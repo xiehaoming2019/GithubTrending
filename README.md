@@ -9,6 +9,7 @@
 - 补充 Topics、License、README、更新时间等官方仓库数据
 - 使用 OpenAI Responses API 生成结构化中文解读
 - 未配置 AI 密钥时自动降级为基础摘要
+- 同一天重复运行时复用已有 AI 摘要，避免重复费用和无意义提交
 - 保存原始快照和 Markdown 日报
 - GitHub Actions 每天北京时间 08:23 自动运行
 
@@ -96,4 +97,3 @@ py -3 -m unittest discover -s tests -v
 - 生成 HTML 邮件
 - 接入飞书、企业微信或邮件推送
 - 为 Trending 页面结构变化增加失败通知
-

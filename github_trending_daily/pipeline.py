@@ -36,7 +36,7 @@ def run_pipeline(
     github = GitHubClient()
     summarizer = OpenAISummarizer()
     items: list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]] = []
-    cached_details, cached_briefs = _load_cached_snapshot(report_date)
+    cached_repositories, cached_details, cached_briefs = _load_cached_snapshot(report_date)
     enrichment_available = enrich
     ai_available = use_ai and summarizer.enabled
 
@@ -53,12 +53,23 @@ def run_pipeline(
         elif enrich:
             details = cached_details.get(repo.full_name, RepositoryDetails())
 
-        if ai_available:
+        cached_repo = cached_repositories.get(repo.full_name)
+        cached_brief = cached_briefs.get(repo.full_name)
+        can_reuse_ai = (
+            cached_repo is not None
+            and cached_brief is not None
+            and cached_repo.description == repo.description
+            and cached_repo.stars_today == repo.stars_today
+        )
+
+        if ai_available and can_reuse_ai:
+            brief = cached_brief
+        elif ai_available:
             try:
                 brief = summarizer.summarize(repo, details)
             except Exception as exc:  # Publish deterministic copy if the model is unavailable.
                 print(f"[warn] AI summary failed for {repo.full_name}: {exc}", file=sys.stderr)
-                brief = cached_briefs.get(repo.full_name) or fallback_brief(repo, details)
+                brief = cached_brief or fallback_brief(repo, details)
                 ai_available = False
         else:
             brief = fallback_brief(repo, details)
@@ -86,12 +97,20 @@ def run_pipeline(
 
 def _load_cached_snapshot(
     report_date: date,
-) -> tuple[dict[str, RepositoryDetails], dict[str, ProjectBrief]]:
+) -> tuple[
+    dict[str, TrendingRepository],
+    dict[str, RepositoryDetails],
+    dict[str, ProjectBrief],
+]:
     path = Path("data/snapshots") / f"{report_date.isoformat()}.json"
     if not path.exists():
-        return {}, {}
+        return {}, {}, {}
     try:
         rows = json.loads(path.read_text(encoding="utf-8"))
+        repositories = {
+            row["repository"]["full_name"]: TrendingRepository(**row["repository"])
+            for row in rows
+        }
         details = {
             row["repository"]["full_name"]: RepositoryDetails(**row["details"])
             for row in rows
@@ -101,7 +120,7 @@ def _load_cached_snapshot(
             for row in rows
             if row.get("brief", {}).get("generated_by_ai")
         }
-        return details, briefs
+        return repositories, details, briefs
     except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
         print(f"[warn] Ignoring invalid cached snapshot {path}: {exc}", file=sys.stderr)
-        return {}, {}
+        return {}, {}, {}
