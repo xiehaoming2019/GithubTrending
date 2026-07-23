@@ -6,9 +6,10 @@ from dataclasses import asdict
 from datetime import date
 from pathlib import Path
 
+from .email_delivery import EmailSettings, build_message, send_message
 from .github_api import GitHubClient
 from .models import ProjectBrief, RepositoryDetails, TrendingRepository
-from .render import render_markdown
+from .render import render_email_html, render_markdown
 from .summarize import OpenAISummarizer, fallback_brief
 from .trending import fetch_trending, load_trending
 
@@ -22,6 +23,7 @@ def run_pipeline(
     source_html: Path | None = None,
     enrich: bool = True,
     use_ai: bool = True,
+    deliver_email: bool = False,
 ) -> Path:
     if source_html:
         html, repositories = load_trending(source_html)
@@ -90,8 +92,29 @@ def run_pipeline(
         encoding="utf-8",
     )
 
+    markdown = render_markdown(report_date, items)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(render_markdown(report_date, items), encoding="utf-8")
+    output.write_text(markdown, encoding="utf-8")
+
+    if deliver_email:
+        email_settings = EmailSettings.from_env()
+        if email_settings is None:
+            print(
+                "[info] Email delivery skipped: QQ_EMAIL or QQ_SMTP_AUTH_CODE is not configured.",
+                file=sys.stderr,
+            )
+        else:
+            message = build_message(
+                settings=email_settings,
+                report_date=report_date,
+                repository_count=len(items),
+                markdown=markdown,
+                html=render_email_html(report_date, items),
+            )
+            send_message(email_settings, message)
+            print(
+                f"Sent daily report to {len(email_settings.recipients)} recipient(s)."
+            )
     return output
 
 

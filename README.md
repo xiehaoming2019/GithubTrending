@@ -11,6 +11,7 @@
 - 未配置 AI 密钥时自动降级为基础摘要
 - 同一天重复运行时复用已有 AI 摘要，避免重复费用和无意义提交
 - 保存原始快照和 Markdown 日报
+- 可通过 QQ 邮箱 SMTP 发送排版后的 HTML 日报
 - GitHub Actions 每天北京时间 08:23 自动运行
 
 ## 本地运行
@@ -78,6 +79,29 @@ py -3 -m unittest discover -s tests -v
 
 定时任务会提交 `reports/` 和 `data/snapshots/` 的新增内容。原始 HTML 只用于当次排错，不会提交。
 
+## QQ 邮箱推送
+
+QQ 邮箱发送需要使用 SMTP 授权码，不能使用 QQ 登录密码：
+
+1. 登录 QQ 邮箱网页版，进入“设置 → 账户”。
+2. 开启 `POP3/SMTP` 或 `IMAP/SMTP` 服务。
+3. 生成一个单独的 SMTP 授权码。
+4. 在 GitHub 仓库 `Settings → Secrets and variables → Actions` 中添加：
+   - `QQ_EMAIL`：完整发件邮箱，例如 `123456@qq.com`
+   - `QQ_SMTP_AUTH_CODE`：刚生成的授权码
+   - `EMAIL_TO`：收件邮箱；不设置时默认发给发件邮箱自己
+
+工作流使用 `smtp.qq.com:465` 的 SSL 连接。凭据不写入代码，缺少配置时会跳过邮件发送，但日报仍会正常生成。
+
+本地测试发送：
+
+```powershell
+$env:QQ_EMAIL="你的QQ邮箱"
+$env:QQ_SMTP_AUTH_CODE="你的SMTP授权码"
+$env:EMAIL_TO="接收日报的邮箱"
+python -m github_trending_daily --limit 10 --send-email
+```
+
 ## 常用参数
 
 ```text
@@ -85,6 +109,7 @@ py -3 -m unittest discover -s tests -v
 --language python      只看某种编程语言
 --no-ai                禁用 AI，生成基础摘要
 --no-enrich            不调用 GitHub REST API
+--send-email           已配置 SMTP 凭据时发送 HTML 邮件
 --source-html FILE     从本地 HTML 解析，便于测试
 --output FILE          指定日报输出位置
 --date YYYY-MM-DD      指定日报日期

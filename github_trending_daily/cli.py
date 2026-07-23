@@ -19,6 +19,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-html", type=Path, help="parse a local HTML fixture")
     parser.add_argument("--no-enrich", action="store_true", help="skip GitHub REST API")
     parser.add_argument("--no-ai", action="store_true", help="skip AI summaries")
+    parser.add_argument(
+        "--send-email",
+        action="store_true",
+        help="send the report when QQ/SMTP credentials are configured",
+    )
     return parser
 
 
@@ -41,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
         source_html=args.source_html,
         enrich=not args.no_enrich,
         use_ai=not args.no_ai,
+        deliver_email=args.send_email,
     )
     print(f"Generated {result}")
     return 0
-

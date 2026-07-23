@@ -5,7 +5,7 @@ from datetime import date
 from pathlib import Path
 
 from github_trending_daily.models import ProjectBrief, RepositoryDetails
-from github_trending_daily.render import render_markdown
+from github_trending_daily.render import render_email_html, render_markdown
 from github_trending_daily.summarize import fallback_brief
 from github_trending_daily.trending import parse_trending, trending_url
 
@@ -44,7 +44,11 @@ class TrendingParserTests(unittest.TestCase):
         self.assertIn("今日 +234", report)
         self.assertIn("MIT", report)
 
+        html = render_email_html(date(2026, 7, 23), [(repo, details, brief)])
+        self.assertIn("<!doctype html>", html)
+        self.assertIn("https://github.com/octocat/hello-world", html)
+        self.assertIn("GitHub Trending 中文日报", html)
+
 
 if __name__ == "__main__":
     unittest.main()
-
