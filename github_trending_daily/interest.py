@@ -387,7 +387,7 @@ def select_repositories(
     ]
     eligible.sort(
         key=lambda repo: (
-            -by_repository[repo.full_name.lower()].score,
+            -_selection_score(by_repository[repo.full_name.lower()]),
             -repo.stars_today,
             -repo.total_stars,
             repo.rank,
@@ -469,7 +469,7 @@ def select_daily_mix(
     ]
     remaining.sort(
         key=lambda repo: (
-            -by_repository[repo.full_name.lower()].score,
+            -_selection_score(by_repository[repo.full_name.lower()]),
             -repo.stars_today,
             -repo.total_stars,
             repo.rank,
@@ -477,6 +477,10 @@ def select_daily_mix(
     )
     add_from(remaining, limit - len(selected))
     return selected
+
+
+def _selection_score(match: InterestMatch) -> float:
+    return match.ranking_score if match.ranking_score > 0 else float(match.score)
 
 
 def _parse_match(value: Any) -> InterestMatch | None:

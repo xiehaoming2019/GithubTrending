@@ -16,6 +16,11 @@ from .interest import (
 )
 from .models import InterestMatch, ProjectBrief, RepositoryDetails, TrendingRepository
 from .radar import fetch_radar_candidates
+from .ranking import (
+    apply_ranking_metrics,
+    load_previous_candidate_totals,
+    write_candidate_snapshot,
+)
 from .render import render_email_html, render_markdown
 from .summarize import OpenAISummarizer, fallback_brief
 from .trending import fetch_trending, load_trending
@@ -164,6 +169,19 @@ def run_pipeline(
                 fallback_interest(repo, details)
                 for repo, details in candidate_details
             ]
+        previous_totals = load_previous_candidate_totals(
+            report_date,
+            days=history_days,
+        )
+        for full_name, record in history.items():
+            previous_totals.setdefault(full_name, record.total_stars)
+        apply_ranking_metrics(
+            candidate_details,
+            matches,
+            report_date=report_date,
+            previous_totals=previous_totals,
+        )
+        write_candidate_snapshot(report_date, candidate_details, matches)
         repositories = select_daily_mix(
             trending_repositories,
             radar_repositories,
@@ -215,6 +233,7 @@ def run_pipeline(
             and cached_brief is not None
             and cached_repo.description == repo.description
             and cached_repo.stars_today == repo.stars_today
+            and cached_brief.prompt_version == summarizer.prompt_version
         )
 
         if ai_available and can_reuse_ai:

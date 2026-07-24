@@ -15,6 +15,7 @@ class TrendingRepository:
     stars_today: int = 0
     source: str = "trending"
     history_label: str = "本周首次收录"
+    star_gain: int = 0
 
 
 @dataclass(slots=True)
@@ -41,6 +42,7 @@ class ProjectBrief:
     caveat: str
     category: str
     generated_by_ai: bool = False
+    prompt_version: str = "legacy"
 
 
 @dataclass(slots=True)
@@ -50,3 +52,6 @@ class InterestMatch:
     category: str
     reason: str
     generated_by_ai: bool = False
+    velocity_score: int = 0
+    freshness_score: int = 0
+    ranking_score: float = 0.0

@@ -19,7 +19,8 @@ why_trending 不超过 50 个字符；caveat 不超过 45 个字符。
 只返回一个 JSON 对象，不要使用 Markdown 代码围栏。字段必须是：
 summary: 中文一句话介绍；
 problem: 它解决的问题；
-highlights: 2 到 3 条核心特点的字符串数组；
+highlights: 2 到 3 条具体使用场景的字符串数组，优先使用“可以……”句式，
+让读者马上知道能拿它做什么，不要只复述技术特性；
 target_users: 1 到 3 类适用人群的字符串数组；
 why_trending: 为什么今天值得关注；Trending 项目参考今日新增 Star，ACG 雷达项目参考
 总 Star、近期活跃度和项目资料进行谨慎判断；
@@ -29,21 +30,21 @@ AI 视频、3D / VTuber、语音 / 配音、音乐 / 音效、互动叙事、XR 
 ACG 本地化、ACG 资源 / Mod、创作者自动化中选择最接近的一项。
 """
 
+SUMMARY_PROMPT_VERSION = "use-cases-v2"
+
 
 def fallback_brief(
     repo: TrendingRepository,
     details: RepositoryDetails,
 ) -> ProjectBrief:
     description = repo.description or "项目页面暂未提供简介"
-    highlights = []
+    highlights = [f"可以用来试用或扩展：{description[:28]}"]
     if repo.language:
         highlights.append(f"主要使用 {repo.language} 开发")
     if details.topics:
         highlights.append(f"主题包括：{'、'.join(details.topics[:4])}")
-    if details.license_name:
+    if details.license_name and len(highlights) < 3:
         highlights.append(f"许可证：{details.license_name}")
-    if not highlights:
-        highlights.append("需要阅读 README 进一步确认核心能力")
 
     caveat = "当前为规则生成的基础摘要，建议结合 README 判断成熟度。"
     if details.archived:
@@ -63,6 +64,7 @@ def fallback_brief(
         caveat=caveat,
         category=_guess_category(repo, details),
         generated_by_ai=False,
+        prompt_version=SUMMARY_PROMPT_VERSION,
     )
 
 
@@ -84,6 +86,8 @@ def _guess_category(repo: TrendingRepository, details: RepositoryDetails) -> str
 
 
 class OpenAISummarizer:
+    prompt_version = SUMMARY_PROMPT_VERSION
+
     def __init__(
         self,
         api_key: str | None = None,
@@ -156,6 +160,7 @@ class OpenAISummarizer:
             caveat=_string(data, "caveat", "仍需结合项目文档评估。"),
             category=_string(data, "category", _guess_category(repo, details)),
             generated_by_ai=True,
+            prompt_version=self.prompt_version,
         )
 
 

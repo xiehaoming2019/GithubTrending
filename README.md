@@ -9,6 +9,8 @@
 - 通过 ACG 雷达补充游戏、动画、剪辑、VTuber、语音等近期活跃项目
 - 最近 7 天介绍过的项目默认跳过，热度显著上升时才重新收录
 - 每期目标包含约 3 个“ACG 新发现”，Agent / Skills 最多 3 个
+- 按相关性、Star 增速、项目新鲜度和分类多样性综合排序
+- 项目卡片直接说明“能做什么”，减少技术特性堆砌
 - 用 AI 批量判断项目相关性，失败时自动改用本地关键词规则
 - 达不到标准时宁可少发，不用通用框架、数据库、金融或炒币项目凑数
 - 提取今日新增 Star、总 Star、Fork、语言和简介
@@ -40,6 +42,7 @@ py -3 -m github_trending_daily --limit 8
 ```text
 reports/YYYY-MM-DD.md
 data/snapshots/YYYY-MM-DD.json
+data/candidates/YYYY-MM-DD.json
 ```
 
 ### 启用 AI 解读
@@ -91,7 +94,8 @@ py -3 -m unittest discover -s tests -v
 4. 确认 Actions 的 Workflow permissions 允许写入仓库内容。
 5. 在 Actions 页面手动运行一次 `GitHub Trending Daily` 验证结果。
 
-定时任务会提交 `reports/` 和 `data/snapshots/` 的新增内容。原始 HTML 只用于当次排错，不会提交。
+定时任务会提交 `reports/`、`data/snapshots/` 和 `data/candidates/` 的新增内容。
+候选快照用于计算次日 Star 增速；原始 HTML 只用于当次排错，不会提交。
 
 ## QQ 邮箱推送
 
@@ -139,7 +143,7 @@ python -m github_trending_daily --limit 8 --send-email
 
 ## 下一阶段
 
-- 统计项目 Star 增速，完善“突然升温”和排名变化
+- 完善“突然升温”和跨日排名变化标记
 - 增加整份日报的“今日 ACG 技术风向”二次编辑
 - 接入飞书或企业微信推送
 - 为 Trending 页面结构变化增加失败通知

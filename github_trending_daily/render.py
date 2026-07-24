@@ -144,7 +144,7 @@ def render_markdown(
                 "",
                 _compact(brief.summary, 65),
                 "",
-                f"- **亮点：** {highlight}",
+                f"- **能做什么：** {highlight}",
                 f"- **提醒：** {_compact(brief.caveat, 60)}",
                 "",
             ]
@@ -247,7 +247,7 @@ def render_email_html(
                 {escape(_compact(brief.summary, 65))}
               </p>
               <p style="color:#374151;font-size:13px;line-height:1.55;margin:7px 0;">
-                <strong>亮点：</strong>{escape(highlight)}
+                <strong>能做什么：</strong>{escape(highlight)}
               </p>
               <p style="color:#9a3412;font-size:13px;line-height:1.55;margin:7px 0 0;">
                 <strong>提醒：</strong>{escape(_compact(brief.caveat, 60))}

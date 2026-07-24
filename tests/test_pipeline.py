@@ -67,8 +67,8 @@ class SnapshotCacheTests(unittest.TestCase):
         self.assertEqual(25, repositories["example/project"].stars_today)
         self.assertEqual("MIT", details["example/project"].license_name)
         self.assertTrue(briefs["example/project"].generated_by_ai)
+        self.assertEqual("legacy", briefs["example/project"].prompt_version)
 
 
 if __name__ == "__main__":
     unittest.main()
-
