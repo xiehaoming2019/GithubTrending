@@ -55,3 +55,14 @@ jobs:
             git commit -m "daily: GitHub Trending $(TZ=Asia/Shanghai date +%F)"
             git push
           fi
+
+      - name: Send failure alert
+        if: failure()
+        continue-on-error: true
+        env:
+          QQ_EMAIL: ${{ secrets.QQ_EMAIL }}
+          QQ_SMTP_AUTH_CODE: ${{ secrets.QQ_SMTP_AUTH_CODE }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+        run: >-
+          python -m github_trending_daily.failure_alert
+          --run-url "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
