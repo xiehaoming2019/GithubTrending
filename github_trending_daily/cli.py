@@ -13,7 +13,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Generate a Chinese daily newsletter from GitHub Trending.",
     )
-    parser.add_argument("--limit", type=int, default=10, help="maximum report repositories")
+    parser.add_argument("--limit", type=int, default=8, help="maximum report repositories")
     parser.add_argument(
         "--candidate-limit",
         type=int,
@@ -26,6 +26,24 @@ def build_parser() -> argparse.ArgumentParser:
         default=int(os.getenv("ACG_RELEVANCE_THRESHOLD", "60")),
         help="minimum ACG/creator relevance score, from 0 to 100",
     )
+    parser.add_argument(
+        "--radar-candidate-limit",
+        type=int,
+        default=int(os.getenv("ACG_RADAR_CANDIDATE_LIMIT", "18")),
+        help="maximum ACG radar candidates before filtering",
+    )
+    parser.add_argument(
+        "--radar-limit",
+        type=int,
+        default=int(os.getenv("ACG_RADAR_LIMIT", "3")),
+        help="target number of ACG radar discoveries",
+    )
+    parser.add_argument(
+        "--history-days",
+        type=int,
+        default=int(os.getenv("HISTORY_DEDUP_DAYS", "7")),
+        help="days used for duplicate suppression",
+    )
     parser.add_argument("--language", default="", help="programming language filter")
     parser.add_argument("--date", help="report date in YYYY-MM-DD")
     parser.add_argument("--output", type=Path, help="Markdown output path")
@@ -36,6 +54,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-interest-filter",
         action="store_true",
         help="disable ACG/creator relevance filtering",
+    )
+    parser.add_argument("--no-radar", action="store_true", help="disable ACG radar")
+    parser.add_argument(
+        "--no-deduplicate",
+        action="store_true",
+        help="allow projects seen in recent daily reports",
     )
     parser.add_argument(
         "--send-email",
@@ -51,6 +75,12 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit("--limit must be at least 1")
     if args.candidate_limit < 1:
         raise SystemExit("--candidate-limit must be at least 1")
+    if args.radar_candidate_limit < 1:
+        raise SystemExit("--radar-candidate-limit must be at least 1")
+    if args.radar_limit < 0:
+        raise SystemExit("--radar-limit cannot be negative")
+    if args.history_days < 1:
+        raise SystemExit("--history-days must be at least 1")
     if not 0 <= args.relevance_threshold <= 100:
         raise SystemExit("--relevance-threshold must be between 0 and 100")
 
@@ -72,6 +102,11 @@ def main(argv: list[str] | None = None) -> int:
         filter_interests=not args.no_interest_filter,
         relevance_threshold=args.relevance_threshold,
         candidate_limit=args.candidate_limit,
+        use_radar=not args.no_radar,
+        radar_candidate_limit=args.radar_candidate_limit,
+        radar_limit=args.radar_limit,
+        deduplicate=not args.no_deduplicate,
+        history_days=args.history_days,
     )
     print(f"Generated {result}")
     return 0

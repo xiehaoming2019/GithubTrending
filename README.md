@@ -1,10 +1,14 @@
 # GitHub Trending ACG 日报
 
-每天抓取 GitHub Trending，先筛出 ACG 与创作者工具相关项目，再由 AI 生成精简中文日报。
+每天抓取 GitHub Trending，并从 GitHub Search 补充近期活跃的 ACG 创作工具，
+经过 AI 筛选和 7 天去重后生成精简中文日报。
 
 当前 MVP 具备：
 
-- 默认检查每日 Trending 前 25 个仓库，最多收录 10 个
+- 默认检查每日 Trending 前 25 个仓库，日报最多收录 8 个
+- 通过 ACG 雷达补充游戏、动画、剪辑、VTuber、语音等近期活跃项目
+- 最近 7 天介绍过的项目默认跳过，热度显著上升时才重新收录
+- 每期目标包含约 3 个“ACG 新发现”，Agent / Skills 最多 3 个
 - 用 AI 批量判断项目相关性，失败时自动改用本地关键词规则
 - 达不到标准时宁可少发，不用通用框架、数据库、金融或炒币项目凑数
 - 提取今日新增 Star、总 Star、Fork、语言和简介
@@ -28,7 +32,7 @@
 项目只使用 Python 标准库，不需要安装依赖。需要 Python 3.11 或更高版本。
 
 ```powershell
-py -3 -m github_trending_daily --limit 10
+py -3 -m github_trending_daily --limit 8
 ```
 
 生成结果位于：
@@ -45,7 +49,7 @@ data/snapshots/YYYY-MM-DD.json
 ```powershell
 $env:OPENAI_API_KEY="你的 API Key"
 $env:OPENAI_MODEL="gpt-5.6-luna"
-py -3 -m github_trending_daily --limit 10
+py -3 -m github_trending_daily --limit 8
 ```
 
 `gpt-5.6-luna` 适合这种每日批量摘要场景；也可以通过 `OPENAI_MODEL` 换成账户可用的其他 Responses API 模型。
@@ -109,18 +113,23 @@ QQ 邮箱发送需要使用 SMTP 授权码，不能使用 QQ 登录密码：
 $env:QQ_EMAIL="你的QQ邮箱"
 $env:QQ_SMTP_AUTH_CODE="你的SMTP授权码"
 $env:EMAIL_TO="接收日报的邮箱"
-python -m github_trending_daily --limit 10 --send-email
+python -m github_trending_daily --limit 8 --send-email
 ```
 
 ## 常用参数
 
 ```text
---limit 10             日报项目数量
+--limit 8              日报项目数量
 --candidate-limit 25   筛选前检查的 Trending 候选数
 --relevance-threshold 60  ACG / 创作者相关性最低分
+--radar-candidate-limit 18  ACG 雷达候选数
+--radar-limit 3        每期 ACG 新发现目标数
+--history-days 7       项目去重天数
 --language python      只看某种编程语言
 --no-ai                禁用 AI，生成基础摘要
 --no-interest-filter   禁用 ACG / 创作者相关性筛选
+--no-radar             禁用 ACG 雷达
+--no-deduplicate       禁用近期项目去重
 --no-enrich            不调用 GitHub REST API
 --send-email           已配置 SMTP 凭据时发送 HTML 邮件
 --source-html FILE     从本地 HTML 解析，便于测试
@@ -130,7 +139,7 @@ python -m github_trending_daily --limit 10 --send-email
 
 ## 下一阶段
 
-- 增加 SQLite 历史库，识别首次上榜、连续上榜和排名变化
+- 统计项目 Star 增速，完善“突然升温”和排名变化
 - 增加整份日报的“今日 ACG 技术风向”二次编辑
 - 接入飞书或企业微信推送
 - 为 Trending 页面结构变化增加失败通知

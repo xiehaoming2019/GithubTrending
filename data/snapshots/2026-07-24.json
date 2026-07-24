@@ -1,87 +1,22 @@
 [
   {
     "repository": {
-      "rank": 3,
-      "full_name": "ComposioHQ/awesome-claude-skills",
-      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
-      "description": "A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows",
-      "language": "Python",
-      "total_stars": 69753,
-      "forks": 7872,
-      "stars_today": 636
-    },
-    "details": {
-      "topics": [
-        "agent-skills",
-        "ai-agents",
-        "antigravity",
-        "automation",
-        "claude",
-        "claude-code",
-        "codex",
-        "composio",
-        "cursor",
-        "developer-tools",
-        "gemini-cli",
-        "mcp",
-        "openai-codex",
-        "rube",
-        "saas",
-        "skill",
-        "workflow-automation"
-      ],
-      "license_name": "",
-      "created_at": "2025-10-17T07:15:01Z",
-      "updated_at": "2026-07-24T11:25:39Z",
-      "pushed_at": "2026-07-24T07:48:01Z",
-      "open_issues": 1084,
-      "homepage": "",
-      "archived": false,
-      "default_branch": "master",
-      "readme": "<h1 align=\"center\">Awesome Claude Skills</h1>\n\n<p align=\"center\">\n<a href=\"https://dashboard.composio.dev/login?utm_source=Github&utm_medium=Youtube&utm_campaign=2025-11&utm_content=AwesomeSkills\">\n  <img width=\"1280\" height=\"640\" alt=\"Composio banner\" src=\"https://github.com/user-attachments/assets/e91255af-e4ba-4d71-b1a8-bd081e8a234a\">\n</a>\n\n\n</p>\n\n<p align=\"center\">\n  <a href=\"https://awesome.re\">\n    <img src=\"https://awesome.re/badge.svg\" alt=\"Awesome\" />\n  </a>\n  <a href=\"https://makeapullrequest.com\">\n    <img src=\"https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square\" alt=\"PRs Welcome\" />\n  </a>\n  <a href=\"https://www.apache.org/licenses/LICENSE-2.0\">\n    <img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat-square\" alt=\"License: Apache-2.0\" />\n  </a>\n</p>\n<div>\n<p align=\"center\">\n  <a href=\"https://twitter.com/composio\">\n    <img src=\"https://img.shields.io/badge/Follow on X-000000?style=for-the-badge&logo=x&logoColor=white\" alt=\"Follow on X\" />\n  </a>\n  <a href=\"https://www.linkedin.com/company/composiohq/\">\n    <img src=\"https://img.shields.io/badge/Follow on LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white\" alt=\"Follow on LinkedIn\" />\n  </a>\n  <a href=\"https://discord.com/invite/composio\">\n    <img src=\"https://img.shields.io/badge/Join our Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Join our Discord\" />\n  </a>\n  </p>\n</div>\n\nA comprehensive and curated list of 1000+ production ready and practical Claude Skills and Plugins for enhancing productivity across usecases on not just Claude.ai, Claude Code, but also across coding agents like Codex, Cursor, Gemini CLI, Antigravity and more.\n\n## Give your skills real-world actions\n\nSkills tell your agent **how** to work. An MCP Gateway gives it secure access to the tools it needs.\n\nComposio [MCP Gateway](https://composio.dev/mcp-gateway) provides a single MCP endpoint for 1,000+ integrations with built-in authentication, team-based access controls, audit logs, and production-ready reliability.\n\n---\n\n## Quickstart: Connect Claude to 1000+ Apps\n\nThe **connect-apps** plugin lets Claude perform real actions - send emails, create issues, post to Slack. It handles auth and connects to 1000+ apps using Composio under the hood.\n\n### 1. Install the Plugin\n\n```bash\nclaude --plugin-dir ./connect-apps-plugin\n```\n\n### 2. Run Setup\n\n```\n/connect-apps:setup\n```\n\nPaste your API key when asked. (Get a free key at [dashboard.composio.dev](https://dashboard.composio.dev/login?utm_source=Github&utm_content=AwesomeSkills))\n\n### 3. Restart & Try It\n\n```bash\nexit\nclaude\n```\n\n> **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)\n\nIf you receive the email, Claude is now connected to 1000+ apps.\n\n**[See all supported apps →](https://composio.dev/toolkits)**\n\n---\n\n## Contents\n\n- [What Are Claude Skills?](#what-are-claude-skills)\n- [Skills](#skills)\n  - [Document Processing](#document-processing)\n  - [Development & Code Tools](#development--code-tools)\n  - [Data & Analysis](#data--analysis)\n  - [Business & Marketing](#business--marketing)\n  - [Communication & Writing](#communication--writing)\n  - [Creative & Media](#creative--media)\n  - [Productivity & Organization](#productivity--organization)\n  - [Collaboration & Project Management](#collaboration--project-management)\n  - [Security & Systems](#security--systems)\n  - [App Automation via Composio](#app-automation-via-composio)\n- [Getting Started](#getting-started)\n- [Creating Skills](#creating-skills)\n- [Contributing](#contributing)\n- [Resources](#resources)\n- [License](#license)\n\n## What Are Claude Skills?\n\nClaude Skills are reusable instruction packages that teach an AI agent how to handle a specific class of tasks. Each skill is a folder containing a `SKILL.md` file with YAML frontmatter (name, description) and Markdown instructions, optionally bundled with scripts, references, and assets. Anthropic introduced the format in October 2025 and released it as an [open standard](https://github.com/anthropics/skills) in December 2025; it's now supported by Claude Code, Claude.ai, the Claude API, OpenAI Codex, Cursor, Gemini CLI, Antigravity, and Windsurf.\n\nSkills load progressively. At session start, the agent sees only each skill's name and description — roughly 100 tokens per skill. The full SKILL.md body (typically under 5,000 tokens) loads only when the agent decides the skill is relevant to the current task. Auxiliary files in `scripts/` and `references/` load on demand. This is what lets a single agent host hundreds of skills without bloating its context window.\n\nSkills are not MCP servers and not tools. MCP defines how an agent connects to external systems — auth, transport, tool discovery. Tools are the individual functions an agent invokes. Skills define the workflow — what to do, in what order, with what guardrails — once the agent has the connections and tools it needs. In production, all three layers run together: MCP for access, tools for actions, skills for behavior.\n\n## Skills\n\n### Document Processing\n\n- [docx](https://github.com/anthropics/skills/tree/main/skills/docx) - Create, edit, analyze Word docs with tracked changes, comments, formatting.\n- [pdf](https://github.com/anthropics/skills/tree/main/skills/pdf) - Extract text, tables, metadata, merge & annotate PDFs.\n- [pptx](https://github.com/anthropics/skills/tree/main/skills/pptx) - Read, generate, and adjust slides, layouts, templates.\n- [xlsx](https://github.com/anthropics/skills/tree/main/skills/xlsx) - Spreadsheet manipulation: formulas, charts, data transformations.\n- [Markdown to EPUB Converter](https://github.com/smerchek/claude-epub-skill) - Converts markdown documents and chat summaries into professional EPUB ebook files. *By [@smerchek](https://github.com/smerchek)*\n- [Master Claude for Legal](https://github.com/sboghossian/master-claude-for-legal) - Skill pack for legal teams. NDA triage, multi-party version diff, citation verifier, meeting brief, and the Friday-newsletter status synthesis pattern. Includes 10 reference docs (privilege, verification, long documents, practice areas) and 3 firm templates. Built from the public Anthropic Claude for Legal Teams webinar dataset. *By [@sboghossian](https://github.com/sboghossian)*\n\n### Development & Code Tools\n\n- [artifacts-builder](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder) - Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui).\n- [aws-skills](https://github.com/zxkane/aws-skills) - AWS development with CDK best practices, cost optimization MCP servers, and serverless/event-driven architecture patterns.\n- [building-blog](https://github.com/BuildShipGrowRepeat/nextjs-sanity-blog-skill) - Adds an SEO-first, i18n-ready blog to a Next.js + Sanity site via a 40-question intake, a one-page plan, and a 20-section spec. Includes a generator for AI hero images via Gemini 3 Pro Image (Nano Banana Pro). *By [@BuildShipGrowRepeat](https://github.com/BuildShipGrowRepeat)*\n- [Changelog Generator](./changelog-generator/) - Automatically creates user-facing changelogs from git commits by analyzing history and transforming technical commits into customer-friendly release notes.\n- [Chrome Relay](https://chrome-relay.kushalsm.com/) - Drives the user's already-open Chrome session — cookies, SSO, extensions, localhost — through a local CLI bridge. Real-Chrome counterpart to Playwright Browser Automation; install via `npx skills add chrome-relay` + a [Chrome Web Store extension](https://chromewebstore.google.com/detail/chrome-relay/cpdiapbifblhlcpnmlmfpgfjlacebokb). No remote relay, no Playwright fixtures, no MCP server needed.\n- [Claude Code Terminal Title](https://github.com/bluzername/claude-code-terminal-title) - Gives each Claud-Code terminal window a dynamic title that describes the work being done so you don't lose track of what window is doing what.\n- [Connect](./connect/) - Connect Claude to any app. Send emails, create issues, post messages, update databases - take real actions across Gmail, Slack, GitHub, Notion, and 1000+ services.\n- [D3.js Visualization](https://github.com/chrisvoncsefalvay/claude-d3js-skill) - Teaches Claude to produce D3 charts and interactive data visualizations. *By [@chrisvoncsefalvay](https://github.com/chrisvoncsefalvay)*\n- [FFUF Web Fuzzing](https://github.com/jthack/ffuf_claude_skill) - Integrates the ffuf web fuzzer so Claude can run fuzzing tasks and analyze results for vulnerabilities. *By [@jthack](https://github.com/jthack)*\n- [finishing-a-development-branch](https://github.com/obra/superpowers/tree/main/skills/finishing-a-development-branch) - Guides completion of development work by presenting clear options and handling chosen workflow.\n- [Full-Page Screenshot](https://github.com/LewisLiu007/full-page-screenshot) - Captures full-page screenshots of web pages via Chrome DevTools Protocol with zero dependencies. *By [@LewisLiu007](https://github.com/LewisLiu007)*\n- [great_cto](https://github.com/avelikiy/great_cto) - Claude Code plugin: 7 specialised subagents (tech-lead, senior-dev, qa-engineer, security-officer, devops, l3-support, project-auditor) orchestrating a full SDLC pipeline — architecture, TDD, 12-angle code review, QA, security audit, deploy. 11 project archetypes auto-detected, 13 compliance frameworks (GDPR/PCI-DSS/HIPAA/SOC2/ISO 27001), self-improving knowledge layer that learns from every incident. *By [@avelikiy](https://github.com/avelikiy)*\n- [iOS Simulator](https://github.com/conorluddy/ios-simulator-skill) - Enables Claude to interact with iOS Simulator for testing and debugging iOS applications. *By [@conorluddy](https://github.com/conorluddy)*\n- [jules](https://github.com/sanjay3290/ai-skills/tree/main/skills/jules) - Delegate coding tasks to Google Jules AI agent for async bug fixes, documentation, tests, and feature implementation on GitHub repos. *By [@sanjay3290](https://github.com/sanjay3290)*\n- [LangSmith Fetch](./langsmith-fetch/) - Debug LangChain and LangGraph agents by automatically fetching and analyzing execution traces from LangSmith Studio. First AI observability skill for Claude Code. *By [@OthmanAdi](https://github.com/OthmanAdi)*\n- [lean-ctx](https://github.com/yvgude/lean-ctx) - MCP server and context runtime for AI coding agents: session caching, AST-aware compression, and 90+ shell patterns to reduce token usage. Supports Claude Code, Cursor, Copilot, and other integrations. Install the Claude Code skill with `lean-ctx init --agent claude-code`; docs at [leanctx.com](https://leanctx.com). *By [@yvgude](https://github.com/yvgude)*\n- [MCP Builder](./mcp-builder/) - Guides creation of high-quality MCP (Model Context Protocol) servers for integrating external APIs and services with LLMs using Python or TypeScript.\n- [move-code-quality-skill](https://github.com/1NickPappas/move-code-quality-skill) - Analyzes Move language packages against the official Move Book Code Quality Checklist for Move 2024 Edition compliance and best practices.\n- [OpenWeb](https://github.com/openweb-org/openweb) - Agent-native way to access any website. Calls the same APIs the website calls (JSON in, JSON out) with auth (cookies, JWT, CSRF, signing) auto-resolved per request. 90+ sites built in. *By [@openweb-org](https://github.com/openweb-org)*\n- [overkill](https://github.com/santiago-vargas-de-kruijf/claude-overkill) - Surfaces advanced, maximalist alternatives to whatever solution is being discussed — advanced data structures, distributed-systems algorithms, niche frameworks, design patterns, and frontier tooling — each ranked on a calibrated complexity scale with learning links and the scenario in which the path pays off. *By [@santiago-vargas-de-kruijf](https://github.com/santiago-vargas-de-kruijf)*\n- [Play"
-    },
-    "brief": {
-      "summary": "汇总1000多个可复用的Claude Skills与工具",
-      "problem": "帮助AI代理按规范完成特定任务并连接外部应用",
-      "highlights": [
-        "覆盖文档、开发、数据和创意等场景",
-        "支持Claude、Codex、Cursor等代理",
-        "可通过MCP连接1000多个应用"
-      ],
-      "target_users": [
-        "AI代理开发者",
-        "自动化工作流用户",
-        "Claude Code用户"
-      ],
-      "why_trending": "今日新增636个Star，且项目近期持续更新",
-      "caveat": "资料中的许可证信息不一致，使用前需核实",
-      "category": "AI Agent / Skills",
-      "generated_by_ai": true
-    },
-    "interest": {
-      "repository": "ComposioHQ/awesome-claude-skills",
-      "score": 92,
-      "category": "AI Agent / Skills",
-      "reason": "专门收集Claude Agent Skills",
-      "generated_by_ai": true
-    }
-  },
-  {
-    "repository": {
       "rank": 13,
       "full_name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
       "language": "Shell",
-      "total_stars": 185828,
-      "forks": 15946,
-      "stars_today": 2224
+      "total_stars": 185846,
+      "forks": 15947,
+      "stars_today": 2224,
+      "source": "trending",
+      "history_label": "本周首次收录"
     },
     "details": {
       "topics": [],
       "license_name": "MIT",
       "created_at": "2026-02-03T11:15:53Z",
-      "updated_at": "2026-07-24T11:25:42Z",
+      "updated_at": "2026-07-24T11:39:51Z",
       "pushed_at": "2026-07-23T14:29:59Z",
       "open_issues": 225,
       "homepage": "",
@@ -109,124 +44,9 @@
     },
     "interest": {
       "repository": "mattpocock/skills",
-      "score": 91,
-      "category": "AI Agent / Skills",
-      "reason": "提供可组合的Agent技能集合",
-      "generated_by_ai": true
-    }
-  },
-  {
-    "repository": {
-      "rank": 4,
-      "full_name": "Pumpkin-MC/Pumpkin",
-      "url": "https://github.com/Pumpkin-MC/Pumpkin",
-      "description": "Empowering everyone to host fast and efficient Minecraft servers.",
-      "language": "Rust",
-      "total_stars": 9128,
-      "forks": 622,
-      "stars_today": 565
-    },
-    "details": {
-      "topics": [
-        "docker",
-        "game-server",
-        "gamedev",
-        "minecraft",
-        "minecraft-bedrock-edition",
-        "minecraft-protocol",
-        "minecraft-server",
-        "networking",
-        "rust",
-        "server"
-      ],
-      "license_name": "GPL-3.0",
-      "created_at": "2024-07-28T21:07:38Z",
-      "updated_at": "2026-07-24T11:26:04Z",
-      "pushed_at": "2026-07-24T10:41:06Z",
-      "open_issues": 213,
-      "homepage": "https://pumpkinmc.org/",
-      "archived": false,
-      "default_branch": "master",
-      "readme": "<div align=\"center\">\n\n# Pumpkin\n\n![CI](https://github.com/Pumpkin-MC/Pumpkin/actions/workflows/rust.yml/badge.svg)\n[![Discord](https://img.shields.io/discord/1268592337445978193.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/wT8XjrjKkf)\n[![License: GPL](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/gpl-3-0)\n\n</div>\n\n[Pumpkin](https://pumpkinmc.org/) is a Minecraft server built entirely in Rust, offering a fast, efficient,\nand customizable experience. It prioritizes performance and player enjoyment while adhering to the core mechanics of the game.\n<div align=\"center\">\n\n![Pumpkin Chunk Loading](./assets/pumpkin_chunk_loading.gif)\n\n</div>\n\n## Goals\n\n- **Performance**: Leveraging multi-threading for maximum speed and efficiency.\n- **Compatibility**: Supports the latest Java & Bedrock Minecraft server version while adhering to Vanilla game mechanics.\n- **Security**: Prioritizes security by preventing known security exploits.\n- **Flexibility**: Highly configurable, with the ability to disable unnecessary features.\n- **Extensibility**: Provides a foundation for plugin development.\n\n> [!IMPORTANT]\n> Pumpkin is currently under heavy development.\n>\n> [See what needs to be done before the 1.0.0 Release](https://github.com/Pumpkin-MC/Pumpkin/issues/449)\n\n## Features\n\n- [x] Configuration (toml)\n- [Tracking: Protocol](https://github.com/Pumpkin-MC/Pumpkin/issues/1401)\n  - [x] Server Status/Ping\n  - [x] Encryption\n  - [x] Packet Compression\n  - [x] Java Edition\n  - [x] Bedrock Edition (W.I.P)\n  - ...\n- [Tracking: World](https://github.com/Pumpkin-MC/Pumpkin/issues/1403)\n  - [x] Player Tab-list\n  - [x] Scoreboard\n  - [x] World Loading\n  - [x] World Time\n  - [x] World Borders\n  - [x] World Saving\n  - [x] Lighting\n  - [x] Entity Spawning\n  - [x] Bossbar\n  - [x] Chunk Loading (Vanilla, Linear, Pump)\n  - [Chunk Generation](https://github.com/Pumpkin-MC/Pumpkin/issues/36)\n  - [x] Chunk Saving (Vanilla, Linear, Pump)\n  - [Redstone](https://github.com/Pumpkin-MC/Pumpkin/issues/1402)\n  - [x] Liquid Physics\n  - ...\n- [Tracking: Player](https://github.com/Pumpkin-MC/Pumpkin/issues/1405)\n  - [x] Skins\n  - [x] Teleport\n  - [x] Movement\n  - [x] Animation\n  - [x] Inventory\n  - [Combat](https://github.com/Pumpkin-MC/Pumpkin/issues/1404)\n  - [x] Experience\n  - [x] Hunger\n  - [X] Off Hand\n  - [X] Advancements (W.I.P)\n  - [x] Eating\n  - ...\n- Entities\n  - [x] Non-Living (Minecart, Eggs...) (W.I.P)\n  - [x] Entity Effects\n  - [x] Players\n  - [x] Mobs (W.I.P)\n  - [x] Animals (W.I.P)\n  - [Entity AI](https://github.com/Pumpkin-MC/Pumpkin/issues/1406)\n  - [x] Boss (W.I.P)\n  - [x] Villagers (W.I.P)\n  - [X] Entity Saving\n- Server\n  - [Plugins](https://github.com/Pumpkin-MC/Pumpkin/issues/1407)\n  - [x] Query\n  - [x] RCON\n  - [x] Inventories\n  - [x] Particles\n  - [x] Chat\n  - [Commands](https://github.com/Pumpkin-MC/Pumpkin/issues/15)\n  - [x] Permissions\n  - [x] Translations\n- Proxy\n  - [x] Bungeecord\n  - [x] Velocity\n\n<!-- Check out our [Github Project](https://github.com/orgs/Pumpkin-MC/projects/3) to see current progress. -->\n\n## How to run\n\nSee our [Quick Start](https://docs.pumpkinmc.org/#quick-start) guide to get Pumpkin running.\n\n## Contributions\n\nContributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)\n\n## Docs\n\nPumpkin's documentation can be found at <https://pumpkinmc.org/>\n\n## Communication\n\nConsider joining [our Discord server](https://discord.gg/wT8XjrjKkf) to stay up-to-date on events, updates, and connect with other members.\n\n## Funding\n\nIf you want to fund me and help the project, check out the [Donation Page](https://pumpkinmc.org/donate/).\n"
-    },
-    "brief": {
-      "summary": "用 Rust 构建高性能、可定制的 Minecraft 服务器",
-      "problem": "为 Minecraft 提供更快、更高效的服务器实现",
-      "highlights": [
-        "支持 Java 版与 Bedrock 版",
-        "支持多线程与多种区块加载方式",
-        "提供配置、代理和插件开发基础"
-      ],
-      "target_users": [
-        "Minecraft 服务器主",
-        "Rust 开发者",
-        "游戏社区运营者"
-      ],
-      "why_trending": "今日新增 565 Star，项目持续活跃开发",
-      "caveat": "项目仍在重度开发，部分功能处于进行中",
-      "category": "游戏开发",
-      "generated_by_ai": true
-    },
-    "interest": {
-      "repository": "Pumpkin-MC/Pumpkin",
       "score": 88,
-      "category": "游戏开发",
-      "reason": "直接提供Minecraft服务器开发基础",
-      "generated_by_ai": true
-    }
-  },
-  {
-    "repository": {
-      "rank": 8,
-      "full_name": "citrolabs/ego-lite",
-      "url": "https://github.com/citrolabs/ego-lite",
-      "description": "The best browser for both you and your AI agents work in parallel.",
-      "language": "JavaScript",
-      "total_stars": 2097,
-      "forks": 108,
-      "stars_today": 247
-    },
-    "details": {
-      "topics": [
-        "agent-skills",
-        "ai-agent",
-        "browser",
-        "skills",
-        "skills-sh"
-      ],
-      "license_name": "MIT",
-      "created_at": "2026-04-16T12:51:09Z",
-      "updated_at": "2026-07-24T11:24:38Z",
-      "pushed_at": "2026-07-24T09:30:16Z",
-      "open_issues": 26,
-      "homepage": "https://lite.ego.app",
-      "archived": false,
-      "default_branch": "main",
-      "readme": "<div align=\"center\">\n\n<img src=\"docs/assets/banner.png\" alt=\"ego lite\" width=\"100%\" />\n\n**The fastest browser for AI agents to run web automation**\n\n<a href=\"https://trendshift.io/repositories/42334?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-42334\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/42334\" alt=\"citrolabs%2Fego-lite | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n<p>\n  <a href=\"https://cdn.ego.app/channel/github_github_referral/setup/macos/arm64/egolite.dmg\"><img src=\"https://img.shields.io/badge/Download-Apple%20Silicon-000000?style=for-the-badge&logo=apple&logoColor=white\" alt=\"Download for Apple Silicon\" /></a>\n  <a href=\"https://cdn.ego.app/channel/github_github_referral/setup/macos/x64/egolite.dmg\"><img src=\"https://img.shields.io/badge/Download-Intel-000000?style=for-the-badge&logo=apple&logoColor=white\" alt=\"Download for Intel\" /></a>\n  <a href=\"https://discord.gg/5eGZVvHbTq\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Discord\" /></a>\n  <a href=\"https://x.com/ego_agent\"><img src=\"https://img.shields.io/badge/Follow-%40ego__agent-000000?style=for-the-badge&logo=x&logoColor=white\" alt=\"Follow @ego_agent on X\" /></a>\n  <a href=\"https://lite.ego.app/document/\"><img src=\"https://img.shields.io/badge/Docs-lite.ego.app-1E90FF?style=for-the-badge&logo=gitbook&logoColor=white\" alt=\"Docs\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge\" alt=\"License MIT\" /></a>\n</p>\n\n</div>\n\nego (lite) is a browser where you and your AI agents work in parallel. Your agents run multiple browser tasks in their own Spaces while your tabs stay yours, and tasks complete faster on fewer tokens.\n\nExisting tools like browser-use and agent-browser are browser automation frameworks: they need a separate browser to drive, logins never carry cleanly, and you and the agent end up fighting for the same tabs. ego lite is one browser designed from the start for the two of you to share. No extra setup, and the agent can always reach your real logins and tabs through `ego-browser`.\n\n## Demo\n\nhttps://github.com/user-attachments/assets/ffe7954b-58ee-411e-b35d-ec30c58a08bc\n\n## Quick Start\n\nego lite runs on macOS today. Windows and Linux are on the [roadmap](https://lite.ego.app/roadmap).\n\n### 1. Install\n\nPick whichever fits your flow.\n\n**1.1 Download the macOS app**\n\n<a href=\"https://cdn.ego.app/channel/github_github_referral/setup/macos/arm64/egolite.dmg\"><img src=\"https://img.shields.io/badge/⬇%20Apple%20Silicon-.dmg-000000?style=for-the-badge&logo=apple&logoColor=white\" alt=\"Download ego lite for Apple Silicon\" /></a>\n<a href=\"https://cdn.ego.app/channel/github_github_referral/setup/macos/x64/egolite.dmg\"><img src=\"https://img.shields.io/badge/⬇%20Intel-.dmg-000000?style=for-the-badge&logo=apple&logoColor=white\" alt=\"Download ego lite for Intel\" /></a>\n\nClick to download, then open it to install. Either way, ego lite adds the `ego-browser` skill to every agent's skills directory on your machine.\n\n**1.2 Add the skill with npx**\n\nInstall just the `ego-browser` skill:\n\n```bash\nnpx skills add citrolabs/ego-lite\n```\n\nThe first time your agent runs a browser task, it walks you through installing the ego lite app.\n\n**1.3 Let your agent set it up**\n\nPaste this into your agent:\n\n```\nSet up ego lite for me: https://github.com/citrolabs/ego-lite\n\nRead `skills/ego-browser/references/install.md` and follow the steps to install ego lite.\n```\n\nOn first launch, ego lite asks one question, whether to migrate your Chrome data. Say yes and your agent inherits your existing logins, cookies, extensions, and bookmarks.\n\n### 2. Run your first task\n\nIn your agent CLI, type `/ego-browser` followed by a space, then describe what you want in plain language:\n\n```\nego-browser follow @ego_agent on x.com for me\n```\n\nThe agent picks up the `ego-browser` skill, opens the page in its own Space, reads a Snapshot, acts on the page, and reports back, all while your own tabs stay untouched.\n\nYour browsing data stays on your device. ego lite only records whether you opted into Chrome migration during setup.\n\n## Highlight of ego lite\n\n| Feature | What it does |\n|---|---|\n| **Code base, not CLI base, for faster runs with fewer tokens on complex tasks** | The capabilities ego lite exposes to the agent are wrapped as JavaScript functions the agent calls directly. The agent gets to do what it does best: write code, composing a multi-step task into a single output instead of getting stuck in a \"call two commands, look at the result, call two more commands\" loop. Compared to the conventional CLI approach, complex workflows finish up to 2.5× faster with higher task success rates and far fewer tool calls per task. |\n| **A dedicated Space for every agent** | ego lite gives each agent its own fully isolated Space. You browse up front, your agent works in the background, and they don't get in each other's way. You can see which Space has an agent running at any moment, and take it over or stop it whenever you want. |\n| **Your agents multitask in Spaces, parallel workspaces inside the same browser** | Each Space gets its own AI agent or its own task, all running at the same time. Claude Code enriching 10 leads in 10 parallel Spaces. Codex scraping 5 competitor sites in 5 more. They don't collide or steal your tabs. Your mouse stays where you left it. |\n| **The strongest page Snapshot on the market** | Thanks to kernel-level customization, ego lite produces the highest-quality page snapshots, the view text models rely on to \"see\" and act on a webpage. It reliably handles tough cases like deeply nested iframes, exactly where other approaches consistently break down. |\n| **Any agent can drive it through `ego-browser`** | `ego-browser` is the connection layer between any agent CLI (Claude Code, Codex, Cursor, or a custom one) and ego lite. It exposes the browser as a set of in-page JavaScript tools: snapshot, fill, click, wait, navigate, capture. The agent writes a JavaScript snippet calling those tools, and `ego-browser` runs it on the page in one pass. |\n| **Experience accumulation that makes your agent faster the more you use it** *(coming soon)* | Most of an agent's time on browser tasks goes to trial and error. ego lite's official Skill distills every successful action into reusable tools and workflows, so similar tasks down the line run up to 5x faster. |\n\n## ego lite vs existing products\n\nMost tools can automate a browser. The real questions are what browser the agent gets, whether you can keep working at the same time, and whether the tool is built for the agent you already use or a built-in one.\n\n| Capability | ego lite | Browser-Use | agent-browser (Vercel) | ChatGPT Atlas | Perplexity Comet |\n|---|:---:|:---:|:---:|:---:|:---:|\n| Multitask in parallel | ✓ | — | — | — | — |\n| Reusable skills | ✓ | — | — | — | — |\n| Inherits Chrome's data | ✓ | — | — | ✓ | ✓ |\n| Same browser, separate workspace | ✓ | — | — | — | — |\n| Compressed semantic input | ✓ | — | ✓ | — | — |\n| Controllable by external agents | ✓ | ✓ | ✓ | — | — |\n| Data stored locally | ✓ | ✓ | ✓ | — | — |\n| No login friction | ✓ | — | — | ✓ | ✓ |\n| Daily-use browser | ✓ | — | — | ✓ | ✓ |\n| Free | ✓ | ✓ | ✓ | — | — |\n\nTwo other categories try to solve the same problem. Browser automation frameworks like Browser-Use and Vercel's agent-browser are libraries the agent calls; they ship no browser of their own, so they need a separate one to drive and your logins rarely carry cleanly. AI browsers like ChatGPT Atlas and Perplexity Comet ship a built-in agent, and only that agent can drive the browser. ego lite is one browser, designed from the start for you and any agent you bring to share.\n\n\n## Benchmarks\n\nWe benchmarked ego lite against Vercel's agent-browser on four complex browser automation tasks. ego lite finished each task up to 2.5× faster, with substantially fewer tokens. The harder the task, the bigger the gap. Check the comparison.\n\n<div align=\"center\">\n\n<img src=\"docs/assets/ego-vs-agent-benchmark.png\" alt=\"ego lite vs agent-browser, speed and cost across four tasks\" width=\"100%\" />\n\n</div>\n\n## Docs\n\nTutorials, the full tool reference, and integration guides live at [lite.ego.app/document/](https://lite.ego.app/document/).\n\n## Community\n\n- [Discord](https://discord.gg/5eGZVvHbTq), questions, setup help, and skill sharing\n- [GitHub Discussions](https://github.com/citrolabs/ego-lite/discussions), ideas and longer threads\n- [X/Twitter](https://x.com/ego_agent), updates and releases\n\n## Star History\n\n<a href=\"https://www.star-history.com/?repos=citrolabs%2Fego-lite&type=date&legend=top-left\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/chart?repos=citrolabs/ego-lite&type=date&theme=dark&legend=top-left&sealed_token=REc3U13uyXA_SL88c2BU0N5DOPw40Uiufp-RaA8pQS-JIMVaaxcGBjHmFV3Vwn9GMMIiL5e40DXSqHNcDjtXItvqvpMr013AaU6OkphU5o60GjasXVoXTQRR4TkWQSCPrPIxmKHehNll1TAsdoQ8rD3wPyRaj-Z_iHXqDDWf9b0gSWHxkyYoMUj6yWxY\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/chart?repos=citrolabs/ego-lite&type=date&legend=top-left&sealed_token=REc3U13uyXA_SL88c2BU0N5DOPw40Uiufp-RaA8pQS-JIMVaaxcGBjHmFV3Vwn9GMMIiL5e40DXSqHNcDjtXItvqvpMr013AaU6OkphU5o60GjasXVoXTQRR4TkWQSCPrPIxmKHehNll1TAsdoQ8rD3wPyRaj-Z_iHXqDDWf9b0gSWHxkyYoMUj6yWxY\" />\n   <img alt=\"Star History Chart\" src=\"https://api.star-history.com/chart?repos=citrolabs/ego-lite&type=date&legend=top-left&sealed_token=REc3U13uyXA_SL88c2BU0N5DOPw40Uiufp-RaA8pQS-JIMVaaxcGBjHmFV3Vwn9GMMIiL5e40DXSqHNcDjtXItvqvpMr013AaU6OkphU5o60GjasXVoXTQRR4TkWQSCPrPIxmKHehNll1TAsdoQ8rD3wPyRaj-Z_iHXqDDWf9b0gSWHxkyYoMUj6yWxY\" />\n </picture>\n</a>\n\n## License\n\nThe contents of this repository are released under the [MIT License](LICENSE). The ego lite browser is a separate, free download.\n"
-    },
-    "brief": {
-      "summary": "为用户和AI代理提供并行操作的浏览器",
-      "problem": "解决用户与AI代理抢占标签页、登录难复用的问题",
-      "highlights": [
-        "代理在独立Space中并行执行任务",
-        "通过ego-browser连接多种代理",
-        "支持继承Chrome登录、Cookie和书签"
-      ],
-      "target_users": [
-        "AI代理开发者",
-        "浏览器自动化用户",
-        "macOS用户"
-      ],
-      "why_trending": "今日新增247个Star，近期仍有提交记录",
-      "caveat": "目前仅支持macOS，Windows和Linux尚在路线图中",
       "category": "AI Agent / Skills",
-      "generated_by_ai": true
-    },
-    "interest": {
-      "repository": "citrolabs/ego-lite",
-      "score": 86,
-      "category": "AI Agent / Skills",
-      "reason": "专为Agent网页自动化设计",
+      "reason": "可组合的智能体技能集合",
       "generated_by_ai": true
     }
   },
@@ -237,17 +57,19 @@
       "url": "https://github.com/block/buzz",
       "description": "A hive mind communication platform",
       "language": "Rust",
-      "total_stars": 8310,
+      "total_stars": 8341,
       "forks": 647,
-      "stars_today": 2162
+      "stars_today": 2162,
+      "source": "trending",
+      "history_label": "连续上榜"
     },
     "details": {
       "topics": [],
       "license_name": "Apache-2.0",
       "created_at": "2026-03-06T21:00:56Z",
-      "updated_at": "2026-07-24T11:25:31Z",
+      "updated_at": "2026-07-24T11:39:44Z",
       "pushed_at": "2026-07-24T09:28:13Z",
-      "open_issues": 542,
+      "open_issues": 546,
       "homepage": "",
       "archived": false,
       "default_branch": "main",
@@ -273,9 +95,397 @@
     },
     "interest": {
       "repository": "block/buzz",
-      "score": 85,
+      "score": 75,
       "category": "AI Agent / Skills",
-      "reason": "支持人类与Agent协作工作流",
+      "reason": "人类与智能体协作工作区",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "ciddwd/overlay-translator",
+      "url": "https://github.com/ciddwd/overlay-translator",
+      "description": "无需 ROOT 的开源 Android 屏幕实时翻译工具，适合游戏、视觉小说和漫画。支持端侧与云端 OCR、离线 LLM、多种翻译服务和文字朗读（TTS），译文可直接显示在画面上。Open-source no-root Android real-time screen translator for games, visual novels, and manga. Supports on-device and cloud OCR, offline LLMs, multiple translation services, on-screen translations, and text-to-speech (TTS).",
+      "language": "Kotlin",
+      "total_stars": 360,
+      "forks": 13,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "android",
+        "android-app",
+        "game-translation",
+        "gguf",
+        "kotlin",
+        "llama-cpp",
+        "llm",
+        "manga",
+        "manga-ocr",
+        "mlkit",
+        "no-root",
+        "ocr",
+        "offline-translation",
+        "paddleocr",
+        "screen-translation",
+        "shizuku",
+        "text-to-speech",
+        "translation",
+        "tts",
+        "visual-novel"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-06-22T10:58:05Z",
+      "updated_at": "2026-07-24T11:40:11Z",
+      "pushed_at": "2026-07-24T10:40:49Z",
+      "open_issues": 3,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n**简体中文** · [English](README.en.md)\n\n# 屏译 · Screen Translator\n\n**Android 屏幕实时翻译 · 截屏 → 识字 → 翻译 → 叠加显示 / 朗读**\n\n[![License](https://img.shields.io/github/license/ciddwd/overlay-translator?style=flat-square)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/ciddwd/overlay-translator?include_prereleases&style=flat-square)](../../releases)\n[![Downloads](https://img.shields.io/github/downloads/ciddwd/overlay-translator/total?style=flat-square)](../../releases)\n[![Stars](https://img.shields.io/github/stars/ciddwd/overlay-translator?style=flat-square)](https://github.com/ciddwd/overlay-translator)\n[![Issues](https://img.shields.io/github/issues/ciddwd/overlay-translator?style=flat-square)](../../issues)\n![Android API](https://img.shields.io/badge/Android-8.0%20%28API%2026%29%2B-3DDC84?style=flat-square&logo=android&logoColor=white)\n![Kotlin](https://img.shields.io/badge/Kotlin-2.x-7F52FF?style=flat-square&logo=kotlin&logoColor=white)\n![Compose](https://img.shields.io/badge/Jetpack-Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)\n[![QQ 群 1059655926](https://img.shields.io/badge/QQ%E7%BE%A4-1059655926-12B7F5?style=flat-square&logo=tencentqq&logoColor=white)](https://qun.qq.com/universal-share/share?ac=1&authKey=%2Fs0%2FaO4mEHsgutzjUnhGIQEWLcAcGPXTefUY2YwdMkPdnHHuB%2FpLZm9hPjcrw6n5&busi_data=eyJncm91cENvZGUiOiIxMDU5NjU1OTI2IiwidG9rZW4iOiJ4b25nS0FvSFQyMko4WjJTMHhGRlIwSnppeVB2eGJCNjFua0FDTGZzNUhEWlY3VkdPcFVaOEdMams0aEY3aFBTIiwidWluIjoiNTcyMjQyOTk4In0%3D&data=j7H7DHUunIEqMXYLZxhTkx-K_LZTTs5aBJS95LT_Y50uQy37d5IiUU2y3gAPcy9CYRzRufvHuTCaSHOQsLTkTw&svctype=4&tempid=h5_group_info)\n\n通过 MediaProjection / Shizuku 截屏 → 端侧或云端 OCR → LLM / 机器翻译 → 悬浮窗叠加显示。\n译文既可以盖在原文附近，也可以用手机语音、自建语音服务或在线音色朗读。\n无需 ROOT，单机可用，面向视觉小说、漫画、游戏对话等任意屏上文字的实时翻译。\n\n[安装](#-安装) · [使用](#-使用) · [配置](#-配置) · [参与开发](#-参与开发) · [Releases](../../releases) · [Issues](../../issues)\n\n</div>\n\n---\n\n## ✨ 功能\n\n### 🎯 一句话定位\n\n游戏 / 漫画 / 视觉小说画面在屏，按一下圆球，识别和翻译完成后，目标语言译文盖在原文上；需要时还能直接朗读。\n\n### 🖱️ 怎么触发翻译\n\n- **悬浮球单击**：默认翻整个屏幕；可切到「划词模式」——按一下后用手指圈一小块文字单独翻（更准、专挑要看的那一段）\n- **悬浮球长按**：弹出弧形子菜单，常用动作一指可达：循环翻译 / 重选区域 / 在「全屏翻译」和「划词翻译」之间切换 / 快速切源语言与目标语言 / 切换翻译预设 / 打开设置 / 回主页。**按钮顺序和每页数量可在设置里调整**；超过一页自动出现「下一组」翻页按钮\n- **循环模式**：可选固定间隔，或等待报幕文字稳定后再翻译；会跳过完全相同的画面 / 译文，并可优先检测下半屏对话区域，连续看剧情时不用反复点球\n- **音量双键**：同时按住「音量+ / 音量−」0.3 秒触发，手指不用离开游戏（需在系统无障碍中启用）\n- **从其它 App 选中文字**：在任意 App 里长按选中一段文字 → 系统菜单选「屏译翻译」→ 直接弹译文卡片，省去切到屏译再框选的步骤\n\n### 🔍 识别屏上的文字（OCR）\n\n- **本机识别**：ML Kit（中日韩英）/ PaddleOCR / 日漫 OCR——图不上传，无网也能用；PaddleOCR 支持 v5/v6 多档模型\n- **本地 HTTP OCR**：可接入局域网里的 Umi-OCR / LunaTranslator OCR 服务，适合把 PC 端 OCR 能力接到手机截屏流里\n- **云端识别**：PP-OCRv6 在线（PaddleOCR AI Studio）/ 百度 / 腾讯 / 有道——本机识不准时兜底；PP-OCRv6 在线需填写 AI Studio Access Token\n- 切源语言时会自动检查\"当前 OCR 能不能认这门语言\"，认不了会推荐换引擎，不用自己排查\n- 可自动判别横排 / 竖排 / 旋转文本方向，必要时重跑更合适的 OCR 路径；也可以手动锁定方向\n- PaddleOCR、日漫 OCR 和方向模型会按设备可用核心数动态选择 1 / 2 / 4 / 6 个 CPU 推理线程，最高 6 线程\n\n### 🌐 翻译引擎\n\n- **大语言模型**：DeepSeek / ChatGPT / Claude / 智谱 / 自建服务……支持 OpenAI 或 Anthropic 兼容方式，一边翻一边显示\n- **本机翻译**：Google ML Kit 下载语言包后可离线使用；Sakura 适合日语漫画和视觉小说翻简中，Hy-MT2 支持更多语言\n- **译名一致性**：可按全局或指定 App 保存人名、地点、组织和专业术语，让大语言模型和本机模型在连续剧情中使用固定译名\n- **DeepL**：官方付费 / 免费版自动识别，**支持自架 [deeplx](https://github.com/OwO-Network/DeepLX)**（免 key 的开源代理，能在自己服务器上跑），可选「官方 / deeplx / 自动 fallback」三种协议\n- **有道图翻**：截图直接换译文，跳过中间环节，特别适合漫画\n- **Google**：免 key、免费（国内需代理）\n- 联网引擎都可以先「测试连接」，DeepL 还能显示当前额度\n\n### 🔊 把译文读出来（TTS）\n\n- **手机系统语音**：不需要注册账号，直接使用手机里已有的声音，还能调整语速和音调\n- **更多声音选择**：也可以使用自己部署的语音服务，或火山引擎、MiniMax、MiMo 等在线服务；在线服务可能收费\n- **能读哪些内容**：原文、译文、划词卡片和字典内容都能朗读；横排文字还可以只选中其中一段来读\n- **播放控制**：再次点击同一段即可暂停或继续；点击另一段会改读新内容，失败时会直接说明原因。部分手机厂商的系统语音不会提供朗读位置，继续时只能从头读这一段\n- TTS 默认关闭，不想使用朗读功能时不会影响识别和翻译\n\n### 🔤 划词翻译（按一个词出字典）\n\n不只是翻整屏。框出屏上一个单词或短语，弹卡片一次告诉你：\n\n- **译文** —— 所有翻译引擎都给\n- **音标 / 词性 / 多条释义 / 例句对照 / 难点解释** —— **使用大语言模型时**才有完整字典；生僻词、专业名词、缩写、文化背景和易混用法会单独说明（百度 / 腾讯 / DeepL 这类只返回译文）\n- 卡片上有「复制原文」「复制译文」两个按钮，长按文字也能复制\n- 横屏时顶部关闭栏和底部复制栏固定，中间内容单独滚动，并自动避开状态栏、导航栏和刘海区域\n- 适合查游戏 / 漫画 / 视觉小说里冒出来的生词，单词长按一秒，比切回字典 App 快得多\n\n### 🎨 译文怎么显示\n\n- **两种渲染**：贴每段原文下 / 上 / 覆盖（BLOCKS），或装进一个可拖拽缩放的**悬浮窗口**（适合虚拟按键密集的游戏，让译文飘在画面上方不挡操作；可一键锁定避免误触）\n- **自动适配画面**：紧贴原文显示时，根据每个文字区域自动选择颜色、背景和字号，并尽量把译文放回原文位置；关闭后恢复原来的显示设置\n- **排版与阅读顺序统一**：默认让译文跟随 OCR 识别出的横排 / 竖排及阅读顺序；关闭后必须手动选择横排或竖排，以及从左到右或从右到左，OCR 块排序和译文渲染共用同一方向\n- **译文块可复制**：可选长按译文块调用系统文字选择，或点击译文块打开选择面板，按范围选择文字，也能整段复制原文 / 译文\n- **5 套配色 + 可视化取色器**：直接选择背景、文字、边框颜色和透明度，不需要手填 ARGB；横屏下取色面板可滚动\n- **完整文字样式**：加粗、倾斜、下划线、字符间距、行距、对齐、描边和阴影都可独立调整，预览与实际译文同步\n- **漫画 / 字幕优化**：自动把被切成几段的同一句话合到一起再翻；竖排日漫从右往左拼；漢字旁的小注音（振假名）自动去掉，译文不再重复；竖排场景可用竖排译文布局\n- **长译文跑马灯**：单行模式下太长不会被省略号截断，自动横向滚动\n- **译文字体自选**：导入 `.ttf` 后只作用于译文渲染，系统 UI 仍使用默认字体；已导入字体会以 chip 形式保留可切换\n\n### 🛠️ 用着舒服的小事\n\n- **中英界面 + 浅 / 深 / 跟随系统主题**，立即切换不重启\n- **设置项内搜索**：找不到选项？顶部搜一下，中英关键字都行；颜色、字体、备份、导入导出等新配置均已加入索引\n- **系统预设方案**：内置「离线日语漫画 OCR → 简中」等组合，一键完成识别、翻译和显示设置；日漫预设默认使用自动适配画面，缺模型时会提示先下载\n- **后台模型下载**：离开设置页后仍可继续；应用内和系统通知都会显示当前模型与下载进度，并支持取消、失败重试和断点续传\n- **按应用翻译上下文**：可自动识别前台 App，为不同游戏启用各自的术语；包名始终留在本机，只有主动开启时才把应用显示名称交给支持上下文的翻译模型\n- **便携配置包**：一键导出 / 导入非敏感设置、自定义预设和字体文件；API Key、Token 等凭据只留在当前设备\n- **翻译结果缓存**：当前运行期间，相同文本和翻译配置会复用结果；云端接口与端侧 LLM 都不会重复计算\n- **崩溃自动留现场**：Java 崩溃、原生崩溃、ANR、低内存退出等会在下次启动进入日志页，可导出经过脱敏的诊断报告\n- **基础 TalkBack 支持**：悬浮球、弧形菜单、语言 / 预设快切、截图选区、划词卡片和取色器都有读屏标签、状态与操作提示\n- **敏感设置加密保存**：API Key、prompt、镜像 URL、预设等持久化字段会迁移到加密存储，减少本机明文残留\n- **新版本自动提示**：进入主页自动检查（每天最多一次），国内拉不到会给你直链\n- **国产手机后台引导**：小米 / OPPO / VIVO / 华为 / 三星 容易杀后台的手机，有一键跳转设置的引导\n- **隐私保护**：明文 HTTP 默认只能在家里的局域网用，公网必须 HTTPS\n\n## 🧩 项目特点\n\n屏译将**截屏、文字识别、翻译、显示和朗读**分成可独立配置的环节：\n\n| 特点 | 说明 |\n|---|---|\n| **识别和翻译可以自由组合** | 识字可以在手机完成，也能连接自己的电脑或云服务；翻译方式可以单独选择，不会因为某一家服务不可用就让整套应用失效 |\n| **朗读方式不受翻译方式限制** | 无论用哪种方式翻译，都可以改用手机系统语音、自建语音服务或在线音色朗读，不需要重新设置 OCR 和翻译 |\n| **可以全离线，也可以完全自建** | 使用本机识别、本机翻译和已下载的系统语音时，截图与文字都能留在手机；也可以把识别、翻译和朗读服务放在自己的电脑或服务器上 |\n| **专门面向游戏、漫画和视觉小说** | 智能等待文字显示完整、跳过重复画面、优先处理对话框、识别竖排日漫，并让译文跟随原文位置和阅读方向；还可按游戏固定人名与术语 |\n| **开源且不锁配置** | 代码采用 Apache-2.0；设置、预设、术语和字体可以导出迁移，API Key 不会写进导出文件 |\n\n适合希望自行选择识别、翻译和朗读方式，并兼顾离线使用、竖排漫画与自建服务的用户。\n\n## 📸 截图\n\n**实际译文叠加** —— Discord 沟通规则页，OCR 紧贴原文渲染：\n\n| 经典深色主题 | 浅色纸张主题 | 自动适配画面 |\n|---|---|---|\n| <img src=\"docs/screenshots/overlay-discord-dark.png\" width=\"320\" alt=\"经典深色译文叠加\" /> | <img src=\"docs/screenshots/overlay-discord-light.png\" width=\"320\" alt=\"浅色纸张译文叠加\" /> | <img src=\"docs/screenshots/overlay-discord-adaptive.png\" width=\"320\" alt=\"Discord 自动适配画面\" /> |\n\n**日文漫画自动适配对比** —— 同一张竖排日漫从原版到自动适配画面，并展示将译文改为横排、从左向右后的效果：\n\n| 原版 | 自动适配画面 | 自动适配画面（横排、从左向右） |\n|---|---|---|\n| <img src=\"docs/screenshots/overlay-manga-jp-original.png\" width=\"280\" alt=\"日文漫画原版\" /> | <img src=\"docs/screenshots/overlay-manga-jp-adaptive.png\" width=\"280\" alt=\"日文漫画自动适配画面\" /> | <img src=\"docs/screenshots/overlay-manga-jp-adaptive-horizontal-ltr.png\" width=\"280\" alt=\"日文漫画自动适配画面，译文横排并从左向右\" /> |\n\n**游戏场景** —— Sandship UI 同一画面对比：原图、紧贴原文与自动适配画面。\n\n| 显示方式 | 画面 |\n|---|---|\n| 原图无处理 | <img src=\"docs/screenshots/overlay-game-original.jpg\" width=\"640\" alt=\"游戏原图无处理\" /> |\n| 紧贴原文 | <img src=\"docs/screenshots/overlay-game-source-aligned.jpg\" width=\"640\" alt=\"游戏译文紧贴原文\" /> |\n| 自动适配画面 | <img src=\"docs/screenshots/overlay-game-adaptive.jpg\" width=\"640\" alt=\"游戏译文自动适配画面\" /> |\n\n**漫画 / 字幕场景** —— 漫画气泡按列识别后译文紧贴覆盖：\n\n| 韩文漫画 | 日文竖排漫画 |\n|---|---|\n| <img src=\"docs/screenshots/overlay-manga.png\" width=\"320\" alt=\"韩文漫画译文叠加\" /> | <img src=\"docs/screenshots/overlay-manga-jp.png\" width=\"320\" alt=\"日文竖排漫画译文叠加\" /> |\n\n\n**悬浮窗口模式** —— 把所有原文 / 译文集中到一个可拖拽缩放的浮窗里，避免「贴原文」模式下译文挡住游戏操控（虚拟摇杆 / 按键 / 对话推进键）。窗口支持**锁定**：解锁时可拖动、可缩放、带 X 关闭按钮和底部缩放手柄；锁定后只剩文字内容，不响应任何手势，彻底防误触。\n\n| 解锁（可拖拽 / 缩放 / 关闭） | 锁定（防误触，只剩内容） |\n|---|---|\n| <img src=\"docs/screenshots/floating-window-unlocked.jpg\" width=\"420\" alt=\"悬浮窗口解锁状态\" /> | <img src=\"docs/screenshots/floating-window-locked.jpg\" width=\"420\" alt=\"悬浮窗口锁定状态\" /> |\n\n**长按悬浮球的弧形子菜单 & 划词翻译卡片** —— 左：长按弹出菜单，循环 / 选区 / 在「全屏翻译」和「划词翻译」之间切换 / 回主页（按钮顺序可在设置里拖动重排）；右：圈出屏上一个词后弹出的卡片，连读音、词性、多条释义、例句一起呈现，并可分别朗读原文、译文和词典内容（使用大语言模型时才能拿到这套完整字典）。\n\n| 长按弹出的弧形菜单 | 划词翻译卡片（带字典 / TTS 朗读） |\n|---|---|\n| <img src=\"docs/screenshots/arc-menu.png\" width=\"320\" alt=\"长按悬浮球弹出弧形菜单\" /> | <img src=\"docs/screenshots/word-select.png\" width=\"320\" alt=\"支持字典与 TTS 朗读的划词翻译卡片\" /> |\n\n**译文块选择 / 复制 / 朗读** —— 把译文块点击动作设为「打开选择面板」后，点击任意译文块即可同时查看原文和译文。拖动选区后可使用系统的「复制 / 全选」，也可一键复制整段原文或译文；点击原文或译文右侧的扬声器按钮，可使用应用内朗读功能播放对应整段内容。\n\n<p><strong><span style=\"color: red;\">提示：竖排译文暂时不能通过长按来选中一小段朗读；可以改用「点击块选择复制」模式，通过扬声器按钮朗读整段原文或译文。</span></strong></p>\n\n<p align=\"left\">\n  <img src=\"docs/screenshots/translation-block-selection.png\" width=\"420\" alt=\"译文块文字选择、复制与朗读面板\" />\n</p>\n\n**设置页**：\n\n| 语言 / 主题 / 系统预设 | 翻译后端 |\n|---|---|\n| <img src=\"docs/screenshots/settings-top.png\" width=\"280\" alt=\"设置顶部与系统预设\" /> | <img src=\"docs/screenshots/settings-translator.png\" width=\"280\" alt=\"翻译后端设置\" /> |\n| **OCR 引擎** | **方向模型设置** |\n| <img src=\"docs/screenshots/settings-ocr.png\" width=\"280\" alt=\"OCR 引擎设置\" /> | <img src=\"docs/screenshots/settings-direction-model.png\" width=\"280\" alt=\"自动方向判别与方向模型设置\" /> |\n| **译文样式与字体** | **自动适配画面** |\n| <img src=\"docs/screenshots/settings-display.png\" width=\"280\" alt=\"译文显示与字体设置\" /> | <img src=\"docs/screenshots/settings-display-adaptive.png\" width=\"280\" alt=\"自动适配画面设置\" /> |\n| **弧形菜单按钮** | **悬浮窗口模式选项** |\n| <img src=\"docs/screenshots/settings-arc-menu.png\" width=\"280\" alt=\"弧形菜单按钮设置\" /> | <img src=\"docs/screenshots/settings-display-floating.png\" width=\"280\" alt=\"悬浮窗口模式设置\" /> |\n| **段落合并 / 悬浮球** | **智能循环翻译** |\n| <img src=\"docs/screenshots/settings-floating.png\" width=\"280\" alt=\"段落合并与悬浮球设置\" /> | <img src=\"docs/screenshots/settings-loop-translation.png\" width=\"280\" alt=\"智能循环翻译设置\" /> |\n\n| **TTS 朗读设置** |\n|---|\n| <img src=\"docs/screenshots/settings-tts.png\" width=\"280\" alt=\"TTS 朗读引擎、系统音色、语速、音调和测试文本设置\" /> |\n\n## 📦 安装\n\n1. 到本仓库的 [Releases](../../releases) 页下载最新 `ScreenTranslator-x.y.z.apk`\n2. 在 Android 设备上点击安装（首次需在系统设置允许\"安装未知来源应用\"）\n3. 启动后依次授予 **悬浮窗**、**通知** 权限\n\n目前只发布 **`arm64-v8a`（64 位 ARM）** 版本，32 位 ARM 和 x86 设备暂不支持。下载前可以先在系统信息或设备资料中确认处理器架构。\n\n每个 APK 同时附带 `.sha256` 校验文件，可对照本地 `Get-FileHash` / `sha256sum` 输出确认下载完整性。\n\n## 🚀 使用\n\n1. 启动 App，点 **启动截屏服务**，确认系统弹出的\"开始截屏？\"对话框\n2. 切到任意游戏 / 视觉小说 / 漫画 App\n3. 点屏幕上的圆形悬浮按钮 → 识别和翻译完成后显示译文；等待时间取决于手机性能、画面和所选服务\n4. 长按悬浮按钮 → 打开弧形菜单，可切换循环模式、重选截图区域、切源语言/目标语言、切翻译预设，或在整屏翻译与划词翻译之间切换（循环可使用固定间隔，也可等待文字稳定后自动翻译）\n5. 默认单击译文条隐藏、长按选择复制；也可在设置中改为点击译文块打开原文 / 译文复制面板\n\n可选：\n- 在系统\"无障碍\"里启用本应用，**同时按下音量加 / 音量减并按住 300ms** 作为全局触发。该服务不读取其它 App 的无障碍文字或 View 树；屏译自身的主要悬浮控件提供 TalkBack 标签、状态和操作提示\n- 安装 [Shizuku](https://github.com/RikkaApps/Shizuku) 并授权后，在设置切换到 Shizuku 截屏路径，免去每次的系统授权弹窗；截屏会优先走原始像素通路，并用 PNG 作为兼容回退\n- 在设置顶部选择系统预设方案，例如「离线日语漫画 OCR → 简中」。预设需要的模型未就绪时，会显示缺失项并提供下载入口\n- 若只想查一个词，先在弧形菜单把主球操作切到「划词翻译」，再框选屏幕上的单词 / 短语；也可以在其它 App 中选中文本后从系统菜单调用屏译\n- 若想听原文或译文，在设置中打开 TTS 并选择声音；之后点击文字旁的扬声器按钮即可朗读\n\n## ⚙️ 配置\n\n启动 App 后进入\"设置\"。设置页顶部可切换 **应用语言** 与 **主题模式**；任意 section 都可用搜索图标按关键字（中英文都行）快速跳转。\n\n### OCR 引擎\n\n| 引擎 | 适用场景 | 备注 |\n|---|---|---|\n| **端侧** ML Kit (auto / latin / ja / zh / ko) | 默认；日文 / 中文 / 韩文 / 拉丁字符 | 无需外网，端侧推理 |\n| **端侧** PaddleOCR PP-OCRv5 / v6 | 多语种密排文字、UI 按钮、横排中文 / 英文 | 支持 v5 mobile、v6 tiny / small / medium；首次使用需模型就绪，见下 |\n| **端侧** 日漫 OCR | 日语漫画、竖排气泡、手写感字体 | 使用 manga-ocr ONNX，复用 DBNet 检测；约 140 MB，按需下载或本地导入 |\n| **本地 HTTP** Umi-OCR | 已在 PC / 局域网部署 [Umi-OCR](https://github.com/hiroi-sora/Umi-OCR) 的场景 | 填 `http://<host>:<port>/api/ocr`，手机截图发到你的局域网服务 |\n| **本地 HTTP** LunaTranslator | 已在 PC / 局域网部署 [LunaTranslator](https://github.com/HIllya51/LunaTranslator) OCR 的场景 | 填 LunaTranslator OCR HTTP endpoint |\n| **云端** PP-OCRv6 在线 | 中文、日文及拉丁字母多语种 | 使用 PaddleOCR AI Studio `PP-OCRv6` 异步任务接口；需 AI Studio Access Token |\n| **云端** 百度 OCR | ML Kit / Paddle 漏检兜底 | 需 API Key + Secret，按量计费；5 个 endpoint（标准/含位置/高精度/含位置高精度/网络图片）；图片有尺寸 / 宽高比限制 |\n| **云端** 腾讯 OCR | 同上 | 需 SecretId + SecretKey；3 个 endpoint：GeneralBasic / GeneralAccurate / **RecognizeAgent**（LLM 智能体，已对接 ParagNo 段落分组合并） |\n| **云端** 有道云 OCR | 简单一键 | 需 应用 ID（API Key）+ 应用密钥；langType 跟随源语言自动映射，无需独立选择 |\n\n<details>\n<summary><strong>端侧 OCR 基准测试</strong></summary>\n\n测试条件：\n\n- 设备：高通骁龙 8 Gen 3，16 GB 内存\n- 测试画面：同一张日文漫画截图，全屏 `1440×3200`\n- 预处理与文本合并关闭；Debug 构建开启详细性能日志\n- 「OCR 耗时」是引擎内部识别耗时；「完整流程」还包含截屏、方向判断、必要的模型切换和渲染\n- 以下是单台设备、单张画面的实测记录，用于比较本项目内不同端侧模型，不代表所有设备和图片的固定表现\n\n#### 速度优先\n\n| OCR 模型 | OCR 耗时 | 完整流程 | 本次画面识别情况 |\n|---|---:|---:|---|\n| PP-OCRv5 Mobile | 平均 1.17 秒 | 平均 2.30 秒"
+    },
+    "brief": {
+      "summary": "无需 ROOT 的 Android 屏幕实时翻译工具",
+      "problem": "解决游戏、漫画和视觉小说中的屏幕文字翻译问题",
+      "highlights": [
+        "支持端侧与云端 OCR",
+        "可接入多种翻译服务和离线模型",
+        "译文可叠加显示并支持朗读"
+      ],
+      "target_users": [
+        "游戏玩家",
+        "视觉小说读者",
+        "漫画读者"
+      ],
+      "why_trending": "本周首次收录，已有 360 Star 且近期仍有更新",
+      "caveat": "部分云端服务、在线语音可能需要网络或付费",
+      "category": "ACG 本地化",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "ciddwd/overlay-translator",
+      "score": 93,
+      "category": "ACG 本地化",
+      "reason": "游戏视觉小说漫画实时翻译",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "modelscope/FunClip",
+      "url": "https://github.com/modelscope/FunClip",
+      "description": "FunASR-powered video transcription, subtitle generation, and LLM-assisted clipping tool with a local Gradio UI.",
+      "language": "Python",
+      "total_stars": 6052,
+      "forks": 722,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "ai-tools",
+        "ai-video-editing",
+        "asr",
+        "auto-subtitles",
+        "chinese",
+        "content-creation",
+        "funasr",
+        "funclip",
+        "gradio",
+        "llm",
+        "paraformer",
+        "speech-recognition",
+        "speech-to-text",
+        "subtitles-generator",
+        "transcription",
+        "video-editing",
+        "video-processing",
+        "video-subtitles",
+        "video-transcription",
+        "whisper-alternative"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-05-17T07:23:44Z",
+      "updated_at": "2026-07-24T11:24:02Z",
+      "pushed_at": "2026-07-24T11:23:44Z",
+      "open_issues": 0,
+      "homepage": "https://huggingface.co/spaces/FunAudioLLM/FunClip",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![SVG Banners](https://svg-banners.vercel.app/api?type=rainbow&text1=FunClip%20%20🥒&width=800&height=210)](https://github.com/Akshay090/svg-banners)\n\n### <p align=\"center\">「[简体中文](./README_zh.md) | English」</p>\n\n**<p align=\"center\"> ⚡ Open-source, accurate and easy-to-use video clipping tool </p>**\n**<p align=\"center\"> 🧠 Explore LLM based video clipping with FunClip </p>**\n\n<p align=\"center\"> <img src=\"docs/images/interface.jpg\" width=444/></p>\n\n<p align=\"center\" class=\"trendshift\">\n<a href=\"https://trendshift.io/repositories/20318\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/20318\" alt=\"modelscope%2FFunClip | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"300\" height=\"55\"/></a>\n</p>\n\n<div align=\"center\">  \n<h4>\n<a href=\"#What's New\"> What's New </a>\n｜<a href=\"#On Going\"> On Going </a>\n｜<a href=\"#Install\"> Install </a>\n｜<a href=\"#Usage\"> Usage </a>\n｜<a href=\"#Community\"> Community </a>\n</h4>\n</div>\n\n**FunClip** is a fully open-source, locally deployed automated video clipping tool. It leverages Alibaba TONGYI speech lab's open-source [FunASR](https://github.com/modelscope/FunASR) Paraformer series models to perform speech recognition on videos. Then, users can freely choose text segments or speakers from the recognition results and click the clip button to obtain the video clip corresponding to the selected segments (Quick Experience [Modelscope⭐](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary) [HuggingFace🤗](https://huggingface.co/spaces/FunAudioLLM/FunClip)).\n\n## Highlights🎨\n\n- 🔥Try AI clipping using LLM in FunClip now.\n- FunClip integrates Alibaba's open-source industrial-grade model [Paraformer-Large](https://modelscope.cn/models/iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary), which is one of the best-performing open-source Chinese ASR models available, with over 13 million downloads on Modelscope. It can also accurately predict timestamps in an integrated manner.\n- FunClip incorporates the hotword customization feature of [SeACo-Paraformer](https://modelscope.cn/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary), allowing users to specify certain entity words, names, etc., as hotwords during the ASR process to enhance recognition results.\n- FunClip integrates the [CAM++](https://modelscope.cn/models/iic/speech_campplus_sv_zh-cn_16k-common/summary) speaker recognition model, enabling users to use the auto-recognized speaker ID as the target for trimming, to clip segments from a specific speaker.\n- The functionalities are realized through Gradio interaction, offering simple installation and ease of use. It can also be deployed on a server and accessed via a browser.\n- FunClip supports multi-segment free clipping and automatically returns full video SRT subtitles and target segment SRT subtitles, offering a simple and convenient user experience.\n\n<a name=\"What's New\"></a>\n## What's New🚀\n- 2026/05/20 FunClip now supports [Fun-ASR-Nano](https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-2512) and [SenseVoice](https://huggingface.co/FunAudioLLM/SenseVoiceSmall) models. The `fun-asr-nano` option loads the flagship Fun-ASR-Nano-2512 checkpoint for Mandarin, English, Japanese, 7 Chinese dialect groups, and 26 regional accents; it does not load the separate 31-language Fun-ASR-MLT-Nano-2512 checkpoint. SenseVoice adds emotion recognition and audio event detection. Run `python funclip/launch.py -m fun-asr-nano` or `-m sensevoice` to try. For precise text-based clipping, use Paraformer because the released Nano checkpoint does not provide reliable character-level timestamps.\n- 2024/06/12 FunClip now supports recognizing and clipping English audio files. Run `python funclip/launch.py -l en` to try.\n- 🔥2024/05/13 FunClip v2.0.0 now supports smart clipping with large language models, integrating models from the qwen series, GPT series, etc., providing default prompts. You can also explore and share tips for setting prompts, the usage is as follows:\n  1. After the recognition, select the name of the large model and configure your own apikey;\n  2. Click on the 'LLM Inference' button, and FunClip will automatically combine two prompts with the video's srt subtitles;\n  3. Click on the 'AI Clip' button, and based on the output results of the large language model from the previous step, FunClip will extract the timestamps for clipping;\n  4. You can try changing the prompt to leverage the capabilities of the large language models to get the results you want;\n- 2024/05/09 FunClip updated to v1.1.0, including the following updates and fixes:\n  - Support configuration of output file directory, saving ASR intermediate results and video clipping intermediate files;\n  - UI upgrade (see guide picture below), video and audio cropping function are on the same page now, button position adjustment;\n  - Fixed a bug introduced due to FunASR interface upgrade, which has caused some serious clipping errors;\n  - Support configuring different start and end time offsets for each paragraph;\n  - Code update, etc;\n- 2024/03/06 Fix bugs in using FunClip with command line.\n- 2024/02/28 [FunASR](https://github.com/modelscope/FunASR) is updated to 1.0 version, use FunASR1.0 and SeACo-Paraformer to conduct ASR with hotword customization.\n- 2023/10/17 Fix bugs in multiple periods chosen, used to return video with wrong length.\n- 2023/10/10 FunClipper now supports recognizing with speaker diarization ability, choose 'yes' button in 'Recognize Speakers' and you will get recognition results with speaker id for each sentence. And then you can clip out the periods of one or some speakers (e.g. 'spk0' or 'spk0#spk3') using FunClipper.\n\n<a name=\"On Going\"></a>\n## On Going🌵\n\n- [x] FunClip will support Whisper model for English users, coming soon (ASR using Whisper with timestamp requires massive GPU memory, we support timestamp prediction for vanilla Paraformer in FunASR to achieving this).\n- [x] FunClip will further explore large language model based AI clipping. Feedback and prompt-setting tips are welcome.\n- [ ] Reverse periods choosing while clipping.\n- [ ] Removing silence periods.\n\n<a name=\"Install\"></a>\n## Install🔨\n\n### Python env install\n\nFunClip basic functions rely on a python environment only.\n```shell\n# clone funclip repo\ngit clone https://github.com/modelscope/FunClip.git\ncd FunClip\n# install Python requirments\npip install -r ./requirements.txt\n```\n\nFunClip's Fun-ASR-Nano, SenseVoice, and subtitle compatibility paths require `funasr>=1.3.28`. This release preserves stable final text after VAD-locked regressions and decodes short trailing speech on `STOP`, improving the final subtitle segment. If you installed FunClip before this requirement was updated, run `pip install -U \"funasr>=1.3.28\"` before starting the Gradio service. [Release notes](https://github.com/modelscope/FunASR/releases/tag/v1.3.28) · [subtitle guide](https://www.funasr.com/en/blog/funasr-v1-3-28-realtime-websocket-subtitles.html)\n\n### imagemagick install (Optional)\n\nIf you want to clip video file with embedded subtitles\n\n1. ffmpeg and imagemagick is required\n\n- On Ubuntu\n```shell\napt-get -y update && apt-get -y install ffmpeg imagemagick\nsed -i 's/none/read,write/g' /etc/ImageMagick-6/policy.xml\n```\n- On MacOS\n```shell\nbrew install imagemagick\nsed -i '' 's/none/read,write/g' \"$(brew --prefix imagemagick)/etc/ImageMagick-7/policy.xml\" \n```\n- On Windows\n\nDownload and install imagemagick https://imagemagick.org/script/download.php#windows\n\nFind your python install path and change the `IMAGEMAGICK_BINARY` to your imagemagick install path in file `site-packages\\moviepy\\config_defaults.py`\n\n2. Download font file to funclip/font\n\n```shell\nwget https://isv-data.oss-cn-hangzhou.aliyuncs.com/ics/MaaS/ClipVideo/STHeitiMedium.ttc -O font/STHeitiMedium.ttc\n```\n<a name=\"Usage\"></a>\n## Use FunClip\n\n### A. Use FunClip as local Gradio Service\nYou can establish your own FunClip service which is same as [Modelscope Space](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary) as follow:\n```shell\npython funclip/launch.py\n# '-m fun-asr-nano' for the flagship Fun-ASR-Nano model (Mandarin, English,\n# Japanese, 7 Chinese dialect groups, and 26 regional accents)\n# '-m sensevoice' for SenseVoice model (multilingual ASR + emotion + audio event detection)\n# '-l en' for English audio recognize\n# '-p xxx' for setting port number\n# '-s True' for establishing service for public accessing\n```\n\n#### Model selection quick start\n\n| Scenario | Command |\n| --- | --- |\n| Default Chinese video clipping with Paraformer | `python funclip/launch.py` |\n| High-accuracy transcription with the flagship Fun-ASR-Nano checkpoint (use Paraformer for precise text-based clipping) | `python funclip/launch.py -m fun-asr-nano` |\n| Multilingual ASR with emotion and audio event tags | `python funclip/launch.py -m sensevoice` |\n| English video clipping with the Paraformer English model | `python funclip/launch.py -l en` |\n\nIf you only need offline speech transcription on CPU or edge devices and do not need FunClip's video clipping UI, use the FunASR llama.cpp / GGUF runtime instead: [funasr.com/llama-cpp](https://www.funasr.com/llama-cpp.html) · [Fun-ASR-Nano-GGUF](https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-GGUF) · [SenseVoiceSmall-GGUF](https://huggingface.co/FunAudioLLM/SenseVoiceSmall-GGUF).\n\nthen visit ```localhost:7860``` you will get a Gradio service like below and you can use FunClip following the steps:\n\n- Step1: Upload your video file (or try the example videos below)\n- Step2: Copy the text segments you need to 'Text to Clip'\n- Step3: Adjust subtitle settings (if needed)\n- Step4: Click 'Clip' or 'Clip and Generate Subtitles'\n\n<img src=\"docs/images/guide.jpg\"/>\n\nFollow the guide below to explore LLM based clipping:\n\n<img src=\"docs/images/LLM_guide.png\" width=360/>\n\n#### Content-aware clipping with TwelveLabs Pegasus (optional)\n\nBesides the transcript-based LLMs above, FunClip can optionally use [TwelveLabs](https://twelvelabs.io) Pegasus, a video understanding model that reasons over the actual video (visuals + audio) rather than only the ASR transcript. This helps pick highlight segments even when the transcript alone is ambiguous (e.g. action, scene changes, on-screen events). To use it, select the `pegasus1.5` model name, paste your TwelveLabs API key, upload a video, and click 'LLM Inference' — Pegasus returns segments in the same `N. [start-end] text` format, so the existing 'AI Clip' button works unchanged. It needs `pip install twelvelabs`, and a free API key is available at https://twelvelabs.io.\n\n### B. Experience FunClip in Modelscope\n\n[FunClip@Modelscope Space⭐](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary)\n\n[FunClip@HuggingFace Space🤗](https://huggingface.co/spaces/FunAudioLLM/FunClip)\n\n### C. Use FunClip in command line\n\nFunClip supports you to recognize and clip with commands:\n```shell\n# download the example video used in the commands below\nmkdir -p examples\nwget \"https://huggingface.co/spaces/R1ckShi/FunClip/resolve/main/examples/2022%E4%BA%91%E6%A0%96%E5%A4%A7%E4%BC%9A_%E7%89%87%E6%AE%B5.mp4\" -O \"examples/2022云栖大会_片段.mp4\"\n\n# step1: Recognize\npython funclip/videoclipper.py --stage 1 \\\n                       --file examples/2022云栖大会_片段.mp4 \\\n                       --output_dir ./output\n# now you can find recognition results and entire SRT file in ./output/\n# step2: Clip\npython funclip/videoclipper.py --stage 2 \\\n                       --file examples/2022云栖大会_片段.mp4 \\\n                       --output_dir ./output \\\n                       --dest_text '我们把它跟乡村振兴去结合起来，利用我们的设计的能力' \\\n                       --start_ost 0 \\\n                       --end_ost 100 \\\n                       --output_file './output/res.mp4'\n```\n\n<a name=\"Community\"></a>\n## Community Communication🍟\n\nFunClip was first open-sourced by the FunASR team, and useful PRs are welcome.\n\nYou can also scan the following DingTalk group or WeChat group QR code to join "
+    },
+    "brief": {
+      "summary": "本地运行的AI视频转写、字幕与智能剪辑工具",
+      "problem": "视频内容难以快速转写、定位片段并生成字幕",
+      "highlights": [
+        "支持Paraformer语音识别与时间戳",
+        "可按文本或说话人截取片段",
+        "支持LLM辅助智能剪辑与SRT字幕"
+      ],
+      "target_users": [
+        "视频创作者",
+        "字幕制作人员",
+        "内容运营团队"
+      ],
+      "why_trending": "总Star超6000，本周首次收录且近期持续更新",
+      "caveat": "Nano模型不适合需要精确字符级时间戳的剪辑",
+      "category": "视频剪辑",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "modelscope/FunClip",
+      "score": 92,
+      "category": "视频剪辑",
+      "reason": "自动转写字幕与智能剪辑",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "HIllya51/LunaTranslator",
+      "url": "https://github.com/HIllya51/LunaTranslator",
+      "description": "视觉小说翻译器 / Visual Novel Translator",
+      "language": "C++",
+      "total_stars": 12475,
+      "forks": 1121,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "ocr",
+        "reverse-engineering",
+        "translator",
+        "visual-novel",
+        "win32"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2022-09-28T03:10:53Z",
+      "updated_at": "2026-07-24T11:28:49Z",
+      "pushed_at": "2026-07-24T11:28:38Z",
+      "open_issues": 70,
+      "homepage": "https://lunatranslator.org/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n### 简体中文  | [English](#lunatranslator-1) | [繁體中文](https://docs.lunatranslator.org/cht/) | [한국어](https://docs.lunatranslator.org/ko/) | [日本語](https://docs.lunatranslator.org/ja/) | [Tiếng Việt](https://docs.lunatranslator.org/vi/) | [Русский язык](https://docs.lunatranslator.org/ru/)\n\n---\n\n# LunaTranslator  <span style=\"float: right;\">[【软件下载 & 常见问题】](https://docs.lunatranslator.org/zh/README.html)</span>\n\n\n\n> **视觉小说翻译器**\n\n**如果使用中遇到困难，可以查阅[使用说明](https://docs.lunatranslator.org/zh)、观看[我的B站视频](https://space.bilibili.com/592120404/video)，也欢迎加入[QQ群](https://qm.qq.com/q/mPSu3sG5ri)。**\n\n## 功能支持\n\n- **[HOOK](https://docs.lunatranslator.org/zh/hooksettings.html)** 主要使用HOOK提取游戏文本，几乎适配了所有的常见和冷门的视觉小说\n\n- **[内嵌翻译](https://docs.lunatranslator.org/zh/embedtranslate.html)** 部分游戏还可以直接内嵌翻译到游戏中，以获取沉浸式体验\n\n- **[HOOK模拟器](https://docs.lunatranslator.org/zh/emugames.html)** 对NS/PSP/PSV/PS2上的大部分游戏，支持HOOK模拟器直接读取游戏文本\n\n- **[OCR](https://docs.lunatranslator.org/zh/useapis/ocrapi.html)** 内置较高精度的OCR模型，并支持许多其他在线&离线OCR引擎，以便灵活的读取任意文本\n\n- **[丰富的翻译接口](https://docs.lunatranslator.org/zh/guochandamoxing.html)** 支持几乎所有翻译引擎，包括大语言模型翻译、离线翻译等\n\n- **[语言学习](https://docs.lunatranslator.org/zh/qa1.html)** 支持日语分词及假名注音，支持AnkiConnect，支持Yomitan插件\n\n- **[语音合成](https://docs.lunatranslator.org/zh/ttsengines.html)** 支持大量在线&离线语音合成引擎\n\n- **[语音识别](https://docs.lunatranslator.org/zh/sr.html)** 在Windows 10和Windows 11上，可以使用Windows语音识别。\n\n## 开源许可\n\nLunaTranslator使用 [GPLv3](../LICENSE) 许可证。\n\n## 支持作者\n\n软件维护不易，如果您感觉该软件对你有帮助，欢迎通过[爱发电](https://afdian.com/a/HIllya51)，或微信扫码赞助，您的支持将成为软件长期维护的助力，谢谢~\n\n<a href=\"https://afdian.com/a/HIllya51\"><img width=\"200\" src=\"https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png\" alt=\"\"></a>\n\n<img src='../src/files/static/zan.jpg' style=\"height: 300px !important;\">\n\n---\n\n# LunaTranslator  \n\n> **Visual Novel Translator**\n\n**If you encounter any difficulties while using the software, you can check the [User Guide](https://docs.lunatranslator.org/en), or join our [Discord](https://discord.com/invite/ErtDwVeAbB).**\n\n## Features\n\n\n- **[HOOK](https://docs.lunatranslator.org/en/hooksettings.html)** Primarily uses HOOK to extract game text, compatible with almost all popular and niche visual novels.  \n\n- **[Embedded Translation](https://docs.lunatranslator.org/en/embedtranslate.html)** Some games also support directly embedding translations into the game for an immersive experience.\n\n- **[HOOK Emulator](https://docs.lunatranslator.org/en/emugames.html)** Supports HOOK emulators to directly extract text from most games on NS/PSP/PSV/PS2.\n\n- **[OCR](https://docs.lunatranslator.org/en/useapis/ocrapi.html)** Built-in high-precision OCR model, supporting many other online & offline OCR engines for flexible text extraction.  \n\n- **[Rich Translation APIs](https://docs.lunatranslator.org/en/guochandamoxing.html)** Supports almost all translation engines, including large language model translation, offline translation, and more.\n\n- **[Language Learning](https://docs.lunatranslator.org/en/qa1.html)** Supports Japanese word segmentation and kana annotation, supports AnkiConnect, supports Yomitan plugin\n\n- **[Text-to-Speech](https://docs.lunatranslator.org/en/ttsengines.html)** Supports a wide range of online & offline text-to-speech engines.  \n\n- **[Speech Recognition](https://docs.lunatranslator.org/en/sr.html)** On Windows 10 and Windows 11, you can use Windows Speech Recognition.\n\n## License\n\nLunaTranslator uses [GPLv3](../LICENSE) License\n\n\n## Sponsors\n\nSoftware maintenance is not easy. If you find this software helpful, feel free to support me via [Patreon](https://patreon.com/HIllya51). Your support will contribute to the long-term maintenance of the software. Thank you~\n\n<a href=\"https://patreon.com/HIllya51\" target='_blank'><img width=\"200\" src=\"../docs/become_a_patron_4x1_black_logo_white_text_on_coral.svg\"></a>\n\n\n| <img src=\"https://signpath.org/assets/favicon.png\" width=\"25\" height=\"25\" align=\"center\"> | Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). |\n| :--- | :--- |\n\n"
+    },
+    "brief": {
+      "summary": "面向视觉小说的文本提取与多引擎翻译工具",
+      "problem": "解决视觉小说文本难提取、难翻译和语言学习支持不足的问题",
+      "highlights": [
+        "支持HOOK提取游戏文本",
+        "支持OCR及在线、离线翻译引擎",
+        "支持嵌入翻译、分词注音与语音功能"
+      ],
+      "target_users": [
+        "视觉小说玩家",
+        "日语学习者",
+        "本地化开发者"
+      ],
+      "why_trending": "总 Star 超过1.2万，本周首次收录且近期有提交",
+      "caveat": "部分游戏才支持内嵌翻译，实际兼容性需测试",
+      "category": "ACG 本地化",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "HIllya51/LunaTranslator",
+      "score": 90,
+      "category": "ACG 本地化",
+      "reason": "视觉小说OCR翻译工具",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "A-kirami/webgal-craft",
+      "url": "https://github.com/A-kirami/webgal-craft",
+      "description": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
+      "language": "TypeScript",
+      "total_stars": 20,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "game-development",
+        "visual-novel",
+        "visual-novel-editor",
+        "webgal"
+      ],
+      "license_name": "MPL-2.0",
+      "created_at": "2025-10-24T07:39:30Z",
+      "updated_at": "2026-07-24T11:19:48Z",
+      "pushed_at": "2026-07-24T11:19:21Z",
+      "open_issues": 0,
+      "homepage": "https://webgalcraft.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft\">\n    <br />\n    <img src=\"./public/webgal-craft-logo.svg\" alt=\"WebGAL Craft Logo\" width=\"160\" />\n    <br />\n    <h1 align=\"center\">WebGAL Craft</h1>\n  </a>\n</p>\n\n<p align=\"center\">\n  面向 WebGAL 创作者的跨平台视觉小说工作室\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"./LICENSE\">\n    <img src=\"https://img.shields.io/badge/license-MPL--2.0-blue\" alt=\"License MPL-2.0\" />\n  </a>\n  <img src=\"https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-6f42c1\" alt=\"Supported platforms: Windows, macOS, Linux\" />\n  <br />\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img src=\"https://img.shields.io/github/v/release/A-kirami/webgal-craft?include_prereleases&&color=70aeff&style=social\" alt=\"Release Version\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/stargazers\" target=\"__blank\"\n    ><img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/A-kirami/webgal-craft?style=social\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img alt=\"GitHub downloads\" src=\"https://img.shields.io/github/downloads/A-kirami/webgal-craft/total?style=social\"\n  /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\">下载最新版</a>\n  ·\n  <a href=\"https://webgalcraft.com\">官方网站</a>\n  ·\n  <a href=\"https://github.com/A-kirami/webgal-craft/issues\">反馈问题</a>\n  ·\n  <a href=\"https://qm.qq.com/q/W2Dt9V2F66\">加入交流群</a>\n</p>\n\nWebGAL Craft 是一款为 [WebGAL](https://github.com/OpenWebGAL/WebGAL) 游戏创作者设计的创作工具。它把项目管理、脚本编辑、资源浏览、可视化语句编辑和实时预览放在同一个工作流里，让创作者可以更直接地组织素材、编写演出并检查游戏效果。\n\n## 特性\n\n**资源管理**\n\n集中管理立绘、背景、音效等项目素材，在创作过程中随取随用。\n\n**可视化编辑**\n\n在可视化界面中组织剧情、对白和演出参数，同时保留脚本编辑能力，兼顾上手效率与精细控制。\n\n**本地历史版本**\n\n自动记录场景保存历史，脚本变更可追溯、可回退，长篇项目也能更稳妥地维护。\n\n**快速预览**\n\n在编辑器中实时预览演出效果，边创作边验证，减少在编辑器和游戏窗口之间反复切换。\n\n**引擎与模板切换**\n\n按作品需要管理和切换 WebGAL 引擎与项目模板，便于适配不同版本和制作风格。\n\n**演出参数复用**\n\n保存常用语句默认值与语句组，减少重复配置和手写脚本，让创作流程更稳定。\n\n## 下载安装\n\n前往 [Releases](https://github.com/A-kirami/webgal-craft/releases) 下载适合你系统的最新版本。\n\n| 平台 | 构建 | 推荐下载 |\n| --- | --- | --- |\n| Windows | 64-bit | `.exe` |\n| macOS | Intel / Apple Silicon | `.dmg` |\n| Linux | x64 | `.AppImage` / `.deb` |\n\n## 快速上手\n\n> [!IMPORTANT]\n> WebGAL Craft 需要 WebGAL `4.6.2` 或以上版本的引擎，可在 [WebGAL Releases](https://github.com/OpenWebGAL/WebGAL/releases) 获取\n\n1. 下载并安装适合你系统的 WebGAL Craft。\n2. 打开 WebGAL Craft，在主页安装游戏引擎。\n3. 创建新游戏，或导入已有 WebGAL 游戏目录。\n4. 进入编辑后，在文本/可视化编辑器、资源面板和预览面板之间完成创作。\n\n## 贡献\n\nWebGAL Craft 欢迎任何形式的贡献，详情请阅读[贡献指南](./.github/CONTRIBUTING.md)。\n\n## 许可证\n\nCode: [MPL-2.0](./LICENSE), 2026, Akirami\n\nLogo: CC-BY-NC-ND, Designs by Akirami\n\n## 鸣谢\n\n### 贡献者\n\n感谢以下贡献者对 WebGAL Craft 作出的贡献\n\n<a href=\"https://github.com/A-kirami/webgal-craft/graphs/contributors\">\n  <img src=\"https://contrib.rocks/image?repo=A-kirami/webgal-craft\" />\n</a>\n"
+    },
+    "brief": {
+      "summary": "面向WebGAL创作者的跨平台视觉小说工作室",
+      "problem": "整合视觉小说项目管理、脚本编辑与预览流程",
+      "highlights": [
+        "集中管理立绘、背景和音效等素材",
+        "支持文本与可视化编辑及实时预览",
+        "提供本地历史版本和演出参数复用"
+      ],
+      "target_users": [
+        "WebGAL视觉小说创作者",
+        "独立游戏开发者",
+        "剧情策划与编剧"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有20个Star",
+      "caveat": "需要WebGAL 4.6.2或更高版本引擎",
+      "category": "互动叙事",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "A-kirami/webgal-craft",
+      "score": 90,
+      "category": "互动叙事",
+      "reason": "视觉小说制作工作室",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "k2-fsa/sherpa-onnx",
+      "url": "https://github.com/k2-fsa/sherpa-onnx",
+      "description": "Speech-to-text, text-to-speech, speaker diarization, speech enhancement, source separation, and VAD using next-gen Kaldi with onnxruntime without Internet connection. Support embedded systems, Android, iOS, HarmonyOS, Raspberry Pi, RISC-V, RK NPU, Axera NPU, Ascend NPU, x86_64 servers, websocket server/client, support 12 programming languages",
+      "language": "C++",
+      "total_stars": 13763,
+      "forks": 1582,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "aarch64",
+        "android",
+        "arm32",
+        "asr",
+        "cpp",
+        "csharp",
+        "dotnet",
+        "ios",
+        "lazarus",
+        "linux",
+        "macos",
+        "mfc",
+        "object-pascal",
+        "onnx",
+        "raspberry-pi",
+        "risc-v",
+        "speech-to-text",
+        "text-to-speech",
+        "vits",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-09-01T05:47:33Z",
+      "updated_at": "2026-07-24T11:12:10Z",
+      "pushed_at": "2026-07-24T11:11:21Z",
+      "open_issues": 616,
+      "homepage": "https://k2-fsa.github.io/sherpa/onnx/index.html",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/k2-fsa/sherpa-onnx)\n\n</div>\n\n ### Supported functions\n\n|Speech recognition| [Speech synthesis][tts-url] | [Source separation][ss-url] |\n|------------------|------------------|-------------------|\n|   ✔️              |         ✔️        |       ✔️           |\n\n|Speaker identification| [Speaker diarization][sd-url] | Speaker verification |\n|----------------------|-------------------- |------------------------|\n|   ✔️                  |         ✔️           |            ✔️           |\n\n| [Spoken Language identification][slid-url] | [Audio tagging][at-url] | [Voice activity detection][vad-url] |\n|--------------------------------|---------------|--------------------------|\n|                 ✔️              |          ✔️    |                ✔️         |\n\n| [Keyword spotting][kws-url] | [Add punctuation][punct-url] | [Speech enhancement][se-url] |\n|------------------|-----------------|--------------------|\n|     ✔️            |       ✔️         |      ✔️             |\n\n\n### Supported platforms\n\n|Architecture| Android | iOS     | Windows    | macOS | linux | HarmonyOS |\n|------------|---------|---------|------------|-------|-------|-----------|\n|   x64      |  ✔️      |         |   ✔️      | ✔️    |  ✔️    |   ✔️   |\n|   x86      |  ✔️      |         |   ✔️      |       |        |        |\n|   arm64    |  ✔️      | ✔️      |   ✔️      | ✔️    |  ✔️    |   ✔️   |\n|   arm32    |  ✔️      |         |           |       |  ✔️    |   ✔️   |\n|   riscv64  |          |         |           |       |  ✔️    |        |\n\n### Supported programming languages\n\n| 1. C++ | 2. C  | 3. Python | 4. JavaScript |\n|--------|-------|-----------|---------------|\n|   ✔️    | ✔️     | ✔️         |    ✔️          |\n\n|5. Java | 6. C# | 7. Kotlin | 8. Swift |\n|--------|-------|-----------|----------|\n| ✔️      |  ✔️    | ✔️         |  ✔️       |\n\n| 9. Go | 10. Dart | 11. Rust | 12. Pascal |\n|-------|----------|----------|------------|\n| ✔️     |  ✔️       |   ✔️      |    ✔️       |\n\n\nIt also supports WebAssembly.\n\n### Supported NPUs\n\n| [1. Rockchip NPU (RKNN)][rknpu-doc] | [2. Qualcomm NPU (QNN)][qnn-doc]  | [3. Ascend NPU][ascend-doc] |\n|-------------------------------------|-----------------------------------|-----------------------------|\n|     ✔️                              |                  ✔️               |     ✔️                      |\n\n| [4. Axera NPU][axera-npu] |\n|---------------------------|\n|     ✔️                    |\n\n[Join our discord](https://discord.gg/fJdxzg2VbG)\n\n\n## Introduction\n\nThis repository supports running the following functions **locally**\n\n  - Speech-to-text (i.e., ASR); both streaming and non-streaming are supported\n  - Text-to-speech (i.e., TTS)\n  - Speaker diarization\n  - Speaker identification\n  - Speaker verification\n  - Spoken language identification\n  - Audio tagging\n  - VAD (e.g., [silero-vad][silero-vad])\n  - Speech enhancement (e.g., [gtcrn][gtcrn], [DPDFNet](https://github.com/ceva-ip/DPDFNet))\n  - Keyword spotting\n  - Source separation (e.g., [spleeter][spleeter], [UVR][UVR])\n\non the following platforms and operating systems:\n\n  - x86, ``x86_64``, 32-bit ARM, 64-bit ARM (arm64, aarch64), RISC-V (riscv64), **RK NPU**, **Ascend NPU**\n  - Linux, macOS, Windows, openKylin\n  - Android, WearOS\n  - iOS\n  - HarmonyOS\n  - NodeJS\n  - WebAssembly\n  - [NVIDIA Jetson Orin NX][NVIDIA Jetson Orin NX] (Support running on both CPU and GPU)\n  - [NVIDIA Jetson Nano B01][NVIDIA Jetson Nano B01] (Support running on both CPU and GPU)\n  - [Raspberry Pi][Raspberry Pi]\n  - [RV1126][RV1126]\n  - [LicheePi4A][LicheePi4A]\n  - [VisionFive 2][VisionFive 2]\n  - [旭日X3派][旭日X3派]\n  - [爱芯派][爱芯派]\n  - [RK3588][RK3588]\n  - [SpacemiT-K1][SpacemiT-K1]\n  - [SpacemiT-K3][SpacemiT-K3]\n  - etc\n\nwith the following APIs\n\n  - C++, C, Python, Go, ``C#``\n  - Java, Kotlin, JavaScript\n  - Swift, Rust\n  - Dart, Object Pascal\n\n### Links for Huggingface Spaces\n\n<details>\n<summary>You can visit the following Huggingface spaces to try sherpa-onnx without\ninstalling anything. All you need is a browser.</summary>\n\n| Description                                           | URL                                     | 中国镜像                               |\n|-------------------------------------------------------|-----------------------------------------|----------------------------------------|\n| Speaker diarization                                   | [Click me][hf-space-speaker-diarization]| [镜像][hf-space-speaker-diarization-cn]|\n| Speech recognition                                    | [Click me][hf-space-asr]                | [镜像][hf-space-asr-cn]                |\n| Speech recognition with [Whisper][Whisper]            | [Click me][hf-space-asr-whisper]        | [镜像][hf-space-asr-whisper-cn]        |\n| Speech synthesis                                      | [Click me][hf-space-tts]                | [镜像][hf-space-tts-cn]                |\n| Generate subtitles                                    | [Click me][hf-space-subtitle]           | [镜像][hf-space-subtitle-cn]           |\n| Audio tagging                                         | [Click me][hf-space-audio-tagging]      | [镜像][hf-space-audio-tagging-cn]      |\n| Source separation                                     | [Click me][hf-space-source-separation]  | [镜像][hf-space-source-separation-cn]  |\n| Spoken language identification with [Whisper][Whisper]| [Click me][hf-space-slid-whisper]       | [镜像][hf-space-slid-whisper-cn]       |\n\nWe also have spaces built using WebAssembly. They are listed below:\n\n| Description                                                                              | Huggingface space| ModelScope space|\n|------------------------------------------------------------------------------------------|------------------|-----------------|\n|Voice activity detection with [silero-vad][silero-vad]                                    | [Click me][wasm-hf-vad]|[地址][wasm-ms-vad]|\n|Real-time speech recognition (Chinese + English) with Zipformer                           | [Click me][wasm-hf-streaming-asr-zh-en-zipformer]|[地址][wasm-hf-streaming-asr-zh-en-zipformer]|\n|Real-time speech recognition (Chinese + English) with Paraformer                          |[Click me][wasm-hf-streaming-asr-zh-en-paraformer]| [地址][wasm-ms-streaming-asr-zh-en-paraformer]|\n|Real-time speech recognition (Chinese + English + Cantonese) with [Paraformer-large][Paraformer-large]|[Click me][wasm-hf-streaming-asr-zh-en-yue-paraformer]| [地址][wasm-ms-streaming-asr-zh-en-yue-paraformer]|\n|Real-time speech recognition (English) |[Click me][wasm-hf-streaming-asr-en-zipformer]    |[地址][wasm-ms-streaming-asr-en-zipformer]|\n|VAD + speech recognition (Chinese) with [Zipformer CTC](https://k2-fsa.github.io/sherpa/onnx/pretrained_models/offline-ctc/icefall/zipformer.html#sherpa-onnx-zipformer-ctc-zh-int8-2025-07-03-chinese)|[Click me][wasm-hf-vad-asr-zh-zipformer-ctc-07-03]| [地址][wasm-ms-vad-asr-zh-zipformer-ctc-07-03]|\n|VAD + speech recognition (Chinese + English + Korean + Japanese + Cantonese) with [SenseVoice][SenseVoice]|[Click me][wasm-hf-vad-asr-zh-en-ko-ja-yue-sense-voice]| [地址][wasm-ms-vad-asr-zh-en-ko-ja-yue-sense-voice]|\n|VAD + speech recognition (English) with [Whisper][Whisper] tiny.en|[Click me][wasm-hf-vad-asr-en-whisper-tiny-en]| [地址][wasm-ms-vad-asr-en-whisper-tiny-en]|\n|VAD + speech recognition (English) with [Moonshine tiny][Moonshine tiny]|[Click me][wasm-hf-vad-asr-en-moonshine-tiny-en]| [地址][wasm-ms-vad-asr-en-moonshine-tiny-en]|\n|VAD + speech recognition (English) with Zipformer trained with [GigaSpeech][GigaSpeech]    |[Click me][wasm-hf-vad-asr-en-zipformer-gigaspeech]| [地址][wasm-ms-vad-asr-en-zipformer-gigaspeech]|\n|VAD + speech recognition (Chinese) with Zipformer trained with [WenetSpeech][WenetSpeech]  |[Click me][wasm-hf-vad-asr-zh-zipformer-wenetspeech]| [地址][wasm-ms-vad-asr-zh-zipformer-wenetspeech]|\n|VAD + speech recognition (Japanese) with Zipformer trained with [ReazonSpeech][ReazonSpeech]|[Click me][wasm-hf-vad-asr-ja-zipformer-reazonspeech]| [地址][wasm-ms-vad-asr-ja-zipformer-reazonspeech]|\n|VAD + speech recognition (Thai) with Zipformer trained with [GigaSpeech2][GigaSpeech2]      |[Click me][wasm-hf-vad-asr-th-zipformer-gigaspeech2]| [地址][wasm-ms-vad-asr-th-zipformer-gigaspeech2]|\n|VAD + speech recognition (Chinese 多种方言) with a [TeleSpeech-ASR][TeleSpeech-ASR] CTC model|[Click me][wasm-hf-vad-asr-zh-telespeech]| [地址][wasm-ms-vad-asr-zh-telespeech]|\n|VAD + speech recognition (English + Chinese, 及多种中文方言) with Paraformer-large          |[Click me][wasm-hf-vad-asr-zh-en-paraformer-large]| [地址][wasm-ms-vad-asr-zh-en-paraformer-large]|\n|VAD + speech recognition (English + Chinese, 及多种中文方言) with Paraformer-small          |[Click me][wasm-hf-vad-asr-zh-en-paraformer-small]| [地址][wasm-ms-vad-asr-zh-en-paraformer-small]|\n|VAD + speech recognition (多语种及多种中文方言) with [Dolphin][Dolphin]-base          |[Click me][wasm-hf-vad-asr-multi-lang-dolphin-base]| [地址][wasm-ms-vad-asr-multi-lang-dolphin-base]|\n|Speech synthesis (Piper, English)                                                                  |[Click me][wasm-hf-tts-piper-en]| [地址][wasm-ms-tts-piper-en]|\n|Speech synthesis (Piper, German)                                                                   |[Click me][wasm-hf-tts-piper-de]| [地址][wasm-ms-tts-piper-de]|\n|Speech synthesis (Matcha, Chinese)                                                                  |[Click me][wasm-hf-tts-matcha-zh]| [地址][wasm-ms-tts-matcha-zh]|\n|Speech synthesis (Matcha, English)                                                                  |[Click me][wasm-hf-tts-matcha-en]| [地址][wasm-ms-tts-matcha-en]|\n|Speech synthesis (Matcha, Chinese+English)                                                          |[Click me][wasm-hf-tts-matcha-zh-en]| [地址][wasm-ms-tts-matcha-zh-en]|\n|Speaker diarization                                                                         |[Click me][wasm-hf-speaker-diarization]|[地址][wasm-ms-speaker-diarization]|\n|Voice cloning with ZipVoice (Chinese+English)                                               |[Click me][wasm-hf-voice-cloning-zipvoice]|[地址][wasm-ms-voice-cloning-zipvoice]|\n|Voice cloning with Pocket TTS (English)                                               |[Click me][wasm-hf-voice-cloning-pocket]|[地址][wasm-ms-voice-cloning-pocket]|\n\n</details>\n\n### Links for pre-built Android APKs\n\n<details>\n\n<summary>You can find pre-built Android APKs for this repository in the following table</summary>\n\n| Description                            | URL                                | 中国用户                          |\n|----------------------------------------|------------------------------------|-----------------------------------|\n| Speaker diarization                    | [Address][apk-speaker-diarization] | [点此][apk-speaker-diarization-cn]|\n| Streaming speech recognition           | [Address][apk-streaming-asr]       | [点此][apk-streaming-asr-cn]      |\n| Simulated-streaming speech recognition | [Address][apk-simula-streaming-asr]| [点此][apk-simula-streaming-asr-cn]|\n| Text-to-speech                         | [Address][apk-tts]                 | [点此][apk-tts-cn]                |\n| Voice activity detection (VAD)         | [Address][apk-vad]                 | [点此][apk-vad-cn]                |\n| VAD + non-streaming speech recognition | [Address][apk-vad-asr]             | [点此][apk-vad-asr-cn]            |\n| Two-pass speech recognition            | [Address][apk-2pass]               | [点此][apk-2pass-cn]              |\n| Audio tagging                          | [Address][apk-at]                  | [点此][apk-at-cn]                 |\n| Audio tagging (WearOS)                 | [Address][apk-at-wearos]           | [点此][apk-at-wearos-cn]          |\n| Speaker identification                 | [Address][apk-sid]                 | [点此][apk-sid-cn]                |\n| Spoken language identification         | [Address][apk-slid]                | ["
+    },
+    "brief": {
+      "summary": "支持离线语音识别与合成的跨平台工具库",
+      "problem": "解决语音能力依赖网络、平台和语言支持不足的问题",
+      "highlights": [
+        "支持识别、合成、分离与说话人分析",
+        "覆盖移动端、桌面端和嵌入式平台",
+        "支持12种编程语言及多类NPU"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "嵌入式开发者",
+        "跨平台开发团队"
+      ],
+      "why_trending": "总Star达13763，本周首次收录且近期仍有更新",
+      "caveat": "具体模型效果、资源占用和部署要求资料中未说明",
+      "category": "语音 / 配音",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "k2-fsa/sherpa-onnx",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "离线语音识别合成与增强",
+      "generated_by_ai": true
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "Tencent/libpag",
+      "url": "https://github.com/Tencent/libpag",
+      "description": "The official rendering library for PAG (Portable Animated Graphics) files that renders After Effects animations natively across multiple platforms.",
+      "language": "HTML",
+      "total_stars": 5742,
+      "forks": 533,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录"
+    },
+    "details": {
+      "topics": [
+        "after-effects",
+        "animation",
+        "keyframes",
+        "libpag",
+        "pag"
+      ],
+      "license_name": "",
+      "created_at": "2020-09-22T04:32:20Z",
+      "updated_at": "2026-07-24T11:36:02Z",
+      "pushed_at": "2026-07-24T11:35:19Z",
+      "open_issues": 215,
+      "homepage": "https://pag.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<img src=\"resources/readme/logo.png\" alt=\"PAG Logo\" width=\"553\"/>\n\n[![license](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/Tencent/libpag/blob/master/LICENSE.txt) \n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/libpag/pulls) \n[![codecov](https://codecov.io/gh/Tencent/libpag/branch/main/graph/badge.svg)](https://codecov.io/gh/Tencent/libpag)\n[![autotest](https://github.com/Tencent/libpag/actions/workflows/autotest.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/autotest.yml)\n[![build](https://github.com/Tencent/libpag/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/build.yml)\n[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Tencent/libpag)](https://github.com/Tencent/libpag/releases)\n\n\n[![Cloud Studio](https://cs-res.codehub.cn/common/assets/icon-badge.svg)](https://cloudstudio.net/a/20987965736472576?channel=share&sharetype=Markdown)\n\nEnglish | [简体中文](./README.zh_CN.md) | [Homepage](https://pag.io)\n\n## Introduction\n\nlibpag is a real-time rendering library for PAG (Portable Animated Graphics) files, capable of \nrendering both vector-based and raster-based animations across various platforms, including iOS, \nAndroid, OpenHarmony, macOS, Windows, Linux, and the Web.\n\nPAG is an open-source file format designed for recording animations. You can create and export PAG \nfiles from Adobe After Effects using the PAGExporter plugin and preview them in the PAGViewer app, \nboth available on macOS and Windows.\n\nPAG is widely used in major Tencent apps like WeChat, Mobile QQ, Honor of Kings, Tencent Video, and \nQQ Music, as well as in thousands of third-party apps, reaching hundreds of millions of users.\n\n## Advantages\n\n- **Highly efficient file format**\n\n<img src=\"resources/readme/intro_1.png\" alt=\"intro_1\" width=\"282\"/>\n\nBenefiting from its highly efficient binary format, PAG files decode 10 times faster than JSON files \nand are about 50% smaller in file size for the same animations. Designers can also easily include \nbeautiful animations with bitmaps or audiovisual media in a single file without needing additional \nattachments.\n\n- **All AE features supported**\n\n<img src=\"resources/readme/intro_2.png\" alt=\"intro_2\" width=\"282\"/>\n\nWhile other solutions may only support exporting limited vector-based AE features, PAG combines \nvector-based and raster-based exporting techniques to support all AE animations in a single file. \nThis means third-party plugin effects in AE can also be exported.\n\n- **Measurable performance**\n\n<img src=\"resources/readme/intro_4.png\" alt=\"intro_4\" width=\"282\"/>\n\nPAG provides a monitoring panel in PAGViewer that displays normalized performance data for PAG files,\nmaking it easy for designers to review and optimize performance without needing developers. With \nnumerous automatic optimization techniques from the PAGExporter plugin, you can create animations \nwith impressive visual effects and excellent performance more efficiently.\n\n\nPAGViewer includes a monitoring panel \n- **Runtime editable animations**\n\n<img src=\"resources/readme/intro_5.png\" alt=\"intro_5\" width=\"282\"/>\n\nWith the flexible editing APIs from the PAG SDK, developers can easily modify the layer structure of\na single PAG file, combine multiple PAG files into one composition, or replace text and images with \nall pre-designed animation effects applied at runtime. This significantly reduces the coding work \nrequired for features like video templates.\n\n## System Requirements\n\n- iOS 9.0+\n- Android 5.0+\n- HarmonyOS Next 5.0.0(12)+\n- macOS 10.15+\n- Windows 7.0+\n- Chrome 69.0+ (Web)\n- Safari 15.0+ (Web)\n\n## Getting Started\n\nWe currently only publish precompiled libraries for iOS, Android, macOS, Web, and OpenHarmony. You \ncan build libraries of other platforms from the source code. The latest releases can be downloaded\nfrom [here](https://github.com/Tencent/libpag/releases).\n\n### iOS Integration\n\nYou can download the framework from the release page or add `libpag` to your project using CocoaPods.\nTo add the pod to your Podfile, include:\n\n```\npod 'libpag'\n```\n\nAnd then run:\n\n```\npod install\n```\n\nAfter installing the CocoaPod, import `libpag` into your project with:\n\n```\n#import <libpag/xxx.h>\n```\n\n### Android Integration\n\nYou can download the AAR from the release page or add `libpag` to your project using Maven:\n\nEdit the `build.gradle` file in the root of your project and add `mavenCentral()` to the `repositories` section:\n\n```\nbuildscript {\n    repositories {\n        mavenCentral()\n    }\n    dependencies {\n        classpath 'com.android.tools.build:gradle:3.2.1'\n    }\n}\n```\n\nAdd libpag to `app/build.gradle` (*`4.0.5.10` should be replaced with the latest release version*):\n\n```\ndependencies {\n    implementation 'com.tencent.tav:libpag:4.0.5.10'\n}\n```\n\nAdd the following rule to your proguard rules to prevent incorrect obfuscation:\n\n```\n  -keep class org.libpag.** {*;}\n  -keep class androidx.exifinterface.** {*;}\n```\n\nFinally, run gradle sync and build your project.\n\n### OpenHarmony Integration\n\nYou can download the HAR file from the [release](https://github.com/Tencent/libpag/releases) page, \nor add `libpag` to your project using OHPM:\n\n```\nohpm install @tencent/libpag\n```\n\nAlternatively, you can add it to your project manually. Add the following lines to `oh-package.json5` \nin your app module.\n\n```\n\"dependencies\": {\n\"@tencent/libpag\": \"^1.0.1\",\n}\n```\n\nThen run:\n\n```\nohpm install\n```\n\n### Web Integration\n\nCopy the following code into an HTML file and open it in your browser:\n\n```html\n<canvas class=\"canvas\" id=\"pag\"></canvas>\n<script src=\"https://unpkg.com/libpag@latest/lib/libpag.min.js\"></script>\n<script>\n  window.libpag.PAGInit().then((PAG) => {\n    const url = 'https://pag.io/file/like.pag';\n    fetch(url)\n      .then((response) => response.blob())\n      .then(async (blob) => {\n        const file = new window.File([blob], url.replace(/(.*\\/)*([^.]+)/i, '$2'));\n        // Do Something.\n      });\n  });\n</script>\n```\nMore information：[Web SDK Guide](./web/README.md)\n\n\n### Example\n\nExplore these projects to learn how to use the libpag APIs:\n\n- [https://github.com/libpag/pag-ios](https://github.com/libpag/pag-ios)\n- [https://github.com/libpag/pag-android](https://github.com/libpag/pag-android)\n- [https://github.com/libpag/pag-web](https://github.com/libpag/pag-web)\n\n### Documentation\n\n- [iOS API Reference](https://pag.io/apis/ios/index.html)\n- [Android API Reference](https://pag.io/apis/android/index.html)\n- [Web API Reference](https://pag.io/apis/web/index.html)\n\nYou can find additional documentation on [pag.io](https://pag.io/docs/home.html)\n\n## Development\n\nWe recommend using the CLion IDE on macOS for development.\n\n### Branch Management\n\n- The `main` branch is our active development branch, containing the latest features and bug fixes.\n- The `release/` branches are our stable milestone branches, fully tested. We periodically create a\n  `release/{version}` branch from the `main` branch. After a `release/{version}` branch is created, \n  only high-priority fixes are checked into it.\n\n**Note: This repository only contains the latest code since PAG 4.0. For legacy PAG 3.0 versions, \nyou can download the precompiled libraries from [here](https://github.com/Tencent/libpag/releases).**\n\n### Build Prerequisites\n\n- Xcode 11.0+\n- GCC 9.0+\n- Visual Studio 2019+\n- NodeJS 14.14.0+\n- Ninja 1.9.0+\n- CMake 3.13.0+\n- QT 6.2.0+\n- NDK 28+ (**28.0.13004108 recommended**)\n- Emscripten 3.1.58+\n\n### Dependency Management\n\nlibpag uses the [depsync](https://github.com/domchen/depsync) tool to manage third-party dependencies.\n\n**For macOS platform：**\n\nRun the script located in the root directory of the project:\n\n```\n./sync_deps.sh\n```\n\nThis script will automatically install the necessary tools and sync all third-party repositories.\n\n**For other platforms：**\n\nFirst, ensure you have the latest version of Node.js installed (you may need to restart your \ncomputer afterward). Then, run the following command to install the depsync tool:\n\n```\nnpm install -g depsync\n```\n\nThen, run `depsync` in the root directory of the project.\n\n```\ndepsync\n```\n\nYou might need to enter your Git account and password during synchronization. Ensure you have \nenabled the `git-credential-store` so that `CMakeList.txt` can automatically trigger synchronization \nnext time.\n\n### Build\n\nAfter synchronization, you can open the project with CLion and build the PAG library.\n\n**For macOS:**\n\nNo additional CLion configuration is needed.\n\n**For Windows:**\n\nFollow these steps to configure CLion correctly:\n\n- Ensure you have installed the **[Desktop development with C++]** and **[Universal Windows Platform development]** components for VS2019.\n- Open the **File->Settings** panel, go to **Build, Execution, Deployment->Toolchains**, and set the toolchain to **Visual Studio** with **amd64 (Recommended)** or **x86** architecture.\n\n**Note: If you encounter issues during the CMake build, update to the latest version of the CMake \ncommand-line tool and try again.**\n\n## Support Us\n\nIf you find libpag helpful, please give us a **Star**. We truly appreciate your support :)\n\n\n[![Star History Chart](https://api.star-history.com/svg?repos=Tencent/libpag&type=Date)](https://star-history.com/#Tencent/libpag&Date)\n\n\n## License\n\nlibpag is licensed under the [Apache Version 2.0 License](./LICENSE.txt)\n\nThe copyright notice pertaining to the Tencent code in this repo was previously in the name of \"THL\nA29 Limited\". That entity has now been de-registered. You should treat all previously distributed\ncopies of the code as if the copyright notice was in the name of \"Tencent\".\n\n## Privacy Policy\n\nPlease refer to the [PAG SDK Personal Information Processing Rules](https://privacy.qq.com/document/preview/01e79d0cc7a2427ba774b88c6beff0fd) when using the libpag SDK.\n\n## Contribution\n\nIf you have any ideas or suggestions to improve libpag, feel free to submit an\n[issue](https://github.com/Tencent/libpag/issues/new/choose) or a [pull request](https://github.com/Tencent/libpag/pulls). \nBefore doing so, please read our [Contributing Guide](./CONTRIBUTING.md).\n\n\n"
+    },
+    "brief": {
+      "summary": "跨平台原生渲染 After Effects 动画的 PAG 库",
+      "problem": "让 PAG 动画在多种平台高效播放和运行时编辑",
+      "highlights": [
+        "支持矢量与位图动画渲染",
+        "覆盖移动端、桌面端和 Web",
+        "支持运行时替换文字与图片"
+      ],
+      "target_users": [
+        "移动端开发者",
+        "Web 开发者",
+        "动画设计师"
+      ],
+      "why_trending": "总 Star 超 5700，本周首次收录且近期持续更新",
+      "caveat": "部分平台需从源码构建，资料未说明授权字段",
+      "category": "动画",
+      "generated_by_ai": true
+    },
+    "interest": {
+      "repository": "Tencent/libpag",
+      "score": 88,
+      "category": "动画",
+      "reason": "跨平台原生动画渲染库",
       "generated_by_ai": true
     }
   }

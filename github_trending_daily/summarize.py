@@ -21,7 +21,8 @@ summary: 中文一句话介绍；
 problem: 它解决的问题；
 highlights: 2 到 3 条核心特点的字符串数组；
 target_users: 1 到 3 类适用人群的字符串数组；
-why_trending: 为什么今天值得关注，只能根据今日新增 Star、项目活跃度和资料进行谨慎判断；
+why_trending: 为什么今天值得关注；Trending 项目参考今日新增 Star，ACG 雷达项目参考
+总 Star、近期活跃度和项目资料进行谨慎判断；
 caveat: 一个需要注意的点；
 category: 必须从 AI Agent / Skills、游戏开发、动画、视频剪辑、AI 绘画 / 漫画、
 AI 视频、3D / VTuber、语音 / 配音、音乐 / 音效、互动叙事、XR / 虚拟制作、
@@ -48,12 +49,17 @@ def fallback_brief(
     if details.archived:
         caveat = "仓库已归档，不建议直接用于新的生产项目。"
 
+    why_trending = (
+        f"今日新增约 {repo.stars_today:,} 个 Star，进入 GitHub Trending。"
+        if repo.source != "radar"
+        else f"近期保持活跃，ACG 雷达发现时已有 {repo.total_stars:,} 个 Star。"
+    )
     return ProjectBrief(
         summary=description,
         problem=f"该项目围绕“{description}”提供开源实现或相关资源。",
         highlights=highlights[:3],
         target_users=["希望了解或试用该项目方向的开发者"],
-        why_trending=f"今日新增约 {repo.stars_today:,} 个 Star，进入 GitHub Trending。",
+        why_trending=why_trending,
         caveat=caveat,
         category=_guess_category(repo, details),
         generated_by_ai=False,
@@ -86,7 +92,9 @@ class OpenAISummarizer:
     ) -> None:
         self.api_key = api_key if api_key is not None else os.getenv("OPENAI_API_KEY", "")
         self.model = model or os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
-        self.base_url = (base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")).rstrip("/")
+        self.base_url = (
+            base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        ).rstrip("/")
 
     @property
     def enabled(self) -> bool:
@@ -107,6 +115,8 @@ class OpenAISummarizer:
             "total_stars": repo.total_stars,
             "forks": repo.forks,
             "stars_today": repo.stars_today,
+            "source": repo.source,
+            "history_label": repo.history_label,
             "topics": details.topics,
             "license": details.license_name,
             "created_at": details.created_at,
@@ -137,7 +147,11 @@ class OpenAISummarizer:
             why_trending=_string(
                 data,
                 "why_trending",
-                f"今日新增约 {repo.stars_today:,} 个 Star。",
+                (
+                    f"今日新增约 {repo.stars_today:,} 个 Star。"
+                    if repo.source != "radar"
+                    else f"近期活跃，当前约 {repo.total_stars:,} 个 Star。"
+                ),
             ),
             caveat=_string(data, "caveat", "仍需结合项目文档评估。"),
             category=_string(data, "category", _guess_category(repo, details)),

@@ -13,6 +13,8 @@ class TrendingRepository:
     total_stars: int = 0
     forks: int = 0
     stars_today: int = 0
+    source: str = "trending"
+    history_label: str = "本周首次收录"
 
 
 @dataclass(slots=True)

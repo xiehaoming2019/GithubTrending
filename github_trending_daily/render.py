@@ -21,17 +21,41 @@ def _compact_fragment(text: str, limit: int) -> str:
     return _compact(text.rstrip("。；;，, "), limit)
 
 
+def _source_label(repo: TrendingRepository) -> str:
+    return "ACG 新发现" if repo.source == "radar" else "GitHub Trending"
+
+
+def _popularity_label(repo: TrendingRepository) -> str:
+    if repo.source == "radar":
+        return f"★ {repo.total_stars:,}"
+    return f"今日 +{repo.stars_today:,}"
+
+
 def _split_items(
     items: list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]],
 ) -> tuple[
     list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]],
     list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]],
 ]:
-    ranked = sorted(
-        items,
+    trending = sorted(
+        (item for item in items if item[0].source != "radar"),
         key=lambda item: item[0].stars_today,
         reverse=True,
     )
+    radar = sorted(
+        (item for item in items if item[0].source == "radar"),
+        key=lambda item: item[0].total_stars,
+        reverse=True,
+    )
+    ranked: list[
+        tuple[TrendingRepository, RepositoryDetails, ProjectBrief]
+    ] = []
+    for index in range(max(len(trending), len(radar))):
+        if index < len(trending):
+            ranked.append(trending[index])
+        if index < len(radar):
+            ranked.append(radar[index])
+
     featured: list[
         tuple[TrendingRepository, RepositoryDetails, ProjectBrief]
     ] = []
@@ -74,14 +98,14 @@ def render_markdown(
                 "",
                 "## 今天不硬凑",
                 "",
-                "今天的 Trending 中，没有发现足够相关的 AI Agent、游戏、动画、",
-                "视频、绘画、3D、语音或其他 ACG 创作项目。",
+                "今天的 Trending 与 ACG 雷达中，没有发现足够相关的 AI Agent、",
+                "游戏、动画、视频、绘画、3D、语音或其他 ACG 创作项目。",
                 "",
                 "宁可少发，也不拿通用框架、数据库、金融或炒币项目凑数。",
                 "",
                 "---",
                 "",
-                "项目来自 GitHub Trending；相关性由 AI 与本地规则共同筛选。",
+                "项目来自 GitHub Trending 与 GitHub Search；相关性由 AI 筛选。",
                 "",
             ]
         )
@@ -90,16 +114,20 @@ def render_markdown(
     dominant_category, dominant_count = categories.most_common(1)[0]
     featured, remaining = _split_items(items)
     hottest = featured[0][0]
+    trending_count = sum(repo.source != "radar" for repo, _, _ in items)
+    radar_count = len(items) - trending_count
 
     lines = [
         f"# GitHub Trending ACG 日报 · {report_date.isoformat()}",
         "",
-        f"> 约 3 分钟读完 · 今日收录 {len(items)} 个项目",
+        f"> 约 3 分钟读完 · Trending 精选 {trending_count} 个 · "
+        f"ACG 新发现 {radar_count} 个",
         "",
         "## 今天先知道",
         "",
         f"- **主线：** {dominant_category} 项目最多，占 {dominant_count}/{len(items)}",
-        f"- **最热：** [{hottest.full_name}]({hottest.url})，今日 +{hottest.stars_today:,} Stars",
+        f"- **最热：** [{hottest.full_name}]({hottest.url})，"
+        f"{_popularity_label(hottest)}",
         "",
         f"## 今天只看这 {len(featured)} 个",
         "",
@@ -109,8 +137,10 @@ def render_markdown(
         highlight = _compact_fragment(brief.highlights[0], 55)
         lines.extend(
             [
-                f"### {index}. [{repo.full_name}]({repo.url}) · "
-                f"{brief.category} · 今日 +{repo.stars_today:,}",
+                f"### {index}. [{repo.full_name}]({repo.url}) · {brief.category}",
+                "",
+                f"> {_source_label(repo)} · {repo.history_label} · "
+                f"{_popularity_label(repo)}",
                 "",
                 _compact(brief.summary, 65),
                 "",
@@ -120,27 +150,32 @@ def render_markdown(
             ]
         )
 
-    if remaining:
-        lines.extend(
-            [
-                "## 其余项目，一句话扫完",
-                "",
-            ]
-        )
-        for repo, _, brief in remaining:
+    for source, title in (
+        ("trending", "更多 GitHub Trending 精选"),
+        ("radar", "更多 ACG 新发现"),
+    ):
+        source_items = [
+            item
+            for item in remaining
+            if (item[0].source == "radar") == (source == "radar")
+        ]
+        if source_items:
+            lines.extend([f"## {title}", ""])
+        for repo, _, brief in source_items:
             language = repo.language or "未标注语言"
             lines.append(
                 f"- **[{repo.full_name}]({repo.url})** · {brief.category} — "
                 f"{_compact(brief.summary, 70)} "
-                f"`{language} · 今日 +{repo.stars_today:,}`"
+                f"`{repo.history_label} · {language} · {_popularity_label(repo)}`"
             )
-        lines.append("")
+        if source_items:
+            lines.append("")
 
     lines.extend(
         [
             "---",
             "",
-            "项目来自 GitHub Trending；相关性与简介由 AI 基于公开资料整理。",
+            "项目来自 GitHub Trending 与 GitHub Search；相关性和简介由 AI 整理。",
             "",
         ]
     )
@@ -186,6 +221,8 @@ def render_email_html(
     dominant_category, dominant_count = categories.most_common(1)[0]
     featured, remaining = _split_items(items)
     hottest = featured[0][0]
+    trending_count = sum(repo.source != "radar" for repo, _, _ in items)
+    radar_count = len(items) - trending_count
 
     cards: list[str] = []
     for index, (repo, _, brief) in enumerate(featured, start=1):
@@ -196,13 +233,14 @@ def render_email_html(
             <section style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;
                             padding:18px 20px;margin:14px 0;">
               <div style="color:#6b7280;font-size:12px;margin-bottom:6px;">
-                重点 {index} · {escape(brief.category)}
+                重点 {index} · {escape(_source_label(repo))} ·
+                {escape(repo.history_label)} · {escape(brief.category)}
               </div>
               <h2 style="font-size:19px;line-height:1.35;margin:0 0 9px;">
                 <a href="{escape(repo.url, quote=True)}"
                    style="color:#111827;text-decoration:none;">{escape(repo.full_name)}</a>
                 <span style="color:#dc2626;font-size:13px;font-weight:500;margin-left:8px;">
-                  今日 +{repo.stars_today:,}
+                  {escape(_popularity_label(repo))}
                 </span>
               </h2>
               <p style="color:#111827;font-size:15px;line-height:1.65;margin:0 0 10px;">
@@ -218,8 +256,16 @@ def render_email_html(
             """
         )
 
-    quick_items = "".join(
-        f"""
+    def quick_section(
+        source_items: list[
+            tuple[TrendingRepository, RepositoryDetails, ProjectBrief]
+        ],
+        title: str,
+    ) -> str:
+        if not source_items:
+            return ""
+        quick_items = "".join(
+            f"""
         <div style="padding:12px 0;border-bottom:1px solid #f0f1f3;">
           <a href="{escape(repo.url, quote=True)}"
              style="color:#111827;font-weight:700;text-decoration:none;">
@@ -227,24 +273,33 @@ def render_email_html(
           </a>
           <span style="color:#6b7280;font-size:12px;margin-left:6px;">
             {escape(brief.category)} · {escape(repo.language or "未标注语言")}
-            · 今日 +{repo.stars_today:,}
+            · {escape(repo.history_label)} · {escape(_popularity_label(repo))}
           </span>
           <div style="color:#4b5563;font-size:14px;line-height:1.55;margin-top:4px;">
             {escape(_compact(brief.summary, 70))}
           </div>
         </div>
         """
-        for repo, _, brief in remaining
-    )
-    quick_section = ""
-    if remaining:
-        quick_section = f"""
+            for repo, _, brief in source_items
+        )
+        return f"""
         <section style="background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;
                         padding:6px 18px 4px;margin:20px 0;">
-          <h2 style="font-size:18px;margin:14px 0 4px;">其余项目，一句话扫完</h2>
+          <h2 style="font-size:18px;margin:14px 0 4px;">{escape(title)}</h2>
           {quick_items}
         </section>
         """
+
+    remaining_trending = [
+        item for item in remaining if item[0].source != "radar"
+    ]
+    remaining_radar = [
+        item for item in remaining if item[0].source == "radar"
+    ]
+    quick_sections = (
+        quick_section(remaining_trending, "更多 GitHub Trending 精选")
+        + quick_section(remaining_radar, "更多 ACG 新发现")
+    )
 
     return f"""<!doctype html>
 <html lang="zh-CN">
@@ -261,7 +316,10 @@ def render_email_html(
         <h1 style="font-size:25px;line-height:1.3;margin:7px 0 4px;">
           GitHub Trending ACG 日报
         </h1>
-        <div style="color:#d1d5db;">{report_date.isoformat()} · 约 3 分钟读完</div>
+        <div style="color:#d1d5db;">
+          {report_date.isoformat()} · 约 3 分钟读完 · Trending {trending_count}
+          · ACG 新发现 {radar_count}
+        </div>
       </header>
       <section style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;
                       padding:15px 18px;margin:16px 0;">
@@ -274,15 +332,15 @@ def render_email_html(
           <a href="{escape(hottest.url, quote=True)}" style="color:#1d4ed8;">
             {escape(hottest.full_name)}
           </a>
-          · 今日 +{hottest.stars_today:,}
+          · {escape(_popularity_label(hottest))}
         </p>
       </section>
       <h2 style="font-size:18px;margin:22px 2px 10px;">今天只看这 {len(featured)} 个</h2>
       {"".join(cards)}
-      {quick_section}
+      {quick_sections}
       <footer style="color:#6b7280;font-size:12px;line-height:1.6;text-align:center;
                      padding:18px 10px;">
-        项目来自 GitHub Trending；相关性与简介由 AI 基于公开资料整理。
+        项目来自 GitHub Trending 与 GitHub Search；相关性和简介由 AI 整理。
       </footer>
     </main>
   </body>

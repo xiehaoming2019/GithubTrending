@@ -7,6 +7,7 @@ from unittest.mock import patch
 from github_trending_daily.interest import (
     OpenAIInterestClassifier,
     fallback_interest,
+    select_daily_mix,
     select_repositories,
 )
 from github_trending_daily.models import (
@@ -89,6 +90,46 @@ class FallbackInterestTests(unittest.TestCase):
         self.assertEqual(5, len(selected))
         self.assertIn("games/engine", {repo.full_name for repo in selected})
         self.assertIn("video/editor", {repo.full_name for repo in selected})
+        self.assertEqual(
+            3,
+            sum(repo.full_name.startswith("agents/") for repo in selected),
+        )
+
+    def test_daily_mix_reserves_radar_and_caps_agents(self) -> None:
+        trending = [
+            _repo(f"agents/project-{index}", "agent", rank=index)
+            for index in range(1, 6)
+        ]
+        radar = [
+            _repo("studio/game", "game", rank=1),
+            _repo("studio/video", "video", rank=2),
+            _repo("studio/voice", "voice", rank=3),
+        ]
+        for repo in radar:
+            repo.source = "radar"
+        matches = [
+            InterestMatch(repo.full_name, 95 - repo.rank, "AI Agent / Skills", "")
+            for repo in trending
+        ]
+        matches.extend(
+            [
+                InterestMatch("studio/game", 88, "游戏开发", ""),
+                InterestMatch("studio/video", 86, "视频剪辑", ""),
+                InterestMatch("studio/voice", 84, "语音 / 配音", ""),
+            ]
+        )
+
+        selected = select_daily_mix(
+            trending,
+            radar,
+            matches,
+            limit=8,
+            threshold=60,
+            radar_target=3,
+        )
+
+        self.assertEqual(6, len(selected))
+        self.assertEqual(3, sum(repo.source == "radar" for repo in selected))
         self.assertEqual(
             3,
             sum(repo.full_name.startswith("agents/") for repo in selected),

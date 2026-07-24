@@ -113,7 +113,40 @@ class TrendingParserTests(unittest.TestCase):
         report = render_markdown(date(2026, 7, 23), items)
 
         self.assertIn("### 2. [studio/game]", report)
-        self.assertIn("· 游戏开发 · 今日 +50", report)
+        self.assertIn("· 游戏开发", report)
+        self.assertIn("今日 +50", report)
+
+    def test_renders_radar_source_without_fake_daily_stars(self) -> None:
+        repo = TrendingRepository(
+            rank=1,
+            full_name="creator/video-tool",
+            url="https://github.com/creator/video-tool",
+            description="Video editing tool",
+            language="Python",
+            total_stars=1_234,
+            source="radar",
+            history_label="本周首次收录",
+        )
+        details = RepositoryDetails()
+        brief = ProjectBrief(
+            summary="面向创作者的视频剪辑工具",
+            problem="",
+            highlights=["支持自动剪辑"],
+            target_users=[],
+            why_trending="",
+            caveat="仍需验证",
+            category="视频剪辑",
+        )
+
+        report = render_markdown(date(2026, 7, 23), [(repo, details, brief)])
+        html = render_email_html(date(2026, 7, 23), [(repo, details, brief)])
+
+        self.assertIn("ACG 新发现 1 个", report)
+        self.assertIn("★ 1,234", report)
+        self.assertNotIn("今日 +0", report)
+        self.assertIn("ACG 新发现 1", html)
+        self.assertIn("★ 1,234", html)
+        self.assertNotIn("今日 +0", html)
 
 
 if __name__ == "__main__":

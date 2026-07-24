@@ -8,12 +8,14 @@ from pathlib import Path
 
 from .email_delivery import EmailSettings, build_message, send_message
 from .github_api import GitHubClient
+from .history import filter_recent_repeats, load_recent_history
 from .interest import (
     OpenAIInterestClassifier,
     fallback_interest,
-    select_repositories,
+    select_daily_mix,
 )
 from .models import InterestMatch, ProjectBrief, RepositoryDetails, TrendingRepository
+from .radar import fetch_radar_candidates
 from .render import render_email_html, render_markdown
 from .summarize import OpenAISummarizer, fallback_brief
 from .trending import fetch_trending, load_trending
@@ -32,13 +34,18 @@ def run_pipeline(
     filter_interests: bool = True,
     relevance_threshold: int = 60,
     candidate_limit: int = 25,
+    use_radar: bool = True,
+    radar_candidate_limit: int = 18,
+    radar_limit: int = 3,
+    deduplicate: bool = True,
+    history_days: int = 7,
 ) -> Path:
     if source_html:
         html, repositories = load_trending(source_html)
     else:
         html, repositories = fetch_trending(language)
     pool_size = max(limit, candidate_limit) if filter_interests else limit
-    repositories = repositories[:pool_size]
+    trending_repositories = repositories[:pool_size]
 
     raw_dir = Path("data/raw")
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -47,10 +54,79 @@ def run_pipeline(
     github = GitHubClient()
     summarizer = OpenAISummarizer()
     cached_repositories, cached_details, cached_briefs = _load_cached_snapshot(report_date)
+    history = (
+        load_recent_history(report_date, days=history_days)
+        if filter_interests and deduplicate
+        else {}
+    )
+    if history:
+        trending_repositories, skipped = filter_recent_repeats(
+            trending_repositories,
+            history,
+            report_date=report_date,
+        )
+        if skipped:
+            print(
+                f"Skipped {skipped} Trending project(s) seen in the last "
+                f"{history_days} days.",
+                file=sys.stderr,
+            )
+
+    radar_details_by_repository: dict[str, RepositoryDetails] = {}
+    radar_repositories: list[TrendingRepository] = []
+    if filter_interests and use_radar and source_html is None and enrich:
+        try:
+            radar_candidates = fetch_radar_candidates(
+                github,
+                report_date,
+                limit=radar_candidate_limit,
+            )
+        except Exception as exc:
+            print(f"[warn] ACG radar failed: {exc}", file=sys.stderr)
+            radar_candidates = []
+
+        trending_names = {
+            repo.full_name.lower() for repo in repositories[:pool_size]
+        }
+        radar_candidates = [
+            (repo, details)
+            for repo, details in radar_candidates
+            if repo.full_name.lower() not in trending_names
+        ]
+        if history:
+            filtered_radar, skipped = filter_recent_repeats(
+                [repo for repo, _ in radar_candidates],
+                history,
+                report_date=report_date,
+            )
+            allowed_names = {repo.full_name.lower() for repo in filtered_radar}
+            radar_candidates = [
+                (repo, details)
+                for repo, details in radar_candidates
+                if repo.full_name.lower() in allowed_names
+            ]
+            filtered_by_name = {
+                repo.full_name.lower(): repo for repo in filtered_radar
+            }
+            radar_candidates = [
+                (filtered_by_name[repo.full_name.lower()], details)
+                for repo, details in radar_candidates
+            ]
+            if skipped:
+                print(
+                    f"Skipped {skipped} ACG radar project(s) seen in the last "
+                    f"{history_days} days.",
+                    file=sys.stderr,
+                )
+        radar_repositories = [repo for repo, _ in radar_candidates]
+        radar_details_by_repository = {
+            repo.full_name: details for repo, details in radar_candidates
+        }
+
     enrichment_available = enrich
     candidate_details: list[tuple[TrendingRepository, RepositoryDetails]] = []
 
-    for repo in repositories:
+    for repo in trending_repositories:
         details = RepositoryDetails()
         if enrichment_available:
             try:
@@ -66,6 +142,11 @@ def run_pipeline(
         elif enrich:
             details = cached_details.get(repo.full_name, RepositoryDetails())
         candidate_details.append((repo, details))
+
+    candidate_details.extend(
+        (repo, radar_details_by_repository[repo.full_name])
+        for repo in radar_repositories
+    )
 
     matches: list[InterestMatch] = []
     if filter_interests:
@@ -83,21 +164,41 @@ def run_pipeline(
                 fallback_interest(repo, details)
                 for repo, details in candidate_details
             ]
-        repositories = select_repositories(
-            repositories,
+        repositories = select_daily_mix(
+            trending_repositories,
+            radar_repositories,
             matches,
             limit=limit,
             threshold=relevance_threshold,
+            radar_target=radar_limit,
         )
         print(
             f"Selected {len(repositories)} of {len(candidate_details)} candidates "
             f"at relevance >= {relevance_threshold}.",
             file=sys.stderr,
         )
+    else:
+        repositories = trending_repositories[:limit]
 
     details_by_repository = {
         repo.full_name: details for repo, details in candidate_details
     }
+    if enrich and enrichment_available:
+        for repo in repositories:
+            if repo.source != "radar":
+                continue
+            try:
+                details_by_repository[repo.full_name] = github.repository_details(
+                    repo.full_name
+                )
+            except Exception as exc:
+                print(
+                    f"[warn] GitHub radar enrichment failed for {repo.full_name}: {exc}",
+                    file=sys.stderr,
+                )
+                if "rate limit" in str(exc).lower():
+                    enrichment_available = False
+                    break
     matches_by_repository = {
         match.repository.lower(): match for match in matches
     }

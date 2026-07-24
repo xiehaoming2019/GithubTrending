@@ -332,6 +332,8 @@ class OpenAIInterestClassifier:
                 "description": repo.description,
                 "language": repo.language,
                 "stars_today": repo.stars_today,
+                "total_stars": repo.total_stars,
+                "source": repo.source,
                 "topics": details.topics,
                 "readme_excerpt": details.readme[:1_500],
             }
@@ -387,6 +389,7 @@ def select_repositories(
         key=lambda repo: (
             -by_repository[repo.full_name.lower()].score,
             -repo.stars_today,
+            -repo.total_stars,
             repo.rank,
         )
     )
@@ -405,6 +408,74 @@ def select_repositories(
             return selected
 
     selected.extend(deferred[: max(0, limit - len(selected))])
+    return selected
+
+
+def select_daily_mix(
+    trending: list[TrendingRepository],
+    radar: list[TrendingRepository],
+    matches: list[InterestMatch],
+    *,
+    limit: int,
+    threshold: int,
+    radar_target: int = 3,
+    agent_cap: int = 3,
+) -> list[TrendingRepository]:
+    ranked_trending = select_repositories(
+        trending,
+        matches,
+        limit=len(trending),
+        threshold=threshold,
+    )
+    ranked_radar = select_repositories(
+        radar,
+        matches,
+        limit=len(radar),
+        threshold=threshold,
+    )
+    by_repository = {match.repository.lower(): match for match in matches}
+    selected: list[TrendingRepository] = []
+    selected_names: set[str] = set()
+    category_counts: defaultdict[str, int] = defaultdict(int)
+
+    def add_from(pool: list[TrendingRepository], target: int) -> None:
+        added = 0
+        for repo in pool:
+            if len(selected) >= limit or added >= target:
+                return
+            key = repo.full_name.lower()
+            match = by_repository.get(key)
+            if match is None or key in selected_names:
+                continue
+            if (
+                match.category == "AI Agent / Skills"
+                and category_counts[match.category] >= agent_cap
+            ):
+                continue
+            selected.append(repo)
+            selected_names.add(key)
+            category_counts[match.category] += 1
+            added += 1
+
+    radar_quota = min(radar_target, limit)
+    trending_quota = max(0, limit - radar_quota)
+    add_from(ranked_trending, trending_quota)
+    add_from(ranked_radar, radar_quota)
+
+    remaining = [
+        repo
+        for repo in [*ranked_trending, *ranked_radar]
+        if repo.full_name.lower() not in selected_names
+    ]
+    remaining.sort(
+        key=lambda repo: (
+            -by_repository[repo.full_name.lower()].score,
+            -repo.stars_today,
+            -repo.total_stars,
+            repo.rank,
+        )
+    )
+    add_from(remaining, limit - len(selected))
     return selected
 
 
