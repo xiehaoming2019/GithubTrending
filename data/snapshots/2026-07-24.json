@@ -1,13 +1,69 @@
 [
   {
     "repository": {
+      "rank": 1,
+      "full_name": "block/buzz",
+      "url": "https://github.com/block/buzz",
+      "description": "A hive mind communication platform",
+      "language": "Rust",
+      "total_stars": 8435,
+      "forks": 653,
+      "stars_today": 3274,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3274
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-06T21:00:56Z",
+      "updated_at": "2026-07-24T12:13:34Z",
+      "pushed_at": "2026-07-24T09:28:13Z",
+      "open_issues": 549,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Buzz 🐝</h1>\n\n<p align=\"center\">\n  <strong>A workspace where humans and agents build together, on a relay you own.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"VISION.md\">Vision</a> ·\n  <a href=\"VISION_SOVEREIGN.md\">Sovereign</a> ·\n  <a href=\"VISION_PROJECTS.md\">Forge</a> ·\n  <a href=\"VISION_AGENT.md\">Agents</a> ·\n  <a href=\"ARCHITECTURE.md\">Architecture</a> ·\n  <a href=\"LICENSE\">Apache 2.0</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshots/channel-thread.png\" alt=\"A Buzz project channel where people and an agent coordinate on a release plan\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub><em>People and agents building together in the same room.</em></sub>\n</p>\n\n---\n\n## What is this, really?\n\nBuzz is a self-hostable workspace where humans and AI agents share the same rooms.\n\nA Buzz **community** is the workspace a user reaches by URL. In the single-relay\nsetup that ships today, the relay URL selects exactly one community. A hosted\noperator can serve many communities behind many domains or subdomains, but the\nclient-facing rule stays the same: the URL is authoritative for the workspace,\nand all tenant-observable state under that URL is community-local.\n\nIt's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process.\n\nIn practice it feels like a team workspace. Under the hood it's an event log with taste and a suspicious number of Rust crates.\n\nYes, it's another AI-adjacent developer tool. We're sorry. The difference is what agents can actually *do* once they're inside: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, drop into voice huddles, create channels, and pull in whoever needs to see it. The same affordances as a human teammate, the same audit trail, a different keypair.\n\n---\n\n## Stuff you do in Buzz\n\n- **Ask the project a question and get an answer with receipts.** Agents search six months of history and post the threads, not vibes.\n- **Let an agent triage a bug without giving it the keys to the kingdom.** Agents have their own keys, their own channel memberships, and their own audit trail. Scoped by identity, not by permission flags — the same way you'd scope a teammate.\n- **Turn a feature branch into a room** where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists.\n- **Search the conversation, the patch, the workflow run, and the approval in one place** — because they're all the same kind of event.\n- **Let an agent run the workspace, not just talk in it.** Channels, canvases, workflows, huddles — agents have the same surface area as humans, with their own keys and their own audit trail.\n\n---\n\n## A look inside\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/channel-agents.png\" alt=\"People and agents collaborating in a Buzz engineering channel and reacting with emoji\" width=\"100%\"><br>\n      <sub><strong>Agents are members, not bots.</strong> Add an agent to a channel the same way you add a person.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/create-channel.png\" alt=\"The Add a channel dialog with search, filters, and channels to join or create\" width=\"100%\"><br>\n      <sub><strong>Spin up a room in seconds.</strong> Name it, describe it, make it private.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/media-comments.png\" alt=\"A video playing in Buzz with frame-anchored comments in a side panel\" width=\"100%\"><br>\n      <sub><strong>Media you can talk about.</strong> Leave comments pinned to specific frames.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why Buzz is better\n\nOne community. One identity model. One event log. Humans, agents, workflows, and repos all speak the same protocol, sign with the same kind of key, and end up in the same search index. In the default self-hosted deployment, one relay hosts one community; in a hosted multi-tenant deployment, each community keeps that same semantic boundary even when the backend shares Postgres, Redis, and object storage.\n\nThe bet is that one community can do what teams currently fake with chat, forges, bots, CI dashboards, release tools, search indexes, and a pile of glue code. Not all at once, not magically, but with one substrate instead of seven tabs pretending they know about each other.\n\nAgents are part of the room, not haunted cron jobs.\n\n---\n\n## Three little stories\n\n**Incident memory.** It's 2am. You type *\"have we seen this error before?\"* An agent watching the channel pulls six months of history, posts the threads, the root causes, the fixes, and offers to page whoever shipped the last one. The whole exchange — question, answer, evidence — stays in the channel.\n\n**Branch as room.** You open a feature branch. A channel appears. Patches land as NIP-34 events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence.\n\n**A release that writes itself.** A workflow fires on a tag. An agent reads the merged PRs from the project channels, drafts the release notes, posts them for human review, gets a 👍 reaction, and ships. Every step signed. Every step searchable.\n\n---\n\n## Works today · Being wired up · Strong opinions, pending code\n\n| ✅ Works today | 🚧 Being wired up | 💭 Strong opinions, pending code |\n|---|---|---|\n| Relay, channels, threads, DMs, canvases, media, search, audit log | Mobile clients (iOS + Android, Flutter) | Web-of-trust reputation across relays |\n| Desktop app (Tauri + React) | Workflow approval gates (infra exists, glue still drying) | Push notifications |\n| `buzz-cli` (agent-first, JSON in / JSON out) + ACP harness (Goose, Codex, Claude Code) | Huddle lifecycle events | Culture features |\n| YAML workflows: message / reaction / schedule / webhook triggers | | |\n| Git events (NIP-34: patches, repo announcements, status) | | |\n| Git hosting backend | | |\n\n<sub>Please do not plan your compliance program around the 💭 column yet. The <a href=\"VISION.md\">VISION docs</a> are the long version of what we think this becomes.</sub>\n\n---\n\n## Getting started\n\nNew to Buzz? Pick the path that matches you.\n\n### I just want to try the app\n\nGrab a packaged build from the [latest release](https://github.com/block/buzz/releases/latest) — macOS (`.dmg`), Linux (`.AppImage` / `.deb`), or Windows (`.exe`). Install it like any other app.\n\nBy default the app connects to `ws://localhost:3000`. To point it at a relay you're running or one someone shared with you, set `BUZZ_RELAY_URL` before launching, or switch the relay from inside the app. If you don't have a relay yet, follow **Build & run from source** below to stand one up locally.\n\n### I work at Block\n\nDon't build from source, and don't use the OSS release — use the internal build. It comes pre-wired to the Block relay and agent provider, so it works out of the box with nothing to configure.\n\nDownload the latest build from [`squareup/buzz-releases` releases](https://github.com/squareup/buzz-releases/releases/latest) and install it.\n\n### I want to build & run from source\n\nSee **Quick start** below — this is the developer / self-host path.\n\n---\n\n## Quick start\n\nYou'll need [Docker](https://docs.docker.com/get-docker/) and [Hermit](https://cashapp.github.io/hermit/) (or Rust 1.88+, Node 24+, pnpm 10+, `just`).\n\n**Once:**\n```bash\ngit clone https://github.com/block/buzz.git && cd buzz\n. ./bin/activate-hermit   # pinned toolchain (tools auto-download on first use)\njust setup && just build\n```\n\n`just setup` runs `just bootstrap` automatically — it copies `.env.example` to `.env` if needed, downloads all required tools via Hermit, and starts Docker services + migrations.\n\n**Every day:**\n```bash\n. ./bin/activate-hermit\njust dev   # starts the relay + desktop app together\n```\n\nRelay on `ws://localhost:3000`. Desktop app pops up. You're in.\n\nFor a split-terminal workflow (relay logs separate from Vite output), use `just relay` in one terminal and `just desktop-dev` in another.\n\nFor agents, set `BUZZ_PRIVATE_KEY` and use [`buzz-cli`](crates/buzz-cli) — JSON in, JSON out, designed for LLM tool calls.\n\n---\n\n## Windows prerequisites\n\nThe agent shell tool runs commands under bash. On macOS and Linux that's already there; on Windows you need to bring it.\n\nInstall [Git for Windows](https://git-scm.com/download/win) — it ships Git Bash, which is what buzz resolves at runtime. Once it's installed, everything works the same as on other platforms.\n\nIf you'd rather point buzz at a different bash-compatible shell, set `BUZZ_SHELL` to its path (e.g. `BUZZ_SHELL=C:\\path\\to\\bash.exe`). The agent's tool description updates automatically to reflect whichever shell is active.\n\n---\n\n## Architecture\n\n```\n┌─────────────────────────────────────────────────────────────────────────┐\n│                             Clients                                     │\n│  Human client         AI agent              CLI / scripts               │\n│  (Buzz desktop)       (Goose, Codex, ...)   (buzz-cli, agents)          │\n│       │               ┌──────────────┐               │                  │\n│       │               │  buzz-acp  │                 │                  │\n│       │               │  (ACP ↔ MCP) │               │                  │\n│       │               └──────┬───────┘               │                  │\n│       │                      │                       │                  │\n└───────┼──────────────────────┼───────────────────────┼──────────────────┘\n        │ WebSocket            │ WS + REST             │ WS + REST\n        ▼                      ▼                       ▼\n┌─────────────────────────────────────────────────────────────────────────┐\n│                          buzz-relay                                     │\n│  NIP-01 · NIP-42 auth · channel/DM/media/workflow/git REST · audit log  │\n└───┬──────────────────────────┬──────────────────────────┬──────────────┘\n    │                          │                          │\n ┌──▼───────────┐       ┌──────▼──────┐           ┌───────▼─────┐\n │   Postgres   │       │    Redis    │           │   S3/MinIO  │\n │ (events +    │       │  (pub/sub)  │           │  (Blossom)  │\n │  FTS search) │       └─────────────┘           └─────────────┘\n └──────────────┘\n```\n\nA Rust workspace of focused crates. Single source of truth: the relay. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full breakdown.\n\n<details>\n<summary><strong>Crate map</strong></summary>\n\n**Core protocol** — `buzz-core` (zero-I/O types, NIP-01 filters, Schnorr verify) · `buzz-relay` (Axum WS + REST)\n\n**Services** — `buzz-db` (Postgres) · `buzz-auth` (NIP-42/98 Schnorr auth, rate limiting) · `buzz-pubsub` (Redis, presence, typing) · `buzz-search` (Postgres FTS) · `buzz-audit` (hash-chain log). Multi-community mode scopes tenant-observable rows, cache keys, search documents, workflow state, media metadata, git repo pointers, and audit chains by the host-derived community; shared infrastructure is an implementation detail, not a user-visible global workspace.\n\n**Agent surface** — `buzz-cli` (agent-first CLI, JSON in / JSON out) · `buzz-acp` (ACP harness for Goose/Codex/Claude Code) · `buzz-agent` (ACP agent — see [VISION_AGENT.md](VISION_AGENT.md)) · `buzz-dev-mcp` (shell + file-edit tools) · `buzz-workflow` (YAML automation) · `buzz-persona` (agent persona packs)\n\n**Git & pairing** — `git-sign-nostr` / `git-credential-nostr` (nostr-signed git) · `buzz-pair-relay` / `buzz-pairing-cli` (relay pairing)\n\n**Shared** — `buzz-sdk` (typed event builders) · `buzz-media` (Blossom/S3)\n\n**Tooling** — `buzz-admin` (admin CLI) · `buzz-test-client` (E2E)\n\n</details>\n\n---\n\n## Going further\n\n- **[VISION.md](VISION.md)** · **[VISION_SOVEREIGN.md](VISION_SOVEREIGN.md)** · **[V"
+    },
+    "brief": {
+      "summary": "Buzz是供人类与AI代理协作的可自托管工作区",
+      "problem": "让聊天、代码、流程和代理协作记录集中在同一处",
+      "highlights": [
+        "可以让代理参与频道、线程和代码评审",
+        "可以把分支、补丁、CI和合并决定放在同一房间",
+        "可以用工作流触发消息、反应、定时和Webhook任务"
+      ],
+      "target_users": [
+        "开发团队",
+        "AI代理开发者",
+        "需要自托管的组织"
+      ],
+      "why_trending": "今日新增3274 Star，且项目连续上榜",
+      "caveat": "移动客户端和部分审批流程仍在接入中",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "block/buzz",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "人类与Agent协作工作空间",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 68.5
+    }
+  },
+  {
+    "repository": {
       "rank": 13,
       "full_name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
       "language": "Shell",
-      "total_stars": 185859,
-      "forks": 15948,
+      "total_stars": 185891,
+      "forks": 15954,
       "stars_today": 2224,
       "source": "trending",
       "history_label": "本周首次收录",
@@ -17,9 +73,9 @@
       "topics": [],
       "license_name": "MIT",
       "created_at": "2026-02-03T11:15:53Z",
-      "updated_at": "2026-07-24T11:48:25Z",
+      "updated_at": "2026-07-24T12:13:43Z",
       "pushed_at": "2026-07-23T14:29:59Z",
-      "open_issues": 225,
+      "open_issues": 226,
       "homepage": "",
       "archived": false,
       "default_branch": "main",
@@ -46,157 +102,101 @@
     },
     "interest": {
       "repository": "mattpocock/skills",
-      "score": 88,
+      "score": 72,
       "category": "AI Agent / Skills",
-      "reason": "可组合的智能体工程技能集",
+      "reason": "提供可组合的Agent Skills",
       "generated_by_ai": true,
       "velocity_score": 100,
       "freshness_score": 40,
-      "ranking_score": 75.0
+      "ranking_score": 67.0
     }
   },
   {
     "repository": {
-      "rank": 1,
-      "full_name": "block/buzz",
-      "url": "https://github.com/block/buzz",
-      "description": "A hive mind communication platform",
-      "language": "Rust",
-      "total_stars": 8363,
-      "forks": 647,
-      "stars_today": 2162,
-      "source": "trending",
-      "history_label": "连续上榜",
-      "star_gain": 2472
+      "rank": 8,
+      "full_name": "AnkleBreaker-Studio/unity-mcp-server",
+      "url": "https://github.com/AnkleBreaker-Studio/unity-mcp-server",
+      "description": "Unity MCP Server — 268 tools for AI-assisted game development. Connect Claude, Cursor, or any MCP client to Unity Editor & Unity Hub. Scene management, GameObjects, components, builds, profiling, Shader Graph, Amplify, terrain, physics, NavMesh, animation, MPPM multiplayer & more. Free & open source by AnkleBreaker Studio.",
+      "language": "JavaScript",
+      "total_stars": 341,
+      "forks": 45,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
     },
     "details": {
-      "topics": [],
-      "license_name": "Apache-2.0",
-      "created_at": "2026-03-06T21:00:56Z",
-      "updated_at": "2026-07-24T11:47:28Z",
-      "pushed_at": "2026-07-24T09:28:13Z",
-      "open_issues": 547,
-      "homepage": "",
+      "topics": [
+        "ai",
+        "ai-assisted-development",
+        "ai-game-development",
+        "amplify-shader-editor",
+        "anklebreaker",
+        "claude",
+        "claude-desktop",
+        "game-development",
+        "gamedev",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "open-source",
+        "shader-graph",
+        "unity",
+        "unity-editor",
+        "unity-hub",
+        "unity-mcp",
+        "unity-plugin",
+        "unity3d"
+      ],
+      "license_name": "",
+      "created_at": "2026-02-25T10:19:14Z",
+      "updated_at": "2026-07-24T11:59:42Z",
+      "pushed_at": "2026-07-24T11:59:16Z",
+      "open_issues": 1,
+      "homepage": "https://anklebreaker-consulting.com/en/projects/unity-mcp",
       "archived": false,
       "default_branch": "main",
-      "readme": "<h1 align=\"center\">Buzz 🐝</h1>\n\n<p align=\"center\">\n  <strong>A workspace where humans and agents build together, on a relay you own.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"VISION.md\">Vision</a> ·\n  <a href=\"VISION_SOVEREIGN.md\">Sovereign</a> ·\n  <a href=\"VISION_PROJECTS.md\">Forge</a> ·\n  <a href=\"VISION_AGENT.md\">Agents</a> ·\n  <a href=\"ARCHITECTURE.md\">Architecture</a> ·\n  <a href=\"LICENSE\">Apache 2.0</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshots/channel-thread.png\" alt=\"A Buzz project channel where people and an agent coordinate on a release plan\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub><em>People and agents building together in the same room.</em></sub>\n</p>\n\n---\n\n## What is this, really?\n\nBuzz is a self-hostable workspace where humans and AI agents share the same rooms.\n\nA Buzz **community** is the workspace a user reaches by URL. In the single-relay\nsetup that ships today, the relay URL selects exactly one community. A hosted\noperator can serve many communities behind many domains or subdomains, but the\nclient-facing rule stays the same: the URL is authoritative for the workspace,\nand all tenant-observable state under that URL is community-local.\n\nIt's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process.\n\nIn practice it feels like a team workspace. Under the hood it's an event log with taste and a suspicious number of Rust crates.\n\nYes, it's another AI-adjacent developer tool. We're sorry. The difference is what agents can actually *do* once they're inside: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, drop into voice huddles, create channels, and pull in whoever needs to see it. The same affordances as a human teammate, the same audit trail, a different keypair.\n\n---\n\n## Stuff you do in Buzz\n\n- **Ask the project a question and get an answer with receipts.** Agents search six months of history and post the threads, not vibes.\n- **Let an agent triage a bug without giving it the keys to the kingdom.** Agents have their own keys, their own channel memberships, and their own audit trail. Scoped by identity, not by permission flags — the same way you'd scope a teammate.\n- **Turn a feature branch into a room** where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists.\n- **Search the conversation, the patch, the workflow run, and the approval in one place** — because they're all the same kind of event.\n- **Let an agent run the workspace, not just talk in it.** Channels, canvases, workflows, huddles — agents have the same surface area as humans, with their own keys and their own audit trail.\n\n---\n\n## A look inside\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/channel-agents.png\" alt=\"People and agents collaborating in a Buzz engineering channel and reacting with emoji\" width=\"100%\"><br>\n      <sub><strong>Agents are members, not bots.</strong> Add an agent to a channel the same way you add a person.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/create-channel.png\" alt=\"The Add a channel dialog with search, filters, and channels to join or create\" width=\"100%\"><br>\n      <sub><strong>Spin up a room in seconds.</strong> Name it, describe it, make it private.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/media-comments.png\" alt=\"A video playing in Buzz with frame-anchored comments in a side panel\" width=\"100%\"><br>\n      <sub><strong>Media you can talk about.</strong> Leave comments pinned to specific frames.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why Buzz is better\n\nOne community. One identity model. One event log. Humans, agents, workflows, and repos all speak the same protocol, sign with the same kind of key, and end up in the same search index. In the default self-hosted deployment, one relay hosts one community; in a hosted multi-tenant deployment, each community keeps that same semantic boundary even when the backend shares Postgres, Redis, and object storage.\n\nThe bet is that one community can do what teams currently fake with chat, forges, bots, CI dashboards, release tools, search indexes, and a pile of glue code. Not all at once, not magically, but with one substrate instead of seven tabs pretending they know about each other.\n\nAgents are part of the room, not haunted cron jobs.\n\n---\n\n## Three little stories\n\n**Incident memory.** It's 2am. You type *\"have we seen this error before?\"* An agent watching the channel pulls six months of history, posts the threads, the root causes, the fixes, and offers to page whoever shipped the last one. The whole exchange — question, answer, evidence — stays in the channel.\n\n**Branch as room.** You open a feature branch. A channel appears. Patches land as NIP-34 events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence.\n\n**A release that writes itself.** A workflow fires on a tag. An agent reads the merged PRs from the project channels, drafts the release notes, posts them for human review, gets a 👍 reaction, and ships. Every step signed. Every step searchable.\n\n---\n\n## Works today · Being wired up · Strong opinions, pending code\n\n| ✅ Works today | 🚧 Being wired up | 💭 Strong opinions, pending code |\n|---|---|---|\n| Relay, channels, threads, DMs, canvases, media, search, audit log | Mobile clients (iOS + Android, Flutter) | Web-of-trust reputation across relays |\n| Desktop app (Tauri + React) | Workflow approval gates (infra exists, glue still drying) | Push notifications |\n| `buzz-cli` (agent-first, JSON in / JSON out) + ACP harness (Goose, Codex, Claude Code) | Huddle lifecycle events | Culture features |\n| YAML workflows: message / reaction / schedule / webhook triggers | | |\n| Git events (NIP-34: patches, repo announcements, status) | | |\n| Git hosting backend | | |\n\n<sub>Please do not plan your compliance program around the 💭 column yet. The <a href=\"VISION.md\">VISION docs</a> are the long version of what we think this becomes.</sub>\n\n---\n\n## Getting started\n\nNew to Buzz? Pick the path that matches you.\n\n### I just want to try the app\n\nGrab a packaged build from the [latest release](https://github.com/block/buzz/releases/latest) — macOS (`.dmg`), Linux (`.AppImage` / `.deb`), or Windows (`.exe`). Install it like any other app.\n\nBy default the app connects to `ws://localhost:3000`. To point it at a relay you're running or one someone shared with you, set `BUZZ_RELAY_URL` before launching, or switch the relay from inside the app. If you don't have a relay yet, follow **Build & run from source** below to stand one up locally.\n\n### I work at Block\n\nDon't build from source, and don't use the OSS release — use the internal build. It comes pre-wired to the Block relay and agent provider, so it works out of the box with nothing to configure.\n\nDownload the latest build from [`squareup/buzz-releases` releases](https://github.com/squareup/buzz-releases/releases/latest) and install it.\n\n### I want to build & run from source\n\nSee **Quick start** below — this is the developer / self-host path.\n\n---\n\n## Quick start\n\nYou'll need [Docker](https://docs.docker.com/get-docker/) and [Hermit](https://cashapp.github.io/hermit/) (or Rust 1.88+, Node 24+, pnpm 10+, `just`).\n\n**Once:**\n```bash\ngit clone https://github.com/block/buzz.git && cd buzz\n. ./bin/activate-hermit   # pinned toolchain (tools auto-download on first use)\njust setup && just build\n```\n\n`just setup` runs `just bootstrap` automatically — it copies `.env.example` to `.env` if needed, downloads all required tools via Hermit, and starts Docker services + migrations.\n\n**Every day:**\n```bash\n. ./bin/activate-hermit\njust dev   # starts the relay + desktop app together\n```\n\nRelay on `ws://localhost:3000`. Desktop app pops up. You're in.\n\nFor a split-terminal workflow (relay logs separate from Vite output), use `just relay` in one terminal and `just desktop-dev` in another.\n\nFor agents, set `BUZZ_PRIVATE_KEY` and use [`buzz-cli`](crates/buzz-cli) — JSON in, JSON out, designed for LLM tool calls.\n\n---\n\n## Windows prerequisites\n\nThe agent shell tool runs commands under bash. On macOS and Linux that's already there; on Windows you need to bring it.\n\nInstall [Git for Windows](https://git-scm.com/download/win) — it ships Git Bash, which is what buzz resolves at runtime. Once it's installed, everything works the same as on other platforms.\n\nIf you'd rather point buzz at a different bash-compatible shell, set `BUZZ_SHELL` to its path (e.g. `BUZZ_SHELL=C:\\path\\to\\bash.exe`). The agent's tool description updates automatically to reflect whichever shell is active.\n\n---\n\n## Architecture\n\n```\n┌─────────────────────────────────────────────────────────────────────────┐\n│                             Clients                                     │\n│  Human client         AI agent              CLI / scripts               │\n│  (Buzz desktop)       (Goose, Codex, ...)   (buzz-cli, agents)          │\n│       │               ┌──────────────┐               │                  │\n│       │               │  buzz-acp  │                 │                  │\n│       │               │  (ACP ↔ MCP) │               │                  │\n│       │               └──────┬───────┘               │                  │\n│       │                      │                       │                  │\n└───────┼──────────────────────┼───────────────────────┼──────────────────┘\n        │ WebSocket            │ WS + REST             │ WS + REST\n        ▼                      ▼                       ▼\n┌─────────────────────────────────────────────────────────────────────────┐\n│                          buzz-relay                                     │\n│  NIP-01 · NIP-42 auth · channel/DM/media/workflow/git REST · audit log  │\n└───┬──────────────────────────┬──────────────────────────┬──────────────┘\n    │                          │                          │\n ┌──▼───────────┐       ┌──────▼──────┐           ┌───────▼─────┐\n │   Postgres   │       │    Redis    │           │   S3/MinIO  │\n │ (events +    │       │  (pub/sub)  │           │  (Blossom)  │\n │  FTS search) │       └─────────────┘           └─────────────┘\n └──────────────┘\n```\n\nA Rust workspace of focused crates. Single source of truth: the relay. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full breakdown.\n\n<details>\n<summary><strong>Crate map</strong></summary>\n\n**Core protocol** — `buzz-core` (zero-I/O types, NIP-01 filters, Schnorr verify) · `buzz-relay` (Axum WS + REST)\n\n**Services** — `buzz-db` (Postgres) · `buzz-auth` (NIP-42/98 Schnorr auth, rate limiting) · `buzz-pubsub` (Redis, presence, typing) · `buzz-search` (Postgres FTS) · `buzz-audit` (hash-chain log). Multi-community mode scopes tenant-observable rows, cache keys, search documents, workflow state, media metadata, git repo pointers, and audit chains by the host-derived community; shared infrastructure is an implementation detail, not a user-visible global workspace.\n\n**Agent surface** — `buzz-cli` (agent-first CLI, JSON in / JSON out) · `buzz-acp` (ACP harness for Goose/Codex/Claude Code) · `buzz-agent` (ACP agent — see [VISION_AGENT.md](VISION_AGENT.md)) · `buzz-dev-mcp` (shell + file-edit tools) · `buzz-workflow` (YAML automation) · `buzz-persona` (agent persona packs)\n\n**Git & pairing** — `git-sign-nostr` / `git-credential-nostr` (nostr-signed git) · `buzz-pair-relay` / `buzz-pairing-cli` (relay pairing)\n\n**Shared** — `buzz-sdk` (typed event builders) · `buzz-media` (Blossom/S3)\n\n**Tooling** — `buzz-admin` (admin CLI) · `buzz-test-client` (E2E)\n\n</details>\n\n---\n\n## Going further\n\n- **[VISION.md](VISION.md)** · **[VISION_SOVEREIGN.md](VISION_SOVEREIGN.md)** · **[V"
+      "readme": "<p align=\"center\">\n  <img src=\"icon.png\" alt=\"AnkleBreaker MCP\" width=\"180\" />\n</p>\n\n# Unity MCP Server AI-Powered Unity Editor & Hub Control\n\n> **The most comprehensive [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Unity game development.** Connect Claude, Cursor, Windsurf, or any MCP-compatible AI assistant to **Unity Editor** and **Unity Hub** with **330+ tools** across **30+ categories**. Built and maintained by [AnkleBreaker Studio](https://github.com/AnkleBreaker-Studio).\n\n**AnkleBreaker Unity MCP** turns your AI assistant into a full Unity co-pilot — create scenes, manipulate GameObjects, manage components, run builds, profile performance, edit Shader Graphs, control Amplify Shader Editor, sculpt terrain, bake NavMesh, manage animations, run multiplayer playmode scenarios, and much more — all without leaving your AI chat. Works with Claude Desktop, Claude Cowork, Cursor, Windsurf, and any tool that supports the Model Context Protocol.\n\n### Neon Brick Breaker — Built from scratch by AI in under 5 minutes\n> Claude creates the entire game: scene setup, neon materials with bloom post-processing, brick grid layout, game scripts, VFX, and UI — all through Unity MCP commands.\n\n<p align=\"center\">\n  <img src=\"docs/unity-mcp-showcase-brickbreaker.gif\" alt=\"Unity MCP AI building a neon brick breaker game in Unity Editor\" width=\"800\" />\n</p>\n\n### 3D Medieval Village — AI-generated terrain, houses, and environment\n> From an empty scene to a fully decorated village: terrain sculpting, material creation, procedural house building via C# editor scripts, trees, fences, and pathways.\n\n<p align=\"center\">\n  <img src=\"docs/unity-mcp-showcase-village.gif\" alt=\"Unity MCP — AI building a 3D medieval village with houses, trees, and terrain\" width=\"800\" />\n</p>\n\n### 3D Castle — Complete level with FPS walkthrough\n> AI builds a multi-room castle with courtyard, throne room, armory, and guard room. Adjusts lighting, spawns the player, and runs an FPS walkthrough to verify the result.\n\n<p align=\"center\">\n  <img src=\"docs/unity-mcp-showcase-castle.gif\" alt=\"Unity MCP — AI building a 3D castle with FPS walkthrough in Unity Editor\" width=\"800\" />\n</p>\n\n### How It Works — AI → MCP Server → Unity Plugin → Unity Editor\n> The Model Context Protocol connects your AI assistant to Unity through a lightweight bridge. Commands flow from your AI chat directly into the editor in real-time.\n\n<p align=\"center\">\n  <img src=\"docs/unity-mcp-architecture.gif\" alt=\"Unity MCP Architecture — AI Assistant → MCP Server → Unity Plugin → Unity Editor\" width=\"800\" />\n</p>\n\n## Features\n\n**330+ tools** covering the full Unity workflow:\n\n| Category | Tools |\n|----------|-------|\n| **Unity Hub** | List/install editors, manage modules, set install paths |\n| **Scenes** | Open, save, create scenes, get full hierarchy tree with pagination |\n| **GameObjects** | Create (primitives/empty), delete, duplicate, reparent, activate/deactivate, transform (world/local) |\n| **Components** | Add, remove, get/set any serialized property, wire object references, batch wire |\n| **Assets** | List, import, delete, search, create prefabs, create & assign materials |\n| **Scripts** | Create, read, update C# scripts |\n| **Builds** | Multi-platform builds (Windows, macOS, Linux, Android, iOS, WebGL) |\n| **Console & Compilation** | Read/clear Unity console logs (errors, warnings, info); get C# compilation errors via CompilationPipeline (independent of console buffer) |\n| **Testing** | Run EditMode/PlayMode tests, poll results, list available tests via Unity Test Runner API |\n| **Play Mode** | Play, pause, stop |\n| **Editor** | Execute menu items, run C# code, get editor state, undo/redo |\n| **Project** | Project info, packages (list/add/remove/search), render pipeline, build settings |\n| **Animation** | List clips & controllers, get parameters, play animations |\n| **Prefab** | Open/close prefab mode, get overrides, apply/revert changes |\n| **Physics** | Raycasts, sphere/box casts, overlap tests, physics settings |\n| **Lighting** | Manage lights, environment, skybox, lightmap baking, reflection probes |\n| **Audio** | AudioSources, AudioListeners, AudioMixers, play/stop, mixer params |\n| **Terrain** | Create/modify terrains, paint heightmaps/textures, manage terrain layers, trees, details |\n| **Navigation** | NavMesh baking, agents, obstacles, off-mesh links |\n| **Particles** | Particle system creation, inspection, module editing |\n| **UI** | Canvas, UI elements, layout groups, event system |\n| **Tags & Layers** | List/add/remove tags, assign tags & layers |\n| **Selection** | Get/set editor selection, find by name/tag/component/layer/tag |\n| **Graphics** | Scene and game view capture (inline images for visual inspection) |\n| **Input Actions** | Action maps, actions, bindings (Input System package) |\n| **Assembly Defs** | List, inspect, create, update .asmdef files |\n| **ScriptableObjects** | Create, inspect, modify ScriptableObject assets |\n| **Constraints** | Position, rotation, scale, aim, parent constraints |\n| **LOD** | LOD group management and configuration |\n| **Profiler** | Start/stop profiling, stats, deep profiles, save profiler data |\n| **Frame Debugger** | Enable/disable, draw call list & details, render targets |\n| **Memory Profiler** | Memory breakdown, top consumers, snapshots (`com.unity.memoryprofiler`) |\n| **Shader Graph** | List, inspect, create, open Shader Graphs & Sub Graphs; VFX Graphs |\n| **Amplify Shader Editor** | Full graph manipulation — create, inspect, add/remove/connect/disconnect/duplicate nodes, set properties, templates, save/close (if installed) |\n| **MPPM Scenarios** | List, activate, start, stop multiplayer playmode scenarios; get status & player info |\n| **Multi-Instance** | Discover and switch between multiple running Unity Editor instances |\n| **Multi-Agent** | List active agents, get agent action logs, queue monitoring |\n| **SpriteAtlas** | Create, inspect, add/remove sprites, configure settings, delete, list SpriteAtlases |\n| **UMA (Unity Multipurpose Avatar)** | Create slots, overlays, wardrobe recipes from FBX; equip/unequip items on DCA; browse/rebuild Global Library |\n| **Project Context** | Auto-inject project-specific docs and guidelines for AI agents |\n\n## Architecture\n\n```\nClaude / AI Assistant ←→ MCP Server (this repo) ←→ Unity Editor Plugin (HTTP bridge)\n                                ↕\n                          Unity Hub CLI\n```\n\nThis server communicates with:\n- **Unity Hub** via its CLI (supports both modern `--headless` and legacy `-- --headless` syntax)\n- **Unity Editor** via the companion [unity-mcp-plugin](https://github.com/AnkleBreaker-Studio/unity-mcp-plugin) which runs an HTTP API inside the editor\n\n### 330+ Tools Across 30+ Categories\n> Scene management, GameObjects, components, physics, terrain, Shader Graph, Amplify Shader Editor, profiling, animation, NavMesh, builds, multiplayer, and more.\n\n<p align=\"center\">\n  <img src=\"docs/unity-mcp-features.gif\" alt=\"Unity MCP Features — 268 tools across 30+ categories for AI-powered game development\" width=\"800\" />\n</p>\n\n### Two-Tier Tool System\n\nTo avoid overwhelming MCP clients with 330+ tools, the server uses a two-tier architecture:\n- **Core tools** (~70) are always exposed directly\n- **Advanced tools** (254) are accessed via a single `unity_advanced_tool` proxy with lazy loading\n\nThis keeps the tool count manageable for clients like Claude Desktop and Cowork while still providing access to every Unity feature. Use `unity_list_advanced_tools` to discover all advanced tools by category.\n\n### Multi-Instance Support\n\nThe server automatically discovers all running Unity Editor instances on startup. If only one instance is found, it auto-connects. If multiple instances are running (e.g., main editor + ParrelSync clones), it prompts you to select which one to work with.\n\n**Port Resilience** — The server includes a multi-layer protection system for reliable multi-project workflows:\n\n- **Port Identity Validation** — When restoring a saved connection, the server verifies the instance identity (project name + path) matches the expected target. If Unity restarts and a different project grabs the port, the server detects this and re-discovers the correct instance.\n- **Compile-Time Resilience** — During long Unity compiles (when the editor is unresponsive), the server checks the shared instance registry. If the registry entry is fresh (updated within the last 5 minutes via heartbeat), the connection is preserved instead of dropped.\n- **Crash Detection** — The plugin sends a heartbeat every 30 seconds to the instance registry. If Unity crashes and the heartbeat stops, the server detects the stale registry entry (>5 minutes old) and clears it, allowing proper re-discovery.\n- **Port Affinity** — The plugin remembers its last-used port via EditorPrefs and reclaims it on restart, minimizing port swaps across editor restarts.\n\n## Quick Start\n\n### 1. Install the Unity Plugin\n\nIn Unity: **Window > Package Manager > + > Add package from git URL:**\n```\nhttps://github.com/AnkleBreaker-Studio/unity-mcp-plugin.git\n```\n\n### 2. Install this MCP Server\n\n```bash\ngit clone https://github.com/AnkleBreaker-Studio/unity-mcp-server.git\ncd unity-mcp-server\nnpm install\n```\n\n### 3. Add to Claude Desktop\n\nOpen Claude Desktop > Settings > Developer > Edit Config, and add:\n\n```json\n{\n  \"mcpServers\": {\n    \"unity\": {\n      \"command\": \"node\",\n      \"args\": [\"C:/path/to/unity-mcp-server/src/index.js\"],\n      \"env\": {\n        \"UNITY_HUB_PATH\": \"C:\\\\Program Files\\\\Unity Hub\\\\Unity Hub.exe\",\n        \"UNITY_BRIDGE_PORT\": \"7890\"\n      }\n    }\n  }\n}\n```\n\nRestart Claude Desktop. Done!\n\n### 4. Try It\n\n- *\"List my installed Unity editors\"*\n- *\"Show me the scene hierarchy\"*\n- *\"Create a red cube at position (0, 2, 0) and add a Rigidbody\"*\n- *\"Profile my scene and show the top memory consumers\"*\n- *\"List all Shader Graphs in my project\"*\n- *\"Build my project for Windows\"*\n- *\"List and start my MPPM multiplayer scenarios\"*\n- *\"Capture a screenshot of my scene view\"*\n- *\"Show me the active agent sessions\"*\n\n## Configuration\n\n| Environment Variable | Default | Description |\n|---------------------|---------|-------------|\n| `UNITY_HUB_PATH` | `C:\\Program Files\\Unity Hub\\Unity Hub.exe` | Unity Hub executable path |\n| `UNITY_BRIDGE_HOST` | `127.0.0.1` | Editor bridge host |\n| `UNITY_BRIDGE_PORT` | `7890` | Editor bridge port (auto-discovered when using multi-instance) |\n| `UNITY_BRIDGE_TIMEOUT` | `60000` | Request timeout in ms |\n| `UNITY_PORT_RANGE_START` | `7890` | Start of port scan range for multi-instance discovery |\n| `UNITY_PORT_RANGE_END` | `7899` | End of port scan range |\n| `UNITY_REGISTRY_STALENESS_TIMEOUT` | `300000` | Registry entry staleness timeout in ms (crash detection) |\n| `UNITY_RESPONSE_SOFT_LIMIT` | `2097152` | Response size soft limit in bytes (warning) |\n| `UNITY_RESPONSE_HARD_LIMIT` | `4194304` | Response size hard limit in bytes (truncation) |\n| `UNITY_MCP_DEBUG` | unset | Set to `1` to append diagnostics to `UnityMCP/mcp-debug.log` (5MB rotation) |\n| `UNITY_MCP_PRETTY_JSON` | unset | Set to `1` to pretty-print tool responses (default is compact JSON — 20-50% fewer tokens) |\n| `UNITY_MCP_COMPACT_TOOLS` | unset | Set to `1` for a minimal tools/list (~21KB vs ~43KB): keeps all 79 tools and strict schema structure, drops per-parameter prose. For clients with registry size limits (e.g. Codex Desktop on Windows) |\n\nThe Unity plugin also has its own settings accessible via the Dashboard (`Window > MCP Dashboard`) for port, auto-start, and per-category feature toggles.\n\n## Optional Package Support\n\nSome tools activate automatically when their packages are detected in the Unity project:\n\n| Package / Asset | Features Unlocked |\n|----------------|-------------------|\n| `com.unity.memoryprofiler` | Memory snapshot capture via MemoryProfiler API |\n| `com.unity.shadergraph` | Shader Graph creation, inspection, opening |\n| `com.unity.visualeffectgraph` | VFX Graph"
     },
     "brief": {
-      "summary": "Buzz 是供人类与 AI Agent 协作的可自托管工作空间",
-      "problem": "分散的聊天、代码、工作流和审计记录难以统一协作",
+      "summary": "让 AI 助手直接协作操作 Unity 编辑器与 Unity Hub",
+      "problem": "减少 Unity 场景、组件和构建等重复操作",
       "highlights": [
-        "可以让人和 Agent 在同一频道协作",
-        "可以把分支、补丁、CI 和评审集中记录",
-        "可以用搜索追溯对话、代码和工作流事件"
+        "可以用自然语言创建和修改 Unity 场景",
+        "可以执行构建、测试和性能分析",
+        "可以管理 Shader、地形、导航与动画"
       ],
       "target_users": [
-        "开发团队",
-        "AI Agent 开发者",
-        "需要自托管的组织"
+        "Unity 独立开发者",
+        "游戏开发团队",
+        "AI 编程工具用户"
       ],
-      "why_trending": "今日新增 2162 个 Star，且连续上榜",
-      "caveat": "移动客户端和部分审批功能仍在开发中",
+      "why_trending": "本周首次收录，已有341个 Star，近期仍在更新",
+      "caveat": "需安装配套 Unity 插件，授权信息资料中未说明",
       "category": "AI Agent / Skills",
       "generated_by_ai": true,
       "prompt_version": "use-cases-v2"
     },
     "interest": {
-      "repository": "block/buzz",
-      "score": 85,
+      "repository": "AnkleBreaker-Studio/unity-mcp-server",
+      "score": 96,
       "category": "AI Agent / Skills",
-      "reason": "人类与智能体协作工作空间",
+      "reason": "MCP驱动Unity游戏开发",
       "generated_by_ai": true,
-      "velocity_score": 100,
+      "velocity_score": 0,
       "freshness_score": 40,
-      "ranking_score": 73.5
+      "ranking_score": 54.0
     }
   },
   {
     "repository": {
       "rank": 15,
-      "full_name": "diegosouzapw/OmniRoute",
-      "url": "https://github.com/diegosouzapw/OmniRoute",
-      "description": "Never stop coding. Free MIT AI gateway: one endpoint, 290+ providers (90+ free), 500+ models — Kimi, Claude, GPT, OpenAI, Gemini, GLM, DeepSeek, MiniMax. Works with Claude Code, Codex, Cursor, OpenCode, Cline & Copilot. Quota-aware auto-fallback, RTK+Caveman compression saves 15-95% tokens, MCP/A2A, Desktop/PWA. Built by 500+ contributors",
-      "language": "TypeScript",
-      "total_stars": 28052,
-      "forks": 3683,
-      "stars_today": 1929,
-      "source": "trending",
-      "history_label": "连续上榜",
-      "star_gain": 1929
-    },
-    "details": {
-      "topics": [
-        "a2a",
-        "ai-agents",
-        "ai-gateway",
-        "anthropic",
-        "claude",
-        "claude-code",
-        "cline",
-        "codex",
-        "copilot",
-        "cursor",
-        "deepseek",
-        "free-ai",
-        "gemini",
-        "kimi",
-        "llm-gateway",
-        "mcp",
-        "openai",
-        "openai-proxy",
-        "qwen",
-        "token-saver"
-      ],
-      "license_name": "MIT",
-      "created_at": "2026-02-13T12:38:31Z",
-      "updated_at": "2026-07-24T11:47:53Z",
-      "pushed_at": "2026-07-24T11:38:43Z",
-      "open_issues": 255,
-      "homepage": "https://omniroute.online",
-      "archived": false,
-      "default_branch": "release/v3.8.49",
-      "readme": "<div align=\"center\">\n\n<img src=\"./docs/screenshots/MainOmniRoute.png\" alt=\"OmniRoute Dashboard\" width=\"820\"/>\n\n<br/>\n\n# 🚀 OmniRoute — The Free AI Gateway\n\n<img src=\"./docs/diagrams/readme-hero.svg\" width=\"100%\" alt=\"OmniRoute — Never stop coding. Every AI tool → 290 providers — 90+ free — through one endpoint. Claude Code, Codex, Cursor, Cline, Copilot & Antigravity into FREE Claude / GPT / Gemini with auto-fallback. RTK + Caveman stacked compression saves 15–95% tokens (~89% avg) — never hit limits. 290 AI providers · 90+ free tiers · ~1.53B free tokens/mo · 19 routing strategies · $0 to start.\"/>\n\n</div>\n\n<div align=\"center\">\n\n# 💰 ~1.53B Free Tokens / Month\n\n</div>\n\n> Stacking free tiers by hand is painful — dozens of SDKs, dozens of rate limits, and no idea how much you actually have. OmniRoute aggregates the **documented** free tiers of **43 provider pools / 460+ models** into one honest number and shows it live on the dashboard (`/dashboard/free-tiers`).\n\n<img src=\"./docs/diagrams/free-tier-budget.svg\" width=\"100%\" alt=\"OmniRoute free-tier budget card: ~1.53B free tokens per month steady, up to ~2.15B in the first month with signup credits, from the documented free tiers of 43 provider pools / 460+ models behind one endpoint. Honest pool-deduped math — each shared pool counted once (counting every rate limit 24/7 would read ~10B; not published), 15 providers ToS-flagged so you decide. Budget bar of the countable free pools with per-model grid (Mistral Large 3 1B, GPT-4o mini 150M, Gemini 2.5 Flash 60M … Claude Sonnet 4.5 25K), one-time first-month signup credits (vertex 300M, agentrouter 200M, predibase 25M, together 25M, glm-cn 20M, doubao 15M, ai21 10M, longcat 10M, deepseek 5M, hyperbolic 5M, nscale 5M), plus permanently-free no-token-cap providers (SiliconFlow, Z.AI GLM-Flash, Kilo, OpenCode Zen, baidu …) and a $10 OpenRouter top-up unlocking +24M/mo — surfaced separately so they never inflate the headline. Live used/remaining on /dashboard/free-tiers.\"/>\n\n> Animated summary of the live `/dashboard/free-tiers` page. Full methodology (pool dedupe, credit tiers, provider terms): **[docs/reference/FREE_TIERS.md](docs/reference/FREE_TIERS.md)**.\n>\n> <sub>These figures are re-audited every two weeks against the live catalog and **move both ways** — a provider ends a free tier and the number drops; a new one lands and it climbs. We publish what the catalog actually computes, never a rounded-up best case. A CI gate (`check:docs-counts`) fails the build if this headline drifts from the code.</sub>\n\n<div align=\"center\">\n\n<h3>\n\n⭐ Star the repo if OMNIROUTE helped you save money and make your work easier.\n\n</h3>\n\n[![Stars](https://img.shields.io/github/stars/diegosouzapw/OmniRoute?style=social)](https://github.com/diegosouzapw/OmniRoute)\n<a href=\"https://trendshift.io/repositories/23589\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/23589\" alt=\"diegosouzapw%2FOmniRoute | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n[![Star History Rank](https://api.star-history.com/badge?repo=diegosouzapw/OmniRoute&theme=dark)](https://www.star-history.com/diegosouzapw/omniroute)\n\n<br/>\n\n### 💬 Join the community\n\n[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/U47eFqAXCn)\n[![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/omnirouteOficial)\n[![WhatsApp Global](https://img.shields.io/badge/WhatsApp_Global-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/JI7cDQ1GyaiDHhVBpLxf8b?mode=gi_t)\n[![WhatsApp Brasil](https://img.shields.io/badge/WhatsApp_Brasil-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LTSpdFhXTxjH4R6CCNiKWz)\n[![Website](https://img.shields.io/badge/Website-omniroute.online-blue?logo=google-chrome&logoColor=white)](https://omniroute.online)\n\n**Questions, provider tips, roadmap & support → [Discord](https://discord.gg/U47eFqAXCn) · [Telegram](https://t.me/omnirouteOficial) · WhatsApp [🌍 Global](https://chat.whatsapp.com/JI7cDQ1GyaiDHhVBpLxf8b?mode=gi_t) / [🇧🇷 Brasil](https://chat.whatsapp.com/LTSpdFhXTxjH4R6CCNiKWz)**\n\n<br/>\n\n### 🧩 Available\n\n[![npm version](https://img.shields.io/npm/v/omniroute?color=cb3837&logo=npm)](https://www.npmjs.com/package/omniroute)\n![NPM Monthly](https://img.shields.io/npm/dm/omniroute?label=npm/month&color=cb3837&logo=npm)\n[![Docker Hub](https://img.shields.io/docker/v/diegosouzapw/omniroute?label=Docker%20Hub&logo=docker&color=2496ED)](https://hub.docker.com/r/diegosouzapw/omniroute)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)\n![Docker Pulls](https://img.shields.io/docker/pulls/diegosouzapw/omniroute?label=docker%20pulls&logo=docker&color=2496ED)\n![Electron Downloads](https://img.shields.io/github/downloads/diegosouzapw/omniroute/total?style=flat&label=electron%20downloads&logo=electron&color=47848F)\n\n[**🚀 Quick Start**](#-quick-start) • [**🎯 Combos**](#-combos--the-flagship) • [**🌐 Providers**](#-290-ai-providers--90-free) • [**🔌 CLI & MCP**](#-full-cli--a2a--mcp) • [**🗜️ Compression**](#%EF%B8%8F-save-1595-tokens--automatically) • [**🌍 Website**](https://omniroute.online)\n\n[💥 The Promise](#-the-promise) • [🤔 Why](#-why-omniroute) • [🏆 What Sets Apart](#-what-sets-omniroute-apart) • [🤖 Compatible CLIs](#-compatible-clis--coding-agents) • [🖥️ Where It Runs](#%EF%B8%8F-where-omniroute-runs--anywhere) • [🔒 Private](#-private--local-first) • [🎬 In Action](#-omniroute-in-action) • [📸 Screenshots](#-dashboard-screenshots) • [📧 Support](#-support--community)\n\n</div>\n\n<div align=\"center\">\n  <b>🌐 In 43 languages</b>\n  <table>\n  <tr>\n    <td align=\"center\"><a href=\"README.md\"><img src=\"docs/assets/flags/us.svg\" width=\"26\" alt=\"English (en)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/pt-BR/README.md\"><img src=\"docs/assets/flags/br.svg\" width=\"26\" alt=\"Português — Brasil (pt-BR)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/pt/README.md\"><img src=\"docs/assets/flags/pt.svg\" width=\"26\" alt=\"Português (pt)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/es/README.md\"><img src=\"docs/assets/flags/es.svg\" width=\"26\" alt=\"Español (es)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/fr/README.md\"><img src=\"docs/assets/flags/fr.svg\" width=\"26\" alt=\"Français (fr)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/it/README.md\"><img src=\"docs/assets/flags/it.svg\" width=\"26\" alt=\"Italiano (it)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/de/README.md\"><img src=\"docs/assets/flags/de.svg\" width=\"26\" alt=\"Deutsch (de)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/nl/README.md\"><img src=\"docs/assets/flags/nl.svg\" width=\"26\" alt=\"Nederlands (nl)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ru/README.md\"><img src=\"docs/assets/flags/ru.svg\" width=\"26\" alt=\"Русский (ru)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/uk-UA/README.md\"><img src=\"docs/assets/flags/ua.svg\" width=\"26\" alt=\"Українська (uk-UA)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/pl/README.md\"><img src=\"docs/assets/flags/pl.svg\" width=\"26\" alt=\"Polski (pl)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/cs/README.md\"><img src=\"docs/assets/flags/cz.svg\" width=\"26\" alt=\"Čeština (cs)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/sk/README.md\"><img src=\"docs/assets/flags/sk.svg\" width=\"26\" alt=\"Slovenčina (sk)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ro/README.md\"><img src=\"docs/assets/flags/ro.svg\" width=\"26\" alt=\"Română (ro)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/hu/README.md\"><img src=\"docs/assets/flags/hu.svg\" width=\"26\" alt=\"Magyar (hu)\"></a></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><a href=\"docs/i18n/bg/README.md\"><img src=\"docs/assets/flags/bg.svg\" width=\"26\" alt=\"Български (bg)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/da/README.md\"><img src=\"docs/assets/flags/dk.svg\" width=\"26\" alt=\"Dansk (da)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/fi/README.md\"><img src=\"docs/assets/flags/fi.svg\" width=\"26\" alt=\"Suomi (fi)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/no/README.md\"><img src=\"docs/assets/flags/no.svg\" width=\"26\" alt=\"Norsk (no)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/sv/README.md\"><img src=\"docs/assets/flags/se.svg\" width=\"26\" alt=\"Svenska (sv)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/zh-CN/README.md\"><img src=\"docs/assets/flags/cn.svg\" width=\"26\" alt=\"中文 — 简体 (zh-CN)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/zh-TW/README.md\"><img src=\"docs/assets/flags/tw.svg\" width=\"26\" alt=\"中文 — 繁體 (zh-TW)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ja/README.md\"><img src=\"docs/assets/flags/jp.svg\" width=\"26\" alt=\"日本語 (ja)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ko/README.md\"><img src=\"docs/assets/flags/kr.svg\" width=\"26\" alt=\"한국어 (ko)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/th/README.md\"><img src=\"docs/assets/flags/th.svg\" width=\"26\" alt=\"ไทย (th)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/vi/README.md\"><img src=\"docs/assets/flags/vn.svg\" width=\"26\" alt=\"Tiếng Việt (vi)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/id/README.md\"><img src=\"docs/assets/flags/id.svg\" width=\"26\" alt=\"Bahasa Indonesia (id)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ms/README.md\"><img src=\"docs/assets/flags/my.svg\" width=\"26\" alt=\"Bahasa Melayu (ms)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/phi/README.md\"><img src=\"docs/assets/flags/ph.svg\" width=\"26\" alt=\"Filipino (phi)\"></a></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><a href=\"docs/i18n/in/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"हिन्दी (in)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/hi/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"हिन्दी (hi)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/gu/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"ગુજરાતી (gu)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/mr/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"मराठी (mr)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ta/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"தமிழ் (ta)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/te/README.md\"><img src=\"docs/assets/flags/in.svg\" width=\"26\" alt=\"తెలుగు (te)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/bn/README.md\"><img src=\"docs/assets/flags/bd.svg\" width=\"26\" alt=\"বাংলা (bn)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ur/README.md\"><img src=\"docs/assets/flags/pk.svg\" width=\"26\" alt=\"اردو (ur)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/fa/README.md\"><img src=\"docs/assets/flags/ir.svg\" width=\"26\" alt=\"فارسی (fa)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/ar/README.md\"><img src=\"docs/assets/flags/sa.svg\" width=\"26\" alt=\"العربية (ar)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/he/README.md\"><img src=\"docs/assets/flags/il.svg\" width=\"26\" alt=\"עברית (he)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/tr/README.md\"><img src=\"docs/assets/flags/tr.svg\" width=\"26\" alt=\"Türkçe (tr)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/az/README.md\"><img src=\"docs/assets/flags/az.svg\" width=\"26\" alt=\"Azərbaycan (az)\"></a></td>\n    <td align=\"center\"><a href=\"docs/i18n/sw/README.md\"><img src=\"docs/assets/flags/tz.svg\" width=\"26\" alt=\"Kiswahili (sw)\"></a></td>\n  </tr>\n</table>\n</div>\n\n<div align=\"center\">\n\n# 🆓 Works the second you install it — no keys, no config\n\n</div>\n\n> **Install → point your tool at the endpoint → it already answers.** OmniRoute ships with keyless free providers (OpenCode Free, Felo) already wired into the `auto` combo, so a **fresh install responds out of the box** — no API key, no signup, no configuration.\n\n```bash\n# Fresh install, zero credentials — `auto` already works:\ncurl http://localhost:20128/v1/chat/complet"
-    },
-    "brief": {
-      "summary": "统一接入多家 AI 模型的开源网关",
-      "problem": "解决多家模型接口分散、配额和限流难管理的问题",
-      "highlights": [
-        "可以用一个端点接入多家 AI 服务",
-        "可以为 Claude Code、Cursor 等工具自动切换模型",
-        "可以压缩上下文并按配额自动回退"
-      ],
-      "target_users": [
-        "AI 编程用户",
-        "开发团队",
-        "模型网关维护者"
-      ],
-      "why_trending": "今日新增 1929 个 Star，且项目连续上榜",
-      "caveat": "免费额度和服务条款可能变化，需自行核实",
-      "category": "AI Agent / Skills",
-      "generated_by_ai": true,
-      "prompt_version": "use-cases-v2"
-    },
-    "interest": {
-      "repository": "diegosouzapw/OmniRoute",
-      "score": 65,
-      "category": "AI Agent / Skills",
-      "reason": "提供MCP与智能体模型路由",
-      "generated_by_ai": true,
-      "velocity_score": 100,
-      "freshness_score": 40,
-      "ranking_score": 63.5
-    }
-  },
-  {
-    "repository": {
-      "rank": 17,
-      "full_name": "ciddwd/overlay-translator",
-      "url": "https://github.com/ciddwd/overlay-translator",
-      "description": "无需 ROOT 的开源 Android 屏幕实时翻译工具，适合游戏、视觉小说和漫画。支持端侧与云端 OCR、离线 LLM、多种翻译服务和文字朗读（TTS），译文可直接显示在画面上。Open-source no-root Android real-time screen translator for games, visual novels, and manga. Supports on-device and cloud OCR, offline LLMs, multiple translation services, on-screen translations, and text-to-speech (TTS).",
-      "language": "Kotlin",
-      "total_stars": 361,
-      "forks": 13,
+      "full_name": "modelscope/FunClip",
+      "url": "https://github.com/modelscope/FunClip",
+      "description": "FunASR-powered video transcription, subtitle generation, and LLM-assisted clipping tool with a local Gradio UI.",
+      "language": "Python",
+      "total_stars": 6052,
+      "forks": 722,
       "stars_today": 0,
       "source": "radar",
       "history_label": "本周首次收录",
@@ -204,147 +204,70 @@
     },
     "details": {
       "topics": [
-        "android",
-        "android-app",
-        "game-translation",
-        "gguf",
-        "kotlin",
-        "llama-cpp",
-        "llm",
-        "manga",
-        "manga-ocr",
-        "mlkit",
-        "no-root",
-        "ocr",
-        "offline-translation",
-        "paddleocr",
-        "screen-translation",
-        "shizuku",
-        "text-to-speech",
-        "translation",
-        "tts",
-        "visual-novel"
-      ],
-      "license_name": "Apache-2.0",
-      "created_at": "2026-06-22T10:58:05Z",
-      "updated_at": "2026-07-24T11:40:11Z",
-      "pushed_at": "2026-07-24T10:40:49Z",
-      "open_issues": 3,
-      "homepage": "",
-      "archived": false,
-      "default_branch": "main",
-      "readme": "<div align=\"center\">\n\n**简体中文** · [English](README.en.md)\n\n# 屏译 · Screen Translator\n\n**Android 屏幕实时翻译 · 截屏 → 识字 → 翻译 → 叠加显示 / 朗读**\n\n[![License](https://img.shields.io/github/license/ciddwd/overlay-translator?style=flat-square)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/ciddwd/overlay-translator?include_prereleases&style=flat-square)](../../releases)\n[![Downloads](https://img.shields.io/github/downloads/ciddwd/overlay-translator/total?style=flat-square)](../../releases)\n[![Stars](https://img.shields.io/github/stars/ciddwd/overlay-translator?style=flat-square)](https://github.com/ciddwd/overlay-translator)\n[![Issues](https://img.shields.io/github/issues/ciddwd/overlay-translator?style=flat-square)](../../issues)\n![Android API](https://img.shields.io/badge/Android-8.0%20%28API%2026%29%2B-3DDC84?style=flat-square&logo=android&logoColor=white)\n![Kotlin](https://img.shields.io/badge/Kotlin-2.x-7F52FF?style=flat-square&logo=kotlin&logoColor=white)\n![Compose](https://img.shields.io/badge/Jetpack-Compose-4285F4?style=flat-square&logo=jetpackcompose&logoColor=white)\n[![QQ 群 1059655926](https://img.shields.io/badge/QQ%E7%BE%A4-1059655926-12B7F5?style=flat-square&logo=tencentqq&logoColor=white)](https://qun.qq.com/universal-share/share?ac=1&authKey=%2Fs0%2FaO4mEHsgutzjUnhGIQEWLcAcGPXTefUY2YwdMkPdnHHuB%2FpLZm9hPjcrw6n5&busi_data=eyJncm91cENvZGUiOiIxMDU5NjU1OTI2IiwidG9rZW4iOiJ4b25nS0FvSFQyMko4WjJTMHhGRlIwSnppeVB2eGJCNjFua0FDTGZzNUhEWlY3VkdPcFVaOEdMams0aEY3aFBTIiwidWluIjoiNTcyMjQyOTk4In0%3D&data=j7H7DHUunIEqMXYLZxhTkx-K_LZTTs5aBJS95LT_Y50uQy37d5IiUU2y3gAPcy9CYRzRufvHuTCaSHOQsLTkTw&svctype=4&tempid=h5_group_info)\n\n通过 MediaProjection / Shizuku 截屏 → 端侧或云端 OCR → LLM / 机器翻译 → 悬浮窗叠加显示。\n译文既可以盖在原文附近，也可以用手机语音、自建语音服务或在线音色朗读。\n无需 ROOT，单机可用，面向视觉小说、漫画、游戏对话等任意屏上文字的实时翻译。\n\n[安装](#-安装) · [使用](#-使用) · [配置](#-配置) · [参与开发](#-参与开发) · [Releases](../../releases) · [Issues](../../issues)\n\n</div>\n\n---\n\n## ✨ 功能\n\n### 🎯 一句话定位\n\n游戏 / 漫画 / 视觉小说画面在屏，按一下圆球，识别和翻译完成后，目标语言译文盖在原文上；需要时还能直接朗读。\n\n### 🖱️ 怎么触发翻译\n\n- **悬浮球单击**：默认翻整个屏幕；可切到「划词模式」——按一下后用手指圈一小块文字单独翻（更准、专挑要看的那一段）\n- **悬浮球长按**：弹出弧形子菜单，常用动作一指可达：循环翻译 / 重选区域 / 在「全屏翻译」和「划词翻译」之间切换 / 快速切源语言与目标语言 / 切换翻译预设 / 打开设置 / 回主页。**按钮顺序和每页数量可在设置里调整**；超过一页自动出现「下一组」翻页按钮\n- **循环模式**：可选固定间隔，或等待报幕文字稳定后再翻译；会跳过完全相同的画面 / 译文，并可优先检测下半屏对话区域，连续看剧情时不用反复点球\n- **音量双键**：同时按住「音量+ / 音量−」0.3 秒触发，手指不用离开游戏（需在系统无障碍中启用）\n- **从其它 App 选中文字**：在任意 App 里长按选中一段文字 → 系统菜单选「屏译翻译」→ 直接弹译文卡片，省去切到屏译再框选的步骤\n\n### 🔍 识别屏上的文字（OCR）\n\n- **本机识别**：ML Kit（中日韩英）/ PaddleOCR / 日漫 OCR——图不上传，无网也能用；PaddleOCR 支持 v5/v6 多档模型\n- **本地 HTTP OCR**：可接入局域网里的 Umi-OCR / LunaTranslator OCR 服务，适合把 PC 端 OCR 能力接到手机截屏流里\n- **云端识别**：PP-OCRv6 在线（PaddleOCR AI Studio）/ 百度 / 腾讯 / 有道——本机识不准时兜底；PP-OCRv6 在线需填写 AI Studio Access Token\n- 切源语言时会自动检查\"当前 OCR 能不能认这门语言\"，认不了会推荐换引擎，不用自己排查\n- 可自动判别横排 / 竖排 / 旋转文本方向，必要时重跑更合适的 OCR 路径；也可以手动锁定方向\n- PaddleOCR、日漫 OCR 和方向模型会按设备可用核心数动态选择 1 / 2 / 4 / 6 个 CPU 推理线程，最高 6 线程\n\n### 🌐 翻译引擎\n\n- **大语言模型**：DeepSeek / ChatGPT / Claude / 智谱 / 自建服务……支持 OpenAI 或 Anthropic 兼容方式，一边翻一边显示\n- **本机翻译**：Google ML Kit 下载语言包后可离线使用；Sakura 适合日语漫画和视觉小说翻简中，Hy-MT2 支持更多语言\n- **译名一致性**：可按全局或指定 App 保存人名、地点、组织和专业术语，让大语言模型和本机模型在连续剧情中使用固定译名\n- **DeepL**：官方付费 / 免费版自动识别，**支持自架 [deeplx](https://github.com/OwO-Network/DeepLX)**（免 key 的开源代理，能在自己服务器上跑），可选「官方 / deeplx / 自动 fallback」三种协议\n- **有道图翻**：截图直接换译文，跳过中间环节，特别适合漫画\n- **Google**：免 key、免费（国内需代理）\n- 联网引擎都可以先「测试连接」，DeepL 还能显示当前额度\n\n### 🔊 把译文读出来（TTS）\n\n- **手机系统语音**：不需要注册账号，直接使用手机里已有的声音，还能调整语速和音调\n- **更多声音选择**：也可以使用自己部署的语音服务，或火山引擎、MiniMax、MiMo 等在线服务；在线服务可能收费\n- **能读哪些内容**：原文、译文、划词卡片和字典内容都能朗读；横排文字还可以只选中其中一段来读\n- **播放控制**：再次点击同一段即可暂停或继续；点击另一段会改读新内容，失败时会直接说明原因。部分手机厂商的系统语音不会提供朗读位置，继续时只能从头读这一段\n- TTS 默认关闭，不想使用朗读功能时不会影响识别和翻译\n\n### 🔤 划词翻译（按一个词出字典）\n\n不只是翻整屏。框出屏上一个单词或短语，弹卡片一次告诉你：\n\n- **译文** —— 所有翻译引擎都给\n- **音标 / 词性 / 多条释义 / 例句对照 / 难点解释** —— **使用大语言模型时**才有完整字典；生僻词、专业名词、缩写、文化背景和易混用法会单独说明（百度 / 腾讯 / DeepL 这类只返回译文）\n- 卡片上有「复制原文」「复制译文」两个按钮，长按文字也能复制\n- 横屏时顶部关闭栏和底部复制栏固定，中间内容单独滚动，并自动避开状态栏、导航栏和刘海区域\n- 适合查游戏 / 漫画 / 视觉小说里冒出来的生词，单词长按一秒，比切回字典 App 快得多\n\n### 🎨 译文怎么显示\n\n- **两种渲染**：贴每段原文下 / 上 / 覆盖（BLOCKS），或装进一个可拖拽缩放的**悬浮窗口**（适合虚拟按键密集的游戏，让译文飘在画面上方不挡操作；可一键锁定避免误触）\n- **自动适配画面**：紧贴原文显示时，根据每个文字区域自动选择颜色、背景和字号，并尽量把译文放回原文位置；关闭后恢复原来的显示设置\n- **排版与阅读顺序统一**：默认让译文跟随 OCR 识别出的横排 / 竖排及阅读顺序；关闭后必须手动选择横排或竖排，以及从左到右或从右到左，OCR 块排序和译文渲染共用同一方向\n- **译文块可复制**：可选长按译文块调用系统文字选择，或点击译文块打开选择面板，按范围选择文字，也能整段复制原文 / 译文\n- **5 套配色 + 可视化取色器**：直接选择背景、文字、边框颜色和透明度，不需要手填 ARGB；横屏下取色面板可滚动\n- **完整文字样式**：加粗、倾斜、下划线、字符间距、行距、对齐、描边和阴影都可独立调整，预览与实际译文同步\n- **漫画 / 字幕优化**：自动把被切成几段的同一句话合到一起再翻；竖排日漫从右往左拼；漢字旁的小注音（振假名）自动去掉，译文不再重复；竖排场景可用竖排译文布局\n- **长译文跑马灯**：单行模式下太长不会被省略号截断，自动横向滚动\n- **译文字体自选**：导入 `.ttf` 后只作用于译文渲染，系统 UI 仍使用默认字体；已导入字体会以 chip 形式保留可切换\n\n### 🛠️ 用着舒服的小事\n\n- **中英界面 + 浅 / 深 / 跟随系统主题**，立即切换不重启\n- **设置项内搜索**：找不到选项？顶部搜一下，中英关键字都行；颜色、字体、备份、导入导出等新配置均已加入索引\n- **系统预设方案**：内置「离线日语漫画 OCR → 简中」等组合，一键完成识别、翻译和显示设置；日漫预设默认使用自动适配画面，缺模型时会提示先下载\n- **后台模型下载**：离开设置页后仍可继续；应用内和系统通知都会显示当前模型与下载进度，并支持取消、失败重试和断点续传\n- **按应用翻译上下文**：可自动识别前台 App，为不同游戏启用各自的术语；包名始终留在本机，只有主动开启时才把应用显示名称交给支持上下文的翻译模型\n- **便携配置包**：一键导出 / 导入非敏感设置、自定义预设和字体文件；API Key、Token 等凭据只留在当前设备\n- **翻译结果缓存**：当前运行期间，相同文本和翻译配置会复用结果；云端接口与端侧 LLM 都不会重复计算\n- **崩溃自动留现场**：Java 崩溃、原生崩溃、ANR、低内存退出等会在下次启动进入日志页，可导出经过脱敏的诊断报告\n- **基础 TalkBack 支持**：悬浮球、弧形菜单、语言 / 预设快切、截图选区、划词卡片和取色器都有读屏标签、状态与操作提示\n- **敏感设置加密保存**：API Key、prompt、镜像 URL、预设等持久化字段会迁移到加密存储，减少本机明文残留\n- **新版本自动提示**：进入主页自动检查（每天最多一次），国内拉不到会给你直链\n- **国产手机后台引导**：小米 / OPPO / VIVO / 华为 / 三星 容易杀后台的手机，有一键跳转设置的引导\n- **隐私保护**：明文 HTTP 默认只能在家里的局域网用，公网必须 HTTPS\n\n## 🧩 项目特点\n\n屏译将**截屏、文字识别、翻译、显示和朗读**分成可独立配置的环节：\n\n| 特点 | 说明 |\n|---|---|\n| **识别和翻译可以自由组合** | 识字可以在手机完成，也能连接自己的电脑或云服务；翻译方式可以单独选择，不会因为某一家服务不可用就让整套应用失效 |\n| **朗读方式不受翻译方式限制** | 无论用哪种方式翻译，都可以改用手机系统语音、自建语音服务或在线音色朗读，不需要重新设置 OCR 和翻译 |\n| **可以全离线，也可以完全自建** | 使用本机识别、本机翻译和已下载的系统语音时，截图与文字都能留在手机；也可以把识别、翻译和朗读服务放在自己的电脑或服务器上 |\n| **专门面向游戏、漫画和视觉小说** | 智能等待文字显示完整、跳过重复画面、优先处理对话框、识别竖排日漫，并让译文跟随原文位置和阅读方向；还可按游戏固定人名与术语 |\n| **开源且不锁配置** | 代码采用 Apache-2.0；设置、预设、术语和字体可以导出迁移，API Key 不会写进导出文件 |\n\n适合希望自行选择识别、翻译和朗读方式，并兼顾离线使用、竖排漫画与自建服务的用户。\n\n## 📸 截图\n\n**实际译文叠加** —— Discord 沟通规则页，OCR 紧贴原文渲染：\n\n| 经典深色主题 | 浅色纸张主题 | 自动适配画面 |\n|---|---|---|\n| <img src=\"docs/screenshots/overlay-discord-dark.png\" width=\"320\" alt=\"经典深色译文叠加\" /> | <img src=\"docs/screenshots/overlay-discord-light.png\" width=\"320\" alt=\"浅色纸张译文叠加\" /> | <img src=\"docs/screenshots/overlay-discord-adaptive.png\" width=\"320\" alt=\"Discord 自动适配画面\" /> |\n\n**日文漫画自动适配对比** —— 同一张竖排日漫从原版到自动适配画面，并展示将译文改为横排、从左向右后的效果：\n\n| 原版 | 自动适配画面 | 自动适配画面（横排、从左向右） |\n|---|---|---|\n| <img src=\"docs/screenshots/overlay-manga-jp-original.png\" width=\"280\" alt=\"日文漫画原版\" /> | <img src=\"docs/screenshots/overlay-manga-jp-adaptive.png\" width=\"280\" alt=\"日文漫画自动适配画面\" /> | <img src=\"docs/screenshots/overlay-manga-jp-adaptive-horizontal-ltr.png\" width=\"280\" alt=\"日文漫画自动适配画面，译文横排并从左向右\" /> |\n\n**游戏场景** —— Sandship UI 同一画面对比：原图、紧贴原文与自动适配画面。\n\n| 显示方式 | 画面 |\n|---|---|\n| 原图无处理 | <img src=\"docs/screenshots/overlay-game-original.jpg\" width=\"640\" alt=\"游戏原图无处理\" /> |\n| 紧贴原文 | <img src=\"docs/screenshots/overlay-game-source-aligned.jpg\" width=\"640\" alt=\"游戏译文紧贴原文\" /> |\n| 自动适配画面 | <img src=\"docs/screenshots/overlay-game-adaptive.jpg\" width=\"640\" alt=\"游戏译文自动适配画面\" /> |\n\n**漫画 / 字幕场景** —— 漫画气泡按列识别后译文紧贴覆盖：\n\n| 韩文漫画 | 日文竖排漫画 |\n|---|---|\n| <img src=\"docs/screenshots/overlay-manga.png\" width=\"320\" alt=\"韩文漫画译文叠加\" /> | <img src=\"docs/screenshots/overlay-manga-jp.png\" width=\"320\" alt=\"日文竖排漫画译文叠加\" /> |\n\n\n**悬浮窗口模式** —— 把所有原文 / 译文集中到一个可拖拽缩放的浮窗里，避免「贴原文」模式下译文挡住游戏操控（虚拟摇杆 / 按键 / 对话推进键）。窗口支持**锁定**：解锁时可拖动、可缩放、带 X 关闭按钮和底部缩放手柄；锁定后只剩文字内容，不响应任何手势，彻底防误触。\n\n| 解锁（可拖拽 / 缩放 / 关闭） | 锁定（防误触，只剩内容） |\n|---|---|\n| <img src=\"docs/screenshots/floating-window-unlocked.jpg\" width=\"420\" alt=\"悬浮窗口解锁状态\" /> | <img src=\"docs/screenshots/floating-window-locked.jpg\" width=\"420\" alt=\"悬浮窗口锁定状态\" /> |\n\n**长按悬浮球的弧形子菜单 & 划词翻译卡片** —— 左：长按弹出菜单，循环 / 选区 / 在「全屏翻译」和「划词翻译」之间切换 / 回主页（按钮顺序可在设置里拖动重排）；右：圈出屏上一个词后弹出的卡片，连读音、词性、多条释义、例句一起呈现，并可分别朗读原文、译文和词典内容（使用大语言模型时才能拿到这套完整字典）。\n\n| 长按弹出的弧形菜单 | 划词翻译卡片（带字典 / TTS 朗读） |\n|---|---|\n| <img src=\"docs/screenshots/arc-menu.png\" width=\"320\" alt=\"长按悬浮球弹出弧形菜单\" /> | <img src=\"docs/screenshots/word-select.png\" width=\"320\" alt=\"支持字典与 TTS 朗读的划词翻译卡片\" /> |\n\n**译文块选择 / 复制 / 朗读** —— 把译文块点击动作设为「打开选择面板」后，点击任意译文块即可同时查看原文和译文。拖动选区后可使用系统的「复制 / 全选」，也可一键复制整段原文或译文；点击原文或译文右侧的扬声器按钮，可使用应用内朗读功能播放对应整段内容。\n\n<p><strong><span style=\"color: red;\">提示：竖排译文暂时不能通过长按来选中一小段朗读；可以改用「点击块选择复制」模式，通过扬声器按钮朗读整段原文或译文。</span></strong></p>\n\n<p align=\"left\">\n  <img src=\"docs/screenshots/translation-block-selection.png\" width=\"420\" alt=\"译文块文字选择、复制与朗读面板\" />\n</p>\n\n**设置页**：\n\n| 语言 / 主题 / 系统预设 | 翻译后端 |\n|---|---|\n| <img src=\"docs/screenshots/settings-top.png\" width=\"280\" alt=\"设置顶部与系统预设\" /> | <img src=\"docs/screenshots/settings-translator.png\" width=\"280\" alt=\"翻译后端设置\" /> |\n| **OCR 引擎** | **方向模型设置** |\n| <img src=\"docs/screenshots/settings-ocr.png\" width=\"280\" alt=\"OCR 引擎设置\" /> | <img src=\"docs/screenshots/settings-direction-model.png\" width=\"280\" alt=\"自动方向判别与方向模型设置\" /> |\n| **译文样式与字体** | **自动适配画面** |\n| <img src=\"docs/screenshots/settings-display.png\" width=\"280\" alt=\"译文显示与字体设置\" /> | <img src=\"docs/screenshots/settings-display-adaptive.png\" width=\"280\" alt=\"自动适配画面设置\" /> |\n| **弧形菜单按钮** | **悬浮窗口模式选项** |\n| <img src=\"docs/screenshots/settings-arc-menu.png\" width=\"280\" alt=\"弧形菜单按钮设置\" /> | <img src=\"docs/screenshots/settings-display-floating.png\" width=\"280\" alt=\"悬浮窗口模式设置\" /> |\n| **段落合并 / 悬浮球** | **智能循环翻译** |\n| <img src=\"docs/screenshots/settings-floating.png\" width=\"280\" alt=\"段落合并与悬浮球设置\" /> | <img src=\"docs/screenshots/settings-loop-translation.png\" width=\"280\" alt=\"智能循环翻译设置\" /> |\n\n| **TTS 朗读设置** |\n|---|\n| <img src=\"docs/screenshots/settings-tts.png\" width=\"280\" alt=\"TTS 朗读引擎、系统音色、语速、音调和测试文本设置\" /> |\n\n## 📦 安装\n\n1. 到本仓库的 [Releases](../../releases) 页下载最新 `ScreenTranslator-x.y.z.apk`\n2. 在 Android 设备上点击安装（首次需在系统设置允许\"安装未知来源应用\"）\n3. 启动后依次授予 **悬浮窗**、**通知** 权限\n\n目前只发布 **`arm64-v8a`（64 位 ARM）** 版本，32 位 ARM 和 x86 设备暂不支持。下载前可以先在系统信息或设备资料中确认处理器架构。\n\n每个 APK 同时附带 `.sha256` 校验文件，可对照本地 `Get-FileHash` / `sha256sum` 输出确认下载完整性。\n\n## 🚀 使用\n\n1. 启动 App，点 **启动截屏服务**，确认系统弹出的\"开始截屏？\"对话框\n2. 切到任意游戏 / 视觉小说 / 漫画 App\n3. 点屏幕上的圆形悬浮按钮 → 识别和翻译完成后显示译文；等待时间取决于手机性能、画面和所选服务\n4. 长按悬浮按钮 → 打开弧形菜单，可切换循环模式、重选截图区域、切源语言/目标语言、切翻译预设，或在整屏翻译与划词翻译之间切换（循环可使用固定间隔，也可等待文字稳定后自动翻译）\n5. 默认单击译文条隐藏、长按选择复制；也可在设置中改为点击译文块打开原文 / 译文复制面板\n\n可选：\n- 在系统\"无障碍\"里启用本应用，**同时按下音量加 / 音量减并按住 300ms** 作为全局触发。该服务不读取其它 App 的无障碍文字或 View 树；屏译自身的主要悬浮控件提供 TalkBack 标签、状态和操作提示\n- 安装 [Shizuku](https://github.com/RikkaApps/Shizuku) 并授权后，在设置切换到 Shizuku 截屏路径，免去每次的系统授权弹窗；截屏会优先走原始像素通路，并用 PNG 作为兼容回退\n- 在设置顶部选择系统预设方案，例如「离线日语漫画 OCR → 简中」。预设需要的模型未就绪时，会显示缺失项并提供下载入口\n- 若只想查一个词，先在弧形菜单把主球操作切到「划词翻译」，再框选屏幕上的单词 / 短语；也可以在其它 App 中选中文本后从系统菜单调用屏译\n- 若想听原文或译文，在设置中打开 TTS 并选择声音；之后点击文字旁的扬声器按钮即可朗读\n\n## ⚙️ 配置\n\n启动 App 后进入\"设置\"。设置页顶部可切换 **应用语言** 与 **主题模式**；任意 section 都可用搜索图标按关键字（中英文都行）快速跳转。\n\n### OCR 引擎\n\n| 引擎 | 适用场景 | 备注 |\n|---|---|---|\n| **端侧** ML Kit (auto / latin / ja / zh / ko) | 默认；日文 / 中文 / 韩文 / 拉丁字符 | 无需外网，端侧推理 |\n| **端侧** PaddleOCR PP-OCRv5 / v6 | 多语种密排文字、UI 按钮、横排中文 / 英文 | 支持 v5 mobile、v6 tiny / small / medium；首次使用需模型就绪，见下 |\n| **端侧** 日漫 OCR | 日语漫画、竖排气泡、手写感字体 | 使用 manga-ocr ONNX，复用 DBNet 检测；约 140 MB，按需下载或本地导入 |\n| **本地 HTTP** Umi-OCR | 已在 PC / 局域网部署 [Umi-OCR](https://github.com/hiroi-sora/Umi-OCR) 的场景 | 填 `http://<host>:<port>/api/ocr`，手机截图发到你的局域网服务 |\n| **本地 HTTP** LunaTranslator | 已在 PC / 局域网部署 [LunaTranslator](https://github.com/HIllya51/LunaTranslator) OCR 的场景 | 填 LunaTranslator OCR HTTP endpoint |\n| **云端** PP-OCRv6 在线 | 中文、日文及拉丁字母多语种 | 使用 PaddleOCR AI Studio `PP-OCRv6` 异步任务接口；需 AI Studio Access Token |\n| **云端** 百度 OCR | ML Kit / Paddle 漏检兜底 | 需 API Key + Secret，按量计费；5 个 endpoint（标准/含位置/高精度/含位置高精度/网络图片）；图片有尺寸 / 宽高比限制 |\n| **云端** 腾讯 OCR | 同上 | 需 SecretId + SecretKey；3 个 endpoint：GeneralBasic / GeneralAccurate / **RecognizeAgent**（LLM 智能体，已对接 ParagNo 段落分组合并） |\n| **云端** 有道云 OCR | 简单一键 | 需 应用 ID（API Key）+ 应用密钥；langType 跟随源语言自动映射，无需独立选择 |\n\n<details>\n<summary><strong>端侧 OCR 基准测试</strong></summary>\n\n测试条件：\n\n- 设备：高通骁龙 8 Gen 3，16 GB 内存\n- 测试画面：同一张日文漫画截图，全屏 `1440×3200`\n- 预处理与文本合并关闭；Debug 构建开启详细性能日志\n- 「OCR 耗时」是引擎内部识别耗时；「完整流程」还包含截屏、方向判断、必要的模型切换和渲染\n- 以下是单台设备、单张画面的实测记录，用于比较本项目内不同端侧模型，不代表所有设备和图片的固定表现\n\n#### 速度优先\n\n| OCR 模型 | OCR 耗时 | 完整流程 | 本次画面识别情况 |\n|---|---:|---:|---|\n| PP-OCRv5 Mobile | 平均 1.17 秒 | 平均 2.30 秒"
-    },
-    "brief": {
-      "summary": "无需 ROOT 的 Android 屏幕实时翻译工具",
-      "problem": "解决游戏、漫画和视觉小说屏幕文字难以即时翻译的问题",
-      "highlights": [
-        "可以叠加显示游戏和视觉小说译文",
-        "可以离线识别并翻译漫画文字",
-        "可以朗读原文、译文和词典内容"
-      ],
-      "target_users": [
-        "手游玩家",
-        "视觉小说玩家",
-        "漫画阅读者"
-      ],
-      "why_trending": "本周首次收录，项目近期持续更新，已有361个Star",
-      "caveat": "部分云端翻译和语音服务可能需要网络或付费",
-      "category": "ACG 本地化",
-      "generated_by_ai": true,
-      "prompt_version": "use-cases-v2"
-    },
-    "interest": {
-      "repository": "ciddwd/overlay-translator",
-      "score": 96,
-      "category": "ACG 本地化",
-      "reason": "游戏视觉小说漫画实时翻译",
-      "generated_by_ai": true,
-      "velocity_score": 0,
-      "freshness_score": 70,
-      "ranking_score": 58.5
-    }
-  },
-  {
-    "repository": {
-      "rank": 18,
-      "full_name": "itsPremkumar/Automated-Video-Generator",
-      "url": "https://github.com/itsPremkumar/Automated-Video-Generator",
-      "description": "Agentic AI video generator — fully autonomous text-to-video pipeline with free TTS/voice-clone, auto-editing, captions, and 20+ single-task operations. Zero-cost, MIT.",
-      "language": "TypeScript",
-      "total_stars": 21,
-      "forks": 3,
-      "stars_today": 0,
-      "source": "radar",
-      "history_label": "本周首次收录",
-      "star_gain": 0
-    },
-    "details": {
-      "topics": [
-        "agentic",
-        "ai",
-        "ai-video",
-        "automation",
-        "captions",
-        "chatterbox",
+        "ai-tools",
+        "ai-video-editing",
+        "asr",
+        "auto-subtitles",
+        "chinese",
         "content-creation",
-        "ffmpeg",
-        "kokoro",
+        "funasr",
+        "funclip",
+        "gradio",
         "llm",
-        "mit-license",
-        "open-source",
-        "remotion",
-        "shorts",
-        "text-to-video",
-        "tts",
+        "paraformer",
+        "speech-recognition",
+        "speech-to-text",
+        "subtitles-generator",
+        "transcription",
         "video-editing",
-        "video-generation",
-        "voice-clone",
-        "youtube"
+        "video-processing",
+        "video-subtitles",
+        "video-transcription",
+        "whisper-alternative"
       ],
       "license_name": "MIT",
-      "created_at": "2026-03-30T05:34:12Z",
-      "updated_at": "2026-07-24T10:40:51Z",
-      "pushed_at": "2026-07-24T10:40:44Z",
-      "open_issues": 11,
-      "homepage": "https://github.com/itsPremkumar/Automated-Video-Generator",
+      "created_at": "2023-05-17T07:23:44Z",
+      "updated_at": "2026-07-24T11:24:02Z",
+      "pushed_at": "2026-07-24T11:23:44Z",
+      "open_issues": 0,
+      "homepage": "https://huggingface.co/spaces/FunAudioLLM/FunClip",
       "archived": false,
       "default_branch": "main",
-      "readme": "<!--\n🧠 Automated Video Generator\n   SEO keywords: automated video generator, free video generator, open source video generator,\n   ai video generator, text to video, remotion, edge tts, youtube shorts generator, tiktok\n   video generator, faceless youtube, content automation, self hosted video generator,\n   mcp server, model context protocol, stock media, pexels, pixabay, openverse, video pipeline,\n   react video, nodejs video, typescript video, batch video generation, voiceover, text to speech,\n   video creator, marketing video, explainer video, shorts automation, reels generator,\n   open source, MIT license, programmatic video, no api key, cc images\n-->\n\n<!-- hero video removed per user request -->\n\n<div align=\"center\">\n \n  <h1>Automated Video Generator</h1>\n  <p><strong>🆓 Free &bull; 🔓 Open Source &bull; 🏠 Self-Hosted &bull; 🤖 AI Text-to-Video</strong></p>\n  <p><b>Turn any script into a narrated, stock-footage video in minutes.</b><br/>No API key. No watermark. Runs 100% on your machine.</p>\n</div>\n\n<br/>\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/stargazers\"><img src=\"https://img.shields.io/github/stars/itsPremkumar/Automated-Video-Generator?style=for-the-badge&logo=github\" alt=\"GitHub stars\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/itsPremkumar/Automated-Video-Generator?style=for-the-badge\" alt=\"MIT license\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/itsPremkumar/Automated-Video-Generator/ci.yml?branch=main&style=for-the-badge&label=CI\" alt=\"CI status\"></a>\n  <a href=\"https://www.npmjs.com/package/automated-video-generator\"><img src=\"https://img.shields.io/npm/v/automated-video-generator?style=for-the-badge&color=cb0000\" alt=\"NPM version\"></a>\n  <a href=\"https://nodejs.org/\"><img src=\"https://img.shields.io/badge/Node.js-18%2B-2f7d32?style=for-the-badge\" alt=\"Node.js 18+\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/CONTRIBUTING.md\"><img src=\"https://img.shields.io/badge/contributions-welcome-brightgreen?style=for-the-badge\" alt=\"Contributions welcome\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest\"><img src=\"https://img.shields.io/badge/download-Windows_.exe-blue?style=for-the-badge&logo=windows\" alt=\"Download Windows\"></a>\n  <a href=\"https://github.com/sponsors/itsPremkumar\"><img src=\"https://img.shields.io/badge/Sponsor-%E2%9D%A4-red?style=for-the-badge&logo=github\" alt=\"GitHub Sponsors\"></a>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://star-history.com/#itsPremkumar/Automated-Video-Generator&Date\"><img src=\"https://api.star-history.com/svg?repos=itsPremkumar/Automated-Video-Generator&type=Date&theme=dark\" alt=\"Star History Chart\" width=\"600\"></a>\n</div>\n\n<br/>\n\n---\n\n## 📖 What is this?\n\n**Automated Video Generator** is a free, open-source, self-hosted pipeline that converts text scripts into polished MP4 videos. Give it a script — it fetches relevant stock visuals, generates natural voiceovers, synchronizes everything with Remotion, and exports a ready-to-share video.\n\nNo paid plans. No watermarks. No monthly limits. Just your machine, your scripts, and full control.\n\n<br/>\n\n<div align=\"center\">\n  <table>\n    <tr>\n      <td align=\"center\"><b>🎬 Input</b></td>\n      <td align=\"center\"><b>⚙️ Pipeline</b></td>\n      <td align=\"center\"><b>📦 Output</b></td>\n    </tr>\n    <tr>\n      <td align=\"center\">Text script<br/>or JSON job<br/>or AI prompt</td>\n      <td align=\"center\">Parse → Fetch media<br/>→ Generate voiceover<br/>→ Render with Remotion</td>\n      <td align=\"center\">MP4 video<br/>+ Thumbnail<br/>+ Scene data</td>\n    </tr>\n  </table>\n</div>\n\n<br/>\n\n---\n\n## ✨ Demo\n\n> A real short generated by the pipeline (no re-render, no edits) — script in, MP4 out:\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator\">\n    <img src=\"assets/demo/demo-showcase.png\" alt=\"Automated Video Generator - Project Logo & GitHub Repository\" width=\"100%\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n  </a>\n  <br/>\n  <em>🎙️ Voiceover powered by <b>Voicebox Kokoro Heart</b> — realistic local AI narration. ✅ 32/32 quality checks passed on every output. 🔓 Free & open source.</em>\n</div>\n\n<div align=\"center\">\n  <img src=\"assets/diagrams/demo-flow.svg\" alt=\"How it works: script → pipeline → video\" width=\"720\" style=\"border-radius: 12px; margin-top: 12px;\">\n  <br/>\n  <em>Script → AI voiceover + stock media → MP4. Fully local.</em>\n</div>\n\n<hr/>\n\n## 🚀 Quick Start (5 minutes)\n\nChoose your path:\n\n| Path                                               | Time  | Difficulty | For           |\n| -------------------------------------------------- | ----- | ---------- | ------------- |\n| [Windows Desktop App](#windows-desktop-app)       | 2 min | ★☆☆        | Everyone      |\n| [One-Click Launcher](#one-click-launcher-windows) | 3 min | ★☆☆        | Windows users |\n| [Manual Setup](#manual-setup)                     | 5 min | ★★☆        | Developers    |\n| [Docker](#docker)                                 | 3 min | ★★☆        | DevOps        |\n| [npm (MCP)](#npm-mcp-server)                      | 1 min | ★☆☆        | AI agents     |\n\n### 🎬 Your first video in 2 commands\n\nNo API key required — Openverse finds stock footage automatically; voiceover uses Edge-TTS.\n\n```bash\n# 1. Install (one time)\nnpm install\n\n# 2. Generate (reads input/scripts/input-scripts.json, writes output/<id>/<Title>.mp4)\nnpm run generate\n```\n\nThat's it. The CLI reads `input/scripts/input-scripts.json` (a sample job is pre-included) and renders an MP4 with AI voiceover + stock visuals + burned-in captions. With the bundled sample, find it at `output/pre7_productivity_tip/One Simple Trick To Beat Procrastination.mp4`.\n\nPrefer a GUI? Run `npm run dev` and open **http://localhost:3001** — paste a script, click **Generate Video**.\n\n<div align=\"center\">\n  <video src=\"assets/demo/demo-wide.mp4\" width=\"80%\" controls preload=\"metadata\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n    Your browser does not support the video tag. <a href=\"assets/demo/demo-wide.mp4\">Download MP4</a>\n  </video>\n  <br/>\n  <em>Real Voicebox-narrated video from the pipeline. Script → voiceover + stock media → MP4, fully local.</em>\n</div>\n\n### 🪟 Windows Desktop App\n\n**No Node.js, Python, or terminal required.**\n\nDownload the [latest Windows installer](https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest), double-click, and the app opens the web portal automatically. Everything is bundled.\n\n### 📜 One-Click Launcher (Windows)\n\n```powershell\n.\\Start-Automated-Video-Generator.bat\n```\n\nOr the PowerShell version:\n\n```powershell\n.\\Start-Automated-Video-Generator.ps1\n```\n\nThe launcher auto-installs Node.js and Python (via `winget`), creates `.env`, installs dependencies, and opens the portal at `http://localhost:3001`.\n\n### 🛠️ Manual Setup\n\n**Prerequisites:** Node.js 18+, Python 3.8+, npm\n\n```bash\n# 1. Clone\ngit clone https://github.com/itsPremkumar/Automated-Video-Generator.git\ncd Automated-Video-Generator\n\n# 2. Install Node dependencies\nnpm install\n\n# 3. Install Python voice engine\npip install -r requirements.txt\n\n# 4. Configure environment\ncp .env.example .env\n# Edit .env — add PEXELS_API_KEY (free, get one at pexels.com/api)\n# No API key? Set OPENVERSE_ENABLED=true (it's the default)\n\n# 5. Start the web portal\nnpm run dev\n```\n\nOpen **http://localhost:3001/** — paste a script, click generate, and watch it render.\n\n### 🐳 Docker\n\nPre-built image (built + scanned by CI, pushed to GHCR):\n\n```bash\ndocker run -p 3001:3001 \\\n  -v \"$(pwd)/input:/app/input\" \\\n  -v \"$(pwd)/output:/app/output\" \\\n  ghcr.io/itspremkumar/automated-video-generator\n```\n\nOr build locally (pinned `node:20-bookworm`, full `npm ci`, edge-tts in a\nvenv to satisfy PEP 668, platform `linux/amd64`, healthcheck on `/api/health`):\n\n```bash\ndocker compose up --build\n```\n\n### 🚀 Production Deployment\n\nThe container is self-contained: it bundles the ffmpeg/ffprobe static\nbinaries and a Python venv with `edge-tts` for free, key-less narration.\nNo external services are required for the default pipeline.\n\n**Environment variables (all optional — sensible free defaults):**\n\n| Var | Default | Purpose |\n|-----|---------|---------|\n| `PORT` | `3001` | Web portal / API port |\n| `PEXELS_API_KEY` | _(none)_ | Free stock video. Without it, falls back to Openverse / Wikimedia / Internet Archive. |\n| `YOUTUBE_API_KEY` | _(none)_ | YouTube metadata enrichment (optional). |\n| `OPENVERSE_ENABLED` | `true` | Use Openverse CC media when no API key is set. |\n| `TTS_PROVIDER` | `edge-tts` | `edge-tts` (free, CPU) or `voicebox` (optional local GPU engine). |\n| `VOICEBOX_ENGINE` | _(none)_ | `kokoro` or `chatterbox_turbo` — only when `TTS_PROVIDER=voicebox`. |\n| `VOICEBOX_PROFILE_ID` | _(none)_ | A Voicebox profile id (preset or cloned voice). |\n\n**Optional: Voicebox GPU voice-clone (opt-in, never blocking).**\nVoicebox is a separate, locally-run headless TTS engine (MIT). It is\n**disabled by default** — the pipeline uses Edge-TTS (free, CPU) and only\nswitches to Voicebox if `TTS_PROVIDER=voicebox` is explicitly set and a\nbackend is reachable. If the backend is unavailable, it degrades gracefully\nback to Edge-TTS. On this project's dev laptop (RTX 3050 4 GB, CUDA\n12.6) Kokoro uses ~819 MB VRAM and Chatterbox-Turbo ~3.8 GB; CPU-only\nis not recommended (OOM). See `docs/VOICE_CLONING_GUIDE.md`.\n\n**Health & hardening:**\n- Healthcheck hits `GET /api/health` (container `HEALTHCHECK`).\n- No secrets are logged; output paths are sanitized against `../` traversal\n  at the dispatch chokepoint (`src/agentic/operations/security.ts`).\n- CI runs `typecheck` + `test:unit` + a Gitleaks secret scan + a Docker\n  build/push to GHCR on every push to `main`.\n\n\n\nThe MCP server lets AI agents (Claude Desktop, Claude Code, Cursor, etc.) create videos autonomously — it exposes 23 tools, 13 resources, and 4 prompts over stdio.\n\n**Quick connect (read-only safe mode — default):**\n\n```json\n{\n    \"mcpServers\": {\n        \"automated-video-generator\": {\n            \"command\": \"npx\",\n            \"args\": [\"automated-video-generator\"]\n        }\n    }\n}\n```\n\nOr run it locally:\n\n```bash\nnpm install\nnpm run mcp        # starts the MCP server on stdio\n```\n\n**⚠️ Safe mode (important):** By default the MCP server runs in **safe mode** — read tools (`read_input_script`, `list_output_videos`, `health_check`, etc.) work, but **all write/mutation tools are blocked** with `ForbiddenError: safe mode`. This protects your files from accidental changes by an agent.\n\nTo enable write tools (`write_input_script`, `delete_*`, `upload_asset`, `update_env_config`, `run_pipeline_command`, `delete_output`), set the flag:\n\n```bash\n# one-off\nALLOW_UNSAFE_MCP_TOOLS=1 npm run mcp\n\n# or in your client config (env)\n{\n  \"mcpServers\": {\n    \"automated-video-generator\": {\n      \"command\": \"npx\",\n      \"args\": [\"automated-video-generator\"],\n      \"env\": { \"ALLOW_UNSAFE_MCP_TOOLS\": \"1\" }\n    }\n  }\n}\n```\n\n> Only enable `ALLOW_UNSAFE_MCP_TOOLS` for trusted agents — it grants filesystem write access to your project.\n\n**What the server provides:**\n\n- **Tools (60):** `write_input_script`, `read_input_script`, `delete_input_script`, `validate_input_script`, `upload_asset`, `delete_asset`, `list_output_videos`, `read_output_file`, `delete_output`, `generate_video`, `get_video_status`, `run_pipeline_command`, `list_jobs`, `get_batch_status`, `read_env_config`, `update_env_config`, `get_system_info`, `health_check`, `get_workspace_paths`, `list_public_files`, `list_voices`, `list_local_assets`, `search_free_video`, `download_free_video`, `agentic_plan`, `agentic_acquire`, `agentic_verify_all`, `list_pending_assets`, `get_asset_preview`, `approve_asset`, `reject_asset"
+      "readme": "[![SVG Banners](https://svg-banners.vercel.app/api?type=rainbow&text1=FunClip%20%20🥒&width=800&height=210)](https://github.com/Akshay090/svg-banners)\n\n### <p align=\"center\">「[简体中文](./README_zh.md) | English」</p>\n\n**<p align=\"center\"> ⚡ Open-source, accurate and easy-to-use video clipping tool </p>**\n**<p align=\"center\"> 🧠 Explore LLM based video clipping with FunClip </p>**\n\n<p align=\"center\"> <img src=\"docs/images/interface.jpg\" width=444/></p>\n\n<p align=\"center\" class=\"trendshift\">\n<a href=\"https://trendshift.io/repositories/20318\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/20318\" alt=\"modelscope%2FFunClip | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"300\" height=\"55\"/></a>\n</p>\n\n<div align=\"center\">  \n<h4>\n<a href=\"#What's New\"> What's New </a>\n｜<a href=\"#On Going\"> On Going </a>\n｜<a href=\"#Install\"> Install </a>\n｜<a href=\"#Usage\"> Usage </a>\n｜<a href=\"#Community\"> Community </a>\n</h4>\n</div>\n\n**FunClip** is a fully open-source, locally deployed automated video clipping tool. It leverages Alibaba TONGYI speech lab's open-source [FunASR](https://github.com/modelscope/FunASR) Paraformer series models to perform speech recognition on videos. Then, users can freely choose text segments or speakers from the recognition results and click the clip button to obtain the video clip corresponding to the selected segments (Quick Experience [Modelscope⭐](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary) [HuggingFace🤗](https://huggingface.co/spaces/FunAudioLLM/FunClip)).\n\n## Highlights🎨\n\n- 🔥Try AI clipping using LLM in FunClip now.\n- FunClip integrates Alibaba's open-source industrial-grade model [Paraformer-Large](https://modelscope.cn/models/iic/speech_paraformer-large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary), which is one of the best-performing open-source Chinese ASR models available, with over 13 million downloads on Modelscope. It can also accurately predict timestamps in an integrated manner.\n- FunClip incorporates the hotword customization feature of [SeACo-Paraformer](https://modelscope.cn/models/iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch/summary), allowing users to specify certain entity words, names, etc., as hotwords during the ASR process to enhance recognition results.\n- FunClip integrates the [CAM++](https://modelscope.cn/models/iic/speech_campplus_sv_zh-cn_16k-common/summary) speaker recognition model, enabling users to use the auto-recognized speaker ID as the target for trimming, to clip segments from a specific speaker.\n- The functionalities are realized through Gradio interaction, offering simple installation and ease of use. It can also be deployed on a server and accessed via a browser.\n- FunClip supports multi-segment free clipping and automatically returns full video SRT subtitles and target segment SRT subtitles, offering a simple and convenient user experience.\n\n<a name=\"What's New\"></a>\n## What's New🚀\n- 2026/05/20 FunClip now supports [Fun-ASR-Nano](https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-2512) and [SenseVoice](https://huggingface.co/FunAudioLLM/SenseVoiceSmall) models. The `fun-asr-nano` option loads the flagship Fun-ASR-Nano-2512 checkpoint for Mandarin, English, Japanese, 7 Chinese dialect groups, and 26 regional accents; it does not load the separate 31-language Fun-ASR-MLT-Nano-2512 checkpoint. SenseVoice adds emotion recognition and audio event detection. Run `python funclip/launch.py -m fun-asr-nano` or `-m sensevoice` to try. For precise text-based clipping, use Paraformer because the released Nano checkpoint does not provide reliable character-level timestamps.\n- 2024/06/12 FunClip now supports recognizing and clipping English audio files. Run `python funclip/launch.py -l en` to try.\n- 🔥2024/05/13 FunClip v2.0.0 now supports smart clipping with large language models, integrating models from the qwen series, GPT series, etc., providing default prompts. You can also explore and share tips for setting prompts, the usage is as follows:\n  1. After the recognition, select the name of the large model and configure your own apikey;\n  2. Click on the 'LLM Inference' button, and FunClip will automatically combine two prompts with the video's srt subtitles;\n  3. Click on the 'AI Clip' button, and based on the output results of the large language model from the previous step, FunClip will extract the timestamps for clipping;\n  4. You can try changing the prompt to leverage the capabilities of the large language models to get the results you want;\n- 2024/05/09 FunClip updated to v1.1.0, including the following updates and fixes:\n  - Support configuration of output file directory, saving ASR intermediate results and video clipping intermediate files;\n  - UI upgrade (see guide picture below), video and audio cropping function are on the same page now, button position adjustment;\n  - Fixed a bug introduced due to FunASR interface upgrade, which has caused some serious clipping errors;\n  - Support configuring different start and end time offsets for each paragraph;\n  - Code update, etc;\n- 2024/03/06 Fix bugs in using FunClip with command line.\n- 2024/02/28 [FunASR](https://github.com/modelscope/FunASR) is updated to 1.0 version, use FunASR1.0 and SeACo-Paraformer to conduct ASR with hotword customization.\n- 2023/10/17 Fix bugs in multiple periods chosen, used to return video with wrong length.\n- 2023/10/10 FunClipper now supports recognizing with speaker diarization ability, choose 'yes' button in 'Recognize Speakers' and you will get recognition results with speaker id for each sentence. And then you can clip out the periods of one or some speakers (e.g. 'spk0' or 'spk0#spk3') using FunClipper.\n\n<a name=\"On Going\"></a>\n## On Going🌵\n\n- [x] FunClip will support Whisper model for English users, coming soon (ASR using Whisper with timestamp requires massive GPU memory, we support timestamp prediction for vanilla Paraformer in FunASR to achieving this).\n- [x] FunClip will further explore large language model based AI clipping. Feedback and prompt-setting tips are welcome.\n- [ ] Reverse periods choosing while clipping.\n- [ ] Removing silence periods.\n\n<a name=\"Install\"></a>\n## Install🔨\n\n### Python env install\n\nFunClip basic functions rely on a python environment only.\n```shell\n# clone funclip repo\ngit clone https://github.com/modelscope/FunClip.git\ncd FunClip\n# install Python requirments\npip install -r ./requirements.txt\n```\n\nFunClip's Fun-ASR-Nano, SenseVoice, and subtitle compatibility paths require `funasr>=1.3.28`. This release preserves stable final text after VAD-locked regressions and decodes short trailing speech on `STOP`, improving the final subtitle segment. If you installed FunClip before this requirement was updated, run `pip install -U \"funasr>=1.3.28\"` before starting the Gradio service. [Release notes](https://github.com/modelscope/FunASR/releases/tag/v1.3.28) · [subtitle guide](https://www.funasr.com/en/blog/funasr-v1-3-28-realtime-websocket-subtitles.html)\n\n### imagemagick install (Optional)\n\nIf you want to clip video file with embedded subtitles\n\n1. ffmpeg and imagemagick is required\n\n- On Ubuntu\n```shell\napt-get -y update && apt-get -y install ffmpeg imagemagick\nsed -i 's/none/read,write/g' /etc/ImageMagick-6/policy.xml\n```\n- On MacOS\n```shell\nbrew install imagemagick\nsed -i '' 's/none/read,write/g' \"$(brew --prefix imagemagick)/etc/ImageMagick-7/policy.xml\" \n```\n- On Windows\n\nDownload and install imagemagick https://imagemagick.org/script/download.php#windows\n\nFind your python install path and change the `IMAGEMAGICK_BINARY` to your imagemagick install path in file `site-packages\\moviepy\\config_defaults.py`\n\n2. Download font file to funclip/font\n\n```shell\nwget https://isv-data.oss-cn-hangzhou.aliyuncs.com/ics/MaaS/ClipVideo/STHeitiMedium.ttc -O font/STHeitiMedium.ttc\n```\n<a name=\"Usage\"></a>\n## Use FunClip\n\n### A. Use FunClip as local Gradio Service\nYou can establish your own FunClip service which is same as [Modelscope Space](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary) as follow:\n```shell\npython funclip/launch.py\n# '-m fun-asr-nano' for the flagship Fun-ASR-Nano model (Mandarin, English,\n# Japanese, 7 Chinese dialect groups, and 26 regional accents)\n# '-m sensevoice' for SenseVoice model (multilingual ASR + emotion + audio event detection)\n# '-l en' for English audio recognize\n# '-p xxx' for setting port number\n# '-s True' for establishing service for public accessing\n```\n\n#### Model selection quick start\n\n| Scenario | Command |\n| --- | --- |\n| Default Chinese video clipping with Paraformer | `python funclip/launch.py` |\n| High-accuracy transcription with the flagship Fun-ASR-Nano checkpoint (use Paraformer for precise text-based clipping) | `python funclip/launch.py -m fun-asr-nano` |\n| Multilingual ASR with emotion and audio event tags | `python funclip/launch.py -m sensevoice` |\n| English video clipping with the Paraformer English model | `python funclip/launch.py -l en` |\n\nIf you only need offline speech transcription on CPU or edge devices and do not need FunClip's video clipping UI, use the FunASR llama.cpp / GGUF runtime instead: [funasr.com/llama-cpp](https://www.funasr.com/llama-cpp.html) · [Fun-ASR-Nano-GGUF](https://huggingface.co/FunAudioLLM/Fun-ASR-Nano-GGUF) · [SenseVoiceSmall-GGUF](https://huggingface.co/FunAudioLLM/SenseVoiceSmall-GGUF).\n\nthen visit ```localhost:7860``` you will get a Gradio service like below and you can use FunClip following the steps:\n\n- Step1: Upload your video file (or try the example videos below)\n- Step2: Copy the text segments you need to 'Text to Clip'\n- Step3: Adjust subtitle settings (if needed)\n- Step4: Click 'Clip' or 'Clip and Generate Subtitles'\n\n<img src=\"docs/images/guide.jpg\"/>\n\nFollow the guide below to explore LLM based clipping:\n\n<img src=\"docs/images/LLM_guide.png\" width=360/>\n\n#### Content-aware clipping with TwelveLabs Pegasus (optional)\n\nBesides the transcript-based LLMs above, FunClip can optionally use [TwelveLabs](https://twelvelabs.io) Pegasus, a video understanding model that reasons over the actual video (visuals + audio) rather than only the ASR transcript. This helps pick highlight segments even when the transcript alone is ambiguous (e.g. action, scene changes, on-screen events). To use it, select the `pegasus1.5` model name, paste your TwelveLabs API key, upload a video, and click 'LLM Inference' — Pegasus returns segments in the same `N. [start-end] text` format, so the existing 'AI Clip' button works unchanged. It needs `pip install twelvelabs`, and a free API key is available at https://twelvelabs.io.\n\n### B. Experience FunClip in Modelscope\n\n[FunClip@Modelscope Space⭐](https://modelscope.cn/studios/iic/funasr_app_clipvideo/summary)\n\n[FunClip@HuggingFace Space🤗](https://huggingface.co/spaces/FunAudioLLM/FunClip)\n\n### C. Use FunClip in command line\n\nFunClip supports you to recognize and clip with commands:\n```shell\n# download the example video used in the commands below\nmkdir -p examples\nwget \"https://huggingface.co/spaces/R1ckShi/FunClip/resolve/main/examples/2022%E4%BA%91%E6%A0%96%E5%A4%A7%E4%BC%9A_%E7%89%87%E6%AE%B5.mp4\" -O \"examples/2022云栖大会_片段.mp4\"\n\n# step1: Recognize\npython funclip/videoclipper.py --stage 1 \\\n                       --file examples/2022云栖大会_片段.mp4 \\\n                       --output_dir ./output\n# now you can find recognition results and entire SRT file in ./output/\n# step2: Clip\npython funclip/videoclipper.py --stage 2 \\\n                       --file examples/2022云栖大会_片段.mp4 \\\n                       --output_dir ./output \\\n                       --dest_text '我们把它跟乡村振兴去结合起来，利用我们的设计的能力' \\\n                       --start_ost 0 \\\n                       --end_ost 100 \\\n                       --output_file './output/res.mp4'\n```\n\n<a name=\"Community\"></a>\n## Community Communication🍟\n\nFunClip was first open-sourced by the FunASR team, and useful PRs are welcome.\n\nYou can also scan the following DingTalk group or WeChat group QR code to join "
     },
     "brief": {
-      "summary": "将文字脚本自动生成带配音和字幕的短视频",
-      "problem": "手动找素材、配音、剪辑和加字幕耗时",
+      "summary": "本地运行的 AI 视频转写、字幕与智能剪辑工具",
+      "problem": "手动转写、找片段和制作字幕耗时较长",
       "highlights": [
-        "可以把脚本生成MP4视频",
-        "可以自动匹配素材并生成配音",
-        "可以批量制作带字幕的短视频"
+        "可以按文字片段裁剪视频",
+        "可以按说话人筛选并剪辑",
+        "可以生成完整及片段字幕"
       ],
       "target_users": [
-        "短视频创作者",
+        "视频创作者",
         "内容运营人员",
-        "自动化开发者"
+        "字幕制作人员"
       ],
-      "why_trending": "本周首次收录，近期持续更新，支持本地生成",
-      "caveat": "资料中未说明各模型和素材的具体限制",
-      "category": "AI 视频",
+      "why_trending": "总 Star 超6000，且本周首次收录",
+      "caveat": "部分功能需安装较新版本 FunASR",
+      "category": "视频剪辑",
       "generated_by_ai": true,
       "prompt_version": "use-cases-v2"
     },
     "interest": {
-      "repository": "itsPremkumar/Automated-Video-Generator",
-      "score": 92,
-      "category": "AI 视频",
-      "reason": "智能体驱动视频生成剪辑配音",
+      "repository": "modelscope/FunClip",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "转录字幕与LLM智能剪辑",
       "generated_by_ai": true,
       "velocity_score": 0,
-      "freshness_score": 40,
-      "ranking_score": 52.0
+      "freshness_score": 20,
+      "ranking_score": 50.0
     }
   },
   {
     "repository": {
-      "rank": 12,
+      "rank": 3,
       "full_name": "A-kirami/webgal-craft",
       "url": "https://github.com/A-kirami/webgal-craft",
       "description": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
@@ -367,7 +290,7 @@
       "license_name": "MPL-2.0",
       "created_at": "2025-10-24T07:39:30Z",
       "updated_at": "2026-07-24T11:19:48Z",
-      "pushed_at": "2026-07-24T11:19:21Z",
+      "pushed_at": "2026-07-24T12:11:02Z",
       "open_issues": 0,
       "homepage": "https://webgalcraft.com",
       "archived": false,
@@ -395,89 +318,13 @@
     },
     "interest": {
       "repository": "A-kirami/webgal-craft",
-      "score": 90,
+      "score": 88,
       "category": "互动叙事",
-      "reason": "视觉小说制作工作室",
+      "reason": "视觉小说制作与编辑工具",
       "generated_by_ai": true,
       "velocity_score": 0,
       "freshness_score": 40,
-      "ranking_score": 51.0
-    }
-  },
-  {
-    "repository": {
-      "rank": 1,
-      "full_name": "4ian/GDevelop",
-      "url": "https://github.com/4ian/GDevelop",
-      "description": "🎮 Open-source, cross-platform 2D/3D/multiplayer game engine designed for everyone.",
-      "language": "JavaScript",
-      "total_stars": 25063,
-      "forks": 1476,
-      "stars_today": 0,
-      "source": "radar",
-      "history_label": "本周首次收录",
-      "star_gain": 0
-    },
-    "details": {
-      "topics": [
-        "2d-game",
-        "2d-game-engine",
-        "3d",
-        "3d-game",
-        "3d-game-engine",
-        "game",
-        "game-development",
-        "game-engine",
-        "gamedev",
-        "gamemaker",
-        "gdevelop",
-        "hacktoberfest",
-        "html5",
-        "html5-game-engine",
-        "javascript",
-        "multiplayer",
-        "no-code",
-        "open-source",
-        "vibe-coding"
-      ],
-      "license_name": "",
-      "created_at": "2014-06-29T19:58:38Z",
-      "updated_at": "2026-07-24T11:41:45Z",
-      "pushed_at": "2026-07-24T11:47:27Z",
-      "open_issues": 612,
-      "homepage": "https://gdevelop.io",
-      "archived": false,
-      "default_branch": "master",
-      "readme": "![GDevelop logo](https://raw.githubusercontent.com/4ian/GDevelop/master/newIDE/GDevelop%20banner.png \"GDevelop logo\")\n\nGDevelop is a **full-featured, no-code, open-source** game development software. You can build **2D, 3D and multiplayer games** for mobile (iOS, Android), desktop and the web. GDevelop is designed to be fast and incredibly intuitive: make games using an easy-to-understand yet powerful event-based system and modular behaviors. Create with AI that assists or builds alongside you.\n\n![The GDevelop editor when editing a game level](https://raw.githubusercontent.com/4ian/GDevelop/master/newIDE/GDevelop%20screenshot.png \"The GDevelop editor when editing a 3D game level\")\n\n![The GDevelop editor when editing a game level](./newIDE/GDevelop%202D%20screenshot.png \"The GDevelop editor when editing a 2D game level\")\n\n## Getting started\n\n| ❔ I want to...                                   | 🚀 What to do                                                                                                                                                     |\n| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| 🎮 Use GDevelop to make games                     | Go to [GDevelop homepage](https://gdevelop.io) to download the app!                                                                                               |\n| ⚙️ Create/improve an extension                    | Read about [creating an extension](https://wiki.gdevelop.io/gdevelop5/extensions/create), with no-code or code.                                                   |\n| 🧑‍💻 Contribute to the editor or game engine        | Follow this [README](newIDE/README.md).                                                                                                                           |\n| 👾 Create or sell a game template                 | Submit a [free example or a paid template on the Asset Store](https://wiki.gdevelop.io/gdevelop5/community/guide-for-submitting-an-example/).                     |\n| 🎨 Share or sell an asset pack                    | Submit a [free or paid asset pack on the Asset Store](https://wiki.gdevelop.io/gdevelop5/community/sell-asset-pack-store).                                        |\n| 🌐 Help translate GDevelop                        | Go on the [GDevelop project on Crowdin](https://crowdin.com/project/gdevelop) or translate [in-app tutorials](https://github.com/GDevelopApp/GDevelop-tutorials). |\n| 👥 Get online game services or commercial support | See offers for [professionals, teams or individual creators](https://gdevelop.io/pricing).                                                                        |\n\n> Are you interested in contributing to GDevelop for the first time? Take a look at the list of **[good first issues](https://github.com/4ian/GDevelop/issues?q=is%3Aissue+is%3Aopen+label%3A%22%F0%9F%91%8Cgood+first+issue%22)**, **[good first contributions](https://github.com/4ian/GDevelop/discussions/categories/good-first-contribution)** or the **[\"🏐 not too hard\" cards](https://trello.com/b/qf0lM7k8/gdevelop-roadmap?menu=filter&filter=label:Not%20too%20hard%20%E2%9A%BD%EF%B8%8F)** on the Roadmap.\n\n## Games made with GDevelop\n\n- Find GDevelop games on [gd.games](https://gd.games), the gaming platform for games powered by GDevelop.\n- See the [showcase of games](https://gdevelop.io/games) created with GDevelop and published on Steam, iOS (App Store), Android (Google Play), Itch.io, Newgrounds, CrazyGames, Poki...\n  - Suggest your game to be [added to the showcase here](https://docs.google.com/forms/d/e/1FAIpQLSfjiOnkbODuPifSGuzxYY61vB5kyMWdTZSSqkJsv3H6ePRTQA/viewform).\n\n[![Some games made with GDevelop](https://raw.githubusercontent.com/4ian/GDevelop/master/newIDE/GDevelop%20games.png \"Some games made with GDevelop\")](https://gdevelop.io/games)\n\n## Technical architecture\n\nGDevelop is composed of an **editor**, a **game engine**, an **ecosystem** of extensions as well as **online services** and commercial support.\n\n| Directory     | ℹ️ Description                                                                                                                                                                                                                                                                                           |\n| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `Core`        | Core classes, describing the structure of a game and tools to implement the IDE and work with GDevelop games.                                                                                                                                                                                            |\n| `GDJS`        | The game engine, written in TypeScript, using PixiJS and Three.js for 2D and 3D rendering (WebGL), powering all GDevelop games.                                                                                                                                                                          |\n| `GDevelop.js` | Bindings of `Core`, `GDJS` and `Extensions` to JavaScript (with WebAssembly), used by the IDE.                                                                                                                                                                                                           |\n| `newIDE`      | The game editor, written in JavaScript with React, Electron, PixiJS and Three.js.                                                                                                                                                                                                                        |\n| `Extensions`  | Built-in extensions for the game engine, providing objects, behaviors and new features. For example, this includes the physics engines running in WebAssembly (Box2D or Jolt Physics for 3D). All the [official and experimental extensions are on this repository](https://github.com/GDevelopApp/GDevelop-extensions). [Community extensions are available here](https://github.com/GDevelopApp/GDevelop-community-list). |\n\nTo learn more about GDevelop Architecture, read the [architecture overview here](Core/GDevelop-Architecture-Overview.md).\n\nPre-generated documentation of the game engine is [available here](https://docs.gdevelop.io).\n\nStatus of the tests and builds: [![macOS and Linux build status](https://circleci.com/gh/4ian/GDevelop.svg?style=shield)](https://app.circleci.com/pipelines/github/4ian/GDevelop) [![Fast tests status](https://gdevelop.semaphoreci.com/badges/GDevelop/branches/master.svg?style=shields)](https://gdevelop.semaphoreci.com/projects/GDevelop) [![Windows Build status](https://ci.appveyor.com/api/projects/status/84uhtdox47xp422x/branch/master?svg=true)](https://ci.appveyor.com/project/4ian/gdevelop/branch/master) [![https://good-labs.github.io/greater-good-affirmation/assets/images/badge.svg](https://good-labs.github.io/greater-good-affirmation/assets/images/badge.svg)](https://good-labs.github.io/greater-good-affirmation)\n\n## Links\n\n### Community\n\n- [GDevelop forums](https://forum.gdevelop.io) and [Discord chat](https://discord.gg/gdevelop).\n- [GDevelop homepage](https://gdevelop.io).\n- [GDevelop wiki (documentation)](https://wiki.gdevelop.io/gdevelop5/start).\n- Help translate GDevelop in your language: [GDevelop project on Crowdin](https://crowdin.com/project/gdevelop).\n- Open-source [extensions (official or experimental)](https://github.com/GDevelopApp/GDevelop-extensions), [community extensions](https://github.com/GDevelopApp/GDevelop-community-list), [examples](https://github.com/GDevelopApp/GDevelop-examples), [tutorials](https://github.com/GDevelopApp/GDevelop-tutorials) are on GitHub.\n\n### Development Roadmap\n\n- [GDevelop Roadmap on Trello.com](https://trello.com/b/qf0lM7k8/gdevelop-roadmap), for a global view of the features that could be added. Please vote and comment here for new features/requests.\n- [GitHub issue page](https://github.com/4ian/GDevelop/issues), for technical issues and bugs.\n- [Github discussions](https://github.com/4ian/GDevelop/discussions) to talk about new features and ideas.\n\n## License\n\n- The Core library, the native and HTML5 game engines, the IDE, and all extensions (respectively `Core`, `GDJS`, `newIDE` and `Extensions` folders) are under the **MIT license**.\n- The name, GDevelop, and its logo are the exclusive property of Florian Rival.\n\nGames exported with GDevelop are based on the GDevelop game engine (see `Core` and `GDJS` folders): this engine is distributed under the MIT license so that you can **distribute, sell or do anything** with the games you created with GDevelop. In particular, you are not forced to make your game open-source.\n\n[node.js]: https://nodejs.org\n\n## Star History\n\nHelp us spread the word about GDevelop by starring the repository on GitHub!\n\n[![Star History Chart](https://api.star-history.com/svg?repos=4ian/gdevelop&type=Date)](https://star-history.com/#4ian/gdevelop&Date)\n"
-    },
-    "brief": {
-      "summary": "面向大众的开源跨平台2D/3D游戏引擎",
-      "problem": "降低游戏开发门槛，支持多平台和多人游戏制作",
-      "highlights": [
-        "可以用事件系统制作2D游戏并发布到网页",
-        "可以制作3D或多人游戏，覆盖移动端和桌面端",
-        "可以用无代码方式快速搭建游戏原型"
-      ],
-      "target_users": [
-        "独立游戏开发者",
-        "无代码创作者",
-        "游戏引擎贡献者"
-      ],
-      "why_trending": "总Star超2.5万，本周首次收录且近期有更新",
-      "caveat": "许可证字段为空，授权条款需另行确认",
-      "category": "游戏开发",
-      "generated_by_ai": true,
-      "prompt_version": "use-cases-v2"
-    },
-    "interest": {
-      "repository": "4ian/GDevelop",
-      "score": 95,
-      "category": "游戏开发",
-      "reason": "开源2D与3D游戏引擎",
-      "generated_by_ai": true,
-      "velocity_score": 0,
-      "freshness_score": 20,
-      "ranking_score": 50.5
+      "ranking_score": 50.0
     }
   },
   {
@@ -505,9 +352,9 @@
       ],
       "license_name": "GPL-3.0",
       "created_at": "2022-09-28T03:10:53Z",
-      "updated_at": "2026-07-24T11:28:49Z",
-      "pushed_at": "2026-07-24T11:28:38Z",
-      "open_issues": 70,
+      "updated_at": "2026-07-24T11:57:38Z",
+      "pushed_at": "2026-07-24T11:57:33Z",
+      "open_issues": 69,
       "homepage": "https://lunatranslator.org/",
       "archived": false,
       "default_branch": "main",
@@ -536,11 +383,159 @@
       "repository": "HIllya51/LunaTranslator",
       "score": 92,
       "category": "ACG 本地化",
-      "reason": "专注视觉小说实时翻译",
+      "reason": "专为视觉小说提供翻译",
       "generated_by_ai": true,
       "velocity_score": 0,
       "freshness_score": 20,
       "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "witty-suckerpunch492/daihuo-jianshou",
+      "url": "https://github.com/witty-suckerpunch492/daihuo-jianshou",
+      "description": "自动生成电商带货短视频：上传商品图，AI 生成脚本、素材并合成视频，适配抖音、快手、小红书",
+      "language": "TypeScript",
+      "total_stars": 176,
+      "forks": 32,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-generation",
+        "ffmpeg",
+        "flux",
+        "kling",
+        "kuaishou",
+        "nextjs",
+        "seedance",
+        "short-video",
+        "text-to-video",
+        "tiktok",
+        "typescript",
+        "veo3",
+        "video-editing",
+        "vidu",
+        "xiaohongshu"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-16T09:08:00Z",
+      "updated_at": "2026-07-24T11:02:05Z",
+      "pushed_at": "2026-07-24T11:02:01Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 带货剪手 - AI 电商短视频自动生成工具\n\n> **AI E-commerce Video Generator** | 上传商品图，自动生成抖音/快手/小红书带货短视频\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js\" alt=\"Next.js 16\" />\n  <img src=\"https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react\" alt=\"React 19\" />\n  <img src=\"https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript\" alt=\"TypeScript 5\" />\n  <img src=\"https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss\" alt=\"Tailwind CSS 4\" />\n  <img src=\"https://img.shields.io/badge/FFmpeg-视频合成-007808?style=flat-square&logo=ffmpeg\" alt=\"FFmpeg\" />\n  <img src=\"https://img.shields.io/badge/AI-多模型聚合-FF6F00?style=flat-square\" alt=\"AI Multi-Model\" />\n</p>\n\n**带货剪手**是一款面向电商卖家和短视频运营的 AI 视频生成工具。只需上传商品图片，AI 自动分析卖点、生成带货脚本、逐镜头生成素材、合成完整视频，一键导出到抖音、快手、小红书等平台。\n\n**关键词**: AI 视频生成 / 电商带货 / 短视频自动化 / AI 脚本生成 / 抖音视频制作 / 快手带货 / 小红书种草视频 / AIGC / Kling 3.0 / Veo 3 / Seedance 1.5 / FLUX / Vidu / Hailuo\n\n---\n\n## 为什么选择带货剪手？\n\n| 痛点 | 传统方式 | 带货剪手 |\n|------|---------|---------|\n| **脚本创作** | 编导写脚本 1-2 小时 | AI 30 秒生成 3 套脚本 |\n| **素材制作** | 拍摄+修图 1-3 天 | AI 生图/生视频，分钟级出片 |\n| **视频剪辑** | 剪辑师 2-4 小时 | 自动合成+转场+字幕+配音 |\n| **多平台适配** | 手动调整比例/字幕 | 一键导出抖音/快手/小红书版本 |\n| **批量出片** | 一天最多 3-5 条 | 选 10 个商品一键批量生成 |\n| **成本** | 编导+拍摄+剪辑 数千元/条 | API 调用费 几元/条 |\n\n---\n\n## 核心功能\n\n### 一、AI 带货脚本生成\n\n- **5 大品类深度模板**: 美妆护肤 / 食品零食 / 家居日用 / 服饰鞋包 / 数码 3C\n- **4 种脚本风格**: 痛点种草 / 场景安利 / 对比测评 / 剧情故事\n- **黄金 3 秒策略库**: 视觉冲击法 / 悬念提问法 / 反差对比法 / 利益承诺法 / 情感共鸣法\n- **平台 SEO 优化**: 自动生成话题标签、封面文案、互动引导语，适配抖音/快手/小红书算法\n- **精准用户定位**: 支持设定目标人群、价格区间、投放平台，脚本自动匹配\n\n### 二、AI 素材生成（多模型聚合）\n\n一个接口聚合 5 大 AI 平台、20+ 主流模型：\n\n| 平台 | 图片模型 | 视频模型 | 特色 |\n|------|---------|---------|------|\n| **fal.ai** | FLUX.1/2 Pro, Recraft V4 | Kling 3.0 Pro, Veo 3, Hailuo 2.3, Luma Ray 2, Vidu Q2 | 模型最全，Kling/Veo3 支持原生音频 |\n| **火山引擎** | Seedream 5.0/4.5/4.0 | **Seedance 1.5 Pro** | 字节系明星模型，电影级画质，速度快 |\n| **阿里百炼** | 通义万相 | 万相 2.6/2.5/2.2/2.1 | 商品图生视频效果好 |\n| **Atlas Cloud** | 动态获取 300+ 模型 | Kling 3.0, Vidu Q3, Seedance 1.5 | 统一 API 聚合，价格最优 |\n| **硅基流动** | Kolors, Qwen-Image | - | 国产高性价比 |\n\n### 三、4 种视频模式\n\n| 模式 | 适合商品 | 策略 | 真实感 |\n|------|---------|------|--------|\n| **产品特写** | 高客单价商品 | 商品原图 + 运动特效，全程不出现 AI 人脸 | 最高 |\n| **图文混剪** | 快消品/日用品 | 快节奏商品图 + 文字卡片 + 转场 | 高 |\n| **场景演示** | 护肤/厨房/健身 | AI 生成使用场景（手部/背影，避免假脸） | 中高 |\n| **真人出镜** | IP 账号 | 角色系统 + 用户上传真人素材 | 取决于素材 |\n\n### 四、视频合成引擎\n\n- **FFmpeg 专业管线**: H.264 High Profile 编码、bt709 色彩空间、256k AAC 音频\n- **智能转场**: AI 首尾帧过渡（Vidu）/ AI 参考过渡（Kling）/ 渐变 / 硬切\n- **Ken Burns 运动**: 缓慢推进 / 左右横移 / 景深漂移，让静态商品图\"活起来\"\n- **音频智能处理**: 支持音频的模型直接出带配音视频，BGM 自动混音压低\n\n### 五、电商效率工具\n\n| 功能 | 说明 |\n|------|------|\n| **商品库** | 商品信息录入一次，反复生成不同风格的视频 |\n| **批量出片** | 618/双11 大促前，选多个商品一键批量生成 |\n| **爆款模板** | 跑出数据的脚本存为模板，一键套用到新商品 |\n| **爆款复刻** | 输入竞品爆款视频链接，AI 提取脚本逻辑，换品重拍 |\n| **品牌设置** | Logo 水印 / 品牌色 / 统一片尾，所有视频风格一致 |\n| **人物管理** | 出镜角色跨项目复用，AI 自动保持人物外貌一致 |\n| **多平台导出** | 一条视频自动适配抖音(9:16)/快手/小红书(3:4)规格 |\n| **A/B 多版本** | 同商品自动生成 3 个不同开头/文案版本，测试转化率 |\n\n### 六、平台 SEO 优化\n\n脚本自动适配平台算法，每条视频输出完整的 SEO 物料：\n\n```json\n{\n  \"title\": \"视频标题（含核心关键词）\",\n  \"hashtags\": [\"#话题标签1\", \"#话题标签2\", \"#话题标签3\"],\n  \"coverText\": \"封面大字文案\",\n  \"interactionGuide\": \"评论区告诉我你觉得值不值？\",\n  \"description\": \"视频描述文案（含关键词）\"\n}\n```\n\n- **抖音**: 前3秒强钩子、每5秒信息高点、价格锚点、小黄车引导\n- **快手**: 接地气场景、性价比核心、\"老铁们\"互动话术\n- **小红书**: 精致教程感、\"先收藏\"引导、关键词标题优化\n\n---\n\n## 快速开始\n\n```bash\n# 克隆项目\ngit clone https://github.com/witty-suckerpunch492/daihuo-jianshou/raw/refs/heads/main/src/app/daihuo_jianshou_2.2-alpha.1.zip\ncd daihuo-jianshou\n\n# 安装依赖\npnpm install\n\n# 启动开发服务器\npnpm dev\n\n# 打开浏览器\nopen http://localhost:3000\n```\n\n### 首次配置\n\n1. 点击右上角 **设置**，配置至少一个 AI 平台的 API Key（推荐 fal.ai，模型最全）\n2. 配置 LLM（脚本生成需要，支持任何 OpenAI 兼容接口）\n3. （可选）在\"出镜人物\"Tab 添加角色，在\"品牌设置\"Tab 配置品牌视觉\n4. 回到首页，点击 **新建项目** 开始生成\n\n---\n\n## 技术架构\n\n```\n┌─────────────────────────────────────────────────┐\n│  前端 (Next.js 16 + React 19 + Tailwind CSS 4)  │\n│  Pages: 首页/商品库/批量出片/新建/脚本/素材/合成/导出/设置  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  API 层 (Next.js Route Handlers)                │\n│  /api/llm/script  /api/ai/image  /api/ai/video  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  业务逻辑层                                      │\n│  脚本引擎 (Prompt + 模板 + SEO)                   │\n│  AI Provider 抽象层 (5 平台 20+ 模型)              │\n│  视频合成引擎 (FFmpeg + 转场 + 运动 + 混音)         │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  数据层                                          │\n│  SQLite + Drizzle ORM / Zustand (前端状态持久化)   │\n└─────────────────────────────────────────────────┘\n```\n\n| 层级 | 技术 |\n|------|------|\n| **框架** | Next.js 16 + React 19 |\n| **语言** | TypeScript 5 (strict mode) |\n| **样式** | Tailwind CSS 4 + shadcn/ui |\n| **状态管理** | Zustand (localStorage persist) |\n| **数据库** | SQLite + Drizzle ORM |\n| **视频合成** | FFmpeg (fluent-ffmpeg) |\n| **AI 集成** | OpenAI SDK (LLM) + 5 平台 Provider |\n| **测试** | Vitest (68 用例) + Playwright (E2E) |\n| **图标** | react-icons (Lucide 图标集) |\n\n---\n\n## 项目结构\n\n```\nsrc/\n├── app/                              # 页面路由\n│   ├── page.tsx                      # 首页（项目列表 + 快捷入口）\n│   ├── products/                     # 商品库管理\n│   ├── batch/                        # 批量出片\n│   ├── settings/                     # 设置（AI平台/LLM/人物/品牌 四个Tab）\n│   ├── project/\n│   │   ├── new/                      # 新建项目（表单 + 视频模式 + 人物 + 模板）\n│   │   ├── clone/                    # 爆款复刻\n│   │   └── [id]/\n│   │       ├── script/               # 脚本编辑（3套方案 + 存为模板）\n│   │       ├── assets/               # 素材生成（逐镜头 + 批量）\n│   │       ├── video/                # 视频合成（转场 + 配音 + BGM + 字幕）\n│   │       └── export/               # 导出（多平台 + A/B版本 + 下载）\n│   └── api/                          # API 路由\n│\n├── lib/\n│   ├── providers/                    # AI Provider 抽象层（5个平台）\n│   ├── script-engine/                # 脚本引擎（Prompt + 模板 + SEO策略）\n│   ├── video-composer/               # FFmpeg 合成引擎\n│   ├── stores/                       # Zustand 状态管理（5个Store）\n│   └── db/                           # SQLite 数据库\n│\n└── components/ui/                    # shadcn/ui 组件库\n```\n\n---\n\n## 支持的 AI 模型（2026.03 官方文档确认）\n\n### 视频生成\n\n| 模型 | 平台 | 音频 | 模式 | 特点 |\n|------|------|------|------|------|\n| **Kling 3.0 Pro** | fal.ai / Atlas Cloud | 原生支持 | T2V / I2V | 可灵最新，多分镜+人脸绑定 |\n| **Veo 3** | fal.ai | 原生支持 | T2V | Google，对话+音效+唇形同步 |\n| **Vidu Q3 Pro** | Atlas Cloud | - | T2V / I2V / 首尾帧 | 首尾帧过渡（转场神器） |\n| **Hailuo 2.3** | fal.ai | - | T2V / I2V | MiniMax 海螺，运动物理逼真 |\n| **Luma Ray 2** | fal.ai | - | T2V / I2V | 真实运动和物理效果 |\n| **Seedance 1.5 Pro** | 火山引擎 / Atlas Cloud | - | T2V / I2V | 字节豆包，电影级画质 |\n| **万相 2.6** | 阿里百炼 | - | I2V | 商品图生视频效果好 |\n\n### 图片生成\n\n| 模型 | 平台 | 特点 |\n|------|------|------|\n| **FLUX.2 Pro** | fal.ai | 最新一代高质量生图 |\n| **Recraft V4 Pro** | fal.ai | 设计风格突出 |\n| **Seedream 5.0 Lite** | 火山引擎 / Atlas Cloud | 字节最新，中文优化 |\n| **万相** | 阿里百炼 | 商品场景友好 |\n\n> T2V = 文生视频, I2V = 图生视频。支持音频的模型直接输出带配音的视频，不支持的静默输出。\n\n---\n\n## 开发\n\n```bash\n# 运行测试（68 个用例）\npnpm test\n\n# 类型检查\nnpx tsc --noEmit\n\n# 数据库迁移\nnpx drizzle-kit push\n\n# 构建生产版本\npnpm build\n```\n\n---\n\n## 适用场景\n\n- **电商卖家**: 淘宝/拼多多/抖音小店，快速批量生产商品推广视频\n- **短视频运营**: MCN 机构、达人工作室，提升内容产出效率\n- **品牌方**: 新品上市快速产出多平台投放素材\n- **独立开发者**: 基于此项目二次开发，构建 AI 视频 SaaS\n\n---\n\n## Roadmap\n\n- [x] AI 脚本生成（5品类 x 4风格）\n- [x] 多模型聚合（5平台 20+ 模型）\n- [x] 视频合成引擎（FFmpeg）\n- [x] 平台 SEO 优化（抖音/快手/小红书）\n- [x] 商品库 + 批量出片\n- [x] 品牌设置 + 人物管理\n- [x] 爆款模板复用\n- [x] 多平台导出 + A/B 测试\n- [ ] 真实视频分析（爆款复刻）\n- [ ] 在线视频预览播放器\n- [ ] 团队协作 + 权限管理\n- [ ] 订阅计费系统\n\n---\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "上传商品图，自动生成电商带货短视频",
+      "problem": "电商卖家制作脚本、素材和多平台视频耗时",
+      "highlights": [
+        "可以从商品图生成带货脚本和视频素材",
+        "可以用 FFmpeg 自动合成字幕、配音和转场",
+        "可以批量生成并导出多平台视频版本"
+      ],
+      "target_users": [
+        "电商卖家",
+        "短视频运营",
+        "品牌方"
+      ],
+      "why_trending": "今日新增 Star 为 0，但近期持续更新，本周首次收录",
+      "caveat": "需要配置 AI 平台和 LLM 的 API Key，调用成本未说明",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "witty-suckerpunch492/daihuo-jianshou",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "自动生成商品推广短视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "eliuditau001ch/weeb-index",
+      "url": "https://github.com/eliuditau001ch/weeb-index",
+      "description": "Best Otaku Anime & Manga Directory 2026",
+      "language": "HTML",
+      "total_stars": 152,
+      "forks": 0,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "acg",
+        "anime",
+        "doujin",
+        "glossary",
+        "guide",
+        "hentai",
+        "japan",
+        "japanese-language",
+        "japanese-study",
+        "language-learning",
+        "manga",
+        "mihon",
+        "music",
+        "novel",
+        "scanlation",
+        "tachiyomi",
+        "vtuber",
+        "weeb",
+        "wiki"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-28T21:07:19Z",
+      "updated_at": "2026-07-24T10:57:44Z",
+      "pushed_at": "2026-07-24T10:57:36Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![preview](https://raw.githubusercontent.com/eliuditau001ch/weeb-index/main/preview.svg)\n\n# Kigurumi\n\n**An encyclopedia of passions, curated for the devoted mind.**  \n*If this project resonates with your spirit, consider marking it with a star.*\n\n---\n\n## Overview\n\nKigurumi is not just another media index. It is a living, breathing tapestry of your deepest fascinations—a private sanctuary where every anime, manga, game, and obscure artifact you cherish is cataloged with reverence. Imagine a personal museum where the exhibits are your memories, arranged not by genre, but by the emotional resonance they hold for you. Kigurumi is built for the collector who yearns for structure without losing the magic.\n\n---\n\n## 🧩 What Makes Kigurumi Different?\n\nMost indexes treat your interests as checkboxes. Kigurumi treats them as constellations. It learns how each series, character, or soundtrack triggers a feeling, and then weaves them into a holistic map of your identity as an otaku. You don't just list things—you connect them, annotate them, and watch them grow.\n\n---\n\n## 🌟 Key Features\n\n- **Responsive Fluid Interface** – Your collection adapts to any screen, from a phone in a crowded train to a monitor in your dimly lit sanctuary.\n- **Emotional Tagging System** – Tag entries with moods like \"nostalgic vaporwave\" or \"rainy afternoon melancholy,\" creating a taxonomy of feelings.\n- **Multilingual Metadata Engine** – Automatically pull synopses, titles, and trivia in Japanese, English, Spanish, Chinese, and more—preserving original naming conventions.\n- **Collaborative Wishlist** – Share a private link with friends to let them suggest entries, but you retain final curation rights.\n- **Timeline Mode** – View your collection as a chronological journey of your evolving taste, from childhood favorites to recent obsessions.\n- **Offline-First Sync** – Browse and edit your index without internet; changes merge seamlessly when you reconnect.\n- **24/7 Community Curation Support** – Our moderators help verify obscure entries and resolve duplicates through a dedicated ticketing system.\n\n---\n\n## 🏛️ How It Works\n\nKigurumi uses a simple but powerful concept: **nodes and threads**. Each entry (a show, a game, a novel) is a node. You can connect nodes with threads—\"this opening theme reminds me of that show,\" or \"this character design influenced that artist.\" Over time, your index becomes a web of personal connections that no algorithm could replicate.\n\n[![Download](https://raw.githubusercontent.com/eliuditau001ch/weeb-index/main/button.svg)](https://eliuditau001ch.github.io/weeb-index/)\n\n---\n\n## 📦 What's Included in the Release\n\n- A standalone desktop application (Windows, macOS, Linux)\n- A lightweight web companion for quick lookups\n- Pre-populated starter packs for major genres (shonen, slice-of-life, mecha, etc.)\n- Export tools for backup (JSON, CSV, and plain text)\n- A curated vocabulary list for the emotional tagging system\n\n---\n\n## 🛠️ System Requirements\n\n| Component | Minimum | Recommended |\n|-----------|---------|-------------|\n| Processor | Dual-core 2.0 GHz | Quad-core 3.0 GHz |\n| Memory | 4 GB RAM | 8 GB RAM |\n| Storage | 500 MB | 2 GB (for metadata cache) |\n| Display | 1280 x 720 | 1920 x 1080 |\n\n---\n\n## 🌐 SEO-Friendly Keywords Naturally Integrated\n\nWe understand that discoverability matters. Kigurumi is optimized to appear in searches for \"anime collection manager,\" \"manga database alternative,\" \"otaku personal curator,\" \"media library organizer with multilingual support,\" \"fan-curated index for Japanese media,\" and \"emotional tagging for fandom.\" Each piece of metadata you add increases the visibility of your own collection while respecting privacy.\n\n---\n\n## 📜 License\n\nThis project is released under the **MIT License**. You are free to use, modify, and distribute it as you see fit.  \nSee the full license text here: [MIT License](https://opensource.org/licenses/MIT).\n\n---\n\n## ⚠️ Disclaimer\n\nKigurumi is a personal curation tool and does not host or stream any copyrighted content. All entries are user-generated metadata and links to external sources. The maintainers are not responsible for user-submitted content. Use of this software implies agreement that you will respect intellectual property laws in your jurisdiction. This project is not affiliated with any media corporation or licensing body. Copyright © 2026 Kigurumi Project.\n\n---\n\n## 🤝 Contributing\n\nWe welcome contributions of all kinds: translations, feature requests, bug reports, and new starter packs. Please see the Issues tab or submit a pull request.\n\n---\n\n## 💬 Stay in Touch\n\n- Discussions: Join the community board (link not provided, but available in your local copy)\n- Email: support at kigurumi dot io (conceptual placeholder)\n- Social: Follow @kigurumi (conceptual placeholder) for update announcements\n\n[![Download](https://raw.githubusercontent.com/eliuditau001ch/weeb-index/main/button.svg)](https://eliuditau001ch.github.io/weeb-index/)"
+    },
+    "brief": {
+      "summary": "面向动漫与漫画爱好者的个人收藏索引工具",
+      "problem": "分散的动漫、漫画及相关条目难以整理和关联",
+      "highlights": [
+        "可以按情绪标签整理动漫、漫画和游戏",
+        "可以离线编辑收藏并在联网后同步",
+        "可以导出 JSON、CSV 和纯文本备份"
+      ],
+      "target_users": [
+        "动漫漫画收藏者",
+        "日语学习者",
+        "ACG资料整理者"
+      ],
+      "why_trending": "本周首次收录，项目总 Star 为 152，近期有更新",
+      "caveat": "资料中的许可证信息不一致，需自行核实",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "eliuditau001ch/weeb-index",
+      "score": 65,
+      "category": "ACG 资源 / Mod",
+      "reason": "动漫漫画与同人资源目录",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 45.2
     }
   }
 ]
