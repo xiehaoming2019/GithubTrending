@@ -42,12 +42,14 @@ class TrendingParserTests(unittest.TestCase):
         self.assertIn("# GitHub Trending 中文日报 · 2026-07-23", report)
         self.assertIn("[octocat/hello-world]", report)
         self.assertIn("今日 +234", report)
-        self.assertIn("MIT", report)
+        self.assertIn("约 3 分钟读完", report)
+        self.assertIn("今天只看这 1 个", report)
 
         html = render_email_html(date(2026, 7, 23), [(repo, details, brief)])
         self.assertIn("<!doctype html>", html)
         self.assertIn("https://github.com/octocat/hello-world", html)
         self.assertIn("GitHub Trending 中文日报", html)
+        self.assertIn("约 3 分钟读完", html)
 
 
 if __name__ == "__main__":
