@@ -50,6 +50,7 @@ class EmailDeliveryTests(unittest.TestCase):
         )
 
         self.assertIn("2026-07-24", str(message["Subject"]))
+        self.assertIn("ACG 日报", str(message["Subject"]))
         self.assertEqual("receiver@qq.com", str(message["To"]))
         self.assertTrue(message.is_multipart())
         self.assertEqual(2, len(message.get_payload()))

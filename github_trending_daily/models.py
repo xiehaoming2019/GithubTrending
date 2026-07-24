@@ -40,3 +40,11 @@ class ProjectBrief:
     category: str
     generated_by_ai: bool = False
 
+
+@dataclass(slots=True)
+class InterestMatch:
+    repository: str
+    score: int
+    category: str
+    reason: str
+    generated_by_ai: bool = False

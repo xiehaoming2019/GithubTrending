@@ -1,10 +1,12 @@
-# GitHub Trending 中文日报
+# GitHub Trending ACG 日报
 
-每天抓取 GitHub Trending，使用 GitHub REST API 补全项目资料，再由 AI 生成中文项目解读和 Markdown 日报。
+每天抓取 GitHub Trending，先筛出 ACG 与创作者工具相关项目，再由 AI 生成精简中文日报。
 
 当前 MVP 具备：
 
-- 抓取每日 Trending 前 N 个仓库
+- 默认检查每日 Trending 前 25 个仓库，最多收录 10 个
+- 用 AI 批量判断项目相关性，失败时自动改用本地关键词规则
+- 达不到标准时宁可少发，不用通用框架、数据库、金融或炒币项目凑数
 - 提取今日新增 Star、总 Star、Fork、语言和简介
 - 补充 Topics、License、README、更新时间等官方仓库数据
 - 使用 OpenAI Responses API 生成结构化中文解读
@@ -13,6 +15,13 @@
 - 保存原始快照和 Markdown 日报
 - 可通过 QQ 邮箱 SMTP 发送排版后的 HTML 日报
 - GitHub Actions 每天北京时间 08:23 自动运行
+
+关注方向包括：
+
+- AI Agent / Skills、游戏开发、动画、视频剪辑
+- AI 绘画 / 漫画、AI 视频、3D / VTuber
+- 语音 / 配音、音乐 / 音效、互动叙事
+- XR / 虚拟制作、ACG 本地化、ACG 资源 / Mod、创作者自动化
 
 ## 本地运行
 
@@ -60,6 +69,7 @@ py -3 -m github_trending_daily `
   --source-html tests/fixtures/trending.html `
   --no-enrich `
   --no-ai `
+  --no-interest-filter `
   --output reports/demo.md
 ```
 
@@ -106,8 +116,11 @@ python -m github_trending_daily --limit 10 --send-email
 
 ```text
 --limit 10             日报项目数量
+--candidate-limit 25   筛选前检查的 Trending 候选数
+--relevance-threshold 60  ACG / 创作者相关性最低分
 --language python      只看某种编程语言
 --no-ai                禁用 AI，生成基础摘要
+--no-interest-filter   禁用 ACG / 创作者相关性筛选
 --no-enrich            不调用 GitHub REST API
 --send-email           已配置 SMTP 凭据时发送 HTML 邮件
 --source-html FILE     从本地 HTML 解析，便于测试
@@ -118,7 +131,6 @@ python -m github_trending_daily --limit 10 --send-email
 ## 下一阶段
 
 - 增加 SQLite 历史库，识别首次上榜、连续上榜和排名变化
-- 增加整份日报的“今日技术风向”二次编辑
-- 生成 HTML 邮件
-- 接入飞书、企业微信或邮件推送
+- 增加整份日报的“今日 ACG 技术风向”二次编辑
+- 接入飞书或企业微信推送
 - 为 Trending 页面结构变化增加失败通知

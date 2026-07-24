@@ -23,7 +23,9 @@ highlights: 2 到 3 条核心特点的字符串数组；
 target_users: 1 到 3 类适用人群的字符串数组；
 why_trending: 为什么今天值得关注，只能根据今日新增 Star、项目活跃度和资料进行谨慎判断；
 caveat: 一个需要注意的点；
-category: 一个简短分类，如 AI、开发工具、前端、基础设施、数据、学习资源、其他。
+category: 必须从 AI Agent / Skills、游戏开发、动画、视频剪辑、AI 绘画 / 漫画、
+AI 视频、3D / VTuber、语音 / 配音、音乐 / 音效、互动叙事、XR / 虚拟制作、
+ACG 本地化、ACG 资源 / Mod、创作者自动化中选择最接近的一项。
 """
 
 

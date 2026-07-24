@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import json
 import sys
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import date
 from pathlib import Path
 
 from .email_delivery import EmailSettings, build_message, send_message
 from .github_api import GitHubClient
-from .models import ProjectBrief, RepositoryDetails, TrendingRepository
+from .interest import (
+    OpenAIInterestClassifier,
+    fallback_interest,
+    select_repositories,
+)
+from .models import InterestMatch, ProjectBrief, RepositoryDetails, TrendingRepository
 from .render import render_email_html, render_markdown
 from .summarize import OpenAISummarizer, fallback_brief
 from .trending import fetch_trending, load_trending
@@ -24,12 +29,16 @@ def run_pipeline(
     enrich: bool = True,
     use_ai: bool = True,
     deliver_email: bool = False,
+    filter_interests: bool = True,
+    relevance_threshold: int = 60,
+    candidate_limit: int = 25,
 ) -> Path:
     if source_html:
         html, repositories = load_trending(source_html)
     else:
         html, repositories = fetch_trending(language)
-    repositories = repositories[:limit]
+    pool_size = max(limit, candidate_limit) if filter_interests else limit
+    repositories = repositories[:pool_size]
 
     raw_dir = Path("data/raw")
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -37,10 +46,9 @@ def run_pipeline(
 
     github = GitHubClient()
     summarizer = OpenAISummarizer()
-    items: list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]] = []
     cached_repositories, cached_details, cached_briefs = _load_cached_snapshot(report_date)
     enrichment_available = enrich
-    ai_available = use_ai and summarizer.enabled
+    candidate_details: list[tuple[TrendingRepository, RepositoryDetails]] = []
 
     for repo in repositories:
         details = RepositoryDetails()
@@ -48,13 +56,57 @@ def run_pipeline(
             try:
                 details = github.repository_details(repo.full_name)
             except Exception as exc:  # Keep the daily edition publishable.
-                print(f"[warn] GitHub enrichment failed for {repo.full_name}: {exc}", file=sys.stderr)
+                print(
+                    f"[warn] GitHub enrichment failed for {repo.full_name}: {exc}",
+                    file=sys.stderr,
+                )
                 details = cached_details.get(repo.full_name, RepositoryDetails())
                 if "rate limit" in str(exc).lower():
                     enrichment_available = False
         elif enrich:
             details = cached_details.get(repo.full_name, RepositoryDetails())
+        candidate_details.append((repo, details))
 
+    matches: list[InterestMatch] = []
+    if filter_interests:
+        classifier = OpenAIInterestClassifier()
+        if use_ai and classifier.enabled:
+            try:
+                matches = classifier.classify(candidate_details)
+            except Exception as exc:
+                print(
+                    f"[warn] AI interest filter failed; using local rules: {exc}",
+                    file=sys.stderr,
+                )
+        if not matches:
+            matches = [
+                fallback_interest(repo, details)
+                for repo, details in candidate_details
+            ]
+        repositories = select_repositories(
+            repositories,
+            matches,
+            limit=limit,
+            threshold=relevance_threshold,
+        )
+        print(
+            f"Selected {len(repositories)} of {len(candidate_details)} candidates "
+            f"at relevance >= {relevance_threshold}.",
+            file=sys.stderr,
+        )
+
+    details_by_repository = {
+        repo.full_name: details for repo, details in candidate_details
+    }
+    matches_by_repository = {
+        match.repository.lower(): match for match in matches
+    }
+    ai_available = use_ai and summarizer.enabled
+    items: list[tuple[TrendingRepository, RepositoryDetails, ProjectBrief]] = []
+    selected_matches: dict[str, InterestMatch] = {}
+
+    for repo in repositories:
+        details = details_by_repository.get(repo.full_name, RepositoryDetails())
         cached_repo = cached_repositories.get(repo.full_name)
         cached_brief = cached_briefs.get(repo.full_name)
         can_reuse_ai = (
@@ -75,6 +127,11 @@ def run_pipeline(
                 ai_available = False
         else:
             brief = fallback_brief(repo, details)
+
+        interest_match = matches_by_repository.get(repo.full_name.lower())
+        if interest_match is not None:
+            brief = replace(brief, category=interest_match.category)
+            selected_matches[repo.full_name] = interest_match
         items.append((repo, details, brief))
 
     snapshot_dir = Path("data/snapshots")
@@ -84,6 +141,11 @@ def run_pipeline(
             "repository": asdict(repo),
             "details": asdict(details),
             "brief": asdict(brief),
+            **(
+                {"interest": asdict(selected_matches[repo.full_name])}
+                if repo.full_name in selected_matches
+                else {}
+            ),
         }
         for repo, details, brief in items
     ]

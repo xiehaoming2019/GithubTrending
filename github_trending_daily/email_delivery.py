@@ -17,7 +17,7 @@ class EmailSettings:
     username: str
     authorization_code: str
     recipients: tuple[str, ...]
-    sender_name: str = "GitHub Trending 日报"
+    sender_name: str = "GitHub Trending ACG 日报"
 
     @classmethod
     def from_env(cls) -> EmailSettings | None:
@@ -51,7 +51,7 @@ class EmailSettings:
             username=username,
             authorization_code=authorization_code,
             recipients=recipients,
-            sender_name=os.getenv("EMAIL_SENDER_NAME", "GitHub Trending 日报"),
+            sender_name=os.getenv("EMAIL_SENDER_NAME", "GitHub Trending ACG 日报"),
         )
 
 
@@ -65,7 +65,7 @@ def build_message(
 ) -> EmailMessage:
     message = EmailMessage()
     message["Subject"] = (
-        f"GitHub Trending 中文日报 · {report_date.isoformat()} · "
+        f"GitHub Trending ACG 日报 · {report_date.isoformat()} · "
         f"{repository_count} 个项目"
     )
     message["From"] = Address(
@@ -88,4 +88,3 @@ def send_message(settings: EmailSettings, message: EmailMessage) -> None:
     ) as smtp:
         smtp.login(settings.username, settings.authorization_code)
         smtp.send_message(message)
-
