@@ -1,0 +1,548 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "block/buzz",
+      "url": "https://github.com/block/buzz",
+      "description": "A hive mind communication platform",
+      "language": "Rust",
+      "total_stars": 10190,
+      "forks": 803,
+      "stars_today": 3270,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3270
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-06T21:00:56Z",
+      "updated_at": "2026-07-25T03:44:40Z",
+      "pushed_at": "2026-07-25T03:30:23Z",
+      "open_issues": 614,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Buzz 🐝</h1>\n\n<p align=\"center\">\n  <strong>A workspace where humans and agents build together, on a relay you own.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"VISION.md\">Vision</a> ·\n  <a href=\"VISION_SOVEREIGN.md\">Sovereign</a> ·\n  <a href=\"VISION_PROJECTS.md\">Forge</a> ·\n  <a href=\"VISION_AGENT.md\">Agents</a> ·\n  <a href=\"ARCHITECTURE.md\">Architecture</a> ·\n  <a href=\"LICENSE\">Apache 2.0</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshots/channel-thread.png\" alt=\"A Buzz project channel where people and an agent coordinate on a release plan\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub><em>People and agents building together in the same room.</em></sub>\n</p>\n\n---\n\n## What is this, really?\n\nBuzz is a self-hostable workspace where humans and AI agents share the same rooms.\n\nA Buzz **community** is the workspace a user reaches by URL. In the single-relay\nsetup that ships today, the relay URL selects exactly one community. A hosted\noperator can serve many communities behind many domains or subdomains, but the\nclient-facing rule stays the same: the URL is authoritative for the workspace,\nand all tenant-observable state under that URL is community-local.\n\nIt's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process.\n\nIn practice it feels like a team workspace. Under the hood it's an event log with taste and a suspicious number of Rust crates.\n\nYes, it's another AI-adjacent developer tool. We're sorry. The difference is what agents can actually *do* once they're inside: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, drop into voice huddles, create channels, and pull in whoever needs to see it. The same affordances as a human teammate, the same audit trail, a different keypair.\n\n---\n\n## Stuff you do in Buzz\n\n- **Ask the project a question and get an answer with receipts.** Agents search six months of history and post the threads, not vibes.\n- **Let an agent triage a bug without giving it the keys to the kingdom.** Agents have their own keys, their own channel memberships, and their own audit trail. Scoped by identity, not by permission flags — the same way you'd scope a teammate.\n- **Turn a feature branch into a room** where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists.\n- **Search the conversation, the patch, the workflow run, and the approval in one place** — because they're all the same kind of event.\n- **Let an agent run the workspace, not just talk in it.** Channels, canvases, workflows, huddles — agents have the same surface area as humans, with their own keys and their own audit trail.\n\n---\n\n## A look inside\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/channel-agents.png\" alt=\"People and agents collaborating in a Buzz engineering channel and reacting with emoji\" width=\"100%\"><br>\n      <sub><strong>Agents are members, not bots.</strong> Add an agent to a channel the same way you add a person.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/create-channel.png\" alt=\"The Add a channel dialog with search, filters, and channels to join or create\" width=\"100%\"><br>\n      <sub><strong>Spin up a room in seconds.</strong> Name it, describe it, make it private.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/media-comments.png\" alt=\"A video playing in Buzz with frame-anchored comments in a side panel\" width=\"100%\"><br>\n      <sub><strong>Media you can talk about.</strong> Leave comments pinned to specific frames.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why Buzz is better\n\nOne community. One identity model. One event log. Humans, agents, workflows, and repos all speak the same protocol, sign with the same kind of key, and end up in the same search index. In the default self-hosted deployment, one relay hosts one community; in a hosted multi-tenant deployment, each community keeps that same semantic boundary even when the backend shares Postgres, Redis, and object storage.\n\nThe bet is that one community can do what teams currently fake with chat, forges, bots, CI dashboards, release tools, search indexes, and a pile of glue code. Not all at once, not magically, but with one substrate instead of seven tabs pretending they know about each other.\n\nAgents are part of the room, not haunted cron jobs.\n\n---\n\n## Three little stories\n\n**Incident memory.** It's 2am. You type *\"have we seen this error before?\"* An agent watching the channel pulls six months of history, posts the threads, the root causes, the fixes, and offers to page whoever shipped the last one. The whole exchange — question, answer, evidence — stays in the channel.\n\n**Branch as room.** You open a feature branch. A channel appears. Patches land as NIP-34 events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence.\n\n**A release that writes itself.** A workflow fires on a tag. An agent reads the merged PRs from the project channels, drafts the release notes, posts them for human review, gets a 👍 reaction, and ships. Every step signed. Every step searchable.\n\n---\n\n## Works today · Being wired up · Strong opinions, pending code\n\n| ✅ Works today | 🚧 Being wired up | 💭 Strong opinions, pending code |\n|---|---|---|\n| Relay, channels, threads, DMs, canvases, media, search, audit log | Mobile clients (iOS + Android, Flutter) | Web-of-trust reputation across relays |\n| Desktop app (Tauri + React) | Workflow approval gates (infra exists, glue still drying) | Push notifications |\n| `buzz-cli` (agent-first, JSON in / JSON out) + ACP harness (Goose, Codex, Claude Code) | Huddle lifecycle events | Culture features |\n| YAML workflows: message / reaction / schedule / webhook triggers | | |\n| Git events (NIP-34: patches, repo announcements, status) | | |\n| Git hosting backend | | |\n\n<sub>Please do not plan your compliance program around the 💭 column yet. The <a href=\"VISION.md\">VISION docs</a> are the long version of what we think this becomes.</sub>\n\n---\n\n## Getting started\n\nNew to Buzz? Pick the path that matches you.\n\n### I just want to try the app\n\nGrab a packaged build from the [latest release](https://github.com/block/buzz/releases/latest) — macOS (`.dmg`), Linux (`.AppImage` / `.deb`), or Windows (`.exe`). Install it like any other app.\n\nBy default the app connects to `ws://localhost:3000`. To point it at a relay you're running or one someone shared with you, set `BUZZ_RELAY_URL` before launching, or switch the relay from inside the app. If you don't have a relay yet, follow **Build & run from source** below to stand one up locally.\n\n### I work at Block\n\nDon't build from source, and don't use the OSS release — use the internal build. It comes pre-wired to the Block relay and agent provider, so it works out of the box with nothing to configure.\n\nDownload the latest build from [`squareup/buzz-releases` releases](https://github.com/squareup/buzz-releases/releases/latest) and install it.\n\n### I want to build & run from source\n\nSee **Quick start** below — this is the developer / self-host path.\n\n---\n\n## Quick start\n\nYou'll need [Docker](https://docs.docker.com/get-docker/) and [Hermit](https://cashapp.github.io/hermit/) (or Rust 1.88+, Node 24+, pnpm 10+, `just`).\n\n**Once:**\n```bash\ngit clone https://github.com/block/buzz.git && cd buzz\n. ./bin/activate-hermit   # pinned toolchain (tools auto-download on first use)\njust setup && just build\n```\n\n`just setup` runs `just bootstrap` automatically — it copies `.env.example` to `.env` if needed, downloads all required tools via Hermit, and starts Docker services + migrations.\n\n**Every day:**\n```bash\n. ./bin/activate-hermit\njust dev   # starts the relay + desktop app together\n```\n\nRelay on `ws://localhost:3000`. Desktop app pops up. You're in.\n\nFor a split-terminal workflow (relay logs separate from Vite output), use `just relay` in one terminal and `just desktop-dev` in another.\n\nWant a single-node / VPS relay instead of the local-dev stack? Use the production Compose bundle in [`deploy/compose/`](deploy/compose/README.md) (`docker compose` + Postgres, Redis, MinIO, optional Caddy/TLS). The root [`docker-compose.yml`](docker-compose.yml) is for day-to-day development only.\n\nFor agents, set `BUZZ_PRIVATE_KEY` and use [`buzz-cli`](crates/buzz-cli) — JSON in, JSON out, designed for LLM tool calls.\n\n---\n\n## Windows prerequisites\n\nThe agent shell tool runs commands under bash. On macOS and Linux that's already there; on Windows you need to bring it.\n\nInstall [Git for Windows](https://git-scm.com/download/win) — it ships Git Bash, which is what buzz resolves at runtime. Once it's installed, everything works the same as on other platforms.\n\nIf you'd rather point buzz at a different bash-compatible shell, set `BUZZ_SHELL` to its path (e.g. `BUZZ_SHELL=C:\\path\\to\\bash.exe`). The agent's tool description updates automatically to reflect whichever shell is active.\n\n---\n\n## Architecture\n\n```\n┌─────────────────────────────────────────────────────────────────────────┐\n│                             Clients                                     │\n│  Human client         AI agent              CLI / scripts               │\n│  (Buzz desktop)       (Goose, Codex, ...)   (buzz-cli, agents)          │\n│       │               ┌──────────────┐               │                  │\n│       │               │  buzz-acp  │                 │                  │\n│       │               │  (ACP ↔ MCP) │               │                  │\n│       │               └──────┬───────┘               │                  │\n│       │                      │                       │                  │\n└───────┼──────────────────────┼───────────────────────┼──────────────────┘\n        │ WebSocket            │ WS + REST             │ WS + REST\n        ▼                      ▼                       ▼\n┌─────────────────────────────────────────────────────────────────────────┐\n│                          buzz-relay                                     │\n│  NIP-01 · NIP-42 auth · channel/DM/media/workflow/git REST · audit log  │\n└───┬──────────────────────────┬──────────────────────────┬──────────────┘\n    │                          │                          │\n ┌──▼───────────┐       ┌──────▼──────┐           ┌───────▼─────┐\n │   Postgres   │       │    Redis    │           │   S3/MinIO  │\n │ (events +    │       │  (pub/sub)  │           │  (Blossom)  │\n │  FTS search) │       └─────────────┘           └─────────────┘\n └──────────────┘\n```\n\nA Rust workspace of focused crates. Single source of truth: the relay. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full breakdown.\n\n<details>\n<summary><strong>Crate map</strong></summary>\n\n**Core protocol** — `buzz-core` (zero-I/O types, NIP-01 filters, Schnorr verify) · `buzz-relay` (Axum WS + REST)\n\n**Services** — `buzz-db` (Postgres) · `buzz-auth` (NIP-42/98 Schnorr auth, rate limiting) · `buzz-pubsub` (Redis, presence, typing) · `buzz-search` (Postgres FTS) · `buzz-audit` (hash-chain log). Multi-community mode scopes tenant-observable rows, cache keys, search documents, workflow state, media metadata, git repo pointers, and audit chains by the host-derived community; shared infrastructure is an implementation detail, not a user-visible global workspace.\n\n**Agent surface** — `buzz-cli` (agent-first CLI, JSON in / JSON out) · `buzz-acp` (ACP harness for Goose/Codex/Claude Code) · `buzz-agent` (ACP agent — see [VISION_AGENT.md](VISION_AGENT.md)) · `buzz-dev-mcp` (shell + file-edit tools) · `buzz-workflow` (YAML automation) · `buzz-persona` (agent persona packs)\n\n**Git & pairing** — `git-sign-nostr` / `git-credential-nostr` (nostr-signed git) · `buzz-pair-relay` "
+    },
+    "brief": {
+      "summary": "面向人类与 AI Agent 的可自托管协作工作区",
+      "problem": "分散的聊天、代码、工作流和审计记录难以统一协作",
+      "highlights": [
+        "可以让人和 Agent 在同一频道协作",
+        "可以把分支、补丁、CI 和评审放进同一房间",
+        "可以搜索对话、代码事件和工作流记录"
+      ],
+      "target_users": [
+        "开发团队",
+        "AI Agent 开发者",
+        "需要自托管的组织"
+      ],
+      "why_trending": "今日新增 3270 Star，且项目连续上榜",
+      "caveat": "移动客户端和部分审批功能仍在接入中",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "block/buzz",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "支持人类与智能体协作工作流",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 186977,
+      "forks": 16049,
+      "stars_today": 2251,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2251
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-07-25T03:43:32Z",
+      "pushed_at": "2026-07-23T14:29:59Z",
+      "open_issues": 227,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Quickstart (30-second setup)\n\n1. Run the skills.sh installer:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\n2. Pick the skills you want, and which coding agents you want to install them on. **Make sure you select `/setup-matt-pocock-skills`**.\n\n3. Run `/setup-matt-pocock-skills` in your agent. It will:\n   - Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n   - Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n   - Ask you where you want to save any docs we create\n\n4. Bam - you're ready to go.\n\n## Install as a Claude Code plugin\n\nPrefer a plug-and-play install you don't maintain by hand? These skills also ship as a native [Claude Code plugin](https://code.claude.com/docs/en/plugins). Instead of copying editable files into your repo, the plugin installs the whole skill set as a managed bundle that updates when I ship a new version — you subscribe rather than fork.\n\nInside Claude Code:\n\n```\n/plugin marketplace add mattpocock/skills\n/plugin install mattpocock-skills@mattpocock\n```\n\nOr from your shell:\n\n```bash\nclaude plugin marketplace add mattpocock/skills\nclaude plugin install mattpocock-skills@mattpocock\n```\n\nThen run `/setup-matt-pocock-skills` once per repo, exactly as in the quickstart above.\n\nTwo ways to install, two philosophies:\n\n- **[skills.sh](https://skills.sh/mattpocock/skills)** copies the skills into your project so you can hack on them and make them your own.\n- **The plugin** keeps them as a read-only, always-current bundle you don't edit — best when you just want my set to work and follow along as it evolves.\n\n> Using Codex or another agent? The [skills.sh installer](https://skills.sh/mattpocock/skills) already installs these skills into Codex and other Agent-Skills-standard harnesses today. A native Codex plugin is on the roadmap — see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a simple loop.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis — who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)** — Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)** — Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)** — Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)** — Turn the current conversation into a spec and publish it to the issue tracker. No interview — just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)** — Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** — Plan a huge chunk of work, more than one agent session can hold, as a shared map of investigation tickets on the issue tracker — resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — a runnable terminal app for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)** — Disciplined diagnosis loop for hard bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → "
+    },
+    "brief": {
+      "summary": "面向编码代理的可组合工程实践技能集",
+      "problem": "帮助编码代理减少需求误解、低质量代码和调试困难",
+      "highlights": [
+        "可以用提问流程先明确需求和术语",
+        "可以用 TDD 技能推动测试驱动开发",
+        "可以用调试技能排查代码问题"
+      ],
+      "target_users": [
+        "使用编码代理的开发者",
+        "软件工程团队"
+      ],
+      "why_trending": "今日新增2251 Star，且已连续上榜",
+      "caveat": "需要按项目配置问题跟踪器和文档位置",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的Agent Skills",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "Cassette-Editor/oh-my-cassette",
+      "url": "https://github.com/Cassette-Editor/oh-my-cassette",
+      "description": "你的随身 AI 剪辑搭档 | Pocket AI co-editor for video montage — AI video editing plugin & MCP server for Claude Code, Codex, Hermes & OpenCode",
+      "language": "Python",
+      "total_stars": 142,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agent-skills",
+        "ai-agent",
+        "ai-video-editing",
+        "chat-to-edit",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-code-skills",
+        "codex",
+        "ffmpeg",
+        "hermes-agent",
+        "llm",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "opencode",
+        "python",
+        "video-editing",
+        "video-editor",
+        "video-montage"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-10T14:17:55Z",
+      "updated_at": "2026-07-25T03:04:20Z",
+      "pushed_at": "2026-07-25T03:05:54Z",
+      "open_issues": 2,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/banner.jpg\" width=\"80%\" alt=\"Oh My Cassette banner\" />\n</p>\n\n<h1 align=\"center\">\nOh My <a href=\"https://trycassette.online/\">Cassette</a>: Chat Your Raw Clips Into a Finished Cut\n</h1>\n\n<p align=\"center\">\n  <a href=\"https://github.com/Cassette-Editor/oh-my-cassette/releases\">\n    <img src=\"https://img.shields.io/github/v/release/Cassette-Editor/oh-my-cassette?style=flat-square&color=blue\" alt=\"Version\">\n  </a>\n  <a href=\"https://github.com/Cassette-Editor/oh-my-cassette/blob/main/LICENSE\">\n    <img src=\"https://img.shields.io/github/license/Cassette-Editor/oh-my-cassette?style=flat-square\" alt=\"License\">\n  </a>\n  <a href=\"https://github.com/Cassette-Editor/oh-my-cassette/stargazers\">\n    <img src=\"https://img.shields.io/github/stars/Cassette-Editor/oh-my-cassette?style=flat-square&logo=github\" alt=\"Stars\">\n  </a>\n  <a href=\"https://github.com/Cassette-Editor/oh-my-cassette/fork\">\n    <img src=\"https://img.shields.io/github/forks/Cassette-Editor/oh-my-cassette?style=flat-square&logo=github\" alt=\"Forks\">\n  </a>\n  <img src=\"https://img.shields.io/badge/Python-3.11--3.13-purple.svg\" alt=\"Python\">\n  <a href=\"https://github.com/Cassette-Editor/oh-my-cassette/actions/workflows/ci.yml\">\n    <img src=\"https://img.shields.io/github/actions/workflow/status/Cassette-Editor/oh-my-cassette/ci.yml?branch=main&style=flat-square&label=CI\" alt=\"CI\">\n  </a>\n  <a href=\"https://trycassette.online\">\n    <img src=\"https://img.shields.io/badge/Cassette-Compatible-1f6feb?style=flat-square&logo=data%3Aimage%2Fwebp%3Bbase64%2CUklGRhgHAABXRUJQVlA4WAoAAAAQAAAANwAANwAAQUxQSMkCAAABkIVt29lI75hr27Yx9tq2bdu2bdu2bdt23e4kfQ86TZN%2FeRgRE4DfcIX9Oyr%2BCuE7ZFJeX0a0oK0SE7SsKyNSmTU2KjQvKypKsTVWumhcVkSEIsuNVNG4KJ9WOabqqPK3yVm1yDnjCzX8OCWLWhknfabG7yZkUiPz5HcU8HWvVK5kGPuegj4blEqJV%2B9XFPhpZ09nmU0UWi7gLKteLHtRBTqx5CIKvotl%2B%2B%2F2tNfgd7%2FC6%2BHpgCwTv4r2YVQGJJhn2meRPo3PCoU5lhhE%2BT41F1wsssoswo%2FphaFiycVGrfQLC0Dl0ssNqugSMq0uAQ0LrbQlJLlkXVUSGgdttjnISr6T8TuCIGDQVom0FVa0PxSCRu2Ltwcp2pdOFLe2P1nKWX6LXnc7nRhR53mvuaezEpyU58d0AdwaRG1mX18oDOcQLH%2FqizEjUmpSZidHrXuarXmggmAOQ9IYb78HnK1BwVVm2%2BTUG%2BON31IryGgZCwBh8bzqBZ9EqhSNvkauB7Zwb2ko9Dh8PnFMfowmdVkDDjzq5eVS7lm25S1aSKuBHS%2Fdsk%2FP4QylDA%2BstxOfJO2xOWWZ892VpR3zlXvyIqO0Btj2bZnZmFMBYh9xS7YfJEcmM02rLVeFl7uTNPlXkFc8gBwOW8g1BaE4WViShiS5F4tf5ti%2FK%2FPpU9UdkvR4t7pZ45dn4GTV%2FvJwPebx7J3S67Sprjyr07oz7ewA78b3ebI8cO%2B8g7weSOUBNVO4YxS7HYq6%2BiBxNBvOMmYJ4svGALzvO%2BSUxkLDXN9HfRuX4vMMr9t7MusGhHFwxtLOAuL8tUDRwgPs01%2Fe8i6v31u%2FehTfG5c6XIKIAQvJo42XNbWuRhylDVkA7yfbhQBippUKY%2BVKrBbOCShbAx5VUgsCwHvvp1HSjDCumsnVEDvzKXJSOCmtyC4YfFpOyRhnnF8Mv2TaYviLBABWUDggKAQAAPAYAJ0BKjgAOAA%2BTSCLRCKiIRgN%2FgAoBMS0htgATIB%2FRvwg8Cf6r%2BM37Vdtj559kc4Z9Yvtn5Gfkzzg7Sf%2BC%2FKTgCePfx3%2FVfmBzAfTz%2B7epP%2BKf2X8wvYDuAPUA%2Flv9E%2F2P3O%2FDz%2FeeSD8v%2FuHsB%2Fxz%2Bef6r%2B7fu%2Fxm36xJmyyFkngkpmRPYsV6xmH5QF4lb%2Fl9hSgk5D3PqHNQLXrlv7NrItI%2FEHrxBF2jRuhKjEBVmBB10mJvHzkR2Q2arL3GqP10RyllNZGUghwhZxRilAA%2Fuw6mSpSUmz%2BC9%2BKh7D7qK39xAKDdKGxdWNME94DsfqLZMWOWeIeTypqgNWds0IPEbdim9%2FrYj%2BEd8AhWw%2F%2Bzi%2FwdIkNi7bJQyZ55GARC1%2FHJxJRDbUPxx7XEJNOqXwK2TTvcPfg%2FB1Sxtu3%2F%2BqXZV7Ea27hgAqAwjmpzYt%2FUnFY%2BC0oW45G3Loc8bVetEXzeXitUxCUpACSaawCSSfLqRe1eG3zUIXqEc82GnC78rFUxGMUSd%2FG9fuFsdPGi96Lm3KIZEKgeEYxznL%2BMFlhtO40ZN%2FW3ejoFZfedwy4KUpiGElmS9DdaNzh40f3qq2ox2aJonnJDtPET3GC8%2FxLitJKLpjNVH%2Fs2f5UmAx%2B5LKDbHdllFCDWoI3Pp%2FVHmOId6JL4jNCWVVHcq5vtCed3YAxjpLyN7Mu2NYOtVFR9IFyf7Vd5AztRBIGFD79z80kLXz%2F%2F%2BfO3t2lkek5ydWcB0weeaYMf%2Fwaie0%2Bighho%2Bx1LSEM4hwlpukY3yztN8wyYCF8fSe9AWia9TSnFp57nMo5YifIm9RF6TM%2Fvo6yBTI0Pi%2FGt%2F%2F6mnejWgvH1%2F%2F%2BhS5iYOwLt%2BHG5ouw5J01Fd%2F1WfcWXdBL9MEwe3fGBYZUYUOiM3FvKWH0ikirZAvG0xfpgf%2FgnXTZaTTeyzpnuvF289BWGVcYoRTe2gBbGUT00tzQ4XuCIo9OV7ysRBBK4PTfYTi%2FntO%2FGJkP7JHWEAf7RfyPpf2z%2F3gmxcwD3IXTbEB9aXF%2BVQYVzi8x%2FWj1eluYh3G6xEWj5aKxK09fn3AaJy6LKTQjgk8209Tv7brUzGKt26W4a5uQVRnc6cAzlXdvZB3nrAUJ4SsTWRbCM9m6TDQ7A0dctlIEQzv%2FUTvpPTnyuaOqiVP5PsHXhi9x0791xIp4e1U8sUVgkxVIgE2QYZjQXnY9Kuv0ciSsqTTzWZ6it0Z1Y9qOMi%2F%2BDwjsHCI%2FTwjcrXfrv2jVjya%2Fh3h%2FRzBb7Mszb6Pr54Dpg%2B6OQeVLDvWMOcd9P7x1uSSp%2FrzOS7zB9i5HJvNTeTjIi%2Be5Xf9eSzCoym6aKUC6i6Gkf7O96HwkdmR9TOx3ZuNOJY%2F%2BdF%2F%2F%2FnRxgu4Mj%2F29%2FT%2FJ34nP%2F6r9U3fQV%2BjAyqrfV23tQAAA&logoColor=white\" alt=\"Cassette Compatible\">\n  </a>\n  <a href=\"https://github.com/nousresearch/hermes-agent\">\n    <img src=\"https://img.shields.io/badge/Hermes%20Agent-Compatible-7c3aed?style=flat-square&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZD0iTTUgNGgzdjZoOFY0aDN2MTZoLTN2LTdIOHY3SDV6IiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjIiIGZpbGw9IiMxMTEiLz48L3N2Zz4%3D&logoColor=white\" alt=\"Hermes Agent Compatible\">\n  </a>\n  <a href=\"https://github.com/openai/codex\">\n    <img src=\"https://img.shields.io/badge/Codex-Compatible-000000?style=flat-square&logo=openai&logoColor=white\" alt=\"Codex Compatible\">\n  </a>\n  <a href=\"https://claude.com/claude-code\">\n    <img src=\"https://img.shields.io/badge/Claude%20Code-Compatible-d97757?style=flat-square&logo=anthropic&logoColor=white\" alt=\"Claude Code Compatible\">\n  </a>\n  <a href=\"https://opencode.ai\">\n    <img src=\"https://img.shields.io/badge/OpenCode-Compatible-0b0b0b?style=flat-square&logo=opencode&logoColor=white\" alt=\"OpenCode Compatible\">\n  </a>\n  <a href=\"https://discord.gg/qd9NY4k8d7\">\n    <img src=\"https://img.shields.io/discord/1514649803626250452?style=flat-square&logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\">\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"./README.zh-cn.md\">简体中文</a> | <b>English</b>\n</p>\n\n<table align=\"center\" width=\"82%\">\n<tr>\n<td>\n  <video src=\"https://github.com/user-attachments/assets/efcfda75-f09b-4bde-8a69-e84410f28e10\" controls width=\"100%\"></video>\n</td>\n</tr>\n</table>\n\n<h3 align=\"center\">\n  <em>\n  Point <a href=\"https://claude.com/claude-code\">Claude Code</a>, <a href=\"https://github.com/openai/codex\">Codex</a>, or <a href=\"https://github.com/nousresearch/hermes-agent\">Hermes</a> at a folder of raw clips.<br />\n  Describe the video you want. Get back a finished, beat-synced cut.\n  </em>\n</h3>\n\n<p align=\"center\">\n  <b>14 clips in. One prompt. ~13 minutes to a rendered file.</b><br />\n  <sub>No timeline. No editing software. No GPU.</sub>\n</p>\n\n## ⚡ Install in 30 seconds\n\n```bash\n# Claude Code\nclaude plugin marketplace add Cassette-Editor/oh-my-cassette\nclaude plugin install oh-my-cassette@cassette-editor\n```\n\n```bash\n# Codex\ncodex plugin marketplace add https://github.com/Cassette-Editor/oh-my-cassette.git\ncodex plugin add oh-my-cassette@cassette-editor\n```\n\nRestart your agent, then say: *\"Edit the clips in ./footage into a 30-second travel vlog with beat-synced cuts.\"*\n\nNeeds Python 3.11–3.13, `ffmpeg`, and a [Cassette account](https://trycassette.online/signup/). Full setup — including [OpenCode](#opencode), [Hermes](#hermes), and any other MCP host — is in [Quick Start](#-quick-start). Want to try it first? [Run it in your browser](#-try-without-installation) — no install, no account.\n\n# 🎥 Overview\n\n**Oh My Cassette** is an open-source AI video editing plugin and local MCP server for [Claude Code](https://claude.com/claude-code), [Codex](https://github.com/openai/codex), [Hermes Agent](https://github.com/nousresearch/hermes-agent), and [OpenCode](https://opencode.ai). It turns natural-language chat into finished montage videos on [Cassette](https://trycassette.online) — beat-synced cuts, auto-matched music, subtitles, transitions, and picture-in-picture — with minimal token overhead.\n\nThe agent does the parts that make editing tedious: it watches every clip, picks the shots, plans the cut, syncs it to the beat, and renders — while you stay in chat. Because it runs through your agent, you can do all of it from your phone.\n\n<table>\n  <tr>\n    <td align=\"center\" width=\"33%\">\n      <h3>💬 Chat-to-Edit</h3>\n      <p>Describe the video in plain language — the agent handles shot selection, pacing, and the timeline, so you never open an editor.</p>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      <h3>🎵 Smart Music Matching</h3>\n      <p>Finds and syncs music to the mood and rhythm of your footage, so the cut lands on the beat without you marking a single one.</p>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      <h3>👀 Nothing Renders Until You Say So</h3>\n      <p>Every turn returns a timeline digest and a contact sheet you can review in seconds — you approve the plan before a frame is rendered.</p>\n    </td>\n  </tr>\n</table>\n\n## 🖥️ How it works\n\nUpload your clips, describe the video you want, and the agent edits it.\n\n<table width=\"100%\">\n<tr><td>\n  <video src=\"https://github.com/user-attachments/assets/7f747c99-7ecf-40ac-8854-857d4220ff4e\" controls width=\"100%\"></video>\n</td></tr>\n</table>\n\n| Time | What happens |\n| --- | --- |\n| 0:00 | The brief — the same prompt as the Travel Vlog case below, typed into Claude Code |\n| 0:05 | 14 files upload to Cassette; every clip is analyzed for scene content |\n| 0:13 | The agent edits on its own — shot selection, titles, picture-in-picture, beat-synced cuts |\n| 0:16 | The timeline comes back as a readable digest, with a clickable preview link |\n| 0:25 | One `cmd+click` opens the real contact sheet — one frame per clip, zero render |\n| 0:30 | Nothing renders until you say so; the export runs on your go |\n| 0:36 | The finished cut lands in the project folder |\n\n**The cut it produced**\n\n<table align=\"center\" width=\"70%\">\n<tr><td>\n  <video src=\"https://github.com/user-attachments/assets/34b966af-ef5f-41c6-94f9-a91285cc5f9f\" controls width=\"100%\"></video>\n</td></tr>\n</table>\n\n<sub>The screen recording is compressed to keep this page light, so the terminal text looks softer here than it does on your machine; the cut below it is the full-quality render. Prompt to rendered file took about 13 minutes of real time, sped up above.</sub>\n\n## 🎬 Case Videos\n\nEvery case below was edited end-to-end by an AI agent through Oh My Cassette, from the exact prompt shown — real inputs, real processing times, and the output is what the agent delivered.\n\n<table width=\"100%\">\n<tr>\n<td width=\"33%\" valign=\"top\">\n  <video src=\"https://github.com/user-attachments/assets/b85285a9-30ed-4f9b-b314-538bfd9dbdd6\" controls width=\"100%\"></video>\n  <h3>Travel Vlog</h3>\n  <p>\n    <sub>🎞️ Input: 13 video clips · 1 audio track</sub><br />\n    <sub>⏱️ Processing Time: 15 mins</sub>\n  </p>\n  <p><b>Prompt</b><br />\n  Edit a 30-second travel vlog using all materials with a clear viewing flow. Add the title subtitle \"KOTA KINABALU\" at the beginning and end. Include the vlog shooting time, overlay the character video onto similar scenic shots as a picture-in-picture effect, keep the rhythm light and memorable, and use hard cuts plus music beat sync for a fresh vacation feeling.</p>\n  <p><code>Travel</code> <code>Vlog</code> <code>Beat Sync</code> <code>PiP</code></p>\n</td>\n<td width=\"33%\" valign=\"top\">\n  <video src=\"https://github.com/user-attachments/assets/97fdfe3a-f420-4135-8c62-494bbb7ea436\" controls width=\"100%\"></video>\n  <h3>Cooking Tutorial</h3>\n  <p>\n    <sub>🎞️ Input: 12 video clips · 1 audio track</sub><br />\n    <sub>⏱️ Processing Time: 8 mins</sub>\n  </p>\n  <p><b>Prompt</b><br />\n  Use these materials to edit a cooking video for stir-fried pork with green peppers. Keep the steps smooth, preserve the cooking sounds, and add simple subtitles. The subtitles can be generated based on the visuals to help viewers understand each step. Keep the style clean and natural without covering the ingredients.</p>\n  <p><code>Food</code> <code>Tutorial</code> <code>Explainer</code></p>\n</td>\n<td width=\"33%\" valign=\"top\">\n  <video src=\"https://github.com/user-attachments/assets/8da38e40-7876-4743-a32d-5fd95265f37e\" controls width=\"100%\"></video>\n  <h3>Commercial</h3>\n  <p>\n    <sub>🎞️ Input: 15 video clips · 15 sound effects · 1 audio track</sub><br />\n    <sub>⏱️ Processing Time: 13 mins</sub>\n  </p>\n  <p><b>Prompt</b><br />\n  Use these materials to edit a 15-sec"
+    },
+    "brief": {
+      "summary": "用自然语言把原始片段交给 AI 自动剪成视频",
+      "problem": "减少选镜头、排节奏和渲染成片的手工操作",
+      "highlights": [
+        "可以用一句话生成旅行 vlog",
+        "可以自动挑镜头并按节拍剪辑",
+        "可以通过多种 AI 编程工具调用剪辑"
+      ],
+      "target_users": [
+        "视频创作者",
+        "短视频剪辑者",
+        "AI 工具开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，适合关注 AI 剪辑方向",
+      "caveat": "需要 Python、ffmpeg 和 Cassette 账号",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Cassette-Editor/oh-my-cassette",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "面向AI Agent的剪辑插件与MCP",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "aqm857886159/Nomi",
+      "url": "https://github.com/aqm857886159/Nomi",
+      "description": "Open-source, local-first desktop app for AI video creation: write a script → generate images & video → edit on a timeline → export. Bring your own model & API key — everything runs on your machine. Built with Electron + React.",
+      "language": "TypeScript",
+      "total_stars": 365,
+      "forks": 77,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-video",
+        "ai-video-generator",
+        "bring-your-own-key",
+        "content-creation",
+        "creative-tools",
+        "desktop-app",
+        "electron",
+        "image-generation",
+        "local-first",
+        "offline",
+        "react",
+        "storyboard",
+        "text-to-image",
+        "text-to-video",
+        "timeline-editor",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-04T13:38:29Z",
+      "updated_at": "2026-07-25T03:39:37Z",
+      "pushed_at": "2026-07-25T03:39:28Z",
+      "open_issues": 1,
+      "homepage": "https://nomiaqm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/nomi-logo.svg\" alt=\"Nomi\" width=\"80\" />\n</p>\n\n<h1 align=\"center\">Nomi</h1>\n\n<p align=\"center\">\n  <strong>把你脑子里的画面，精确传达给 AI。</strong><br />\n  本地优先、开源的 AI 导演工作台——3D 摆构图、定妆锁身份、运镜控节奏，从一句想法到一条成片，都在同一处。<br />\n  <sub>Open-source, local-first AI director's workspace — compose in 3D, lock character identity, direct camera moves; script → storyboard → images &amp; video → timeline → export.</sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://nomiaqm.com\"><strong>🌐 官网</strong></a>\n  ·\n  <a href=\"https://nomiaqm.com/quickstart.html\"><strong>新手指南</strong></a>\n  ·\n  <a href=\"https://github.com/aqm857886159/Nomi/releases/latest\"><strong>⬇️ GitHub 下载</strong></a>\n  ·\n  <a href=\"https://pan.quark.cn/s/d3322c17e7b6\"><strong>📦 网盘下载</strong></a>\n  ·\n  <a href=\"#-加入用户群\"><strong>💬 进群</strong></a>\n  ·\n  <a href=\"docs/user-guide.md\">使用指南</a>\n  ·\n  <a href=\"https://github.com/aqm857886159/Nomi/issues/new/choose\">反馈</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/aqm857886159/Nomi/stargazers\"><img src=\"https://img.shields.io/badge/GitHub-%E2%AD%90%20Star-2563eb?logo=github&logoColor=2563eb&labelColor=f1f5f9\" alt=\"Star on GitHub\" /></a>\n  <a href=\"https://github.com/aqm857886159/Nomi/releases/latest\"><img src=\"https://img.shields.io/badge/release-v0.16.9-2563eb?labelColor=f1f5f9\" alt=\"Latest release\" /></a>\n  <img src=\"https://img.shields.io/badge/platform-macOS%20%7C%20Windows-2563eb?labelColor=f1f5f9\" alt=\"Platform\" />\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache--2.0-2563eb?labelColor=f1f5f9\" alt=\"License\" /></a>\n</p>\n\n---\n\n## ⬇️ 下载（双击即用，不用懂代码）\n\n| 系统 | 适用机型 | 下载 |\n|------|---------|------|\n| 🍎 **macOS** | Apple Silicon（M 系列） | [Nomi-mac-arm64.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-arm64.dmg) |\n| 🍎 **macOS** | Intel 芯片 | [Nomi-mac-intel.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-intel.dmg) |\n| 🪟 **Windows** | Win 10 / 11 | [Nomi-windows-setup.exe](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-windows-setup.exe) |\n\n> 不知道自己哪种 Mac？左上角苹果图标 → 关于本机 → 看「芯片」。\n>\n> 🇨🇳 **打不开 GitHub / 下载慢？用夸克网盘镜像**：<https://pan.quark.cn/s/d3322c17e7b6>　·　🌐 最新版以 [GitHub Releases](https://github.com/aqm857886159/Nomi/releases/latest) / [官网](https://nomiaqm.com)为准。\n\n<details>\n<summary><b>第一次打开提示「未知开发者 / 已损坏」？</b>（还没买签名证书，正常现象，点开看绕过方法）</summary>\n\n- **macOS**：把 `Nomi.app` 拖进「应用程序」，终端运行 `xattr -cr /Applications/Nomi.app`，再双击打开。\n- **Windows**：SmartScreen 弹窗点「更多信息」→「仍要运行」。\n</details>\n\n---\n\n## 💬 加入用户群\n\n**正在招种子用户——欢迎进群一起把 Nomi 做好。** 扫码进「nomi 画布群」：反馈直达、更新和新功能第一时间收到，也能看别人怎么用。\n\n<img src=\"docs/media/nomi-canvas-group-wechat.png\" alt=\"nomi 画布群二维码\" width=\"200\" />\n\n> 群二维码 **7 月 27 日前有效**；过期或扫不进，加作者微信 **TZ857886159**（长期有效）拉你进群。\n\n---\n\n## 🎬 这是什么\n\n**「我知道我想要什么，但 AI 老是理解错。」** Nomi 就是来解决这件事的。\n\n你用大白话描述想拍什么，AI 当你的副导演，把**写故事 → 拆镜头 → 生图 → 生视频 → 剪辑成片**整条线跑下来。但 Nomi 真正的不同，是给你一套**把意图精确喂给模型**的工具：在 3D 里摆好构图和机位、给角色定妆锁住身份、用轨迹控制运镜——这些「文字说不清」的东西直接搭出来当参考，而不是和模型来回猜。\n\n```\n  故事     →     拆镜头      →     画布生成      →    时间轴    →    成片\n 写想法       AI 出分镜方案     并行生成图/视频      吸附剪辑      导出 MP4\n            (镜头/角色/提示词)   跨节点复用素材     拖播放头预览\n```\n\n它跟「网页版生成器」最大的不同：**一个完整、本地、可掌控的导演工作台**——不用在 ChatGPT / 即梦 / 剪映之间来回搬素材，剧本、画布、3D 导演台、时间轴在一处串起来，素材自动流转，项目和文件都在你自己电脑上。\n\n---\n\n## ✨ 它能做什么\n\n- 🤖 **AI 拆镜头 + 排片** — 写完故事点一下，AI 拆成一份**可改的分镜方案**（镜头 / 角色 / 提示词逐项可编辑）；你确认后自动铺到画布、规划「角色定妆 → 关键帧 → 视频」的生成顺序，还能按镜序排上时间轴。跨次打开它也记得这个项目聊过什么。\n- 🎬 **3D 导演台 + AI 运镜** — 在 3D 场景里摆角色姿势、架机位、设画幅，截机位画面当参考；也能让 AI 按你的描述自动搭好站位。**文字说不清的构图，直接「搭」出来**，锁住跨镜头的空间关系。v0.16.1 重新校准了坐、蹲、半蹲、单膝跪、双膝跪、指向、举手等白模姿势，并用 front / side / q3 / back / top 多视角截图回归，参考图和参考视频更稳定。再用一句话描述运镜，AI 沿相机轨迹渲一段运镜小片喂给视频模型，把镜头运动复刻到成片上。还能**文生 3D / 图生 3D**（混元 / Meshy / HiTem3D）直接生成 3D 模型资产。\n- 🎨 **画布上直接修图，不用导去 PS** — 生成的图当场就能改：**抠图换背景、把元素拆出来单独调、改图里的文字**（对标 Lovart 的元素 / 文字编辑），还能往画布粘贴、派生新版本。素材一多，用「**找素材**」一键按成片 / 参考自动分组、缩略图识别，秒找到要的那张。\n- 🔗 **一键接入 Claude Code / Codex / Cursor** — Nomi 的创作能力抽成了一个**无头能力核**（MCP）；在「模型接入」面板一键写好接入，让编程助手用对话直接指挥 Nomi 建项目、加节点、连参考、触发生成——Nomi 里所见即所得。\n- 🔑 **一个 key、十几个模型全通** — 「模型接入」填一个 key（APIMart / kie），视频 **Sora 2 / Veo 3.1 / 可灵 / Seedance / Wan / Hailuo**、图像 **Seedream / Nano Banana / GPT Image / Qwen / Imagen** 等预置模型立即可用，**文生 / 图生 / 首尾帧补间 / 多图参考**模式齐全，同款模型的**标准 / 快速 / Pro 变体**一处切换；也可自定义接入任意中转站——中转的**图生图 / 参考图 / 1K–4K 清晰度**同样可用（v0.16.2 起老接入自动升级，无需删了重加）。\n- 🎫 **有即梦高级会员？用会员积分直接出片（不用 API key）** — 接入即梦官方 CLI，扫码登录就能用会员积分跑 **Seedance 2.0 视频**（文生 / 图生 / 首尾帧 / 全能参考 / 多帧）和**即梦图片**（文生图 3.0–5.0 / 改图 / 超清），零额外 API 费。走官方授权、不碰逆向、不存密码。<sub>注：即梦 CLI 生成仅「高级会员（maestro vip）」可用。</sub>\n- 🎭 **项目级资产锁一致性** — 角色（多视角参考图）、分镜、风格沉淀成可复用资产，减少多片段里的「脸漂移、风格跑偏」。\n- ✍️ **提示词库 + AI 优化** — 内置起步提示词直接送上画布；写得糙的提示词一键 AI 优化，改动**高亮可对比、确认再应用**，不黑箱。\n- 🔗 **全流程打通 & 本地优先** — 从剧本到成片一条线，素材自动流转；项目、素材、剪辑全在你电脑上，不上传任何素材到服务器。\n\n---\n\n## 📸 看一眼\n\n**▶ 这是用 Nomi 做出来的** — 想法 → 3D 构图 → 生成 → 成片。[看 46 秒完整演示视频](https://nomiaqm.com/assets/demo.mp4)\n\n<img src=\"marketing/assets/demo.gif\" alt=\"Nomi 生成的视频片段\" width=\"100%\" />\n\n**Mura 画布** — 角色定妆 / 场景 / 镜头分层，并行生成、跨节点复用参考，下方就是吸附剪辑的镜头时间轴\n\n<img src=\"marketing/assets/screen-canvas.png\" alt=\"Mura 画布\" width=\"100%\" />\n\n**3D 导演台** — 摆人偶姿势、架机位、设画幅，截机位画面当生成参考，锁住跨镜头的空间关系\n\n<img src=\"marketing/assets/screen-3d.png\" alt=\"3D 导演台\" width=\"100%\" />\n\n**创作区** — 写故事 / 文案，右侧 AI 助手帮你拆镜头、立角色卡\n\n<img src=\"marketing/assets/screen-script.png\" alt=\"创作区\" width=\"100%\" />\n\n---\n\n## 🚀 三步出第一条视频\n\n**1. 接一个模型** — 顶部「模型接入」：\n\n- **最快**：选预置供应商（APIMart / kie），填一个 key → 该家全部模型一键解锁。\n- **自定义**：填 BaseURL + Key，点「测试连接」自动识别协议（OpenAI / Responses / Anthropic），不用懂术语。OpenAI / Claude / DeepSeek / 国内中转站都能接。\n\n**2. 写一段故事** — 进「创作区」写下你想拍的内容，点「拆镜头」让 AI 跑。\n\n**3. 生成 → 导出** — 画布上的图片 / 视频生成好后，拖到时间轴，导出 MP4。\n\n> 完整指南：[docs/user-guide.md](docs/user-guide.md) · 模型接入细节：[docs/provider-integration.md](docs/provider-integration.md)\n\n---\n\n## 💬 反馈\n\n验证阶段的项目，很需要你的反馈：[报 Bug](https://github.com/aqm857886159/Nomi/issues/new?template=bug_report.yml) · [提需求](https://github.com/aqm857886159/Nomi/issues/new?template=feedback.yml) · [闲聊](https://github.com/aqm857886159/Nomi/discussions)\n\n---\n\n## 👨‍💻 开发者\n\n<details>\n<summary>用源码启动</summary>\n\n需要 **Node.js 20+**，无需 Docker / 数据库。\n\n```bash\ngit clone https://github.com/aqm857886159/Nomi.git\ncd Nomi\ncorepack enable && pnpm install && pnpm dev\n```\n\n```\nelectron/    主进程 + 本地运行时（Agent、文件存储、模型调用）\nsrc/         前端工作台（React + Vite + Tailwind）\nskills/      Skill Pack v2（见 docs/skill-pack-format.md）\n```\n</details>\n\n<details>\n<summary>用 Claude Code / 编程助手在本地驱动 Nomi（能力核）</summary>\n\nNomi 的创作能力也抽成了一个**无头能力核**（CLI / MCP），可以被 Claude Code 等编程助手在本地直接调用——建项目、加节点、连参考、触发生成都能用对话指挥。在 App 内「模型接入」面板有「一键接入 Claude Code」卡片，零配置写好接入；细节见 [docs/capability-core-guide.md](docs/capability-core-guide.md)。\n</details>\n\n---\n\n## 关于作者\n\n**青阳** — AI 产品经理 / 创作者。愿意当种子用户的话，加微信 **TZ857886159**（长期有效）拉你进群（群码在上方 [💬 加入用户群](#-加入用户群)）。\n\n<img src=\"docs/media/qingyang-wechat.jpg\" alt=\"青阳的个人微信二维码\" width=\"140\" />\n\n---\n\nApache-2.0 License · Made with ❤️ in China\n"
+    },
+    "brief": {
+      "summary": "Nomi 是本地优先的开源 AI 视频创作工作台。",
+      "problem": "把剧本、分镜、生成素材和剪辑流程集中管理。",
+      "highlights": [
+        "可以从故事自动拆分镜并生成素材",
+        "可以用 3D 场景控制构图和运镜",
+        "可以在时间轴剪辑并导出 MP4"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "短片制作团队",
+        "内容创作者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，但今日新增 Star 为 0。",
+      "caveat": "通常需要自行准备模型接口和 API Key。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aqm857886159/Nomi",
+      "score": 95,
+      "category": "AI 视频",
+      "reason": "覆盖脚本生成到时间线导出的AI视频工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "blender/blender",
+      "url": "https://github.com/blender/blender",
+      "description": "Official mirror of Blender",
+      "language": "C++",
+      "total_stars": 19359,
+      "forks": 3062,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "animation",
+        "b3d",
+        "computer-graphics",
+        "modeling",
+        "rendering"
+      ],
+      "license_name": "",
+      "created_at": "2019-10-09T12:47:28Z",
+      "updated_at": "2026-07-25T03:41:20Z",
+      "pushed_at": "2026-07-25T03:40:50Z",
+      "open_issues": 0,
+      "homepage": "https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nKeep this document short & concise,\nlinking to external resources instead of including content in-line.\nSee 'release/text/readme.html' for the end user read-me.\n-->\n\n> [!IMPORTANT]\n> Cloning from this [GitHub mirror](https://github.com/blender/blender) may cause Git LFS errors. To avoid this, use `GIT_LFS_SKIP_SMUDGE=1` when doing your initial clone.  \n> See [the documentation](https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror) for full instructions.\n\nBlender\n=======\n\nBlender is the free and open source 3D creation suite.\nIt supports the entirety of the 3D pipeline—modeling, rigging, animation, simulation, rendering, compositing,\nmotion tracking and video editing.\n\n![Blender screenshot](https://code.blender.org/wp-content/uploads/2018/12/springrg.jpg \"Blender screenshot\")\n\nProject Pages\n-------------\n\n- [Main Website](http://www.blender.org)\n- [Reference Manual](https://docs.blender.org/manual/en/latest/index.html)\n- [User Community](https://www.blender.org/community/)\n\nDevelopment\n-----------\n\n- [Build Instructions](https://developer.blender.org/docs/handbook/building_blender/)\n- [Code Review & Bug Tracker](https://projects.blender.org)\n- [Developer Forum](https://devtalk.blender.org)\n- [Developer Documentation](https://developer.blender.org/docs/)\n\n\nLicense\n-------\n\nBlender as a whole is licensed under the GNU General Public License, Version 3.\nIndividual files may have a different but compatible license.\n\nSee [blender.org/about/license](https://www.blender.org/about/license) for details.\n"
+    },
+    "brief": {
+      "summary": "开源的完整3D创作套件，覆盖建模到视频编辑",
+      "problem": "为3D内容制作提供一套完整的开源工具链",
+      "highlights": [
+        "可以制作3D模型并进行绑定、动画和模拟",
+        "可以完成渲染、合成与运动追踪",
+        "可以直接进行视频编辑"
+      ],
+      "target_users": [
+        "3D艺术家",
+        "动画制作团队",
+        "视频创作者"
+      ],
+      "why_trending": "本周首次收录，项目总Star超1.9万且近期有更新",
+      "caveat": "这是GitHub镜像，初次克隆可能遇到Git LFS错误",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "blender/blender",
+      "score": 98,
+      "category": "3D / VTuber",
+      "reason": "完整的3D建模动画制作套件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "nirholas/three.ws",
+      "url": "https://github.com/nirholas/three.ws",
+      "description": "Open-source 3D AI agent framework — GLB/glTF avatars with LLM brains, memory, emotions, and autonomous payments. MCP server · x402 · Solana/EVM · Three.js. Embed anywhere as a web component. Character studio, animation gallery, OAuth 2.1. Browser-native.",
+      "language": "JavaScript",
+      "total_stars": 86,
+      "forks": 24,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "ai-agent",
+        "animation",
+        "avatar",
+        "blockchain",
+        "character-studio",
+        "claude",
+        "embedding",
+        "erc",
+        "gltf",
+        "javascript",
+        "llm",
+        "mcp",
+        "oauth",
+        "onchain",
+        "three-js",
+        "typescript",
+        "vercel",
+        "web-component",
+        "webgl"
+      ],
+      "license_name": "",
+      "created_at": "2026-01-08T20:46:03Z",
+      "updated_at": "2026-07-25T03:02:48Z",
+      "pushed_at": "2026-07-25T03:02:38Z",
+      "open_issues": 0,
+      "homepage": "https://three.ws",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# three.ws        \n\n[**Website**](https://three.ws) · [**X / Twitter**](https://x.com/trythreews) · [**GitHub**](https://github.com/nirholas/three.ws) · [**$THREE on pump.fun**](https://pump.fun/FeMbDoX7R1Psc4GEcvJdsbNbZA3bfztcyDCatJVJpump)\n\nhttps://github.com/user-attachments/assets/d52515d1-cb04-4dd6-98bd-fef233312dc4\n\n**Give your AI a body.** three.ws is an open-source, browser-native 3D AI agent platform. Type a prompt and [**Forge**](https://three.ws/forge) generates a textured 3D model — or drop a GLB you already have. Add an LLM brain, register on-chain, and embed anywhere — no plugins, no server uploads, no installs required.\n\n> **Try it in 60 seconds:** open [three.ws/forge](https://three.ws/forge), type *\"a brass steampunk owl, full body\"*, and download the GLB. Text→3D, image→3D, and sketch→3D — free draft tier, no account. [Jump to the Forge section ↓](#forge--text--image-to-3d)\n\n### Meet the avatar: a live 3D model, right here in markdown\n\nDrag to rotate. This is not an image or a video: it is an interactive 3D model rendered natively by GitHub. The avatar was generated from a one-line text prompt on [three.ws Forge](https://three.ws/forge) (free tier), decimated to 1,200 triangles, and embedded as ASCII STL with [readme-3d](packages/readme-3d), our open-source toolkit for putting 3D models in any GitHub README, issue, or discussion.\n\n```stl\nsolid threews_avatar\n facet normal -0.34 -0.93 0.11\n  outer loop\n   vertex 7.06 -3.99 23.19\n   vertex 9.13 -4.19 27.78\n   vertex 3.98 -2.59 25.51\n  endloop\n endfacet\n facet normal -0.94 -0.30 0.16\n  outer loop\n   vertex 17.94 3.99 37.76\n   vertex 18.01 2.79 35.88\n   vertex 18.27 2.91 37.66\n  endloop\n endfacet\n facet normal -0.90 0.43 0.10\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 18.01 2.79 35.88\n   vertex 17.73 2.15 36.16\n  endloop\n endfacet\n facet normal -0.92 0.36 0.15\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 17.73 2.15 36.16\n   vertex 17.95 2.20 37.37\n  endloop\n endfacet\n facet normal 0.94 0.34 0.00\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.47 1.83 38.79\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 -0.25 0.33\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 28.47 1.83 38.79\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal 0.99 -0.14 0.08\n  outer loop\n   vertex 28.47 1.83 38.79\n   vertex 28.01 -2.89 36.41\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.06 -0.40\n  outer loop\n   vertex 28.90 0.61 31.76\n   vertex 27.10 -0.47 27.53\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.83 -0.51 -0.22\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 27.10 -0.47 27.53\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.38 -0.16\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.90 0.61 31.76\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.89 0.45 0.09\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 28.47 1.83 38.79\n   vertex 27.20 5.38 33.47\n  endloop\n endfacet\n facet normal 0.90 -0.39 -0.20\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.22 -3.16 28.82\n   vertex 27.10 -0.47 27.53\n  endloop\n endfacet\n facet normal 0.82 -0.02 0.58\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 26.14 -2.49 41.92\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.80 0.40 0.44\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 23.27 4.13 46.24\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.70 -0.07 -0.71\n  outer loop\n   vertex 27.03 3.46 27.96\n   vertex 24.69 2.15 25.80\n   vertex 25.39 4.36 26.25\n  endloop\n endfacet\n facet normal 0.63 -0.73 0.27\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.14 -2.49 41.92\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal 0.56 -0.82 0.08\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.39 -5.14 38.78\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.64 -0.76 -0.12\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.40 -5.59 34.11\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.37 -0.89 -0.28\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 23.26 -5.15 31.23\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.42 -0.20 -0.89\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.15 0.41 25.94\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.34 -0.94 0.00\n  outer loop\n   vertex 26.22 -3.16 28.82\n   vertex 23.11 -4.26 27.61\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.40 -0.88 -0.23\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 23.11 -4.26 27.61\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal -0.24 0.97 -0.05\n  outer loop\n   vertex 24.58 4.14 25.81\n   vertex 25.39 4.36 26.25\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.64 -0.61 -0.46\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.14 -2.60 26.21\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.78 -0.11 -0.62\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 22.59 1.54 23.24\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.78 -0.12 -0.61\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 24.69 2.15 25.80\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.46 -0.87 -0.17\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 22.59 1.54 23.24\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.05 -0.66 -0.75\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 24.14 -2.60 26.21\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.32 -0.80 0.50\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 21.60 -3.52 43.21\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.37 -0.90 -0.21\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 21.41 -3.57 27.63\n   vertex 23.11 -4.26 27.61\n  endloop\n endfacet\n facet normal -0.23 -0.54 -0.81\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 21.41 -3.57 27.63\n   vertex 24.14 -2.60 26.21\n  endloop\n endfacet\n facet normal -0.01 -1.00 0.10\n  outer loop\n   vertex 24.39 -5.14 38.78\n   vertex 20.81 -5.34 36.22\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.52 -0.77 0.37\n  outer loop\n   vertex 20.28 -1.08 52.96\n   vertex 18.87 -2.53 51.93\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.95 0.26\n  outer loop\n   vertex 21.60 -3.52 43.21\n   vertex 20.81 -5.34 36.22\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.13 -0.99 -0.10\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 20.81 -5.34 36.22\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 0.03 -0.99 -0.15\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 19.99 1.49 22.99\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.91 0.14 0.38\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 20.84 0.68 53.36\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.99 -0.03\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.87 0.27 0.43\n  outer loop\n   vertex 20.33 2.84 53.04\n   vertex 20.84 0.68 53.36\n   vertex 23.27 4.13 46.24\n  endloop\n endfacet\n facet normal -0.48 -0.82 0.30\n  outer loop\n   vertex 22.34 1.45 26.31\n   vertex 18.93 2.50 23.81\n   vertex 22.82 1.11 26.12\n  endloop\n endfacet\n facet normal -0.49 -0.80 0.35\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 18.93 2.50 23.81\n   vertex 19.99 1.49 22.99\n  endloop\n endfacet\n facet normal 0.80 -0.36 0.47\n  outer loop\n   vertex 20.84 0.68 53.36\n   vertex 20.28 -1.08 52.96\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.62 -0.30 0.72\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 18.93 2.50 23.81\n   vertex 22.34 1.45 26.31\n  endloop\n endfacet\n facet normal -0.80 0.13 0.59\n  outer loop\n   vertex 21.74 -0.40 26.89\n   vertex 18.46 -1.70 22.74\n   vertex 21.76 -1.78 27.21\n  endloop\n endfacet\n facet normal -0.79 -0.21 0.58\n  outer loop\n   vertex 21.76 -1.78 27.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.75 -2.39 26.98\n  endloop\n endfacet\n facet normal -0.54 -0.84 -0.09\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 17.89 -1.75 31.72\n   vertex 21.41 -3.57 27.63\n  endloop\n endfacet\n facet normal 0.10 -0.26 -0.96\n  outer loop\n   vertex 22.59 1.54 23.24\n   vertex 19.99 1.49 22.99\n   vertex 20.26 3.48 22.48\n  endloop\n endfacet\n facet normal 0.96 0.24 0.12\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.84 0.68 53.36\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal -0.53 -0.80 -0.29\n  outer loop\n   vertex 20.81 -5.34 36.22\n   vertex 17.89 -1.75 31.72\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 1.00 0.05 0.05\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.89 8.80 78.04\n   vertex 19.60 7.11 85.93\n  endloop\n endfacet\n facet normal 1.00 0.04 0.04\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.78 0.25 88.57\n   vertex 19.89 8.80 78.04\n  endloop\n endfacet\n facet normal 0.96 0.26 0.13\n  outer loop\n   vertex 19.46 3.33 58.61\n   vertex 20.67 -0.54 57.28\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal 0.96 -0.29 -0.05\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.28 -1.08 52.96\n   vertex 20.84 0.68 53.36\n  endloop\n endfacet\n facet normal -0.11 -0.99 -0.07\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 21.75 -2.39 26.98\n   vertex 18.46 -1.70 22.74\n  endloop\n endfacet\n facet normal 1.00 -0.03 -0.02\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.78 0.25 88.57\n   vertex 19.45 -6.79 83.01\n  endloop\n endfacet\n facet normal 1.00 0.00 0.07\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.45 -6.79 83.01\n   vertex 20.12 -4.30 73.94\n  endloop\n endfacet\n facet normal 0.93 0.30 -0.21\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.93 5.01 72.90\n   vertex 19.58 8.54 76.35\n  endloop\n endfacet\n facet normal -0.70 -0.09 0.71\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 19.00 3.74 24.02\n   vertex 18.93 2.50 23.81\n  endloop\n endfacet\n facet normal 0.99 0.00 -0.17\n  outer loop\n   vertex 20.12 -4.30 73.94\n   vertex 19.78 1.87 71.95\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 1.00 0.02 -0.01\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 20.12 -4.30 73.94\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 0.79 -0.61 0.01\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 18.66 -3.15 57.91\n   vertex 20.28 -1.08 52.96\n  endloop\n endfacet\n facet normal 0.27 -0.95 0.19\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 18.87 -2.53 51.93\n   vertex 21.60 -3.52 43.21\n  endloop\n endfacet\n facet normal 0.99 0.13 0.11\n  outer loop\n   vertex 19.45 -6.79 83.01\n   vertex 20.12 -5.67 75.56\n   vertex 20.12 -4.30 73.94\n  endloop\n endfacet\n facet normal -0.77 -0.07 0.63\n  outer loop\n   vertex 19.80 0.58 24.64\n   vertex 18.46 -1.70 22.74\n   vertex 21.74 -0.40 26.89\n  endloop\n endfacet\n facet normal 0.99 -0.11 0.08\n  outer loop\n   vertex 19.78 0.25 88.57\n   vertex 19.38 -4.86 86.48\n   vertex 19.45 -6.79 83.01\n  endloop\n endfacet\n facet normal 0.73 -0.52 -0.45\n  outer loop\n   vertex 20.12 -4.30 73.94\n   vertex 20.12 -5.67 75.56\n   vertex 17.93 -5.99 72.36\n  endloop\n endfacet\n facet normal 0.30 -0.95 -0.11\n  outer loop\n   vertex 19.45 -6.79 83.01\n   vertex 17.93 -5.99 72.36\n   vertex 20.12 -5.67 75.56\n  endloop\n endfacet\n facet normal -0.47 0.12 0.87\n  outer loop\n   vertex 18.22 5.83 86.97\n   vertex 18.49 -1.78 88.13\n   vertex 19.78 0.25 88.57\n  endloop\n endfacet\n facet normal 0.97 0.25 0.07\n  outer loop\n   vertex 19.11 0.55 6.61\n   vertex 18.74 3.81 0.23\n   vertex 18.00 5.61 3.97\n  endloop\n endfacet\n facet normal 1.00 0.07 -0.02\n  outer loop\n   vertex 18.74 3.81 0.23\n   vertex 19.11 0.55 6.61\n   vertex 19.30 -4.41 0.13\n  endloop\n endfacet\n facet normal 0.28 -0.37 0.89\n  outer loop\n   vertex 19.78 0.25 88.57\n   vertex 18.49 -1.78 88.13\n   vertex 18.53 -3.21 87.53\n  endloop\n endfacet\n facet normal 0.73 -0.68 -0.04\n  outer loop\n   vertex 18.66 -3.15 57.91\n   vertex 18.87 -2.53 51.93\n   vertex 20.28 -1.08 52.96\n  endloop\n endfacet\n facet normal 0.06 -0.99 0.13\n  outer loop\n   vertex 18.87 -2.53 51.93\n   vertex 17.09 -2.77 50."
+    },
+    "brief": {
+      "summary": "面向浏览器的3D AI智能体与虚拟角色框架",
+      "problem": "把3D角色、语言模型和记忆整合到可嵌入的网页智能体中",
+      "highlights": [
+        "可以生成或导入GLB/glTF角色",
+        "可以为角色接入语言模型、记忆和情绪",
+        "可以将3D智能体嵌入网页组件"
+      ],
+      "target_users": [
+        "AI应用开发者",
+        "3D角色创作者",
+        "网页开发者"
+      ],
+      "why_trending": "本周首次收录，近期有代码提交；总Star为86",
+      "caveat": "项目未提供许可证信息，链上支付功能需谨慎评估",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "nirholas/three.ws",
+      "score": 90,
+      "category": "3D / VTuber",
+      "reason": "提供带记忆情绪的3D智能体化身",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "renpy/renpy",
+      "url": "https://github.com/renpy/renpy",
+      "description": "The Ren'Py Visual Novel Engine",
+      "language": "Ren'Py",
+      "total_stars": 6660,
+      "forks": 908,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "engine",
+        "game",
+        "novel",
+        "python",
+        "renpy",
+        "visual",
+        "visual-novel"
+      ],
+      "license_name": "",
+      "created_at": "2012-06-28T01:21:22Z",
+      "updated_at": "2026-07-25T03:30:07Z",
+      "pushed_at": "2026-07-25T02:40:08Z",
+      "open_issues": 290,
+      "homepage": "http://www.renpy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "==============================\nThe Ren'Py Visual Novel Engine\n==============================\n\nhttps://www.renpy.org\n\n\nBranches\n========\n\nThe following branches are the most interesting.\n\n``fix``\n    The fix branch is used for fixes to the current version of Ren'Py that do\n    not require dangerous changes. The fix branch is also the source of the\n    documentation on https://www.renpy.org/. This branch is automatically\n    merged into master on a regular basis.\n\n    Pull requests that contain fixes or documentation improvements should be\n    made to the fix branch. When a feature release is made (for example, going from 8.6.x to 8.7.0),\n    the master branch is copied to the fix branch. Fix releases are made from this branch.\n\n``master``\n    The master branch is where the main focus of development is. This branch\n    will eventually become the next release of Ren'Py.\n\n    Pull requests that contain new features, that require incompatible changes,\n    or major changes to Ren'Py's internals should be targeted at the master\n    branch.\n\n    Feature releases are made from this branch.\n\n\nGetting Started\n===============\n\nRen'Py depends on a number of Python modules written in Cython and C. For\nchanges to Ren'Py that only involve Python modules, you can use the modules\nfound in the latest nightly build. Otherwise, you'll have to compile the\nmodules yourself.\n\nThe development scripts assume a POSIX-like platform. The scripts should run\non Linux or macOS, and can be made to run on Windows using an environment\nlike MSYS.\n\nNightly Build\n-------------\n\nNightly builds can be downloaded from:\n\n   https://nightly.renpy.org\n\nNote that the latest nightly build is at the bottom of the list. Once you've\nunpacked the nightly, change into this repository, and run::\n\n    ./after_checkout.sh <path-to-nightly>\n\nOnce this script completes, you should be able to run Ren'Py using renpy.sh,\nrenpy.app, or renpy.exe, as appropriate for your platform.\n\nIf the current nightly build doesn't work, please wait 24 hours for a new\nbuild to occur. If that build still doesn't work, contact Tom (`pytom at bishoujo.us`,\nor @renpytom on Twitter/X) to find out what's wrong.\n\nThe ``doc`` symlink will dangle until documentation is built, as described\nbelow.\n\nCompiling the Modules\n----------------------\n\nBuilding the modules requires you have the many dependencies installed on\nyour system. On Ubuntu and Debian, these dependencies can be installed with\nthe command::\n\n    sudo apt install python3-dev libassimp-dev libavcodec-dev libavformat-dev \\\n        libswresample-dev libswscale-dev libharfbuzz-dev libfreetype6-dev libfribidi-dev libsdl2-dev \\\n        libsdl2-image-dev libsdl2-gfx-dev libsdl2-mixer-dev libsdl2-ttf-dev libjpeg-dev pkg-config\n\nRen'Py requires SDL_image 2.6 or greater. If your distribution doesn't include\nthat version, you'll need to download it from:\n\n    https://github.com/libsdl-org/SDL_image/tree/SDL2\n\nWe strongly suggest using a package manager to create virtual environment and\nmanage dependencies. We have tested with `uv <https://docs.astral.sh/uv/>`_ but\nother package managers should work as well. To create a virtual environment and\ninstall dependencies, open a new terminal and run::\n\n    uv sync\n\nAfter that, compile extension modules and run Ren'Py using the command::\n\n    ./run.sh\n\n\nOther Platforms\n---------------\n\nWhere supported, Ren'Py will attempt to find include directories and library paths\nusing pkg-config. If pkg-config is not present, include and library paths can be\nspecified using CFLAGS and LDFLAGS.\n\nIf RENPY_CFLAGS is present in the environment and CFLAGS is not, setup.py\nwill set CFLAGS to RENPY_CFLAGS. The same is true for RENPY_LDFLAGS,\nRENPY_CC, RENPY_CXX, and RENPY_LD.\n\nSetup.py does not support cross-compiling. See https://github.com/renpy/renpy-build\nfor software that cross-compiles Ren'Py for many platforms. The renpy-build system\nalso include some runtime components for Android, iOS, and web.\n\n\nDocumentation\n=============\n\nBuilding\n--------\n\nBuilding the documentation requires Ren'Py to work. You'll either need to\nlink in a nightly build, or compile the modules as described above. You'll\nalso need the `Sphinx <https://www.sphinx-doc.org>`_ documentation generator.\nIf you have pip working, install Sphinx using::\n\n    pip install -U sphinx sphinx_rtd_theme sphinx_rtd_dark_mode sphinx-tabs\n\nOnce Sphinx is installed, change into the ``sphinx`` directory inside the\nRen'Py checkout and run::\n\n    ./build.sh\n\nFormat\n------\n\nRen'Py's documentation consists of reStructuredText files found in sphinx/source, and\ngenerated documentation found in function docstrings scattered throughout the code. Do\nnot edit the files in the ``sphinx/source/inc`` folder directly, as they will be\noverwritten.\n\nDocstrings may include tags on the first few lines:\n\n\\:doc: `section` `kind`\n    Indicates that this function should be documented. `section` gives\n    the name of the include file the function will be documented in, while\n    `kind` indicates the kind of object to be documented (one of ``function``,\n    ``method`` or ``class``. If omitted, `kind` will be auto-detected.\n\\:name: `name`\n    The name of the function to be documented. Function names are usually\n    detected, so this is only necessary when a function has multiple aliases.\n\\:args: `args`\n    This overrides the detected argument list. It can be used if some arguments\n    to the function are deprecated.\n\nFor example::\n\n    def warp_speed(factor, transwarp=False):\n        \"\"\"\n        :doc: warp\n        :name: renpy.warp_speed\n        :args: (factor)\n\n        Exceeds the speed of light.\n\n        `factor`\n            The warp factor. See Sternbach (1991) for details.\n\n        `transwarp`\n            If True, use transwarp. This does not work on all platforms.\n        \"\"\"\n\n        renpy.engine.warp_drive.engage(factor)\n\n\nTranslating\n===========\n\nFor best practices when it comes to translating the launcher and template\ngame, please read:\n\nhttps://lemmasoft.renai.us/forums/viewtopic.php?p=321603#p321603\n\n\nContributing\n============\n\nFor bug fixes, documentation improvements, and simple changes, just make a pull request. For nontrivial changes,\nplease file an issue first so we can discuss the planned change.\n\n\nEfficiency Tools (including Language Models)\n============================================\n\nThe goal of Ren'Py is to provide tools that enable human creativity in the form of visual novels and similar styles\nof games. In service of this goal, developers may use tools that increase their efficiency, including tools that use\nlanguage models.\n\nEvery change to Ren'Py must be created by a human that understands both the change, the\nportions of Ren'Py affected by this change, and the copyright implications of the change. Examples of uses of\nefficiency tools that we consider appropriate include completion where the human only accepts suggestions that\nthey understand and that are correct, and prompts that cause changes that can be immediately\nreviewed by a human for correctness. Larger changes may be created by prompting for smaller changes with reviews\nat each step.\n\nWe do not accept changes where a human does not fully understand the change and how it affects Ren'Py. Large changes\nmade with minimal human review (\"vibe coding\") are not acceptable. If you'd like to make such a change, it's better to\njust bring the idea to us on GitHub and let us make the change. Changes made by agents without human review are not\nacceptable.\n\nOur use of AI is intended to not require disclosure in the\n`Steam Content Survey <https://partner.steamgames.com/doc/gettingstarted/contentsurvey#5>`_. Specifically, we\ndon't use diffusion models or other techniques to generate game content consumed by players, and we do not require\ncreators to use any AI tools, or provide any such tools for creators to use.\n\nAs a special case, we allow machine translation of system messages when there is no human translator for the language.\nWhen a human translator becomes available, their work takes precedence. This exception allows system messages to be\ntranslated to improve accessibility.\n\nLicense\n=======\n\nFor the complete licensing terms, please read:\n\nhttps://www.renpy.org/doc/html/license.html\n\nBy contributing to Ren'Py, you agree to license your contributions under the MIT license. When contributing, you may\nchoose to:\n\n* Retain copyright in your contribution. If you choose this, please \"Copyright (year) Your Name <your email>\" in the\n  copyright notice for any file you change.\n* Assign copyright in your contribution to Tom Rothamel <pytom@bishoujo.us>. This is assumed to be the default if\n  you don't specify otherwise.\n"
+    },
+    "brief": {
+      "summary": "Ren'Py 是用于制作视觉小说和类似游戏的开源引擎。",
+      "problem": "降低视觉小说开发、运行和维护的门槛。",
+      "highlights": [
+        "可以制作视觉小说和类似叙事游戏",
+        "可以基于 Python 模块修改引擎",
+        "可以参与修复、文档和功能开发"
+      ],
+      "target_users": [
+        "视觉小说开发者",
+        "互动叙事创作者",
+        "引擎贡献者"
+      ],
+      "why_trending": "本周首次收录，项目近期仍有提交和维护。",
+      "caveat": "从源码构建需安装较多 C、Python 和 SDL 依赖。",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "renpy/renpy",
+      "score": 95,
+      "category": "互动叙事",
+      "reason": "成熟的视觉小说开发引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "lukaszliniewicz/Pandrator",
+      "url": "https://github.com/lukaszliniewicz/Pandrator",
+      "description": "Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.",
+      "language": "Python",
+      "total_stars": 593,
+      "forks": 43,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audiobook",
+        "audiobook-creator",
+        "audiobook-maker",
+        "chatterbox",
+        "dubbing",
+        "dubbing-ai",
+        "kokoro",
+        "pdf-to-audio",
+        "rvc",
+        "silero",
+        "subtitle-to-speech",
+        "subtitle-to-voice",
+        "text-processing",
+        "text-to-speech",
+        "voice-clone",
+        "voice-cloning",
+        "voiceover",
+        "voxtral",
+        "xtts",
+        "xttsv2"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2024-03-20T14:46:13Z",
+      "updated_at": "2026-07-25T03:16:12Z",
+      "pushed_at": "2026-07-25T03:16:02Z",
+      "open_issues": 16,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"pandrator.png\" alt=\"Pandrator\" width=\"180\" />\n</p>\n\n# Pandrator\n\nPandrator is a local-first workspace for creating audiobooks, subtitles, and voiceovers. It combines document preparation, transcription, optional LLM correction and translation, speech generation, detailed review, and export in one browser-based interface.\n\nThe desktop installer and launcher manage Pandrator and its optional local model services. Docker and WSL are not required.\n\nThe application itself is web-only. The retired Qt application is preserved on the `qt-maintenance` branch; Qt remains in `main` only for the desktop installer and launcher.\n\n## TL;DR\n\n| If you want to… | Start with… |\n|---|---|\n| Create an audiobook with ready-made voices | **Kokoro** is the simplest lightweight starting point. Consult the [language table](#speech-generation-language-support) for alternatives. |\n| Clone a voice from a reference recording | Install **Qwen3 TTS Base** or another cloning model supporting your language. |\n| Create subtitles from audio or video | Install **CrispASR**. Use Whisper large-v3 for broad coverage or Parakeet TDT 0.6B v3 for its supported languages. |\n| Correct or translate text and subtitles | Configure a local or cloud LLM provider. This is optional for basic speech generation. |\n| Convert generated speech to another trained voice | Install **RVC**. It runs after speech generation and is optional. |\n\nDownload the launcher from [GitHub Releases](https://github.com/lukaszliniewicz/Pandrator/releases). You can begin with only the components you need and add others later.\n\nLocal models process content on your machine. Cloud LLM and speech providers are optional; when used, they may send content to an external service and incur charges.\n\n## What Pandrator does\n\n### Audiobooks\n\n- Imports plain text, pasted text, PDF, EPUB, DOCX, and MOBI sources.\n- Extracts structure and chapter markers, with OCR and a reviewable cleaning workflow for difficult PDF and EPUB files.\n- Includes a browser PDF editor with page stacks, left/right stacks, cropping, whiteouts, and deletion.\n- Applies deterministic text normalization and configurable segmentation before speech generation.\n- Optionally uses an LLM to clean a complete document or optimize small batches while generating.\n- Keeps generated speech as reviewable segments: edit, play as a playlist, mark, regenerate, compare takes, and select RVC variants.\n- Exports WAV, MP3, Opus, FLAC, or M4B with chapters, metadata, and cover art.\n\n### Subtitles and voiceovers\n\n- Starts from SRT subtitles or common audio and video formats.\n- Transcribes media through CrispASR with word timestamps, VAD, and optional diarization controls.\n- Keeps transcription, correction, translation, subtitle composition, speech generation, synchronization, and export as separate, rerunnable steps.\n- Supports professional translation directly from an original transcript or from a corrected revision.\n- Provides side-by-side subtitle review with timing, text, split, and merge editing.\n- Creates subtitle-only exports or dubbed media with original, mixed, or dubbing-only audio and soft, burned, translated, original-language, or bilingual subtitles.\n\n### Providers and voices\n\n- Connects to local TTS services, OpenAI, Google Gemini, and configurable custom speech endpoints.\n- Connects to local OpenAI-compatible LLM servers such as LM Studio as well as supported cloud providers.\n- Stores model-specific LLM temperature, reasoning, and cached/uncached token pricing defaults.\n- Manages recorded and uploaded reference samples, transcripts, and persistent previews of pre-built voices in the voice library.\n- Supports RVC model management and XTTS training as separate workflows.\n\n## Installation\n\n### Windows\n\nDownload `PandratorInstaller.exe` from [Releases](https://github.com/lukaszliniewicz/Pandrator/releases) and run it. Choose an installation location and the local services you need. The same application is used later to launch, update, repair, or extend the installation.\n\n### Linux\n\nDownload `PandratorInstaller-x86_64.AppImage`, make it executable, and run it:\n\n```bash\nchmod +x PandratorInstaller-x86_64.AppImage\n./PandratorInstaller-x86_64.AppImage\n```\n\nThe default installation location is `~/Pandrator`. The installer keeps Pixi environments, services, model caches, and application data under the selected workspace. It does not install system packages. Calibre is optional and is needed only for MOBI conversion.\n\n### Launching and access\n\nThe launcher starts the web application, worker, and selected speech services, waits for Pandrator to become ready, and opens it in your browser. Its **Open Web UI** action reopens the page if you close the tab.\n\nPandrator listens on `127.0.0.1` by default. The installer can enable access from other devices; non-local access requires owner authentication. Use HTTPS through a reverse proxy when exposing Pandrator beyond a trusted local network.\n\nClosing the browser does not stop generation. Use the launcher to reopen the interface or stop the managed processes.\n\n### Updating\n\nUse **Update** in the installer. If Pandrator or one of its services is running, the installer can stop it before continuing. User data is preserved unless removal with data purging is explicitly requested.\n\nBefore the first web-based launch, Pandrator backs up legacy metadata and imports existing sessions into its new database without rewriting the original Qt data. Keep a separate backup of important work before any major application upgrade.\n\n## Choosing local services\n\n| Service | Voice type | Typical hardware path | Notes |\n|---|---|---|---|\n| Kokoro 82M | Pre-built | CPU, CUDA; experimental ROCm and Apple Silicon paths | Lightweight and a good first installation. |\n| Qwen3 TTS | Pre-built and cloning | CPU, CUDA, Vulkan, Metal | CustomVoice 1.7B supplies named voices; Base 0.6B/1.7B clones references. |\n| XTTS v2 | Cloning | CPU or CUDA | Mature multilingual cloning; GPU is much faster. |\n| VoxCPM2 | Cloning | CUDA | Large multilingual model intended for capable NVIDIA hardware. |\n| Fish S2 Pro | Cloning | Configurable native backend and quantization | Very broad declared language coverage. |\n| Voxtral 4B | Pre-built | WGPU-compatible accelerator | Preset voices only in the packaged local service; no CPU path. |\n| Silero | Pre-built | CPU | Efficient regional, East European, and legacy language packs. |\n| Chatterbox | Cloning | CPU or CUDA | English and multilingual models. |\n| Magpie 357M | Pre-built | CPU or CUDA | Five speakers shared across nine languages. |\n| CrispASR | Transcription | CPU, CUDA, Vulkan; Metal on Apple Silicon | Whisper and Parakeet engines with word timestamps. |\n| RVC | Speech-to-speech | CPU or CUDA | Applies a `.pth` model and matching `.index` after generation. |\n\nHardware requirements vary with model size, quantization, input length, and the selected compute backend. The installer shows the available variants and model licences before downloading them.\n\n## Speech generation language support\n\n“Pre-built voices” require no reference recording. “Voice cloning” uses a sample from the voice library. You need only **one** compatible model from the applicable column.\n\n| Language(s) | Pre-built voices | Voice cloning |\n|---|---|---|\n| English, French, Spanish | Kokoro 82M, Qwen3 CustomVoice 1.7B, Voxtral 4B, Silero, Magpie 357M | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| German | Qwen3 CustomVoice 1.7B, Voxtral 4B, Silero, Magpie 357M | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Italian | Kokoro 82M, Qwen3 CustomVoice 1.7B, Voxtral 4B, Magpie 357M | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Portuguese | Kokoro 82M, Qwen3 CustomVoice 1.7B, Voxtral 4B | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Russian | Qwen3 CustomVoice 1.7B, Silero | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Chinese, Japanese | Kokoro 82M, Qwen3 CustomVoice 1.7B, Magpie 357M | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Korean | Qwen3 CustomVoice 1.7B | Qwen3 Base 0.6B/1.7B, XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Hindi | Kokoro 82M, Voxtral 4B, Silero, Magpie 357M | VoxCPM2, Fish S2 Pro, Chatterbox |\n| Arabic, Dutch | Voxtral 4B | XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Polish, Turkish | — | XTTS v2, VoxCPM2, Fish S2 Pro, Chatterbox |\n| Czech, Hungarian | — | XTTS v2, Fish S2 Pro |\n| Vietnamese | Magpie 357M | VoxCPM2, Fish S2 Pro |\n| Danish, Finnish, Greek, Hebrew, Malay, Norwegian, Swahili, Swedish | — | VoxCPM2, Fish S2 Pro, Chatterbox |\n| Burmese, Indonesian, Khmer, Tagalog, Thai | — | VoxCPM2, Fish S2 Pro |\n| Lao | — | VoxCPM2 |\n| Armenian, Azerbaijani, Belarusian, Bengali, Georgian, Gujarati, Kannada, Kazakh, Malayalam, Tamil, Telugu, Ukrainian | Silero | Fish S2 Pro |\n| Bashkir, Chuvash, Erzya, Kabardian-Cherkess, Kalmyk, Khakas, Kyrgyz, Manipuri, Moksha, Rajasthani, Tajik, Tatar, Udmurt, Uzbek, Yakut | Silero | — |\n| Afrikaans, Albanian, Amharic, Assamese, Basque, Bosnian, Breton, Bulgarian, Catalan, Croatian, Estonian, Faroese, Galician, Haitian Creole, Icelandic, Javanese, Latin, Latvian, Lithuanian, Maori, Marathi, Mongolian, Nepali, Norwegian Nynorsk, Pashto, Persian, Punjabi, Romanian, Sanskrit, Serbian, Shona, Sindhi, Sinhala, Slovak, South Slavey, Tibetan, Urdu, Welsh, Yiddish, Yoruba | — | Fish S2 Pro |\n\nAdditional notes:\n\n- Qwen3 CustomVoice provides its named pre-built voices. Qwen3 Base performs voice cloning.\n- VoxCPM2 also supports several Chinese dialects.\n- Silero’s legacy Indic model supports Hindi, Malayalam, Manipuri, Bengali, Rajasthani, Tamil, Telugu, Gujarati, and Kannada. It expects [ISO-romanized input](https://github.com/snakers4/silero-models#indic-languages-v4).\n- A declared language indicates backend support, not equal quality across every model or voice.\n- Model licences differ. The installer displays the applicable licence and usage conditions before installation.\n- Custom and commercial endpoints may provide languages not listed here.\n\n## Transcription language support\n\nBoth transcription engines run through CrispASR and produce word-level timestamps. Model choice, quantization, compute backend, language, and VAD settings are configurable.\n\n| Model | Available variants | Coverage |\n|---|---|---|\n| Whisper large-v3 | FP16 or Q5_0 | 100 languages; the broadest option |\n| Parakeet TDT 0.6B v3 | FP16, Q8_0, Q5_0, or Q4_K | 25 primarily European languages |\n\n<details>\n<summary>Whisper large-v3 language list</summary>\n\nEnglish, Chinese, German, Spanish, Russian, Korean, French, Japanese, Portuguese, Turkish, Polish, Catalan, Dutch, Arabic, Swedish, Italian, Indonesian, Hindi, Finnish, Vietnamese, Hebrew, Ukrainian, Greek, Malay, Czech, Romanian, Danish, Hungarian, Tamil, Norwegian, Thai, Urdu, Croatian, Bulgarian, Lithuanian, Latin, Maori, Malayalam, Welsh, Slovak, Telugu, Persian, Latvian, Bengali, Serbian, Azerbaijani, Slovenian, Kannada, Estonian, Macedonian, Breton, Basque, Icelandic, Armenian, Nepali, Mongolian, Bosnian, Kazakh, Albanian, Swahili, Galician, Marathi, Punjabi, Sinhala, Khmer, Shona, Yoruba, Somali, Afrikaans, Occitan, Georgian, Belarusian, Tajik, Sindhi, Gujarati, Amharic, Yiddish, Lao, Uzbek, Faroese, Haitian Creole, Pashto, Turkmen, Nynorsk, Maltese, Sanskrit, Luxembourgish, Myanmar, Tibetan, Tagalog, Malagasy, Assamese, Tatar, Hawaiian, Lingala, Hausa, Bashkir, Javanese, Sundanese, and Cantonese.\n\n</details>\n\nParakeet TDT 0.6B v3 supports Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, and Ukrainian.\n\n## Input and output formats\n\n| Category | Formats |\n|---|---|\n| Documents | TXT, PDF, EPUB, DOCX, MOBI, or pasted text |\n| Subtitles | SRT |\n| Audio sources | AAC, AIFF, FLAC, M4A/MKA, MP3,"
+    },
+    "brief": {
+      "summary": "本地处理文档转有声书，也能制作配音视频",
+      "problem": "手动完成文本清理、翻译、配音和字幕制作较繁琐",
+      "highlights": [
+        "可以把PDF、EPUB等文档导出为有声书",
+        "可以将音视频转录、翻译并制作配音视频",
+        "可以审阅字幕、语音片段并导出多种格式"
+      ],
+      "target_users": [
+        "有声书制作者",
+        "视频配音人员",
+        "本地模型用户"
+      ],
+      "why_trending": "本周首次收录，已有593个Star且近期保持更新",
+      "caveat": "模型和硬件需求因配置而异，云服务可能产生费用",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "lukaszliniewicz/Pandrator",
+      "score": 94,
+      "category": "语音 / 配音",
+      "reason": "支持本地配音克隆与视频翻译",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.0
+    }
+  }
+]
