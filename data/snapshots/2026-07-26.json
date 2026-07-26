@@ -1,0 +1,524 @@
+[
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "palmier-io/palmier-pro",
+      "url": "https://github.com/palmier-io/palmier-pro",
+      "description": "macOS video editor built for AI",
+      "language": "Swift",
+      "total_stars": 12263,
+      "forks": 895,
+      "stars_today": 412,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 412
+    },
+    "details": {
+      "topics": [
+        "ai-video",
+        "claude",
+        "macos",
+        "mcp",
+        "seedance2",
+        "swift",
+        "video-editor"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-04-07T04:15:51Z",
+      "updated_at": "2026-07-26T03:55:31Z",
+      "pushed_at": "2026-07-26T03:53:54Z",
+      "open_issues": 80,
+      "homepage": "https://palmier.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# Palmier Pro\n\n**The video editor built for AI.**\n\n<a href=\"https://github.com/palmier-io/palmier-pro/releases/latest/download/PalmierPro.dmg\">\n  <img src=\"./assets/macos-badge.png\" alt=\"Download Palmier Pro for macOS\" width=\"180\" />\n</a>\n\n<sub><i>Requires macOS 26 (Tahoe) on Apple Silicon</i></sub>\n\n<a href=\"https://x.com/Palmier_io\"><img src=\"https://img.shields.io/badge/Follow-%40Palmier__io-000000?style=flat&logo=x&logoColor=white\" alt=\"Follow on X\" /></a>\n<a href=\"https://discord.com/invite/SMVW6pKYmg\"><img src=\"https://img.shields.io/badge/Join-Discord-5865F2?style=flat&logo=discord&logoColor=white\" alt=\"Join Discord\" /></a>\n<a href=\"https://www.ycombinator.com/companies/palmier\"><img src=\"https://img.shields.io/badge/Y%20Combinator-S24-orange\" alt=\"Y Combinator S24\" /></a>\n<br />\n<a href=\"https://trendshift.io/repositories/41342?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-41342\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/41342\" alt=\"palmier-io%2Fpalmier-pro | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n<p>\n  <strong>English</strong> ·\n  <a href=\"docs/readme/README.es.md\">Español</a> ·\n  <a href=\"docs/readme/README.zh-CN.md\">简体中文</a> ·\n  <a href=\"docs/readme/README.zh-TW.md\">繁體中文</a> ·\n  <a href=\"docs/readme/README.ja.md\">日本語</a> ·\n  <a href=\"docs/readme/README.ko.md\">한국어</a> ·\n  <a href=\"docs/readme/README.vi.md\">Tiếng Việt</a> ·\n  <a href=\"docs/readme/README.hi.md\">हिन्दी</a> ·\n  <a href=\"docs/readme/README.bn.md\">বাংলা</a> ·\n  <a href=\"docs/readme/README.ar.md\">العربية</a> ·\n  <a href=\"docs/readme/README.it.md\">Italiano</a> ·\n  <a href=\"docs/readme/README.pt-BR.md\">Português (Brasil)</a> ·\n  <a href=\"docs/readme/README.fr.md\">Français</a> ·\n  <a href=\"docs/readme/README.ru.md\">Русский</a> ·\n  <a href=\"docs/readme/README.tr.md\">Türkçe</a>\n</p>\n\n</div>\n\n<img src=\"./assets/palmier-ui.png\" alt=\"Palmier Pro UI\" width=\"900\" />\n\n---\n\nPalmier Pro is an open source video editor for Mac. You and your agent can generate and edit videos together inside the timeline.\n\n### Swift-native video editor\n\nWe built Palmier Pro from scratch with Swift. The north star is Premiere Pro, with our take on integrating AI into the workflow.\n\n### Built-in Generative AI\n\nGenerate videos and images with SOTA models like Seedance, Kling, Nano Banana Pro inside the timeline editor.\n\n### Integrates with your agents\n\nConnects your Claude/Codex/Cursor via MCP, or use the in-app agent to work on the same project together.\n\n## MCP server\n\nWhen the app is open, it exposes an MCP server at `http://127.0.0.1:19789/mcp` via HTTP. To connect:\n\n**Claude Code**\n```bash\nclaude mcp add --transport http palmier-pro http://127.0.0.1:19789/mcp\n```\n\n**Codex**\n```bash\ncodex mcp add palmier-pro --url http://127.0.0.1:19789/mcp\n```\n\n**Cursor**\n\nThe easiest way is go inside the app `Help` -> `MCP Instructions` -> `Install in Cursor`, or install manually by adding this to `~/.cursor/mcp.json`:\n\n```\n{\n  \"mcpServers\": {\n    \"palmier-pro\": {\n      \"type\": \"http\",\n      \"url\": \"http://127.0.0.1:19789/mcp\"\n    }\n  }\n}\n```\n\n**Claude Desktop**\n\nWe bundle a [mcpb](https://github.com/modelcontextprotocol/mcpb) with the app that allows a one click install Desktop Extension on Claude Desktop. Go to `Help` -> `MCP Instructions` -> `Install in Claude Desktop`\n\n## FAQ\n\n**Is Palmier Pro fully open source?**\n\nThe video editor (without the generative AI features) is fully open source. The MCP server and the agent chat are also open source. The only thing that is closed source is the generative AI processing.\n\n**Is it free?**\n\nThe editor is free. You can download it with no login required, and use it as a video editor like CapCut or Adobe Premiere. You can also use the MCP server for free, and start experimenting using Claude Code/Desktop or Cursor to interact with your timeline editor.\n\nGenerative AI features require login and subscription.\n\n**What platforms does it support?**\n\nmacOS 26 (Tahoe) on Apple Silicon only.\n\nSee [FAQ.md](FAQ.md) for more.\n\n## Development\n\nSee [CONTRIBUTING.md](CONTRIBUTING.md)\n\n## Community &amp; Support\n\n- **Discord:** Join the community on **[Discord](https://discord.com/invite/SMVW6pKYmg)**.\n- **Twitter / X:** Follow **[@Palmier_io](https://x.com/Palmier_io)** for updates and announcements.\n- **Instagram:** Follow [@palmier.io](https://www.instagram.com/palmier.io) \n- **Feedback &amp; Support:** Create a [Github Issue](https://github.com/palmier-io/palmier-pro/issues) or email us at founders@palmier.io\n\n## Star History\n\n<a href=\"https://www.star-history.com/?repos=palmier-io%2Fpalmier-pro&type=date&legend=top-left\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&theme=dark&legend=top-left&sealed_token=noeYrwWrpHCjd3KdAoj1jK1SLWKED61qQxKmx0oIh1oFzShl6A_eSw-ABZEgU2tm7WymnOSjnRltpeY01CPYhh6TN2aBTS9gH9Op0wMbGe1YW2J10xzGfjOtSir7GL-Nm80Wt1TCZ3bqjICSdSPQCQosZOTax4zLC_wNXYWunWmKvtcclfTbvWTd08AF\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left&sealed_token=noeYrwWrpHCjd3KdAoj1jK1SLWKED61qQxKmx0oIh1oFzShl6A_eSw-ABZEgU2tm7WymnOSjnRltpeY01CPYhh6TN2aBTS9gH9Op0wMbGe1YW2J10xzGfjOtSir7GL-Nm80Wt1TCZ3bqjICSdSPQCQosZOTax4zLC_wNXYWunWmKvtcclfTbvWTd08AF\" />\n   <img alt=\"Star History Chart\" src=\"https://api.star-history.com/chart?repos=palmier-io/palmier-pro&type=date&legend=top-left&sealed_token=noeYrwWrpHCjd3KdAoj1jK1SLWKED61qQxKmx0oIh1oFzShl6A_eSw-ABZEgU2tm7WymnOSjnRltpeY01CPYhh6TN2aBTS9gH9Op0wMbGe1YW2J10xzGfjOtSir7GL-Nm80Wt1TCZ3bqjICSdSPQCQosZOTax4zLC_wNXYWunWmKvtcclfTbvWTd08AF\" />\n </picture>\n</a>\n\n## License\n\nCopyright (C) 2026 Palmier, Inc.\n\nPalmier Pro is open source under [GPLv3](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "面向 AI 协作的 macOS 开源视频编辑器",
+      "problem": "让视频剪辑与 AI 代理在同一时间线协作",
+      "highlights": [
+        "可以在时间线中生成和编辑视频",
+        "可以用 Claude、Codex 或 Cursor 操作项目",
+        "可以生成视频和图片素材"
+      ],
+      "target_users": [
+        "视频创作者",
+        "AI 工具开发者",
+        "Mac 用户"
+      ],
+      "why_trending": "今日新增 412 个 Star，本周首次收录",
+      "caveat": "仅支持 Apple Silicon 的 macOS 26；生成式 AI 需订阅",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "palmier-io/palmier-pro",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "面向AI的视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 70.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "block/buzz",
+      "url": "https://github.com/block/buzz",
+      "description": "A hive mind communication platform",
+      "language": "Rust",
+      "total_stars": 12110,
+      "forks": 974,
+      "stars_today": 2491,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2491
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-06T21:00:56Z",
+      "updated_at": "2026-07-26T04:02:46Z",
+      "pushed_at": "2026-07-26T04:01:23Z",
+      "open_issues": 619,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Buzz 🐝</h1>\n\n<p align=\"center\">\n  <strong>A workspace where humans and agents build together, on a relay you own.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"VISION.md\">Vision</a> ·\n  <a href=\"VISION_SOVEREIGN.md\">Sovereign</a> ·\n  <a href=\"VISION_PROJECTS.md\">Forge</a> ·\n  <a href=\"VISION_AGENT.md\">Agents</a> ·\n  <a href=\"ARCHITECTURE.md\">Architecture</a> ·\n  <a href=\"LICENSE\">Apache 2.0</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshots/channel-thread.png\" alt=\"A Buzz project channel where people and an agent coordinate on a release plan\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub><em>People and agents building together in the same room.</em></sub>\n</p>\n\n---\n\n## What is this, really?\n\nBuzz is a self-hostable workspace where humans and AI agents share the same rooms.\n\nA Buzz **community** is the workspace a user reaches by URL. In the single-relay\nsetup that ships today, the relay URL selects exactly one community. A hosted\noperator can serve many communities behind many domains or subdomains, but the\nclient-facing rule stays the same: the URL is authoritative for the workspace,\nand all tenant-observable state under that URL is community-local.\n\nIt's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process.\n\nIn practice it feels like a team workspace. Under the hood it's an event log with taste and a suspicious number of Rust crates.\n\nYes, it's another AI-adjacent developer tool. We're sorry. The difference is what agents can actually *do* once they're inside: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, drop into voice huddles, create channels, and pull in whoever needs to see it. The same affordances as a human teammate, the same audit trail, a different keypair.\n\n---\n\n## Stuff you do in Buzz\n\n- **Ask the project a question and get an answer with receipts.** Agents search six months of history and post the threads, not vibes.\n- **Let an agent triage a bug without giving it the keys to the kingdom.** Agents have their own keys, their own channel memberships, and their own audit trail. Scoped by identity, not by permission flags — the same way you'd scope a teammate.\n- **Turn a feature branch into a room** where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists.\n- **Search the conversation, the patch, the workflow run, and the approval in one place** — because they're all the same kind of event.\n- **Let an agent run the workspace, not just talk in it.** Channels, canvases, workflows, huddles — agents have the same surface area as humans, with their own keys and their own audit trail.\n\n---\n\n## A look inside\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/channel-agents.png\" alt=\"People and agents collaborating in a Buzz engineering channel and reacting with emoji\" width=\"100%\"><br>\n      <sub><strong>Agents are members, not bots.</strong> Add an agent to a channel the same way you add a person.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/create-channel.png\" alt=\"The Add a channel dialog with search, filters, and channels to join or create\" width=\"100%\"><br>\n      <sub><strong>Spin up a room in seconds.</strong> Name it, describe it, make it private.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/media-comments.png\" alt=\"A video playing in Buzz with frame-anchored comments in a side panel\" width=\"100%\"><br>\n      <sub><strong>Media you can talk about.</strong> Leave comments pinned to specific frames.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why Buzz is better\n\nOne community. One identity model. One event log. Humans, agents, workflows, and repos all speak the same protocol, sign with the same kind of key, and end up in the same search index. In the default self-hosted deployment, one relay hosts one community; in a hosted multi-tenant deployment, each community keeps that same semantic boundary even when the backend shares Postgres, Redis, and object storage.\n\nThe bet is that one community can do what teams currently fake with chat, forges, bots, CI dashboards, release tools, search indexes, and a pile of glue code. Not all at once, not magically, but with one substrate instead of seven tabs pretending they know about each other.\n\nAgents are part of the room, not haunted cron jobs.\n\n---\n\n## Three little stories\n\n**Incident memory.** It's 2am. You type *\"have we seen this error before?\"* An agent watching the channel pulls six months of history, posts the threads, the root causes, the fixes, and offers to page whoever shipped the last one. The whole exchange — question, answer, evidence — stays in the channel.\n\n**Branch as room.** You open a feature branch. A channel appears. Patches land as NIP-34 events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence.\n\n**A release that writes itself.** A workflow fires on a tag. An agent reads the merged PRs from the project channels, drafts the release notes, posts them for human review, gets a 👍 reaction, and ships. Every step signed. Every step searchable.\n\n---\n\n## Works today · Being wired up · Strong opinions, pending code\n\n| ✅ Works today | 🚧 Being wired up | 💭 Strong opinions, pending code |\n|---|---|---|\n| Relay, channels, threads, DMs, canvases, media, search, audit log | Mobile clients (iOS + Android, Flutter) | Web-of-trust reputation across relays |\n| Desktop app (Tauri + React) | Workflow approval gates (infra exists, glue still drying) | Push notifications |\n| `buzz-cli` (agent-first, JSON in / JSON out) + ACP harness (Goose, Codex, Claude Code) | Huddle lifecycle events | Culture features |\n| YAML workflows: message / reaction / schedule / webhook triggers | | |\n| Git events (NIP-34: patches, repo announcements, status) | | |\n| Git hosting backend | | |\n\n<sub>Please do not plan your compliance program around the 💭 column yet. The <a href=\"VISION.md\">VISION docs</a> are the long version of what we think this becomes.</sub>\n\n---\n\n## Getting started\n\nNew to Buzz? Pick the path that matches you.\n\n### I just want to try the app\n\nGrab a packaged build from the [latest release](https://github.com/block/buzz/releases/latest) — macOS (`.dmg`), Linux (`.AppImage` / `.deb`), or Windows (`.exe`). Install it like any other app.\n\nBy default the app connects to `ws://localhost:3000`. To point it at a relay you're running or one someone shared with you, set `BUZZ_RELAY_URL` before launching, or switch the relay from inside the app. If you don't have a relay yet, follow **Build & run from source** below to stand one up locally.\n\n### I work at Block\n\nDon't build from source, and don't use the OSS release — use the internal build. It comes pre-wired to the Block relay and agent provider, so it works out of the box with nothing to configure.\n\nDownload the latest build from [`squareup/buzz-releases` releases](https://github.com/squareup/buzz-releases/releases/latest) and install it.\n\n### I want to build & run from source\n\nSee **Quick start** below — this is the developer / self-host path.\n\n---\n\n## Quick start\n\nYou'll need [Docker](https://docs.docker.com/get-docker/) and [Hermit](https://cashapp.github.io/hermit/) (or Rust 1.88+, Node 24+, pnpm 10+, `just`).\n\n**Once:**\n```bash\ngit clone https://github.com/block/buzz.git && cd buzz\n. ./bin/activate-hermit   # pinned toolchain (tools auto-download on first use)\njust setup && just build\n```\n\n`just setup` runs `just bootstrap` automatically — it copies `.env.example` to `.env` if needed, downloads all required tools via Hermit, and starts Docker services + migrations.\n\n**Every day:**\n```bash\n. ./bin/activate-hermit\njust dev   # starts the relay + desktop app together\n```\n\nRelay on `ws://localhost:3000`. Desktop app pops up. You're in.\n\nFor a split-terminal workflow (relay logs separate from Vite output), use `just relay` in one terminal and `just desktop-dev` in another.\n\nWant a single-node / VPS relay instead of the local-dev stack? Use the production Compose bundle in [`deploy/compose/`](deploy/compose/README.md) (`docker compose` + Postgres, Redis, MinIO, optional Caddy/TLS). The root [`docker-compose.yml`](docker-compose.yml) is for day-to-day development only.\n\nFor agents, set `BUZZ_PRIVATE_KEY` and use [`buzz-cli`](crates/buzz-cli) — JSON in, JSON out, designed for LLM tool calls.\n\n---\n\n## Windows prerequisites\n\nThe agent shell tool runs commands under bash. On macOS and Linux that's already there; on Windows you need to bring it.\n\nInstall [Git for Windows](https://git-scm.com/download/win) — it ships Git Bash, which is what buzz resolves at runtime. Once it's installed, everything works the same as on other platforms.\n\nIf you'd rather point buzz at a different bash-compatible shell, set `BUZZ_SHELL` to its path (e.g. `BUZZ_SHELL=C:\\path\\to\\bash.exe`). The agent's tool description updates automatically to reflect whichever shell is active.\n\n---\n\n## Architecture\n\n```\n┌─────────────────────────────────────────────────────────────────────────┐\n│                             Clients                                     │\n│  Human client         AI agent              CLI / scripts               │\n│  (Buzz desktop)       (Goose, Codex, ...)   (buzz-cli, agents)          │\n│       │               ┌──────────────┐               │                  │\n│       │               │  buzz-acp  │                 │                  │\n│       │               │  (ACP ↔ MCP) │               │                  │\n│       │               └──────┬───────┘               │                  │\n│       │                      │                       │                  │\n└───────┼──────────────────────┼───────────────────────┼──────────────────┘\n        │ WebSocket            │ WS + REST             │ WS + REST\n        ▼                      ▼                       ▼\n┌─────────────────────────────────────────────────────────────────────────┐\n│                          buzz-relay                                     │\n│  NIP-01 · NIP-42 auth · channel/DM/media/workflow/git REST · audit log  │\n└───┬──────────────────────────┬──────────────────────────┬───────────────┘\n    │                          │                          │\n ┌──▼───────────┐       ┌──────▼──────┐           ┌───────▼─────┐\n │   Postgres   │       │    Redis    │           │   S3/MinIO  │\n │ (events +    │       │  (pub/sub)  │           │  (Blossom)  │\n │  FTS search) │       └─────────────┘           └─────────────┘\n └──────────────┘\n```\n\nA Rust workspace of focused crates. Single source of truth: the relay. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full breakdown.\n\n<details>\n<summary><strong>Crate map</strong></summary>\n\n**Core protocol** — `buzz-core` (zero-I/O types, NIP-01 filters, Schnorr verify) · `buzz-relay` (Axum WS + REST)\n\n**Services** — `buzz-db` (Postgres) · `buzz-auth` (NIP-42/98 Schnorr auth, rate limiting) · `buzz-pubsub` (Redis, presence, typing) · `buzz-search` (Postgres FTS) · `buzz-audit` (hash-chain log). Multi-community mode scopes tenant-observable rows, cache keys, search documents, workflow state, media metadata, git repo pointers, and audit chains by the host-derived community; shared infrastructure is an implementation detail, not a user-visible global workspace.\n\n**Agent surface** — `buzz-cli` (agent-first CLI, JSON in / JSON out) · `buzz-acp` (ACP harness for Goose/Codex/Claude Code) · `buzz-agent` (ACP agent — see [VISION_AGENT.md](VISION_AGENT.md)) · `buzz-dev-mcp` (shell + file-edit tools) · `buzz-workflow` (YAML automation) · `buzz-persona` (agent persona packs)\n\n**Git & pairing** — `git-sign-nostr` / `git-credential-nostr` (nostr-signed git) · `buzz-pair-relay`"
+    },
+    "brief": {
+      "summary": "Buzz 是人类与 AI Agent 共用的自托管协作空间",
+      "problem": "团队协作、代码流程与 Agent 操作分散在多个工具中",
+      "highlights": [
+        "可以让人和 Agent 在同一频道协作",
+        "可以把分支、补丁、CI 和评审放进一个房间",
+        "可以用事件日志搜索对话、工作流和代码记录"
+      ],
+      "target_users": [
+        "开发团队",
+        "AI Agent 开发者",
+        "需要自托管的组织"
+      ],
+      "why_trending": "今日新增 2491 个 Star，且连续上榜",
+      "caveat": "移动端和部分审批功能仍在接入中",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "block/buzz",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "支持人类与智能体协作工作流",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 61.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 188447,
+      "forks": 16191,
+      "stars_today": 1740,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1740
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-07-26T04:02:40Z",
+      "pushed_at": "2026-07-23T14:29:59Z",
+      "open_issues": 232,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Quickstart (30-second setup)\n\n1. Run the skills.sh installer:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\n2. Pick the skills you want, and which coding agents you want to install them on. **Make sure you select `/setup-matt-pocock-skills`**.\n\n3. Run `/setup-matt-pocock-skills` in your agent. It will:\n   - Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n   - Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n   - Ask you where you want to save any docs we create\n\n4. Bam - you're ready to go.\n\n## Install as a Claude Code plugin\n\nPrefer a plug-and-play install you don't maintain by hand? These skills also ship as a native [Claude Code plugin](https://code.claude.com/docs/en/plugins). Instead of copying editable files into your repo, the plugin installs the whole skill set as a managed bundle that updates when I ship a new version — you subscribe rather than fork.\n\nInside Claude Code:\n\n```\n/plugin marketplace add mattpocock/skills\n/plugin install mattpocock-skills@mattpocock\n```\n\nOr from your shell:\n\n```bash\nclaude plugin marketplace add mattpocock/skills\nclaude plugin install mattpocock-skills@mattpocock\n```\n\nThen run `/setup-matt-pocock-skills` once per repo, exactly as in the quickstart above.\n\nTwo ways to install, two philosophies:\n\n- **[skills.sh](https://skills.sh/mattpocock/skills)** copies the skills into your project so you can hack on them and make them your own.\n- **The plugin** keeps them as a read-only, always-current bundle you don't edit — best when you just want my set to work and follow along as it evolves.\n\n> Using Codex or another agent? The [skills.sh installer](https://skills.sh/mattpocock/skills) already installs these skills into Codex and other Agent-Skills-standard harnesses today. A native Codex plugin is on the roadmap — see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a simple loop.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis — who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)** — Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)** — Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)** — Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)** — Turn the current conversation into a spec and publish it to the issue tracker. No interview — just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)** — Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** — Plan a huge chunk of work, more than one agent session can hold, as a shared map of investigation tickets on the issue tracker — resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — a runnable terminal app for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs](./skills/engineering/diagnosing-bugs/SKILL.md)** — Disciplined diagnosis loop for hard bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → "
+    },
+    "brief": {
+      "summary": "面向真实软件开发的可组合 AI 编程代理技能集",
+      "problem": "帮助编程代理减少需求误解、冗长输出和代码缺陷",
+      "highlights": [
+        "可以用提问流程澄清需求并形成文档",
+        "可以用 TDD 技能推动测试驱动开发",
+        "可以用调试技能辅助定位代码问题"
+      ],
+      "target_users": [
+        "使用 AI 编程代理的开发者",
+        "需要规范开发流程的团队"
+      ],
+      "why_trending": "今日新增 1740 个 Star，且项目连续上榜",
+      "caveat": "需要按项目运行初始化流程，资料未说明实际效果",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "提供可安装的智能体技能集合",
+      "generated_by_ai": true,
+      "velocity_score": 98,
+      "freshness_score": 40,
+      "ranking_score": 60.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "language": "JavaScript",
+      "total_stars": 233370,
+      "forks": 35580,
+      "stars_today": 377,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 377
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "developer-tools",
+        "llm",
+        "mcp",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-18T00:51:51Z",
+      "updated_at": "2026-07-26T04:02:55Z",
+      "pushed_at": "2026-07-25T00:58:36Z",
+      "open_issues": 104,
+      "homepage": "https://ecc.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "**Language:** English | [Português (Brasil)](docs/pt-BR/README.md) | [简体中文](README.zh-CN.md) | [繁體中文](docs/zh-TW/README.md) | [日本語](docs/ja-JP/README.md) | [한국어](docs/ko-KR/README.md) | [Türkçe](docs/tr/README.md) | [Русский](docs/ru/README.md) | [Tiếng Việt](docs/vi-VN/README.md) | [ไทย](docs/th/README.md) | [Deutsch](docs/de-DE/README.md) | [Español](docs/es/README.md)\n\n![ECC — the agent harness operating system](assets/hero.png)\n\n[![Discord](https://img.shields.io/discord/1496644400590094540?logo=discord&logoColor=white&label=Join%20the%20Discord&color=5865F2)](https://discord.gg/36yGMHGFbR)\n[![Website](https://img.shields.io/badge/Website-ecc.tools-E07856?logo=googlechrome&logoColor=white)](https://ecc.tools)\n[![GitHub App](https://img.shields.io/badge/GitHub%20App-ECC%20Tools-181717?logo=github&logoColor=white)](https://github.com/apps/ecc-tools)\n[![Guides](https://img.shields.io/badge/Guides-Start%20here-1f6feb?logo=readme&logoColor=white)](#the-guides)\n\n[![Stars](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fstars&style=flat)](https://github.com/affaan-m/ECC/stargazers)\n[![Forks](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fforks&style=flat)](https://github.com/affaan-m/ECC/network/members)\n[![Contributors](https://img.shields.io/github/contributors/affaan-m/ECC?style=flat)](https://github.com/affaan-m/ECC/graphs/contributors)\n[![npm ecc-universal](https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal%20weekly%20downloads&logo=npm)](https://www.npmjs.com/package/ecc-universal)\n[![npm ecc-agentshield](https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield%20weekly%20downloads&logo=npm)](https://www.npmjs.com/package/ecc-agentshield)\n[![GitHub App Install](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github)](https://github.com/marketplace/ecc-tools)\n[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)\n![Shell](https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white)\n![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white)\n![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)\n![Go](https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white)\n![Java](https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white)\n![Perl](https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white)\n![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)\n\n> [!WARNING]\n> **Official sources only.** Install ECC only from verified channels: the GitHub repository [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC), the npm packages [`ecc-universal`](https://www.npmjs.com/package/ecc-universal) and [`ecc-agentshield`](https://www.npmjs.com/package/ecc-agentshield), the [GitHub App](https://github.com/apps/ecc-tools), the plugin slug `ecc@ecc`, and the project website [ecc.tools](https://ecc.tools). Third-party re-uploads and unofficial mirrors are not maintained or reviewed by the project and may contain malware.\n\n**211.9K+ stars** | **32.5K+ forks** | **230+ contributors** | **12+ language ecosystems** | **Cross-harness agent workflows**\n\n---\n\n<div align=\"center\">\n\n**Language / 语言 / 語言 / Dil / Язык / Ngôn ngữ / Idioma**\n\n[**English**](README.md) | [Português (Brasil)](docs/pt-BR/README.md) | [简体中文](README.zh-CN.md) | [繁體中文](docs/zh-TW/README.md) | [日本語](docs/ja-JP/README.md) | [한국어](docs/ko-KR/README.md)\n | [Türkçe](docs/tr/README.md) | [Русский](docs/ru/README.md) | [Tiếng Việt](docs/vi-VN/README.md) | [ไทย](docs/th/README.md) | [Deutsch](docs/de-DE/README.md) | [Español](docs/es/README.md)\n\n</div>\n\n---\n\n**The harness-native operator system for agentic work. Built from real-world multi-harness engineering workflows.**\n\nNot just configs. A complete system: skills, instincts, memory optimization, continuous learning, security scanning, and research-first development. Production-ready agents, skills, hooks, rules, MCP configurations, and legacy command shims evolved over 10+ months of intensive daily use building real products.\n\nWorks across **Codex**, **Claude Code**, **Cursor**, **OpenCode**, **Gemini**, **Zed**, **GitHub Copilot**, and other AI agent harnesses.\n\nECC v2.0.0 adds the public Hermes operator story on top of that reusable layer: start with the [Hermes setup guide](docs/HERMES-SETUP.md), then review the [2.0.0 release notes](docs/releases/2.0.0/release-notes.md) and [cross-harness architecture](docs/architecture/cross-harness.md).\n\n---\n\n<div align=\"center\">\n\n<table aria-label=\"ECC primary links\">\n<tr>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://ecc.tools/pricing\">\n    <img src=\"assets/images/community/ecc-tools-mark.svg\" height=\"42\" alt=\"ECC Tools\" /><br />\n    <strong>ECC Pro + GitHub App</strong>\n  </a><br />\n  <sub><a href=\"https://github.com/apps/ecc-tools\">Install free</a> · <a href=\"https://ecc.tools/pricing\">Private repos from $19/seat/mo</a></sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://github.com/sponsors/affaan-m\">\n    <img src=\"assets/images/community/heart.svg\" height=\"42\" alt=\"\" /><br />\n    <strong>Sponsor ECC</strong>\n  </a><br />\n  <sub>Fund the open-source project</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\">\n    <img src=\"assets/images/community/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show &amp; Tell</sub>\n</td>\n</tr>\n</table>\n\n</div>\n\n<sub>**OSS stays free.** This repo is MIT-licensed forever. ECC Pro is the hosted GitHub App for private repos. <a href=\"https://github.com/sponsors/affaan-m\">Sponsors</a> and <a href=\"https://ecc.tools/pricing\">Pro subscribers</a> fund the work. That's why a single maintainer ships weekly across 7 harnesses.</sub>\n\n<div align=\"center\">\n\n<sub><strong>Partners &amp; sponsors</strong></sub>\n\n<p align=\"center\" aria-label=\"Partners and sponsors\">\n  <a href=\"https://www.coderabbit.ai\" title=\"CodeRabbit\"><img src=\"assets/images/sponsors/coderabbit.png\" height=\"54\" alt=\"CodeRabbit\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.greptile.com/go/ecc\" title=\"Greptile\"><img src=\"assets/images/sponsors/greptile.png\" height=\"54\" alt=\"Greptile\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=ECC\" title=\"Atlas Cloud\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/atlascloud-dark.svg\" /><img src=\"assets/images/sponsors/atlascloud.svg\" width=\"154\" alt=\"Atlas Cloud\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.moonshot.ai\" title=\"Moonshot AI — Kimi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/moonshot-dark.png\" /><img src=\"assets/images/sponsors/moonshot.png\" width=\"132\" alt=\"Moonshot AI — Kimi\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://compute.itomarkets.com\" title=\"Itô Markets\"><picture><source media=\"(prefers-color-scheme: light)\" srcset=\"assets/images/sponsors/ito-transparent-light.png\" /><img src=\"assets/images/sponsors/ito-transparent.png\" width=\"96\" alt=\"Itô Markets\" /></picture></a>\n</p>\n\n<sub><strong>Community sponsors:</strong> <a href=\"https://github.com/mikejmorgan-ai\">Mike Morgan</a> · <a href=\"https://github.com/jasonwu513\">@jasonwu513</a> · <a href=\"https://github.com/1anter\">@1anter</a> · <a href=\"https://github.com/massimotodaro\">@massimotodaro</a> · <a href=\"https://github.com/meadmccabe\">@meadmccabe</a></sub>\n\n<sub><a href=\"https://github.com/sponsors/affaan-m\"><strong>Become a Sponsor</strong></a> · <a href=\"SPONSORS.md\">Sponsor Tiers</a> · <a href=\"SPONSORING.md\">Sponsorship Program</a></sub>\n\n</div>\n\n---\n\n## The Guides\n\nThis repo is the raw code only. The guides explain everything.\n\n<table aria-label=\"ECC guides\" width=\"100%\">\n<tr>\n<td width=\"33%\" align=\"center\">\n<a href=\"./the-shortform-guide.md\">\n<img src=\"./assets/images/guides/shorthand-guide.png\" width=\"213\" height=\"120\" alt=\"The Shorthand Guide to ECC\" /><br />\n<b>The Shorthand Guide</b>\n</a>\n<br /><sub>Setup, foundations, philosophy. <b>Read this first.</b> (<a href=\"https://x.com/affaan/status/2012378465664745795\">thread</a>)</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n<a href=\"./the-longform-guide.md\">\n<img src=\"./assets/images/guides/longform-guide.png\" width=\"213\" height=\"120\" alt=\"The Longform Guide to ECC\" /><br />\n<b>The Longform Guide</b>\n</a>\n<br /><sub>Token optimization, memory persistence, evals, parallelization. (<a href=\"https://x.com/affaan/status/2014040193557471352\">thread</a>)</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n<a href=\"./the-security-guide.md\">\n<img src=\"./assets/images/guides/security-guide.png\" width=\"213\" height=\"120\" alt=\"The Shorthand Guide to Everything Agentic Security\" /><br />\n<b>The Security Guide</b>\n</a>\n<br /><sub>Attack vectors, sandboxing, sanitization, CVEs, AgentShield. (<a href=\"https://x.com/affaan/status/2033263813387223421\">thread</a>)</sub>\n</td>\n</tr>\n</table>\n\n| Topic | What You'll Learn |\n|-------|-------------------|\n| Token Optimization | Model selection, system prompt slimming, background processes |\n| Memory Persistence | Hooks that save/load context across sessions automatically |\n| Continuous Learning | Auto-extract patterns from sessions into reusable skills |\n| Verification Loops | Checkpoint vs continuous evals, grader types, pass@k metrics |\n| Parallelization | Git worktrees, cascade method, when to scale instances |\n| Subagent Orchestration | The context problem, iterative retrieval pattern |\n\n---\n\n## Self-host Kimi with ECC + Itô compute\n\nThe Kimi Code harness and the model-serving layer are separate. ECC configures the agent harness; you bring an API endpoint or self-host an open-weight Kimi model on your own GPU capacity.\n\n<table aria-label=\"Local Kimi model path\" width=\"100%\">\n<tr>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://compute.itomarkets.com\">\n    <picture><source media=\"(prefers-color-scheme: light)\" srcset=\"assets/images/sponsors/ito-transparent-light.png\" /><img src=\"assets/images/sponsors/ito-transparent.png\" width=\"92\" alt=\"Itô Markets\" /></picture><br />\n    <strong>1. Get GPU capacity</strong>\n  </a><br />\n  <sub>Use Itô or any GPU provider.</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://www.moonshot.ai\">\n    <picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/moonshot-dark.png\" /><img src=\"assets/images/sponsors/moonshot.png\" width=\"126\" alt=\"Moonshot AI — Kimi\" /></picture><br />\n    <strong>2. Serve Kimi</strong>\n  </a><br />\n  <sub>Expose the chosen checkpoint through a Kimi- or OpenAI-compatible endpoint.</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\".kimi/README.md\">\n    <img src=\"assets/images/community/ecc-tools-mark.svg\" height=\"52\" alt=\"ECC Tools\" /><br />\n    <strong>3. Run Kimi Code with ECC</strong>\n  </a><br />\n  <sub>Install project instructions and skills, then start <code>kimi</code>.</sub>\n</td>\n</tr>\n</table>\n\nConfigure the endpoint using Kimi Code's <a href=\"https://moonshotai.github.io/kimi-cli/en/configuration/providers.html\">official provider guide</a>, then install the ECC project surface:\n\n```bash\nbash ./install.sh --target kimi --profile minimal\nnpx ecc doctor --target kimi\nkimi\n```\n\nKimi Code discovers the installed `.kimi/AGENTS.md` instructions and `.kimi/skills/` workflows natively. The installer dry-run and regression suite verify that the Kimi target stays inside the project-local `.kimi/` root.\n\nRun or self-host any open-source model on owned or rented GPUs. Itô is ECC's preferred compute sponsor; any GPU provider works. The sponsorship link is passive: it does not invoke an RFQ, reserve capacity, provision compute, or configure serving. Separately, `ecc ito find` invokes the explicitly configured canonical Itô CLI and submits a live authenticated RFQ; it does not reserve capacity. Managed inference throug"
+    },
+    "brief": {
+      "summary": "跨多种编程代理的工作流优化系统",
+      "problem": "帮助代理统一管理技能、记忆、安全与研究流程",
+      "highlights": [
+        "可以为 Claude Code 等代理配置技能和规则",
+        "可以跨代理复用工作流、钩子与 MCP 配置",
+        "可以进行安全扫描和研究优先的开发流程"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "开发团队",
+        "代理工作流维护者"
+      ],
+      "why_trending": "总 Star 超23万，今日新增377，且本周首次收录",
+      "caveat": "仅建议从项目列出的官方渠道安装",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "affaan-m/ECC",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "提供智能体技能与记忆机制",
+      "generated_by_ai": true,
+      "velocity_score": 78,
+      "freshness_score": 40,
+      "ranking_score": 60.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "aigengame/godot-agent",
+      "url": "https://github.com/aigengame/godot-agent",
+      "description": "Godot AI agent CLI, Skill, and MCP server with structured JSON/schema output — headless scene/script/export automation plus live runtime control.",
+      "language": "Python",
+      "total_stars": 26,
+      "forks": 6,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skill",
+        "agent-tools",
+        "ai-agent",
+        "automation",
+        "cli",
+        "coding-agent",
+        "game-development",
+        "gamedev",
+        "godot",
+        "godot-ai",
+        "godot-engine",
+        "godot-mcp",
+        "headless",
+        "llm",
+        "mcp",
+        "model-context-protocol",
+        "skill",
+        "structured-output"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-08T10:43:05Z",
+      "updated_at": "2026-07-26T03:29:03Z",
+      "pushed_at": "2026-07-26T03:29:36Z",
+      "open_issues": 71,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# godot-agent (`gda`): Godot AI Agent CLI, Skill, and MCP Server\n\n![godot-agent title image](https://raw.githubusercontent.com/aigengame/godot-agent/main/assets/godot-agent-title.png)\n\n**Read this in:** [简体中文](docs/README.zh-CN.md) · [Español](docs/README.es.md) · [日本語](docs/README.ja.md)\n\n> **`gda` gives your AI coding agent — or your shell scripts and CI — structured, machine-readable\n> control of the [Godot Engine](https://godotengine.org).** Create scenes, edit nodes & scripts,\n> and export builds headlessly, then drive a *running* game live: runtime tree, input,\n> screenshots, performance — one command surface, three ways in.\n\n[![pre-1.0](https://img.shields.io/badge/status-pre--1.0-orange)](https://pypi.org/project/gda/)\n[![CI](https://github.com/aigengame/godot-agent/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/aigengame/godot-agent/actions/workflows/ci.yml?query=branch%3Amain+event%3Apush)\n[![Python](https://img.shields.io/badge/python-3.13%2B-blue)](https://www.python.org/)\n[![Godot](https://img.shields.io/badge/godot-4.4%2B%20(live%204.6%2B)-478CBF)](https://godotengine.org)\n[![Platform](https://img.shields.io/badge/platform-macOS%20%C2%B7%20Linux%20%C2%B7%20Windows-lightgrey)](#how-it-works)\n[![MCP](https://img.shields.io/badge/MCP-server-000)](https://modelcontextprotocol.io)\n[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)\n\nAI agents are great at writing GDScript and terrible at *seeing what happened*. `gda`\ncloses that loop: your agent issues one operation and gets back a single clean JSON\nresult it can act on — never engine logs it has to scrape. It runs in **two modes**:\n\n- **Headless** — one-shot and stateless, zero setup. No editor plugin, no daemon,\n  nothing to install in your project. Create and edit scenes, nodes, scripts, resources,\n  shaders and themes; analyze the project; export builds.\n- **Live** — drive a *running* game through a background daemon for everything only a\n  live engine can do: read the runtime scene tree, get/set runtime properties, simulate\n  input, capture screenshots, and sample performance.\n\n> `gda` is **pre-1.0**: every command works end-to-end today, but the CLI surface may\n> still change before 1.0.\n\n---\n\n## Contents\n\n- [Why `gda`?](#why-gda)\n- [Capabilities at a glance](#capabilities-at-a-glance)\n- [Installation](#installation)\n- [Quick start](#quick-start)\n- [Choose your integration](#choose-your-integration)\n- [How it works](#how-it-works)\n- [Command reference](#command-reference)\n- [Configuration](#configuration)\n- [Contributing](#contributing)\n- [License](#license)\n\n---\n\n## Why `gda`?\n\n- **🤖 Structured output, built for agents.** Every command emits **exactly one** JSON\n  object on stdout (`--json`); engine banners, warnings and `print()` go to stderr. Your\n  agent parses one result, not a wall of logs.\n- **📐 Typed & self-describing.** Every command's input and output are typed models that\n  also back a machine-readable `--schema` (a JSON-Schema contract), so an agent can\n  discover and validate the whole surface programmatically instead of guessing.\n- **🔀 CLI, Skill, and MCP — your agent's choice.** Drive Godot from a terminal or CI with the\n  raw `gda` CLI, hand your agent a bundled **Skill** (`gda skill`) that teaches it how and when\n  to use the CLI, or expose the same operations as **MCP** tools (`gda-mcp`, generated from the\n  CLI's own schemas). One command surface, three ways in — pick whatever your agent supports.\n- **🧩 Godot-native commands.** Grouped by Godot object (`gda scene create`,\n  `gda node add`, `gda game set`) with a tiny, consistent verb vocabulary — zero learning\n  curve if you already know Godot.\n- **⚡ Headless by default, live when you need it.** Headless operations need no daemon\n  and no editor — just a Godot binary. Live operations add real-time control of a running\n  game over a Unix-domain-socket daemon, addressed by the same CLI grammar.\n- **🛡️ Fails loudly, never silently.** A missing or hung engine is bounded by a timeout\n  and mapped to a **stable non-zero exit code** plus a structured `{\"error\": {…}}`\n  envelope — so a shell or agent can branch on the failure category without parsing prose.\n\n---\n\n## Capabilities at a glance\n\n| What you need | Reach for |\n| --- | --- |\n| Build project files from an agent or script | `scene` / `node` / `script` / `resource` / `shader` / `theme` — create & edit headlessly |\n| Parse results instead of scraping engine logs | `--json` (one clean object) and `--schema` (a JSON-Schema contract) |\n| Hand an agent Godot tools | the bundled **Skill** (`gda skill`) or the **`gda-mcp`** server |\n| Automate CI, exports, and project analysis | headless commands — no editor, no plugin, just a Godot binary |\n| Debug a *running* game's runtime behavior | `gda daemon start`, then `game` / `diag` / `logger` / `perf` / `input` / `screen` |\n\n---\n\n## Installation\n\n**Requirements:** Python 3.13+, and a [Godot](https://godotengine.org) binary — 4.4+ for\nheadless commands, 4.6+ on macOS/Linux for live (daemon) commands.\n\nInstall the CLI from PyPI onto your `PATH`:\n\n```bash\nuv tool install gda      # or: pipx install gda\ngda --help\n```\n\n<details>\n<summary>Other ways to install (pip, from source)</summary>\n\nInto an existing environment:\n\n```bash\npip install gda\n```\n\nFrom source (for development or unreleased changes):\n\n```bash\ngit clone https://github.com/aigengame/godot-agent.git\ncd godot-agent\nuv sync                  # create the environment + install dependencies\nuv run gda --help\n```\n</details>\n\n---\n\n## Quick start\n\n**Point `gda` at your Godot binary**, then ask the engine its version — no project needed:\n\n```bash\nexport GDA_GODOT=\"/path/to/Godot\"   # or pass --godot to any command\ngda info --json\n# {\"major\":4,\"minor\":6,\"patch\":3,\"status\":\"stable\",\"string\":\"4.6.3-stable (official)\",…}\n```\n\nstdout is always clean JSON you can pipe; all engine and script diagnostics go to stderr:\n\n```bash\ngda info --json | jq .major   # → 4\n```\n\n**Build a scene headlessly.** Point `gda` at a Godot project (a directory with `project.godot`)\nonce; relative paths then resolve *inside* it, and nodes are addressed by their path relative to\nthe scene root:\n\n```bash\nexport GDA_PROJECT=\"/path/to/your/godot-project\"   # or pass --project to any command\ngda scene create scenes/main.tscn --root-type Node2D --json\ngda node add  scenes/main.tscn --type Sprite2D --name Hero --json\ngda node set  scenes/main.tscn --node Hero --property position --value 10,20 --json\ngda scene get scenes/main.tscn --json\n# {\"path\":\"scenes/main.tscn\",\"root\":{\"name\":\"main\",\"type\":\"Node2D\",\"children\":[{\"name\":\"Hero\",…}]}}\n```\n\n> No project? `gda` still runs **projectless** on plain filesystem paths (relative to your current\n> directory) — only `res://` resolution needs a project. See [Configuration](#configuration).\n\n**Drive a *running* game live.** Live ops run the project's **main scene**, so point it at the\none you just built via Godot's `application/run/main_scene` project setting (the editor's\n*Application → Run → Main Scene*), then start the daemon (macOS/Linux, Godot 4.6+):\n\n```bash\ngda project set application/run/main_scene --value res://scenes/main.tscn --json  # a Godot project setting key\ngda daemon start             # start the daemon for $GDA_PROJECT (installs the in-game harness)\ngda game tree --json         # the runtime scene tree, after _ready\ngda perf monitors --json     # live engine counters: fps, memory, node count\ngda daemon stop\n```\n\n(`gda screen capture` works live too, but needs a windowed session — start the daemon\nwith `gda daemon start --windowed`.)\n\n---\n\n## Choose your integration\n\n`gda` exposes the **same command surface** three ways — pick whichever your agent (or you) supports:\n\n| Entry point | Best for | How |\n| --- | --- | --- |\n| **CLI** (`gda`) | humans, shell scripts, CI, and agents that can run commands | `gda <group> <command> --json` |\n| **Skill** (`gda skill`) | coding agents that support Agent Skills and prefer a token-light CLI workflow | print/install `SKILL.md` (below) |\n| **MCP** (`gda-mcp`) | agents that call tools over the Model Context Protocol | run the stdio server (below) |\n\n### Use it as a Skill\n\n`gda` ships an agent **Skill** — a `SKILL.md` that teaches an AI agent *how and when* to drive\nGodot from the CLI. It's the lightest way in (no server to register), bundled in the package and\nversion-locked to your install. Print it, or install it into your agent's skills directory:\n\n```bash\ngda skill                                              # print SKILL.md (redirect it anywhere)\ngda skill --install --provider claude --scope user     # resolve a known agent's skills dir\ngda skill --install --dir ~/.claude/skills/gda         # …or give the directory yourself\n```\n\n`--install --provider <claude|codex> --scope <project|user>` resolves a known agent's skills\ndirectory (`--scope` defaults to `user`); `--dir` is the neutral fallback for any other agent —\nthere's no built-in default. The [skill recipes](docs/gda-skill.md) list each agent's directory\n(Claude Code's `~/.claude/skills/`, Codex's `~/.agents/skills/`, …). Or fetch the same file straight\nfrom the repo, if you'd rather not go through `gda skill` — you still install `gda`, since the Skill\ndrives it:\n\n```bash\ncurl --create-dirs -o ~/.claude/skills/gda/SKILL.md \\\n  https://raw.githubusercontent.com/aigengame/godot-agent/main/src/gda/skill/SKILL.md\n```\n\n### Use it as an MCP server\n\n`gda` ships a stdio [MCP](https://modelcontextprotocol.io) server behind a `[mcp]` extra,\nso any MCP agent (Claude Code, Codex, Cursor, …) can drive Godot. Try it with no install:\n\n```bash\nuvx --from \"gda[mcp]\" gda-mcp\n```\n\nThe server resolves two pieces of context — which Godot **project** to drive and which Godot\n**binary** to run (MCP can't pass per-call flags):\n\n- **Project** — set `GDA_PROJECT` when your client can't advertise workspace **roots**; otherwise\n  `gda-mcp` auto-detects the project from the roots the client sends (the folder you have open). A\n  *set-but-invalid* `GDA_PROJECT` is a reported error, not a silent fallback. See\n  [Configuration](#configuration) for the full CLI-vs-MCP resolution order.\n- **Engine** — set `GDA_GODOT` to your Godot binary, e.g. `\"GDA_GODOT\": \"/path/to/Godot\"`.\n\n\n#### Register with Coding Agents\n\n<details>\n<summary>Claude Code</summary>\n\nProject scope, `.mcp.json` at the repo root (auto-detects the project via `roots`):\n\n```json\n{\n  \"mcpServers\": {\n    \"gda-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"--from\", \"gda[mcp]\", \"gda-mcp\"]\n    }\n  }\n}\n```\n\nUser scope (every project) — the CLI, which writes `~/.claude.json`:\n\n```bash\nclaude mcp add --scope user gda-mcp -- uvx --from \"gda[mcp]\" gda-mcp\n```\n\n</details>\n\n<details>\n<summary>Codex</summary>\n\nProject scope, `.codex/config.toml` at the repo root (the project must be trusted):\n\n```toml\n[mcp_servers.gda-mcp]\ncommand = \"uvx\"\nargs = [\"--from\", \"gda[mcp]\", \"gda-mcp\"]\n\n[mcp_servers.gda-mcp.env]\nGDA_PROJECT = \"/absolute/path/to/your/godot/project\"\n```\n\nUser scope (available everywhere, but pinned to one project) — the same table in\n`~/.codex/config.toml`, or add it with the CLI. Codex has no workspace variable, so\n`GDA_PROJECT` is an absolute path; use project scope if you work across several projects:\n\n```bash\ncodex mcp add gda-mcp --env GDA_PROJECT=/absolute/path/to/your/godot/project -- \\\n  uvx --from \"gda[mcp]\" gda-mcp\n```\n\n</details>\n\n<details>\n<summary>Cursor</summary>\n\nProject scope, `.cursor/mcp.json` at the repo root (`${workspaceFolder}`\ntracks the open project):\n\n```json\n{\n  \"mcpServers\": {\n    \"gda-mcp\": {\n      \"type\": \"stdio\",\n      \"command\": \"/path/to/uvx\",\n      \"args\": [\"--from\", \"gda[mcp]\", \"gda-mcp\"],\n      \"env\": {\n        \"GDA_PROJECT\": \"${workspaceFolder}\"\n      }\n    }\n  }\n}\n```\n\nUser scope (available everywhere, but pinned to one project) — the same config in\n`~/.cursor/mcp.json` with `GDA_PROJECT` set to an absolute path (`${workspaceFolder}` only\nworks in project scope; use project "
+    },
+    "brief": {
+      "summary": "面向 Godot 的 AI Agent 命令行与 MCP 工具",
+      "problem": "让 AI 代理以结构化方式创建、修改和调试 Godot 项目",
+      "highlights": [
+        "可以无头创建场景、节点和脚本",
+        "可以通过 CI 自动分析项目并导出构建",
+        "可以实时读取运行树、截图和性能数据"
+      ],
+      "target_users": [
+        "Godot 开发者",
+        "AI 编程代理开发者",
+        "游戏自动化工程师"
+      ],
+      "why_trending": "本周首次收录，近期有提交，但今日新增 Star 为 0",
+      "caveat": "项目处于 pre-1.0，命令行接口可能变化",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aigengame/godot-agent",
+      "score": 95,
+      "category": "游戏开发",
+      "reason": "智能体驱动Godot开发与控制",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "WyattBlue/auto-editor",
+      "url": "https://github.com/WyattBlue/auto-editor",
+      "description": "Effort free video editing!",
+      "language": "Nim",
+      "total_stars": 4614,
+      "forks": 576,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 9
+    },
+    "details": {
+      "topics": [
+        "audio",
+        "audio-editing",
+        "audio-processing",
+        "automatic",
+        "nim",
+        "video",
+        "video-editing",
+        "video-processing"
+      ],
+      "license_name": "Unlicense",
+      "created_at": "2020-04-30T04:57:21Z",
+      "updated_at": "2026-07-26T03:13:26Z",
+      "pushed_at": "2026-07-26T03:13:21Z",
+      "open_issues": 0,
+      "homepage": "https://auto-editor.com",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\"><img src=\"https://auto-editor.com/img/auto-editor-banner.webp\" title=\"Auto-Editor\" width=\"700\"></p>\n\n**Auto-Editor** is a command line application for automatically **editing video and audio** by analyzing a variety of methods, most notably audio loudness.\n\n---\n\n[![Actions Status](https://img.shields.io/github/actions/workflow/status/wyattblue/auto-editor/build.yml?style=flat)](https://github.com/wyattblue/auto-editor/actions)\n[![Nim](https://img.shields.io/badge/nim-%23FFE953.svg?style=flat&logo=nim&logoColor=black)](https://nim-lang.org)\n\nBefore doing the real editing, you first cut out the \"dead space\" which is typically silence. This is known as a \"first pass\". Cutting these is a boring task, especially if the video is very long.\n\n```\nauto-editor path/to/your/video.mp4\n```\n\n<h2 align=\"center\">Installing</h2>\n\nSee [Installing](https://auto-editor.com/installing) for more information.\n\n<h2 align=\"center\">Skills</h2>\n\n```\nnpx skills add WyattBlue/auto-editor\n```\n\n<h2 align=\"center\">Cutting</h2>\n\nChange the **pace** of the edited video by using `--margin`.\n\n`--margin` adds in some \"silent\" sections to make the editing feel nicer.\n\n```\n# Add 0.2 seconds of padding before and after to make the edit nicer.\n# `0.2s` is the default value for `--margin`\nauto-editor example.mp4 --margin 0.2sec\n\n# Add 0.3 seconds of padding before, 1.5 seconds after\nauto-editor example.mp4 --margin 0.3s,1.5sec\n```\n\n### Methods for Making Automatic Cuts\nThe `--edit` option is how auto-editor makes automated cuts.\n\nFor example, edit out motionlessness in a video by setting `--edit motion`.\n\n```\n# cut out sections where the total motion is less than 2%.\nauto-editor example.mp4 --edit motion:threshold=0.02\n\n# `--edit audio:threshold=0.04,stream=all` is used by defaut.\nauto-editor example.mp4\n\n# Different tracks can be set with different attribute.\nauto-editor multi-track.mov --edit \"(or audio:stream=0 audio:threshold=10%,stream=1)\"\n```\n\nDifferent editing methods can be used together.\n```\n# 'threshold' is always the first argument for edit-method objects\nauto-editor example.mp4 --edit \"(or audio:0.03 motion:0.06)\"\n```\n\nYou can also use `dB` unit, a volume unit familiar to video-editors (case-sensitive):\n```\nauto-editor example.mp4 --edit audio:-19dB\nauto-editor example.mp4 --edit audio:-7dB\nauto-editor example.mp4 --edit motion:-19dB\n```\n\n### Labels\nEvery moment gets an integer **label**: `0` is silent (cut by default), `1` is active (kept). `--edit` sets what's label `1`; `-w:0`/`-w:1` set each one's action. Add more classes with `--edit:N` and `--when:N` (`N` up to 255); where they overlap, the higher label wins.\n```\n# Cut silence, keep speech, and additionally speed up the loud parts\nauto-editor example.mp4 --edit:2 audio:-12dB --when:2 speed:1.5\n```\nAs a value (not a label), `--edit 1` keeps everything and `--edit 0` cuts everything. See the [actions docs](https://auto-editor.com/docs/actions) for more.\n\n### See What Auto-Editor Cuts Out\nTo export what auto-editor normally cuts out. Set `--when-active` to `cut` and `--when-inactive` to `nil` (leave as is). This is the reverse of the usual default values.\n\n```\nauto-editor example.mp4 --when-active cut --when-inactive nil\n```\n\n<h2 align=\"center\">Exporting to Editors</h2>\n\nCreate an XML file that can be imported to Adobe Premiere Pro using this command:\n\n```\nauto-editor example.mp4 --export premiere\n```\n\nAuto-Editor can also export to:\n- DaVinci Resolve with `--export resolve`\n- Final Cut Pro with `--export final-cut-pro`\n- ShotCut with `--export shotcut`\n- Kdenlive with `--export kdenlive`\n- Individual media clips with `--export clip-sequence`\n\n<h2 align=\"center\">More Options</h2>\n\nList all available options:\n\n```\nauto-editor --help\n```\n\n## Articles\n - [How to Install Auto-Editor](https://auto-editor.com/installing)\n - [All the Options (And What They Do)](https://auto-editor.com/ref/options)\n - [Docs](https://auto-editor.com/docs)\n - [Blog](https://basswood.io/blog/)\n\n## Run Online and as an Application\nYou can [run auto-editor online](https://app.auto-editor.com/online) or [download the application](https://app.auto-editor.com/download). They use assets from this repository (Unlicense); their own unique assets are under a separate proprietary license.\n\n## Copyright\nEverything in this repository is under the [Public Domain](https://github.com/WyattBlue/auto-editor/blob/master/LICENSE). Binary artifacts in the \"Releases\" section may be under various open source licenses.\n"
+    },
+    "brief": {
+      "summary": "按声音或画面活动自动剪辑视频和音频",
+      "problem": "手动删去长视频中的静音和无动作片段耗时",
+      "highlights": [
+        "可以自动剪掉视频中的静音片段",
+        "可以按画面运动自动移除停滞内容",
+        "可以导出到多款专业剪辑软件"
+      ],
+      "target_users": [
+        "视频创作者",
+        "剪辑师",
+        "命令行用户"
+      ],
+      "why_trending": "本周首次收录，累计4614 Star且近期有提交",
+      "caveat": "自动剪辑效果取决于阈值和边距设置",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "WyattBlue/auto-editor",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "自动化处理视频与音频剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 30,
+      "freshness_score": 20,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "vericontext/vibeframe",
+      "url": "https://github.com/vericontext/vibeframe",
+      "description": "Frontier AI video generation for coding agents - Seedance, Runway, Veo, Kling on your own keys, behind a hard cost cap. CLI + MCP.",
+      "language": "TypeScript",
+      "total_stars": 160,
+      "forks": 32,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "claude",
+        "cli",
+        "developer-tools",
+        "ffmpeg",
+        "gemini",
+        "image-to-video",
+        "mcp",
+        "monorepo",
+        "open-source",
+        "openai",
+        "text-to-video",
+        "tts",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-01T06:58:09Z",
+      "updated_at": "2026-07-26T03:48:51Z",
+      "pushed_at": "2026-07-26T03:48:49Z",
+      "open_issues": 0,
+      "homepage": "https://vibeframe.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# VibeFrame\n\n**Let your coding agent generate real video, on your own provider keys, under a spend ceiling it cannot cross.**\n\nVibeFrame is a CLI and MCP server for Claude Code, Codex, Cursor, or any bash-capable agent.\nIt turns a written brief into a plan, generates the assets from frontier models (Seedance, Runway, Veo, Kling), and renders a finished MP4.\nEvery paid step sits behind a dry run and a hard `--max-cost` ceiling, and every failure comes back as machine-readable recovery actions instead of a stack trace.\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n[![CI](https://github.com/vericontext/vibeframe/actions/workflows/ci.yml/badge.svg)](https://github.com/vericontext/vibeframe/actions/workflows/ci.yml)\n[![GitHub stars](https://img.shields.io/github/stars/vericontext/vibeframe)](https://github.com/vericontext/vibeframe/stargazers)\n\n![One consistent character across a directed arctic night: a trek under the stars, the first aurora, the whole sky ablaze, and the walk home at dawn](docs/media/showcase-aurora.gif)\n\nOne photographer across a single arctic night, 1080p, generated end to end.\n▶ **[Watch the full render](https://github.com/vericontext/vibeframe/releases/download/v0.113.11/vibeframe-showcase.mp4)**\n\n## Know the price before anything is spent\n\n`--dry-run` prices the whole build without calling a provider or needing a single key.\nPair it with `--max-cost` and the build refuses to start when the estimate is over your ceiling:\n\n```bash\nvibe build film --dry-run --max-cost 3 --json\n```\n\n```json\n{\n  \"success\": false,\n  \"error\": \"Estimated cost $10.93 exceeds --max-cost $3.00.\",\n  \"code\": \"COST_CAP_EXCEEDED\",\n  \"retryWith\": [\n    \"vibe build . --stage all --skip-backdrop --json\",\n    \"vibe build . --stage all --max-cost 10.93 --json\"\n  ],\n  \"data\": { \"plan\": { \"estimatedCostUsd\": 10.93, \"...\": \"the full priced plan\" } }\n}\n```\n\nThe envelope goes to stderr and the command exits 1, so an agent loop stops instead of guessing.\n`retryWith` gives it the two cheaper ways forward it can take without asking you, and `data.plan` carries the priced plan the refusal was based on, so it never has to re-run just to learn the estimate.\n\nThe same dry run names the keys each stage would need, so you find out what a video costs before you own an account:\n\n```text\nKeyframe generation will need openai (OPENAI_API_KEY), but no key/config is available.\nVideo generation will need seedance (FAL_API_KEY), but no key/config is available.\n```\n\nYour keys, your bill, your ceiling.\n\n## Where VibeFrame fits\n\nIt wraps lower-level composition engines rather than replacing them:\n\n| Layer                                                    | Owns                                                                             |\n| -------------------------------------------------------- | --------------------------------------------------------------------------------- |\n| [Remotion](https://github.com/remotion-dev/remotion)     | React-based programmatic video and component-driven motion graphics.              |\n| [Hyperframes](https://github.com/heygen-com/hyperframes) | HTML/CSS/JS scene composition and deterministic browser capture.                  |\n| VibeFrame                                                | Frontier-model generation on your own keys, dry runs and the hard `--max-cost` ceiling, storyboard/design files, build reports, render inspection, edit/remix commands, and host-agent guidance. |\n\nRead that table as one sentence: scene composition is delegated, generation is not.\nIf the job is only HTML scene authoring and rendering, use Hyperframes directly - it is the better tool for that, and `vibe scene install-skill` installs its skill for you either way.\nReach for VibeFrame when the job involves paid generation: frontier image and video models, character continuity across scenes, narration, cost ceilings, build reports, or editing steps around the composition layer.\n\nOne consequence worth knowing before you install: the whole pipeline runs locally for $0 without a provider key, because that free half is the delegated half - Kokoro narration, agent-authored HTML/CSS scenes, headless Chrome plus FFmpeg.\nIt is the cheapest way to see whether the workflow fits you, and the full walkthrough is in [docs/hyperframes.md](docs/hyperframes.md#the-zero-key-render-start-to-finish).\nIt is not the point of the tool: the paid generation path below is.\n\nVibeFrame is not affiliated with HeyGen.\nSee [CREDITS.md](CREDITS.md) for dependency and provenance notes.\n\n## Install\n\n```bash\ncurl -fsSL https://vibeframe.ai/install.sh | bash\nvibe doctor\n```\n\nNeeds **Node.js 20+, FFmpeg, and Chrome** (or Chromium).\n`vibe doctor` verifies all three and lists which commands each provider key unlocks.\n\nGeneration is the only thing that needs a key.\nFFmpeg edits, Kokoro narration, scene composition, detection, timeline work, and rendering are all local.\nAdd `OPENAI_API_KEY`, `FAL_API_KEY`, `GOOGLE_API_KEY`, `RUNWAY_API_SECRET`, or `KLING_API_KEY` for the providers you actually use, via `vibe setup` or the environment.\n\n<details>\n<summary>Package names, config locations, and building from source</summary>\n\nThe CLI is published as [`@vibeframe/cli`](https://www.npmjs.com/package/@vibeframe/cli) (binary `vibe`) and the MCP server as [`@vibeframe/mcp-server`](https://www.npmjs.com/package/@vibeframe/mcp-server).\nThere is no bare `vibeframe` npm package from this project - that name belongs to an unrelated package, so `npx vibeframe` will not run this tool.\n\nThe installer places the CLI under the XDG data directory (`~/.local/share/vibeframe` by default).\nUser-scope keys live in `~/.vibeframe/config.yaml`; `vibe setup --scope project` writes `./.vibeframe/config.yaml`.\nWhen a project config exists at or above your current directory, VibeFrame uses it in isolation and does not merge user-scope keys.\n\n```bash\ngit clone https://github.com/vericontext/vibeframe.git\ncd vibeframe && pnpm install && pnpm build\npnpm vibe --help\n```\n\n</details>\n\n## Build a video from a brief\n\n```bash\nvibe init launch --from brief.md            # or --from \"30-second launch video for VibeFrame\"\nvibe build launch --dry-run --max-cost 5    # price it\nvibe build launch --max-cost 5              # generate\nvibe render launch -o renders/final.mp4     # render\nvibe inspect render launch --cheap          # check the result\n```\n\n`brief.md` can be messy notes, links, or a single line.\nWhat `init` produces are two files you then own:\n\n| File            | What it holds                                                            |\n| --------------- | ------------------------------------------------------------------------ |\n| `STORYBOARD.md` | Beats: narration, duration, and image/video/music cues. The intent layer. |\n| `DESIGN.md`     | Palette, typography, layout, motion, transitions. The visual system.      |\n\nEdit them directly, or ask a coding agent to research and revise them.\nThe rest is convention: `media/` for footage you supply, `assets/` for generated ones, `renders/` for output, and `vibe.config.json` for the provider, model, and quality contract.\n\nEach beat carries YAML cues.\nA cue's value is either a prompt to generate from, or a project-relative path to a file you already have:\n\n````markdown\n## Beat hook - Open\n\n```yaml\nnarration: \"Start with a storyboard. VibeFrame turns each beat into a render plan.\"\nbackdrop: \"Clean developer terminal beside structured storyboard cues\"\nvideo: \"media/broll.mp4\"   # a path reuses your file instead of generating\nvoice: \"alloy\"\nduration: 5\n```\n````\n\nAdd `--json` to any command for structured output.\n`plan`, `build`, `preview`, `render`, and both `inspect` commands take `--beat <id>` to work one beat at a time instead of rebuilding everything.\n`storyboard`, `status`, and `scene repair` cover editing beats, polling async work, and deterministic fixes.\n\nProfiles (`--profile minimal | agent | full`), every cue key, and the full project flow are in [docs/projects.md](docs/projects.md).\n\n## What the spend buys: one character, many scenes\n\nGenerating four shots that look like the same film is the hard part, and it is what the paid path is for.\nDeclare a character pool in the storyboard frontmatter and reference it from individual beats.\nVibeFrame generates the character sheet once and reuses it as the reference image for Seedance image-to-video, so the character stays consistent across scenes.\n\n````markdown\n---\ncharacters:\n  mira: \"arctic aurora photographer, deep-red fur-lined parka, dark hair under a charcoal beanie, vintage 35mm camera\"\n  rival: { image: \"media/rival-ref.png\" }\n---\n\n## Beat hook - Hook\n\n```yaml\nduration: 5\ncharacters: [mira]\nkeyframe: \"MIRA stands on the frozen ice, camera lowered, looking up as the aurora fills the sky\"\nvideo: \"slow tilt up as the aurora ripples and pulses overhead\"\n```\n````\n\nEach beat pairs a `keyframe` still with a `video` motion prompt.\nGenerate the cheap image storyboard first, review it, then animate only the stills you approve.\nThat is also the cheapest way to keep a run under its ceiling, since stills cost a fraction of the video.\n\n```bash\nvibe build my-film --skip-video   # keyframe stills only (cheap) - review them first\nvibe build my-film --beat wonder --stage assets --force --skip-video  # redo one beat\nvibe build my-film --max-cost 12  # animate the approved stills (image-to-video)\n```\n\nPrompt craft for both models lives in the [AI video prompting playbook](docs/ai-video-prompting.md).\n\n## One-off assets and edits\n\nThese need no project and no storyboard:\n\n```bash\nvibe generate image \"cinematic product demo frame\" -p openai -o frame.png\nvibe generate video \"interface animates into a polished demo\" -p seedance -i frame.png -o motion.mp4\nvibe generate narration \"Start with a storyboard.\" -o narration.mp3\n\nvibe edit silence-cut interview.mp4 -o clean.mp4\nvibe edit caption video.mp4 -o captioned.mp4\nvibe detect scenes video.mp4\n\nvibe remix highlights demo-process.mp4 -d 60 -o highlight.mp4\nvibe audio duck bgm.mp3 --voice highlight.mp4 -o bgm-ducked.mp3\n```\n\nFor reproducible multi-step workflows, `vibe run pipeline.yaml` executes a budgeted YAML pipeline with `--dry-run` and `--resume`.\nWorked examples of all of the above are in [docs/recipes.md](docs/recipes.md).\n\n## Drive it from an agent\n\nUse your host's agent loop as the outer loop, drive the CLI with `--json`, and use `build-report.json` and `review-report.json` as loop state.\nThe forward pass is the build flow above; what makes it a loop is the recovery pass:\n\n```text\n\"fix quality issues from the render review\"\n-> read review-report.json\n-> vibe scene repair launch --json\n-> edit STORYBOARD.md or composition artifacts only where needed\n-> vibe render launch --json\n-> vibe inspect render launch --cheap --json\n```\n\n`inspect` returns pre-classified `nextActions`: run `safeToAutoRun:true` automatically, ask before `requiresConfirmation:true`, and use `retryWith` only as a fallback.\n`fixOwner` says who acts - `\"vibe\"` means the CLI repairs it deterministically, `\"host-agent\"` means the outer loop or a human edits the source files.\n\nYou do not have to write any of that into your prompt.\n`vibe context` prints it, so \"read `vibe context`, then build `launch/` from `brief.md` under `--max-cost 5`\" is enough to start a host agent.\nThe full contract with a worked report is in [docs/projects.md](docs/projects.md#host-agent-loop).\n\nTo explore the surface:\n\n```bash\nvibe schema --list                  # full command catalog, the source of truth\nvibe schema --list --surface public # first-run product path only\nvibe schema --list --filter free    # narrow to a cost tier\nvibe guide                          # workflow guides (motion | scene | pipeline)\n```\n\n## Connect your host\n\n`vibe init` writes one `AGENTS.md` (plus a `CLAUDE.md` that imports it).\nThat is the whole contract: Codex, Cursor, Aider, Gemini CLI, OpenCode, and any other bash-capable agent read the same file, and there is no per-host scaffold.\n\nThe"
+    },
+    "brief": {
+      "summary": "面向编程代理的可控成本 AI 视频生成工具",
+      "problem": "解决多模型视频生成难以控费和自动编排的问题",
+      "highlights": [
+        "可以把文字简报生成故事板和成片",
+        "可以用自有密钥调用多种视频模型",
+        "可以先试算费用并设置硬性上限"
+      ],
+      "target_users": [
+        "编程代理用户",
+        "视频创作者",
+        "开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获160 Star",
+      "caveat": "需要 Node.js、FFmpeg、Chrome及模型服务密钥",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "vericontext/vibeframe",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "支持智能体的视频生成与剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 37669,
+      "forks": 3551,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-07-26T04:00:51Z",
+      "pushed_at": "2026-07-26T04:03:50Z",
+      "open_issues": 229,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes --full-depth\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas a non-interactive `skills add` without `--skill` installs all 19.\n>\n> `--full-depth` does a full clone of the repo's current `main`. Without it, `skills add` fetches the skills.sh registry blob, which lags `main` by hours — you'd get an older copy of a skill. (`hyperframes skills update` already installs full-depth.)\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 19 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes --full-depth`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 19. Use `npx skills add heygen-com/hyperframes --all --full-depth` to install all 19 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name> --full-depth` for just one (bare name, no leading `/`). Keep `--full-depth` — it installs the current `main`; without it `skills add` fetches the skills.sh blob, which lags by hours.\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, or video to pull audio from) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                                                             |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                           |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                   |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                    |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                      |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                       |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local file or paste-ready block + ledger record, generate via TTS/music/image models when the catalog misses, transcribe, caption, remove backgrounds, and reuse assets across projects. One shared audio engine + manifest tracking. |\n| `/hyperframes-cli`       | CLI dev loop — `init`, `lint`, `check`, `snapshot`, `preview`, `render`, `publish`, `doctor`, plus HeyGen-hosted cloud rendering (`cloud render`) and AWS Lambda rendering (`lambda deploy / render / progress`).                                                                                                                                |\n| `/hyperframes-registry`  | Install and wire registry blocks and components into compositions via `hyperframes add`. A"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和媒体生成确定性 MP4 视频",
+      "problem": "视频制作流程复杂，难以让 AI 代理稳定执行",
+      "highlights": [
+        "可以用 AI 代理按提示创建短视频",
+        "可以将 HTML 动画渲染为 MP4",
+        "可以为产品介绍和解说视频加字幕"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "前端开发者",
+        "内容制作团队"
+      ],
+      "why_trending": "总 Star 达37669，本周首次收录且近期持续更新",
+      "caveat": "需要 Node.js 22 或更高版本；资料未说明兼容性",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "为智能体提供HTML视频渲染",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 48.5
+    }
+  }
+]
