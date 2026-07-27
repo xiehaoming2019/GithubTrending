@@ -1,0 +1,541 @@
+[
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "pbakaus/impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "description": "The design language that makes your AI harness better at design.",
+      "language": "JavaScript",
+      "total_stars": 50814,
+      "forks": 2993,
+      "stars_today": 413,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 413
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-11-16T01:52:04Z",
+      "updated_at": "2026-07-27T04:10:35Z",
+      "pushed_at": "2026-07-27T02:04:49Z",
+      "open_issues": 33,
+      "homepage": "https://impeccable.style",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Impeccable\n\nDesign guidance for AI coding agents. 1 skill, 23 commands, live browser iteration, and 60 deterministic detector rules for AI-generated frontend design.\n\n> **Quick start:** From your project root, run `npx impeccable install`, then run `/impeccable init` inside your AI coding tool. Full docs: [impeccable.style](https://impeccable.style).\n\n## Why Impeccable?\n\nAnthropic's [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) was the first widely-used design skill for Claude. Impeccable started from there.\n\nEvery model trained on the same SaaS templates. Skip the guidance and you get the same handful of tells on every project: Inter for everything, purple-to-blue gradients, cards nested in cards, gray text on colored backgrounds, the rounded-square icon tile above every heading.\n\nImpeccable adds:\n- **One setup flow.** `/impeccable init` writes `PRODUCT.md` and offers `DESIGN.md`, so later commands know the audience, brand/product lane, voice, anti-references, colors, type, and components.\n- **23 commands.** A shared design vocabulary with your AI: `polish`, `audit`, `critique`, `distill`, `animate`, `bolder`, `quieter`, and more.\n- **60 deterministic detector rules** plus LLM-only critique checks. The CLI and browser extension run the deterministic rules with no LLM and no API key.\n\n## What's Included\n\n### The Skill: impeccable\n\nThe skill installs as one command:\n\n```bash\n/impeccable <command> <target>\n```\n\nStart every new project with:\n\n```bash\n/impeccable init\n```\n\n`init` asks whether the surface is brand (marketing, landing, portfolio) or product (app UI, dashboard, tool), then writes design context that every later command reads.\n\n### 23 Commands\n\nAll commands are accessed through `/impeccable`:\n\n| Command | What it does |\n|---------|--------------|\n| `/impeccable craft` | Full shape-then-build flow with visual iteration |\n| `/impeccable init` | One-time setup: gather design context, write PRODUCT.md and DESIGN.md, configure live mode, recommend next steps |\n| `/impeccable document` | Generate root DESIGN.md from existing project code |\n| `/impeccable extract` | Pull reusable components and tokens into the design system |\n| `/impeccable shape` | Plan UX/UI before writing code |\n| `/impeccable critique` | UX design review: hierarchy, clarity, emotional resonance |\n| `/impeccable audit` | Run technical quality checks (a11y, performance, responsive) |\n| `/impeccable polish` | Final pass, design system alignment, and shipping readiness |\n| `/impeccable bolder` | Amplify boring designs |\n| `/impeccable quieter` | Tone down overly bold designs |\n| `/impeccable distill` | Strip to essence |\n| `/impeccable harden` | Error handling, i18n, text overflow, edge cases |\n| `/impeccable onboard` | First-run flows, empty states, activation paths |\n| `/impeccable animate` | Add purposeful motion |\n| `/impeccable colorize` | Introduce strategic color |\n| `/impeccable typeset` | Fix font choices, hierarchy, sizing |\n| `/impeccable layout` | Fix layout, spacing, visual rhythm |\n| `/impeccable delight` | Add moments of joy |\n| `/impeccable overdrive` | Add technically extraordinary effects |\n| `/impeccable clarify` | Improve unclear UX copy |\n| `/impeccable adapt` | Adapt for different devices |\n| `/impeccable optimize` | Performance improvements |\n| `/impeccable live` | Visual variant mode: iterate on elements in the browser |\n\nUse `/impeccable pin <command>` to create standalone shortcuts (e.g., `pin audit` creates `/audit`).\n\n#### Usage Examples\n\n```\n/impeccable audit blog           # Audit blog hub + post pages\n/impeccable critique landing     # UX design review\n/impeccable polish settings      # Final pass before shipping\n/impeccable harden checkout      # Add error handling + edge cases\n```\n\nOr use `/impeccable` directly with a description:\n```\n/impeccable redo this hero section\n```\n\n### Anti-Patterns\n\nThe skill includes explicit guidance on what to avoid:\n\n- Don't use overused fonts (Arial, Inter, system defaults)\n- Don't use gray text on colored backgrounds\n- Don't use pure black/gray (always tint)\n- Don't wrap everything in cards or nest cards inside cards\n- Don't use bounce/elastic easing (feels dated)\n\n## See It In Action\n\nVisit [the Neo Mirai case study](https://impeccable.style/cases/neo-mirai) to see a before/after case study of a real project transformed with Impeccable commands.\n\n## Installation\n\n### Option 1: CLI installer (Recommended)\n\nFrom the root of your project, run:\n\n```bash\nnpx impeccable install\n```\n\nThis shows the harness folders it detected (for example `~/.claude`, `~/.codex`, `~/.grok`, or project-local `.cursor`), lets you keep the detected set or customize providers, then asks whether to install into the current project or globally. Use `--providers=claude,codex,cursor,grok` and `--scope=project|global` to skip those choices in scripts. On Claude Code, Cursor, Codex, GitHub Copilot, and Grok Build, it also installs the provider-native hook manifest for the current project. Works with Cursor, Claude Code, Gemini CLI, Codex CLI, Grok Build, and every other supported tool. Reload your harness afterward.\n\nTo refresh an existing install, run:\n\n```bash\nnpx impeccable update\n```\n\nCodex users should open `/hooks` after install or update and approve the project hook when prompted. Codex tracks trust by hook definition, so updates that change `.codex/hooks.json` can require approval again. Grok Build users need project folder trust (`/hooks-trust` or launch with `--trust`) before `.grok/hooks/` scripts run.\n\n### Option 2: Git Submodule\n\nFor teams that want to keep Impeccable vendored and updated through Git, add this repo as a submodule and link the compiled provider build into your harness folders:\n\n```bash\ngit submodule add https://github.com/pbakaus/impeccable .impeccable\nnpx impeccable link --source=.impeccable --providers=claude,cursor\ngit add .gitmodules .impeccable .claude .cursor\ngit commit -m \"Add Impeccable skills\"\n```\n\nUse the providers your project needs, for example `claude`, `cursor`, `gemini`, `codex`, `github`, `grok`, `opencode`, `pi`, `qoder`, `trae`, `trae-cn`, `rovo-dev`, or `vibe`. The command links individual skill folders from `.impeccable/dist/universal/` and leaves existing real skill directories untouched unless you pass `--force`.\n\nTo update later:\n\n```bash\ngit submodule update --remote .impeccable\nnpx impeccable link --source=.impeccable --providers=claude,cursor\n```\n\n### Option 3: Plugin install\n\n**Claude Code:**\n```bash\n/plugin marketplace add pbakaus/impeccable\n```\n\n> Claude Code only. After adding the marketplace, open `/plugin` and install Impeccable from the list.\n\n**Grok Build:**\n```bash\ngrok plugin install pbakaus/impeccable#plugin --trust\n```\n\n> Grok Build only. The `#plugin` suffix installs the slim plugin package (skills, agents, and hooks) instead of the full monorepo. Then run `/impeccable init` in a Grok session. Project-scoped installs via `npx impeccable install --providers=grok` also work and write `.grok/skills/` plus `.grok/hooks/impeccable.json`.\n\n### Option 4: Download from Website\n\nVisit [impeccable.style](https://impeccable.style), download the ZIP for your tool, and extract to your project.\n\n### Option 5: Copy from Repository\n\n**Cursor:**\n```bash\ncp -r dist/cursor/.cursor your-project/\n```\n\n> **Note:** Cursor skills require setup:\n> 1. Switch to Nightly channel in Cursor Settings → Beta\n> 2. Enable Agent Skills in Cursor Settings → Rules\n>\n> [Learn more about Cursor skills](https://cursor.com/docs/context/skills)\n\n**Claude Code:**\n```bash\n# Project-specific\ncp -r dist/claude-code/.claude your-project/\n\n# Or global (applies to all projects)\ncp -r dist/claude-code/.claude/* ~/.claude/\n```\n\n**OpenCode:**\n```bash\ncp -r dist/opencode/.opencode your-project/\n```\n\n**Pi:**\n```bash\ncp -r dist/pi/.pi your-project/\n```\n\n**Gemini CLI:**\n```bash\ncp -r dist/gemini/.gemini your-project/\n```\n\n> **Note:** Gemini CLI skills require setup:\n> 1. Install preview version: `npm i -g @google/gemini-cli@preview`\n> 2. Run `/settings` and enable \"Skills\"\n> 3. Run `/skills list` to verify installation\n>\n> [Learn more about Gemini CLI skills](https://geminicli.com/docs/cli/skills/)\n\n**Codex CLI:**\n```bash\n# Project-local\ncp -r dist/agents/.agents your-project/\nmkdir -p your-project/.codex\ncp dist/codex/.codex/hooks.json your-project/.codex/hooks.json\n\n# Or install the skill user-wide. Copy .codex/hooks.json into each project\n# where you want the design hook to run.\nmkdir -p ~/.agents/skills\ncp -r dist/agents/.agents/skills/* ~/.agents/skills/\n```\n\n> The asset-producer subagent ships nested inside the skill's own `agents/` folder, which Codex auto-discovers. No separate `.codex/agents/` copy is needed. The hook is project-local because Codex discovers hooks from `.codex/hooks.json` next to trusted project config.\n\n**GitHub Copilot:**\n```bash\ncp -r dist/github/.github your-project/\n```\n\n**Trae:**\n```bash\n# Trae China (domestic version)\ncp -r dist/trae/.trae-cn/skills/* ~/.trae-cn/skills/\n\n# Trae International\ncp -r dist/trae/.trae/skills/* ~/.trae/skills/\n```\n\n> **Note:** Trae has two versions with different config directories:\n> - **Trae China**: `~/.trae-cn/skills/`\n> - **Trae International**: `~/.trae/skills/`\n>\n> After copying, restart Trae IDE to activate the skills.\n\n**Rovo Dev:**\n```bash\n# Project-specific\ncp -r dist/rovo-dev/.rovodev your-project/\n\n# Or global (applies to all projects)\ncp -r dist/rovo-dev/.rovodev/skills/* ~/.rovodev/skills/\n```\n\n**Qoder:**\n```bash\n# Project-specific\ncp -r dist/qoder/.qoder your-project/\n\n# Or global (applies to all projects)\ncp -r dist/qoder/.qoder/skills/* ~/.qoder/skills/\n```\n\n**Mistral Vibe:**\n```bash\n# Project-specific\ncp -r dist/vibe/.vibe your-project/\n\n# Or global (applies to all projects)\ncp -r dist/vibe/.vibe/skills/* ~/.vibe/skills/\n```\n\n**Grok Build:**\n```bash\n# Project-specific\ncp -r dist/grok/.grok your-project/\n\n# Or global (applies to all projects)\ncp -r dist/grok/.grok/skills/* ~/.grok/skills/\n```\n\n> Prefer `npx impeccable install --providers=grok` or `grok plugin install pbakaus/impeccable#plugin --trust` so the design hook installs too. Project hooks need `/hooks-trust` (or `--trust`) once per folder.\n\n## Usage\n\nOnce installed, every command runs through the single `/impeccable` skill:\n\n```\n/impeccable audit        # Find issues\n/impeccable polish       # Final cleanup\n/impeccable distill      # Remove complexity\n/impeccable critique     # Full design review\n```\n\nType `/impeccable` alone to see the full command list.\n\nMost commands accept an optional argument to focus on a specific area:\n\n```\n/impeccable audit the header\n/impeccable polish the checkout form\n```\n\nIf you reach for one command often, pin it with `/impeccable pin audit` to get `/audit` as a standalone shortcut.\n\n**Note:** Codex uses skills here, not `/prompts:` commands. Open `/skills` or type `$impeccable`. Repo-local installs live in `.agents/skills/`; user-wide installs live in `~/.agents/skills/`. GitHub Copilot uses `.github/skills/`. Restart the tool if a newly installed skill does not appear.\n\n## Keeping `.impeccable` out of git\n\nAs you run commands, Impeccable writes working files under `.impeccable/`: critique and polish screenshots, live-mode session and preview state, runtime caches, and per-developer config. Most of it is ephemeral and should not be committed, while a few files are shared project artifacts that belong in the repo. Add this block to your project's `.gitignore`:\n\n```gitignore\n# impeccable-ignore-start\n# Ephemeral output, runtime state, and per-dev overrides.\n# Unanchored: .impeccable may sit at the repo root or under a nested\n# workspace (apps/web/.impeccable/...); anchored patterns would miss it.\n# Shared artifacts stay tracked: config.json, live/config.json,\n# design.json, critique/*.md.\n.impeccable/config.local.json\n.impeccable/hook.cache.json\n.impeccable/hook.pending.json\n.impeccable/*.png\n.impeccable/live/server.json\n.impeccable/live/sessions/\n"
+    },
+    "brief": {
+      "summary": "为 AI 编程代理提供前端设计指导与检查命令",
+      "problem": "AI 生成的前端容易套用模板，缺少一致的设计规范",
+      "highlights": [
+        "可以用命令审查无障碍、性能和响应式设计",
+        "可以在浏览器中迭代页面视觉方案",
+        "可以为项目生成并维护设计上下文文件"
+      ],
+      "target_users": [
+        "前端开发者",
+        "AI 编程工具用户",
+        "产品设计师"
+      ],
+      "why_trending": "总 Star 50814，今日新增 413，本周首次收录",
+      "caveat": "部分功能依赖具体 AI 编程工具，资料未说明兼容细节",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "pbakaus/impeccable",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "面向编程智能体的设计技能",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 69.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "block/buzz",
+      "url": "https://github.com/block/buzz",
+      "description": "A hive mind communication platform",
+      "language": "Rust",
+      "total_stars": 13518,
+      "forks": 1114,
+      "stars_today": 1710,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1710
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-06T21:00:56Z",
+      "updated_at": "2026-07-27T04:10:20Z",
+      "pushed_at": "2026-07-27T03:26:54Z",
+      "open_issues": 717,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Buzz 🐝</h1>\n\n<p align=\"center\">\n  <strong>A workspace where humans and agents build together, on a relay you own.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"VISION.md\">Vision</a> ·\n  <a href=\"VISION_SOVEREIGN.md\">Sovereign</a> ·\n  <a href=\"VISION_PROJECTS.md\">Forge</a> ·\n  <a href=\"VISION_AGENT.md\">Agents</a> ·\n  <a href=\"ARCHITECTURE.md\">Architecture</a> ·\n  <a href=\"LICENSE\">Apache 2.0</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshots/channel-thread.png\" alt=\"A Buzz project channel where people and an agent coordinate on a release plan\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub><em>People and agents building together in the same room.</em></sub>\n</p>\n\n---\n\n## What is this, really?\n\nBuzz is a self-hostable workspace where humans and AI agents share the same rooms.\n\nA Buzz **community** is the workspace a user reaches by URL. In the single-relay\nsetup that ships today, the relay URL selects exactly one community. A hosted\noperator can serve many communities behind many domains or subdomains, but the\nclient-facing rule stays the same: the URL is authoritative for the workspace,\nand all tenant-observable state under that URL is community-local.\n\nIt's a Nostr relay: every message, reaction, workflow step, review approval, and git event is a signed event in one log. Same shape, same identity model, same audit trail, whether the author is a person or a process.\n\nIn practice it feels like a team workspace. Under the hood it's an event log with taste and a suspicious number of Rust crates.\n\nYes, it's another AI-adjacent developer tool. We're sorry. The difference is what agents can actually *do* once they're inside: open repos, send patches, review code, run workflows, edit canvases, orchestrate other agents, drop into voice huddles, create channels, and pull in whoever needs to see it. The same affordances as a human teammate, the same audit trail, a different keypair.\n\n---\n\n## Stuff you do in Buzz\n\n- **Ask the project a question and get an answer with receipts.** Agents search six months of history and post the threads, not vibes.\n- **Let an agent triage a bug without giving it the keys to the kingdom.** Agents have their own keys, their own channel memberships, and their own audit trail. Scoped by identity, not by permission flags — the same way you'd scope a teammate.\n- **Turn a feature branch into a room** where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists.\n- **Search the conversation, the patch, the workflow run, and the approval in one place** — because they're all the same kind of event.\n- **Let an agent run the workspace, not just talk in it.** Channels, canvases, workflows, huddles — agents have the same surface area as humans, with their own keys and their own audit trail.\n\n---\n\n## A look inside\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/channel-agents.png\" alt=\"People and agents collaborating in a Buzz engineering channel and reacting with emoji\" width=\"100%\"><br>\n      <sub><strong>Agents are members, not bots.</strong> Add an agent to a channel the same way you add a person.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/create-channel.png\" alt=\"The Add a channel dialog with search, filters, and channels to join or create\" width=\"100%\"><br>\n      <sub><strong>Spin up a room in seconds.</strong> Name it, describe it, make it private.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <img src=\"docs/assets/screenshots/media-comments.png\" alt=\"A video playing in Buzz with frame-anchored comments in a side panel\" width=\"100%\"><br>\n      <sub><strong>Media you can talk about.</strong> Leave comments pinned to specific frames.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why Buzz is better\n\nOne community. One identity model. One event log. Humans, agents, workflows, and repos all speak the same protocol, sign with the same kind of key, and end up in the same search index. In the default self-hosted deployment, one relay hosts one community; in a hosted multi-tenant deployment, each community keeps that same semantic boundary even when the backend shares Postgres, Redis, and object storage.\n\nThe bet is that one community can do what teams currently fake with chat, forges, bots, CI dashboards, release tools, search indexes, and a pile of glue code. Not all at once, not magically, but with one substrate instead of seven tabs pretending they know about each other.\n\nAgents are part of the room, not haunted cron jobs.\n\n---\n\n## Three little stories\n\n**Incident memory.** It's 2am. You type *\"have we seen this error before?\"* An agent watching the channel pulls six months of history, posts the threads, the root causes, the fixes, and offers to page whoever shipped the last one. The whole exchange — question, answer, evidence — stays in the channel.\n\n**Branch as room.** You open a feature branch. A channel appears. Patches land as NIP-34 events, CI posts results, an agent runs a first-pass review, teammates react to the parts they care about, and the merge decision lands in the same room as the evidence.\n\n**A release that writes itself.** A workflow fires on a tag. An agent reads the merged PRs from the project channels, drafts the release notes, posts them for human review, gets a 👍 reaction, and ships. Every step signed. Every step searchable.\n\n---\n\n## Works today · Being wired up · Strong opinions, pending code\n\n| ✅ Works today | 🚧 Being wired up | 💭 Strong opinions, pending code |\n|---|---|---|\n| Relay, channels, threads, DMs, canvases, media, search, audit log | Mobile clients (iOS + Android, Flutter) | Web-of-trust reputation across relays |\n| Desktop app (Tauri + React) | Workflow approval gates (infra exists, glue still drying) | Push notifications |\n| `buzz-cli` (agent-first, JSON in / JSON out) + ACP harness (Goose, Codex, Claude Code) | Huddle lifecycle events | Culture features |\n| YAML workflows: message / reaction / schedule / webhook triggers | | |\n| Git events (NIP-34: patches, repo announcements, status) | | |\n| Git hosting backend | | |\n\n<sub>Please do not plan your compliance program around the 💭 column yet. The <a href=\"VISION.md\">VISION docs</a> are the long version of what we think this becomes.</sub>\n\n---\n\n## Getting started\n\nNew to Buzz? Pick the path that matches you.\n\n### I just want to try the app\n\nGrab a packaged build from the [latest release](https://github.com/block/buzz/releases/latest) — macOS (`.dmg`), Linux (`.AppImage` / `.deb`), or Windows (`.exe`). Install it like any other app.\n\nBy default the app connects to `ws://localhost:3000`. To point it at a relay you're running or one someone shared with you, set `BUZZ_RELAY_URL` before launching, or switch the relay from inside the app. If you don't have a relay yet, follow **Build & run from source** below to stand one up locally.\n\n### I work at Block\n\nDon't build from source, and don't use the OSS release — use the internal build. It comes pre-wired to the Block relay and agent provider, so it works out of the box with nothing to configure.\n\nDownload the latest build from [`squareup/buzz-releases` releases](https://github.com/squareup/buzz-releases/releases/latest) and install it.\n\n### I want to build & run from source\n\nSee **Quick start** below — this is the developer / self-host path.\n\n---\n\n## Quick start\n\nYou'll need [Docker](https://docs.docker.com/get-docker/) and [Hermit](https://cashapp.github.io/hermit/) (or Rust 1.88+, Node 24+, pnpm 10+, `just`).\n\n**Once:**\n```bash\ngit clone https://github.com/block/buzz.git && cd buzz\n. ./bin/activate-hermit   # pinned toolchain (tools auto-download on first use)\njust setup && just build\n```\n\n`just setup` runs `just bootstrap` automatically — it copies `.env.example` to `.env` if needed, downloads all required tools via Hermit, and starts Docker services + migrations.\n\n**Every day:**\n```bash\n. ./bin/activate-hermit\njust dev   # starts the relay + desktop app together\n```\n\nRelay on `ws://localhost:3000`. Desktop app pops up. You're in.\n\nFor a split-terminal workflow (relay logs separate from Vite output), use `just relay` in one terminal and `just desktop-dev` in another.\n\nWant a single-node / VPS relay instead of the local-dev stack? Use the production Compose bundle in [`deploy/compose/`](deploy/compose/README.md) (`docker compose` + Postgres, Redis, MinIO, optional Caddy/TLS). The root [`docker-compose.yml`](docker-compose.yml) is for day-to-day development only.\n\nFor agents, set `BUZZ_PRIVATE_KEY` and use [`buzz-cli`](crates/buzz-cli) — JSON in, JSON out, designed for LLM tool calls.\n\n---\n\n## Windows prerequisites\n\nThe agent shell tool runs commands under bash. On macOS and Linux that's already there; on Windows you need to bring it.\n\nInstall [Git for Windows](https://git-scm.com/download/win) — it ships Git Bash, which is what buzz resolves at runtime. Once it's installed, everything works the same as on other platforms.\n\nIf you'd rather point buzz at a different bash-compatible shell, set `BUZZ_SHELL` to its path (e.g. `BUZZ_SHELL=C:\\path\\to\\bash.exe`). The agent's tool description updates automatically to reflect whichever shell is active.\n\n---\n\n## Architecture\n\n```\n┌─────────────────────────────────────────────────────────────────────────┐\n│                             Clients                                     │\n│  Human client         AI agent              CLI / scripts               │\n│  (Buzz desktop)       (Goose, Codex, ...)   (buzz-cli, agents)          │\n│       │               ┌──────────────┐               │                  │\n│       │               │  buzz-acp  │                 │                  │\n│       │               │  (ACP ↔ MCP) │               │                  │\n│       │               └──────┬───────┘               │                  │\n│       │                      │                       │                  │\n└───────┼──────────────────────┼───────────────────────┼──────────────────┘\n        │ WebSocket            │ WS + REST             │ WS + REST\n        ▼                      ▼                       ▼\n┌─────────────────────────────────────────────────────────────────────────┐\n│                          buzz-relay                                     │\n│  NIP-01 · NIP-42 auth · channel/DM/media/workflow/git REST · audit log  │\n└───┬──────────────────────────┬──────────────────────────┬───────────────┘\n    │                          │                          │\n ┌──▼───────────┐       ┌──────▼──────┐           ┌───────▼─────┐\n │   Postgres   │       │    Redis    │           │   S3/MinIO  │\n │ (events +    │       │  (pub/sub)  │           │  (Blossom)  │\n │  FTS search) │       └─────────────┘           └─────────────┘\n └──────────────┘\n```\n\nA Rust workspace of focused crates. Single source of truth: the relay. See [ARCHITECTURE.md](ARCHITECTURE.md) for the full breakdown.\n\n<details>\n<summary><strong>Crate map</strong></summary>\n\n**Core protocol** — `buzz-core` (zero-I/O types, NIP-01 filters, Schnorr verify) · `buzz-relay` (Axum WS + REST)\n\n**Services** — `buzz-db` (Postgres) · `buzz-auth` (NIP-42/98 Schnorr auth, rate limiting) · `buzz-pubsub` (Redis, presence, typing) · `buzz-search` (Postgres FTS) · `buzz-audit` (hash-chain log). Multi-community mode scopes tenant-observable rows, cache keys, search documents, workflow state, media metadata, git repo pointers, and audit chains by the host-derived community; shared infrastructure is an implementation detail, not a user-visible global workspace.\n\n**Agent surface** — `buzz-cli` (agent-first CLI, JSON in / JSON out) · `buzz-acp` (ACP harness for Goose/Codex/Claude Code) · `buzz-agent` (ACP agent — see [VISION_AGENT.md](VISION_AGENT.md)) · `buzz-dev-mcp` (shell + file-edit tools) · `buzz-workflow` (YAML automation) · `buzz-persona` (agent persona packs)\n\n**Git & pairing** — `git-sign-nostr` / `git-credential-nostr` (nostr-signed git) · `buzz-pair-relay`"
+    },
+    "brief": {
+      "summary": "Buzz 是供人类与 AI Agent 共用的自托管协作空间。",
+      "problem": "解决聊天、代码、工作流和审计记录彼此分散的问题。",
+      "highlights": [
+        "可以让 Agent 参与频道、处理问题和审查代码",
+        "可以把分支、补丁、CI 与评审集中到一个房间",
+        "可以搜索对话、代码变更和工作流记录"
+      ],
+      "target_users": [
+        "开发团队",
+        "AI Agent 开发者",
+        "希望自托管的组织"
+      ],
+      "why_trending": "今日新增 1710 Star，累计 13518 Star，且连续上榜。",
+      "caveat": "移动客户端和部分审批功能仍在接入中。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "block/buzz",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "支持人与智能体协作工作流",
+      "generated_by_ai": true,
+      "velocity_score": 98,
+      "freshness_score": 40,
+      "ranking_score": 63.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "itsPremkumar/Automated-Video-Generator",
+      "url": "https://github.com/itsPremkumar/Automated-Video-Generator",
+      "description": "Agentic AI video generator — fully autonomous text-to-video pipeline with free TTS/voice-clone, auto-editing, captions, and 20+ single-task operations. Zero-cost, MIT.",
+      "language": "TypeScript",
+      "total_stars": 23,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agentic",
+        "ai",
+        "ai-video",
+        "automation",
+        "captions",
+        "chatterbox",
+        "content-creation",
+        "ffmpeg",
+        "kokoro",
+        "llm",
+        "mit-license",
+        "open-source",
+        "remotion",
+        "shorts",
+        "text-to-video",
+        "tts",
+        "video-editing",
+        "video-generation",
+        "voice-clone",
+        "youtube"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-30T05:34:12Z",
+      "updated_at": "2026-07-27T03:49:57Z",
+      "pushed_at": "2026-07-27T03:49:38Z",
+      "open_issues": 11,
+      "homepage": "https://github.com/itsPremkumar/Automated-Video-Generator",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\n🧠 Automated Video Generator\n   SEO keywords: automated video generator, free video generator, open source video generator,\n   ai video generator, text to video, remotion, edge tts, youtube shorts generator, tiktok\n   video generator, faceless youtube, content automation, self hosted video generator,\n   mcp server, model context protocol, stock media, pexels, pixabay, openverse, video pipeline,\n   react video, nodejs video, typescript video, batch video generation, voiceover, text to speech,\n   video creator, marketing video, explainer video, shorts automation, reels generator,\n   open source, MIT license, programmatic video, no api key, cc images\n-->\n\n<!-- hero video removed per user request -->\n\n<div align=\"center\">\n \n  <h1>Automated Video Generator</h1>\n  <p><strong>🆓 Free &bull; 🔓 Open Source &bull; 🏠 Self-Hosted &bull; 🤖 AI Text-to-Video</strong></p>\n  <p><b>Turn any script into a narrated, stock-footage video in minutes.</b><br/>No API key. No watermark. Runs 100% on your machine.</p>\n</div>\n\n<br/>\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/stargazers\"><img src=\"https://img.shields.io/github/stars/itsPremkumar/Automated-Video-Generator?style=for-the-badge&logo=github\" alt=\"GitHub stars\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/itsPremkumar/Automated-Video-Generator?style=for-the-badge\" alt=\"MIT license\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/itsPremkumar/Automated-Video-Generator/ci.yml?branch=main&style=for-the-badge&label=CI\" alt=\"CI status\"></a>\n  <a href=\"https://www.npmjs.com/package/automated-video-generator\"><img src=\"https://img.shields.io/npm/v/automated-video-generator?style=for-the-badge&color=cb0000\" alt=\"NPM version\"></a>\n  <a href=\"https://nodejs.org/\"><img src=\"https://img.shields.io/badge/Node.js-18%2B-2f7d32?style=for-the-badge\" alt=\"Node.js 18+\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/CONTRIBUTING.md\"><img src=\"https://img.shields.io/badge/contributions-welcome-brightgreen?style=for-the-badge\" alt=\"Contributions welcome\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest\"><img src=\"https://img.shields.io/badge/download-Windows_.exe-blue?style=for-the-badge&logo=windows\" alt=\"Download Windows\"></a>\n  <a href=\"https://github.com/sponsors/itsPremkumar\"><img src=\"https://img.shields.io/badge/Sponsor-%E2%9D%A4-red?style=for-the-badge&logo=github\" alt=\"GitHub Sponsors\"></a>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://star-history.com/#itsPremkumar/Automated-Video-Generator&Date\"><img src=\"https://api.star-history.com/svg?repos=itsPremkumar/Automated-Video-Generator&type=Date&theme=dark\" alt=\"Star History Chart\" width=\"600\"></a>\n</div>\n\n<br/>\n\n---\n\n## 📖 What is this?\n\n**Automated Video Generator** is a free, open-source, self-hosted pipeline that converts text scripts into polished MP4 videos. Give it a script — it fetches relevant stock visuals, generates natural voiceovers, synchronizes everything with Remotion, and exports a ready-to-share video.\n\nNo paid plans. No watermarks. No monthly limits. Just your machine, your scripts, and full control.\n\n<br/>\n\n<div align=\"center\">\n  <table>\n    <tr>\n      <td align=\"center\"><b>🎬 Input</b></td>\n      <td align=\"center\"><b>⚙️ Pipeline</b></td>\n      <td align=\"center\"><b>📦 Output</b></td>\n    </tr>\n    <tr>\n      <td align=\"center\">Text script<br/>or JSON job<br/>or AI prompt</td>\n      <td align=\"center\">Parse → Fetch media<br/>→ Generate voiceover<br/>→ Render with Remotion</td>\n      <td align=\"center\">MP4 video<br/>+ Thumbnail<br/>+ Scene data</td>\n    </tr>\n  </table>\n</div>\n\n<br/>\n\n---\n\n## ✨ Demo\n\n> A real short generated by the pipeline (no re-render, no edits) — script in, MP4 out:\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator\">\n    <img src=\"assets/demo/demo-showcase.png\" alt=\"Automated Video Generator - Project Logo & GitHub Repository\" width=\"100%\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n  </a>\n  <br/>\n  <em>🎙️ Voiceover powered by <b>Voicebox Kokoro Heart</b> — realistic local AI narration. ✅ 32/32 quality checks passed on every output. 🔓 Free & open source.</em>\n</div>\n\n<div align=\"center\">\n  <img src=\"assets/diagrams/demo-flow.svg\" alt=\"How it works: script → pipeline → video\" width=\"720\" style=\"border-radius: 12px; margin-top: 12px;\">\n  <br/>\n  <em>Script → AI voiceover + stock media → MP4. Fully local.</em>\n</div>\n\n<hr/>\n\n## 🚀 Quick Start (5 minutes)\n\nChoose your path:\n\n| Path                                               | Time  | Difficulty | For           |\n| -------------------------------------------------- | ----- | ---------- | ------------- |\n| [Windows Desktop App](#windows-desktop-app)       | 2 min | ★☆☆        | Everyone      |\n| [One-Click Launcher](#one-click-launcher-windows) | 3 min | ★☆☆        | Windows users |\n| [Manual Setup](#manual-setup)                     | 5 min | ★★☆        | Developers    |\n| [Docker](#docker)                                 | 3 min | ★★☆        | DevOps        |\n| [npm (MCP)](#npm-mcp-server)                      | 1 min | ★☆☆        | AI agents     |\n\n### 🎬 Your first video in 2 commands\n\nNo API key required — Openverse finds stock footage automatically; voiceover uses Edge-TTS.\n\n```bash\n# 1. Install (one time)\nnpm install\n\n# 2. Generate (reads input/scripts/input-scripts.json, writes output/<id>/<Title>.mp4)\nnpm run generate\n```\n\nThat's it. The CLI reads `input/scripts/input-scripts.json` (a sample job is pre-included) and renders an MP4 with AI voiceover + stock visuals + burned-in captions. With the bundled sample, find it at `output/pre7_productivity_tip/One Simple Trick To Beat Procrastination.mp4`.\n\nPrefer a GUI? Run `npm run dev` and open **http://localhost:3001** — paste a script, click **Generate Video**.\n\n<div align=\"center\">\n  <video src=\"assets/demo/demo-wide.mp4\" width=\"80%\" controls preload=\"metadata\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n    Your browser does not support the video tag. <a href=\"assets/demo/demo-wide.mp4\">Download MP4</a>\n  </video>\n  <br/>\n  <em>Real Voicebox-narrated video from the pipeline. Script → voiceover + stock media → MP4, fully local.</em>\n</div>\n\n### 🪟 Windows Desktop App\n\n**No Node.js, Python, or terminal required.**\n\nDownload the [latest Windows installer](https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest), double-click, and the app opens the web portal automatically. Everything is bundled.\n\n### 📜 One-Click Launcher (Windows)\n\n```powershell\n.\\Start-Automated-Video-Generator.bat\n```\n\nOr the PowerShell version:\n\n```powershell\n.\\Start-Automated-Video-Generator.ps1\n```\n\nThe launcher auto-installs Node.js and Python (via `winget`), creates `.env`, installs dependencies, and opens the portal at `http://localhost:3001`.\n\n### 🛠️ Manual Setup\n\n**Prerequisites:** Node.js 18+, Python 3.8+, npm\n\n```bash\n# 1. Clone\ngit clone https://github.com/itsPremkumar/Automated-Video-Generator.git\ncd Automated-Video-Generator\n\n# 2. Install Node dependencies\nnpm install\n\n# 3. Install Python voice engine\npip install -r requirements.txt\n\n# 4. Configure environment\ncp .env.example .env\n# Edit .env — add PEXELS_API_KEY (free, get one at pexels.com/api)\n# No API key? Set OPENVERSE_ENABLED=true (it's the default)\n\n# 5. Start the web portal\nnpm run dev\n```\n\nOpen **http://localhost:3001/** — paste a script, click generate, and watch it render.\n\n### 🐳 Docker\n\nPre-built image (built + scanned by CI, pushed to GHCR):\n\n```bash\ndocker run -p 3001:3001 \\\n  -v \"$(pwd)/input:/app/input\" \\\n  -v \"$(pwd)/output:/app/output\" \\\n  ghcr.io/itspremkumar/automated-video-generator\n```\n\nOr build locally (pinned `node:20-bookworm`, full `npm ci`, edge-tts in a\nvenv to satisfy PEP 668, platform `linux/amd64`, healthcheck on `/api/health`):\n\n```bash\ndocker compose up --build\n```\n\n### 🚀 Production Deployment\n\nThe container is self-contained: it bundles the ffmpeg/ffprobe static\nbinaries and a Python venv with `edge-tts` for free, key-less narration.\nNo external services are required for the default pipeline.\n\n**Environment variables (all optional — sensible free defaults):**\n\n| Var | Default | Purpose |\n|-----|---------|---------|\n| `PORT` | `3001` | Web portal / API port |\n| `PEXELS_API_KEY` | _(none)_ | Free stock video. Without it, falls back to Openverse / Wikimedia / Internet Archive. |\n| `YOUTUBE_API_KEY` | _(none)_ | YouTube metadata enrichment (optional). |\n| `OPENVERSE_ENABLED` | `true` | Use Openverse CC media when no API key is set. |\n| `TTS_PROVIDER` | `edge-tts` | `edge-tts` (free, CPU) or `voicebox` (optional local GPU engine). |\n| `VOICEBOX_ENGINE` | _(none)_ | `kokoro` or `chatterbox_turbo` — only when `TTS_PROVIDER=voicebox`. |\n| `VOICEBOX_PROFILE_ID` | _(none)_ | A Voicebox profile id (preset or cloned voice). |\n\n**Optional: Voicebox GPU voice-clone (opt-in, never blocking).**\nVoicebox is a separate, locally-run headless TTS engine (MIT). It is\n**disabled by default** — the pipeline uses Edge-TTS (free, CPU) and only\nswitches to Voicebox if `TTS_PROVIDER=voicebox` is explicitly set and a\nbackend is reachable. If the backend is unavailable, it degrades gracefully\nback to Edge-TTS. On this project's dev laptop (RTX 3050 4 GB, CUDA\n12.6) Kokoro uses ~819 MB VRAM and Chatterbox-Turbo ~3.8 GB; CPU-only\nis not recommended (OOM). See `docs/VOICE_CLONING_GUIDE.md`.\n\n**Health & hardening:**\n- Healthcheck hits `GET /api/health` (container `HEALTHCHECK`).\n- No secrets are logged; output paths are sanitized against `../` traversal\n  at the dispatch chokepoint (`src/agentic/operations/security.ts`).\n- CI runs `typecheck` + `test:unit` + a Gitleaks secret scan + a Docker\n  build/push to GHCR on every push to `main`.\n\n\n\nThe MCP server lets AI agents (Claude Desktop, Claude Code, Cursor, etc.) create videos autonomously — it exposes 23 tools, 13 resources, and 4 prompts over stdio.\n\n**Quick connect (read-only safe mode — default):**\n\n```json\n{\n    \"mcpServers\": {\n        \"automated-video-generator\": {\n            \"command\": \"npx\",\n            \"args\": [\"automated-video-generator\"]\n        }\n    }\n}\n```\n\nOr run it locally:\n\n```bash\nnpm install\nnpm run mcp        # starts the MCP server on stdio\n```\n\n**⚠️ Safe mode (important):** By default the MCP server runs in **safe mode** — read tools (`read_input_script`, `list_output_videos`, `health_check`, etc.) work, but **all write/mutation tools are blocked** with `ForbiddenError: safe mode`. This protects your files from accidental changes by an agent.\n\nTo enable write tools (`write_input_script`, `delete_*`, `upload_asset`, `update_env_config`, `run_pipeline_command`, `delete_output`), set the flag:\n\n```bash\n# one-off\nALLOW_UNSAFE_MCP_TOOLS=1 npm run mcp\n\n# or in your client config (env)\n{\n  \"mcpServers\": {\n    \"automated-video-generator\": {\n      \"command\": \"npx\",\n      \"args\": [\"automated-video-generator\"],\n      \"env\": { \"ALLOW_UNSAFE_MCP_TOOLS\": \"1\" }\n    }\n  }\n}\n```\n\n> Only enable `ALLOW_UNSAFE_MCP_TOOLS` for trusted agents — it grants filesystem write access to your project.\n\n**What the server provides:**\n\n- **Tools (60):** `write_input_script`, `read_input_script`, `delete_input_script`, `validate_input_script`, `upload_asset`, `delete_asset`, `list_output_videos`, `read_output_file`, `delete_output`, `generate_video`, `get_video_status`, `run_pipeline_command`, `list_jobs`, `get_batch_status`, `read_env_config`, `update_env_config`, `get_system_info`, `health_check`, `get_workspace_paths`, `list_public_files`, `list_voices`, `list_local_assets`, `search_free_video`, `download_free_video`, `agentic_plan`, `agentic_acquire`, `agentic_verify_all`, `list_pending_assets`, `get_asset_preview`, `approve_asset`, `reject_asset"
+    },
+    "brief": {
+      "summary": "将文字脚本自动生成带配音、素材和字幕的MP4视频",
+      "problem": "手动寻找素材、配音、剪辑和加字幕耗时",
+      "highlights": [
+        "可以把脚本生成带旁白的MP4",
+        "可以自动匹配库存素材并加字幕",
+        "可以通过网页或命令行批量生成视频"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "内容运营人员",
+        "视频自动化开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码更新，支持本地生成视频",
+      "caveat": "资料中未说明各语音和素材的具体许可范围",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "itsPremkumar/Automated-Video-Generator",
+      "score": 96,
+      "category": "AI 视频",
+      "reason": "自动生成配音字幕与剪辑视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "Osmantic/ODS",
+      "url": "https://github.com/Osmantic/ODS",
+      "description": "Turn your PC, Mac, or Linux box into an AI server.  LLM inference, chat UI, voice, agents, workflows, RAG, and image generation.",
+      "language": "Python",
+      "total_stars": 3731,
+      "forks": 537,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 54
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "amd",
+        "comfyui",
+        "docker",
+        "llama-cpp",
+        "llm",
+        "local-ai",
+        "n8n",
+        "nvidia",
+        "open-webui",
+        "rag",
+        "self-hosted",
+        "speech-to-text",
+        "strix-halo",
+        "text-to-speech",
+        "workflow-automation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-09T13:14:58Z",
+      "updated_at": "2026-07-27T04:05:56Z",
+      "pushed_at": "2026-07-27T04:08:49Z",
+      "open_issues": 266,
+      "homepage": "https://discord.gg/qGVygYada3",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# ODS\n\n**Osmantic Deployment System**\n\n<p align=\"center\">\n  <a href=\"https://osmantic.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <img src=\"ods/docs/images/osmantic-lockup.png\" alt=\"Osmantic\" width=\"800\">\n  </a>\n</p>\n\n**Turn your PC, Mac, or Linux box into a private AI server.**\n\nAI server and homelab setup is rapidly becoming a solved problem.\nIt should feel that way for everyone.\n\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)\n[![GitHub Stars](https://img.shields.io/github/stars/Osmantic/ODS)](https://github.com/Osmantic/ODS/stargazers)\n[![Release](https://img.shields.io/github/v/release/Osmantic/ODS)](https://github.com/Osmantic/ODS/releases)\n\n[![Watch the demo](https://img.shields.io/badge/Demo-Watch%20on%20YouTube-red?logo=youtube)](https://youtu.be/nO8xFNHX-HA)\n\n</div>\n\nODS installs and wires together everything you need to run AI locally, so you do not have to assemble Ollama, Open WebUI, n8n, ComfyUI, and privacy tools by hand:\n\n- **Local model inference** — run open models on your own hardware\n- **ChatGPT-style web UI** — talk to your models from any browser\n- **Control dashboard** — manage models, services, setup, GPU status, and extensions from one place\n- **Voice, agents, and workflows** — build automations that can listen, speak, call tools, and get work done\n- **RAG and search** — connect local documents, private search, and retrieval workflows\n- **Image generation** — run local image tools without sending prompts to a hosted API\n- **Privacy and ops** — keep service auth, secrets, observability, and diagnostics in one local stack\n\nNo cloud required. No subscriptions required. Your prompts and data stay on your machine unless you choose otherwise. Cloud and hybrid API modes are optional when you want them.\n\n**Release validation:** Operational changes are checked with a release-grade\nfleet and distro lab: zero-prereq bootstrap, fresh installs, product flows,\nfull-model capabilities, lifecycle recovery, and the final User Green gate. See\n[Release Validation](ods/docs/RELEASE_VALIDATION.md) for what a green\nrun proves.\n\n**Repo layout:** the repository root holds the public README, installers,\nsecurity policy, GitHub workflows, and project coordination docs. The\n`ods/` directory is the product runtime: services, installer phases,\ncompose overlays, dashboard, CLI, tests, and operator docs.\n\n**Stable consumption:** `v2.5.3` is the current stable release. `main` moves\nquickly; use it for active development and validation candidates. For forks,\nappliances, labs, or production-like installs, pin a tagged release or audited\ncommit and keep your own validation receipt. Stable patch fixes land on\n`release/2.5.x` before being merged forward. See\n[Release Channels](ods/docs/RELEASE_CHANNELS.md),\n[Installer Trust](ods/docs/INSTALLER_TRUST.md), and\n[Forkability](ods/docs/FORKABILITY.md).\n\n## Get Started\n\nLinux and macOS:\n\n```bash\ncurl -fsSL https://install.osmantic.com/ods.sh | bash\n```\n\nThe hosted endpoint proxies the current bootstrap from repository `main`.\nReviewed merges reach it automatically after edge-cache refresh. `ODS_REF` selects a compatible repository checkout. See\n[Installer Trust](ods/docs/INSTALLER_TRUST.md) to inspect the script or install\na stable release or audited commit manually.\n\nWindows users should use the PowerShell installer shown below or follow the [Windows Quickstart](ods/docs/WINDOWS-QUICKSTART.md).\n\nAfter install, open **http://localhost:3000** and start chatting.\n\n> **API endpoint:** Linux Docker installs expose llama-server on **http://localhost:11434** by default (`OLLAMA_PORT`) while containers use `llama-server:8080`. macOS native Metal and Windows native/Lemonade paths use **http://localhost:8080** unless overridden. Open WebUI stays on **http://localhost:3000**.\n\n> **No GPU?** ODS also runs in cloud mode — same full stack, powered by OpenAI/Anthropic/Together APIs instead of local inference:\n> ```bash\n> ./install.sh --cloud\n> ```\n\n> **Port conflicts?** Every port is configurable via environment variables. See [`.env.example`](ods/.env.example) for the full list, or override at install time:\n> ```bash\n> WEBUI_PORT=9090 ./install.sh\n> ```\n\n**New here?** Read the [Friendly Guide](ods/docs/HOW-ODS-SERVER-WORKS.md) or [listen to the audio version](https://open.spotify.com/episode/40MvqJ41bC8cEgvUyOyE3K) — a complete walkthrough of what ODS is, how it works, and how to make it your own. No technical background needed.\n\n---\n\n## At A Glance\n\n| Question | Answer |\n|----------|--------|\n| **What is it?** | A local AI server stack for your own hardware, with a one-command Linux/macOS installer and a PowerShell installer for Windows. |\n| **Who is it for?** | People who want private AI at home, in a lab, or on a workstation without hand-wiring a dozen services. |\n| **What do I get?** | Local inference, Open WebUI chat, a control dashboard, voice, agents, workflows, RAG, search, image generation, privacy tools, observability, and developer tools. |\n| **What does it run on?** | Linux, Windows with WSL2/Docker Desktop, and macOS Apple Silicon. |\n| **Is cloud required?** | No. Local mode is the default; cloud and hybrid API modes are optional. |\n\n| If you know... | ODS adds... |\n|----------------|----------------------|\n| **Ollama / llama.cpp** | The surrounding server stack: chat, dashboard, voice, RAG, workflows, agents, privacy, and service management. |\n| **Open WebUI** | A full installer and control plane around Open WebUI, plus pre-wired local services. |\n| **AnythingLLM** | Broader local AI appliance behavior beyond RAG: inference, chat, voice, workflows, image generation, and ops. |\n| **n8n self-hosted AI starter kits** | Workflow automation as one part of a larger private AI server. |\n\n---\n\n> **Current Platform Support**\n>\n> | Platform | Status |\n> |----------|--------|\n> | **Linux** (NVIDIA + AMD + Intel Arc) | **Supported** — install and run today |\n> | **Windows** (NVIDIA + AMD) | **Supported** — install and run today |\n> | **macOS** (Apple Silicon) | **Supported** — install and run today |\n>\n> **Tested Linux distros:** Ubuntu 24.04/22.04, Debian 12, Linux Mint 21.3, Fedora 41+, Rocky Linux 9, Arch Linux, Manjaro, CachyOS, and openSUSE Tumbleweed. Other distros using apt, dnf, pacman, or zypper should also work — [open an issue](https://github.com/Osmantic/ODS/issues) if yours doesn't.\n>\n> **Release validation:** Operational changes run through a release-grade gate\n> that covers zero-prereq bootstrap, clean installs, product behavior,\n> full-model capabilities, lifecycle recovery, and User Green. See\n> [Release Validation](ods/docs/RELEASE_VALIDATION.md) and the\n> [Validation Matrix](ods/docs/VALIDATION-MATRIX.md).\n>\n> **Windows:** Requires Docker Desktop with WSL2 backend. NVIDIA GPUs use Docker GPU passthrough; AMD Strix Halo runs through the platform-specific accelerated path documented in the Windows installer and support matrix.\n>\n> **macOS:** Requires Apple Silicon (M1+) and Docker Desktop. llama-server runs natively with Metal GPU acceleration; all other services run in Docker.\n>\n> See the [Support Matrix](ods/docs/SUPPORT-MATRIX.md) for supported\n> platform claims and the [Validation Matrix](ods/docs/VALIDATION-MATRIX.md)\n> for the layered test surface used to test those claims.\n\n---\n\n## Why ODS?\n\nA handful of companies control the vast majority of global AI traffic — and with it, your data, your costs, and your uptime. Every query you send to a centralized provider is business intelligence you don’t own, running on infrastructure you don’t control, priced on terms you can’t negotiate.\n\nIf AI is becoming critical infrastructure, it shouldn’t be rented. Self-hosting local AI should be a sovereign human right, not a career choice.\n\nBecause running your own AI shouldn't require a CS degree and a weekend of debugging CUDA drivers. Right now, setting up local AI means stitching together a dozen projects, writing Docker configs from scratch, and praying everything talks to each other. Most people give up and go back to paying OpenAI.\n\nWe built ODS so you don't have to.\n\n- **One command** — detects your GPU, picks the right model, generates credentials, launches everything\n- **Chatting in under 2 minutes** — bootstrap mode gives you a working model instantly while your full model downloads in the background\n- **Full service stack, pre-wired** — chat, agents, voice, workflows, search, RAG, image generation, privacy tools, observability, and developer tools. All talking to each other out of the box\n- **Fully moddable** — every service is an extension. Drop in a folder, run `ods enable`, done\n\n<details>\n<summary><b>Manual install (Linux)</b></summary>\n\n```bash\ngit clone https://github.com/Osmantic/ODS.git\ncd ODS/ods\n./install.sh\n```\n\n</details>\n\n<details>\n<summary><b>Windows (PowerShell)</b></summary>\n\nRequires [Docker Desktop](https://www.docker.com/products/docker-desktop/) with WSL2 backend enabled.\n**Install Docker Desktop first and make sure it is running before you start.**\n\nOpen a normal **PowerShell** session and run:\n\n```powershell\nSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass\ngit clone https://github.com/Osmantic/ODS.git\ncd ODS\n.\\install.ps1\n```\n\n> The `Set-ExecutionPolicy` command allows the installer script to run in the current session. It does not change your system-wide policy.\n> Running as Administrator is not recommended for the installer because user-level paths such as `.opencode`, `data/`, and `.env` can be created with admin-owned permissions.\n\nThe installer detects your GPU, picks the right model, generates credentials, starts all services, and creates a Desktop shortcut to the Dashboard. Manage with `.\\ods\\installers\\windows\\ods.ps1 status`.\n\n</details>\n\n<details>\n<summary><b>macOS (Apple Silicon)</b></summary>\n\nRequires Apple Silicon (M1+) and [Docker Desktop](https://www.docker.com/products/docker-desktop/).\n**Install Docker Desktop first and make sure it is running before you start.**\n\n```bash\ngit clone https://github.com/Osmantic/ODS.git\ncd ODS/ods\n./install.sh\n```\n\nThe installer detects your chip, picks the right model for your unified memory, launches llama-server natively with Metal acceleration, and starts all other services in Docker. Manage with `./ods-macos.sh status`.\n\nSee the [macOS Quickstart](ods/docs/MACOS-QUICKSTART.md) for details.\n\n</details>\n\n---\n\n## What's In The Box\n\n### Chat & Inference\n- **Open WebUI** — full-featured chat interface with conversation history, web search, document upload, and [30+ languages](https://docs.openwebui.com)\n- **llama-server** — high-performance LLM inference with continuous batching, auto-selected for your GPU; Linux Docker host API defaults to `localhost:11434`, native macOS/Windows paths use `localhost:8080`, and container API runs on `8080`\n- **LiteLLM** — API gateway supporting local/cloud/hybrid modes\n- **TEI Embeddings** — text embedding service for RAG and search workflows\n\n### Voice\n- **Whisper** — speech-to-text\n- **Kokoro** — text-to-speech\n\n### Agents & Automation\n- **Hermes Agent** — default local-first autonomous/browser agent with memory, skills, and a magic-link-gated proxy\n- **OpenClaw** — deprecated legacy autonomous agent, still opt-in during the migration window\n- **n8n** — workflow automation with 400+ integrations (Slack, email, databases, APIs)\n- **APE** — Agent Policy Engine for auditing and governing autonomous tool calls\n- **OpenCode** — browser-based AI coding assistant wired to the local stack\n- **Memory Shepherd** — host/systemd helper for agent memory lifecycle management\n\n### Knowledge & Search\n- **Qdrant** — vector database for retrieval-augmented generation (RAG)\n- **SearXNG** — self-hosted web search (no tracking)\n- **Perplexica** — deep research engine\n- **Brave Search** — optional paid Brave Search API integration\n\n### Creative\n- **ComfyUI** — node-based image generation\n\n### Privacy & Ops\n- **Privacy Shield** — PII scrubbing proxy for API calls"
+    },
+    "brief": {
+      "summary": "将个人电脑搭建为一体化本地 AI 服务器",
+      "problem": "解决本地 AI 服务需要手动拼装和维护的问题",
+      "highlights": [
+        "可以运行本地模型并通过网页聊天",
+        "可以搭建语音、代理、RAG 和自动化流程",
+        "可以在本机进行图像生成与服务管理"
+      ],
+      "target_users": [
+        "本地 AI 用户",
+        "家庭实验室用户",
+        "开发者"
+      ],
+      "why_trending": "本周首次收录，已有3731个 Star，近期仍在活跃更新",
+      "caveat": "不同系统和 GPU 有具体要求，稳定版建议固定版本",
+      "category": "创作者自动化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Osmantic/ODS",
+      "score": 65,
+      "category": "创作者自动化",
+      "reason": "集成智能体与语音图像工作流",
+      "generated_by_ai": true,
+      "velocity_score": 53,
+      "freshness_score": 40,
+      "ranking_score": 51.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "esengine/estella",
+      "url": "https://github.com/esengine/estella",
+      "description": "A fast 2D game engine — TypeScript SDK, C++/WebAssembly core, visual editor. Ship one project to web, desktop, WeChat MiniGames, playable ads, and native Android / iOS.",
+      "language": "TypeScript",
+      "total_stars": 315,
+      "forks": 45,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "android",
+        "cpp",
+        "ecs",
+        "game-editor",
+        "game-engine",
+        "gamedev",
+        "ios",
+        "typescript",
+        "webassembly",
+        "webgl",
+        "webgpu",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-25T07:34:59Z",
+      "updated_at": "2026-07-27T04:08:57Z",
+      "pushed_at": "2026-07-27T04:08:49Z",
+      "open_issues": 0,
+      "homepage": "https://estellaengine.com/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<img src=\".github/logo.png\" width=\"120\" alt=\"Estella logo\" />\n\n# Estella\n\n**A fast 2D game engine powered by WebAssembly and ECS**\n\n[![CI](https://github.com/esengine/estella/actions/workflows/build.yml/badge.svg)](https://github.com/esengine/estella/actions/workflows/build.yml)\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/esengine/estella)](https://github.com/esengine/estella/releases)\n[![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)\n[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop%20%7C%20WeChat%20%7C%20Android%20%7C%20iOS-green.svg)]()\n[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/esengine/estella)\n\n[Website](https://estellaengine.com) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Discord](https://discord.gg/sAX6PXZ9) • [QQ群: 481923584](https://qm.qq.com/q/BONa5LXQ0U)\n\n</div>\n\n---\n\n## What is Estella?\n\nEstella is a **2D game engine** with a TypeScript SDK driven by a high-performance **C++/WebAssembly** backend. It ships with a visual editor for scene editing and project management, and outputs games that run in **web browsers**, on the **desktop**, in **WeChat MiniGames**, as single-file **playable ads**, and as native **Android / iOS** apps.\n\n<div align=\"center\">\n  <img src=\"docs/assets/editor-hero-c5bfd2f3.png\" alt=\"An action-RPG scene open in the Estella editor\" width=\"900\" />\n  <br/>\n  <sub><i>Celestial Heights — an action-RPG scene in the Estella editor, with the full scene graph in the outliner.</i></sub>\n</div>\n\n## Why Estella?\n\n- **Fast** — C++ rendering pipeline compiled to WebAssembly, not interpreted JS\n- **Type-safe** — First-class TypeScript SDK with `defineSystem`, `defineComponent`, and `Query`\n- **Data-oriented** — Entity-Component-System architecture for scalable game logic\n- **Visual editor** — Scene hierarchy, inspector, asset browser — no JSON editing\n- **Cross-platform** — One codebase, deploy to web, desktop, WeChat MiniGames, playable ads, and native mobile\n- **Spine & Physics** — Built-in Spine animation and physics support\n\n## Features\n\n| Feature | Description |\n|---------|-------------|\n| **Visual Editor** | Scene editor with hierarchy, inspector, and asset management |\n| **ECS Architecture** | Compose entities from reusable components, drive behavior with systems |\n| **WebGL / WebGPU Rendering** | Sprites, cameras, Spine animations, custom shaders — all in WebAssembly |\n| **TypeScript SDK** | Type-safe API: `defineSystem`, `defineComponent`, `Query`, `Commands` |\n| **Cross-Platform** | One project → web, desktop, WeChat MiniGames, playable ads, and native Android / iOS |\n| **Native mobile** | A real arm64 app rendering through an embedded Dawn (Metal / Vulkan) — not a WebView |\n\n## Getting Started\n\n### Install\n\nDownload the editor from the [releases page](https://github.com/esengine/estella/releases) and install it.\n\n### Create a Project\n\n1. Open the editor and click **New Project**\n2. Enter a project name, select a location, and click **Create**\n\nThe editor creates a project with a default scene containing a Camera entity.\n\n### Write Game Logic\n\nAdd entities and components in the scene editor, then write systems in TypeScript:\n\n```typescript\nimport {\n    defineComponent, defineSystem, addSystem,\n    Query, Mut, Res, Time, LocalTransform\n} from 'esengine';\n\nconst Speed = defineComponent('Speed', { value: 200 });\n\naddSystem(defineSystem(\n    [Res(Time), Query(Mut(LocalTransform), Speed)],\n    (time, query) => {\n        for (const [entity, transform, speed] of query) {\n            transform.position.x += speed.value * time.delta;\n        }\n    }\n));\n```\n\nPress **F5** in the editor to preview.\n\n## Documentation\n\nFull documentation: [estellaengine.com/docs](https://estellaengine.com/docs)\n\n- [Introduction](https://estellaengine.com/docs/getting-started/introduction/)\n- [Installation](https://estellaengine.com/docs/getting-started/installation/)\n- [Quick Start](https://estellaengine.com/docs/getting-started/quick-start/)\n- [ECS Architecture](https://estellaengine.com/docs/core-concepts/ecs/)\n- [Components](https://estellaengine.com/docs/core-concepts/components/)\n- [Systems](https://estellaengine.com/docs/core-concepts/systems/)\n- [Building & Exporting](https://estellaengine.com/docs/guides/build-export/)\n- [Android & iOS](https://estellaengine.com/docs/guides/mobile/)\n\n## Contributing\n\nWe welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.\n\n## License\n\nEstella is licensed under the [Apache License, Version 2.0](LICENSE).\n\nYou may use, modify, and distribute it **for any purpose, including commercial use**,\nfree of charge. There is no separate commercial license and no noncommercial\nrestriction. We follow [Semantic Versioning](VERSIONING.md) and keep a\n[CHANGELOG](CHANGELOG.md).\n\nTwo things to keep in mind:\n\n- **Trademarks.** Apache-2.0 grants rights to the code, not to the \"Estella\" /\n  \"ESEngine\" names or logos. You may state that your project uses Estella, but\n  please don't imply endorsement or ship a fork under the Estella name.\n- **Spine is separate.** The bundled [Spine Runtimes](third_party) are **not** open\n  source. If you ship a game that uses Estella's Spine integration, you need a valid\n  Spine license from Esoteric Software — independent of Estella's Apache-2.0 license.\n  See [NOTICE](NOTICE).\n\nHow the project sustains itself (sponsorship, optional hosted/pro add-ons,\nmarketplace, and support) is described openly in [BUSINESS_MODEL.md](BUSINESS_MODEL.md).\n"
+    },
+    "brief": {
+      "summary": "Estella 是面向多平台发布的 2D 游戏引擎",
+      "problem": "减少 2D 游戏跨平台开发与发布的重复工作",
+      "highlights": [
+        "可以用可视化编辑器搭建游戏场景",
+        "可以用 TypeScript 编写游戏逻辑",
+        "可以发布到网页、桌面和移动端"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "TypeScript 开发者",
+        "小游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新，已获315个 Star",
+      "caveat": "Spine 集成需另行取得商业授权",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "esengine/estella",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "直接提供2D游戏引擎与编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "EndoHizumi/webTaleKit",
+      "url": "https://github.com/EndoHizumi/webTaleKit",
+      "description": "A visual novel game engine written in JavaScript (TypeScript) that allows full customization of the UI.",
+      "language": "TypeScript",
+      "total_stars": 56,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adventure-game-engine",
+        "css",
+        "engine",
+        "galgame",
+        "game-development",
+        "game-developments",
+        "game-engine",
+        "game-framework",
+        "gamemaker",
+        "html",
+        "html-css-javascript",
+        "interactive-storytelling",
+        "javascript",
+        "novel",
+        "text-based-adventure",
+        "typescript",
+        "visual",
+        "visual-novel",
+        "visual-novel-engine",
+        "visual-novel-framework"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-05-22T09:19:01Z",
+      "updated_at": "2026-07-27T03:20:06Z",
+      "pushed_at": "2026-07-27T03:19:41Z",
+      "open_issues": 30,
+      "homepage": "https://endohizumi.github.io/webTaleKit/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# webTaleKit\r\n\r\n![webTaleKitロゴ](s-plan1-5Light-s-1.jpg)\r\n\r\n**[English](README_EN.md) | 日本語**\r\n\r\n## 目次\r\n\r\n- [概要](#概要)\r\n- [デモ](#デモ)\r\n- [ドキュメント](#ドキュメント)\r\n- [環境構築手順](#環境構築手順)\r\n- [動作確認手順](#動作確認手順)\r\n- [Quick Start(デモゲームを弄ってみよう)](#quick-startデモゲームを弄ってみよう)\r\n- [開発コマンド](#開発コマンド)\r\n- [シナリオ検証API](#シナリオ検証api)\r\n- [現在の状況](#現在の状況)\r\n- [ロードマップ](#ロードマップ実装予定)\r\n- [できること](#アルファ版01x-02xでできること)\r\n- [制限事項](#アルファ版01x-02xの制限事項)\r\n\r\n## 概要\r\n\r\nTypeScript(JavaScript) ベースのビジュアルノベルゲームエンジンです。\r\nUIをHTML・CSS・JavaScriptで柔軟に作成でき、シナリオをマークアップ言語とJavaScriptで制御できます。\r\n自動スケーリング機能で、様々なウィンドウサイズに対応します。\r\nVS Codeの拡張機能を用いたGUIエディタやREST API呼び出しによる生成AI連携の追加を提供予定です。\r\n\r\n### 特徴\r\n\r\n- 🎮 **柔軟なUI作成**: HTML・CSS・JavaScriptで自由にUIをデザイン\r\n- 📝 **直感的なシナリオ記述**: マークアップ言語とJavaScriptでシナリオを制御\r\n- 🔄 **自動スケーリング**: 様々なウィンドウサイズに自動対応\r\n- 🎨 **豊富な画像処理**: フィルター・アニメーション機能を搭載\r\n- 🔊 **サウンド対応**: BGM・SE・ボイス再生に対応\r\n- 🛠️ **TypeScript対応**: TypeScriptでの開発をサポート\r\n- 🤖 **AI連携**: REST API呼び出しによる生成AI連携（予定）\r\n\r\n## デモ\r\n\r\nFirefoxでも、Chromeでも、Edgeでも、好きなブラウザを使いたまえ・・・!\r\n<https://test-game-chi.vercel.app/>\r\n![デモゲーム画面](image.png)\r\n\r\n## ドキュメント\r\n\r\n📖 **オンラインドキュメント**: <https://endohizumi.github.io/webTaleKit/>\r\n\r\n## 環境構築手順\r\n\r\n1. Git が必要です。\r\n   - **インストール確認:** `git --version` でバージョンが表示されれば OK\r\n   - Windowsの場合は、Git公式サイト (<https://git-scm.com/>) からインストールしてください。\r\n   - Macの場合は、`brew install git` を実行してインストールしてください。\r\n   - Linuxの場合は、以下のコマンドを実行してインストールしてください。\r\n\r\n    ```bash\r\n    sudo apt-get update\r\n    sudo apt-get install git\r\n    ```\r\n\r\n2. Node.js(20以降)が必要です。(nvm等お好みの方法がある場合は、そちらでも構いません)\r\n   - **インストール確認:** `node --version` でv20以上のバージョンが表示されれば OK\r\n   - Windowsの場合は、Node.js公式サイト (<https://nodejs.org/>) からインストールしてください。\r\n   - Macの場合は、`brew install node` を実行してインストールしてください。\r\n   - Linuxの場合は、以下のコマンドを実行して、インストールしてください。\r\n\r\n    ```bash\r\n    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -\r\n    sudo apt-get install -y nodejs\r\n    ```\r\n\r\n3. 以下のコマンドを実行してください\r\n\r\n    ``` bash\r\n    npm create tale-game your-game-title\r\n    cd your-game-title\r\n    npm run play\r\n    ```\r\n\r\nデモゲームが起動すれば、構築は完了です。\r\n\r\n## 動作確認手順\r\n\r\n以下のコマンドを実行してください。\r\n\r\n```bash\r\ngit clone https://github.com/EndoHizumi/testGame.git\r\ncd testGame\r\nnpm install\r\nnpm run play\r\n```\r\n\r\n## Quick Start(デモゲームを弄ってみよう)\r\n\r\nこのセクションでは、プログラミングの知識がなくても簡単にゲームをカスタマイズできる方法を説明します。\r\n\r\n### 画像を差し替える(簡単なカスタマイズ)\r\n\r\n**手順:** 既存の画像ファイルを新しい画像で置き換える(ファイル名は同じにしてください)\r\n\r\n#### キャラクターや背景を変える\r\n\r\n- **キャラを変える場合**\r\n  - `./src/resource/chara/guide.png` を新しいキャラ画像で上書きしてください(ファイル名は `guide.png` のまま)\r\n- **背景画像を変える**\r\n  - `./src/resource/background/title_bg.png` を新しい背景画像で上書きしてください(ファイル名は `title_bg.png` のまま)\r\n- **BGMを変える**\r\n  - `./src/resource/bgm/title_theme.mp3` を新しい音楽ファイルで上書きしてください(ファイル名は `title_theme.mp3` のまま)\r\n\r\n#### ボタンの見た目を変える\r\n\r\n- **選択肢の画像を変える**\r\n  - `./src/resource/system/systemPicture/02_button/button.png`(通常時) - ファイル名は `button.png` のまま上書き\r\n  - `./src/resource/system/systemPicture/02_button/button2.png`(マウスを乗せた時) - ファイル名は `button2.png` のまま上書き\r\n  - `./src/resource/system/systemPicture/02_button/button3.png`(クリック時) - ファイル名は `button3.png` のまま上書き\r\n\r\n**パス表記について:**\r\n\r\n- `./` は「現在のプロジェクトフォルダから」という意味です\r\n- パス区切り文字は `/` (スラッシュ) を使用しています\r\n- **Windowsをお使いの方:** `\\` (バックスラッシュ) でも動作しますが、上記の `/` 形式を推奨します\r\n\r\n### シナリオファイルを編集する(テキストの変更)\r\n\r\nシナリオファイル(`.scene`ファイル)をテキストエディタで開いて、以下の方法で内容を変更できます:\r\n\r\n#### 基本的な要素の追加\r\n\r\n- **キャラを増やす**\r\n  1. `./src/resource/character` フォルダに新しいキャラ画像を保存\r\n  2. シナリオファイルで `<show src=\"キャラ画像のファイル名\"></show>` を記述\r\n- **セリフを増やす**\r\n  - `<say name=\"キャラの名前\">ここにセリフを入力</say>` を記述\r\n- **地の文(ナレーション)を増やす**\r\n  - `<text>ここに地の文を入力</text>` を記述\r\n\r\n**初心者の方へ:** まずは既存のテキストを変更することから始めることをお勧めします。\r\n\r\n#### 選択肢を追加・変更する\r\n\r\n選択肢はプレイヤーがゲームの進行を選ぶ重要な要素です。シナリオファイル内の `<choice>` タグを編集することで変更できます。\r\n\r\n**基本的な選択肢の書き方:**\r\n\r\n``` html\r\n<item label='選択肢の文言'>\r\n    <text>選択後に表示される文章</text>\r\n</item>\r\n```\r\n\r\n**実用的な例:**\r\n\r\n```html\r\n<choice prompt=\"ゲームを始めますか?\">\r\n  <item label=\"はい\">\r\n      <jump index=\"5\" />\r\n  </item>\r\n  <item label=\"いいえ\">\r\n      <jump index=\"16\" />\r\n  </item>\r\n  <item label='ちょっと待ってくれ'>\r\n    <text>承知しました。</text>\r\n     <jump index=\"1\" />\r\n  </item>\r\n</choice>\r\n```\r\n\r\n## 開発コマンド\r\n\r\n### ビルドと開発\r\n\r\n- `npm run build` - TypeScriptをJavaScriptにコンパイルし、配布ファイルを準備\r\n- `npm run dev` - プロジェクトをビルドし、exampleフォルダで開発サーバーを起動\r\n- `npm run lint` - ESLintでコード品質をチェック\r\n- `npm run test` - Jestでテストを実行\r\n\r\n### CLIツール\r\n\r\n- `wtc` - WebTaleScriptパーサーCLI (`parser/cli.js` から利用可能)\r\n- 使用方法: `wtc <scene-file> [output-directory]` で `.scene` ファイルを `.js/.ts` ファイルに変換\r\n\r\n### ドキュメント\r\n\r\n- `npm run docs:dev` - VitePressドキュメントサーバーを起動\r\n- `npm run docs:build` - ドキュメントをビルド\r\n- `npm run docs:preview` - ビルドしたドキュメントをプレビュー\r\n\r\n## シナリオ検証API\r\n\r\nWebTaleKit には、シナリオ配列を検証しつつ、HTML風の文字列を非破壊でサニタイズできる公開APIがあります。\r\n\r\n- `validateScenarioObjects` - 検証結果とサニタイズ済みシナリオを返します\r\n- `formatValidationOutput` - エラーと警告を表示用文字列へ整形します\r\n- `createScenarioValidationError` - 検証結果から Error を生成します\r\n- `assertScenarioValidation` - エラーがある場合に例外を送出します\r\n- `reportScenarioValidation` - logger 経由で警告とエラーを出力します\r\n\r\nこれらのAPIは、エンジン実行時に自動で強制適用されません。シナリオの読み込み時、エディタ連携時、独自ビルド処理時などに、利用者が必要に応じて呼び出す想定です。\r\n\r\n```ts\r\nimport {\r\n  assertScenarioValidation,\r\n  reportScenarioValidation,\r\n  validateScenarioObjects,\r\n} from './src/utils/validateScenario'\r\n\r\nconst result = validateScenarioObjects(scenarioObjects, commandList)\r\n\r\nawait reportScenarioValidation(result, 'Scene import')\r\nassertScenarioValidation(result, 'Scene import')\r\n\r\nconst safeScenario = result.sanitizedScenario\r\n```\r\n\r\n`sanitizedScenario` は元の入力配列を破壊せずに返されます。`sanitized` が `true` の場合は、HTML風の文字列がエスケープされています。\r\n\r\n## 現在の状況\r\n\r\nwebTaleKitは、現在アルファ版です。\r\n\r\n開発進捗は、[@endo_hizumi](https://x.com/endo_hizumi) で行っております。\r\n実装予定の項目については、こちらの[Trello](https://trello.com/b/qYNGh7MY)からも確認できます。\r\n\r\nデモをプレイした感想・WebTaleKitを使って気になったことなど、意見・感想はこちらで受け付けています!\r\n[https://forms.gle/uejQwvwAb99wcJht7](https://forms.gle/uejQwvwAb99wcJht7)\r\n\r\n検索Hashtag: #webTalekit\r\n\r\n## ロードマップ(実装予定)\r\n\r\n| バージョン | コードネーム | codeName | 内容\r\n| :--- | :--- | :--- | :---\r\n| 0.1.0 | 初音| HATUNE | 初期リリース\r\n| 0.2.0 | 礎 | ISHIZUE | 基本機能アップデート<br>0.2.12〜<br>ダイアログ表示タグの追加<br>engineConfig反映バグの修正<br>未定義タグがある場合、undefineを呼び出すバグの修正<br>文字列以外を囲むとこける問題の修正<br>リンク切れでこける問題の修正<br>メッセージウィンドウオーバーフローの修正<br>if属性の実装<br>for属性の実装<br>既読管理の追加\r\n| 0.3.0 | 舞踊 | BUYO | トランジション・アニメーション関連のアップデート<br>テキストスピードの調整タグの追加<br>テキスト表示フォントサイズの変更<br>Webフォントのサポート(フォント変更設定の追加)<br>動画再生のサポート<br>子要素でフィルター・アニメーション設定\r\n| 0.4.0 | 狭間 | HAZAMA | Vue.jsやReact、SvelteなどのUIフレームワークとの連携追加のアップデート\r\n| 0.5.0 | 操手 | AYATURI |  ゲームパッドのサポート追加<br>キーコンフィグの追加<br>VOICEBOX APIの対応<br>npm run recの追加\r\n| 0.6.0 | 絡繰 | KARAKURI | wtsLinterの追加<br>VSCodeとの連携追加<br>wst2htmlの追加<br>プラグイン機能の追加<br>クロスプラットホームへのビルド追加\r\n| 0.7.0 | 綴り | TUDURI |  GUIエディタの追加\r\n| 0.8.0 | 迅雷 | JINRAI |  パフォーマンスアップデート\r\n| 0.9.0 | 出島 | DEJIMA |  KAGタグコンバータの追加\r\n| 1.0.0 | 暁月 | AKATUKI |  メジャーアップデート\r\n\r\n## アルファ版(0.1.x-0.2.x)で、できること\r\n\r\n### テキスト表示\r\n\r\n- 地の文の表示\r\n- キャラクターのセリフの表示・ボイスの再生\r\n- 定義した変数の表示\r\n\r\n### キャラクター・画像操作\r\n\r\n- キャラクターの画像の表示・位置変更・アニメーション\r\n- その他の画像の画像の表示・位置変更・アニメーション\r\n- キャラクターの複数表示・位置変更・アニメーション\r\n- CGの表示・変更\r\n- 背景画像の表示・変更\r\n\r\n### 画像処理\r\n\r\n- 画像のフィルター操作\r\n  - モノクロ化\r\n  - セピア化\r\n  - 透明度の変更\r\n  - サイズの変更\r\n\r\n### ユーザーインタラクション\r\n\r\n- 選択肢の表示\r\n- 選択肢の画像の変更\r\n  - 通常時\r\n  - マウスオーバー\r\n  - 選択時\r\n- Ctrlキーでの強制スキップ\r\n- Enterキーで全文表示\r\n\r\n### シナリオ制御\r\n\r\n- 表示する文章・画像の条件分岐\r\n- セリフのジャンプ\r\n- シナリオ(シーン)の切り替え\r\n\r\n### 音声\r\n\r\n- BGMの再生・停止\r\n- SEの再生・停止\r\n\r\n### セーブ&ロード\r\n\r\n- セーブ機能\r\n- ロード機能\r\n\r\n### システム設定・UI\r\n\r\n- HTMLで作った画面の表示\r\n- 解像度の設定変更\r\n\r\n### プログラミング連携\r\n\r\n- JavaScript連携\r\n  - メソッドの呼び出し\r\n  - 式の実行\r\n  - 変数の定義・値の変更\r\n- JavaScript側での背景画像の変更\r\n- TypeScript連携\r\n- REST API呼び出し(レスポンスの表示)\r\n\r\n## アルファ版(0.1.x-0.2.x)の制限事項\r\n\r\n### ビルド・プラットフォーム\r\n\r\n- Desktopアプリケーションへのビルド\r\n- Android(iOS)向けのビルド\r\n\r\n### ユーザーインターフェース (UI)\r\n\r\n- 画面各種のボタン\r\n- セーブファイルの一覧の取得\r\n\r\n### キャラクター操作\r\n\r\n- sayタグの以下の機能\r\n  - キャラが表示されていないときは、表示する\r\n\r\n### 視覚効果\r\n\r\n- showタグ / hideタグの以下の機能\r\n  - 子要素でフィルター指定\r\n  - 子要素でアニメーション指定\r\n  - スラッシュで区切ってリソース種類を指定\r\n- quakeタグ(画面を揺らす)\r\n- maskタグ(画面の暗転)\r\n\r\n### 音声\r\n\r\n- soundタグの以下の機能\r\n  - pause\r\n  - setVolume\r\n  - getVolume\r\n  - bgmエイリアス\r\n  - voiceエイリアス\r\n  - seエイリアス\r\n\r\n### リソース管理\r\n\r\n- JavaScriptでのリソースの動的定義\r\n\r\n### 設定・最適化\r\n\r\n- ゲーム設定ファイルの反映\r\n- 画面用HTMLのcss・jsのインライン化・minify化\r\n\r\n## ライセンス\r\n\r\nMIT License\r\n\r\n## クレジット\r\n\r\n### アイコン素材\r\n\r\n- <https://www.silhouette-illust.com/>\r\n\r\n### カラーコード\r\n\r\n- 青: #3178C6 (TypeScript Blue)\r\n- 緑: #02a889 (WebTaleKit Green)\r\n- 白: #f8f8f8 (White Smoke)\r\n"
+    },
+    "brief": {
+      "summary": "用 TypeScript 开发可定制网页视觉小说",
+      "problem": "解决视觉小说界面和剧本难以灵活定制的问题",
+      "highlights": [
+        "可以用 HTML、CSS、JavaScript 定制游戏界面",
+        "可以用场景文件编写对白、分支和跳转",
+        "可以制作含图片、音效和存档的网页视觉小说"
+      ],
+      "target_users": [
+        "视觉小说开发者",
+        "互动叙事创作者",
+        "TypeScript 开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续活跃，已有 56 个 Star",
+      "caveat": "项目仍处于 Alpha 阶段，且有 30 个开放问题",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "EndoHizumi/webTaleKit",
+      "score": 94,
+      "category": "互动叙事",
+      "reason": "专用于视觉小说与互动故事开发",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "Porcupine-Factory/FirstPersonController",
+      "url": "https://github.com/Porcupine-Factory/FirstPersonController",
+      "description": "O3DE First Person Controller Gem",
+      "language": "C++",
+      "total_stars": 50,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-development",
+        "game-engine",
+        "gamedev"
+      ],
+      "license_name": "MPL-2.0",
+      "created_at": "2023-01-31T00:42:50Z",
+      "updated_at": "2026-07-27T04:03:01Z",
+      "pushed_at": "2026-07-27T04:02:53Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# FirstPersonController\nO3DE First Person Controller Gem licensed under the [MPL 2.0](/LICENSE.txt).\n\n## Installation Instructions\nYou can install this gem in your project using O3DE's project manager. Navigate to the Gem Repositories page and provide this repo's git URL.\n\nFor more information, see the instructions found in O3DE's documentation: https://www.docs.o3de.org/docs/user-guide/remote-content/use-a-remote-repository\n\nIf you want to use this gem for multiplayer you will need to enable the Multiplayer gem in your project. Ensure that \"Multiplayer\" is listed in your project.json file's \"gem_names\" list.\n\n## How To Use This Gem\n[![O3DE First Person Controller Gem - Full Setup + Tutorial](https://porcupinesystems.com/wp-content/uploads/2025/10/first-person-controller.gif)](https://www.youtube.com/watch?v=O7rtXNlCNQQ)\n\n## License\nThis project's source and header files are licensed under the [MPL 2.0](/LICENSE.txt).\n\n## Acknowledgements\nThank you to [Olex Lozitskiy](https://github.com/AMZN-Olex) for his [O3DE book](https://github.com/AMZN-Olex/O3DEBookCode2111) which was instrumental in writing this gem.\n\nThank you to the [Open 3D Foundation](https://o3d.foundation/) for the effort that has been put into O3DE itself.\n"
+    },
+    "brief": {
+      "summary": "面向 O3DE 的第一人称控制器 Gem",
+      "problem": "为 O3DE 项目提供可复用的第一人称控制方案",
+      "highlights": [
+        "可以为 O3DE 游戏加入第一人称操作",
+        "可以通过项目管理器安装到项目中",
+        "可以配合 Multiplayer Gem 用于多人项目"
+      ],
+      "target_users": [
+        "O3DE 游戏开发者",
+        "独立游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新，已有 50 个 Star",
+      "caveat": "多人使用需额外启用 Multiplayer Gem",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Porcupine-Factory/FirstPersonController",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "直接提供O3DE第一人称控制器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "aivrar/portable-hermes-agent",
+      "url": "https://github.com/aivrar/portable-hermes-agent",
+      "description": "Hermes Agent made portable desktop for Windows — 100 tools, GUI, local models via LM Studio, TTS, Music, ComfyUI, workflows, tool maker. No install. No Docker. No admin rights.",
+      "language": "Python",
+      "total_stars": 193,
+      "forks": 39,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "desktop-app",
+        "hermes",
+        "hermes-agent",
+        "lm-studio",
+        "local-ai",
+        "music-generation",
+        "no-docker",
+        "no-install",
+        "portable",
+        "tool-making",
+        "windows",
+        "workflow-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-15T23:31:44Z",
+      "updated_at": "2026-07-27T03:13:21Z",
+      "pushed_at": "2026-07-27T03:13:07Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Portable Hermes Agent\n\n**Portable AI agent desktop for Windows** — 100 tools, GUI, local models via LM Studio, TTS, Music, ComfyUI, workflows, tool maker. No install. No Docker. No admin rights.\n\nBuilt on [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) (MIT License) with extensive customization for non-technical users.\n\n---\n\n## Features\n\n### Desktop GUI\n- Dark-themed Tkinter interface with chat, sidebar, and session management\n- Image attachment with thumbnails (vision model support)\n- Guided mode — works even without an AI model connected\n- API key setup wizard with individual service configuration\n- Permissions panel with granular control over file, network, and system access\n\n### 100 Tools Across 20+ Toolsets\n\n| Toolset | Tools | What It Does |\n|---------|-------|-------------|\n| **LM Studio** | 10 | Load/unload models, search HuggingFace, tokenize, embed, direct chat |\n| **Music** | 7 | Generate music, manage models, GPU workers, output library |\n| **TTS** | 7 | Text-to-speech, 10 voice models, voice cloning, job management |\n| **ComfyUI** | 7 | Image generation, instance management, model/node browsing |\n| **Workflows** | 6 | Create, run, schedule, and manage multi-step automation pipelines |\n| **Tool Maker** | 3 | Dynamically create API wrapper or Python handler tools at runtime |\n| **Serper** | 1 | Google-quality search via Serper.dev API |\n| **Guide** | 1 | Searchable built-in user manual |\n| **GPU** | 1 | NVIDIA GPU status (memory, temp, utilization) |\n| **Model Switcher** | 1 | Switch between cloud and local AI models |\n| **Hermes Update** | 2 | Update upstream Hermes while preserving portable tools, extensions, and runtime data |\n\nPlus all built-in hermes-agent tools: web search, file operations, browser automation, code execution, delegation, memory, skills, messaging, Home Assistant, and more.\n\n### Extension Modules\n\nThree portable AI generation servers from [aivrar](https://github.com/aivrar):\n\n| Extension | Port | Models | GPU |\n|-----------|------|--------|-----|\n| **[TTS Server](https://github.com/aivrar/portable-tts-server)** | 8200 | Kokoro, XTTS, Dia, Bark, Fish, + 5 more | 4 GB+ |\n| **[Music Server](https://github.com/aivrar/portable-music-server)** | 9150 | MusicGen, Stable Audio, ACE-Step, Riffusion | 4 GB+ |\n| **[ComfyUI](https://github.com/aivrar/comfyui-portable-installer)** | 5000 | SD 1.5, SDXL, Flux, 100+ registry models | 6 GB+ |\n\nEach extension auto-installs on first use. No system dependencies.\n\n### Workflow Engine\nChain tool calls into automated pipelines with data flow, conditions, loops, parallel execution, error handling, and cron scheduling.\n\n### Dynamic Tool Maker\nCreate new tools at runtime — wrap any REST API or write custom Python handlers. Tools persist across sessions and reload automatically.\n\n### Guided Mode\nNo API key? No problem. The chat works offline using a built-in 1,054-line user guide. New users get step-by-step guidance to set up their first AI model.\n\n---\n\n## Quick Start\n\n### 1. Download\nDownload the latest `portable-hermes-agent-v*.zip` from [Releases](https://github.com/aivrar/portable-hermes-agent/releases/latest), then extract it to a normal folder.\n\nRecommended:\n```text\nC:\\Users\\YourName\\Portable-Hermes-Agent\n```\n\nAvoid protected folders such as `C:\\Program Files`.\n\n### 2. Start\nDouble-click:\n```batch\nSTART.bat\n```\n\nOn first launch, `START.bat` runs the portable setup automatically. It downloads embedded Python, dependencies, LM Studio SDK, and Node.js tools into this folder only. No admin rights are needed.\n\nManual setup:\n```batch\ninstall.bat\n```\n\nPowerShell users can run:\n\n```powershell\n.\\scripts\\install.ps1\n```\n\n### 3. Launch Again\n```batch\nSTART.bat           :: easiest GUI launch\nUPDATE.bat          :: safest one-click update\nhermes_gui.bat      :: GUI mode\nhermes.bat          :: CLI mode\n```\n\n### Updating\n\nFor the easiest safe update, double-click:\n\n```batch\nUPDATE.bat\n```\n\nOr run:\n\n```batch\nhermes.bat update --backup --yes\n```\n\n`UPDATE.bat` and `hermes.bat update --backup --yes` update the tested Portable Hermes distribution from `aivrar/portable-hermes-agent`. Runtime folders such as `.hermes/`, `.hermes/custom_tools/`, `.hermes/extensions/`, `extensions/`, and `python_embedded/` are preserved.\n\nInside the agent, the `update_hermes` tool updates the upstream Hermes Agent code from `NousResearch/hermes-agent` and then repairs/preserves this repo's portable tools, toolsets, extensions, guide, and launchers. That keeps Portable Hermes easy to install while still letting users pull newer upstream Hermes code when they ask the agent to do it.\n\n### 4. Connect an AI Model\n\n**Cloud (2 minutes, free):**\n1. File > API Key Setup > OpenRouter\n2. Sign up at openrouter.ai (free, no credit card)\n3. Paste your API key\n4. Start chatting\n\n**Local (needs NVIDIA GPU):**\n1. Download [LM Studio](https://lmstudio.ai)\n2. Download a model, start the server\n3. Tools > LM Studio in the GUI\n4. Load model, click \"Use for Chat\"\n\n---\n\n## Requirements\n\n- Windows 10/11\n- Internet connection (for cloud AI) or NVIDIA GPU 8GB+ (for local AI)\n- No admin rights, no system Python, no Docker\n\n---\n\n## Documentation\n\nA searchable user guide is built into the agent — ask it anything or use the `search_guide` tool. The [PDF manual](https://github.com/aivrar/portable-hermes-agent/releases/latest) is included in every release.\n\nKey topics: getting started, API setup, the interface, permissions, LM Studio local models, extensions (TTS/Music/ComfyUI), all 100 tools, custom tool creation, workflows, and a glossary of AI terms.\n\n---\n\n## Architecture\n\n```\nUser\n |\n v\nGUI (Tkinter) / CLI\n |\n v\nAgent Bridge (threading, sessions)\n |\n v\nAIAgent (run_agent.py)\n |\n +-- Tool Registry (100 tools)\n |    +-- LM Studio tools (SDK + HTTP)\n |    +-- Extension tools (Music, TTS, ComfyUI)\n |    +-- Workflow engine\n |    +-- Tool maker (dynamic creation)\n |    +-- Serper, GPU, Guide, etc.\n |    +-- Custom tools (user-created)\n |\n +-- LLM Provider\n      +-- OpenRouter (cloud)\n      +-- LM Studio (local, GPU)\n      +-- Any OpenAI-compatible endpoint\n```\n\n---\n\n## Credits\n\n- **Base framework**: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) (MIT License)\n- **Extension modules**: [aivrar](https://github.com/aivrar) — portable-tts-server, portable-music-server, comfyui-portable-installer\n- **Custom tools, GUI, and integrations**: Built with [Claude Code](https://claude.ai/claude-code)\n\n---\n\n## License\n\nMIT License — see [LICENSE](LICENSE) for details.\n\nOriginal framework copyright (c) 2025 Nous Research.\n"
+    },
+    "brief": {
+      "summary": "面向 Windows 的便携式桌面 AI Agent",
+      "problem": "降低本地部署和使用多种 AI 工具的门槛",
+      "highlights": [
+        "可以通过图形界面管理聊天和会话",
+        "可以连接 LM Studio 使用本地模型",
+        "可以编排工作流并生成语音、音乐和图片"
+      ],
+      "target_users": [
+        "Windows 普通用户",
+        "本地 AI 爱好者",
+        "内容创作者"
+      ],
+      "why_trending": "本周首次收录，近期有更新，已有193个 Star",
+      "caveat": "仅支持 Windows；本地模型需 NVIDIA 显卡",
+      "category": "创作者自动化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aivrar/portable-hermes-agent",
+      "score": 78,
+      "category": "创作者自动化",
+      "reason": "智能体集成音乐语音与ComfyUI",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 45.0
+    }
+  }
+]
