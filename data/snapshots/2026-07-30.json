@@ -1,0 +1,516 @@
+[
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "microsoft/VibeVoice",
+      "url": "https://github.com/microsoft/VibeVoice",
+      "description": "Open-Source Frontier Voice AI",
+      "language": "Python",
+      "total_stars": 51388,
+      "forks": 5718,
+      "stars_today": 336,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 336
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2025-08-25T13:24:01Z",
+      "updated_at": "2026-07-30T03:32:24Z",
+      "pushed_at": "2026-07-24T09:24:29Z",
+      "open_issues": 179,
+      "homepage": "https://microsoft.github.io/VibeVoice/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n## 🎙️ VibeVoice: Open-Source Frontier Voice AI\n[![Project Page](https://img.shields.io/badge/Project-Page-blue?logo=githubpages)](https://microsoft.github.io/VibeVoice)\n[![Hugging Face](https://img.shields.io/badge/HuggingFace-Collection-orange?logo=huggingface)](https://huggingface.co/collections/microsoft/vibevoice-68a2ef24a875c44be47b034f)\n[![TTS Report](https://img.shields.io/badge/TTS-Report-red?logo=arxiv)](https://openreview.net/pdf?id=FihSkzyxdv)\n[![ASR Report](https://img.shields.io/badge/ASR-Report-yellow?logo=arxiv)](https://arxiv.org/pdf/2601.18184)\n[![Colab](https://img.shields.io/badge/StreamingTTS-Colab-green?logo=googlecolab)](https://colab.research.google.com/github/microsoft/VibeVoice/blob/main/demo/VibeVoice_colab.ipynb)\n[![ASR Playground](https://img.shields.io/badge/ASR-Playground-6F42C1?logo=gradio)](https://aka.ms/vibevoice-asr)\n\n[![microsoft%2FVibeVoice | Trendshift](https://trendshift.io/api/badge/repositories/15465)](https://trendshift.io/repositories/15465)\n\n</div>\n\n\n<div align=\"center\">\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"Figures/VibeVoice_logo_white.png\">\n  <img src=\"Figures/VibeVoice_logo.png\" alt=\"VibeVoice Logo\" width=\"300\">\n</picture>\n</div>\n\n<div align=\"left\">\n\n<h3>📰 News</h3>\n\n<strong>2026-07-23: ⚡ We released <a href=\"https://github.com/microsoft/VibeASR.cpp\">VibeVoice-ASR-BitNet</a>, an edge CPU inference engine for VibeVoice-ASR. Through heterogeneous quantization (I8_S + I2_S), the model is compressed from 4.62 GB to 1.58 GB with real-time inference (RTF < 1) on 3+ CPU threads — no GPU required. [<a href=\"https://github.com/microsoft/VibeASR.cpp\">Code</a>] [<a href=\"https://huggingface.co/microsoft/VibeVoice-ASR-BitNet\">Models</a>] [<a href=\"https://arxiv.org/abs/2607.21075\">Report</a>]</strong>\n\n<strong>2026-03-12: 🚀 VibeVoice-ASR is now integrated into <a href=\"https://labs.ai.azure.com/innovations/vibevoice-asr/\">Azure AI Foundry Labs</a>! You can now explore and test our unified speech-to-text capabilities directly through Microsoft Foundry.</strong>\n\n<strong>2026-03-06: 🚀 VibeVoice ASR is now part of a <a href=\"https://huggingface.co/microsoft/VibeVoice-ASR-HF\">Transformers release</a>! You can now use our speech recognition model directly through the Hugging Face Transformers library for seamless integration into your projects.</strong>\n\n<strong>2026-01-21:</strong> 📣 We open-sourced <a href=\"docs/vibevoice-asr.md\"><strong>VibeVoice-ASR</strong></a>, a unified speech-to-text model designed to handle 60-minute long-form audio in a single pass, generating structured transcriptions containing Who (Speaker), When (Timestamps), and What (Content), with support for User-Customized Context. Try it in [Playground](https://aka.ms/vibevoice-asr).\n- ⭐️ VibeVoice-ASR is natively multilingual, supporting over 50 languages — check the [supported languages](docs/vibevoice-asr.md#language-distribution) for details.\n- 🔥 The VibeVoice-ASR [finetuning code](finetuning-asr/README.md) is now available!\n- ⚡️ **vLLM inference** is now supported for faster inference; see [vllm-asr](docs/vibevoice-vllm-asr.md) for more details.\n- 📑 [VibeVoice-ASR Technique Report](https://arxiv.org/pdf/2601.18184) is available.\n\n2025-12-16: 📣 We added experimental speakers to <a href=\"docs/vibevoice-realtime-0.5b.md\"><strong>VibeVoice‑Realtime‑0.5B</strong></a> for exploration, including multilingual voices in nine languages (DE, FR, IT, JP, KR, NL, PL, PT, ES) and 11 distinct English style voices. [Try it](docs/vibevoice-realtime-0.5b.md#optional-more-experimental-voices). More speaker types will be added over time.\n\n2025-12-03: 📣 We open-sourced <a href=\"docs/vibevoice-realtime-0.5b.md\"><strong>VibeVoice‑Realtime‑0.5B</strong></a>, a real‑time text‑to‑speech model that supports streaming text input and robust long-form speech generation. Try it on [Colab](https://colab.research.google.com/github/microsoft/VibeVoice/blob/main/demo/vibevoice_realtime_colab.ipynb).\n\n\n2025-09-05: VibeVoice is an open-source research framework intended to advance collaboration in the speech synthesis community. After release, we discovered instances where the tool was used in ways inconsistent with the stated intent. Since responsible use of AI is one of Microsoft’s guiding principles, we have removed the VibeVoice-TTS code from this repository.\n\n\n2025-08-25: 📣 We open-sourced <a href=\"docs/vibevoice-tts.md\"><strong>VibeVoice-TTS</strong></a>, a long-form multi-speaker text-to-speech model that can synthesize speech up to 90 minutes long with up to 4 distinct speakers. — accepted as an [Oral](https://openreview.net/forum?id=FihSkzyxdv) at ICLR 2026! 🔥\n\n</div>\n\n## Overview\n\nVibeVoice is a **family of open-source frontier voice AI models** that includes both Text-to-Speech (TTS) and Automatic Speech Recognition (ASR) models. \n\nA core innovation of VibeVoice is its use of continuous speech tokenizers (Acoustic and Semantic) operating at an ultra-low frame rate of **7.5 Hz**. These tokenizers efficiently preserve audio fidelity while significantly boosting computational efficiency for processing long sequences. VibeVoice employs a [next-token diffusion](https://arxiv.org/abs/2412.08635) framework, leveraging a Large Language Model (LLM) to understand textual context and dialogue flow, and a diffusion head to generate high-fidelity acoustic details.\n\nFor more information, demos, and examples, please visit our [Project Page](https://microsoft.github.io/VibeVoice).\n\n\n<div align=\"center\">\n\n| Model |   Weight | Quick Try |\n|-------|--------------|---------|\n| VibeVoice-ASR-7B | [HF Link](https://huggingface.co/microsoft/VibeVoice-ASR) |  [Playground](https://aka.ms/vibevoice-asr) |\n| VibeVoice-ASR-BitNet (CPU) | [HF Link](https://huggingface.co/microsoft/VibeVoice-ASR-BitNet) | [VibeASR.cpp](https://github.com/microsoft/VibeASR.cpp) |\n| VibeVoice-TTS-1.5B | [HF Link](https://huggingface.co/microsoft/VibeVoice-1.5B) | Disabled |\n| VibeVoice-Realtime-0.5B | [HF Link](https://huggingface.co/microsoft/VibeVoice-Realtime-0.5B) | [Colab](https://colab.research.google.com/github/microsoft/VibeVoice/blob/main/demo/vibevoice_realtime_colab.ipynb) |\n\n</div>\n\n## Models\n\n\n### 1. 📖 [VibeVoice-ASR](docs/vibevoice-asr.md) - Long-form Speech Recognition\n\n**VibeVoice-ASR** is a unified speech-to-text model designed to handle **60-minute long-form audio** in a single pass, generating structured transcriptions containing **Who (Speaker), When (Timestamps), and What (Content)**, with support for **Customized Hotwords**.\n\n- **🕒 60-minute Single-Pass Processing**:\n  Unlike conventional ASR models that slice audio into short chunks (often losing global context), VibeVoice ASR accepts up to **60 minutes** of continuous audio input within 64K token length. This ensures consistent speaker tracking and semantic coherence across the entire hour.\n\n- **👤 Customized Hotwords**:\n  Users can provide customized hotwords (e.g., specific names, technical terms, or background info) to guide the recognition process, significantly improving accuracy on domain-specific content.\n\n- **📝 Rich Transcription (Who, When, What)**:\n  The model jointly performs ASR, diarization, and timestamping, producing a structured output that indicates *who* said *what* and *when*.\n\n[📖 Documentation](docs/vibevoice-asr.md) | [🤗 Hugging Face](https://huggingface.co/microsoft/VibeVoice-ASR) | [🎮 Playground](https://aka.ms/vibevoice-asr) | [🛠️ Finetuning](finetuning-asr/README.md) |  [📊 Paper](docs/VibeVoice-ASR-Report.pdf)\n\n\n<p align=\"center\">\n  <img src=\"Figures/DER.jpg\" alt=\"DER\" width=\"50%\"><br>\n  <img src=\"Figures/cpWER.jpg\" alt=\"cpWER\" width=\"50%\"><br>\n  <img src=\"Figures/tcpWER.jpg\" alt=\"tcpWER\" width=\"50%\">\n</p>\n\n\n<div align=\"center\" id=\"vibevoice-asr\">\n\nhttps://github.com/user-attachments/assets/acde5602-dc17-4314-9e3b-c630bc84aefa\n\n</div>\n<br>\n\n### 2. 🎙️ [VibeVoice-TTS](docs/vibevoice-tts.md) - Long-form Multi-speaker TTS\n\n**Best for**: Long-form conversational audio, podcasts, multi-speaker dialogues\n\n- **⏱️ 90-minute Long-form Generation**:\n  Synthesizes conversational/single-speaker speech up to **90 minutes** in a single pass, maintaining speaker consistency and semantic coherence throughout.\n\n- **👥 Multi-speaker Support**:\n  Supports up to **4 distinct speakers** in a single conversation, with natural turn-taking and speaker consistency across long dialogues.\n\n- **🎭 Expressive Speech**:\n  Generates expressive, natural-sounding speech that captures conversational dynamics and emotional nuances.\n\n- **🌐 Multi-lingual Support**:\n  Supports English, Chinese and other languages.\n\n\n[📖 Documentation](docs/vibevoice-tts.md) | [🤗 Hugging Face](https://huggingface.co/microsoft/VibeVoice-1.5B)  |  [📊 Paper](https://arxiv.org/pdf/2508.19205)\n\n\n<div align=\"center\">\n  <img src=\"Figures/VibeVoice-TTS-results.jpg\" alt=\"VibeVoice Results\" width=\"80%\">\n</div>\n\n\n**English**\n<div align=\"center\">\n\nhttps://github.com/user-attachments/assets/0967027c-141e-4909-bec8-091558b1b784\n\n</div>\n\n\n**Chinese**\n<div align=\"center\">\n\nhttps://github.com/user-attachments/assets/322280b7-3093-4c67-86e3-10be4746c88f\n\n</div>\n\n**Cross-Lingual**\n<div align=\"center\">\n\nhttps://github.com/user-attachments/assets/838d8ad9-a201-4dde-bb45-8cd3f59ce722\n\n</div>\n\n**Spontaneous Singing**\n<div align=\"center\">\n\nhttps://github.com/user-attachments/assets/6f27a8a5-0c60-4f57-87f3-7dea2e11c730\n\n</div>\n\n\n**Long Conversation with 4 people**\n<div align=\"center\">\n\nhttps://github.com/user-attachments/assets/a357c4b6-9768-495c-a576-1618f6275727\n\n</div>\n\n\n\n\n\n<br>\n\n### 3. ⚡ [VibeVoice-Streaming](docs/vibevoice-realtime-0.5b.md) - Real-time Streaming TTS\n\nVibeVoice-Realtime is a **lightweight real‑time** text-to-speech model supporting **streaming text input** and **robust long-form speech generation**.\n\n- Parameter size: 0.5B (deployment-friendly)\n- Real-time TTS (~300 milliseconds first audible latency)\n- Streaming text input\n- Robust long-form speech generation (~10 minutes)\n\n[📖 Documentation](docs/vibevoice-realtime-0.5b.md) | [🤗 Hugging Face](https://huggingface.co/microsoft/VibeVoice-Realtime-0.5B) | [🚀 Colab](https://colab.research.google.com/github/microsoft/VibeVoice/blob/main/demo/vibevoice_realtime_colab.ipynb)\n\n\n<div align=\"center\" id=\"generated-example-audio-vibevoice-realtime\">\n\nhttps://github.com/user-attachments/assets/0901d274-f6ae-46ef-a0fd-3c4fba4f76dc\n\n</div>\n\n<br>\n\n## Contributing\n\nPlease see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.\n\n\n\n## ⚠️ Risks and Limitations\n\n\nWhile efforts have been made to optimize it through various techniques, it may still produce outputs that are unexpected, biased, or inaccurate. VibeVoice inherits any biases, errors, or omissions produced by its base model (specifically, Qwen2.5 1.5b in this release).\nPotential for Deepfakes and Disinformation: High-quality synthetic speech can be misused to create convincing fake audio content for impersonation, fraud, or spreading disinformation. Users must ensure transcripts are reliable, check content accuracy, and avoid using generated content in misleading ways. Users are expected to use the generated content and to deploy the models in a lawful manner, in full compliance with all applicable laws and regulations in the relevant jurisdictions. It is best practice to disclose the use of AI when sharing AI-generated content.\n\n\nWe do not recommend using VibeVoice in commercial or real-world applications without further testing and development. This model is intended for research and development purposes only. Please use responsibly.\n\n## Star History\n\n![Star History Chart](https://api.star-history.com/svg?repos=Microsoft/vibevoice&type=date&legend=top-left)\n"
+    },
+    "brief": {
+      "summary": "开源语音模型家族，覆盖长音频识别与实时合成",
+      "problem": "长音频转写、说话人区分和实时语音生成",
+      "highlights": [
+        "可以处理最长60分钟音频并标注说话人和时间",
+        "可以用自定义热词改善专业内容识别",
+        "可以通过Colab体验实时文本转语音"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "播客与内容创作者",
+        "音频研究人员"
+      ],
+      "why_trending": "今日新增336个Star，本周首次收录，近期持续更新",
+      "caveat": "TTS代码已移除，部分模型的在线体验已停用",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "microsoft/VibeVoice",
+      "score": 90,
+      "category": "语音 / 配音",
+      "reason": "提供开源语音合成与识别能力",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 40,
+      "ranking_score": 70.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "1jehuang/jcode",
+      "url": "https://github.com/1jehuang/jcode",
+      "description": "The most RAM efficient harness",
+      "language": "Rust",
+      "total_stars": 13559,
+      "forks": 1487,
+      "stars_today": 640,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 640
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-coding-agent",
+        "claude",
+        "cli",
+        "coding-agent",
+        "llm",
+        "mcp",
+        "openai",
+        "rust",
+        "terminal",
+        "tui"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-05T09:43:36Z",
+      "updated_at": "2026-07-30T03:33:21Z",
+      "pushed_at": "2026-07-30T03:09:14Z",
+      "open_issues": 165,
+      "homepage": "https://jcode.sh",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n# jcode\n\n[![Latest Release](https://badgen.net/github/release/1jehuang/jcode?icon=github)](https://github.com/1jehuang/jcode/releases)\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)\n[![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20macOS%20%7C%20Windows-blue?style=flat-square)](https://github.com/1jehuang/jcode/releases)\n[![Last Commit](https://badgen.net/github/last-commit/1jehuang/jcode/master?icon=github)](https://github.com/1jehuang/jcode/commits/master)\n[![GitHub Stars](https://badgen.net/github/stars/1jehuang/jcode?icon=github)](https://github.com/1jehuang/jcode/stargazers)\n[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/nBe9vGyK9a)\n\nThe most RAM efficient harness <br>\nThe most most intelligent harness\n\n<a href=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-memory-demo.mp4\">\n  <img src=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-memory-demo.webp\" alt=\"jcode memory demonstration\" width=\"800\">\n</a>\n\n<br>\n\n[Website](https://jcode.sh) · [Docs](https://jcode.sh/docs) · [Benchmarks](https://jcode.sh/bench) · [Features](#features) · [Install](#installation) · [Quick Start](#quick-start) · [Further Reading](#further-reading) · [Contributing](CONTRIBUTING.md)\n\n</div>\n\n---\n\n<div align=\"center\">\n\n## Installation\n\n</div>\n\n```bash\n# macOS & Linux\ncurl -fsSL https://jcode.sh/install | bash\n```\n\n```powershell\n# Windows 11 (PowerShell 5.1+)\nirm https://jcode.sh/install.ps1 | iex\n```\n\nNeed Homebrew, source builds, provider setup, or want an agent to set it up for you?\n[Jump to detailed installation](#detailed-installation).\n\n---\n\n\n<div align=\"center\">\n\n## Performance & Resource Efficiency\n\n</div>\n\njcode is built to be as performant and resource efficient as possible. Every metric is optimized to the bone, which is important for scaling multi-session workflows. Here we sample a few metrics to show the difference: RAM usage and boot up.\n\n### RAM comparison\n\n<div align=\"center\">\n\n<table>\n  <tr>\n    <td valign=\"top\" align=\"center\" width=\"50%\">\n      <strong>1 active session</strong>\n      <table>\n        <thead>\n          <tr>\n            <th>Tool</th>\n            <th>PSS</th>\n            <th>Comparison</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td><strong>jcode (local embedding off)</strong></td>\n            <td align=\"right\"><strong>27.8 MB</strong></td>\n            <td align=\"right\">baseline</td>\n          </tr>\n          <tr>\n            <td><strong>jcode</strong></td>\n            <td align=\"right\"><strong>167.1 MB</strong></td>\n            <td align=\"right\"><strong>6.0× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>pi</strong></td>\n            <td align=\"right\"><strong>144.4 MB</strong></td>\n            <td align=\"right\"><strong>5.2× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Codex CLI</strong></td>\n            <td align=\"right\"><strong>140.0 MB</strong></td>\n            <td align=\"right\"><strong>5.0× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>OpenCode</strong></td>\n            <td align=\"right\"><strong>371.5 MB</strong></td>\n            <td align=\"right\"><strong>13.4× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>GitHub Copilot CLI</strong></td>\n            <td align=\"right\"><strong>333.3 MB</strong></td>\n            <td align=\"right\"><strong>12.0× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Cursor Agent</strong></td>\n            <td align=\"right\"><strong>214.9 MB</strong></td>\n            <td align=\"right\"><strong>7.7× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Claude Code</strong></td>\n            <td align=\"right\"><strong>386.6 MB</strong></td>\n            <td align=\"right\"><strong>13.9× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Antigravity CLI</strong></td>\n            <td align=\"right\"><strong>243.7 MB</strong></td>\n            <td align=\"right\"><strong>8.8× more RAM</strong></td>\n          </tr>\n        </tbody>\n      </table>\n    </td>\n    <td width=\"24\"></td>\n    <td valign=\"top\" align=\"center\" width=\"50%\">\n      <strong>10 active sessions</strong>\n      <table>\n        <thead>\n          <tr>\n            <th>Tool</th>\n            <th>PSS</th>\n            <th>Comparison</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td><strong>jcode (local embedding off)</strong></td>\n            <td align=\"right\"><strong>117.0 MB</strong></td>\n            <td align=\"right\">baseline</td>\n          </tr>\n          <tr>\n            <td><strong>jcode</strong></td>\n            <td align=\"right\"><strong>260.8 MB</strong></td>\n            <td align=\"right\"><strong>2.2× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>pi</strong></td>\n            <td align=\"right\"><strong>833.0 MB</strong></td>\n            <td align=\"right\"><strong>7.1× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Codex CLI</strong></td>\n            <td align=\"right\"><strong>334.8 MB</strong></td>\n            <td align=\"right\"><strong>2.9× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>OpenCode</strong></td>\n            <td align=\"right\"><strong>3237.2 MB</strong></td>\n            <td align=\"right\"><strong>27.7× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>GitHub Copilot CLI</strong></td>\n            <td align=\"right\"><strong>1756.5 MB</strong></td>\n            <td align=\"right\"><strong>15.0× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Cursor Agent</strong></td>\n            <td align=\"right\"><strong>1632.4 MB</strong></td>\n            <td align=\"right\"><strong>14.0× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Claude Code</strong></td>\n            <td align=\"right\"><strong>2300.6 MB</strong></td>\n            <td align=\"right\"><strong>19.7× more RAM</strong></td>\n          </tr>\n          <tr>\n            <td><strong>Antigravity CLI</strong></td>\n            <td align=\"right\"><strong>1021.2 MB</strong></td>\n            <td align=\"right\"><strong>8.7× more RAM</strong></td>\n          </tr>\n        </tbody>\n      </table>\n    </td>\n  </tr>\n</table>\n\n</div>\n\n### Time to first frame\n\n<div align=\"center\">\n\n| Tool | Time to first frame | Range | Comparison |\n|---|---:|---:|---:|\n| **jcode** | **14.0 ms** | 10.1–19.3 ms | baseline |\n| **Antigravity CLI** | **383.5 ms** | 363.1–415.4 ms | **27.4× slower** |\n| **pi** | **590.7 ms** | 369.6–934.8 ms | **42.2× slower** |\n| **Codex CLI** | **882.8 ms** | 742.3–1640.9 ms | **63.1× slower** |\n| **OpenCode** | **1035.9 ms** | 922.5–1104.4 ms | **74.0× slower** |\n| **GitHub Copilot CLI** | **1518.6 ms** | 1357.4–1826.8 ms | **108.5× slower** |\n| **Cursor Agent** | **1949.7 ms** | 1711.0–2104.8 ms | **139.3× slower** |\n| **Claude Code** | **3436.9 ms** | 2032.7–8927.2 ms | **245.5× slower** |\n\n</div>\n\nMeasured on this Linux machine across 10 interactive PTY launches.\n\n### Time to first input\n(time until typed probe text appears on the rendered screen; Antigravity uses its internal input-ready log marker because the sign-in screen suppresses probe echo.)\n<div align=\"center\">\n\n| Tool | Time to first input | Range | Comparison |\n|---|---:|---:|---:|\n| **jcode** | **48.7 ms** | 30.3–62.7 ms | baseline |\n| **Antigravity CLI** | **383.7 ms** | 363.4–415.7 ms | **7.9× slower** |\n| **pi** | **596.4 ms** | 373.9–955.2 ms | **12.2× slower** |\n| **Codex CLI** | **905.8 ms** | 760.1–1675.7 ms | **18.6× slower** |\n| **OpenCode** | **1047.9 ms** | 931.1–1116.9 ms | **21.5× slower** |\n| **GitHub Copilot CLI** | **1583.4 ms** | 1422.8–1880.0 ms | **32.5× slower** |\n| **Cursor Agent** | **1978.7 ms** | 1727.3–2130.0 ms | **40.6× slower** |\n| **Claude Code** | **3512.8 ms** | 2137.4–9002.0 ms | **72.2× slower** |\n\n</div>\n\nMeasured on this Linux machine across 10 interactive PTY launches. Antigravity CLI was unauthenticated for this run; its sign-in screen rendered normally and emitted an internal `CLI ready for user input` marker, but did not echo the typed probe.\n\n### Additional clients / memory scaling\n\n<div align=\"center\">\n\n| Tool | Extra PSS per added session | Comparison |\n|---|---:|---:|\n| **jcode (local embedding off)** | **~9.9 MB** | baseline |\n| **jcode** | **~10.4 MB** | **1.1× more RAM** |\n| **pi** | **~76.5 MB** | **7.7× more RAM** |\n| **Codex CLI** | **~21.6 MB** | **2.2× more RAM** |\n| **OpenCode** | **~318.4 MB** | **32.2× more RAM** |\n| **GitHub Copilot CLI** | **~158.1 MB** | **16.0× more RAM** |\n| **Cursor Agent** | **~157.5 MB** | **15.9× more RAM** |\n| **Claude Code** | **~212.7 MB** | **21.5× more RAM** |\n| **Antigravity CLI** | **~86.4 MB** | **8.7× more RAM** |\n\n</div>\nversions tested for this corrected memory rerun:\n\n- `jcode v0.9.1888-dev (be386f2)`\n- `pi 0.62.0`\n- `codex-cli 0.120.0`\n- `opencode 1.0.203`\n- `GitHub Copilot CLI 1.0.24` for the 1-session rerun, `GitHub Copilot CLI 1.0.27` for the 10-session rerun\n- `Cursor Agent 2026.04.08-a41fba1`\n- `Claude Code 2.1.86 (Claude Code)`\n- `Antigravity CLI 1.0.0`\n\n<div align=\"center\">\n\n  <a href=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-performance-demo.mp4\">\n    <img src=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-performance-demo.webp\" alt=\"jcode performance demonstration\" width=\"900\">\n  </a>\n\n  <p><em>jcode performance demonstration</em></p>\n\n</div>\n\n\n---\n\n## Memory (Agent memory)\n\nJcode embeds each turn/response as a semantic vector. Every turn does queries a graph of memories to efficiently find related memory entries via a cosine similarity check. The embedding hits are fed into the conversation, or optionally uses a memory sideagent which verifies the memories are relevant, and potentially does more work for information retreival before injecting into the conversation. This results in a human like memory system which allows the agent to automatically recall relevant information to the conversation without actively calling memory tools or being a token burner. \not \nTo have memories which are retrieved, they must also be extracted and stored. Every so often (semantic drift, K turns since last extraction, session end, etc), memories are extracted via a memory sideagent, and put into the memory graph. \n\nThe harness also provides explicit memory tools to allow the agent to actively search or store the memory without relying on a passive background process. The harness also provides session search for traditional RAG on previous sessions. \n\nMemories are automatically consolidated every so often via the ambient mode. This reorganizes, checks for staleness and conflicts, etc\n\n<div align=\"center\">\n\n  <a href=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-memory-demo.mp4\">\n    <img src=\"https://github.com/1jehuang/jcode/releases/download/readme-assets/jcode-memory-demo.webp\" alt=\"jcode memory demonstration\" width=\"900\">\n  </a>\n\n  <p><em>jcode memory demonstration</em></p>\n\n</div>\n\n<!-- Memory demo media is hosted in the readme-assets release. -->\n\n---\n\n## UI: Side panels, Diagrams, Info Widgets, rendering, scrolling, alignment\n\nThe side panel is a place for auxiliary information. Tell your jcode agent to load a file into the side panel and see it update in real time, or tell your agent to write directly to the side panel, or use it as a diff viewer. The side panel (and chat) is able to render mermaid diagrams inline. \n<img width=\"2877\" height=\"1762\" alt=\"image\" src=\"https://github.com/user-attachments/assets/6c7bec81-ef3f-434d-8a7b-d55f8a54e5cf\" />\n\nTo make this possible, I created a new mermaid rendering library to render diagrams 1800x f"
+    },
+    "brief": {
+      "summary": "jcode 是面向终端的低内存 AI 编程代理工具。",
+      "problem": "降低多会话 AI 编程代理的内存和启动开销。",
+      "highlights": [
+        "可以在终端中运行 AI 编程代理",
+        "可以同时管理多条代理会话",
+        "可以在 Linux、macOS 和 Windows 上安装"
+      ],
+      "target_users": [
+        "AI 编程开发者",
+        "终端用户",
+        "多会话工作者"
+      ],
+      "why_trending": "今日新增 640 Star，总 Star 13,559，本周首次收录。",
+      "caveat": "性能数据来自单台 Linux 机器，不能代表所有环境。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "1jehuang/jcode",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码代理的高效Agent终端",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 69.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "language": "Shell",
+      "total_stars": 263387,
+      "forks": 23517,
+      "stars_today": 616,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 616
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-09T19:45:18Z",
+      "updated_at": "2026-07-30T03:37:46Z",
+      "pushed_at": "2026-07-28T19:25:36Z",
+      "open_issues": 301,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Superpowers\n\nSuperpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.\n\n\n## Quickstart\n\nGive your agent Superpowers: [Claude Code](#claude-code), [Antigravity](#antigravity), [Codex App](#codex-app), [Codex CLI](#codex-cli), [Cursor](#cursor), [Factory Droid](#factory-droid), [Gemini CLI](#gemini-cli), [GitHub Copilot CLI](#github-copilot-cli), [Kimi Code](#kimi-code), [OpenCode](#opencode), [Pi](#pi).\n\n## How it works\n\nIt starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. \n\nOnce it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. \n\nAfter you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. \n\nNext up, once you say \"go\", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.\n\nThere's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.\n\n## Commercial Services\n\nIf you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.\n\n## Installation\n\nInstallation differs by harness. If you use more than one, install Superpowers separately for each one.\n\n### Claude Code\n\nSuperpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)\n\n#### Official Marketplace\n\n- Install the plugin from Anthropic's official marketplace:\n\n  ```bash\n  /plugin install superpowers@claude-plugins-official\n  ```\n\n#### Superpowers Marketplace\n\nThe Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.\n\n- Register the marketplace:\n\n  ```bash\n  /plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin from this marketplace:\n\n  ```bash\n  /plugin install superpowers@superpowers-marketplace\n  ```\n\n### Antigravity\n\nInstall Superpowers as a plugin from this repository:\n\n```bash\nagy plugin install https://github.com/obra/superpowers\n```\n\nAntigravity runs the plugin's session-start hook, so Superpowers is active from\nthe first message. Reinstall with the same command to update.\n\n### Codex App\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- In the Codex app, click on Plugins in the sidebar.\n- You should see `Superpowers` in the Coding section.\n- Click the `+` next to Superpowers and follow the prompts.\n\n### Codex CLI\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- Open the plugin search interface:\n\n  ```bash\n  /plugins\n  ```\n\n- Search for Superpowers:\n\n  ```bash\n  superpowers\n  ```\n\n- Select `Install Plugin`.\n\n### Cursor\n\n- In Cursor Agent chat, install from marketplace:\n\n  ```text\n  /add-plugin superpowers\n  ```\n\n- Or search for \"superpowers\" in the plugin marketplace.\n\n### Factory Droid\n\n- Register the marketplace:\n\n  ```bash\n  droid plugin marketplace add https://github.com/obra/superpowers\n  ```\n\n- Install the plugin:\n\n  ```bash\n  droid plugin install superpowers@superpowers\n  ```\n\n### Gemini CLI\n\n- Install the extension:\n\n  ```bash\n  gemini extensions install https://github.com/obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  gemini extensions update superpowers\n  ```\n\n### GitHub Copilot CLI\n\n- Register the marketplace:\n\n  ```bash\n  copilot plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin:\n\n  ```bash\n  copilot plugin install superpowers@superpowers-marketplace\n  ```\n\n### Kimi Code\n\nSuperpowers is available in Kimi Code's plugin marketplace.\n\n- Open Kimi Code's plugin manager:\n\n  ```text\n  /plugins\n  ```\n\n- Go to `Marketplace` > `Superpowers` and install it.\n\n- Or install directly from this repository:\n\n  ```text\n  /plugins install https://github.com/obra/superpowers\n  ```\n\n- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)\n\n### OpenCode\n\nOpenCode uses its own plugin install; install Superpowers separately even if you\nalready use it in another harness.\n\n- Tell OpenCode:\n\n  ```\n  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md\n  ```\n\n- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)\n\n### Pi\n\nInstall Superpowers as a Pi package from this repository:\n\n```bash\npi install git:github.com/obra/superpowers\n```\n\nFor local development, run Pi with this checkout loaded as a temporary package:\n\n```bash\npi -e /path/to/superpowers\n```\n\nThe Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.\n\n## The Basic Workflow\n\n1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.\n\n2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.\n\n3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.\n\n4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.\n\n5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.\n\n6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.\n\n7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.\n\n**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.\n\n## What's Inside\n\n### Skills Library\n\n**Testing**\n- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)\n\n**Debugging**\n- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)\n- **verification-before-completion** - Ensure it's actually fixed\n\n**Collaboration** \n- **brainstorming** - Socratic design refinement\n- **writing-plans** - Detailed implementation plans\n- **executing-plans** - Batch execution with checkpoints\n- **dispatching-parallel-agents** - Concurrent subagent workflows\n- **requesting-code-review** - Pre-review checklist\n- **receiving-code-review** - Responding to feedback\n- **using-git-worktrees** - Parallel development branches\n- **finishing-a-development-branch** - Merge/PR decision workflow\n- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)\n\n**Meta**\n- **writing-skills** - Create new skills following best practices (includes testing methodology)\n- **using-superpowers** - Introduction to the skills system\n\n## Philosophy\n\n- **Test-Driven Development** - Write tests first, always\n- **Systematic over ad-hoc** - Process over guessing\n- **Complexity reduction** - Simplicity as primary goal\n- **Evidence over claims** - Verify before declaring success\n\nRead [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).\n\n## Contributing\n\nThe general contribution process for Superpowers is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.\n\n1. Fork the repository\n2. Switch to the 'dev' branch\n3. Create a branch for your work\n4. Follow the `writing-skills` skill for creating and testing new and modified skills\n5. Submit a PR, being sure to fill in the pull request template.\n\nSkill-behavior tests use the drill eval harness from [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Plugin-infrastructure tests live at `tests/` and run via the relevant `run-*.sh` or `npm test`.\n\nSee `skills/writing-skills/SKILL.md` for the complete guide.\n\n## Updating\n\nSuperpowers updates are somewhat coding-agent dependent, but are often automatic.\n\n## License\n\nMIT License - see LICENSE file for details\n\n## Visual companion telemetry\n\nBecause skills and plugins don't provide any feedback to creators, we have no idea how many of you are using Superpowers. By default, the Prime Radiant logo on brainstorming's optional visual companion feature is loaded from our website. It includes the version of Superpowers in use. It does not include any details about your project, prompt, or coding agent. We don't see your clicks or anything about what you're building. This helps us have a rough idea of how many folks are using Superpowers and which version of Superpowers they're using. It's 100% optional. To disable this, set the environment variable `SUPERPOWERS_DISABLE_TELEMETRY` to any true value. Superpowers also honors Claude Code's `DISABLE_TELEMETRY` and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` opt-outs.\n\n## Community\n\nSuperpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).\n\n- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers\n- **Issues**: https://github.com/obra/superpowers/issues\n- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions\n"
+    },
+    "brief": {
+      "summary": "为编程代理提供完整开发流程与可组合技能",
+      "problem": "解决编程代理直接写代码、缺少规划和测试的问题",
+      "highlights": [
+        "可以先梳理需求并确认设计",
+        "可以按计划拆分任务并调用子代理",
+        "可以用测试驱动开发和代码审查推进项目"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "软件开发团队",
+        "开源项目维护者"
+      ],
+      "why_trending": "今日新增616个 Star，总 Star 超26万",
+      "caveat": "不同编程代理需要分别安装，资料未说明兼容限制",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "obra/superpowers",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "为编码Agent提供可组合Skills流程",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 69.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "different-ai/openwork",
+      "url": "https://github.com/different-ai/openwork",
+      "description": "The open-source alternative to Claude Cowork (powered by opencode)",
+      "language": "TypeScript",
+      "total_stars": 18050,
+      "forks": 1862,
+      "stars_today": 97,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 97
+    },
+    "details": {
+      "topics": [],
+      "license_name": "",
+      "created_at": "2026-01-14T01:39:31Z",
+      "updated_at": "2026-07-30T03:37:24Z",
+      "pushed_at": "2026-07-30T00:08:03Z",
+      "open_issues": 400,
+      "homepage": "https://openworklabs.com",
+      "archived": false,
+      "default_branch": "dev",
+      "readme": "# OpenWork\n\nOpenWork is a free, open-source desktop app made for sharing AI workflows. It is an open-source alternative to Claude Cowork and Codex for macOS, Windows, and Linux.\n\nAdd one OpenWork MCP to Codex, Claude Code, Cursor, or another compatible agent and reuse the same skills, MCPs, and connected services across your tools, teammates, and machines. Create something once, share it with coworkers or friends, or keep it for yourself.\n\nThe desktop app is there when you want a dedicated workspace, but it is not required. You can use OpenWork from the agent you already have. For larger organizations, the admin interface lets you publish capabilities, manage access, and configure shared or per-user connections.\n\n[**Download OpenWork**](https://openworklabs.com/download)\n\n<img width=\"1481\" height=\"842\" alt=\"OpenWork desktop app\" src=\"https://github.com/user-attachments/assets/66a8dd9b-5260-488c-957d-e54331e78c1c\" />\n\n## Install with your AI agent\n\nAlready use an AI agent? Copy this prompt and paste it into Claude Code, Cursor, Codex, ChatGPT, or any agent that can run commands on your computer.\n\n```text\nInstall OpenWork on my computer, set up my first workspace, and open it ready to use. Follow the steps in https://openworklabs.com/start.md?v=hero\n```\n\n1. Installs OpenWork\n2. Creates your workspace\n3. Opens it ready to run\n\n## Use OpenWork from any agent\n\nThe OpenWork MCP brings your assigned skills, plugins, MCP connections, Google Workspace, and Microsoft 365 capabilities into any compatible agent.\n\nIt exposes two tools: `search_capabilities` finds what you can use, and `execute_capability` runs it. After adding the MCP, your client opens a browser so you can sign in and choose your OpenWork organization.\n\n### Codex\n\n```bash\ncodex mcp add openwork --url https://api.openworklabs.com/mcp/agent\n```\n\n### Claude Code\n\n```bash\nclaude mcp add --transport http openwork https://api.openworklabs.com/mcp/agent\n```\n\n### OpenCode\n\nAdd this to `opencode.json`:\n\n```json\n{\n  \"mcp\": {\n    \"openwork\": {\n      \"type\": \"remote\",\n      \"enabled\": true,\n      \"url\": \"https://api.openworklabs.com/mcp/agent\",\n      \"oauth\": {}\n    }\n  }\n}\n```\n\n### Any MCP client\n\nUse this remote MCP server URL:\n\n```text\nhttps://api.openworklabs.com/mcp/agent\n```\n\n## OpenWork Den\n\nOpenWork Den is the control plane for managing OpenWork across a team or organization.\n\n- Provision inference at scale and control which members and teams can use each model provider.\n- Invite teammates, create teams, and manage access from one place.\n- Set desktop policies, restrict local model access, and control which app versions your organization can use.\n- Publish skills and plugins through marketplaces, then assign them to the organization, a team, or specific people.\n- Import Anthropic-compatible plugins and make their supported skills and remote MCPs available through the OpenWork MCP.\n\n<img width=\"1546\" height=\"915\" alt=\"OpenWork Den organization control plane\" src=\"https://github.com/user-attachments/assets/033dbbfe-5661-4f7c-869c-46278406d6cc\" />\n\n## Documentation\n\n[Read the OpenWork docs.](https://openworklabs.com/docs)\n\n## Local development\n\nFor one checkout, keep using `pnpm dev`; with no extra environment variables it reuses the existing shared dev profile.\n\nTo run multiple git worktrees at once, use:\n\n```bash\npnpm dev:worktree\n```\n\nThat sets `OPENWORK_DEV_PROFILE=auto`, derives a stable profile name from the worktree path, lets Electron choose a free CDP port, and asks Vite for a free dev-server port. You can also choose a named profile, for example `OPENWORK_DEV_PROFILE=my-feature OPENWORK_ELECTRON_REMOTE_DEBUG_PORT=0 PORT=0 pnpm dev`.\n\n`dev:worktree` also defaults `OPENWORK_ELECTRON_USE_MOCK_KEYCHAIN=1`. A brand-new profile has no stored credentials, so on macOS the real keychain prompts as soon as Chromium persists an authenticated cookie, and that modal blocks Electron's main loop until it is dismissed. Set `OPENWORK_ELECTRON_USE_MOCK_KEYCHAIN=0` if you specifically want the system keychain in an isolated profile.\n\nDev startup prints a banner like `[openwork] dev profile=... cdp=http://127.0.0.1:9223`; use it to find the profile directory and pass the CDP URL to local tooling.\n\nIf a second instance cannot get the profile lock it now says so and exits, instead of lingering with an open CDP port and no window.\n"
+    },
+    "brief": {
+      "summary": "可共享 AI 工作流的开源桌面应用与 MCP 服务",
+      "problem": "解决 AI 技能、插件和连接服务难以复用与协作的问题",
+      "highlights": [
+        "可以在多个 AI Agent 间复用技能和 MCP",
+        "可以通过桌面应用管理个人工作区",
+        "可以为团队发布能力并管理访问权限"
+      ],
+      "target_users": [
+        "AI 工具用户",
+        "开发团队",
+        "组织管理员"
+      ],
+      "why_trending": "今日新增 97 Star，本周首次收录，总 Star 已达 18050",
+      "caveat": "许可证信息未提供，且项目有 400 个开放议题",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "different-ai/openwork",
+      "score": 90,
+      "category": "AI Agent / Skills",
+      "reason": "共享Agent工作流、Skills与MCP",
+      "generated_by_ai": true,
+      "velocity_score": 60,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "deepfakes/faceswap",
+      "url": "https://github.com/deepfakes/faceswap",
+      "description": "Deepfakes Software For All",
+      "language": "Python",
+      "total_stars": 56401,
+      "forks": 13440,
+      "stars_today": 166,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 166
+    },
+    "details": {
+      "topics": [
+        "deep-face-swap",
+        "deep-learning",
+        "deep-neural-networks",
+        "deepface",
+        "deepfakes",
+        "deeplearning",
+        "face-swap",
+        "faceswap",
+        "fakeapp",
+        "machine-learning",
+        "myfakeapp",
+        "neural-nets",
+        "neural-networks",
+        "openfaceswap"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2017-12-19T09:44:13Z",
+      "updated_at": "2026-07-30T03:36:46Z",
+      "pushed_at": "2026-07-06T00:36:36Z",
+      "open_issues": 10,
+      "homepage": "https://www.faceswap.dev",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# deepfakes_faceswap\n\n### Important information for **Patreon** and **PayPal** supporters. Please see this forum post: https://forum.faceswap.dev/viewtopic.php?f=14&t=3120\n\n<p align=\"center\">\n  <a href=\"https://faceswap.dev\"><img src=\"https://i.imgur.com/zHvjHnb.png\"></img></a>\n<br />FaceSwap is a tool that utilizes deep learning to recognize and swap faces in pictures and videos.\n</p>\n<p align=\"center\">\n<img src = \"https://i.imgur.com/nWHFLDf.jpg\"></img>\n</p>\n\n<p align=\"center\">\n<a href=\"https://www.patreon.com/bePatron?u=23238350\"><img src=\"https://c5.patreon.com/external/logo/become_a_patron_button.png\"></img></a>\n&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"https://discord.gg/FC54sYg\"><img src=\"https://i.imgur.com/gIpztkv.png\"></img></a></p>\n\n<p align=\"center\">\n  <a href=\"https://www.dailymotion.com/video/x810mot\"><img src=\"https://user-images.githubusercontent.com/36920800/178301720-b69841bb-a1ca-4c20-91db-a2a10f5692ca.png\"></img></a>\n<br />Emma Stone/Scarlett Johansson FaceSwap using the Phaze-A model\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.youtube.com/watch?v=r1jng79a5xc\"><img src=\"https://img.youtube.com/vi/r1jng79a5xc/0.jpg\"></img></a>\n<br />Jennifer Lawrence/Steve Buscemi FaceSwap using the Villain model\n</p>\n\n\n![Build Status](https://github.com/deepfakes/faceswap/actions/workflows/pytest.yml/badge.svg) [![Documentation Status](https://readthedocs.org/projects/faceswap/badge/?version=latest)](https://faceswap.readthedocs.io/en/latest/?badge=latest)\n\nMake sure you check out [INSTALL.md](INSTALL.md) before getting started.\n\n- [deepfakes\\_faceswap](#deepfakes_faceswap)\n    - [Important information for **Patreon** and **PayPal** supporters. Please see this forum post: https://forum.faceswap.dev/viewtopic.php?f=14\\&t=3120](#important-information-for-patreon-and-paypal-supporters-please-see-this-forum-post-httpsforumfaceswapdevviewtopicphpf14t3120)\n- [Manifesto](#manifesto)\n  - [FaceSwap has ethical uses.](#faceswap-has-ethical-uses)\n- [How To setup and run the project](#how-to-setup-and-run-the-project)\n- [Overview](#overview)\n  - [Extract](#extract)\n  - [Train](#train)\n  - [Convert](#convert)\n  - [GUI](#gui)\n- [General notes:](#general-notes)\n- [Help I need support!](#help-i-need-support)\n  - [Discord Server](#discord-server)\n  - [FaceSwap Forum](#faceswap-forum)\n- [Donate](#donate)\n  - [Patreon](#patreon)\n  - [One time Donations](#one-time-donations)\n    - [@torzdf](#torzdf)\n    - [@andenixa](#andenixa)\n- [How to contribute](#how-to-contribute)\n  - [For people interested in the generative models](#for-people-interested-in-the-generative-models)\n  - [For devs](#for-devs)\n  - [For non-dev advanced users](#for-non-dev-advanced-users)\n  - [For end-users](#for-end-users)\n- [About machine learning](#about-machine-learning)\n  - [How does a computer know how to recognize/shape faces? How does machine learning work? What is a neural network?](#how-does-a-computer-know-how-to-recognizeshape-faces-how-does-machine-learning-work-what-is-a-neural-network)\n\n# Manifesto\n\n## FaceSwap has ethical uses.\n\nWhen faceswapping was first developed and published, the technology was groundbreaking, it was a huge step in AI development. It was also completely ignored outside of academia because the code was confusing and fragmentary. It required a thorough understanding of complicated AI techniques and took a lot of effort to figure it out. Until one individual brought it together into a single, cohesive collection. It ran, it worked, and as is so often the way with new technology emerging on the internet, it was immediately used to create inappropriate content. Despite the inappropriate uses the software was given originally, it was the first AI code that anyone could download, run and learn by experimentation without having a Ph.D. in math, computer theory, psychology, and more. Before \"deepfakes\" these techniques were like black magic, only practiced by those who could understand all of the inner workings as described in esoteric and endlessly complicated books and papers.\n\n\"Deepfakes\" changed all that and anyone could participate in AI development. To us, developers, the release of this code opened up a fantastic learning opportunity. It allowed us to build on ideas developed by others, collaborate with a variety of skilled coders, experiment with AI whilst learning new skills and ultimately contribute towards an emerging technology which will only see more mainstream use as it progresses.\n\nAre there some out there doing horrible things with similar software? Yes. And because of this, the developers have been following strict ethical standards. Many of us don't even use it to create videos, we just tinker with the code to see what it does. Sadly, the media concentrates only on the unethical uses of this software. That is, unfortunately, the nature of how it was first exposed to the public, but it is not representative of why it was created, how we use it now, or what we see in its future. Like any technology, it can be used for good or it can be abused. It is our intention to develop FaceSwap in a way that its potential for abuse is minimized whilst maximizing its potential as a tool for learning, experimenting and, yes, for legitimate faceswapping.\n\nWe are not trying to denigrate celebrities or to demean anyone. We are programmers, we are engineers, we are Hollywood VFX artists, we are activists, we are hobbyists, we are human beings. To this end, we feel that it's time to come out with a standard statement of what this software is and isn't as far as us developers are concerned.\n\n- FaceSwap is not for creating inappropriate content.\n- FaceSwap is not for changing faces without consent or with the intent of hiding its use.\n- FaceSwap is not for any illicit, unethical, or questionable purposes.\n- FaceSwap exists to experiment and discover AI techniques, for social or political commentary, for movies, and for any number of ethical and reasonable uses.\n\nWe are very troubled by the fact that FaceSwap can be used for unethical and disreputable things. However, we support the development of tools and techniques that can be used ethically as well as provide education and experience in AI for anyone who wants to learn it hands-on. We will take a zero tolerance approach to anyone using this software for any unethical purposes and will actively discourage any such uses.\n\n# How To setup and run the project\nFaceSwap is a Python program that will run on multiple Operating Systems including Windows, Linux, and MacOS.\n\nSee [INSTALL.md](INSTALL.md) for full installation instructions. You will need a modern GPU with CUDA support for best performance. Many AMD GPUs are supported through ROCm (Linux).\n\n# Overview\nThe project has multiple entry points. You will have to:\n - Gather photos and/or videos\n - **Extract** faces from your raw photos\n - **Train** a model on the faces extracted from the photos/videos\n - **Convert** your sources with the model\n\nCheck out [USAGE.md](USAGE.md) for more detailed instructions.\n\n## Extract\nFrom your setup folder, run `python faceswap.py extract`. This will take photos from `src` folder and extract faces into `extract` folder.\n\n## Train\nFrom your setup folder, run `python faceswap.py train`. This will take photos from two folders containing pictures of both faces and train a model that will be saved inside the `models` folder.\n\n## Convert\nFrom your setup folder, run `python faceswap.py convert`. This will take photos from `original` folder and apply new faces into `modified` folder.\n\n## GUI\nAlternatively, you can run the GUI by running `python faceswap.py gui`\n\n# General notes:\n- All of the scripts mentioned have `-h`/`--help` options with arguments that they will accept. You're smart, you can figure out how this works, right?!\n\nNB: there is a conversion tool for video. This can be accessed by running `python tools.py effmpeg -h`. Alternatively, you can use [ffmpeg](https://www.ffmpeg.org) to convert video into photos, process images, and convert images back to the video.\n\n\n**Some tips:**\n\nReusing existing models will train much faster than starting from nothing.\nIf there is not enough training data, start with someone who looks similar, then switch the data.\n\n# Help I need support!\n## Discord Server\nYour best bet is to join the [FaceSwap Discord server](https://discord.gg/FC54sYg) where there are plenty of users willing to help. Please note that, like this repo, this is a SFW Server!\n\n## FaceSwap Forum\nAlternatively, you can post questions in the [FaceSwap Forum](https://faceswap.dev/forum). Please do not post general support questions in this repo as they are liable to be deleted without response.\n\n# Donate\nThe developers work tirelessly to improve and develop FaceSwap. Many hours have been put in to provide the software as it is today, but this is an extremely time-consuming process with no financial reward. If you enjoy using the software, please consider donating to the devs, so they can spend more time implementing improvements.\n\n## Patreon\nThe best way to support us is through our Patreon page:\n\n[![become-a-patron](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=23238350)\n\n## One time Donations\nAlternatively you can give a one off donation to any of our Devs:\n### @torzdf\n There is very little FaceSwap code that hasn't been touched by torzdf. He is responsible for implementing the GUI, FAN aligner, MTCNN detector and porting the Villain, DFL-H128 and DFaker models to FaceSwap, as well as significantly improving many areas of the code.\n\n**Bitcoin:** bc1qpm22suz59ylzk0j7qk5e4c7cnkjmve2rmtrnc6\n\n**Ethereum:** 0xd3e954dC241B87C4E8E1A801ada485DC1d530F01\n\n**Monero:** 45dLrtQZ2pkHizBpt3P3yyJKkhcFHnhfNYPMSnz3yVEbdWm3Hj6Kr5TgmGAn3Far8LVaQf1th2n3DJVTRkfeB5ZkHxWozSX\n\n**Paypal:** [![torzdf](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JZ8PP3YE9J62L)\n\n### @andenixa\nCreator of the Unbalanced and OHR models, as well as expanding various capabilities within the training process. Andenixa is currently working on new models and will take requests for donations.\n\n**Paypal:** [![andenixa](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NRVLQYGS6NWTU)\n\n# How to contribute\n\n## For people interested in the generative models\n - Go to the 'faceswap-model' to discuss/suggest/commit alternatives to the current algorithm.\n\n## For devs\n - Read this README entirely\n - Fork the repo\n - Play with it\n - Check issues with the 'dev' tag\n - For devs more interested in computer vision and openCV, look at issues with the 'opencv' tag. Also feel free to add your own alternatives/improvements\n\n## For non-dev advanced users\n - Read this README entirely\n - Clone the repo\n - Play with it\n - Check issues with the 'advuser' tag\n - Also go to the '[faceswap Forum](https://faceswap.dev/forum)' and help others.\n\n## For end-users\n - Get the code here and play with it if you can\n - You can also go to the [faceswap Forum](https://faceswap.dev/forum) and help or get help from others.\n - Be patient. This is a relatively new technology for developers as well. Much effort is already being put into making this program easy to use for the average user. It just takes time!\n - **Notice** Any issue related to running the code has to be opened in the [faceswap Forum](https://faceswap.dev/forum)!\n\n# About machine learning\n\n## How does a computer know how to recognize/shape faces? How does machine learning work? What is a neural network?\nIt's complicated. Here's a good video that makes the process understandable:\n[![How Machines Learn](https://img.youtube.com/vi/R9OHn5ZF4Uo/0.jpg)](https://www.youtube.com/watch?v=R9OHn5ZF4Uo)\n\nHere's a slightly more in depth video that tries to explain the basic functioning of a neural network:\n[![How Machines Learn](https://img.youtube.com/vi/aircAruvnKk/0.jpg)](https://www.youtu"
+    },
+    "brief": {
+      "summary": "开源的人脸识别与换脸工具，支持图片和视频",
+      "problem": "手动制作换脸内容复杂，缺少可学习的完整工具链",
+      "highlights": [
+        "可以提取图片或视频中的人脸",
+        "可以训练模型并替换图片中的人脸",
+        "可以通过GUI处理换脸任务"
+      ],
+      "target_users": [
+        "AI学习者",
+        "影视特效爱好者",
+        "Python开发者"
+      ],
+      "why_trending": "今日新增166个Star，本周首次收录且近期仍有更新",
+      "caveat": "使用前需取得肖像授权，并准备支持CUDA的现代GPU",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "deepfakes/faceswap",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "支持图片与视频的人脸替换",
+      "generated_by_ai": true,
+      "velocity_score": 67,
+      "freshness_score": 20,
+      "ranking_score": 62.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "invoke-ai/InvokeAI",
+      "url": "https://github.com/invoke-ai/InvokeAI",
+      "description": "Invoke is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, and serves as the foundation for multiple commercial products.",
+      "language": "Python",
+      "total_stars": 27681,
+      "forks": 2900,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-art",
+        "artificial-intelligence",
+        "generative-art",
+        "image-generation",
+        "img2img",
+        "inpainting",
+        "latent-diffusion",
+        "linux",
+        "macos",
+        "outpainting",
+        "stable-diffusion",
+        "txt2img",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-08-17T01:04:27Z",
+      "updated_at": "2026-07-30T03:28:33Z",
+      "pushed_at": "2026-07-30T02:18:03Z",
+      "open_issues": 380,
+      "homepage": "https://invoke-ai.github.io/InvokeAI/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![project hero](https://github.com/invoke-ai/InvokeAI/assets/31807370/6e3728c7-e90e-4711-905c-3b55844ff5be)\n\n# Invoke - Professional Creative AI Tools for Visual Media\n\n[![discord badge]][discord link] [![latest release badge]][latest release link] [![github stars badge]][github stars link] [![github forks badge]][github forks link] [![CI checks on main badge]][CI checks on main link] [![latest commit to main badge]][latest commit to main link] [![github open issues badge]][github open issues link] [![github open prs badge]][github open prs link] [![translation status badge]][translation status link]\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\n</div>\n\n\nInvoke is a leading creative engine built to empower professionals and enthusiasts alike. Generate and create stunning visual media using the latest AI-driven technologies. Invoke offers an industry leading web-based UI, and serves as the foundation for multiple commercial products.\n\n- Free to use under a commercially-friendly license\n- Download and install on compatible hardware\n- Generate, refine, iterate on images, and build workflows\n\n![Highlighted Features - Canvas and Workflows](https://github.com/invoke-ai/InvokeAI/assets/31807370/708f7a82-084f-4860-bfbe-e2588c53548d)\n\n# Documentation\n\n| **Quick Links**                                                                                                                                             |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| [Installation and Updates][installation docs] - [Documentation and Tutorials][docs home] - [Bug Reports][github issues] - [Contributing][contributing docs] |\n\n# Installation\n\nTo get started with Invoke, [Download the Launcher](https://github.com/invoke-ai/launcher/releases/latest).\n\n## Troubleshooting, FAQ and Support\n\nPlease review our [FAQ][faq] for solutions to common installation problems and other issues.\n\nFor more help, please join our [Discord][discord link].\n\n## Features\n\nFull details on features can be found in [our documentation][features docs].\n\n### Web Server & UI\n\nInvoke runs a locally hosted web server & React UI with an industry-leading user experience.\n\n### Unified Canvas\n\nThe Unified Canvas is a fully integrated canvas implementation with support for all core generation capabilities, in/out-painting, brush tools, and more. This creative tool unlocks the capability for artists to create with AI as a creative collaborator, and can be used to augment AI-generated imagery, sketches, photography, renders, and more.\n\n### Workflows & Nodes\n\nInvoke offers a fully featured workflow management solution, enabling users to combine the power of node-based workflows with the ease of a UI. This allows for customizable generation pipelines to be developed and shared by users looking to create specific workflows to support their production use-cases.\n\n### Board & Gallery Management\n\nInvoke features an organized gallery system for easily storing, accessing, and remixing your content in the Invoke workspace. Images can be dragged/dropped onto any Image-base UI element in the application, and rich metadata within the Image allows for easy recall of key prompts or settings used in your workflow.\n\n### Model Support\n- SD 1.5\n- SD 2.0\n- SDXL\n- SD 3.5 Medium\n- SD 3.5 Large\n- CogView 4\n- Flux.1 Dev\n- Flux.1 Schnell\n- Flux.1 Kontext\n- Flux.1 Krea\n- Flux Redux\n- Flux Fill\n- Flux.2 Klein 4B\n- Flux.2 Klein 9B\n- Z-Image Turbo\n- Z-Image Base\n- Krea 2 Turbo\n- Anima\n- Qwen Image\n- Qwen Image Edit\n- Ideogram 4\n- Nano Banana (API Only)\n- GPT Image (API Only)\n- Wan (API Only)\n\n### Other features\n\n- Support for ckpt, diffusers, and some gguf models\n- Upscaling Tools\n- Embedding Manager & Support\n- Model Manager & Support\n- Workflow creation & management\n- Node-Based Architecture\n- Object Segmentation & Selection Models (SAM / SAM2)\n\n## Contributing\n\nAnyone who wishes to contribute to this project - whether documentation, features, bug fixes, code cleanup, testing, or code reviews - is very much encouraged to do so.\n\nGet started with contributing by reading our [contribution documentation][contributing docs], joining the [#dev-chat] or the GitHub discussion board.\n\nWe hope you enjoy using Invoke as much as we enjoy creating it, and we hope you will elect to become part of our community.\n\n## Sponsors\n\nInvoke's open-source development is powered by our sponsors. If Invoke is valuable to you or your business, please consider [sponsoring us][sponsor link] — it directly funds maintenance, new features, and community support.\n\n<!-- Sponsor logos can be added below, or automated with a GitHub Action\n     such as `JamesIves/github-sponsors-readme-action` to keep them in sync. -->\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\nWe very much thank the following sponsors:\n\n### Backers ($15/mo)\n\n* [apokolypsse](https://github.com/apokolypsse)\n* [Romeotechguy](https://github.com/Romeotechguy)\n\n### Power Users ($50/mo)\n\n* [mickr777](https://github.com/mickr777)\n\n## Thanks\n\nInvoke is a combined effort of [passionate and talented people from across the world][contributors]. We thank them for their time, hard work and effort.\n\nOriginal portions of the software are Copyright © 2024 by respective contributors.\n\n[features docs]: https://invoke.ai/\n[faq]: https://invoke.ai/troubleshooting/faq/\n[contributors]: https://invoke.ai/contributing/contributors/\n[github issues]: https://github.com/invoke-ai/InvokeAI/issues\n[docs home]: https://invoke.ai\n[installation docs]: https://invoke.ai/start-here/installation/\n[sponsor link]: https://github.com/sponsors/invoke-ai\n[#dev-chat]: https://discord.com/channels/1020123559063990373/1049495067846524939\n[contributing docs]: https://invoke.ai/contributing/\n[CI checks on main badge]: https://flat.badgen.net/github/checks/invoke-ai/InvokeAI/main?label=CI%20status%20on%20main&cache=900&icon=github\n[CI checks on main link]: https://github.com/invoke-ai/InvokeAI/actions?query=branch%3Amain\n[discord badge]: https://flat.badgen.net/discord/members/ZmtBAhwWhy?icon=discord\n[discord link]: https://discord.gg/ZmtBAhwWhy\n[github forks badge]: https://flat.badgen.net/github/forks/invoke-ai/InvokeAI?icon=github\n[github forks link]: https://useful-forks.github.io/?repo=invoke-ai%2FInvokeAI\n[github open issues badge]: https://flat.badgen.net/github/open-issues/invoke-ai/InvokeAI?icon=github\n[github open issues link]: https://github.com/invoke-ai/InvokeAI/issues?q=is%3Aissue+is%3Aopen\n[github open prs badge]: https://flat.badgen.net/github/open-prs/invoke-ai/InvokeAI?icon=github\n[github open prs link]: https://github.com/invoke-ai/InvokeAI/pulls?q=is%3Apr+is%3Aopen\n[github stars badge]: https://flat.badgen.net/github/stars/invoke-ai/InvokeAI?icon=github\n[github stars link]: https://github.com/invoke-ai/InvokeAI/stargazers\n[latest commit to main badge]: https://flat.badgen.net/github/last-commit/invoke-ai/InvokeAI/main?icon=github&color=yellow&label=last%20dev%20commit&cache=900\n[latest commit to main link]: https://github.com/invoke-ai/InvokeAI/commits/main\n[latest release badge]: https://flat.badgen.net/github/release/invoke-ai/InvokeAI/development?icon=github\n[latest release link]: https://github.com/invoke-ai/InvokeAI/releases/latest\n[translation status badge]: https://hosted.weblate.org/widgets/invokeai/-/svg-badge.svg\n[translation status link]: https://hosted.weblate.org/engage/invokeai/\n[nvidia docker docs]: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n[amd docker docs]: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html\n"
+    },
+    "brief": {
+      "summary": "InvokeAI 是面向视觉创作的 Stable Diffusion 开源工具",
+      "problem": "降低 AI 图像生成、编辑和工作流管理的使用门槛",
+      "highlights": [
+        "可以用画布进行扩图、局部重绘和图像创作",
+        "可以保存、复用并分享节点式生成工作流",
+        "可以管理模型、提示词和生成图片元数据"
+      ],
+      "target_users": [
+        "AI 绘画创作者",
+        "视觉设计师",
+        "开源开发者"
+      ],
+      "why_trending": "总 Star 达27681，本周首次收录且近期持续活跃",
+      "caveat": "需在兼容硬件上安装，具体硬件要求资料未说明",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "invoke-ai/InvokeAI",
+      "score": 92,
+      "category": "AI 绘画 / 漫画",
+      "reason": "专业Stable Diffusion创作引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "Far-Beyond-Pulsar/Pulsar-Native",
+      "url": "https://github.com/Far-Beyond-Pulsar/Pulsar-Native",
+      "description": "The next-generation game engine that you deserve implemented in rust https://pulsarnative.com/",
+      "language": "Rust",
+      "total_stars": 366,
+      "forks": 31,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "engine",
+        "game",
+        "game-engine",
+        "gpui",
+        "rust"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-09-15T16:53:02Z",
+      "updated_at": "2026-07-30T03:35:45Z",
+      "pushed_at": "2026-07-30T03:35:22Z",
+      "open_issues": 43,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- =============================== -->\n<!--         PULSAR ENGINE           -->\n<!-- =============================== -->\n\n<p align=\"center\">\n  <a href=\"https://github.com/Far-Beyond-Pulsar/Pulsar-Native\">\n    <img width=\"160\" height=\"160\" alt=\"Pulsar Logo\" src=\"https://github.com/user-attachments/assets/e36bfc3b-f5e8-437e-a50a-967ee254a0eb\" style=\"background-color: transparent !important; border: none !important;\" />\n  </a>\n</p>\n\n<h1 align=\"center\">Pulsar Engine</h1>\n\n<p align=\"center\">\n  <strong>A next‑generation, experimental game engine focused on scalability, modularity, and modern systems design.</strong>\n</p>\n<img width=\"3840\" height=\"1649\" alt=\"deviceframes\" src=\"https://github.com/user-attachments/assets/c850a05b-c863-4c1f-bd4d-4dd79c6b9fe1\" />\n<p align=\"center\">\n  Device Mockup created from <a href=\"https://deviceframes.com/templates/macbook-pro-m1-14\">MacBook Pro mockups</a>\n</p>\n\n---\n\n## ⚡ Beyond the Standard\n\nPulsar Engine is built by developers who believe core engine tech should be more than just a collection of legacy features. We are rebuilding the foundation of world simulation with clarity and intent.\n\n*   **Scalable World Simulation:** Advanced spatial partitioning for high-fidelity environments.\n*   **Rust-First Tooling:** Leveraging modern memory safety and performance from the ground up.\n*   **Explicit Architecture:** Modular design that favors maintainability over short-term hacks.\n*   **In-Editor Stability:** prioritizing a reliable workspace for creators as a first-class citizen.\n\n---\n\n## ⚠️ Project Status\n\n> [!IMPORTANT]  \n> **Pulsar is in early-stage development.** You likely cannot build a full production game yet. The codebase is experimental, subject to heavy architectural shifts, and open to community contributions.\n\n**Current Roadmap:** [View Projects & Milestones](https://github.com/orgs/Far-Beyond-Pulsar/projects/1)\n\n---\n\n## 🤝 Join the Movement\n\nDevelopment happens in the open. Whether you're a systems engineer or a technical artist, your input helps shape the engine.\n\n*   💬 **[Discord](https://discord.gg/5eAKDC53SX):** Real-time dev updates and brainstorming.\n*   🧠 **[GitHub Discussions](https://github.com/Far-Beyond-Pulsar/Pulsar-Native/discussions):** Long-form design proposals.\n*   ⭐ **Support:** Star, Watch, or Fork the repository to boost visibility.\n\n---\n\n## Instalaltion\n\nDownload the appropriate binary for your machine from the `Releases` page\n\n## Source Build\n\nThe Pulsar-Native repo consists of many crates and git sub modules leading to a multi-step setup to build from source.\n\n### Clone the repo\n\nCloning out repo gives you a full copy of the entire project hsitory locally right on your machine\n\n```bash\ngit clone https://github.com/Far-Beyond-Pulsar/Pulsar-Native\n```\n\n### Pull the Submodules\n\nSub modules allow us to store code in other GitHub repos and reference them in the main repo helping to reduce repo bloat and enforce separation\n\n```bash\ngit submodule update --init\n```\n\n### Install Deps (Linux)\n\nOn linux you may need to install some packages to allow the build to complete properly; here are the ones we needed on Ubuntu Desktop:\n\n```bash\nsudo apt update\n\nsudo apt install -y \\\n  gcc g++ clang libfontconfig-dev libwayland-dev \\\n  libwebkit2gtk-4.1-dev libxkbcommon-x11-dev libx11-xcb-dev \\\n  libssl-dev libzstd-dev \\\n  vulkan-validationlayers libvulkan1\n```\n\n### Build via Cargo\n\n```bash\ncargo build --release\n```\n\n## 🛰️ Related Ecosystems\n\n### **Horizon Game Server**\nIf you are interested in massive multiplayer scaling, check out **Horizon**, developed by many of the same contributors.\n\n<a href=\"https://github.com/Far-Beyond-Dev/Horizon\">\n  <img src=\"https://github.com/user-attachments/assets/54a8e1a6-32ce-42fb-853f-04e38a52ae00\" alt=\"Horizon Game Server\" width=\"400\" />\n</a>\n\n---\n\n<p align=\"center\">\n  <em>Pulsar Engine developed by Tristan J. Poland and the Pulsar community.</em>\n</p>\n"
+    },
+    "brief": {
+      "summary": "用 Rust 构建的实验性下一代游戏引擎",
+      "problem": "为游戏开发提供可扩展、模块化的现代引擎基础",
+      "highlights": [
+        "可以下载二进制体验引擎",
+        "可以从源码构建并参与开发",
+        "可以围绕大型世界模拟探索引擎设计"
+      ],
+      "target_users": [
+        "Rust 开发者",
+        "游戏引擎研究者",
+        "技术美术"
+      ],
+      "why_trending": "本周首次收录，已有366个 Star，近期持续更新",
+      "caveat": "项目仍处早期，暂不适合制作完整商业游戏",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Far-Beyond-Pulsar/Pulsar-Native",
+      "score": 82,
+      "category": "游戏开发",
+      "reason": "使用Rust实现的新一代游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "phase-rs/phase",
+      "url": "https://github.com/phase-rs/phase",
+      "description": "A rules engine and game client — Rust + WASM + React",
+      "language": "Rust",
+      "total_stars": 209,
+      "forks": 144,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "magic-the-gathering",
+        "mtg",
+        "react",
+        "rust",
+        "tauri",
+        "typescript",
+        "wasm"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T21:31:17Z",
+      "updated_at": "2026-07-30T03:31:42Z",
+      "pushed_at": "2026-07-30T03:31:40Z",
+      "open_issues": 455,
+      "homepage": "http://preview.phase-rs.dev/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"client/public/logo.webp\" alt=\"phase.rs\" width=\"280\" />\n</p>\n\n<p align=\"center\">\n  <strong>An open-source Magic: The Gathering rules engine and game client</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://preview.phase-rs.dev\"><img alt=\"Play Preview\" src=\"https://img.shields.io/badge/⚡_Play_Preview-Latest-f59e0b?style=for-the-badge\"></a>\n  <a href=\"https://phase-rs.dev\"><img alt=\"Play Online\" src=\"https://img.shields.io/badge/▶_Play_Online-Alpha-6366f1?style=for-the-badge\"></a>\n  <a href=\"https://github.com/phase-rs/phase/releases/latest\"><img alt=\"Download\" src=\"https://img.shields.io/badge/⬇_Download-Desktop-10b981?style=for-the-badge\"></a>\n  <a href=\"https://ko-fi.com/phasers\"><img alt=\"Support on Ko-fi\" src=\"https://img.shields.io/badge/☕_Ko--fi-Support-FF5E5B?style=for-the-badge\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#quick-start\">Quick Start</a> · <a href=\"#features\">Features</a> · <a href=\"#architecture\">Architecture</a> · <a href=\"#development\">Development</a> · <a href=\"https://discord.gg/dUZwhYHUyk\">Discord</a> · <a href=\"https://deepwiki.com/phase-rs/phase\"><img alt=\"Ask DeepWiki\" src=\"https://deepwiki.com/badge.svg\"></a>\n</p>\n\n<!-- coverage-badges:start -->\n<p align=\"center\">\n  <img alt=\"Card Coverage\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fcoverage.json\">\n  <img alt=\"Keywords\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fkeywords.json\">\n  <img alt=\"Cards\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fcards.json\">\n  <br/>\n  <img alt=\"Pauper\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-pauper.json\">\n  <img alt=\"Pioneer\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-pioneer.json\">\n  <img alt=\"Modern\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-modern.json\">\n  <img alt=\"Standard\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-standard.json\">\n  <img alt=\"Legacy\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-legacy.json\">\n  <img alt=\"Vintage\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-vintage.json\">\n  <img alt=\"Commander\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-commander.json\">\n</p>\n<!-- coverage-badges:end -->\n\n<p align=\"center\">\n  <a href=\"https://gittensor.io/miners/repository?name=phase-rs%2Fphase\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/phase-rs/phase/gittensor-impact-assets/gittensor-impact-dark.svg\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/phase-rs/phase/gittensor-impact-assets/gittensor-impact-light.svg\">\n      <img src=\"https://raw.githubusercontent.com/phase-rs/phase/gittensor-impact-assets/gittensor-impact-light.svg\" alt=\"Gittensor contributor impact for phase.rs\" width=\"600\">\n    </picture>\n  </a>\n</p>\n\n---\n\n<p align=\"center\">\n  <img src=\"docs/screenshot.webp\" alt=\"phase.rs gameplay\" width=\"900\" />\n</p>\n\nA Rust-native MTG engine compiling to native and WASM, powering a Tauri desktop app, browser PWA, and WebSocket multiplayer. Implements comprehensive MTG rules using functional architecture — pure reducers, discriminated unions, and immutable state with structural sharing — with an Arena-quality React/TypeScript UI.\n\n## Story\n\nI'm Matt — a millennial software engineer who loves Magic. My six-year-old son asks me to play with him all the time, but the real game is just too complicated for a kid his age.\n\nSo I built [Alchemy](https://matthewevans.github.io/alchemy) ([source](https://github.com/matthewevans/alchemy)) — a simplified, kid-friendly version of MTG we could play together on our iPads. Fewer keywords, no lands, energy that builds each turn, and an adaptive learning mode where he solves math problems for combat bonuses. I had a working version in a single afternoon and fleshed it out over the following week.\n\nAfter that I wanted to see how far I could push it — a real MTG rules engine in Rust, compiling to WASM, with the same React frontend so the whole thing runs in a browser. This whole project went from nothing to where it is now in a matter of weeks.\n\nI'm not trying to make money off this. There are no ads. I'm just a dude who likes Magic.\n\n## Features\n\n- **Rules engine** — Turns, priority, stack, combat, state-based actions, layers, triggers, replacement effects\n- **34,300+ cards** — Parsed from MTGJSON with format support (Commander, Modern, Pioneer, Standard, and more)\n- **AI opponent** — Per-card decision logic, game tree search, and evaluation heuristics\n- **Game UI** — Battlefield, hand, stack, targeting overlays, mana payment, animations, and ambient audio\n- **Multiplayer** — WebSocket server with hidden information, lobby system, and WebRTC peer-to-peer\n- **Metagame feeds** — Automated scraping of top decks from MTGGoldfish, updated daily\n- **Deck builder** — Card search, visual builder, and `.dck`/`.dec` import\n- **Cross-platform** — Tauri desktop (Windows, macOS, Linux), browser PWA, and tablet\n- **Card images** — Scryfall integration with IndexedDB caching\n\n## Contribute a Card with Your LLM\n\nThousands of cards are still unimplemented. If you use Claude Code, Codex CLI, or a similar agent, you can \"lend your LLM\" an hour and ship a real PR — **even if you don't have a Rust toolchain**. The LLM does all the work; you just paste a prompt.\n\nHand this to your LLM:\n\n```\nRead https://raw.githubusercontent.com/phase-rs/phase/main/docs/AI-CONTRIBUTOR.md\nand follow it end-to-end to implement {a card I name, or pick one for me}.\nUse the $engine-implementer skill. Use high thinking. Don't stop for my input.\nOpen a PR when done.\nUse the repository's .github/PULL_REQUEST_TEMPLATE.md for the PR body and fill\nevery section.\n```\n\nFull procedure, two tracks (developer / non-developer), and copy-paste prompts for LLM UIs without web fetch: [docs/AI-CONTRIBUTOR.md](docs/AI-CONTRIBUTOR.md).\n\n## Quick Start\n\n### Prerequisites\n\n- [Rust toolchain](https://rustup.rs/)\n- wasm32 target: `rustup target add wasm32-unknown-unknown` (Windows: see below)\n- wasm-bindgen-cli: `cargo install wasm-bindgen-cli@0.2.114`\n- wasm-opt (optional): `brew install binaryen` or `apt install binaryen`\n- [Node.js](https://nodejs.org/) 22+ and [pnpm](https://pnpm.io/): `npm i -g pnpm`\n\n#### Windows\n\n`rustup` on Windows defaults to the GNU toolchain, which requires `dlltool.exe` and fails with _\"error calling dlltool 'dlltool.exe': program not found\"_. You need [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with the **Desktop development with C++** workload, then switch to the MSVC host:\n\n```powershell\nrustup set default-host x86_64-pc-windows-msvc\nrustup toolchain install nightly --target wasm32-unknown-unknown\n```\n\nVerify with `rustup show active-toolchain` — it should end in `x86_64-pc-windows-msvc`.\n\nThe setup scripts also require `jq` and `curl`, which are not installed by default on Windows. Install them before running `./scripts/setup.sh`:\n\n```powershell\nwinget install jqlang.jq\nwinget install curl.curl   # skip if curl is already on your PATH\n```\n\nOpen a new terminal after installing so the updated PATH takes effect.\n\n### Setup\n\n```bash\ngit clone https://github.com/phase-rs/phase && cd phase\n./scripts/setup.sh     # Fetches data, builds WASM, installs deps\ncd client && pnpm dev  # Start dev server at localhost:5173\n```\n\nIf `tilt` is installed, `setup.sh` skips the eager WASM + card-data build and `tilt up` handles them. Flags: `--agent` (LLM mode — skip Scryfall art; see [docs/AI-CONTRIBUTOR.md](docs/AI-CONTRIBUTOR.md)), `--no-tilt` (force inline build).\n\n### Manual Steps\n\n```bash\n./scripts/gen-card-data.sh            # generate card-data.json\n./scripts/build-wasm.sh               # Build WASM bindings\ncd client && pnpm install && pnpm dev # Start frontend\n```\n\n## Dedicated Server\n\nThe easiest way to run a dedicated multiplayer server is the Docker image:\n\n```bash\ndocker volume create phase-server-data\ndocker run -d \\\n  --platform linux/amd64 \\\n  --name phase-server \\\n  --restart unless-stopped \\\n  -p 9374:9374 \\\n  -v phase-server-data:/var/lib/phase-server \\\n  -e PHASE_LOBBY_ONLY=true \\\n  -e PHASE_CORS_ORIGIN='*' \\\n  ghcr.io/phase-rs/phase-server:latest\n```\n\nThe image includes the server binary and generated card data. It exposes:\n\n- `http://localhost:9374/health` for health checks\n- `ws://localhost:9374/ws` for WebSocket clients\n\n### Server Modes and Options\n\n`PHASE_LOBBY_ONLY=true` runs the same lightweight matchmaking mode as the public\nphase.rs server. Omit it for full server-hosted games and drafts.\n\nDocker uses environment variables for the common options:\n\n| Environment variable | Equivalent flag | Default | Notes |\n|----------------------|-----------------|---------|-------|\n| `PORT` | `--port`, `-p` | `9374` | Port inside the container |\n| `PHASE_DATA_DIR` | `--data-dir`, `-d` | `/var/lib/phase-server` | Container data directory |\n| `PHASE_CORS_ORIGIN` | `--cors-origin` | permissive | Use `*` or a specific origin |\n| `PHASE_LOBBY_ONLY` | `--lobby-only` | false | Matchmaking broker mode |\n| `PHASE_LOG_JSON` | `--log-json` | false | Emit JSON logs |\n| `PHASE_LOG_DIR` | `--log-dir` | stdout | Write logs to files |\n| `PHASE_ADMIN_TOKEN` | — | unset | Bearer token for `/admin/*` endpoints (environment variable only; no CLI flag). Unset ⇒ admin routes disabled (404). Send as `Authorization: Bearer <token>`. |\n\nYou can also pass server flags after the image name:\n\n```bash\ndocker run --rm --platform linux/amd64 -p 9374:9374 ghcr.io/phase-rs/phase-server:latest --lobby-only --cors-origin '*'\n```\n\nFor public internet play, put the container behind a TLS reverse proxy and give\nplayers the `wss://your-domain.example/ws` URL. If the reverse proxy is on the\nsame host, bind Docker to localhost instead:\n\n```bash\ndocker run -d \\\n  --platform linux/amd64 \\\n  --name phase-server \\\n  --restart unless-stopped \\\n  -p 127.0.0.1:9374:9374 \\\n  -v phase-server-data:/var/lib/phase-server \\\n  -e PHASE_LOBBY_ONLY=true \\\n  -e PHASE_CORS_ORIGIN='*' \\\n  ghcr.io/phase-rs/phase-server:latest\n```\n\nThe same flags work when running the `phase-server` release binary directly.\n\n## Architecture\n\n### Rust Workspace (`crates/`)\n\n| Crate | Description |\n|-------|-------------|\n| `engine` | Core rules engine: types, game logic, parser, card database |\n| `phase-ai` | AI opponent: evaluation, legal actions, search |\n| `engine-wasm` | WASM bindings via wasm-bindgen + tsify |\n| `server-core` | Server-side game session management |\n| `phase-server` | Axum WebSocket server for multiplayer |\n| `feed-scraper` | Metagame deck scraper (MTGGoldfish) |\n\nDependency flow: `engine` <- `phase-ai` <- `engine-wasm` / `server-core` <- `phase-server` (feed-scraper is standalone)\n\n### Frontend (`client/`)\n\nReact + TypeScript + Tailwind v4 + Zustand + Framer Motion + Vite\n\nTransport-agnostic `EngineAdapter` interface with multiple implementations:\n- **WasmAdapter** — Direct WASM calls (browser/PWA)\n- **TauriAdapter** — Tauri IPC (desktop)\n- **WebSocketAdapter** — WebSocket (multiplayer)\n- **P2PHostAdapter / P2PGuestAdapter** — WebRTC peer-to-peer via PeerJS\n\n### Design Principles\n\n- **Pure reducers** — `apply(state, action) -> ActionResult` with no mutation\n- **Discriminated unions** — Rust enums serialize to tagged TS unions via serde + tsify\n- **Structural sharing** — Immutable state via rpds persistent data structures\n\n## Development\n\n### Build Commands\n\n> **Tip:** If you're running Tilt (`tilt up`), prefer `./scripts/tilt-wait.sh <resource>` over the direct cargo/pnpm equivalents — Tilt continuously rebuilds in the background and `tilt-wait.sh` blocks only until the relevant resource s"
+    },
+    "brief": {
+      "summary": "用 Rust 和 WASM 实现的开源万智牌规则引擎与客户端",
+      "problem": "让复杂的万智牌规则支持浏览器、桌面和多人对战",
+      "highlights": [
+        "可以在浏览器或桌面端进行万智牌对局",
+        "可以搭建牌组并导入 .dck/.dec 文件",
+        "可以通过 AI 对手或 WebSocket 多人对战"
+      ],
+      "target_users": [
+        "万智牌玩家",
+        "游戏开发者",
+        "Rust 前端开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍有提交；总 Star 209",
+      "caveat": "仍有数千张卡牌尚未实现，搭建依赖较多",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "phase-rs/phase",
+      "score": 80,
+      "category": "游戏开发",
+      "reason": "规则引擎与游戏客户端框架",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 46.0
+    }
+  }
+]
