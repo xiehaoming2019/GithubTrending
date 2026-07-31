@@ -1,0 +1,530 @@
+[
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "ChromeDevTools/chrome-devtools-mcp",
+      "url": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+      "description": "Chrome DevTools for coding agents",
+      "language": "TypeScript",
+      "total_stars": 48129,
+      "forks": 3266,
+      "stars_today": 80,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 80
+    },
+    "details": {
+      "topics": [
+        "browser",
+        "chrome",
+        "chrome-devtools",
+        "debugging",
+        "devtools",
+        "mcp",
+        "mcp-server",
+        "puppeteer"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-09-11T10:39:55Z",
+      "updated_at": "2026-07-31T03:54:38Z",
+      "pushed_at": "2026-07-30T19:41:47Z",
+      "open_issues": 113,
+      "homepage": "https://npmjs.org/package/chrome-devtools-mcp",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Chrome DevTools for agents\n\n[![npm chrome-devtools-mcp package](https://img.shields.io/npm/v/chrome-devtools-mcp.svg)](https://npmjs.org/package/chrome-devtools-mcp)\n\nChrome DevTools for agents (`chrome-devtools-mcp`) lets your coding agent (such as Antigravity, Claude, Cursor or Copilot)\ncontrol and inspect a live Chrome browser. It acts as a Model-Context-Protocol\n(MCP) server, giving your AI coding assistant access to the full power of\nChrome DevTools for reliable automation, in-depth debugging, and performance analysis.\nA [CLI](docs/cli.md) is also provided for use without MCP.\n\n## [Tool reference](./docs/tool-reference.md) | [Changelog](./CHANGELOG.md) | [Contributing](./CONTRIBUTING.md) | [Troubleshooting](./docs/troubleshooting.md) | [Design Principles](./docs/design-principles.md)\n\n## Key features\n\n- **Get performance insights**: Uses [Chrome\n  DevTools](https://github.com/ChromeDevTools/devtools-frontend) to record\n  traces and extract actionable performance insights.\n- **Advanced browser debugging**: Analyze network requests, take screenshots and\n  check browser console messages (with source-mapped stack traces).\n- **Reliable automation**. Uses\n  [puppeteer](https://github.com/puppeteer/puppeteer) to automate actions in\n  Chrome and automatically wait for action results.\n\n## Disclaimers\n\n`chrome-devtools-mcp` exposes content of the browser instance to the MCP clients\nallowing them to inspect, debug, and modify any data in the browser or DevTools.\nAvoid sharing sensitive or personal information that you don't want to share with\nMCP clients.\n\n`chrome-devtools-mcp` officially supports Google Chrome and [Chrome for Testing](https://developer.chrome.com/blog/chrome-for-testing/) only.\nOther Chromium-based browsers may work, but this is not guaranteed, and you may encounter unexpected behavior. Use at your own discretion.\nWe are committed to providing fixes and support for the latest version of [Extended Stable Chrome](https://chromiumdash.appspot.com/schedule).\n\nPerformance tools may send trace URLs to the Google CrUX API to fetch real-user\nexperience data. This helps provide a holistic performance picture by\npresenting field data alongside lab data. This data is collected by the [Chrome\nUser Experience Report (CrUX)](https://developer.chrome.com/docs/crux). To disable\nthis, run with the `--no-performance-crux` flag.\n\n## **Usage statistics**\n\nGoogle collects usage statistics (such as tool invocation success rates, latency, and environment information) to improve the reliability and performance of Chrome DevTools MCP.\n\nData collection is **enabled by default**. You can opt-out by passing the `--no-usage-statistics` flag when starting the server:\n\n```json\n\"args\": [\"-y\", \"chrome-devtools-mcp@latest\", \"--no-usage-statistics\"]\n```\n\nGoogle handles this data in accordance with the [Google Privacy Policy](https://policies.google.com/privacy).\n\nGoogle's collection of usage statistics for Chrome DevTools MCP is independent from the Chrome browser's usage statistics. Opting out of Chrome metrics does not automatically opt you out of this tool, and vice-versa.\n\nCollection is disabled if `CHROME_DEVTOOLS_MCP_NO_USAGE_STATISTICS` or `CI` env variables are set.\n\n## Update checks\n\nBy default, the server periodically checks the npm registry for updates and logs a notification when a newer version is available.\nYou can disable these update checks by setting the `CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS` environment variable.\n\n## Requirements\n\n- [Node.js](https://nodejs.org/) [LTS](https://github.com/nodejs/Release#release-schedule) version.\n- [Chrome](https://www.google.com/chrome/) current stable version or newer.\n- [npm](https://www.npmjs.com/)\n\n## Getting started\n\nAdd the following config to your MCP client:\n\n```json\n{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"chrome-devtools-mcp@latest\"]\n    }\n  }\n}\n```\n\n> [!NOTE]\n> Using `chrome-devtools-mcp@latest` ensures that your MCP client will always use the latest version of the Chrome DevTools MCP server.\n\nIf you are interested in doing only basic browser tasks, use the `--slim` mode:\n\n```json\n{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"chrome-devtools-mcp@latest\", \"--slim\", \"--headless\"]\n    }\n  }\n}\n```\n\nSee [Slim tool reference](./docs/slim-tool-reference.md).\n\n### MCP Client configuration\n\n<details>\n  <summary>Amp</summary>\n  Follow https://ampcode.com/manual#mcp and use the config provided above. You can also install the Chrome DevTools MCP server using the CLI:\n\n```bash\namp mcp add chrome-devtools -- npx chrome-devtools-mcp@latest\n```\n\n</details>\n\n<details>\n  <summary>Antigravity</summary>\n\nTo use the Chrome DevTools MCP server follow the instructions from <a href=\"https://antigravity.google/docs/mcp\">Antigravity's docs</a> to install a custom MCP server. Add the following config to the MCP servers config:\n\n```bash\n{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\n        \"-y\",\n        \"chrome-devtools-mcp@latest\",\n        \"--browser-url=http://127.0.0.1:9222\"\n      ]\n    }\n  }\n}\n```\n\nThis will make the Chrome DevTools MCP server automatically connect to the browser that Antigravity is using. If you are not using port 9222, make sure to adjust accordingly.\n\nChrome DevTools MCP will not start the browser instance automatically using this approach because the Chrome DevTools MCP server connects to Antigravity's built-in browser. If the browser is not already running, you have to start it first by clicking the Chrome icon at the top right corner.\n\n</details>\n\n<details>\n  <summary>Claude Code</summary>\n\n**Install via CLI (MCP only)**\n\nUse the Claude Code CLI to add the Chrome DevTools MCP server (<a href=\"https://code.claude.com/docs/en/mcp\">guide</a>):\n\n```bash\nclaude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest\n```\n\n**Install as a Plugin (MCP + Skills)**\n\n> [!NOTE]\n> If you already had Chrome DevTools MCP installed previously for Claude Code, make sure to remove it first from your installation and configuration files.\n\nTo install Chrome DevTools MCP with skills, add the marketplace registry in Claude Code:\n\n```sh\n/plugin marketplace add ChromeDevTools/chrome-devtools-mcp\n```\n\nThen, install the plugin:\n\n```sh\n/plugin install chrome-devtools-mcp@chrome-devtools-plugins\n```\n\nRestart Claude Code to have the MCP server and skills load (check with `/skills`).\n\n> [!TIP]\n> If the plugin installation fails with a `Failed to clone repository` error (e.g., HTTPS connectivity issues behind a corporate firewall), see the [troubleshooting guide](./docs/troubleshooting.md#claude-code-plugin-installation-fails-with-failed-to-clone-repository) for workarounds, or use the CLI installation method above instead.\n\n</details>\n\n<details>\n  <summary>Cline</summary>\n  Follow https://docs.cline.bot/mcp/configuring-mcp-servers and use the config provided above.\n</details>\n\n<details>\n  <summary>Codex</summary>\n  Follow the <a href=\"https://developers.openai.com/codex/mcp/#configure-with-the-cli\">configure MCP guide</a>\n  using the standard config from above. You can also install the Chrome DevTools MCP server using the Codex CLI:\n\n```bash\ncodex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest\n```\n\n**On Windows 11**\n\nConfigure the Chrome install location and increase the startup timeout by updating `.codex/config.toml` and adding the following `env` and `startup_timeout_ms` parameters:\n\n```\n[mcp_servers.chrome-devtools]\ncommand = \"cmd\"\nargs = [\n    \"/c\",\n    \"npx\",\n    \"-y\",\n    \"chrome-devtools-mcp@latest\",\n]\nenv = { SystemRoot=\"C:\\\\Windows\", PROGRAMFILES=\"C:\\\\Program Files\" }\nstartup_timeout_ms = 20_000\n```\n\n</details>\n\n<details>\n  <summary>Command Code</summary>\n\nUse the Command Code CLI to add the Chrome DevTools MCP server (<a href=\"https://commandcode.ai/docs/mcp\">MCP guide</a>):\n\n```bash\ncmd mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest\n```\n\n</details>\n\n<details>\n  <summary>Copilot CLI</summary>\n\nStart Copilot CLI:\n\n```\ncopilot\n```\n\nStart the dialog to add a new MCP server by running:\n\n```\n/mcp add\n```\n\nConfigure the following fields and press `CTRL+S` to save the configuration:\n\n- **Server name:** `chrome-devtools`\n- **Server Type:** `[1] Local`\n- **Command:** `npx -y chrome-devtools-mcp@latest`\n\n</details>\n\n<details>\n  <summary>Copilot / VS Code</summary>\n\n**Install as a Plugin (Recommended)**\n\nThe easiest way to get up and running is to install `chrome-devtools-mcp` as an agent plugin.\nThis bundles the **MCP server** and all **skills** together, so your agent gets both the tools\nand the expert guidance it needs to use them effectively.\n\n1.  Open the **Command Palette** (`Cmd+Shift+P` on macOS or `Ctrl+Shift+P` on Windows/Linux).\n2.  Search for and run the **Chat: Install Plugin From Source** command.\n3.  Paste in our repository name: `ChromeDevTools/chrome-devtools-mcp`.\n\nThat's it! Your agent is now supercharged with Chrome DevTools capabilities.\n\n---\n\n**Install as an MCP Server (MCP only)**\n\n**Click the button to install:**\n\n[<img src=\"https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Server&color=0098FF\" alt=\"Install in VS Code\">](https://vscode.dev/redirect/mcp/install?name=io.github.ChromeDevTools%2Fchrome-devtools-mcp&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22chrome-devtools-mcp%22%5D%2C%22env%22%3A%7B%7D%7D)\n\n[<img src=\"https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Server&color=24bfa5\" alt=\"Install in VS Code Insiders\">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522io.github.ChromeDevTools%252Fchrome-devtools-mcp%2522%252C%2522config%2522%253A%257B%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522chrome-devtools-mcp%2522%255D%252C%2522env%2522%253A%257B%257D%257D%257D)\n\n**Or install manually:**\n\nFollow the VS Code [MCP configuration guide](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_add-an-mcp-server) using the standard config from above, or use the CLI:\n\nFor macOS and Linux:\n\n```bash\ncode --add-mcp '{\"name\":\"io.github.ChromeDevTools/chrome-devtools-mcp\",\"command\":\"npx\",\"args\":[\"-y\",\"chrome-devtools-mcp\"],\"env\":{}}'\n```\n\nFor Windows (PowerShell):\n\n```powershell\ncode --add-mcp '{\"\"\"name\"\"\":\"\"\"io.github.ChromeDevTools/chrome-devtools-mcp\"\"\",\"\"\"command\"\"\":\"\"\"npx\"\"\",\"\"\"args\"\"\":[\"\"\"-y\"\"\",\"\"\"chrome-devtools-mcp\"\"\"]}'\n```\n\n</details>\n\n<details>\n  <summary>Cursor</summary>\n\n**Click the button to install:**\n\n[<img src=\"https://cursor.com/deeplink/mcp-install-dark.svg\" alt=\"Install in Cursor\">](https://cursor.com/en/install-mcp?name=chrome-devtools&config=eyJjb21tYW5kIjoibnB4IC15IGNocm9tZS1kZXZ0b29scy1tY3BAbGF0ZXN0In0%3D)\n\n**Or install manually:**\n\nGo to `Cursor Settings` -> `MCP` -> `New MCP Server`. Use the config provided above.\n\n</details>\n\n<details>\n  <summary>Devin CLI</summary>\n\n**Install via CLI (MCP only)**\n\nUse the Devin CLI to add the Chrome DevTools MCP server (<a href=\"https://docs.devin.ai/cli/extensibility/mcp/configuration\">guide</a>):\n\n```bash\ndevin mcp add chrome-devtools -- npx chrome-devtools-mcp@latest\n```\n\n</details>\n\n<details>\n  <summary>Factory CLI</summary>\nUse the Factory CLI to add the Chrome DevTools MCP server (<a href=\"https://docs.factory.ai/cli/configuration/mcp\">guide</a>):\n\n```bash\ndroid mcp add chrome-devtools \"npx -y chrome-devtools-mcp@latest\"\n```\n\n</details>\n\n<details>\n  <summary>Gemini CLI</summary>\nInstall the Chrome DevTools MCP server using the Gemini CLI.\n\n**Project wide:**\n\n```bash\n# Either MCP only:\ngemini mcp add chrome-devtools npx chrome-devtools-mcp@latest\n# Or as a Gemini extension (MCP+Skills):\ngemini extensions install --auto-update https://github.com/ChromeDevTools/chrome-devtools-mcp\n```\n\n**Globally:**\n\n```bash\ngemini mcp add -s user chrome-devtools npx chrome-devtools-mcp@latest\n```\n\nAlternatively, follow the "
+    },
+    "brief": {
+      "summary": "让编程智能体控制并检查实时 Chrome",
+      "problem": "编程智能体缺少浏览器调试、自动化和性能分析能力",
+      "highlights": [
+        "可以自动操作 Chrome 页面并等待结果",
+        "可以分析网络请求、控制台消息和截图",
+        "可以录制性能追踪并提取分析结果"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "前端开发者",
+        "浏览器测试人员"
+      ],
+      "why_trending": "今日新增 80 Star，本周首次收录，总 Star 超 4.8 万",
+      "caveat": "默认收集使用统计，浏览器数据可能暴露给 MCP 客户端",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "ChromeDevTools/chrome-devtools-mcp",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "MCP驱动浏览器自动化调试",
+      "generated_by_ai": true,
+      "velocity_score": 58,
+      "freshness_score": 40,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "NotNull92/hera-agent-unity",
+      "url": "https://github.com/NotNull92/hera-agent-unity",
+      "description": "Low-token CLI for AI agents to control a live Unity Editor.",
+      "language": "C#",
+      "total_stars": 21,
+      "forks": 3,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "cli",
+        "csharp",
+        "developer-tools",
+        "gamedev",
+        "golang",
+        "unity",
+        "unity-editor"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-26T21:46:23Z",
+      "updated_at": "2026-07-31T03:44:25Z",
+      "pushed_at": "2026-07-31T03:43:52Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"docs/assets/hera_logo.png\" width=\"50%\" alt=\"hera-agent-unity\">\n\n<br>\n\n[![Release](https://img.shields.io/github/v/release/NotNull92/hera-agent-unity?style=flat-square&logo=github&color=00d4aa)](https://github.com/NotNull92/hera-agent-unity/releases)\n[![GitHub stars](https://img.shields.io/github/stars/NotNull92/hera-agent-unity?style=flat-square&logo=github&label=stars&color=181717)](https://github.com/NotNull92/hera-agent-unity/stargazers)\n[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square&color=blue)](LICENSE)\n[![Go](https://img.shields.io/badge/go-%5E1.25-00ADD8?style=flat-square&logo=go)](https://go.dev)\n[![Unity](https://img.shields.io/badge/unity-2022.3%2B-000000?style=flat-square&logo=unity)](https://unity.com)\n[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-ff69b4?style=flat-square)]()\n\n**Low-token Unity Editor control for AI coding agents.**\n\n<sub>Let Codex, Claude, Cursor, Copilot, and AntiGravity inspect and change your live Unity project — no MCP setup, no Python server.</sub>\n\n<br>\n\n[Start in 60 seconds](#quick-start) · [Install](#install) · [UI systems](#ui-systems) · [Commands](#commands) · [Full docs](docs/COMMANDS.md)\n\n<sub>[What's new](#whats-new) · [Verification](#ultra-hera) · [Agent rules](#add-project-rules-for-agents) · [FAQ](#faq)</sub>\n\n**English** · [한국어](README.ko.md)\n\n</div>\n\n---\n\n## What It Is\n\n`hera-agent-unity` is a low-token CLI that lets AI coding agents control a running Unity Editor.\n\nThink of it like a remote control for the live Editor:\n\n| You want the AI to... | Hera lets it... |\n|:---|:---|\n| See if Unity is open | ask the real Editor |\n| Run C# code | run it inside your loaded project |\n| Check console errors | read the actual Unity Console |\n| Enter Play Mode | press Play and wait |\n| Create or edit objects | use Unity APIs safely |\n| Build UI | create real Unity UI objects and capture the result |\n| Verify UI input | send Unity EventSystem events without relying on screen coordinates |\n\nThe AI does not need to guess from stale training data. It can inspect the real Editor, act on it, and check the result.\n\n```text\nAI agent  ->  hera-agent-unity  ->  Unity Editor\n```\n\n---\n\n## Why It Helps\n\nAI often makes mistakes in Unity because it cannot see your Editor.\n\nIt may guess:\n\n- which scene is open;\n- which objects exist;\n- which Unity API exists in your version;\n- whether Play Mode works;\n- what error is in the console.\n\nHera fixes that by letting the AI ask Unity directly.\n\n```bash\nhera-agent-unity status\nhera-agent-unity console --type error\nhera-agent-unity exec \"return Application.unityVersion;\"\nhera-agent-unity editor play --wait\n```\n\nNo Python server. No generated MCP config. No special agent plugin. If an agent can run a shell command, it can use Hera.\n\n---\n\n## What's New\n\n### Unity De-slop Mode (Beta) — static visual discipline\n\nGame Feel Mode covers how a screen moves. De-slop Mode covers how it sits\nstill: the tells that make generated UI look generated. The taxonomy ships\ninside the connector (**0.0.63** and up), so there is nothing to fetch.\n\n| What it does | Why it works that way |\n|:---|:---|\n| 49 tells across five areas, fixed in order A → B → C → D → E | An upstream fix dissolves the conflicts a downstream one would hit |\n| Every tell carries a uGUI *and* a UI Toolkit check | The UI Toolkit side is written against the USS vocabulary each Unity version actually ships |\n| Findings are predicates, re-measured against the live scene | A checklist that stores \"done\" goes stale; one that measures cannot |\n| Spacing and type scales resolve against a 1280x720 reference | Absolute pixels mean nothing until the reference resolution is stated |\n| Repeated interactive cells are never flattened | Nested surfaces in game UI are usually functional — inventory slots, hotbars, HUD panels |\n\n[Read the mode →](#unity-de-slop-mode-beta) · [Game Feel Mode →](#game-feel-mode-beta)\n\n### UI Toolkit scaffolding, grounded in the live Editor\n\nConnector **0.0.61** added a first-class UI Toolkit path without asking an\nagent to guess version-specific APIs.\n\n| Choose | Hera does | Built-in boundary |\n|:---|:---|:---|\n| `ugui` (default) | Keeps the Canvas / GameObject / RectTransform workflow | Existing uGUI pipeline |\n| `uitk` | Emits validated `.uxml`, shared `.hera-*` `.uss`, `PanelSettings`, and `UIDocument` | Runtime-only reflected elements, UXML attributes, and USS properties |\n| World-space | Enables it only on live Unity 6000.2+ | Never inferred from a documentation bucket |\n| v1 scope | Focuses on layout scaffolding | MVVM and data binding are intentionally out |\n\n[Choose a UI system →](#ui-systems) · [Read the UI document contract →](docs/UI_DOC_IR.md)\n\n### Latest CLI release — v0.0.42\n\nThe latest published CLI release is **v0.0.42** (July 20, 2026). Its released\nUnity package is **Connector 0.0.64**. CLI and connector versions are\nintentionally separate.\n\n| Current highlight | Simple meaning |\n|:---|:---|\n| **Unity De-slop Mode (Beta)** | A bundled taxonomy of UI-slop tells, each with a uGUI and a UI Toolkit check plus the mechanical fix. |\n| **Quiet stderr through domain reloads** | Commands that end in a reload no longer print an `unsolicited response` warning that looked like a failure but never was. |\n| **`editor stop --wait` waits** | The flag was documented but ignored, so a following `status` could still report `playing`. It now confirms the editor is back to ready. |\n| **Honest type metadata** | `describe_type` reports a property as writable only when your code could actually assign it, instead of whenever any setter exists. |\n\nCurrent verified baseline:\n\n| Unity Editor | `list --compact` | `find_gameobjects --ids` | Details |\n|:---|---:|---:|:---|\n| 2022.3.62f2 | **93 T** | **54 T** | [benchmark](docs/benchmarks/token-reduction/2022.3.62f2.md) |\n| 2023.2.22f1 | **93 T** | **54 T** | [benchmark](docs/benchmarks/token-reduction/2023.2.22f1.md) |\n| 6000.3.5f2 | **93 T** | **49 T** | [benchmark](docs/benchmarks/token-reduction/6000.3.5f2.md) |\n| 6000.5.0f1 | **93 T** | **55 T** | [benchmark](docs/benchmarks/token-reduction/6000.5.0f1.md) |\n\nFull benchmark notes: [docs/benchmarks/token-reduction/README.md](docs/benchmarks/token-reduction/README.md)\n\n---\n\n## Quick Start\n\n### 1. Open Unity\n\nOpen a Unity project that has the Hera Unity package installed.\n\n### 2. Check the connection\n\n```bash\nhera-agent-unity status\n```\n\nYou should see the project name, Unity version, port, and state.\n\n### 3. Ask your AI agent to use it\n\nExample prompt:\n\n```text\nUse hera-agent-unity. Check the Unity console, enter Play Mode, reproduce the issue, and fix it.\n```\n\nThe agent can then run commands like:\n\n```bash\nhera-agent-unity console --type error\nhera-agent-unity editor play --wait\nhera-agent-unity exec \"return EditorSceneManager.GetActiveScene().name;\"\nhera-agent-unity test --mode PlayMode\n```\n\n---\n\n## Install\n\nThere are two parts:\n\n1. the CLI program on your computer;\n2. the Unity package inside your project.\n\n### CLI\n\n**npm (Windows, macOS, Linux)**\n\n```bash\nnpm install --global hera-agent-unity\n```\n\n**Windows PowerShell**\n\n```powershell\npowershell -ExecutionPolicy ByPass -c \"irm https://raw.githubusercontent.com/NotNull92/hera-agent-unity/main/install.ps1 | iex\"\n```\n\nOpen a new terminal after install, then check:\n\n```powershell\nhera-agent-unity version\n```\n\n**macOS / Linux**\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/NotNull92/hera-agent-unity/main/install.sh | bash\n```\n\n**Go install**\n\n```bash\ngo install github.com/NotNull92/hera-agent-unity@latest\n```\n\n**Manual**\n\nDownload a binary from [Releases](https://github.com/NotNull92/hera-agent-unity/releases), then run:\n\n```bash\nhera-agent-unity install\n```\n\n### Unity Package\n\nIn Unity:\n\n```text\nWindow -> Package Manager -> Add package from git URL\n```\n\nUse this URL:\n\n```text\nhttps://github.com/NotNull92/hera-agent-unity.git?path=AgentConnector\n```\n\nOr add this to `Packages/manifest.json`:\n\n```json\n\"com.notnull92.hera-agent-unity\": \"https://github.com/NotNull92/hera-agent-unity.git?path=AgentConnector\"\n```\n\nTo pin a specific connector (UPM) version instead of tracking the latest, append\nan existing `connector-<version>` git tag:\n\n```json\n\"com.notnull92.hera-agent-unity\": \"https://github.com/NotNull92/hera-agent-unity.git?path=AgentConnector#connector-<version>\"\n```\n\nConnector versions are separate from CLI `v*` releases.\n\nThe connector starts by itself when Unity opens.\n\n---\n\n## Commands\n\nHere are the commands most agents use first.\n\n| Command | What it does |\n|:---|:---|\n| `status` | Shows which Unity Editor is connected. |\n| `doctor --json` | Checks install, PATH, and Unity connection. |\n| `list --compact` | Lists tools with a small response. |\n| `call <tool> --json '{...}'` | Validates a strict live tool contract, then invokes it. |\n| `console --type error` | Reads real Unity errors. |\n| `exec \"...\"` | Runs C# inside Unity. |\n| `editor play --wait` | Enters Play Mode and waits. |\n| `editor stop --wait` | Stops Play Mode and waits. |\n| `scene info` | Shows the active scene. |\n| `find_gameobjects` | Finds objects in the loaded scenes. |\n| `manage_assets` | Finds, makes folders, authors ScriptableObject `.asset` files, copies, moves, or deletes project assets under `Assets/`. |\n| `manage_gameobject` | Creates, duplicates, moves, renames, parents, or deletes GameObjects. |\n| `manage_components` | Adds, removes, reads, or edits components. |\n| `manage_animation` | Authors AnimationClips and AnimatorController state machines. |\n| `ui_doc` | Builds uGUI or UI Toolkit scaffolding; captures live uGUI overlays. |\n| `input` | Verifies uGUI interaction through Unity EventSystem raycasts and pointer handlers. |\n| `game_feel` | Looks up game-feel recipes (screen shake, hit stop, honest juice, ...). |\n| `ui_slop` | Looks up UI-slop tells and their fixes (decoration, layout, spacing, typography, color). |\n| `test` | Runs Unity tests. |\n| `screenshot` | Captures Scene/Game view or one isolated GameObject. |\n| `batch` | Runs several commands in one request (optionally atomic). |\n\nFull command list: [docs/COMMANDS.md](docs/COMMANDS.md)\n\n---\n\n## Token Saving\n\nHera is built for agents, so small answers matter.\n\nBig answers become input tokens. Input tokens cost money and fill context. So common Hera commands return small data by default.\n\nGood default path:\n\n```bash\nhera-agent-unity list --compact\nhera-agent-unity find_gameobjects --name Player --ids\nhera-agent-unity list --tool manage_gameobject\n```\n\nUse bigger output only when needed:\n\n```bash\nhera-agent-unity list\nhera-agent-unity find_gameobjects --fields all\nhera-agent-unity console --lines 0 --stacktrace full\n```\n\n---\n\n## Unity UI From a Screenshot\n\nUnity UI is hard for AI because anchors, pivots, and layout groups are easy to guess wrong.\n\nHera gives the AI a loop:\n\n1. read the current UI;\n2. build real Unity UI objects;\n3. capture what Unity rendered;\n4. compare and fix.\n\n```bash\nhera-agent-unity ui_doc export --path /Canvas/HUD\nhera-agent-unity ui_doc sample --image hud_ref.png --region \"0,0,1,0.2\"\nhera-agent-unity ui_doc apply --file hud.json --parent /Canvas --mode upsert\nhera-agent-unity ui_doc capture --out hud_built.png\n```\n\nThis is the main idea: do not guess the UI. Measure it. During `ui_doc apply`,\nHera also reports the active official uGUI docs bucket (`2022.3`, `2023.2`,\n`6000.0`, `6000.3`, or `6000.5`), deterministic `fixes`, and remaining\n`diagnostics` so the agent can correct version-specific uGUI structure.\n\n---\n\n## UI Systems\n\n`ui_system` makes the output backend explicit. Set it in `asset-config.json`;\neach UI request stays within the selected backend.\n\n| Backend | Best for | Hera emits |\n|:---|:---|:---|\n| `ugui` (default) | Canvas-based UI | GameObjects and RectTransforms |\n| `uitk` | Runtime UI Toolkit layout | Validated UXML, shared USS, `PanelSettings`, and `UIDocument` |\n\nChoose `uitk` when the project uses runtime UI Toolkit:\n\n```bas"
+    },
+    "brief": {
+      "summary": "让 AI 编程代理直接控制运行中的 Unity 编辑器",
+      "problem": "AI 无法观察真实 Unity 项目，容易误判场景、错误和运行状态",
+      "highlights": [
+        "可以读取 Unity 控制台错误",
+        "可以执行 C#、编辑对象并切换 Play Mode",
+        "可以创建 UI 并验证界面输入"
+      ],
+      "target_users": [
+        "Unity 开发者",
+        "AI 编程代理用户",
+        "游戏工具开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，但今日新增 Star 为 0",
+      "caveat": "需同时安装 CLI 和 Unity 项目连接器",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "NotNull92/hera-agent-unity",
+      "score": 91,
+      "category": "AI Agent / Skills",
+      "reason": "代理控制Unity编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 56.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "FireRedTeam/FireRed-OpenStoryline",
+      "url": "https://github.com/FireRedTeam/FireRed-OpenStoryline",
+      "description": "FireRed-OpenStoryline is an AI video editing agent that transforms manual editing into intention-driven directing through natural language interaction, LLM-powered planning, and precise tool orchestration. It facilitates transparent, human-in-the-loop creation with reusable Style Skills for consistent, professional storytelling.",
+      "language": "Python",
+      "total_stars": 3170,
+      "forks": 373,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "chatbot",
+        "langchain",
+        "mcp",
+        "skills",
+        "video",
+        "video-cut",
+        "video-editing",
+        "video-editing-tools"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-07T13:03:57Z",
+      "updated_at": "2026-07-31T03:16:43Z",
+      "pushed_at": "2026-07-31T03:16:31Z",
+      "open_issues": 27,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <a href=\"#gh-light-mode-only\">\n    <img\n      src=\"https://image-url-2-feature-1251524319.cos.ap-shanghai.myqcloud.com/openstoryline/web/static/brand_white.png\"\n      alt=\"openstoryline\"\n      width=\"70%\"\n    />\n  </a>\n\n  <a href=\"#gh-dark-mode-only\">\n    <img\n      src=\"https://image-url-2-feature-1251524319.cos.ap-shanghai.myqcloud.com/openstoryline/web/static/brand_black.png\"\n      alt=\"openstoryline\"\n      width=\"70%\"\n    />\n  </a>\n  \n  <p>\n    <a href=\"./README_zh.md\">🇨🇳 简体中文</a> | \n    <a href=\"./README.md\">🌏 English</a>\n  </p>\n  <p>\n    <a href=\"https://huggingface.co/FireRedTeam\" target=\"_blank\"><img alt=\"Hugging Face\" src=\"https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-FireRedTeam-ffc107?color=ffc107&logoColor=white\" style=\"display: inline-block;\"/></a>\n    <a href=\"https://www.modelscope.cn/studios/FireRedTeam/FireRed-OpenStoryline\" target=\"_blank\">\n        <img alt=\"ModelScope Demo\" src=\"https://img.shields.io/badge/ModelScope-Demo-4B6CFF?style=flat&logo=modelscope&logoColor=white\" style=\"display: inline-block;\"/></a>\n    <img src=\"https://img.shields.io/badge/python-≥3.11-blue\" alt=\"Python\">\n    <img src=\"https://img.shields.io/badge/license-Apache%202.0-blue\" alt=\"License\">\n    <a href=\"https://image-url-2-feature-1251524319.cos.ap-shanghai.myqcloud.com/openstoryline/docs/media/others/group_20260329.jpg\"><img src=\"https://img.shields.io/badge/Xiaohongshu-Group-E9DBFC?style=flat&logo=xiaohongshu&logoColor=white\" alt=\"xiaohongshu\"></a>\n    <a href=\"https://hellogithub.com/repository/FireRedTeam/FireRed-OpenStoryline\" target=\"_blank\"><img src=\"https://api.hellogithub.com/v1/widgets/recommend.svg?rid=fb457793a87e4bdab9c4f5ca26451a7f&claim_uid=4QpcNTrHEAg3O8n&theme=small\" alt=\"Featured｜HelloGitHub\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n\n[🤗 HuggingFace Demo](https://fireredteam-firered-openstoryline.hf.space/) • [🌐 Homepage](https://fireredteam.github.io/demos/firered_openstoryline/)\n\n</div>\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/9116767e-bcd9-417a-93d8-2db4d3d5df8e\" width=\"70%\" poster=\"\"> </video>\n</div>\n\n**FireRed-OpenStoryline** turns complex video creation into natural, intuitive conversations. Designed with both accessibility and enterprise-grade reliability in mind, FireRed-OpenStoryline makes video creation easy and friendly to beginners and creative enthusiasts alike.\n> Deriving from the saying \"A single spark can start a prairie fire\", the name FireRed represents our vision: to spread our SOTA capabilities—honed in real-world scenarios—like sparks across the wilderness, igniting the imagination of developers worldwide to reshape the future of AI together.\n\n## ✨ Key Features\n- 🌐 **Smart Media Search & Organization**: Automatically searches online and downloads images and video clips that match your requirements. Performs clip segmentation and content understanding based on your thematic media.\n- ✍️ **Intelligent Script Generation**: Combines user themes, visual understanding, and emotion recognition to automatically construct storylines and context-aware narration. Features built-in Few-shot style transfer capabilities, allowing users to define specific copy styles (e.g., product reviews, casual vlogs) via reference text, achieving precise replication of tone, rhythm, and sentence structure.\n- 🎵 **Intelligent Music, Voiceover & Font Recommendations**: Supports personal playlist imports and auto-recommends BGM based on content and mood, featuring smart beat-syncing. Simply describe the desired tone—e.g., \"Restrained,\" \"Emotional,\" or \"Documentary-style\"—and the system matches suitable voiceovers and fonts to ensure a cohesive aesthetic.\n- 💬 **Conversational Refinement**: Rapidly cut, swap, or resequence clips. Edit scripts and fine-tune visual details—including color, font, stroke, and position. All edits are performed exclusively via natural language prompts with immediate results.\n- ⚡**Editing Skill Archiving**: Save your complete editing workflow as a custom Skill. Simply swap the media and apply the corresponding Skill to instantly replicate the style, enabling efficient batch creation.\n\n## NEWS\n\n* 🎬 **2026-04-02**: Added the **AI Transition Generation** feature, which automatically creates transition shots based on the ending frame of one clip, the opening frame of the next, and a natural-language description, making scene transitions smoother and the narrative more coherent.\n* 🚀 **2026-03-22**: Introduced an **ASR-based rough cut skill for speech videos**, enabling automatic removal of filler words, disfluencies, and repeated sentences, with timestamp-aligned segmentation for cleaner and more efficient speech editing workflows.\n* 🔥 **2026-03-12**: Integrated with **OpenClaw**, adding two OpenClaw Skills — `openstoryline-install` and `openstoryline-use` — covering the initial installation/first-run workflow and the actual usage workflow, respectively. Also added Skill usage instructions for **Claude Code**, making it easier for **Claude Code** to install and invoke the project in accordance with the repository guidelines.\n* **2026-02-10**: FireRed-OpenStoryline was officially open-sourced.\n\n> <sub>\n> ⚠️ Note: AI transitions rely on third-party AIGC video generation services, and <b>the cost is relatively high</b>. Due to variations in source material quality, prompts, and model performance, the generated results are somewhat unpredictable. It is recommended to enable this feature only when needed.\n> </sub>\n\n## 🏗️ Architecture\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/FireRedTeam/fireredteam.github.io/main/demos/firered_openstoryline/pics/structure.jpg\" alt=\"openstoryline architecture\" width=\"800\">\n</p>\n\n## ✨ Demo\n<table align=\"center\">\n  <tr>\n    <td align=\"center\"><b>Zhongcao Style</b></td>\n    <td align=\"center\"><b>Humorous Style</b></td>\n    <td align=\"center\"><b>Product Picks</b></td>\n    <td align=\"center\"><b>Artistic Style</b></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/28043813-1fda-4077-80d4-c6f540d7c7cb\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/a1e33da2-a799-4398-a1bb-b25bb5143d7c\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/444fd0fb-8824-4c25-b449-9309b0fcfd85\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/2e69fa0d-b693-4d4f-b4d2-45146254f9e8\" width=\"220\" /></td>\n  </tr>\n\n  <tr>\n    <td align=\"center\"><b>Unboxing</b></td>\n    <td align=\"center\"><b>Talking Pet</b></td>\n    <td align=\"center\"><b>Travel Vlog</b></td>\n    <td align=\"center\"><b>Year-in-Review</b></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/ff1d669b-1d27-4cf8-b0be-1b141c717466\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/063608bb-7fbd-4841-a08f-032ae459499f\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/bc441dfa-e995-4575-8401-ecefa269e57b\" width=\"220\" /></td>\n    <td align=\"center\"><video src=\"https://github.com/user-attachments/assets/533ef5c3-bb76-4416-bff7-825e88b00b7d\" width=\"220\" /></td>\n  </tr>\n</table>\n\n> <sub>\n> 🎨 <b>Effects Note:</b> Due to licensing restrictions on open-source assets, the elements (fonts/music) in the first row represent only basic effects. We <b>highly recommend</b> following the <a href=\"https://github.com/FireRedTeam/FireRed-OpenStoryline/blob/main/docs/source/zh/guide.md#2-%E9%AB%98%E7%BA%A7%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B\">Custom Asset Library Tutorial</a> to unlock commercial-grade fonts, music, and VFX for significantly better video quality.<br>\n> ⚠️ <b>Quality Note:</b> To save space in the README, the demo videos are heavily compressed. The actual output retains the original resolution by default and supports custom dimensions.<br>\n> In the Demo: The <b>first row</b> shows default open-source assets (Restricted Mode); the <b>second row</b> shows Xiaohongshu App \"AI Clip\" asset library effects. 👉 <a href=\"https://image-url-2-feature-1251524319.cos.ap-shanghai.myqcloud.com/openstoryline/docs/media/others/ai_cut_guide.png\">Click to view tutorial</a><br>\n> ⚖️ <b>Disclaimer:</b> User footage and brand logos shown in the demos are for technical demonstration purposes only. Ownership belongs to the original creators. Please contact us for copyright concerns.\n> </sub>\n\n## 🤖 Use Through an Agent\n\nFireRed-OpenStoryline supports usage through Agent Skills.\nWe provide two Skills:\n\n* `openstoryline-install`: for installation, configuration, and first-run verification.\n* `openstoryline-use`: for starting the service and running the actual video editing workflow.\n\n### OpenClaw\n\nJust tell OpenClaw: “I want to try OpenStoryline. Help me install the required Skills,” and it will automatically trigger the installation.\nIf the installation runs into problems, use the following commands to install them manually:\n\n```bash\nopenclaw skills install openstoryline-install\nopenclaw skills install openstoryline-use\n```\n\nIf your current OpenClaw version does not support `openclaw skills install`, or if installation still fails, you can use ClawHub instead:\n\n```bash\nnpx clawhub install openstoryline-install\nnpx clawhub install openstoryline-use\n```\n\nOnce installed, you only need to send your media assets to OpenClaw, and it can help you complete the entire process from installing FireRed-OpenStoryline to generating the final video.\n\n### Claude Code\n\nThis repository comes with built-in Claude Code Skills.\nIf you start Claude Code from the **root directory of this repository**, you can use the project-level Skills included in the repo directly. Claude Code can then help you install and use FireRed-OpenStoryline.\n\n```bash\n/openstoryline-install\n/openstoryline-use\n```\n\nIf you want to install these two Skills into your own global Claude Code configuration, run:\n\n```bash\nmkdir -p ~/.claude/skills\ncp -R .claude/skills/openstoryline-install ~/.claude/skills/\ncp -R .claude/skills/openstoryline-use ~/.claude/skills/\n```\n\n### Other Compatible Agents (Experimental)\n\nThese Skills are based on an open Agent Skills format, so in theory they can also be installed into other compatible agents.\nFor example, you can install them into Codex via the Skills CLI:\n\n```bash\nnpx skills add FireRedTeam/FireRed-OpenStoryline --skill openstoryline-install --agent codex\nnpx skills add FireRedTeam/FireRed-OpenStoryline --skill openstoryline-use --agent codex\n```\n\nOr use the commands below with the `--global` flag to install these Skills into the user-level directory so they are available across projects:\n\n```bash\nnpx skills add FireRedTeam/FireRed-OpenStoryline --skill openstoryline-install --global\nnpx skills add FireRedTeam/FireRed-OpenStoryline --skill openstoryline-use --global\n```\n\n## 📦 Install\n### 1. Clone repository\n```\n# If git is not installed, refer to the official website for installation: https://git-scm.com/install/\n# Or manually download the code\ngit clone https://github.com/FireRedTeam/FireRed-OpenStoryline.git\ncd FireRed-OpenStoryline\n```\n### 2. Create a virtual environment\n\nInstall Conda according to the official guide (Miniforge is recommended, it is suggested to check the option to automatically configure environment variables during installation): https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html\n\n\n```\n# Recommended python>=3.11\nconda create -n storyline python=3.11\nconda activate storyline\n```\n### 3. 📦 Resource Download & Installation\n#### 3.1 Automatic Installation (Linux and macOS only)\n```\nsh build_env.sh\n```\n#### 3.2 Manual Installation\n##### A. MacOS or Linux\n  - Step 1: Install wget (if not already installed)\n\n    ```\n    # MacOS: If you haven't installed Homebrew yet, please install it first: https://brew.sh/\n    brew install wget\n    \n    # Ubuntu/Debian\n    sudo apt-get ins"
+    },
+    "brief": {
+      "summary": "用自然语言对话完成视频剪辑与风格复用",
+      "problem": "手动剪辑流程复杂，风格难以稳定复用",
+      "highlights": [
+        "可以用对话剪切、替换和调整片段",
+        "可以自动生成脚本、配音、音乐和字体建议",
+        "可以保存剪辑流程，批量套用同一风格"
+      ],
+      "target_users": [
+        "视频创作者",
+        "短视频团队",
+        "剪辑初学者"
+      ],
+      "why_trending": "总 Star 达3170，本周首次收录且近期持续更新",
+      "caveat": "AI转场依赖第三方服务，成本较高且结果不稳定",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "FireRedTeam/FireRed-OpenStoryline",
+      "score": 98,
+      "category": "视频剪辑",
+      "reason": "自然语言驱动AI视频剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 55.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "Glade-tool/glade-mcp",
+      "url": "https://github.com/Glade-tool/glade-mcp",
+      "description": "Connect any MCP-compatible AI client (Claude Code, Cursor, Windsurf) to Unity or Godot. 235+ granular tools, an editor aware system prompt, game design document project context, script semantic search, and skill calibration.",
+      "language": "C#",
+      "total_stars": 184,
+      "forks": 21,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-tools",
+        "claude",
+        "cursor",
+        "game-development",
+        "gamedev",
+        "gemini",
+        "godot",
+        "godot-engine",
+        "llm",
+        "mcp",
+        "model-context-protocol",
+        "openai",
+        "unity",
+        "unity-editor",
+        "unity-engine",
+        "unity3d",
+        "vscode",
+        "windsurf"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-08T00:49:55Z",
+      "updated_at": "2026-07-31T03:47:40Z",
+      "pushed_at": "2026-07-31T03:47:30Z",
+      "open_issues": 0,
+      "homepage": "https://www.gladekit.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# GladeKit MCP\n\nConnect Cursor, Claude Code, Windsurf, Claude Desktop, and other AI clients directly to your Unity or Godot editor.\n\n**Unity:** 260+ tools, full Unity-aware system prompt, GLADE.md project context, script semantic search, skill calibration, free CC0 asset pipeline, cloud intelligence layer with RAG and cross-session memory.\n\n**Godot (4.3+):** 105 native tools across scene/node, scripts, resources, signals, physics, 2D (sprites, tilemaps, parallax), audio, particles, animation, camera, navigation, runtime (incl. structured runtime-event observation), project introspection, Control / Window UI, and lighting & WorldEnvironment.\n\nThe MCP server auto-detects which editor is running (Unity on `:8765`, Godot on `:8766`) and exposes the matching tool set.\n\n![GladeKit MCP Demo](https://raw.githubusercontent.com/Glade-tool/glade-mcp/main/assets/demo.gif)\n\n---\n\n## Quick Start\n\n### 1. Install the editor bridge\n\nGladeKit MCP supports both Unity and Godot. Install the bridge for your engine by following the instructions below.\n\n<details>\n<summary><strong>Unity</strong></summary>\n\nIn Unity, open **Window > Package Manager > + > Add package from git URL...**\n\n```\nhttps://github.com/Glade-tool/glade-mcp.git?path=/unity-bridge\n```\n\nThe Unity bridge starts automatically on `localhost:8765`.\n\n</details>\n\n<details>\n<summary><strong>Godot (4.3+)</strong></summary>\n\n1. Download `com.gladekit.mcp-bridge.zip` from the latest [Godot bridge release](https://github.com/Glade-tool/glade-mcp/releases?q=godot&expanded=true). (Grab the zip asset under **Assets** - not \"Source code\".)\n2. Extract it and you get a single `com.gladekit.mcp-bridge/` folder. Move it into your project's `addons/` directory, so the final path is `<your-godot-project>/addons/com.gladekit.mcp-bridge/plugin.cfg`.\n3. In Godot: **Project → Project Settings → Plugins** → enable **GladeKit MCP Bridge**.\n\nThe Godot bridge starts automatically on `localhost:8766`. You should see a confirmation line in the editor Output panel:\n\n```\n[GladeKit MCP Bridge] listening on ws://127.0.0.1:8766  (v0.7.6, 105 tools registered, thread-polled at 200Hz)\n```\n\n**Supported:** Godot 4.3+ GDScript projects, Forward+ and Compatibility renderers, 2D and 3D. **Not yet supported:** Godot Mono / C# projects, web export targets, headless server builds. The bridge is editor-only; it never runs in exported games.\n\n</details>\n\nEngine auto-detection: the MCP server probes both ports on startup and exposes the matching tool set. Running both editors at once? Set `GLADEKIT_MCP_FORCE_ENGINE=unity` or `=godot` to pin a specific engine.\n\n### 2. Connect your AI client\n\nInstall [uv](https://docs.astral.sh/uv/getting-started/installation/) (one-time):\n\n- **Mac/Linux:** `curl -LsSf https://astral.sh/uv/install.sh | sh`\n- **Windows:** `powershell -ExecutionPolicy ByPass -c \"irm https://astral.sh/uv/install.ps1 | iex\"`\n\nThen add the MCP config to your AI client. The client launches the MCP server automatically - no manual server step.\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n**Option A: one-liner (recommended)**\n\n- **Mac/Linux:** `claude mcp add --transport stdio gladekit-mcp --scope user -- uvx gladekit-mcp`\n- **Windows:** `claude mcp add --transport stdio gladekit-mcp --scope user -- cmd /c uvx gladekit-mcp`\n\n**Option B: manual config**\n\nIf you cloned this repo, the `.mcp.json` auto-connects. Otherwise add to your Claude Code MCP settings:\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Cursor</strong></summary>\n\n`Cursor Settings > MCP > Add new MCP server`:\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Claude Desktop</strong></summary>\n\nEdit `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) or `%APPDATA%\\Claude\\claude_desktop_config.json` (Windows):\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Cline (VS Code extension)</strong></summary>\n\nOpen Cline's MCP settings file (auto-created on first MCP use):\n\n- **Mac:** `~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`\n- **Windows:** `%APPDATA%\\Code\\User\\globalStorage\\saoudrizwan.claude-dev\\settings\\cline_mcp_settings.json`\n- **Linux:** `~/.config/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json`\n\nAdd:\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Windsurf</strong></summary>\n\nIn Windsurf, open **Windsurf Settings → MCP Servers → Open MCP Registry**, then click the settings (gear) icon to open `mcp_config.json`. Add the snippet below (or edit `~/.codeium/windsurf/mcp_config.json` directly):\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Unity AI Gateway (native in-editor)</strong></summary>\n\nUnity's built-in AI Assistant can connect to GladeKit via MCP. This gives you GladeKit's 260+ tools directly inside the Unity Editor - no external AI client needed.\n\n**Requires:** Unity 6000.3+ with AI Gateway package (`com.unity.ai.assistant@2.x`)\n\n1. In Unity, go to **Edit > Project Settings > AI > MCP Servers**\n2. Click **Open Config File** and paste:\n\n```json\n{\n  \"enabled\": true,\n  \"path\": \"\",\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"type\": \"stdio\",\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n3. Under **Path Configuration**, paste your terminal's PATH into **User Path** so Unity can find `uvx`. To get your PATH:\n   - **Mac/Linux:** `echo $PATH`\n   - **Windows:** `echo %PATH%`\n4. Click **Refresh Config File and Reload Servers**\n5. Verify the server shows **StartedSuccessfully** in the Servers section\n\n> **Tip:** If `uvx` isn't found, add the directory containing it to the `path` field in the config (e.g., `\"/opt/homebrew/bin\"` on Mac or `\"C:\\\\Users\\\\<you>\\\\.local\\\\bin\"` on Windows). Alternatively, use `pip install gladekit-mcp` and set `\"command\": \"python\"` with `\"args\": [\"-m\", \"gladekit_mcp\"]`.\n\n> **Troubleshooting:** If the server shows **FailedToStart**, click **Inspect** for error details. The most common cause is PATH - Unity's PATH differs from your terminal's PATH. See the [Troubleshooting](#troubleshooting) section below.\n\n> **Paid tier (`GLADEKIT_API_KEY`):** To enable RAG knowledge base and cross-session memory on any client, add the key to the `env` field of your config. See [Cloud intelligence](#cloud-intelligence) below.\n\n</details>\n\n<details>\n<summary><strong>VS Code (GitHub Copilot)</strong></summary>\n\nAdd to `.vscode/mcp.json` in your workspace:\n\n```json\n{\n  \"servers\": {\n    \"gladekit-mcp\": {\n      \"type\": \"stdio\",\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"]\n    }\n  }\n}\n```\n\n</details>\n\n---\n\n## Why GladeKit Unity MCP?\n\n| Feature            | GladeKit Unity MCP                                                                                   | unity-mcp (CoplayDev)  |\n| ------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------- |\n| Tools              | **260+ granular tools** across 16+ categories                                                        | ~40 consolidated tools |\n| System prompt      | **Full Unity intelligence** - render pipeline detection, input system routing, tool discipline rules | None                   |\n| Project context    | **GLADE.md** - inject your game design doc into every request                                        | None                   |\n| Script search      | **Semantic search** via OpenAI embeddings (bring your own key)                                       | None                   |\n| Skill calibration  | **Auto-detects beginner/expert**, adapts response verbosity                                          | None                   |\n| In-session memory  | `remember_for_session` - AI stores and recalls facts mid-conversation                                | None                   |\n| Cloud intelligence | `GLADEKIT_API_KEY` - RAG knowledge base, cross-session memory, convention extraction                 | None                   |\n| License            | MIT                                                                                                  | MIT                    |\n\nAll core features are **free and local**. The cloud intelligence layer is optional and requires a `GLADEKIT_API_KEY`.\n\n---\n\n## Features\n\n<details>\n<summary><strong>260+ tools across 16+ categories</strong></summary>\n\nScene • GameObjects • Scripts • Prefabs • Materials • Lighting • VFX & Audio • Animation • IK • Physics (3D & 2D) • Tilemaps • Camera • UI • Input System • Terrain & NavMesh • Profiler • Asset Pipeline\n\nAll 260+ tools are dispatchable. Claude Code sees ~80 curated core tools by default (Claude Code has a practical 128-tool limit; Unity AI Gateway has a cloud token budget). Use `get_relevant_tools` to discover extended tools for specialized work (blend trees, NavMesh, IK, Cinemachine, etc.).\n\n**5 meta-tools:** `get_relevant_tools` (task-based tool discovery + RAG context), `remember_for_session` (store facts), `recall_session_memories` (retrieve facts), `batch_execute` (multi-step tool dispatch), `search_project_scripts` (semantic code search).\n\n**7 MCP resources:** Bridge health, project context, scene hierarchy, project scripts, current selection, GLADE.md, and session memory.\n\n</details>\n\n<details>\n<summary><strong>GLADE.md</strong></summary>\n\nCreate a `GLADE.md` file in your Unity project root. The MCP server reads it and injects it into every request. Works as a permanent context layer: your game's design intent, conventions, and constraints are always in scope.\n\n```markdown\n# My Game\n\nGenre: 3D platformer\nPlayer: CharacterController, double jump enabled\nArt style: pixel art, 16x16 sprites\nNaming: PascalCase for scripts, snake_case for folders\n```\n\n</details>\n\n<details>\n<summary><strong>Script semantic search</strong></summary>\n\nSet `OPENAI_API_KEY` in your MCP config's `env` field and the server ranks project scripts by semantic similarity to your query. Ask \"how does the enemy spawn?\" and the right script surfaces, even if it's not named `EnemySpawner`.\n\nEverything needed ships with the package; no install flags or extras required. Get a key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys) (pay-as-you-go, pennies per search via `text-embedding-3-small`).\n\n```json\n{\n  \"mcpServers\": {\n    \"gladekit-mcp\": {\n      \"command\": \"uvx\",\n      \"args\": [\"gladekit-mcp\"],\n      \"env\": { \"OPENAI_API_KEY\": \"sk-...\" }\n    }\n  }\n}\n```\n\nWithout the key, `search_project_scripts` still returns scripts - just unranked. Keys are never sent anywhere except OpenAI's embedding endpoint.\n\n</details>\n\n<details>\n<summary><strong>Skill calibration</strong></summary>\n\nThe server tracks vocabulary across your messages and detects whether you're a Unity beginner or expert. Beginners get plain-language explanations and encouraging framing. Experts get terse, technical responses. Calibration persists to `.gladekit/skill_level.json` in your project.\n\n</details>\n\n<details>\n<summary><strong>Asset pipeline (free CC0 imports)</strong></summary>\n\nThree tools for finding and importing free, commercially-usable assets directly from your AI client. All assets are CC0 (public domain, no attribution required). v1 ships [Kenney.nl](https://kenney.nl) packs; additional providers (Freesound, Quaternius, AI generation) are on the roadmap.\n\n| Tool                   | Purpose                                                                                                        "
+    },
+    "brief": {
+      "summary": "让AI客户端直接操作Unity或Godot编辑器",
+      "problem": "降低用自然语言开发和检查游戏项目的门槛",
+      "highlights": [
+        "可以让AI创建和修改场景、节点及资源",
+        "可以搜索脚本并结合项目设计文档回答",
+        "可以从Cursor、Claude Code等客户端连接编辑器"
+      ],
+      "target_users": [
+        "Unity开发者",
+        "Godot开发者",
+        "AI辅助编程用户"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获184颗Star",
+      "caveat": "Godot仅支持4.3+且不支持Mono/C#项目",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Glade-tool/glade-mcp",
+      "score": 96,
+      "category": "AI Agent / Skills",
+      "reason": "MCP连接Unity与Godot代理",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "bluemoonfoundry/bmf-vangard-renpy-ide",
+      "url": "https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide",
+      "description": "Vangard Studio: The Visual Ren'Py Designer",
+      "language": "TypeScript",
+      "total_stars": 24,
+      "forks": 0,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "renpy",
+        "renpy-applications",
+        "renpy-visual-novels",
+        "visual-novel",
+        "visual-novel-editor",
+        "visual-novel-maker",
+        "visual-novel-tools",
+        "visual-novels"
+      ],
+      "license_name": "",
+      "created_at": "2025-10-25T14:55:05Z",
+      "updated_at": "2026-07-31T01:23:29Z",
+      "pushed_at": "2026-07-31T03:19:04Z",
+      "open_issues": 25,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n[![Build/Release](https://github.com/bluemoonfoundry/vangard-renpy-ide/actions/workflows/build.yml/badge.svg)](https://github.com/bluemoonfoundry/vangard-renpy-ide/actions/workflows/build.yml)\n[![CodeQL](https://github.com/bluemoonfoundry/vangard-renpy-ide/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/bluemoonfoundry/vangard-renpy-ide/actions/workflows/github-code-scanning/codeql)\n![Version](https://img.shields.io/badge/version-1.0.0-blue)\n![Platform](https://img.shields.io/badge/platform-Windows_%7C_macOS_%7C_Linux-lightgrey)\n\n# Vangard Studio : The Ren'Py Visual Designer\n\n> **The IDE that lets you see your story.**\n\n> _Formerly known as Ren'IDE._\n\nVangard Studio is a desktop IDE for Ren'Py visual novel development. Your `.rpy` files appear as draggable blocks on a visual canvas — `jump` and `call` connections auto-draw as arrows. Three canvases let you see your project from every angle: file structure, control flow, and the player's choice experience. A full Monaco code editor, two visual composers, asset managers, diagnostics, and a color picker are all built in.\n\n## Getting Started \n\n**[Watch the Full Beta 4 Walkthrough Video @ YouTube →](https://youtu.be/PNgV-JjFNag)**\n\n**[Download the latest stable release (v1.0.0)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/releases/tag/v1.0.0)**\n\n**[Download the latest nightly release (bleeding edge, tread carefully!)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/releases/tag/nightly)**\n\n---\n\n<img width=\"1582\" height=\"1030\" alt=\"story_graph\" src=\"https://github.com/user-attachments/assets/8150b09c-1c04-4d3f-9a1e-0845a5834567\" />\n\n<img width=\"1582\" height=\"1030\" alt=\"stats_pane\" src=\"https://github.com/user-attachments/assets/29f9a3a4-ea28-457f-a817-50e8e9d5081c\" />\n\n<img width=\"1582\" height=\"1030\" alt=\"file_graph\" src=\"https://github.com/user-attachments/assets/1f57a679-4d4b-4358-a7d7-a42716ca0812\" />\n\n\n\n\n---\n\n## Why Vangard Studio?\n\nManaging a Ren'Py project in a plain text editor means juggling dozens of `.rpy` files with no way to see the whole picture. You lose track of where jumps lead, which characters appear in which scenes, and whether your branching structure even makes sense.\n\nVangard gives you that picture — and keeps it in sync as you write.\n\n- **See your story's structure** at a glance, without opening a single file\n- **Navigate instantly** from a canvas node to the code behind it\n- **Catch problems early** — broken jumps, missing assets, and unreachable labels flagged automatically\n- **Compose visually** — build scenes and imagemaps with drag-and-drop, then copy the generated code\n\n## Our Philosophy\n\nVangard Studio is built on the belief that developer tools should be transparent, stable, and empowering. We reject the \"black box\" approach to IDE design. Our project is governed by four core principles:\n\n### 1. Code-First Sovereignty\nVangard Studio is a **code-first** environment. The code is the source of truth, you are simply editing your existing Ren'Py script in a (hopefully) more intuitive way. We do not maintain a hidden internal state or proprietary project format. If you make a change in the GUI, it updates your `.rpy` files directly; if you make a change in your text editor, Vangard Studio reflects it instantly. The code always dictates the visual, ensuring you are never fighting against your own project files.\n\n### 2. No Vendor Lock-in\nYour game is your property. Vangard Studio reads and writes standard Ren'Py script files. We do not use proprietary project containers or hidden metadata. You can open your project in Vangard Studio, switch to VS Code or any other text editor, and move back again at any time. You are never \"trapped\"; our IDE is just a tool that sits on top of your work, not a container for it.\n\n### 3. Human-Crafted Code\nWe believe that for a developer to truly master Ren'Py, they need to own their logic. Vangard Studio is a tool for developers, not a code generator. The focus is on providing reliable editing features—like robust linting, intelligent autocompletion, and visual tooling—that help *you* write better Ren'Py. We believe the best games are built by developers who understand their own scripts.\n\n### 4. Truly Open Source (AGPL)\nVangard Studio is a open-source, community-driven project licensed under the **AGPL**. This means there are no paid tiers, no \"Pro\" versions, and no subscription models. We have no investors or profit targets that would force us to compromise your workflow. We are building this tool for the community, by a member of the community.\n\n---\n\n## Features\n\n### Three Canvases\n\n#### Project Canvas\n\nYour `.rpy` files as draggable blocks. `jump` and `call` connections auto-draw as arrows. Drag blocks to organize, click \"Redraw\" to auto-layout, or filter by character to focus on a single storyline. Role tinting colors blocks by which characters appear in them. A legend overlay explains arrow types and colors. Blocks with diagnostics display a colored outer glow — red for errors, amber for warnings — so problem areas are visible even when fully zoomed out.\n\nUse `Ctrl+G` (or `Cmd+G`) to open the **Go-to-Label** command palette at any time. Type a label name and press `Enter` to jump directly to that node. The toolbox also has a persistent \"Go to Label\" search box for the same purpose. Both zoom the canvas in to at least 100% so the target is always clearly visible.\n\n#### Flow Canvas\n\nA label-by-label narrative flow graph. Every `label` becomes a node; every `jump`, `call`, and implicit fall-through becomes an edge. Highlight specific routes with distinct colors. Unreachable labels are flagged. Hover over menu nodes to inspect all choices and their destinations. Includes a \"Go to Label\" toolbox search and responds to the global `Ctrl+G` palette, with zoom-on-navigate consistent with the Project Canvas.\n\n#### Choices Canvas\n\nThe player's view. Where the Flow Canvas shows code structure, the Choices Canvas shows the player experience. Menu nodes fan out to destinations via color-coded choice pills. Each pill shows the player-visible choice text and any `if` condition guard as a badge — so you can trace exactly what the player sees and where each choice leads, even when paths cross. Includes a \"Go to Label\" toolbox search and responds to the global `Ctrl+G` palette.\n\n---\n\n### Code Editor\n\nA full Monaco editor (the VS Code engine) built right in. Split panes let you edit two files side by side. Drag tabs between panes.\n\n- **TextMate syntax highlighting** — accurate, context-aware Ren'Py coloring with semantic token support for labels, variables, and screen references\n- **Context-aware IntelliSense** — autocomplete for `jump`/`call` targets, `show`/`scene` images, character tags, screen names, and variables\n- **Go to Definition** — `Ctrl+Click` on a label, character, or screen reference to jump to its definition\n- **Dialogue Preview** — an inline \"Player View\" panel below the editor shows a mock Ren'Py textbox (or choice menu) that updates in real time as the cursor moves through dialogue lines\n- **33 built-in Ren'Py snippets** with tab-stop placeholders\n- **User-defined snippets** — create custom snippets with trigger prefixes that integrate with IntelliSense\n- Cursor position (Ln/Col) in status bar\n\n---\n\n### Story Elements\n\nThe right sidebar analyzes your entire project continuously. Tabs are organized in a two-level layout — primary category tabs across the top, then sub-tabs within each category — for efficient use of vertical space.\n\n| Category | Sub-tabs | What it shows |\n|----------|----------|---------------|\n| **Story Data** | Characters | All `define Character(...)` definitions — name, tag, color, dialogue count. Add, edit, find usages. |\n| | Variables | All `define`/`default` globals. Find usages. |\n| | Screens | All `screen` definitions. Jump to definition. Read-only — no visual builder. |\n| **Assets** | Images | Image asset manager with thumbnails and folder tree. |\n| | Audio | Audio asset manager with built-in player. |\n| **Composers** | Scenes | Scene Composer — layer backgrounds and sprites, export PNG. |\n| | ImageMaps | ImageMap Composer — draw hotspots, generate imagemap screen code. |\n| **Tools** | Snippets | Grid-browsable snippet library with fuzzy search and category filters. Built-in snippets + user global + project-specific. |\n| | Menus | Visual menu and choice designer with custom code block support. |\n| | Colors | Color picker with four built-in palettes (Ren'Py Standard, HTML Named, Material 500, Pastel) and a live Project Theme palette scanned from your `.rpy` files. Insert at cursor, wrap in `{color}` tags, or copy hex. |\n\n### Asset Managers\n\n#### Image Assets\n\nBrowse all project images organized by folder, with visual thumbnails. Scan external directories without copying files in. Right-click any image to copy a `scene` or `show` statement directly to your clipboard. Drag images onto the Scene Composer stage. Double-click to manage Ren'Py tags and metadata.\n\n#### Audio Assets\n\nSame workflow for audio. Browse, scan external directories, and right-click to copy `play music`, `play sound`, or `queue audio` statements. **Custom audio player** with Web Audio API integration, 64-bar equalizer visualization (cyan→blue→violet gradient with peak dots and scanline overlay), and volume control.\n\n---\n\n### Visual Composers\n\n#### Scene Composer\n\nLayer backgrounds and sprites on a stage. Per-sprite controls: zoom, flip, rotate, alpha, blur. **Visual Effects panel** with color grading (saturation, brightness, contrast, invert), color modes (tint, colorize), and categorized matrix presets (Night, Sunset, Sepia, Greyscale, Noir, Faded, Silhouette, etc.). Lock layers to prevent accidental edits. Inline layer actions (delete, make background) appear as hover-reveal icons on each layer row. Reorder layers by dragging. Configurable stage resolution (presets: 1920×1080, 1280×720, 1024×768, 800×600, or custom). Copy the generated `scene`/`show` Ren'Py code or export the composition as a PNG.\n\n#### ImageMap Composer\n\nDraw clickable hotspot rectangles over a ground image (with optional hover overlay). Each hotspot has a configurable action type (`jump` or `call`) and target label. Generates `imagebutton`/`imagemap` screen code ready to copy into your project. Ground and hover images are set by dragging from the Image Assets panel.\n\n---\n\n### Diagnostics\n\nA dedicated panel surfaces issues across every file in the project.\n\n- **Invalid jumps** — `jump` or `call` to a label that doesn't exist\n- **Missing images / audio** — assets referenced in code but not found in the project\n- **Undefined characters / screens** — used but never defined\n- **Unused characters** — defined but never spoken\n- **Unreachable labels** — labels no path leads to\n- **Syntax errors** — parse failures with file and line\n\nClick any issue to jump directly to the source. Filter by severity (error / warning / info). Convert issues to task checklist items tracked with your project.\n\n---\n\n### Warp to Label\n\nJump straight into any point in your game without playing through from the start. Press `Ctrl+Shift+G` (or click the toolbar button) to open a label picker, select a target, and Vangard Studio launches the game at that label using Ren'Py's `--warp` flag.\n\nBefore warping, a **Variable Overrides** modal lets you set values for any `default` variables and interpolated text variables (like `[mc_name]`) that the game would normally set during earlier scenes. Vangard Studio writes a temporary `_ide_after_warp.rpy` that applies these overrides in Ren'Py's `after_warp` hook, then removes the file automatically when the game stops. If your project already defines its own `label after_warp`, the IDE detects it and avoids creating a conflicting label.\n\nYou can also warp from within the code editor — right-click a label line and choose **\"Warp to here\"** — or from any canvas node's context menu.\n\n---\n\n### Translation Dashboard\n\nA dedicated dashboard for tracking and "
+    },
+    "brief": {
+      "summary": "面向 Ren'Py 的可视化视觉小说开发工具",
+      "problem": "纯文本管理多文件剧本，难以看清分支与资源问题",
+      "highlights": [
+        "可以用画布查看项目结构和剧情流向",
+        "可以拖拽制作场景并生成 Ren'Py 代码",
+        "可以检查断链、缺失资源和不可达标签"
+      ],
+      "target_users": [
+        "Ren'Py 开发者",
+        "视觉小说制作团队",
+        "剧情策划"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，适合关注",
+      "caveat": "资料显示有25个未关闭议题，成熟度仍需观察",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "bluemoonfoundry/bmf-vangard-renpy-ide",
+      "score": 86,
+      "category": "互动叙事",
+      "reason": "Ren'Py视觉小说设计器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "Pumpkin-MC/Pumpkin",
+      "url": "https://github.com/Pumpkin-MC/Pumpkin",
+      "description": "Empowering everyone to host fast and efficient Minecraft servers.",
+      "language": "Rust",
+      "total_stars": 10444,
+      "forks": 698,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "docker",
+        "game-server",
+        "gamedev",
+        "minecraft",
+        "minecraft-bedrock-edition",
+        "minecraft-protocol",
+        "minecraft-server",
+        "networking",
+        "rust",
+        "server"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2024-07-28T21:07:38Z",
+      "updated_at": "2026-07-31T03:53:28Z",
+      "pushed_at": "2026-07-31T03:53:17Z",
+      "open_issues": 303,
+      "homepage": "https://pumpkinmc.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n# Pumpkin\n\n![CI](https://github.com/Pumpkin-MC/Pumpkin/actions/workflows/rust.yml/badge.svg)\n[![Discord](https://img.shields.io/discord/1268592337445978193.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/wT8XjrjKkf)\n[![License: GPL](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/licenses/gpl-3-0)\n\n</div>\n\n[Pumpkin](https://pumpkinmc.org/) is a Minecraft server built entirely in Rust, offering a fast, efficient,\nand customizable experience. It prioritizes performance and player enjoyment while adhering to the core mechanics of the game.\n<div align=\"center\">\n\n![Pumpkin Chunk Loading](./assets/pumpkin-chunk-loading.webp)\n\n</div>\n\n## Goals\n\n- **Performance**: Leveraging multi-threading for maximum speed and efficiency.\n- **Compatibility**: Supports the latest Java & Bedrock Minecraft server version while adhering to Vanilla game mechanics.\n- **Security**: Prioritizes security by preventing known security exploits.\n- **Flexibility**: Highly configurable, with the ability to disable unnecessary features.\n- **Extensibility**: Provides a foundation for plugin development.\n\n> [!IMPORTANT]\n> Pumpkin is currently under heavy development.\n>\n> [See what needs to be done before the 1.0.0 Release](https://github.com/Pumpkin-MC/Pumpkin/issues/449)\n\n## Features\n\n- [x] Configuration (toml)\n- [Tracking: Protocol](https://github.com/Pumpkin-MC/Pumpkin/issues/1401)\n  - [x] Server Status/Ping\n  - [x] Encryption\n  - [x] Packet Compression\n  - [x] Java Edition\n  - [x] Bedrock Edition (W.I.P)\n  - ...\n- [Tracking: World](https://github.com/Pumpkin-MC/Pumpkin/issues/1403)\n  - [x] Player Tab-list\n  - [x] Scoreboard\n  - [x] World Loading\n  - [x] World Time\n  - [x] World Borders\n  - [x] World Saving\n  - [x] Lighting\n  - [x] Entity Spawning\n  - [x] Bossbar\n  - [x] Chunk Loading (Vanilla, Linear, Pump)\n  - [Chunk Generation](https://github.com/Pumpkin-MC/Pumpkin/issues/36)\n  - [x] Chunk Saving (Vanilla, Linear, Pump)\n  - [Redstone](https://github.com/Pumpkin-MC/Pumpkin/issues/1402)\n  - [x] Liquid Physics\n  - ...\n- [Tracking: Player](https://github.com/Pumpkin-MC/Pumpkin/issues/1405)\n  - [x] Skins\n  - [x] Teleport\n  - [x] Movement\n  - [x] Animation\n  - [x] Inventory\n  - [Combat](https://github.com/Pumpkin-MC/Pumpkin/issues/1404)\n  - [x] Experience\n  - [x] Hunger\n  - [X] Off Hand\n  - [X] Advancements (W.I.P)\n  - [x] Eating\n  - ...\n- Entities\n  - [x] Non-Living (Minecart, Eggs...) (W.I.P)\n  - [x] Entity Effects\n  - [x] Players\n  - [x] Mobs (W.I.P)\n  - [x] Animals (W.I.P)\n  - [Entity AI](https://github.com/Pumpkin-MC/Pumpkin/issues/1406)\n  - [x] Boss (W.I.P)\n  - [x] Villagers (W.I.P)\n  - [X] Entity Saving\n- Server\n  - [Plugins](https://github.com/Pumpkin-MC/Pumpkin/issues/1407)\n  - [x] Query\n  - [x] RCON\n  - [x] Inventories\n  - [x] Particles\n  - [x] Chat\n  - [Commands](https://github.com/Pumpkin-MC/Pumpkin/issues/15)\n  - [x] Permissions\n  - [x] Translations\n- Proxy\n  - [x] Bungeecord\n  - [x] Velocity\n\n<!-- Check out our [Github Project](https://github.com/orgs/Pumpkin-MC/projects/3) to see current progress. -->\n\n## How to run\n\nSee our [Quick Start](https://docs.pumpkinmc.org/#quick-start) guide to get Pumpkin running.\n\n## Contributions\n\nContributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)\n\n## Docs\n\nPumpkin's documentation can be found at <https://pumpkinmc.org/>\n\n## Communication\n\nConsider joining [our Discord server](https://discord.gg/wT8XjrjKkf) to stay up-to-date on events, updates, and connect with other members.\n\n## Funding\n\nIf you want to fund me and help the project, check out the [Donation Page](https://pumpkinmc.org/donate/).\n"
+    },
+    "brief": {
+      "summary": "用 Rust 构建高性能 Minecraft 服务器",
+      "problem": "为 Minecraft 提供更快、更高效且可定制的服务器方案",
+      "highlights": [
+        "可以搭建 Java 版 Minecraft 服务器",
+        "可以同时面向 Java 与 Bedrock 玩家",
+        "可以通过 TOML 配置服务器功能"
+      ],
+      "target_users": [
+        "Minecraft 服主",
+        "游戏服务器开发者",
+        "Rust 开发者"
+      ],
+      "why_trending": "本周首次收录，累计获 10444 个 Star，近期仍有提交",
+      "caveat": "项目仍在重度开发，1.0.0 前可能存在功能缺口",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Pumpkin-MC/Pumpkin",
+      "score": 82,
+      "category": "游戏开发",
+      "reason": "Minecraft服务器实现",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 44.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "pmndrs/react-three-fiber",
+      "url": "https://github.com/pmndrs/react-three-fiber",
+      "description": "🇨🇭 A React renderer for Three.js",
+      "language": "TypeScript",
+      "total_stars": 31584,
+      "forks": 1908,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "animation",
+        "fiber",
+        "react",
+        "renderer",
+        "threejs"
+      ],
+      "license_name": "MIT",
+      "created_at": "2019-02-25T14:31:51Z",
+      "updated_at": "2026-07-31T03:49:43Z",
+      "pushed_at": "2026-07-31T03:49:41Z",
+      "open_issues": 28,
+      "homepage": "https://docs.pmnd.rs/react-three-fiber",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<h1>@react-three/fiber</h1>\n\n[![Version](https://img.shields.io/npm/v/@react-three/fiber?style=flat&colorA=000000&colorB=000000)](https://npmjs.com/package/@react-three/fiber)\n[![Downloads](https://img.shields.io/npm/dt/@react-three/fiber.svg?style=flat&colorA=000000&colorB=000000)](https://npmjs.com/package/@react-three/fiber)\n[![Twitter](https://img.shields.io/twitter/follow/pmndrs?label=%40pmndrs&style=flat&colorA=000000&colorB=000000&logo=twitter&logoColor=000000)](https://twitter.com/pmndrs)\n[![Discord](https://img.shields.io/discord/740090768164651008?style=flat&colorA=000000&colorB=000000&label=discord&logo=discord&logoColor=000000)](https://discord.gg/ZZjjNvJ)\n[![Open Collective](https://img.shields.io/opencollective/all/react-three-fiber?style=flat&colorA=000000&colorB=000000)](https://opencollective.com/react-three-fiber)\n[![ETH](https://img.shields.io/badge/ETH-f5f5f5?style=flat&colorA=000000&colorB=000000)](https://blockchain.com/eth/address/0x6E3f79Ea1d0dcedeb33D3fC6c34d2B1f156F2682)\n[![BTC](https://img.shields.io/badge/BTC-f5f5f5?style=flat&colorA=000000&colorB=000000)](https://blockchain.com/btc/address/36fuguTPxGCNnYZSRdgdh6Ea94brCAjMbH)\n\n<a href=\"https://docs.pmnd.rs/react-three-fiber/getting-started/examples\"><img src=\"docs/banner-r3f.jpg\" /></a>\n\nreact-three-fiber is a <a href=\"https://reactjs.org/docs/codebase-overview.html#renderers\">React renderer</a> for threejs.\n\nBuild your scene declaratively with re-usable, self-contained components that react to state, are readily interactive and can participate in React's ecosystem.\n\n```bash\nnpm install three @types/three @react-three/fiber\n```\n\n> [!WARNING]  \n> Three-fiber is a React renderer, it must pair with a major version of React, just like react-dom, react-native, etc. @react-three/fiber@8 pairs with react@18, @react-three/fiber@9 pairs with react@19.\n\n---\n\n#### Does it have limitations?\n\nNone. Everything that works in Threejs will work here without exception.\n\n#### Is it slower than plain Threejs?\n\nNo. There is no overhead. Components render outside of React. It outperforms Threejs in scale due to React's scheduling abilities.\n\n#### Can it keep up with frequent feature updates to Threejs?\n\nYes. It merely expresses Threejs in JSX, `<mesh />` dynamically turns into `new THREE.Mesh()`. If a new Threejs version adds, removes or changes features, it will be available to you instantly without depending on updates to this library.\n\n### What does it look like?\n\n<table>\n  <tbody>\n    <tr>\n      <td>Let's make a re-usable component that has its own state, reacts to user-input and participates in the render-loop. (<a href=\"https://codesandbox.io/s/rrppl0y8l4?file=/src/App.js\">live demo</a>).</td>\n      <td>\n        <a href=\"https://codesandbox.io/s/rrppl0y8l4\">\n          <img src=\"/docs/basic-app.gif\" />\n        </a>\n      </td>\n    </tr>\n  </tbody>\n</table>\n\n```jsx\nimport { createRoot } from 'react-dom/client'\nimport React, { useRef, useState } from 'react'\nimport { Canvas, useFrame } from '@react-three/fiber'\n\nfunction Box(props) {\n  // This reference gives us direct access to the THREE.Mesh object\n  const ref = useRef()\n  // Hold state for hovered and clicked events\n  const [hovered, hover] = useState(false)\n  const [clicked, click] = useState(false)\n  // Subscribe this component to the render-loop, rotate the mesh every frame\n  useFrame((state, delta) => (ref.current.rotation.x += delta))\n  // Return the view, these are regular Threejs elements expressed in JSX\n  return (\n    <mesh\n      {...props}\n      ref={ref}\n      scale={clicked ? 1.5 : 1}\n      onClick={(event) => click(!clicked)}\n      onPointerOver={(event) => hover(true)}\n      onPointerOut={(event) => hover(false)}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />\n    </mesh>\n  )\n}\n\ncreateRoot(document.getElementById('root')).render(\n  <Canvas>\n    <ambientLight intensity={Math.PI / 2} />\n    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />\n    <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />\n    <Box position={[-1.2, 0, 0]} />\n    <Box position={[1.2, 0, 0]} />\n  </Canvas>,\n)\n```\n\n<details>\n  <summary>Show TypeScript example</summary>\n\n```bash\nnpm install @types/three\n```\n\n```tsx\nimport * as THREE from 'three'\nimport { createRoot } from 'react-dom/client'\nimport React, { useRef, useState } from 'react'\nimport { Canvas, useFrame, ThreeElements } from '@react-three/fiber'\n\nfunction Box(props: ThreeElements['mesh']) {\n  const ref = useRef<THREE.Mesh>(null!)\n  const [hovered, hover] = useState(false)\n  const [clicked, click] = useState(false)\n  useFrame((state, delta) => (ref.current.rotation.x += delta))\n  return (\n    <mesh\n      {...props}\n      ref={ref}\n      scale={clicked ? 1.5 : 1}\n      onClick={(event) => click(!clicked)}\n      onPointerOver={(event) => hover(true)}\n      onPointerOut={(event) => hover(false)}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />\n    </mesh>\n  )\n}\n\ncreateRoot(document.getElementById('root') as HTMLElement).render(\n  <Canvas>\n    <ambientLight intensity={Math.PI / 2} />\n    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />\n    <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />\n    <Box position={[-1.2, 0, 0]} />\n    <Box position={[1.2, 0, 0]} />\n  </Canvas>,\n)\n```\n\nLive demo: https://codesandbox.io/s/icy-tree-brnsm?file=/src/App.tsx\n\n</details>\n\n<details>\n  <summary>Show React Native example</summary>\n\nThis example relies on react 18 and uses `expo-cli`, but you can create a bare project with their template or with the `react-native` CLI.\n\n```bash\n# Install expo-cli, this will create our app\nnpm install expo-cli -g\n# Create app and cd into it\nexpo init my-app\ncd my-app\n# Install dependencies\nnpm install three @react-three/fiber@beta react@rc\n# Start\nexpo start\n```\n\nSome configuration may be required to tell the Metro bundler about your assets if you use `useLoader` or Drei abstractions like `useGLTF` and `useTexture`:\n\n```js\n// metro.config.js\nmodule.exports = {\n  resolver: {\n    sourceExts: ['js', 'jsx', 'json', 'ts', 'tsx', 'cjs'],\n    assetExts: ['glb', 'png', 'jpg'],\n  },\n}\n```\n\n```tsx\nimport React, { useRef, useState } from 'react'\nimport { Canvas, useFrame } from '@react-three/fiber/native'\nfunction Box(props) {\n  const mesh = useRef(null)\n  const [hovered, setHover] = useState(false)\n  const [active, setActive] = useState(false)\n  useFrame((state, delta) => (mesh.current.rotation.x += delta))\n  return (\n    <mesh\n      {...props}\n      ref={mesh}\n      scale={active ? 1.5 : 1}\n      onClick={(event) => setActive(!active)}\n      onPointerOver={(event) => setHover(true)}\n      onPointerOut={(event) => setHover(false)}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />\n    </mesh>\n  )\n}\nexport default function App() {\n  return (\n    <Canvas>\n      <ambientLight intensity={Math.PI / 2} />\n      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />\n      <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  )\n}\n```\n\n</details>\n\n---\n\n# Documentation, tutorials, examples\n\nVisit [docs.pmnd.rs](https://docs.pmnd.rs/react-three-fiber)\n\n# First steps\n\nYou need to be versed in both React and Threejs before rushing into this. If you are unsure about React consult the official [React docs](https://react.dev/learn), especially [the section about hooks](https://react.dev/reference/react). As for Threejs, make sure you at least glance over the following links:\n\n1. Make sure you have a [basic grasp of Threejs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene). Keep that site open.\n2. When you know what a scene is, a camera, mesh, geometry, material, fork the [demo above](https://github.com/pmndrs/react-three-fiber#what-does-it-look-like).\n3. [Look up](https://threejs.org/docs/index.html#api/en/objects/Mesh) the JSX elements that you see (mesh, ambientLight, etc), _all_ threejs exports are native to three-fiber.\n4. Try changing some values, scroll through our [API](https://docs.pmnd.rs/react-three-fiber) to see what the various settings and hooks do.\n\nSome helpful material:\n\n- [Threejs-docs](https://threejs.org/docs) and [examples](https://threejs.org/examples)\n- [Discover Threejs](https://discoverthreejs.com), especially the [Tips and Tricks](https://discoverthreejs.com/tips-and-tricks) chapter for best practices\n- [Bruno Simons Threejs Journey](https://threejs-journey.com), arguably the best learning resource, now includes a full [R3F chapter](https://threejs-journey.com/lessons/what-are-react-and-react-three-fiber)\n\n<a href=\"https://threejs-journey.com\"><img src=\"docs/banner-journey.jpg\" /></a>\n\n# Ecosystem\n\nThere is a vibrant and extensive ecosystem around three-fiber, full of libraries, helpers and abstractions.\n\n- [`@react-three/drei`](https://github.com/pmndrs/drei) &ndash; useful helpers, this is an ecosystem in itself\n- [`@react-three/gltfjsx`](https://github.com/pmndrs/gltfjsx) &ndash; turns GLTFs into JSX components\n- [`@react-three/postprocessing`](https://github.com/pmndrs/react-postprocessing) &ndash; post-processing effects\n- [`@react-three/uikit`](https://github.com/pmndrs/uikit) &ndash; WebGL rendered UI components for three-fiber\n- [`@react-three/test-renderer`](https://github.com/pmndrs/react-three-fiber/tree/master/packages/test-renderer) &ndash; for unit tests in node\n- [`@react-three/offscreen`](https://github.com/pmndrs/react-three-offscreen) &ndash; offscreen/worker canvas for react-three-fiber\n- [`@react-three/flex`](https://github.com/pmndrs/react-three-flex) &ndash; flexbox for react-three-fiber\n- [`@react-three/xr`](https://github.com/pmndrs/react-xr) &ndash; VR/AR controllers and events\n- [`@react-three/csg`](https://github.com/pmndrs/react-three-csg) &ndash; constructive solid geometry\n- [`@react-three/rapier`](https://github.com/pmndrs/react-three-rapier) &ndash; 3D physics using Rapier\n- [`@react-three/cannon`](https://github.com/pmndrs/use-cannon) &ndash; 3D physics using Cannon\n- [`@react-three/p2`](https://github.com/pmndrs/use-p2) &ndash; 2D physics using P2\n- [`@react-three/a11y`](https://github.com/pmndrs/react-three-a11y) &ndash; real a11y for your scene\n- [`@react-three/gpu-pathtracer`](https://github.com/pmndrs/react-three-gpu-pathtracer) &ndash; realistic path tracing\n- [`create-r3f-app next`](https://github.com/pmndrs/react-three-next) &ndash; nextjs starter\n- [`lamina`](https://github.com/pmndrs/lamina) &ndash; layer based shader materials\n- [`zustand`](https://github.com/pmndrs/zustand) &ndash; flux based state management\n- [`jotai`](https://github.com/pmndrs/jotai) &ndash; atoms based state management\n- [`valtio`](https://github.com/pmndrs/valtio) &ndash; proxy based state management\n- [`react-spring`](https://github.com/pmndrs/react-spring) &ndash; a spring-physics-based animation library\n- [`framer-motion-3d`](https://www.framer.com/docs/three-introduction/) &ndash; framer motion, a popular animation library\n- [`use-gesture`](https://github.com/pmndrs/react-use-gesture) &ndash; mouse/touch gestures\n- [`leva`](https://github.com/pmndrs/leva) &ndash; create GUI controls in seconds\n- [`maath`](https://github.com/pmndrs/maath) &ndash; a kitchen sink for math helpers\n- [`miniplex`](https://github.com/hmans/miniplex) &ndash; ECS (entity management system)\n- [`composer-suite`](https://github.com/hmans/composer-suite) &ndash; composing shaders, particles, effects and game mechanics\n- [`triplex`](https://triplex.dev/) &ndash; visual editor for react-three-fiber\n- [`koestlich`](https://github.com/coconut-xr/koestlich) &ndash; UI component library for react-three-fiber\n\n[Usage Trend of the @react-three Fami"
+    },
+    "brief": {
+      "summary": "用 React 声明式构建 Three.js 3D 场景",
+      "problem": "降低 React 项目开发和管理 3D 场景的复杂度",
+      "highlights": [
+        "可以用 JSX 创建可复用 3D 组件",
+        "可以制作带交互和动画的网页场景",
+        "可以在 React Native 中尝试 3D 场景"
+      ],
+      "target_users": [
+        "React 前端开发者",
+        "Three.js 开发者",
+        "3D 网页应用团队"
+      ],
+      "why_trending": "总 Star 超 3.1 万，本周首次收录且近期仍有更新",
+      "caveat": "需要同时掌握 React 和 Three.js，且版本需匹配",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "pmndrs/react-three-fiber",
+      "score": 78,
+      "category": "3D / VTuber",
+      "reason": "React驱动Three.js三维渲染",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 42.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "marchc1/Source.NET",
+      "url": "https://github.com/marchc1/Source.NET",
+      "description": "An open-source Source Engine replica, written in C#, capable of joining real Garry's Mod servers to some extent (very much so an alpha right now)",
+      "language": "C#",
+      "total_stars": 84,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "csharp",
+        "game-engine",
+        "gmod",
+        "source-engine"
+      ],
+      "license_name": "",
+      "created_at": "2025-08-11T06:46:25Z",
+      "updated_at": "2026-07-31T03:45:01Z",
+      "pushed_at": "2026-07-31T03:44:56Z",
+      "open_issues": 11,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Source.NET\n### [Join our Discord](https://discord.gg/rFzd5uEDSE)\n###### Table of Contents\n> <sub>[What is this?](#what-is-this)</sub><br>\n> <sub>[Goals](#goals)</sub><br>\n> <sub>[Credits & Thanks](#credits--thanks)</sub><br>\n> <sub>[Structure](#structure)</sub><br>\n>> <sub>[Stage 0: External Dependencies + Global Usings](#stage-0-external-dependencies--global-usings)</sub><br>\n>> <sub>[Stage 1: Engine Common + Tier Libraries](#stage-1-engine-common--tier-libraries)</sub><br>\n>> <sub>[Stage 2: Pre-Engine Components](#stage-2-pre-engine-components)</sub><br>\n>> <sub>[Stage 3: Engine Main](#stage-3-engine-main)</sub><br>\n>> <sub>[Stage 4: Post-Engine Components](#stage-4-post-engine-components)</sub><br>\n>> <sub>[Stage 5: Game Realms](#stage-5-game-realms)</sub><br>\n>> <sub>[Stage 6: Executables](#stage-6-executables)</sub><br>\n\n> <sub>[API Notes](#api-notes)</sub><br>\n> <sub>[Future Plans](#future-plans)</sub><br>\n\n## What is this?\nThis is an open source clone of the Source Engine, based on [RaphaelIT7's Source Engine branch](https://github.com/RaphaelIT7/obsolete-source-engine), written in C#. It aims to be as compatible as possible with Source Engine's formats and protocols, more specifically targetting [Garry's Mod](https://store.steampowered.com/app/4000/Garrys_Mod/) compatibility. \n\n<img width=\"1600\" height=\"900\" alt=\"image\" src=\"https://github.com/user-attachments/assets/b382c7f6-f3ca-43d5-9ce6-fdfc347a5aa2\" />\n<img width=\"1600\" height=\"900\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d456bd33-b96a-4847-b97c-0a2cb16fbe0a\" />\n<img width=\"1600\" height=\"900\" alt=\"image\" src=\"https://github.com/user-attachments/assets/903488b0-0c1d-4485-940a-d9acc3c2b929\" />\n\nIt can currently connect to real Garry's Mod servers. Development is currently done by connecting to a local Garry's Mod SRCDS instance - if you wish to contribute, you can set one up relatively easily with [these instructions](https://wiki.facepunch.com/gmod/Downloading_a_Dedicated_Server). \n\nGenerally speaking, testing is done on a vanilla, -noworkshop -noaddons SRCDS server on gm_flatgrass.\n\n## Goals\nI originally started this project mostly to learn more about the Source Engine, but due to public interest I've made it open-sourced in the case that it helps others and could be further worked on by people smarter than I (especially in the graphics department). \n\nIn an ideal world, it could serve as a playable Garry's Mod client - but that is a herculean task (and even that feels like an understatement) - and would require a lot more hands than just me to even be remotely feasible.\n\n## Credits & Thanks\n- Valve for obvious reasons\n- [RaphaelIT7](https://github.com/RaphaelIT7) for various contributions & unintentionally getting me down the rabbit-hole of Source Engine tomfoolery in the first place\n- [maddnias](https://github.com/maddnias) for his work on SharpVPK, and [antim0118](https://github.com/antim0118) for his changes which fixed some incompatibilities\n- [Leystryku](https://github.com/Leystryku) for his work on [leysourceengineclient](https://github.com/Leystryku/leysourceengineclient) - which has served as a very good baseline for networking implementations when I was struggling\n\n## Building\nYou need the following:\n- A C#-compatible IDE obviously (Visual Studio 2022 is what I use for now, although I'm sure it would work fine on Rider or VS Code)\n- The .NET 10.0 SDK\n- A license for Garry's Mod on Steam\n\n## Structure\nThe engine is very similar to Source, with various deviations where I saw fit, to better match .NET/C# implementation details. Things like UtlVector/UtlMap/UtlLinkedList are replaced with their C# equivalents. Each \"stage\" described here builds on each other incrementally - ie. stage 3 can include stage 2 and stage 1 libraries, stage 2 can include stage 1 libraries, but stage 1 cannot include stage 2 libraries, etc. Libraries can include other libraries within their own stage if needed - but is done only in a few cases (VTF including Common and Bitmap, for example.)\n\nThere are currently seven stages. The Solution is organized via Solution Folders as well in this order.\n\n> [!NOTE]  \n> AppFramework in Source is instead replaced by [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/microsoft.extensions.dependencyinjection/).\n\n> > [!NOTE]  \n> Some of this is outdated (or missing new libraries that now exist), however the majority of this information and the general structure is still correct.\n\n---\n\n### Stage 0: External Dependencies + Global Usings\nVarious external dependencies & components, along with various non-project-specific C# files, which allow defining global using statements for a project. For example, almost every library uses this in its .csproj file to add the various type definitions/global static methods/constants:\n```xml\n<ItemGroup>\n\t<Compile Include=\"..\\Usings\\GlobalUsings.cs\" Link=\"Usings/GlobalUsings.cs\" />\n</ItemGroup>\n```\n\n---\n\n### Stage 1: Engine Common + Tier Libraries\nThe Source SDK provides a \"public\" folder which contains the vast majority of engine interfaces, enumerations, etc. These are statically linked at compile time. There are also dynamic libraries (tier0) and static libraries (tier1, tier2) which various components use shared functionality from. In Source.NET, these are all merged into one single common dynamic library, since C# doesn't support static linking.\n\n> [!NOTE]  \n> A future goal is to further separate these files - tier0 and tier1 being their own individual projects, for example, rather than tier0 and tier1 functionality being contained within the Source.Common dll. \n\n> [!NOTE]  \n> This stage also includes a couple other libraries, such as bitmap/common - which also are static libraries in C++, but in our case, are dynamic libraries.\n\n#### Libraries\n- ##### Bitmap\n\t- Bitmap processing\n\t- Image format utilities\n- ##### Common\n\t- Public interfaces and enumerations\n\t- Various helper components\n\t- Tier0 functionality - Dbg, Spew, Asserts, etc\n\t- Tier1 functionality - ConVars, implementation of ICVar happens here instead of a vstdlib equiv\n- ##### VTF\n\t- VTF texture parsing\n\t- Implementation of IVTFTexture\n- ##### VPK\n\t- A fork of [SharpVPK](https://github.com/maddnias/SharpVPK) with changes from [antim0118's branch](https://github.com/antim0118/SharpVPK/)\n\t- Parses VPK files, only really used by the filesystem implementation\n\n---\n\n### Stage 2: Pre-Engine Components\nThese are components of the engine which the engine includes directly. This is a rare case as most things are implemented in the post-engine stage, but things like VGUI and VGUI controls have to be in this stage.\n\n#### Libraries\n- ##### GUI\n\t- Defines Panel : IPanel, which is the root of all elements\n\t- Implementation of IVGui\n\t- Implementation of IVGuiInput\n\t- Implementation of ISchemeManager\n\t- Implementation of ILocalize\n- ##### GUI.Controls\n\t- Defines the various GUI controls\n\t- Also defines AnimationControllers, BuildGroups, NavGroups, etc.\n\n---\n\n### Stage 3: Engine Main\nThis is only the engine core. Everything else beyond this point are extensions which are included by the launcher/dedicated projects.\n\n#### Libraries\n- ##### Engine\n\t- Core engine logic\n\t- Cbuf, Cmd, Key, ModelLoader, Render, Scr, Sound, Sys, View, etc.\n\t- Implementation of ICommandLine\n\t- Datatable encoding definitions\n\t- Implementation of IEngineAPI and EngineBuilder to build one\n\n---\n\n### Stage 4: Post-Engine Components\nThese are the implementations of various systems the engine uses. A lot of deviations happen in these components.\n\n#### Libraries\n- ##### FileSystem\n\t- Implements IFileSystem\n\t- Handles the various types of search paths\n\t\t- Folder/disk based\n\t\t- .vpk v1/v2 files\n\t\t- .bsp pakfile lumps\n- ##### MaterialSystem\n\t- Implements IMaterialSystem & IMatRenderContext\n\t- Implements IShaderAPI\n\t- Implements IShaderDevice\n\t- Implements IShaderUtil\n\t- Implements ITextureManager\n\t- Implements IShaderSystem\n\t- Implements ISurface/IMatSystemSurface\n- ##### InputSystem\n\t- Implements IInputSystem around SDL 3\n\t- Produces input events from the game window (wrapped around an IWindow interface, which ILauncherMgr produces)\n- ##### LauncherManager\n\t- Implements ILauncherMgr around SDL 3\n\t- Produces the game window\n- ##### System\n\t- Implements ISystem around SDL 3\n- ##### StdShader.Gl46\n\t- Defines BaseShader, BaseVSShader\n\t- Implements IShaderDLL (StdShaderGl46)\n\t- The core logic for various shaders (currently only UnlitGeneric for now)\n\n> [!WARNING]\n> MaterialSystem/ShaderAPI/StdShader etc. deviates heavily from Source and generally is an abomination of horribleness. DirectX 8/9 is a very outdated API + graphics programming is complicated + whatever the hell Valve was doing I only barely was able to understand. If anyone wishes to help clean up the graphics API, that would be <i>very</i> appreciated... it took me nearly 3 weeks to get to this point :^(\n\n---\n\n### Stage 5: Game Realms\nThis is the actual game code. The closest thing to a static library in this entire repository is the Shared project. It is explicitly set to not compile as a library, and is instead included as a folder in both the Client and Server libraries. The client DLL defines CLIENT_DLL and the server DLL defines GAME_DLL. This allows the shared code to use shared logic with deviations in client/server, pretty much exactly how Source does it.\n\n#### Libraries\n- ##### Game.Client\n\t- Implements IBaseClientDLL\n\t- Core client logic\n- ##### Game.Server\n\t- Implements IServerGameDLL\n\t- Core server logic\n- ##### Game.Shared\n\t- Directly compiled as code in Client and Server\n\t- CLIENT_DLL and GAME_DLL constants can be used to change how Shared is built\n- ##### Game.UI\n\t- Implements IGameUI\n\t- Main menu logic\n\n---\n\n### Stage 6: Executables\nThe Launcher/Dedicated executables. For now, no dedicated project is being worked on - but if it ever is, it would be made here.\n\n#### Executables\n- ##### Launcher\n\t- Defines the IBaseClientDLL, IServerGameDLL, IGameUI implementations from stage 5\n\t- Builds the engine service collection\n\n---\n\n## API Notes\n> [!IMPORTANT]\n> This was just a rough list of things I wanted to write down. I probably will document things better later. This just goes into some details about the app structure\n\n### Adding Components\nThere are three ways to do this:\n\n#### The Common Way: Engine Builders\\<T>\n> [!IMPORTANT]\n> Dedicated does not exist yet, but it would fundamentally do the same thing.\n\nIn Launcher/Dedicated projects, the engine is built up with an EngineBuilder instance, with individual calls to WithComponent to specify which components the game project needs. \n#### WithAssembly(string assemblyName)\nThis pre-loads an assembly by name. This is only needed for projects with no references in-code when the engine is built - because otherwise, ConVar resolving, SourceDllMain resolving, etc. will miss those assemblies entirely.\n#### WithComponent\\<T> or WithComponent\\<Interface, Implementation>\nThis allows you to specify a component by its explicit type or implementation of an interface. For example; this is how IFileSystem is defined in Launcher:\n```cs\n.WithComponent<IFileSystem, BaseFileSystem>()\n```\n... and here's how SDL LauncherManager is defined:\n```cs\n.WithComponent<SDL3_LauncherManager>()\n.WithResolvedComponent<ILauncherManager, SDL3_LauncherManager>(x => x.GetRequiredService<SDL3_LauncherManager>())\n.WithResolvedComponent<IGraphicsProvider, SDL3_LauncherManager>(x => x.GetRequiredService<SDL3_LauncherManager>())\n```\n> [!IMPORTANT]\n> WithComponent<> and its various extensions defined later search for a static \"DLLInit\" method in the concrete type. If that method is found, it is cast to a delegate void(IServiceCollection) and executed on the spot. This allows components to define their own individual includes/usings when included as a dependency. An example can be found in HLClient, where it uses DLLInit to include the input system and a few other things.\n\n#### WithResolvedComponent\\<Interface, Implementation>\nWithR"
+    },
+    "brief": {
+      "summary": "用 C# 复刻 Source Engine，尝试兼容 Garry's Mod",
+      "problem": "为学习和研究 Source Engine 提供开源 C# 实现",
+      "highlights": [
+        "可以连接真实 Garry's Mod 服务器",
+        "可以解析 VPK、VTF 和 BSP 资源",
+        "可以搭建本地服务器进行引擎开发测试"
+      ],
+      "target_users": [
+        "C# 游戏开发者",
+        "Source Engine 研究者",
+        "Garry's Mod 社区开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍有提交更新",
+      "caveat": "项目仍处于 Alpha，兼容性有限",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "marchc1/Source.NET",
+      "score": 68,
+      "category": "游戏开发",
+      "reason": "Source引擎与GMod兼容实现",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 40.0
+    }
+  }
+]
