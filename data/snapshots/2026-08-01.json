@@ -1,0 +1,539 @@
+[
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "github/copilot-sdk",
+      "url": "https://github.com/github/copilot-sdk",
+      "description": "Multi-platform SDK for integrating GitHub Copilot Agent into apps and services",
+      "language": "Java",
+      "total_stars": 10150,
+      "forks": 1373,
+      "stars_today": 7,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 7
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-01-14T00:23:22Z",
+      "updated_at": "2026-08-01T03:53:02Z",
+      "pushed_at": "2026-08-01T03:47:27Z",
+      "open_issues": 231,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# GitHub Copilot CLI SDKs\n\n![GitHub Copilot SDK](./assets/RepoHeader_01.png)\n\n[![NPM Downloads](https://img.shields.io/npm/dm/%40github%2Fcopilot-sdk?label=npm)](https://www.npmjs.com/package/@github/copilot-sdk)\n[![PyPI - Downloads](https://img.shields.io/pypi/dm/github-copilot-sdk?label=PyPI)](https://pypi.org/project/github-copilot-sdk/)\n[![NuGet Downloads](https://img.shields.io/nuget/dt/GitHub.Copilot.SDK?label=NuGet)](https://www.nuget.org/packages/GitHub.Copilot.SDK)\n[![Go Reference](https://img.shields.io/badge/Go-Reference-00ADD8?logo=go&logoColor=white)](https://pkg.go.dev/github.com/github/copilot-sdk/go)\n[![crates.io](https://img.shields.io/crates/v/github-copilot-sdk?label=crates.io)](https://crates.io/crates/github-copilot-sdk)\n[![Maven Central](https://img.shields.io/maven-central/v/com.github/copilot-sdk-java?label=Maven%20Central)](https://central.sonatype.com/artifact/com.github/copilot-sdk-java)\n\nAgents for every app.\n\nEmbed Copilot's agentic workflows in your application with the GitHub Copilot SDK for Python, TypeScript, Go, .NET, Java, and Rust.\n\nThe GitHub Copilot SDK exposes the same engine behind Copilot CLI: a production-tested agent runtime you can invoke programmatically. No need to build your own orchestration—you define agent behavior, Copilot handles planning, tool invocation, file edits, and more.\n\n## Available SDKs\n\n| SDK                      | Location                                                                | Cookbook                                                                                              | Installation                                                                                                                                                                                                                               | API docs                                                                       |\n| ------------------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |\n| **Node.js / TypeScript** | [`nodejs/`](./nodejs/)                                                  | [Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk/nodejs/README.md) | `npm install @github/copilot-sdk`                                                                                                                                                                                                          |                                                                                |\n| **Python**               | [`python/`](./python/)                                                  | [Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk/python/README.md) | `pip install github-copilot-sdk`                                                                                                                                                                                                           |                                                                                |\n| **Go**                   | [`go/`](./go/)                                                          | [Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk/go/README.md)     | `go get github.com/github/copilot-sdk/go`                                                                                                                                                                                                  | [API docs](https://pkg.go.dev/github.com/github/copilot-sdk/go)               |\n| **.NET**                 | [`dotnet/`](./dotnet/)                                                  | [Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk/dotnet/README.md) | `dotnet add package GitHub.Copilot.SDK`                                                                                                                                                                                                    |                                                                                |\n| **Rust**                 | [`rust/`](./rust/)                                                      | —                                                                                                     | `cargo add github-copilot-sdk`                                                                                                                                                                                                             | [API docs](https://docs.rs/github-copilot-sdk/latest/github_copilot_sdk/)     |\n| **Java**                 | [`java/`](./java/) | [Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk/java/README.md)                                                                                                   | Maven coordinates<br>`com.github:copilot-sdk-java`<br>See instructions for [Maven](./java/README.md#maven) and [Gradle](./java/README.md#gradle) | [API docs](https://javadoc.io/doc/com.github/copilot-sdk-java/latest/) |\n\nSee the individual SDK READMEs for installation, usage examples, and API reference.\n\n## Getting Started\n\nFor a complete walkthrough, see the **[Getting Started Guide](./docs/getting-started.md)**.\n\nQuick steps:\n\n1. **(Optional) Install the Copilot CLI**\n\nFor Node.js, Python, and .NET SDKs, the Copilot CLI is bundled automatically and no separate installation is required.\nFor Go, Java, and Rust, [install the CLI manually](https://github.com/features/copilot/cli) or ensure `copilot` is available in your PATH. Go and Rust also expose application-level CLI bundling features.\n\n2. **Install your preferred SDK** using the commands above.\n\n3. **See the SDK README** for usage examples and API documentation.\n\n## Architecture\n\nAll SDKs communicate with the Copilot CLI server via JSON-RPC:\n\n```\nYour Application\n       ↓\n  SDK Client\n       ↓ JSON-RPC\n  Copilot CLI (server mode)\n```\n\nThe SDK manages the CLI process lifecycle automatically. You can also connect to an external CLI server—see the [Getting Started Guide](./docs/getting-started.md#connecting-to-an-external-cli-server) for details on running the CLI in server mode.\n\n## FAQ\n\n### Do I need a GitHub Copilot subscription to use the SDK?\n\nYes, a GitHub Copilot subscription is required to use the GitHub Copilot SDK, **unless you are using BYOK (Bring Your Own Key)**. With BYOK, you can use the SDK without GitHub authentication by configuring your own API keys from supported LLM providers. For standard usage (non-BYOK), refer to the [GitHub Copilot pricing page](https://github.com/features/copilot#pricing), which includes a free tier with limited usage.\n\n### How does billing work for SDK usage?\n\nBilling for the GitHub Copilot SDK is based on the same model as the Copilot CLI, with each prompt being counted towards your usage allowance. For more information on Copilot usage billing, see [Usage in GitHub Copilot](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing).\n\n### Does it support BYOK (Bring Your Own Key)?\n\nYes, the GitHub Copilot SDK supports BYOK (Bring Your Own Key). You can configure the SDK to use your own API keys from supported LLM providers (e.g. OpenAI, Microsoft Foundry, Anthropic) to access models through those providers. See the **[BYOK documentation](./docs/auth/byok.md)** for setup instructions and examples.\n\n**Note:** BYOK uses key-based authentication only. Microsoft Entra ID (Azure AD), managed identities, and third-party identity providers are not supported.\n\n### What authentication methods are supported?\n\nThe SDK supports multiple authentication methods:\n\n- **GitHub signed-in user** - Uses stored OAuth credentials from `copilot` CLI login\n- **OAuth GitHub App** - Pass user tokens from your GitHub OAuth app\n- **Environment variables** - `COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, `GITHUB_TOKEN`\n- **BYOK** - Use your own API keys (no GitHub auth required)\n\nSee the **[Authentication documentation](./docs/auth/README.md)** for details on each method.\n\n### Do I need to install the Copilot CLI separately?\n\nNo — for Node.js, Python, and .NET SDKs, the Copilot CLI is bundled automatically as a dependency. You do not need to install it separately.\n\nFor Go, Java, and Rust SDKs, the CLI is **not** bundled by default. Install the CLI manually or ensure `copilot` is available in your PATH. Go and Rust also expose application-level CLI bundling features.\n\nAdvanced: You can override the CLI binary or connect to an external server. See the individual SDK README for language-specific options.\n\n### What tools are enabled by default?\n\nBy default, the SDK exposes the Copilot CLI's first-party tools, similar to running the CLI with `--allow-all`. Tool execution is still governed by each SDK's permission handler, so applications can approve, deny, or customize tool calls. You can customize tool availability by configuring the SDK client options to enable and disable specific tools. Refer to the individual SDK documentation for details on tool configuration and to the Copilot CLI documentation for the list of available tools.\n\n### Can I use custom agents, skills or tools?\n\nYes, the GitHub Copilot SDK allows you to define custom agents, skills, and tools. You can extend the functionality of the agents by implementing your own logic and integrating additional tools as needed. Refer to the SDK documentation of your preferred language for more details.\n\n### Are there instructions or SDK guidance for Copilot to speed up development?\n\nYes, check out the custom instructions and SDK-specific guidance:\n\n- **[Node.js / TypeScript](https://github.com/github/awesome-copilot/blob/main/instructions/copilot-sdk-nodejs.instructions.md)**\n- **[Python](https://github.com/github/awesome-copilot/blob/main/instructions/copilot-sdk-python.instructions.md)**\n- **[.NET](https://github.com/github/awesome-copilot/blob/main/instructions/copilot-sdk-csharp.instructions.md)**\n- **[Go](https://github.com/github/awesome-copilot/blob/main/instructions/copilot-sdk-go.instructions.md)**\n- **[Rust](./rust/README.md)** (SDK guidance; custom instructions not yet published)\n- **[Java](https://github.com/github/awesome-copilot/blob/main/instructions/copilot-sdk-java.instructions.md)**\n\n### What models are supported?\n\nAll models available via Copilot CLI are supported in the SDK. The SDK also exposes a method which will return the models available so they can be accessed at runtime.\n\n### Is the SDK production-ready?\n\nThe GitHub Copilot SDK is generally available and follows semantic versioning. See [CHANGELOG.md](./CHANGELOG.md) for release notes.\n\n### How do I report issues or request features?\n\nPlease use the [GitHub Issues](https://github.com/github/copilot-sdk/issues) page to report bugs or request new features. We welcome your feedback to help improve the SDK.\n\n## Quick Links\n\n- **[Documentation](./docs/README.md)** – Full documentation index\n- **[Getting Started](./docs/getting-started.md)** – Tutorial to get up and running\n- **[Setup Guides](./docs/setup/README.md)** – Architecture, deployment, and scaling\n- **[Authentication](./docs/auth/README.md)** – GitHub OAuth, BYOK, and more\n- **[Features](./docs/features/README.md)** – Hooks, custom agents, MCP, skills, and more\n- **[Troubleshooting](./docs/troubleshooting/debugging.md)** – Common issues and solutions\n- **[Cookbook](https://github.com/github/awesome-copilot/blob/main/cookbook/copilot-sdk)** – Practical recipes for common tasks across all languages\n- **[More Resources](https:/"
+    },
+    "brief": {
+      "summary": "将 Copilot Agent 嵌入应用和服务的多平台 SDK",
+      "problem": "减少自建智能代理编排和工具调用流程的工作量",
+      "highlights": [
+        "可以在应用中调用 Copilot Agent 工作流",
+        "可以用 Java、Python、Go 等语言集成",
+        "可以让代理处理规划、工具调用和文件编辑"
+      ],
+      "target_users": [
+        "应用开发者",
+        "企业自动化团队",
+        "AI Agent 开发者"
+      ],
+      "why_trending": "总 Star 超万，本周首次收录且近期仍有提交",
+      "caveat": "通常需要 Copilot 订阅；Java 需准备 CLI",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "github/copilot-sdk",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "可嵌入应用的Agent运行时",
+      "generated_by_ai": true,
+      "velocity_score": 27,
+      "freshness_score": 40,
+      "ranking_score": 47.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "fennaraOfficial/fennara-godot-ai",
+      "url": "https://github.com/fennaraOfficial/fennara-godot-ai",
+      "description": "AI chat and agent tooling for Godot, with both MCP support and in-built native chat window.",
+      "language": "C++",
+      "total_stars": 237,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agent",
+        "ai-coding",
+        "ai-game-development",
+        "claude-code",
+        "codex",
+        "cursor",
+        "gamedev",
+        "gdscript",
+        "godot",
+        "godot-4",
+        "godot-addon",
+        "godot-engine",
+        "godot-plugin",
+        "indiegamedev",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-01T06:16:55Z",
+      "updated_at": "2026-08-01T03:53:24Z",
+      "pushed_at": "2026-08-01T03:53:13Z",
+      "open_issues": 5,
+      "homepage": "https://www.fennara.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Fennara Godot AI\n\n<!-- fennara-doc-nav:start -->\n**English** · [简体中文](README.zh-CN.md) · [Español](README.es.md) · [Português do Brasil](README.pt-BR.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Türkçe](README.tr.md)\n<!-- fennara-doc-nav:end -->\n\n[![Discord](https://img.shields.io/badge/Discord-Join%20Fennara-5865F2?logo=discord&logoColor=white)](https://discord.com/invite/3fF4ft9PTk)\n[![Demos](https://img.shields.io/badge/Demos-See%20all-red?logo=youtube&logoColor=white)](docs/demos.md)\n[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)\n\nUsed by Godot developers and teams, including [Somni Game Studios](https://somnigamestudios.com/).\n\nFennara gives AI assistants a live connection to Godot. Use it from MCP-capable apps like Codex, Claude, Cursor, Gemini, and Antigravity, or from the optional in-editor chat dock.\n\nAgents can inspect scenes, check scripts, capture screenshots, read runtime errors, and validate changes inside the editor instead of guessing from project files alone.\n\n<table>\n  <tr>\n    <td width=\"46%\">\n      <a href=\"https://www.youtube.com/watch?v=2vSYP7GyA5U\">\n        <img src=\"https://i.ytimg.com/vi/2vSYP7GyA5U/hqdefault.jpg\" alt=\"Comparing Fennara with other Godot MCPs\" width=\"100%\" />\n      </a>\n    </td>\n    <td>\n      <strong>Watch the featured demo</strong><br />\n      Comparing Fennara with other Godot MCPs.<br />\n      <a href=\"https://www.youtube.com/watch?v=2vSYP7GyA5U\">Play this video</a><br />\n      <a href=\"docs/demos.md\">Browse all demo videos</a>\n    </td>\n  </tr>\n</table>\n\n## What It Does\n\n- exposes Godot-aware tools to external AI apps through MCP\n- adds an optional local chat dock inside the Godot editor\n- returns real Godot feedback: scene trees, diagnostics, screenshots, runtime logs, and validation results\n- keeps the agent accountable to the open editor instead of only the filesystem\n\nExternal MCP apps and the built-in chat use separate model settings. See [MCP Apps And Built-In Chat](docs/chat-vs-mcp.md) and [Built-In Chat Providers](docs/providers.md).\n\n## Requirements\n\n- Godot 4.5 or newer.\n- A supported desktop OS: Windows x86_64, Linux x86_64, or macOS arm64.\n- An MCP-capable coding app only if you want to use Fennara from Claude, Codex, Cursor, Gemini, Antigravity, or another external AI app.\n- A chat provider only if you want to use the built-in Fennara chat dock. This can be a cloud provider key or a local provider such as Ollama / LM Studio.\n\nFor the full install walkthrough, see [Setup](docs/setup.md).\n\n## What Setup Adds\n\n- the Fennara addon kept in `res://addons/fennara/`\n- a small `fennara` CLI installed in Fennara app data\n- a local MCP server used by AI coding apps\n- a local daemon that bridges MCP/chat requests to the open Godot editor\n- generated project guidance for AI agents\n\nThe built-in chat dock uses the platform webview: Microsoft Edge WebView2 on Windows, WKWebView/WebKit on macOS, and a Fennara-managed shared CEF runtime on Linux. MCP tools still work if the optional chat dock cannot start.\n\n## Install\n\nOn Windows and Linux, choose either the addon or CLI install. On macOS, use the\nCLI install below if you want to avoid the macOS security notification that can\nappear after manually downloading and extracting the addon ZIP.\n\n### Add The Addon To Your Project\n\n- Open the [Latest Release](https://github.com/fennaraOfficial/fennara-godot-ai/releases/latest), download `fennara-addon-latest.zip`, and extract its `addons/fennara/` folder into your project.\n\nOpen the project, select the Fennara dock, and press **Set Up Fennara**.\n\nFennara is an editor dependency, not a game runtime dependency. During export,\nthe editor plugin removes its runtime autoload from the exported project and\nskips `res://addons/fennara/` and `res://.fennara/`. The editor project is\nrestored after the export finishes. If a CI checkout excludes the addon with\n`.gitignore`, run `fennara prepare-export --project path/to/project` before\nstarting Godot, or install the addon in that checkout. Godot validates autoload\npaths before export plugins can run, so this preparation must happen first.\n\n> **macOS:** The release addon contains a native library that is not currently\n> Apple-notarized. If you download the addon ZIP through a browser and extract\n> it manually, macOS may report that it cannot verify\n> `libfennara.macos.editor` is free of malware. To avoid this notification, use\n> the CLI installation below. If you already see the notification, close Godot,\n> remove the manually copied `addons/fennara/` folder, then install Fennara with\n> the CLI.\n\n### Install With The CLI (Recommended On macOS)\n\nThe CLI installs the same Fennara addon. It is the recommended installation\nmethod on macOS because it avoids the browser and Finder quarantine path that\ncauses the notification described above.\n\nInstall the CLI on Windows:\n\n```powershell\nirm https://raw.githubusercontent.com/fennaraOfficial/fennara-godot-ai/main/install.ps1 | iex\n```\n\nOr on macOS and Linux:\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/fennaraOfficial/fennara-godot-ai/main/install.sh | sh\n```\n\nThen run Fennara from your Godot project:\n\n```bash\ncd path/to/your-godot-project\nfennara install\n```\n\nSee [Setup](docs/setup.md) for troubleshooting and [Fennara CLI](docs/cli.md)\nfor the complete command reference.\n\n## Set Up A Provider Or Connect An MCP App\n\n### Built-In Chat\n\nOpen **Chat Settings > Chat**, select **Open providers**, and connect a provider.\nFennara uses your own key for cloud providers (BYOK). You can also use a local\nOllama or LM Studio server. See the [supported provider list](docs/providers.md).\n\n### MCP Apps\n\nOpen **Chat Settings > MCP Apps**, find your app, and press **Set Up**.\n\nYou can also connect an app from the terminal:\n\n```bash\nfennara mcp-setup --codex\nfennara mcp-setup --help\n```\n\nIf your MCP app is not listed in Chat Settings, see [MCP Setup](docs/mcp-setup.md)\nfor the complete app list and manual configuration instructions.\n\n## Update\n\nWhen the Fennara dock shows **Update**, press it and follow the prompts.\n\n> **Upgrading from Fennara v0.3.8 or older:** Reinstall the CLI once with the\n> platform install command above before running `fennara update`. Those CLI\n> versions resolve a retired release tag and cannot discover current releases.\n> Reinstalling the CLI switches future updates to GitHub's Latest Release\n> endpoint and does not remove your existing project addon or settings.\n\n> **macOS users upgrading from Fennara v0.3.11:** Reinstall the CLI once with\n> the macOS install command above before updating. The v0.3.11 CLI rejects the\n> existing macOS framework bundle before it can self-update. Reinstalling only\n> replaces the CLI; it does not remove your project addon or settings.\n\nTo update from the terminal, close Godot and run:\n\n```bash\ncd path/to/your-godot-project\nfennara update\n```\n\nSee [Update Fennara](docs/setup.md#update-fennara) for recovery and diagnostics.\n\n## Tools\n\nFennara exposes a small set of Godot-aware tools:\n\n- write or update project files and return diagnostics\n- run one-off scene edit scripts\n- inspect scene trees, nodes, resources, and Godot classes\n- validate scenes\n- capture screenshots\n- start runtime sessions and read runtime logs\n- run small runtime scripts against a live scene\n\nThe goal is not to replace an agent's normal file tools. Fennara gives the missing Godot feedback loop.\n\n## Privacy\n\nFennara sends one anonymous active-installation event at most once per UTC day\nafter Godot connects. It contains a random installation UUID, Fennara and Godot\nversions, operating system, and CPU architecture. It does not contain project\ndata, paths, prompts, tool activity, logs, screenshots, or account information.\n\nTelemetry can be disabled in **Chat Settings > Chat > Anonymous telemetry**,\nwith `FENNARA_DISABLE_TELEMETRY=true`, or with `DO_NOT_TRACK=1`. See [Anonymous\nTelemetry](docs/telemetry.md) for the complete payload, storage, transport, and\nopt-out contract.\n\n## Demos\n\nWatch a hands-on Fennara walkthrough:\n\n[![This Godot Plugin Revolutionizes AI Game Development Forever](https://i.ytimg.com/vi/pijlHyiOnz4/hqdefault.jpg)](https://www.youtube.com/watch?v=pijlHyiOnz4&t=22s)\n\nMore videos:\n\n- [I Gave Codex an AI Game Image and It Built This in Godot](https://www.youtube.com/watch?v=ztbH6zBhxMc)\n- [Fennara MCP Builds a Katamari-Style Godot Game](https://www.youtube.com/watch?v=8y2Ub8pgNSs)\n- [This Godot Plugin Transforms AI Game Development Forever](https://www.youtube.com/watch?v=wKln8248y2M)\n\nSee [Demos](docs/demos.md) for more videos from the Fennara channel.\n\n## Star History\n<!-- Generated daily by .github/workflows/star-history.yml. -->\n<a href=\"https://github.com/fennaraOfficial/fennara-godot-ai/stargazers\">\n  <img alt=\"Star History Chart\" src=\"https://raw.githubusercontent.com/fennaraOfficial/fennara-godot-ai/star-history/star-history.svg\" width=\"700\">\n</a>\n\n## Documentation\n\n| Start with... | When you need... |\n| --- | --- |\n| [Documentation home](docs/README.md) | Every guide and reference page |\n| [Setup](docs/setup.md) | Installation, updates, and troubleshooting |\n| [Chat providers](docs/providers.md) | Built-in chat models and keys |\n| [MCP setup](docs/mcp-setup.md) | Codex, Claude, Cursor, and other MCP apps |\n| [Tools](docs/tools.md) | The Godot feedback available to agents |\n| [Anonymous telemetry](docs/telemetry.md) | Data collected, delivery behavior, and opt-out controls |\n| [Contributing](CONTRIBUTING.md) | Development and pull request guidance |\n\n## Community\n\nQuestions, setup help, and early feedback are welcome on Discord:\n\nhttps://discord.com/invite/3fF4ft9PTk\n\n## License\n\nSee [LICENSE.md](LICENSE.md).\n"
+    },
+    "brief": {
+      "summary": "为 Godot 提供 AI 对话与代理工具",
+      "problem": "让 AI 直接获取 Godot 编辑器中的场景和运行反馈",
+      "highlights": [
+        "可以让 AI 检查场景、脚本和诊断信息",
+        "可以捕获截图并读取运行时日志",
+        "可以在编辑器内使用聊天窗口或 MCP 应用"
+      ],
+      "target_users": [
+        "Godot 独立开发者",
+        "AI 编程用户",
+        "Godot 开发团队"
+      ],
+      "why_trending": "本周首次收录，已有 237 个 Star，近期仍在更新",
+      "caveat": "要求 Godot 4.5+；macOS 手动安装可能触发安全提示",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "fennaraOfficial/fennara-godot-ai",
+      "score": 90,
+      "category": "AI Agent / Skills",
+      "reason": "Godot内置AI与MCP开发工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "PowerBeef/Vocello",
+      "url": "https://github.com/PowerBeef/Vocello",
+      "description": "Vocello: a local, private voice studio for Apple Silicon. Write a script, pick or describe a voice, and generate speech on-device, faster than realtime on an 8 GB M2 Mac mini. Native Swift + MLX, no Python. Mac app out now, iPhone beta on TestFlight. (Formerly QwenVoice.)",
+      "language": "Swift",
+      "total_stars": 347,
+      "forks": 30,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "apple-silicon",
+        "ios",
+        "iphone",
+        "macos",
+        "mlx",
+        "offline",
+        "qwen",
+        "qwenvoice",
+        "swiftui",
+        "text-to-speech",
+        "tts",
+        "vocello",
+        "voice-cloning",
+        "voice-synthesis"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-21T20:22:38Z",
+      "updated_at": "2026-08-01T03:31:10Z",
+      "pushed_at": "2026-08-01T03:31:03Z",
+      "open_issues": 9,
+      "homepage": "https://vocello.vercel.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Vocello</h1>\n\n<p align=\"center\">\n  A local, private voice studio for Apple Silicon. Write a script, choose or shape a voice, and generate speech on your device with native Swift and MLX.<br>\n  No account. No credits. Nothing you write or record leaves your device.<br>\n  <strong>Available for Mac. The iPhone app is in public beta on TestFlight.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://vocello.vercel.app/\"><img src=\"https://img.shields.io/badge/Website-vocello.vercel.app-7b61ff?style=flat-square&logo=vercel\" alt=\"Website\"></a>\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/tag/v2.3.0\"><img src=\"https://img.shields.io/badge/Vocello-2.3.0-7b61ff?style=flat-square\" alt=\"Vocello 2.3.0\"></a>\n  <img src=\"https://img.shields.io/badge/macOS-26%2B-111827?style=flat-square&logo=apple\" alt=\"macOS 26 or newer\">\n  <a href=\"https://testflight.apple.com/join/Cvp6yCv7\"><img src=\"https://img.shields.io/badge/iPhone-TestFlight%20beta-7b61ff?style=flat-square&logo=apple\" alt=\"iPhone TestFlight beta\"></a>\n  <img src=\"https://img.shields.io/badge/Apple%20Silicon-required-111827?style=flat-square&logo=apple\" alt=\"Apple Silicon required\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue?style=flat-square\" alt=\"MIT License\"></a>\n</p>\n\n<div align=\"center\">\n\n![Vocello banner with abstract voice waves and the Vocello logo](docs/readme_banner_vocello.png)\n\n</div>\n\n<p align=\"center\">\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/download/v2.3.0/Vocello-macos26.dmg\"><strong>Download Vocello 2.3.0 for macOS 26+</strong></a><br>\n  <a href=\"https://testflight.apple.com/join/Cvp6yCv7\"><strong>Join the iPhone beta on TestFlight</strong></a><br>\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/tag/v2.3.0\">Release details</a> · <a href=\"docs/releases/v2.3.0.md\">What is new</a> · <a href=\"https://github.com/PowerBeef/Vocello/releases\">All releases</a>\n</p>\n\n<p align=\"center\">\n  <em>Write a script, pick or shape a voice, and listen: a native Swift + MLX engine, faster than realtime on an 8&nbsp;GB M2, with nothing leaving your Mac.</em>\n</p>\n\n![Vocello Studio with a script, a chosen speaker, and a generated take ready to play](docs/screenshots/vocello-custom-voice.png)\n\n## What Vocello does\n\n- **Custom Voice:** choose one of nine built-in Qwen3 speakers, then set language and delivery.\n- **Voice Design:** describe a voice in plain language and generate it from that brief.\n- **Voice Cloning:** record or import a reference you have permission to use, affirm consent, and save it to your voice library.\n\nScripts past 900 characters become **long-form projects**: planned segments stream one after another while you listen along, then join into a single finished file with a per-segment map in History. Ten languages are supported (Chinese, English, Japanese, Korean, German, French, Russian, Portuguese, Spanish, and Italian) with automatic detection, and everything (scripts, references, history, audio) stays in local app storage unless you export it.\n\nVocello is not a wrapper around a Python server: generation runs through a first-party Swift runtime on MLX, and the full engineering story lives in [Under the hood](#under-the-hood).\n\n## Voice workflows\n\n| Voice Design | Voice Cloning |\n| --- | --- |\n| ![Vocello Voice Design screen](docs/screenshots/vocello-voice-design.png) | ![Vocello Voice Cloning screen](docs/screenshots/vocello-voice-cloning.png) |\n| Describe character, age, accent, texture, and delivery. Save a successful design as a reusable voice reference. | Record in the app or import WAV, MP3, AIFF, M4A, FLAC, OGG, or WebM. A transcript improves conditioning but is optional. Generation requires the visible consent acknowledgment in Settings; only clone voices you own or are authorized to use. |\n\nCustom Voice and Voice Design support ten delivery styles at subtle, normal, or strong intensity, plus a free-text delivery description. Voice Cloning follows the reference voice and does not expose delivery controls.\n\n| Models | History |\n| --- | --- |\n| ![Vocello model download settings](docs/screenshots/vocello-model-downloads.png) | ![Vocello History screen](docs/screenshots/vocello-history.png) |\n| Install and manage the available model package for each voice mode from Settings. | Generations remain local and can be replayed, searched, exported, or removed. |\n\n## Variation and reproducibility\n\nThe Expressive, Balanced, and Consistent variation settings trade take-to-take variety against stability. Multi-line batches share one seed so their lines form a consistent performance. CLI and benchmark callers can provide an explicit seed for reproducible evidence. Ordinary interactive generations are not presented as seed-replayable takes.\n\n## Local-first privacy\n\n- Speech generation runs locally after models are installed.\n- Generated audio, recorded references, transcripts, saved voices, and history remain in local app storage unless you export them.\n- Model installation downloads pinned model artifacts from Hugging Face.\n- Reference recording requests microphone access. Transcript auto-fill requests Speech Recognition access and uses on-device recognition with the required system language assets.\n- Voice cloning should only be used with voices you own or have permission to use.\n- Clone generation remains disabled until its visible consent acknowledgment is enabled in\n  Settings; the choice is stored locally and can be changed there.\n\nStorage locations and deletion behavior are documented in [`docs/reference/privacy-storage.md`](docs/reference/privacy-storage.md).\n\n---\n\n## Install on Mac\n\n1. Download [`Vocello-macos26.dmg`](https://github.com/PowerBeef/Vocello/releases/download/v2.3.0/Vocello-macos26.dmg).\n2. Open the DMG and drag `Vocello.app` to `/Applications`.\n3. Open Vocello, then install models from **Settings > Model downloads**.\n4. Generate from Custom Voice, Voice Design, or Voice Cloning.\n\nThe current DMG is signed with an Apple Developer ID certificate, notarized, and stapled. The attached [`release-metadata.txt`](https://github.com/PowerBeef/Vocello/releases/download/v2.3.0/release-metadata.txt) records source and toolchain provenance.\n\nUpgrading from an earlier Vocello 2.x does not require reinstalling models; application data remains under `~/Library/Application Support/QwenVoice/`. After updating to 2.3.0, Settings shows an optional in-place update for installed models to the current smaller packages.\n\nWith the 2.2.0 release the repository moved from `PowerBeef/QwenVoice` to `PowerBeef/Vocello`; every old link and clone URL redirects to the new name.\n\n## System requirements and model variants\n\n| Platform | Support | Model variants | Public status |\n| --- | --- | --- | --- |\n| Mac | macOS 26.0 or newer, Apple Silicon, 8 GB RAM minimum | Speed (4-bit) and Quality (8-bit) | Vocello 2.3.0 is available now |\n| iPhone | iPhone 15 Pro or newer, iOS 26.0 or newer | Speed (4-bit) | Public beta via [TestFlight](https://testflight.apple.com/join/Cvp6yCv7) |\n\nSpeed is the recommended default and uses less memory. Quality is a Mac-only option for machines with more headroom. The three recommended Mac Speed packages total about 6 GB.\n\nSupport floors and benchmark machines are different facts: the floor is any Apple Silicon Mac with 8 GB, and canonical evidence is produced on a Mac mini M2 with 8 GB and an iPhone 17 Pro; see [Performance, measured](#performance-measured) below. The canonical record is `passedWithWarnings` because accepted memory soft trims and audio-QC warnings remain visible rather than being hidden; the [tracked record](benchmarks/runs/ui-generation/macos-xcui-benchmark-20260729-023553-111d88c6.json), produced on the current 2026.07.26.1 model packages, has the exact matrix and conditions.\n\nMacs on macOS 15 can use the legacy [QwenVoice 1.2.3 release](https://github.com/PowerBeef/Vocello/releases/tag/v1.2.3). No Vocello 2.x backport is planned.\n\n## Vocello for iPhone\n\n| | |\n| --- | --- |\n| ![Vocello Studio running on iPhone](docs/screenshots/vocello-ios-studio.png) | The iPhone app uses the same local Qwen3-TTS and MLX foundation with an iPhone-specific in-process runtime. It provides Custom Voice, Voice Design, Voice Cloning, recording and Files import, local history, and the memory-conscious Speed models. On-device generation, physical-iPhone XCUITest, and an optional signed archive/TestFlight lane are implemented. A fresh full multilingual physical-iPhone run passed all 19 hint/QC and 18 output gates with policy-accepted warnings; its exploratory record is excluded from clean performance trends. A public TestFlight beta is open: [join here](https://testflight.apple.com/join/Cvp6yCv7). App Store distribution remains a separate maintainer-owned release decision. |\n\nCurrent implementation and acceptance status: [`docs/development-progress.md`](docs/development-progress.md).\n\n---\n\n## Under the hood\n\nThis is the maintained engineering record of the whole package, refreshed with each release. Every claim below traces to a tracked benchmark record, a machine-readable contract, or a documented measurement in this repository.\n\n### The owned runtime\n\nMost local TTS tools shell out to a Python reference implementation behind a local server. Vocello generates through a first-party Swift runtime on MLX, [`VocelloQwen3Core`](Packages/VocelloQwen3Core/README.md): no Python, no local server, no bundled weights. The runtime is derived from [`mlx-audio-swift`](https://github.com/Blaizzy/mlx-audio-swift) v0.1.2 and narrowed to exactly what Vocello ships, the Qwen3-TTS runtime and the Mimi codec primitives it needs: about 36,000 of roughly 49,000 upstream lines were removed in that specialization, and the 83 retained files (37 identical, 21 modified, 25 added) plus 14 named semantic changes are tracked under an immutable lineage ledger (`Packages/VocelloQwen3Core/PATCHES.json`). A facade contract rejects any public declaration that leaks raw MLX types, and benchmark-backed capability claims automatically demote when their evidence source drifts from the recorded run.\n\nOne engine serves three hosts. On the Mac the engine lives in a separate XPC service process that retires when idle, so engine memory pressure can never take the app window down, and retiring the process returns memory that a model unload alone cannot. On iPhone the same engine runs in-process. The `vocello` command-line tool links the engine directly and reuses the models the app installed.\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/charts/architecture-dark.svg\">\n  <img alt=\"Architecture diagram: the SwiftUI app talks over XPC to a separate engine service process, which drives the owned VocelloQwen3Core runtime (an engine actor owning each session, the Qwen3-TTS talker and code predictor, and the Mimi decoder on MLX and Metal) while PCM audio streams back to the app chunk by chunk\" src=\"docs/charts/architecture-light.svg\">\n</picture>\n\nEvery request moves through one synthesis pipeline from conditioning to a verified 24 kHz mono 16-bit WAV, owned end to end by an engine actor. The full request lifecycle and engine invariants are documented in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).\n\n### Streaming, memory, and determinism\n\nLong scripts do not need a bigger Mac. Audio crosses an actor-owned, frame-bounded channel chunk by chunk: audio-bearing events are never dropped, backpressure suspends the producer instead of buffering, and cancelling a suspended producer is proven by test to wake it cleanly. Making streaming the default collapsed peak generation memory from about 8 GB to about 3 GB on the same take and made the peak flat with output length, a measurement that overturned the project's own earlier analysis (`benchmarks/OPTIMIZATION.md` §F.1). A 12-segment long-form project producing 10.4 minutes of audio ended about 1.1% below its starting footprint:\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/charts/longfo"
+    },
+    "brief": {
+      "summary": "面向 Apple Silicon 的本地隐私语音工作室",
+      "problem": "解决语音生成依赖云端、隐私难保障的问题",
+      "highlights": [
+        "可以本地生成多语言旁白和长文本语音",
+        "可以描述声音或克隆获授权的参考音色",
+        "可以在 Mac 上管理、回放和导出历史音频"
+      ],
+      "target_users": [
+        "配音创作者",
+        "视频制作者",
+        "隐私敏感用户"
+      ],
+      "why_trending": "本周首次收录，项目近期活跃，已有347个 Star",
+      "caveat": "需要 Apple Silicon 和 macOS 26 或更新版本",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "PowerBeef/Vocello",
+      "score": 85,
+      "category": "语音 / 配音",
+      "reason": "本地语音生成与声音克隆工作室",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "RouteVN/routevn-creator-client",
+      "url": "https://github.com/RouteVN/routevn-creator-client",
+      "description": "RouteVN Creator is a desktop application to create Visual Novels without any coding",
+      "language": "JavaScript",
+      "total_stars": 24,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame-engine",
+        "game-engine",
+        "interactive-fiction-engine",
+        "routevn",
+        "visual-novel",
+        "visual-novel-creator",
+        "visual-novel-editor",
+        "visual-novel-engine",
+        "visual-novel-framework",
+        "visual-novel-games",
+        "visual-novel-maker",
+        "visual-novel-tools"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-05-23T04:56:46Z",
+      "updated_at": "2026-08-01T03:52:32Z",
+      "pushed_at": "2026-08-01T03:52:29Z",
+      "open_issues": 2,
+      "homepage": "https://routevn.com/creator/about/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# RouteVN Creator Client\n\n[Official Website](https://routevn.com/creator/about/)\n\nRouteVN Creator Client is a frontend application for building Visual Novels with a drag & drop visual UI, without needing to write any code.\n\nThis is a complete **Single Page Application (SPA)** that operates **offline-first**.\n\nBrowser builds persist project data through IndexedDB-backed stores.\n\nDesktop builds persist project data through Tauri/SQLite-backed stores.\n\nAndroid builds run the web app inside a native WebView shell and persist project\ndata through the web/IndexedDB-backed stores. Tauri is not used for mobile.\n\n## Frameworks used\n\n- [@rettangoli/fe](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-fe) - Is used as the frontend framework\n- [@rettangoli/ui](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-ui) - Is used as the UI library\n- [Product](docs/product.md) - Product principles and UX contract\n- [Engineering](docs/engineering.md) - Code structure, stack, and engineering boundaries\n- [Platform Spec](docs/platform/README.md) - Current project model, command/event flow, and storage contracts\n- [Docs Index](docs/README.md) - Entry point for internal documentation\n\n## Project Structure\n\nEntrypoint defined in `static/index.html` with the `<rvn-app>` tag.\n\nSee [docs/README.md](docs/README.md) for the internal docs index, [docs/product.md](docs/product.md) for product principles, and [docs/engineering.md](docs/engineering.md) for the engineering guide.\n\n`src/pages/app/` - **Application entrypoint**\n\nFolder structure\n\n- `src/components/` - Reusable UI components\n- `src/pages/` - Global components with their own state\n- `src/deps/` - Infrastructure and service dependencies injected into pages/components\n- `src/setup.web.js` - Web-specific configuration\n- `src/setup.tauri.js` - Tauri desktop-specific configuration\n- `src/setup.android.js` - Android WebView-specific configuration\n- `android/routevn/` - Native Android WebView shell\n- `src/domain/` - Domain rules, command processing, and state projection\n- `src/collab/` - Collaboration runtime\n- `scripts/` - Build and utility scripts\n- `static/` - Static HTML files and assets\n- `_site/` - Build output directory\n\nThere is no shared `src/setup.common.js` entrypoint today. Shared runtime code lives behind service cores and adapters.\n\n## Adding Routes\n\nTo add a new route, you need to update 3 files:\n\n1. **Create HTML file in `static/`** - Add the static HTML file for the route\n2. **Update `src/pages/app/app.view.yaml`** - Add the route condition and component\n3. **Update `src/pages/app/app.store.js`** - Add the route pattern to the arrays\n\nExample for adding `/project/new-feature`:\n\n```yaml\n# In app.view.yaml\n$elif currentRoutePattern == \"/project/new-feature\":\n  - rvn-new-feature: []\n```\n\n```javascript\n// In app.store.js - add to both routePatterms and routesWithNavBar arrays\n\"/project/new-feature\",\n```\n\n## Development\n\nInstall `rtgl` cli\n\n```shell\nnpm i -g rtgl\n```\n\nInstall dependencies:\n\n```shell\nbun install\n```\n\n**Setup Git Hooks (Required for new developers):**\n\nAfter installing dependencies, Husky will automatically set up git hooks. The pre-push hook will run `bun run lint` to ensure code quality before pushing changes.\n\nIf you're setting up the project for the first time, make sure to run:\n\n```shell\nbun run prepare\n```\n\nThis ensures all git hooks are properly configured.\n\n**Note:** If you encounter errors when pushing due to linting issues, run:\n\n```shell\nbun run lint:fix\n```\n\nThis will automatically fix most linting errors. After fixing, you can commit the changes and push again.\n\n### Web Development\n\nThe project uses platform-specific entry points that are automatically configured during build:\n\nRun the project in watch mode:\n\n```shell\nbun run watch:web\n```\n\nOr build project and serve without watch mode:\n\n```shell\nbun run build:web\nbunx serve _site -p 3001\n```\n\nOpen: http://localhost:3001/project\n\n**Build Commands:**\n\n- `bun run build` or `bun run build:web` - Build for web platform\n- `bun run watch:web` - Watch mode for web development\n\n### Android Application\n\nInstall the debug shell once after native Android changes:\n\n```shell\nbun run android:install\n```\n\nStart the Android JS dev server:\n\n```shell\nbun run watch:android\n```\n\nThe debug app loads `http://127.0.0.1:3001/android/index.html`. The watch\nscript prepares `_site`, configures `adb reverse tcp:3001 tcp:3001` when a\ndevice is connected, and serves `src/setup.android.js` so frontend changes can\nbe refreshed without reinstalling the APK.\n\n### Desktop Application (Tauri)\n\nRouteVN Creator also supports running as a native desktop application using [Tauri](https://tauri.app/), providing better performance and system integration.\n\n**Prerequisites:**\n\nInstall Rust and system dependencies:\n\n```shell\n# Install Rust\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n\n# Linux users need additional system dependencies\n# Ubuntu/Debian:\nsudo apt update\nsudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libayatana-appindicator3-dev librsvg2-dev\n\n# Arch Linux:\nsudo pacman -S --needed webkit2gtk-4.1 base-devel curl wget file openssl libayatana-appindicator librsvg gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly\n\n# Fedora/RHEL:\nsudo dnf install webkit2gtk4.1-devel openssl-devel curl wget file libappindicator-gtk3-devel librsvg2-devel\n\n# macOS and Windows: No additional system dependencies needed\n```\n\n**Development:**\n\nThe Tauri build automatically uses the desktop-specific configuration (`src/setup.tauri.js`):\n\nAdd `env.dev` to your env variables. It is required to set the private key for the updater\n\nStart dev server from:\n\n```shell\nbun run watch:tauri\n```\n\nRun the Tauri app in development mode:\n\n```shell\nbun run tauri:dev\n```\n\nFor cross-compilation to Windows from Linux/macOS:\n\n```shell\nbun run tauri:dev:win\n```\n\n**Production Build:**\n\nFor production we build installer using NSIS: https://v2.tauri.app/distribute/windows-installer/\n\nBuild the desktop application:\n\n```shell\nbun run tauri:build\n```\n\nBuild the Linux AppImage on the host:\n\n```shell\nbun run tauri:build:linux:appimage\n```\n\nBuild the Linux AppImage in an Ubuntu 22.04 Docker builder for a more\ncompatible release baseline:\n\n```shell\nbun run tauri:build:linux:appimage:docker\n```\n\nThe Docker-built x86_64 AppImage, signature, and checksum are copied to\n`src-tauri/target/release/bundle/appimage/linux-x86_64-<version>/`.\n\nLinux direct releases are AppImage-only. See\n`docs/runbooks/linux-release.md`.\n\nCross-compile for Windows:\n\n```shell\nbun run tauri:build:win\n```\n\nBuild and notarize the macOS DMG:\n\n```shell\nbun run tauri:build:mac\n```\n\nFor the Apple signing and notarization setup, see [docs/runbooks/macos-signing-and-notarization.md](docs/runbooks/macos-signing-and-notarization.md).\n\nThe built application will be available in `src-tauri/target/release/` with platform-specific installers in `src-tauri/target/release/bundle/`.\n\n**Build Commands:**\n\n- `bun run build:tauri` - Build frontend for Tauri platform\n- `bun run watch:tauri` - Watch mode for Tauri development\n- `bun run tauri:build` - Build complete desktop application\n\n**Platform Support:**\n\n- **Windows**: `.exe` installer and `.msi` package\n- **macOS**: `.app` bundle and `.dmg` installer\n- **Linux x86_64**: `.AppImage`\n\n**Features:**\n\n- Native file system access\n- Better performance than web version\n- Offline-first with local storage\n- Platform-specific optimizations via separate entry points\n- System tray integration (planned)\n- Auto-updates support (planned)\n\n### Android Application (WebView)\n\nThe Android app is a native WebView wrapper around the web build. It bypasses\nTauri entirely and loads packaged assets through AndroidX `WebViewAssetLoader`.\n\nSee [docs/android.md](docs/android.md) for the setup details and version pins.\n\n```shell\nbun run build:android\nbun run android:install\n```\n\n## Community\n\nJoin us on [Discord](https://discord.gg/8J9dyZSu9C) to ask questions, report bugs, and stay up to date.\n\n## License\n\n- This project is licensed under the [MIT License](LICENSE).\n- The name RouteVN, and its logo are the exclusive property of Yuusoft\n"
+    },
+    "brief": {
+      "summary": "无需编程即可制作视觉小说的桌面应用",
+      "problem": "降低视觉小说制作的编程门槛",
+      "highlights": [
+        "可以拖放界面搭建视觉小说",
+        "可以离线保存项目数据",
+        "可以构建 Windows、macOS 和 Linux 版本"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "独立游戏开发者",
+        "编剧与美术团队"
+      ],
+      "why_trending": "本周首次收录，近期有更新，但今日新增 Star 为 0",
+      "caveat": "资料中未说明最终作品发布流程",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "RouteVN/routevn-creator-client",
+      "score": 90,
+      "category": "互动叙事",
+      "reason": "无代码视觉小说创作工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "crownengine/crown",
+      "url": "https://github.com/crownengine/crown",
+      "description": "A complete and cross-platform game engine designed for flexibility, performance and fast iteration.",
+      "language": "C++",
+      "total_stars": 2422,
+      "forks": 184,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d",
+        "3d",
+        "data-driven",
+        "data-oriented-design",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "lua"
+      ],
+      "license_name": "",
+      "created_at": "2012-08-07T00:07:40Z",
+      "updated_at": "2026-08-01T03:48:54Z",
+      "pushed_at": "2026-08-01T03:48:50Z",
+      "open_issues": 49,
+      "homepage": "https://www.crownengine.org",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"left\">\n  <a title=\"Build Status\" href=\"https://github.com/crownengine/crown/actions?query=workflow%3Abuild_and_test\"><img alt=\"build_and_test status\" src=\"https://img.shields.io/github/actions/workflow/status/crownengine/crown/main.yml?branch=master&longCache=true&style=flat-square&label=build&logo=github\"></a>\n  <a title=\"Downloads\" href=\"https://crownengine.org/download\"><img src=\"https://img.shields.io/github/downloads/crownengine/crown/total?style=flat-square&color=blue\"></a>\n  <a title=\"Join our Discord\" href=\"https://discord.gg/invite/CeXVWCT\"><img src=\"https://img.shields.io/discord/572468149358690314?color=5865F2&label=Discord&logo=discord&logoColor=white&style=flat-square\"></a>\n  <a title=\"Follow Crown on X\" href=\"https://x.com/crown_engine\"><img src=\"https://img.shields.io/twitter/follow/crown_engine?style=flat-square&logo=x&logoColor=white\"></a>\n  <a title=\"Follow Crown on Bluesky\" href=\"https://bsky.app/profile/crownengine.org\"><img src=\"https://img.shields.io/twitter/follow/crownengine.org?style=flat-square&logo=bluesky&logoColor=white&color=0087ff\"></a>\n</p>\n\nCrown Engine\n============\n\n[Crown](https://docs.crownengine.org/html/latest/introduction.html) is a complete and cross-platform game engine designed for flexibility, performance and fast iteration.\n\n## Download\n  * [Stable Releases](https://crownengine.org/download)\n  * [Nightly Builds](https://cd.crownengine.org/download/crown-unstable)\n  \n## Development\n  * User Manual ([latest](https://docs.crownengine.org/html/latest) or [unstable](https://docs.crownengine.org/html/master))\n  * [Developer Manual](https://docs.crownengine.org/html/master/hackers)\n  * [Building from Source](https://docs.crownengine.org/html/master/hackers/building.html) \n\n## Screenshots\n\n### [Editor](https://github.com/crownengine/crown/tree/master/tools/level_editor)\n\n![level-editor](https://raw.githubusercontent.com/crownengine/crown/master/docs/shots/level-editor.png)\n\n### [Examples](https://github.com/crownengine/crown/tree/master/samples)\n\n<p align=\"center\">\n<a href=\"https://play.crownengine.org/physics\"><img src=\"https://raw.githubusercontent.com/crownengine/crown/master/docs/shots/01-physics.jpg\"   width=\"272px\" title=\"01-physics\"/></a>\n<img src=\"https://raw.githubusercontent.com/crownengine/crown/master/docs/shots/02-animation.png\" width=\"272px\" title=\"02-animation\"/>\n<img src=\"https://raw.githubusercontent.com/crownengine/crown/master/docs/shots/03-joypad.png\"    width=\"272px\" title=\"03-joypad\"/>\n</p>\n"
+    },
+    "brief": {
+      "summary": "Crown 是面向跨平台游戏开发的开源引擎。",
+      "problem": "帮助开发者更灵活、高效地制作2D和3D游戏。",
+      "highlights": [
+        "可以制作2D和3D游戏",
+        "可以用关卡编辑器搭建场景",
+        "可以用Lua参与游戏开发"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "游戏程序员",
+        "游戏原型团队"
+      ],
+      "why_trending": "本周首次收录，近期有更新，已有2422个Star",
+      "caveat": "许可证信息未提供，兼容性需自行确认",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "crownengine/crown",
+      "score": 85,
+      "category": "游戏开发",
+      "reason": "跨平台高性能游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "magefree/mage",
+      "url": "https://github.com/magefree/mage",
+      "description": "XMage - Magic Another Game Engine",
+      "language": "Java",
+      "total_stars": 2323,
+      "forks": 920,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "card",
+        "ccg",
+        "client-server",
+        "computer-opponents",
+        "deck",
+        "game",
+        "game-engine",
+        "java",
+        "linux",
+        "macos",
+        "magic",
+        "magic-the-gathering",
+        "mtg",
+        "mtgjson",
+        "multiplayer",
+        "scryfall",
+        "windows",
+        "xmage"
+      ],
+      "license_name": "MIT",
+      "created_at": "2012-04-27T13:18:34Z",
+      "updated_at": "2026-08-01T03:53:02Z",
+      "pushed_at": "2026-08-01T03:52:58Z",
+      "open_issues": 1942,
+      "homepage": "https://xmage.today",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# XMage — Magic, Another Game Engine\n\n[![Build Status](https://github.com/magefree/mage/actions/workflows/maven.yml/badge.svg)](https://github.com/magefree/mage/actions/workflows/maven.yml)\n[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=magefree_mage&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=magefree_mage)\n[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=magefree_mage&metric=coverage)](https://sonarcloud.io/summary/new_code?id=magefree_mage)\n[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=magefree_mage&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=magefree_mage)\n[![Latest release](https://img.shields.io/github/v/release/magefree/mage)](https://github.com/magefree/mage/releases/)\n[![Commits since latest release](https://img.shields.io/github/commits-since/magefree/mage/latest)](https://github.com/magefree/mage/commits/)\n[![Join the chat at https://gitter.im/magefree/mage](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magefree/mage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n\nXMage allows you to play Magic against one or more online players or computer opponents.\nIt includes full rules enforcement for over **31 000** unique cards and more than 91 000 reprints from different editions.\nYou can also find custom sets like Star Wars. All regular sets have nearly all implemented cards.\n\nIt supports single matches and tournaments with dozens of game modes like duel, multiplayer, standard, modern, commander,\npauper, oathbreaker, historic, freeform, richman and much more.\n\nLocal server supports a [special test mode](https://github.com/magefree/mage/wiki/Development-Testing-Tools) for\ntesting combos and other game situations with pre-defined conditions.\n\nThere are [public servers](http://xmage.today/servers/) where you can play XMage against other players.\nYou can also host your own server to play against the AI and/or your friends.\n\nXMage community and resources:\n* [Official XMage support and feature request on github](https://github.com/magefree/mage/issues);\n* [Official XMage forum](http://www.slightlymagic.net/forum/viewforum.php?f=70) (outdated);\n* [Reddit XMage group](https://www.reddit.com/r/XMage/);\n* [Reddit XMage discord channel](https://discord.gg/Pqf42yn);\n* [Latest changes](https://github.com/magefree/mage/commits/master);\n* [Latest news](https://jaydi85.github.io/xmage-web-news/news.html);\n* [Latest releases](https://github.com/magefree/mage/releases);\n* [Project documentation](https://github.com/magefree/mage/wiki).\n\nServers status:\n* http://xmage.today/servers/ (temporarily out of service)\n\nBeta server with un-released or under development features:\n* http://xmage.today/ (release version)\n\n## Features\n\n* Multiplatform app: Windows, Linux, MacOS;\n* Deck editor (support multiple deck formats and deck sources);\n* Two player duel or a multiplayer free-for-all game with up to 10 players;\n* Computer AI opponents;\n* Players rating system (Glicko);\n* Supports special formats like Commander (up to 10 players), Oathbreaker, Cube, Tiny Leaders, Super Standard, Historic Standard and more;\n* Single matches or tournaments supported (elimination or swiss type handling), which can be played with up to 16 players:\n    * Booster (also Cube) draft tournaments (4-16)\n    * Sealed (also from Cube) tournaments (2-16)\n\n## Bug report / feature request\n\nThe best way to report bug or feature request is [github's issues page](https://github.com/magefree/mage/issues).\n\n## Installation / running\n\n* Download [latest XMage launcher and app files](http://xmage.today/) and un-pack it to any folder like `D:\\games\\xmage`;\n* You need to have [Java version 8 or later](http://java.com/) to run launcher.\n\n[Wiki page](https://github.com/magefree/mage/wiki) contains detail information about private or public server setup.\n\n### Server options\n\nThe XMage server locates by default the configuration file from the current working directory to the relative path `config/config.xml`\n(`config\\config.xml` in Windows). To change this location, start the server with the property `xmage.config.path` set\nto the desired location, for example `-Dxmage.config.path=config/otherconfig.xml`. The option can be set from the\nXMageLauncher in `Settings > Java > Server java options`.\n\n## Troubleshooting / FAQ\n\nGithub issues page contain [popular problems and fixes](https://github.com/magefree/mage/issues?q=is%3Aissue+label%3AFAQ+):\n* [Any: program freezes on startup (white/blue/black screen)](https://github.com/magefree/mage/issues/4461#issuecomment-361108597);\n* [Any: can't download images or it stops after some time](https://www.reddit.com/r/XMage/comments/agmcjf/new_xmage_release_with_ravnica_allegiance_rna/);\n* [Any: can't run client, could not open ...jvm.cfg](https://github.com/magefree/mage/issues/1272#issuecomment-529789018);\n* [Any: no texts or small buttons in launcher](https://github.com/magefree/mage/issues/4126);\n* [Windows: ugly cards, buttons or other GUI drawing artifacts](https://github.com/magefree/mage/issues/4626#issuecomment-374640070);\n* [Windows: pixilated images, icons and texts](https://github.com/magefree/mage/issues/12768#issuecomment-2347125602);\n* [MacOS: can't open launcher](https://www.reddit.com/r/XMage/comments/1u2ezx6/comment/or38wjd/);\n* [MacOS: can't run on M1/M2](https://github.com/magefree/mage/issues/8406#issuecomment-1011720728);\n* [MacOS: client freezes in GUI (on connect dialog, on new match)](https://github.com/magefree/mage/issues/4920#issuecomment-517944308);\n* [Linux: run on non-standard OS or hardware like Raspberry Pi](https://github.com/magefree/mage/issues/11611#issuecomment-1879385151);\n* [Linux: ugly GUI and drawing artifacts](https://github.com/magefree/mage/issues/11611#issuecomment-1879396921);\n\n## Performance tweaks\n\nIf you have a good GPU, it's very likely you'll be able to increase performance by **a lot** through extra Java flags.\n\nXMage runs on JRE 8, so [this link](https://docs.oracle.com/javase/8/docs/technotes/guides/2d/flags.html) should give you the available flags.\n\n### How to enable the extra flags\n\n1. Launch XMage\n2. In the menu bar from the launcher, click on \"Settings\", which will open up the Settings Window\n3. Go to the \"Java\" tab\n4. You can pass extra flags by editing the \"Client java options\" text field\n\n### Linux tweaks\n\n#### Enable OpenGL\n\nMore info about [OpenGL](https://docs.oracle.com/javase/8/docs/technotes/guides/2d/flags.html#opengl):\n* `-Dsun.java2d.opengl=true`\n\nPossible problems:\n* _**Caveat**_: [There's a bug](https://bugs.openjdk.java.net/browse/JDK-6545140) with the file chooser when OpenGL is enabled (you use the file chooser when you, for instance, try to load a deck from disk). The [suggested workaround](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6439320) will make the game crash, so it's not an option.\n* _**Workaround**_: When using [i3](https://github.com/i3/i3), you're able to work around the bug by toggling the \"floating\" capabilities of the window and forcing it to re-render.\n\n#### Enable XRender\n\nMore info about [XRender](https://docs.oracle.com/javase/8/docs/technotes/guides/2d/flags.html#xrender):\n* `-Dsun.java2d.xrender=true`\n\n#### Increase memory usage\n\nThis is not guaranteed to yield improvements, but it depends on your use-case.\nIf you have a lot of RAM to spare, you can increase the initial heap size for good measure.\nMore details about [memory settings](https://stackoverflow.com/a/57839720/8401696):\n* `-Xmx2G`\n\n## Developer\n\nFull project documentation and instructions for developers can be found in [wiki pages](http://github.com/magefree/mage/wiki/).\n\nFirst steps for Xmage's developers:\n* [Setting up your Development Environment](https://github.com/magefree/mage/wiki/Setting-up-your-Development-Environment)\n* [Development Testing Tools](https://github.com/magefree/mage/wiki/Development-Testing-Tools)\n* [Development Workflow](https://github.com/magefree/mage/wiki/Development-Workflow)\n* [Development HOWTO Guides](https://github.com/magefree/mage/wiki/Development-HOWTO-Guides)\n\n[Torch icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/torch)\n"
+    },
+    "brief": {
+      "summary": "XMage 是支持联机与电脑对战的万智牌开源引擎",
+      "problem": "为万智牌提供规则执行、对战和牌组管理能力",
+      "highlights": [
+        "可以与玩家或电脑对手进行对战",
+        "可以创建多人游戏和多种比赛模式",
+        "可以编辑牌组并测试组合与特殊局面"
+      ],
+      "target_users": [
+        "万智牌玩家",
+        "卡牌游戏开发者",
+        "开源项目贡献者"
+      ],
+      "why_trending": "本周首次收录，已有2323个 Star，近期仍在更新",
+      "caveat": "运行需要 Java 8 或更高版本，问题数量较多",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "magefree/mage",
+      "score": 85,
+      "category": "游戏开发",
+      "reason": "完整卡牌游戏引擎与客户端",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "AzurIce/ranim",
+      "url": "https://github.com/AzurIce/ranim",
+      "description": "An animation engine implemented in rust, inspired by manim and JAnim",
+      "language": "Rust",
+      "total_stars": 627,
+      "forks": 36,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "animation",
+        "manim",
+        "ranim",
+        "rust"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-11-13T07:23:29Z",
+      "updated_at": "2026-08-01T03:51:34Z",
+      "pushed_at": "2026-08-01T03:51:22Z",
+      "open_issues": 34,
+      "homepage": "https://azurice.github.io/ranim/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n<img alt=\"Ranim Logo\" src=\"./assets/ranim.png\" width=\"200\" height=\"200\" />\n\n# Ranim\n<div>\n    <img alt=\"license\" src=\"https://img.shields.io/github/license/AzurIce/ranim\" />\n    <img alt=\"crates.io\" src=\"https://img.shields.io/crates/v/ranim.svg\" />\n    <img alt=\"commit\" src=\"https://img.shields.io/github/commit-activity/m/AzurIce/ranim?color=%23ff69b4\">\n</div>\n<div>\n    <img alt=\"build check\" src=\"https://github.com/AzurIce/ranim/actions/workflows/build.yml/badge.svg\" />\n    <img alg=\"website check\" src=\"https://github.com/AzurIce/ranim/actions/workflows/website.yml/badge.svg\" />\n</div>\n<div>\n    <img alt=\"stars\" src=\"https://img.shields.io/github/stars/AzurIce/ranim?style=social\">\n</div>\n</div>\n\n<div style=\"display: flex;\">\n    <img alt=\"hello_ranim\" src=\"./assets/hello_ranim.gif\" width=\"48%\" />\n    <img alt=\"ranim_logo\" src=\"./assets/ranim_logo.gif\" width=\"48%\" />\n</div>\n\n> [examples/hello_ranim](./examples/hello_ranim)\n> \n> [examples/ranim_logo](./examples/ranim_logo)\n\nRanim is an animation engine crate implemented in pure rust, inspired heavily by [Manim](https://github.com/3b1b/manim/tree/master) and [jkjkil4/JAnim](https://github.com/jkjkil4/JAnim).\n\n> [!WARNING]\n> Ranim is now WIP. It only supports some basic *items* and *animations*, the apis are unstable and may change frequently, the documentation is also not complete.\n\n## Dependencies\n\nRuntime dependencies:\n- ffmpeg: encode videos\n  Ranim will try to use ffmpeg from system's path environment variable first, if no ffmpeg is found, ranim will automatic download ffmpeg to the current working dir.\n\n## Installation\n\nCurrently, it is experimental on crates.io:\n\n```toml\n[dependencies]\nranim = \"0.2.1\"\n```\n\nYou can also use from git for the latest updates:\n\n```toml\n[dependencies]\nranim = { git = \"https://github.com/azurice/ranim\" }\n```\n\nFor the usage, check out the [examples](./examples) folder. You can run the examples with:\n\n```bash\ncargo run -p ranim-cli --release -- preview --example <example-name> # run a preview app for the example\ncargo run -p ranim-cli --release -- render --example <example-name> # render the example\n```\n\nSee Ranim Cli for more.\n\n### Ranim Cli\n\nRanim cli is a command line tool to help you build the animation. It enables animation previewing with hot reload through dylib.\n\nPlease notice that you can use ranim without ranim-cli, the previewing and rendering process can be achieved by simply invoking apis provided by *ranim*, but it may enhance your experience.\n\nYou can install it with:\n\n```bash\ncargo install ranim-cli\n```\n\nOr install from git:\n\n```bash\ncargo install --git https://github.com/azurice/ranim ranim-cli --locked\n```\n\nOr you can create a bin, and run cli from `ranim_cli` directly (this can make sure the version of `ranim` matches `ranim_cli`):\n\n```rust\nfn main() {\n    ranim_cli::main();\n}\n```\n\nBasic Usage:\n- `ranim preview[ <scene_name>]`: Launch a preview app and invoke cargo to build your library automatically when the source code is changed, then reload it through *libloading* and show it in the preview app.\n- `ranim render[ <scene-name1> <scene_name2> ...]`: Render scene's output, when no scene name is specified, render all scenes.\n\nYou can specify the package with `--package` and `--example` (just like cargo, note that your anim target should have crate-type of `dylib` or `cdylib`), and other aditional arguments you want to pass to `cargo build` can be passed after `--`.\n\nFor example:\n\n```bash\nranim render -p render scene_a scene_b -- --release\n```\n\n## Feature Flags\n\n- Default features\n\n  - `anims`: re-export `ranim-anims`, default on.\n\n  - `items`: re-export `ranim-items`, default on.\n\n- `render`: enable render api in cmd module\n  \n  use `render_scene` or `render_scene_output` to render scene to output\n\n- `preview`: enbale preview api in cmd module\n\n  use `preview_scene` api to launch an preview app on a scene\n  https://github.com/user-attachments/assets/5bf287e2-b06f-42f8-83b6-76f3775e298e\n- `profiling`: enable profiling with https://github.com/EmbarkStudios/puffin\n\n  CPU uses `127.0.0.1:8585` and GPU uses `127.0.0.1:8586`\n  \n  ![image](https://github.com/user-attachments/assets/36bf841c-e30f-45cc-adbc-bd4bfff9bc4c)\n   \n\n## Contributing\n\nSee [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.\n\n## Design\n\nOnce the design is stablized, I may write about it.\n\nFor now, you can check out the code.\n\n## Aknowledgements\n\n- [3b1b/manim](https://github.com/3b1b/manim)\n- [ManimCommunity/manim](https://github.com/ManimCommunity/manim/)\n- [jkjkil4/JAnim](https://github.com/jkjkil4/JAnim)\n\n## Star History\n\n[![Star History Chart](https://api.star-history.com/svg?repos=AzurIce/ranim&type=Date)](https://www.star-history.com/#AzurIce/ranim&Date)\n"
+    },
+    "brief": {
+      "summary": "用 Rust 编写并渲染动画的开源引擎",
+      "problem": "为 Rust 开发者提供动画制作、预览与视频渲染工具",
+      "highlights": [
+        "可以用示例创建并预览动画场景",
+        "可以通过 CLI 渲染场景并输出视频",
+        "可以用热重载加快动画调试"
+      ],
+      "target_users": [
+        "Rust 开发者",
+        "动画工具开发者",
+        "技术内容创作者"
+      ],
+      "why_trending": "本周首次收录，已有627个 Star，且近期有提交",
+      "caveat": "仍处于 WIP，API 不稳定，文档不完整",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "AzurIce/ranim",
+      "score": 85,
+      "category": "动画",
+      "reason": "专用Rust动画制作引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "pnnbao97/VieNeu-TTS",
+      "url": "https://github.com/pnnbao97/VieNeu-TTS",
+      "description": "Vietnamese TTS with instant voice cloning • On-device • Real-time CPU inference • 24kHz audio quality • Chuyển văn bản thành giọng nói tiếng Việt • Text to speech tiếng Việt • TTS tiếng Việt ",
+      "language": "Python",
+      "total_stars": 2272,
+      "forks": 679,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "deep-learning",
+        "on-device-ml",
+        "real-time",
+        "speech-synthesis",
+        "text-to-speech",
+        "tts",
+        "vietnamese",
+        "vietnamese-language"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-10-28T14:07:23Z",
+      "updated_at": "2026-08-01T03:54:41Z",
+      "pushed_at": "2026-08-01T03:54:34Z",
+      "open_issues": 8,
+      "homepage": "https://www.vieneu.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🦜 VieNeu-TTS\n\n[![Awesome](https://img.shields.io/badge/Awesome-NLP-green?logo=github)](https://github.com/keon/awesome-nlp)\n[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/yJt8kzjzWZ)\n\n[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1b9PO-lcGZX9pEkEwQmu8MfhSnjxKrALW?usp=sharing)\n[![Hugging Face VieNeu-TTS-v3-Turbo](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-v3--Turbo-red)](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo)\n[![Hugging Face VieNeu-TTS-v2](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-v2-blue)](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v2)\n[![Hugging Face VieNeu-TTS](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-v1-orange)](https://huggingface.co/pnnbao-ump/VieNeu-TTS)\n\n<img width=\"1087\" height=\"710\" alt=\"image\" src=\"https://github.com/user-attachments/assets/5534b5db-f30b-4d27-8a35-80f1cf6e5d4d\" />\n\n**VieNeu-TTS-v2** is the next generation of on-device Vietnamese TTS, featuring **10,000+ hours** of bilingual training, **instant voice cloning**, and a dedicated **Podcast/Conversation** mode.\n\n> [!NOTE]\n> **🆕 VieNeu-TTS v3 Turbo (early access) is out for preview!**\n> A brand-new architecture **designed and trained from scratch by Phạm Nguyễn Ngọc Bảo** (codec: [MOSS-Audio-Tokenizer-Nano](https://huggingface.co/OpenMOSS-Team/MOSS-Audio-Tokenizer-Nano); phonemizer: [sea-g2p](https://github.com/pnnbao97/sea-g2p)):\n> - **48 kHz** high-fidelity audio (up from 24 kHz).\n> - **Built-in default voices** — stable and consistent, no reference clip needed.\n> - **Reading styles**: natural, news, and storytelling.\n> - **Emotion / non-verbal cues** *(experimental)*: drop `[cười]`, `[thở dài]`, `[hắng giọng]` straight into the text.\n> - **Batched generation** (batch size up to 32), including a multi-speaker **Conversation** mode that batches the whole script regardless of speaker.\n> - **Instant voice cloning** from a 3–8s clip, with automatic reference denoising.\n>\n> Try it in the Web UI (backbone **\"VieNeu-TTS-v3-Turbo (Thử nghiệm)\"**) or the SDK (`Vieneu(mode=\"v3turbo\")`). The **full v3** release is coming in the next few weeks.\n\n> [!IMPORTANT]\n> **🚀 VieNeu-TTS-v2 is here!**\n> The full high-fidelity bilingual architecture is now available with:\n> - **10,000+ Hours of Data:** Unmatched naturalness in both English and Vietnamese.\n> - **Podcast & Dialogue Mode:** Multi-speaker support with emotional nuances.\n> - **Zero-shot Cloning:** Clone any voice in 3-5 seconds across all v2 variants.\n\n## ✨ Key Features\n- **10,000+ Hours Training**: Trained on a massive English-Vietnamese dataset for human-like prosody.\n- **Bilingual (En-Vi) Code-switching**: Powered by [**sea-g2p**](https://github.com/pnnbao97/sea-g2p) for high-fidelity pronunciation and seamless transitions between Vietnamese and English.\n- **Podcast & Conversation Mode**: Multi-speaker dialogue support with automatic character detection.\n- **Instant Voice Cloning**: Clone any voice with just **3-5 seconds** of reference audio.\n- **Ultra-Fast Performance**: Optimized for **GPU (LMDeploy)** and **CPU (GGUF/ONNX)**.\n- **Production-Ready**: High-quality 24 kHz waveform generation, fully offline.\n\n[<img width=\"600\" height=\"595\" alt=\"VieNeu-TTS Demo\" src=\"https://github.com/user-attachments/assets/021f6671-2d7f-4635-91fb-88b2ab0ddbcd\" />](https://github.com/user-attachments/assets/021f6671-2d7f-4635-91fb-88b2ab0ddbcd)\n\n## 📌 Table of Contents\n\n1. [🦜 Installation & Web UI](#installation)\n2. [📦 Using the Python SDK](#sdk)\n3. [🐳 High-Quality Server (Standard Mode)](#docker-remote)\n4. [🔬 Model Overview](#backbones)\n5. [🚀 Roadmap](#roadmap)\n6. [🤝 Support & Contact](#support)\n7. [📑 Citation](#citation)\n\n---\n\n## 🦜 1. Installation & Web UI <a name=\"installation\"></a>\n\n### Setup with `uv` (Recommended)\n`uv` is the fastest way to manage dependencies. \n```bash\n# Windows:\npowershell -c \"irm https://astral.sh/uv/install.ps1 | iex\"\n\n# Linux/macOS:\ncurl -LsSf https://astral.sh/uv/install.sh | sh\n```\n\n1. **Clone the Repo:**\n   ```bash\n   git clone https://github.com/pnnbao97/VieNeu-TTS.git\n   cd VieNeu-TTS\n   ```\n\n2. **Install Dependencies:**\n   - **Option 1: CPU & macOS (minimal, torch-free) — recommended for maximum speed** — runs **v3 Turbo via ONNX**\n     > 💡 *No GPU required. Installs only the lightweight ONNX stack; **v3 Turbo runs on CPU (48 kHz)** with default voices, voice cloning and emotion cues. PyTorch is never installed.*\n     >\n     > ⚡ **For the fastest CPU inference, install with `uv sync` — not `pip install`.** `uv sync` reproduces the locked environment that pins the optimized ONNX Runtime build, so you get maximum speed out of the box.\n     >\n     > 🍎 **macOS users: use this option too.** For v3 Turbo the torch-free ONNX path on the CPU is *faster* than the MPS/PyTorch build (`--group gpu`), so prefer `uv sync` for top speed on Apple Silicon.\n     ```bash\n     uv sync\n     ```\n   - **Option 2: GPU** — **v3 Turbo on GPU (PyTorch)**\n     > 💡 *Requires a CUDA NVIDIA GPU (CUDA ≥ 12.8) or Apple Silicon MPS. [NVIDIA Toolkit](https://developer.nvidia.com/cuda-downloads) recommended. Adds the PyTorch stack so **v3 Turbo runs on GPU** — inference is batched automatically on CUDA (same API, no code change).*\n\n     ```bash\n     uv sync --group gpu\n     ```\n\n3. **Start the Web UI:**\n   ```bash\n   uv run vieneu-web\n   ```\n   Access the UI at `http://127.0.0.1:7860`.\n\n---\n\n## 📦 2. Using the Python SDK (vieneu) <a name=\"sdk\"></a>\n\nThe `vieneu` SDK **defaults to VieNeu-TTS v3 Turbo (48 kHz)**. The minimal install is **torch-free**: on CPU everything runs on **ONNX Runtime** (PyTorch is never imported), and on a CUDA machine it auto-switches to the PyTorch engine — where inference is **batched automatically** (same API, no code change).\n\n### Quick Start\n\n**CPU (default)** — torch-free, runs v3 Turbo via ONNX Runtime. Most users want this:\n> ⚡**On CPU the backbone runs `int8` by default** — ~1.6× faster and ~4× smaller than fp32, with voice quality preserved. Want maximum fidelity instead? Pass `Vieneu(precision=\"fp32\")` (slower on CPU). `precision` only affects the CPU/ONNX path; on GPU it's ignored (PyTorch).\n\n```bash\npip install vieneu\n```\n\n**GPU (CUDA)** — only if you have an NVIDIA GPU. \n> ℹ️ **When is GPU actually worth it?** The GPU win comes from **batching**, so it\n> only pays off on **long text** (many chunks generated together in one forward —\n> long-form or bulk synthesis). For **short text** the torch-free **CPU/ONNX** path\n> is usually *faster* (there's no batch to fill, and no kernel-launch overhead). Use\n> CPU for short, interactive calls; reach for GPU for long-form or high-throughput work.\n\n```bash\npip install torch==2.8.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu128\npip install \"transformers==4.57.6\"   # pinned — most stable transformers for the GPU SDK\npip install vieneu\n```\n\n```python\nimport time\nfrom vieneu import Vieneu\n\n# Default = v3 Turbo (48 kHz). GPU → PyTorch (auto-detected).\nvieneu = Vieneu() # On a GPU machine you can still switch to ONNX/CPU if you prefer: Vieneu(backend=\"onnx\")\n\n# 1. Built-in voice by name — no reference clip needed\nprint(\"🔊 Generating speech...\")\n\nstart_time = time.time()\naudio = vieneu.infer(\"[cười] Trời ơi, cái giọng nó tự nhiên mà nó mượt mà dã man, nghe không khác gì người thật luôn. Giờ thì tha hồ mà quẩy content với cả kho giọng nói đa dạng, đủ mọi sắc thái biểu cảm. Mọi người bật loa lên rồi cùng trải nghiệm thử với mình nhé!\", voice=\"Phạm Tuyên\")\nelapsed_time = time.time() - start_time\n\nvieneu.save(audio, \"output.wav\")\nprint(\"✅ Saved to output.wav\")\n\n# Tính RTF (Real-Time Factor)\nsample_rate = 48000\naudio_duration = len(audio) / sample_rate\nrtf = elapsed_time / audio_duration\n\nprint(f\"\\n⏱️  Thời gian xử lý: {elapsed_time:.3f}s\")\nprint(f\"🎵 Thời lượng audio: {audio_duration:.3f}s\")\nprint(f\"📊 RTF: {rtf:.4f}  ({'nhanh hơn' if rtf < 1 else 'chậm hơn'} real-time {1/rtf:.2f}x)\" if rtf > 0 else \"\")\n\n# List the built-in voices\nvoices = vieneu.list_preset_voices()\nprint(f\"\\n🎙️  {len(voices)} built-in voices available:\")\nfor label, voice_id in voices:\n    print(f\"  - {label} ({voice_id})\")\n\n# 2. ⚡ Batch on GPU: infer_batch() runs many texts in ONE batched forward — same API.\n#    On a CUDA GPU the chunks from every text share each forward step (big throughput\n#    win). On CPU it still WORKS (no error) — just sequentially, so there's no batch\n#    gain. Batch caps at max_batch_size (default 32; tune via Vieneu(max_batch_size=64)\n#    or infer_batch(..., batch_size=64), or batch_size=1 to disable). A single long\n#    infer() also auto-batches its own chunks. Uncomment to try (GPU recommended):\n#\n# import time\n# texts = [\n#     \"Chào cả nhà, hôm nay mình sẽ hướng dẫn các bạn cách cài đặt và sử dụng bộ giọng đọc mới.\",\n#     \"Giọng nghe cực kỳ tự nhiên và truyền cảm, lại có thể chuyển đổi biểu cảm một cách linh hoạt.\",\n#     \"Nếu thấy hữu ích, các bạn nhớ để lại một lượt thích và chia sẻ video này cho mọi người nhé!\",\n# ] * 10   # 30 texts — enough to fill the batch and really show the GPU throughput win\n# t0 = time.time()\n# audios = vieneu.infer_batch(texts, voice=\"Phạm Tuyên\")\n# elapsed = time.time() - t0\n# total_audio = sum(len(a) for a in audios) / 48_000\n# print(f\"⚡ {len(texts)} texts | audio {total_audio:.1f}s | wall {elapsed:.1f}s | RTF {elapsed/total_audio:.3f}\")\n# for i, a in enumerate(audios):\n#     vieneu.save(a, f\"batch_{i}.wav\")\n```\n\n#### Streaming (real-time) 🔊\n\n> v3 Turbo supports **frame-level streaming**: audio starts in ~300 ms and generation stays *ahead* of playback (RTF < 1 on CPU — ~2–3× on a laptop, ~7× on Apple Silicon), so it's ideal for realtime / interactive apps. Streaming runs on the > **ONNX/CPU** engine — low first-audio latency, frame-by-frame; the GPU/PyTorch engine is built for **batch throughput**, not streaming, so pin `backend=\"onnx\"` for realtime. Just iterate `infer_stream`:\n\n```python\nfrom vieneu import Vieneu\nvieneu = Vieneu(backend=\"onnx\")                      # force ONNX/CPU — the streaming path (int8)\nfor chunk in vieneu.infer_stream(\"Xin chào các bạn!\", voice=\"Minh Đức\"):\n    play(chunk)                                   # np.float32 @ 48 kHz — play/write as it arrives\n```\n\nA complete **FastAPI web streaming demo** is in [`apps/web_stream.py`](apps/web_stream.py):\n\n```bash\nuv run python -m apps.web_stream                  # → http://127.0.0.1:8001\n```\n\n#### Available Voices\n\nThe v3 Turbo engine includes **14 curated preset voices** covering **3 Vietnamese regions** (North, Central, South) with diverse genders and styles:\n\n- **Northern (Bắc)**: Natural, news, storytelling styles\n- **Central (Trung)**: Natural style (Quang Sơn, Ngọc Trân)\n- **Southern (Nam)**: Natural, news, storytelling styles\n\nEach voice supports **3 reading styles**: natural (`tu_nhien`), news (`tin_tuc`), and storytelling (`doc_truyen`).\n\n### Reading style\n\nPick how the text is read with `style` (default `\"tu_nhien\"`):\n\n| `style`        | Meaning       |\n| -------------- | ------------- |\n| `\"tu_nhien\"`   | Natural / conversational |\n| `\"tin_tuc\"`    | News          |\n| `\"doc_truyen\"` | Storytelling  |\n\n```python\naudio = vieneu.infer(\"Trận Caen là một trận đánh trong Chiến tranh Trăm Năm giữa Anh và Pháp diễn ra vào ngày 26 tháng 7 năm 1346 khi quân viễn chinh Anh dưới sự chỉ huy của Edward III tấn công thành Caen do quân Pháp nắm giữ.\", voice=\"Phạm Tuyên\", style=\"tin_tuc\")\n```\n\n### Emotion cues (experimental)\n\nInline tags are supported anywhere in the text: `[cười]` (chuckle), `[thở dài]` (sigh), `[hắng giọng]` (clear throat).\n\n```python\naudio = vieneu.infer(\"Nghe hay quá đi [cười]. Để mình nói tiếp [hắng giọng].\", voice=\"Trúc Ly\")\n```\n\n### Voice cloning\n\nClone any voice from a short reference clip. The clip is cleaned up automatically\n(background noise removed, and trimmed to ≤ 8 seconds) before cloning — keep\n`denoise=True` unless your clip is already clean.\n\n```python"
+    },
+    "brief": {
+      "summary": "面向越南语的本地实时语音合成与克隆工具",
+      "problem": "解决越南语语音生成、双语切换和快速克隆的需求",
+      "highlights": [
+        "可以在本地将越南语文本生成语音",
+        "可以用短音频克隆声音并制作对话内容",
+        "可以在 CPU 上实时生成 24kHz 音频"
+      ],
+      "target_users": [
+        "越南语内容创作者",
+        "语音应用开发者",
+        "播客制作人"
+      ],
+      "why_trending": "总 Star 2272，本周首次收录且近期有更新",
+      "caveat": "v3 Turbo仍是早期预览，部分情绪功能为实验性",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "pnnbao97/VieNeu-TTS",
+      "score": 75,
+      "category": "语音 / 配音",
+      "reason": "支持越南语实时语音克隆",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 43.5
+    }
+  }
+]
