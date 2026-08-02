@@ -1,0 +1,566 @@
+[
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "microsoft/TRELLIS.2",
+      "url": "https://github.com/microsoft/TRELLIS.2",
+      "description": "Native and Compact Structured Latents for 3D Generation",
+      "language": "Python",
+      "total_stars": 9965,
+      "forks": 1202,
+      "stars_today": 107,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 107
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2025-11-26T10:04:35Z",
+      "updated_at": "2026-08-02T04:00:56Z",
+      "pushed_at": "2026-07-10T12:34:32Z",
+      "open_issues": 143,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![](assets/teaser.webp)\n\n# Native and Compact Structured Latents for 3D Generation\n\n<a href=\"https://arxiv.org/abs/2512.14692\"><img src=\"https://img.shields.io/badge/Paper-Arxiv-b31b1b.svg\" alt=\"Paper\"></a>\n<a href=\"https://huggingface.co/microsoft/TRELLIS.2-4B\"><img src=\"https://img.shields.io/badge/Hugging%20Face-Model-yellow\" alt=\"Hugging Face\"></a>\n<a href=\"https://huggingface.co/spaces/microsoft/TRELLIS.2\"><img src=\"https://img.shields.io/badge/Hugging%20Face-Demo-blueviolet\"></a>\n<a href=\"https://microsoft.github.io/TRELLIS.2\"><img src=\"https://img.shields.io/badge/Project-Website-blue\" alt=\"Project Page\"></a>\n<a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-green\" alt=\"License\"></a>\n\nhttps://github.com/user-attachments/assets/63b43a7e-acc7-4c81-a900-6da450527d8f\n\n*(Compressed version due to GitHub size limits. See the full-quality video on our project page!)*\n\n**TRELLIS.2** is a state-of-the-art large 3D generative model (4B parameters) designed for high-fidelity **image-to-3D** generation. It leverages a novel \"field-free\" sparse voxel structure termed **O-Voxel** to reconstruct and generate arbitrary 3D assets with complex topologies, sharp features, and full PBR materials.\n\n\n## ✨ Features\n\n### 1. High Quality, Resolution & Efficiency\nOur 4B-parameter model generates high-resolution fully textured assets with exceptional fidelity and efficiency using vanilla DiTs. It utilizes a Sparse 3D VAE with 16× spatial downsampling to encode assets into a compact latent space.\n\n| Resolution | Total Time* | Breakdown (Shape + Mat) |\n| :--- | :--- | :--- |\n| **512³** | **~3s** | 2s + 1s |\n| **1024³** | **~17s** | 10s + 7s |\n| **1536³** | **~60s** | 35s + 25s |\n\n<small>*Tested on NVIDIA H100 GPU.</small>\n\n### 2. Arbitrary Topology Handling\nThe **O-Voxel** representation breaks the limits of iso-surface fields. It robustly handles complex structures without lossy conversion:\n*   ✅ **Open Surfaces** (e.g., clothing, leaves)\n*   ✅ **Non-manifold Geometry**\n*   ✅ **Internal Enclosed Structures**\n\n### 3. Rich Texture Modeling\nBeyond basic colors, TRELLIS.2 models arbitrary surface attributes including **Base Color, Roughness, Metallic, and Opacity**, enabling photorealistic rendering and transparency support.\n\n### 4. Minimalist Processing\nData processing is streamlined for instant conversions that are fully **rendering-free** and **optimization-free**.\n*   **< 10s** (Single CPU): Textured Mesh → O-Voxel\n*   **< 100ms** (CUDA): O-Voxel → Textured Mesh\n\n\n## 🗺️ Roadmap\n\n- [x] Paper release\n- [x] Release image-to-3D inference code\n- [x] Release pretrained checkpoints (4B)\n- [x] Hugging Face Spaces demo\n- [x] Release shape-conditioned texture generation inference code\n- [x] Release training code\n\n\n## 🛠️ Installation\n\n### Prerequisites\n- **System**: The code is currently tested only on **Linux**.\n- **Hardware**: An NVIDIA GPU with at least 24GB of memory is necessary. The code has been verified on NVIDIA A100 and H100 GPUs.  \n- **Software**:   \n  - The [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit-archive) is needed to compile certain packages. Recommended version is 12.4.  \n  - [Conda](https://docs.anaconda.com/miniconda/install/#quick-command-line-install) is recommended for managing dependencies.  \n  - Python version 3.8 or higher is required. \n\n### Installation Steps\n1. Clone the repo:\n    ```sh\n    git clone -b main https://github.com/microsoft/TRELLIS.2.git --recursive\n    cd TRELLIS.2\n    ```\n\n2. Install the dependencies:\n    \n    **Before running the following command there are somethings to note:**\n    - By adding `--new-env`, a new conda environment named `trellis2` will be created. If you want to use an existing conda environment, please remove this flag.\n    - By default the `trellis2` environment will use pytorch 2.6.0 with CUDA 12.4. If you want to use a different version of CUDA, you can remove the `--new-env` flag and manually install the required dependencies. Refer to [PyTorch](https://pytorch.org/get-started/previous-versions/) for the installation command.\n    - If you have multiple CUDA Toolkit versions installed, `CUDA_HOME` should be set to the correct version before running the command. For example, if you have CUDA Toolkit 12.4 and 13.0 installed, you can run `export CUDA_HOME=/usr/local/cuda-12.4` before running the command.\n    - By default, the code uses the `flash-attn` backend for attention. For GPUs do not support `flash-attn` (e.g., NVIDIA V100), you can install `xformers` manually and set the `ATTN_BACKEND` environment variable to `xformers` before running the code. See the [Minimal Example](#minimal-example) for more details.\n    - The installation may take a while due to the large number of dependencies. Please be patient. If you encounter any issues, you can try to install the dependencies one by one, specifying one flag at a time.\n    - If you encounter any issues during the installation, feel free to open an issue or contact us.\n    \n    Create a new conda environment named `trellis2` and install the dependencies:\n    ```sh\n    . ./setup.sh --new-env --basic --flash-attn --nvdiffrast --nvdiffrec --cumesh --o-voxel --flexgemm\n    ```\n    The detailed usage of `setup.sh` can be found by running `. ./setup.sh --help`.\n    ```sh\n    Usage: setup.sh [OPTIONS]\n    Options:\n        -h, --help              Display this help message\n        --new-env               Create a new conda environment\n        --basic                 Install basic dependencies\n        --flash-attn            Install flash-attention\n        --cumesh                Install cumesh\n        --o-voxel               Install o-voxel\n        --flexgemm              Install flexgemm\n        --nvdiffrast            Install nvdiffrast\n        --nvdiffrec             Install nvdiffrec\n    ```\n\n## 📦 Pretrained Weights\n\nThe pretrained model **TRELLIS.2-4B** is available on Hugging Face. Please refer to the model card there for more details.\n\n| Model | Parameters | Resolution | Link |\n| :--- | :--- | :--- | :--- |\n| **TRELLIS.2-4B** | 4 Billion | 512³ - 1536³ | [Hugging Face](https://huggingface.co/microsoft/TRELLIS.2-4B) |\n\n\n## 🚀 Usage\n\n### 1. Image to 3D Generation\n\n#### Minimal Example\n\nHere is an [example](example.py) of how to use the pretrained models for 3D asset generation.\n\n```python\nimport os\nos.environ['OPENCV_IO_ENABLE_OPENEXR'] = '1'\nos.environ[\"PYTORCH_CUDA_ALLOC_CONF\"] = \"expandable_segments:True\"  # Can save GPU memory\nimport cv2\nimport imageio\nfrom PIL import Image\nimport torch\nfrom trellis2.pipelines import Trellis2ImageTo3DPipeline\nfrom trellis2.utils import render_utils\nfrom trellis2.renderers import EnvMap\nimport o_voxel\n\n# 1. Setup Environment Map\nenvmap = EnvMap(torch.tensor(\n    cv2.cvtColor(cv2.imread('assets/hdri/forest.exr', cv2.IMREAD_UNCHANGED), cv2.COLOR_BGR2RGB),\n    dtype=torch.float32, device='cuda'\n))\n\n# 2. Load Pipeline\npipeline = Trellis2ImageTo3DPipeline.from_pretrained(\"microsoft/TRELLIS.2-4B\")\npipeline.cuda()\n\n# 3. Load Image & Run\nimage = Image.open(\"assets/example_image/T.png\")\nmesh = pipeline.run(image)[0]\nmesh.simplify(16777216) # nvdiffrast limit\n\n# 4. Render Video\nvideo = render_utils.make_pbr_vis_frames(render_utils.render_video(mesh, envmap=envmap))\nimageio.mimsave(\"sample.mp4\", video, fps=15)\n\n# 5. Export to GLB\nglb = o_voxel.postprocess.to_glb(\n    vertices            =   mesh.vertices,\n    faces               =   mesh.faces,\n    attr_volume         =   mesh.attrs,\n    coords              =   mesh.coords,\n    attr_layout         =   mesh.layout,\n    voxel_size          =   mesh.voxel_size,\n    aabb                =   [[-0.5, -0.5, -0.5], [0.5, 0.5, 0.5]],\n    decimation_target   =   1000000,\n    texture_size        =   4096,\n    remesh              =   True,\n    remesh_band         =   1,\n    remesh_project      =   0,\n    verbose             =   True\n)\nglb.export(\"sample.glb\", extension_webp=True)\n```\n\nUpon execution, the script generates the following files:\n - `sample.mp4`: A video visualizing the generated 3D asset with PBR materials and environmental lighting.\n - `sample.glb`: The extracted PBR-ready 3D asset in GLB format.\n\n**Note:** The `.glb` file is exported in `OPAQUE` mode by default. Although the alpha channel is preserved within the texture map, it is not active initially. To enable transparency, import the asset into your 3D software and manually connect the texture's alpha channel to the material's opacity or alpha input.\n\n#### Web Demo\n\n[app.py](app.py) provides a simple web demo for image to 3D asset generation. you can run the demo with the following command:\n```sh\npython app.py\n```\n\nThen, you can access the demo at the address shown in the terminal.\n\n### 2. PBR Texture Generation\n\nPlease refer to the [example_texturing.py](example_texturing.py) for an example of how to generate PBR textures for a given 3D shape. Also, you can use the [app_texturing.py](app_texturing.py) to run a web demo for PBR texture generation.\n\n\n## 🏋️ Training\n\nWe provide the full training codebase, enabling users to train **TRELLIS.2** from scratch or fine-tune it on custom datasets.\n\n### 1. Data Preparation\n\nBefore training, raw 3D assets must be converted into the **O-Voxel** representation. This process includes mesh conversion, compact structured latent generation, and metadata preparation.\n\n> 📂 **Please refer to [data_toolkit/README.md](data_toolkit/README.md) for detailed instructions on data preprocessing and dataset organization.**\n\n### 2. Running Training\n\nTraining is managed through the `train.py` script, which accepts multiple command-line arguments to configure experiments:\n\n* `--config`: Path to the experiment configuration file.\n* `--output_dir`: Directory for training outputs.\n* `--load_dir`: Directory to load checkpoints from (defaults to `output_dir`).\n* `--ckpt`: Checkpoint step to resume from (defaults to the latest).\n* `--data_dir`: Dataset path or a JSON string specifying dataset locations.\n* `--auto_retry`: Number of automatic retries upon failure.\n* `--tryrun`: Perform a dry run without actual training.\n* `--profile`: Enable training profiling.\n* `--num_nodes`: Number of nodes for distributed training.\n* `--node_rank`: Rank of the current node.\n* `--num_gpus`: Number of GPUs per node (defaults to all available GPUs).\n* `--master_addr`: Master node address for distributed training.\n* `--master_port`: Port for distributed training communication.\n\n\n### SC-VAE Training\n\n\nTo train the shape SC-VAE, run:\n\n```sh\npython train.py \\\n  --config configs/scvae/shape_vae_next_dc_f16c32_fp16.json \\\n  --output_dir results/shape_vae_next_dc_f16c32_fp16 \\\n  --data_dir \"{\\\"ObjaverseXL_sketchfab\\\": {\\\"base\\\": \\\"datasets/ObjaverseXL_sketchfab\\\", \\\"mesh_dump\\\": \\\"datasets/ObjaverseXL_sketchfab/mesh_dumps\\\", \\\"dual_grid\\\": \\\"datasets/ObjaverseXL_sketchfab/dual_grid_256\\\", \\\"asset_stats\\\": \\\"datasets/ObjaverseXL_sketchfab/asset_stats\\\"}}\"\n```\n\nThis command trains the shape SC-VAE on the **Objaverse-XL** dataset using the `shape_vae_next_dc_f16c32_fp16.json` configuration. Training outputs will be saved to `results/shape_vae_next_dc_f16c32_fp16`.\n\nThe dataset is specified as a JSON string, where each dataset entry includes:\n\n* `base`: Root directory of the dataset.\n* `mesh_dump`: Directory containing preprocessed mesh dumps.\n* `dual_grid`: Directory with precomputed dual-grid representations.\n* `asset_stats`: Directory containing precomputed asset statistics.\n\nTo fine-tune the model at a higher resolution, use the `shape_vae_next_dc_f16c32_fp16_ft_512.json` configuration. Remember to update the `finetune_ckpt` field and adjust the dataset paths accordingly.\n\n\nTo train the texture SC-VAE, run:\n\n```sh\npython train.py \\\n  --config configs/scvae/tex_vae_next_dc_f16c32_fp16.json \\\n  --output_dir results/tex_vae_next_dc_f16c32_fp16 \\\n  --data_dir \"{\\\"ObjaverseXL_sketchfab\\\": {\\\"base\\\": \\\"datasets/ObjaverseXL_sketchfab\\\", \\\"pbr_dump\\\": \\\"datasets/ObjaverseXL_sketchfab/pbr_dumps\\\", \\\"pbr_voxel\\\": \\\"datasets/ObjaverseXL_sketchfab/pbr_voxe"
+    },
+    "brief": {
+      "summary": "微软开源的高保真图片转3D模型工具",
+      "problem": "将单张图片快速转换为带材质的3D资产",
+      "highlights": [
+        "可以从图片生成带纹理的3D模型",
+        "可以导出GLB并制作渲染视频",
+        "可以处理透明和复杂拓扑结构"
+      ],
+      "target_users": [
+        "3D内容创作者",
+        "游戏开发者",
+        "虚拟人制作团队"
+      ],
+      "why_trending": "今日新增107个Star，本周首次收录，总Star近万",
+      "caveat": "仅测试Linux，至少需要24GB显存的英伟达GPU",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "microsoft/TRELLIS.2",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "图像生成高质量带材质3D资产",
+      "generated_by_ai": true,
+      "velocity_score": 62,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "abus-aikorea/voice-pro",
+      "url": "https://github.com/abus-aikorea/voice-pro",
+      "description": "Gradio WebUI for creators and developers, featuring key TTS (Edge-TTS, kokoro) and zero-shot Voice Cloning (E2 & F5-TTS, CosyVoice), with Whisper audio processing, YouTube download, Demucs vocal isolation, and multilingual translation.",
+      "language": "Python",
+      "total_stars": 11812,
+      "forks": 1727,
+      "stars_today": 58,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 58
+    },
+    "details": {
+      "topics": [
+        "audiobook",
+        "faster-whisper",
+        "gradio",
+        "karaoke",
+        "podcasts",
+        "speech-recognition",
+        "speech-synthesis",
+        "speech-to-text",
+        "subtitles",
+        "text-to-speech",
+        "transcription",
+        "translator",
+        "tts",
+        "voice-cloning",
+        "voice-conversion",
+        "webui",
+        "whisper",
+        "whisperx",
+        "yt-dlp"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2024-07-29T10:02:31Z",
+      "updated_at": "2026-08-02T04:01:11Z",
+      "pushed_at": "2026-07-13T01:28:10Z",
+      "open_issues": 56,
+      "homepage": "https://www.wctokyoseoul.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- \n    title: Voice-Pro: Ultimate AI Voice Conversion and Multilingual Translation Tool\n    description: Powerful AI-powered web application for YouTube video processing, speech recognition, translation, and text-to-speech with multilingual support\n    keywords: AI voice conversion, YouTube translation, subtitle generation, speech-to-text, text-to-speech, voice cloning, multilingual translation, ElevenLabs Alternative \n    author: ABUS\n    version: 4.0.0\n    last-updated: 2026-07-13\n    product-type: AI Multimedia Processing Software\n    platforms: Windows\n    technology-stack: Whisper, Edge-TTS, Gradio, CUDA, Faster-Whisper, Whisper-Timestamped, E2-TTS, F5-TTS, YouTube Downloader, Demucs, MDX-Net, CosyVoice, kokoro, uv\n    license: LGPL\n-->\n\n\n\n<h1 align=\"center\">\nVoice-Pro\n</h1>\n\n<p align=\"center\">\n  <i align=\"center\">The best AI speech recognition, translation, and multilingual dubbing solution 🚀</i>\n</p>\n\n<h4 align=\"center\">\n  <a href=\"https://deepwiki.com/abus-aikorea/voice-pro\">\n    <img alt=\"Ask DeepWiki.com\" src=\"https://deepwiki.com/badge.svg\" style=\"height: 20px;\">\n  </a>\n  <a href=\"https://www.youtube.com/channel/UCbCBWXuVbk-OBp9T4H5JjAA\">\n    <img src=\"https://img.shields.io/badge/youtube-d95652.svg?style=flat-square&logo=youtube\" alt=\"youtube\" style=\"height: 20px;\">\n  </a>\n  <a href=\"https://www.buymeacoffee.com/abus\">\n    <img src=\"https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png\" alt=\"Buy Me a Coffee\" style=\"height: 20px;\">\n  </a>\n  <a href=\"https://github.com/abus-aikorea/voice-pro/releases\">\n    <img src=\"https://img.shields.io/github/v/release/abus-aikorea/voice-pro\" alt=\"release\" style=\"height: 20px;\">\n  </a>\n  <a href=\"https://github.com/abus-aikorea/voice-pro/stargazers\">\n    <img alt=\"GitHub Repo stars\" src=\"https://img.shields.io/github/stars/abus-aikorea/voice-pro\">\n  </a>  \n</h4>\n\n<p align=\"center\">\n    <img src=\"docs/images/main_page_crop.eng.jpg?raw=true\" alt=\"Dubbing Studio\"/>\n</p>\n<br />\n\n\n\n## 🎙️ An AI-powered web application for speech recognition, translation, and dubbing\n\n\n<p>  \n  <a href=\"docs/README.kor.md\">\n    <img src=\"https://flagcdn.com/16x12/kr.png\" alt=\"South Korea Flag\" style=\"vertical-align: middle;\"> 한국어\n  </a> ∙ \n  <a href=\"docs/README.eng.md\">\n    <img src=\"https://flagcdn.com/16x12/us.png\" alt=\"United Kingdom Flag\" style=\"vertical-align: middle;\"> English\n  </a> ∙ \n  <a href=\"docs/README.zh.md\">\n    <img src=\"https://flagcdn.com/16x12/cn.png\" alt=\"China Flag\" style=\"vertical-align: middle;\"> 中文简体\n  </a> ∙ \n  <a href=\"docs/README.tw.md\">\n    <img src=\"https://flagcdn.com/16x12/tw.png\" alt=\"Taiwan Flag\" style=\"vertical-align: middle;\"> 中文繁體\n  </a> ∙ \n  <a href=\"docs/README.jpn.md\">\n    <img src=\"https://flagcdn.com/16x12/jp.png\" alt=\"Japan Flag\" style=\"vertical-align: middle;\"> 日本語\n  </a> ∙ \n  <a href=\"docs/README.deu.md\">\n    <img src=\"https://flagcdn.com/16x12/de.png\" alt=\"Germany Flag\" style=\"vertical-align: middle;\"> Deutsch\n  </a> ∙ \n  <a href=\"docs/README.spa.md\">\n    <img src=\"https://flagcdn.com/16x12/es.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Español\n  </a> ∙ \n  <a href=\"docs/README.por.md\">\n    <img src=\"https://flagcdn.com/16x12/pt.png\" alt=\"Portugal Flag\" style=\"vertical-align: middle;\"> Português\n  </a>\n</p>\n\nVoice-Pro is a state-of-the-art web app that transforms multimedia content creation. It integrates YouTube video downloading, voice separation, speech recognition, translation, and text-to-speech into a single, powerful tool for creators, researchers, and multilingual professionals.\n- 🔊 Top-tier speech recognition: **Whisper**, **Faster-Whisper**, **Whisper-Timestamped**\n- 🎤 Zero-shot voice cloning: **F5-TTS**, **E2-TTS**, **CosyVoice** (incl. **Fun-CosyVoice3** — Korean and 8 more languages)\n- 📢 Multilingual text-to-speech: **Edge-TTS**, **kokoro** (optional **Azure TTS** with your own keys — see [Azure services](#-azure-services-optional-env))\n- 🎥 YouTube processing & audio extraction: **yt-dlp**\n- 🌍 Instant translation for 100+ languages: **Deep-Translator** (optional **Azure Translator** with your own keys)\n\n\nA robust alternative to **ElevenLabs**, Voice-Pro empowers podcasters, developers, and creators with advanced voice solutions.\n\n## ⚠️ Please Note\n- Due to [WeConnect](https://www.wctokyoseoul.com) development work, Voice-Pro development and updates are not possible for the time being.\n- We have made all Voice-Pro code open source and completely free. Voice-Pro can now be freely distributed and modified by anyone.\n- It works well on Windows with NVIDIA GPU. Operation on Mac and Linux has not been verified.\n- Please leave your requests on the [![GitHub Issues](https://img.shields.io/github/issues/abus-aikorea/voice-pro)](https://github.com/abus-aikorea/voice-pro/issues)  or  [![GitHub Discussions](https://img.shields.io/github/discussions/abus-aikorea/voice-pro)](https://github.com/abus-aikorea/voice-pro/discussions) pages.\n- **Troubleshooting**: In most cases, issues can be resolved by deleting the `installer_files` folder and then running `start.bat` again (a clean reinstall takes only a few minutes; downloaded AI models in `model/` are kept). Errors are shown in the WebUI as red toasts that stay until closed.\n\n\n## 📰 News & History\n\n<details open>\n<summary>version 4.0</summary>\n\n- ⚡ **Migrated the installer from Miniconda/pip to [uv](https://docs.astral.sh/uv/)** — dramatically faster, fully reproducible installs from a committed `uv.lock`. Everything stays inside `installer_files/` (uv, Python, packages).\n- 🐍 Upgraded runtime: **Python 3.12, Torch 2.8.0+cu128 (RTX 50-series supported), Gradio 6.20**.\n- 🎙️ Latest ASR stack: **faster-whisper 1.2.1** (large-v3-turbo, distil-large-v3.5), openai-whisper 20250625, whisper-timestamped 1.15.9. whisperX was removed (its dependency pins blocked the Gradio 6 upgrade; existing configs fall back to faster-whisper).\n- 🗣️ Latest TTS stack: **F5-TTS 1.1.21**, kokoro 0.9.4, edge-tts 7.x, and re-vendored **CosyVoice** (upstream main).\n- 🇰🇷 New optional TTS model: **Fun-CosyVoice3-0.5B** — 9 languages including Korean, selectable in the CosyVoice tab (downloads from the official HF repo on first use).\n- 🧹 CUDA Toolkit and Visual Studio Build Tools are **no longer required** — all dependencies ship prebuilt wheels, and PyTorch bundles the CUDA runtime.\n- 🛡️ Friendly to **restricted / corporate PCs**: no administrator rights needed — `start.bat` auto-downloads a portable **ffmpeg** if it is not installed, Whisper model downloads self-heal after interrupted/corrupted transfers, and translation automatically retries with backoff when the network rate-limits the free Google endpoint (failed lines are reported, originals kept).\n- 🚨 **Errors are now visible in the WebUI**: every failure shows a red error toast that stays on screen until you close it (previously a 10-second warning that was easy to miss), with actionable messages for common causes (missing ffmpeg, no media registered, etc.).\n- 🖥️ UI: migrated to **Gradio 6** (full-width layout for all tabs, subtitle tracks shown directly in the video players).\n- 🧽 `uninstall.bat` no longer requires administrator rights and no longer force-reboots; `uninstall.bat silent` runs unattended.\n\n</details>\n\n<details>\n<summary>version 3.2</summary>\n\n- We have been focusing on [WeConnect](https://www.wctokyoseoul.com) development for the past few months and have not been able to manage Voice-Pro at all. \n- We have decided to open source all Voice-Pro code.\n- Voice-Pro is completely free and supports Windows, Mac, Linux.\n- [WeConnect](https://www.wctokyoseoul.com) is an application for global cultural exchange.\n- Connect with people from all over the world for meaningful cultural exchanges, language learning, and international friendships.\n\n<p align=\"center\">\n    <img src=\"docs/images/Hotpot 0.png?raw=true\" alt=\"ScreenShot 0\" width=\"18%\"/>\n    <img src=\"docs/images/Hotpot 1.png?raw=true\" alt=\"ScreenShot 1\" width=\"18%\"/>\n    <img src=\"docs/images/Hotpot 2.png?raw=true\" alt=\"ScreenShot 2\" width=\"18%\"/>\n    <img src=\"docs/images/Hotpot 3.png?raw=true\" alt=\"ScreenShot 3\" width=\"18%\"/>\n    <img src=\"docs/images/Hotpot 4.png?raw=true\" alt=\"ScreenShot 4\" width=\"18%\"/>\n</p>\n\n</details>\n\n\n<details>\n<summary>version 3.1</summary>\n\n- 🪄 Support for fine-tuned models of **F5-TTS**\n- 🌍 Supported languages\n  - <img src=\"https://flagcdn.com/16x12/us.png\" alt=\"United Kingdom Flag\" style=\"vertical-align: middle;\"> English & <img src=\"https://flagcdn.com/16x12/cn.png\" alt=\"China Flag\" style=\"vertical-align: middle;\"> Chinese: <a href=\"https://huggingface.co/SWivid/F5-TTS/tree/main/F5TTS_v1_Base\"> SWivid/F5-TTS_v1 </a> \n  - <img src=\"https://flagcdn.com/16x12/fi.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Finnish: <a href=\"https://huggingface.co/AsmoKoskinen/F5-TTS_Finnish_Model\"> AsmoKoskinen/F5-TTS_Finnish_Model </a> \n  - <img src=\"https://flagcdn.com/16x12/fr.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> French: <a href=\"https://huggingface.co/RASPIAUDIO/F5-French-MixedSpeakers-reduced\"> RASPIAUDIO/F5-French-MixedSpeakers-reduced </a> \n  - <img src=\"https://flagcdn.com/16x12/in.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Hindi: <a href=\"https://huggingface.co/SPRINGLab/F5-Hindi-24KHz\"> SPRINGLab/F5-Hindi-24KHz </a>  \n  - <img src=\"https://flagcdn.com/16x12/it.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Italian: <a href=\"https://huggingface.co/alien79/F5-TTS-italian\"> alien79/F5-TTS-italian </a>  \n  - <img src=\"https://flagcdn.com/16x12/jp.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Japanese: <a href=\"https://huggingface.co/Jmica/F5TTS/tree/main/JA_21999120\"> Jmica/F5TTS/JA_21999120 </a>  \n  - <img src=\"https://flagcdn.com/16x12/ru.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Russian: <a href=\"https://huggingface.co/hotstone228/F5-TTS-Russian\"> hotstone228/F5-TTS-Russian </a> \n  - <img src=\"https://flagcdn.com/16x12/es.png\" alt=\"Spain Flag\" style=\"vertical-align: middle;\"> Spanish: <a href=\"https://huggingface.co/jpgallegoar/F5-Spanish\"> jpgallegoar/F5-Spanish </a> \n  \n</details>\n\n<details>\n<summary>version 3.0</summary>\n\n- 🔥 Removed the **AI Cover** feature.  \n- 🚀 Added support for **m-bain/whisperX**.\n  \n</details>\n\n<details>\n<summary>version 2.0</summary>\n\n- 🐍 Built with Python 3.10.15, Torch 2.5.1+cu124, and Gradio 5.14.0.  \n- 🆓 Free trial supports media up to **60 seconds** in length.  \n- 🔥 Added the **AI Cover** feature.  \n- 🎤 Introduced support for **CosyVoice** and **kokoro**.  \n- ⏳ Initial run downloads **CozyVoice2-0.5B (9GB)**, which may take over an hour depending on network speed.  \n- 🎧 Voice samples for cloning will be continuously updated.  \n- 📝 Added **spaCy** for natural sentence-by-sentence translation and TTS.  \n- ☁️ Subscription version includes **Microsoft Azure** Translator and TTS.  \n- 🏪 Subscription offers **unlimited usage** (no 60-second limit) during the subscription period, available via [![Shopify](https://img.shields.io/badge/Shopify-7ab55c.svg?style=flat-square&logo=shopify&logoColor=white)](https://r17wvy-t2.myshopify.com).\n  \n</details>\n\n## 🎥 YouTube Showcase\n\n<table style=\"border-collapse: collapse; width: 100%;\">\n  <tr>\n    <td style=\"padding: 10px; border: none;\" align=\"center\">\n      <a href=\"https://youtu.be/scC5CicZ6G0\" style=\"text-decoration: none; color: inherit;\">\n        <img src=\"https://img.youtube.com/vi/scC5CicZ6G0/hqdefault.jpg\" alt=\"Demo Video 1\" width=\"240\" height=\"135\" style=\"border-radius: 4px;\">\n        <br>\n        <span style=\"font-size: 16px; font-weight: 600; color: #0f0f0f; line-height: 1.2;\">Demo for Voice-Pro (v2.0)</span>\n      </a>\n    </td>\n    <td style=\"padding: 10px; border: none;\" align=\"center\">\n      <a href=\"https://youtu.be/Wfo7vQCD4no\" style=\"text-decoration: none; color: inherit;\">\n        <img src=\"https://img.youtube.com/vi/Wfo7vQCD4no/hqdefault.jpg\" alt=\"Demo Video 2\" width=\"240\" height=\"135\" style=\"border-radius: 4px;\">\n        <br>\n        <span style=\"font-size: 16px; font-weig"
+    },
+    "brief": {
+      "summary": "面向创作者的语音处理与多语言配音工具",
+      "problem": "分散的语音识别、翻译、配音流程难以统一处理",
+      "highlights": [
+        "可以下载并处理YouTube视频",
+        "可以生成字幕、翻译并合成多语言语音",
+        "可以进行人声分离和零样本声音克隆"
+      ],
+      "target_users": [
+        "视频创作者",
+        "播客制作者",
+        "多语言内容团队"
+      ],
+      "why_trending": "今日新增58 Star，本周首次收录，累计11812 Star",
+      "caveat": "主要面向Windows和NVIDIA显卡，Mac与Linux未验证",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "abus-aikorea/voice-pro",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "支持配音、克隆与多语翻译",
+      "generated_by_ai": true,
+      "velocity_score": 54,
+      "freshness_score": 20,
+      "ranking_score": 64.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "bytedance/deer-flow",
+      "url": "https://github.com/bytedance/deer-flow",
+      "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
+      "language": "Python",
+      "total_stars": 78774,
+      "forks": 10748,
+      "stars_today": 209,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 209
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agentic",
+        "agentic-framework",
+        "agentic-workflow",
+        "ai",
+        "ai-agents",
+        "deep-research",
+        "harness",
+        "langchain",
+        "langgraph",
+        "langmanus",
+        "llm",
+        "multi-agent",
+        "nodejs",
+        "podcast",
+        "python",
+        "superagent",
+        "typescript"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-05-07T02:50:19Z",
+      "updated_at": "2026-08-02T04:01:10Z",
+      "pushed_at": "2026-08-02T02:07:34Z",
+      "open_issues": 935,
+      "homepage": "https://deerflow.tech",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🦌 DeerFlow - 2.0\n\nEnglish | [中文](./README_zh.md) | [日本語](./README_ja.md) | [Français](./README_fr.md) | [Русский](./README_ru.md)\n\n[![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](./backend/pyproject.toml)\n[![Node.js](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](./Makefile)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)\n\n<a href=\"https://trendshift.io/repositories/14699\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14699\" alt=\"bytedance%2Fdeer-flow | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n> On February 28th, 2026, DeerFlow claimed the 🏆 #1 spot on GitHub Trending following the launch of version 2. Thanks a million to our incredible community — you made this happen! 💪🔥\n\nDeerFlow (**D**eep **E**xploration and **E**fficient **R**esearch **Flow**) is an open-source **super agent harness** that orchestrates **sub-agents**, **memory**, and **sandboxes** to do almost anything — powered by **extensible skills**.\n\nhttps://github.com/user-attachments/assets/a8bcadc4-e040-4cf2-8fda-dd768b999c18\n\n> [!NOTE]\n> **DeerFlow 2.0 is a ground-up rewrite.** It shares no code with v1. If you're looking for the original Deep Research framework, it's maintained on the [`1.x` branch](https://github.com/bytedance/deer-flow/tree/main-1.x) — contributions there are still welcome. Active development has moved to 2.0.\n\n## Official Website\n\nLearn more and see **real demos** on our [**official website**](https://deerflow.tech).\n\n## Sister Projects\n\n<img width=\"446\" height=\"280\" alt=\"image\" align=\"middle\" src=\"https://github.com/user-attachments/assets/077edef4-d560-41af-bb0d-d0a5f14fcc20\" />\n\n- [**LLM Space**](https://github.com/deer-flow/llm-space) - Meet our secret weapon behind DeerFlow — one desktop tool to prototype agent ideas, inspect each harness step, replay failures, and benchmark performance.\n\n## Coding Plan from ByteDance Volcengine\n\n- We strongly recommend using Doubao-Seed-2.0-Code, DeepSeek v3.2 and Kimi 2.5 to run DeerFlow\n- [Learn more](https://www.byteplus.com/en/activity/codingplan?utm_campaign=deer_flow&utm_content=deer_flow&utm_medium=devrel&utm_source=OWO&utm_term=deer_flow)\n- [中国大陆地区的开发者请点击这里](https://www.volcengine.com/activity/codingplan?utm_campaign=deer_flow&utm_content=deer_flow&utm_medium=devrel&utm_source=OWO&utm_term=deer_flow)\n\n## InfoQuest\n\nDeerFlow has newly integrated the intelligent search and crawling toolset independently developed by BytePlus--[InfoQuest (supports free online experience)](https://docs.byteplus.com/en/docs/InfoQuest/What_is_Info_Quest)\n\n<a href=\"https://docs.byteplus.com/en/docs/InfoQuest/What_is_Info_Quest\" target=\"_blank\">\n  <img\n    src=\"https://sf16-sg.tiktokcdn.com/obj/eden-sg/hubseh7bsbps/20251208-160108.png\"   alt=\"InfoQuest_banner\"\n  />\n</a>\n\n---\n\n## Table of Contents\n\n- [🦌 DeerFlow - 2.0](#-deerflow---20)\n  - [Official Website](#official-website)\n  - [Coding Plan from ByteDance Volcengine](#coding-plan-from-bytedance-volcengine)\n  - [InfoQuest](#infoquest)\n  - [Table of Contents](#table-of-contents)\n  - [One-Line Agent Setup](#one-line-agent-setup)\n  - [Quick Start](#quick-start)\n    - [Configuration](#configuration)\n    - [Running the Application](#running-the-application)\n      - [Deployment Sizing](#deployment-sizing)\n      - [Option 1: Docker (Recommended)](#option-1-docker-recommended)\n      - [Option 2: Local Development](#option-2-local-development)\n    - [Advanced](#advanced)\n      - [Sandbox Mode](#sandbox-mode)\n      - [MCP Server](#mcp-server)\n      - [IM Channels](#im-channels)\n      - [LangSmith Tracing](#langsmith-tracing)\n      - [Langfuse Tracing](#langfuse-tracing)\n      - [Monocle Tracing](#monocle-tracing)\n      - [Using Multiple Providers](#using-multiple-providers)\n  - [From Deep Research to Super Agent Harness](#from-deep-research-to-super-agent-harness)\n  - [Core Features](#core-features)\n    - [Skills \\& Tools](#skills--tools)\n      - [Claude Code Integration](#claude-code-integration)\n    - [Session Goals](#session-goals)\n    - [Manual Context Compaction](#manual-context-compaction)\n    - [Sub-Agents](#sub-agents)\n    - [Sandbox \\& File System](#sandbox--file-system)\n    - [Context Engineering](#context-engineering)\n    - [Long-Term Memory](#long-term-memory)\n  - [Recommended Models](#recommended-models)\n  - [Embedded Python Client](#embedded-python-client)\n  - [Scheduled Tasks](#scheduled-tasks)\n  - [Terminal Workbench (TUI)](#terminal-workbench-tui)\n  - [Documentation](#documentation)\n  - [⚠️ Security Notice](#️-security-notice)\n    - [Improper Deployment May Introduce Security Risks](#improper-deployment-may-introduce-security-risks)\n    - [Security Recommendations](#security-recommendations)\n  - [Contributing](#contributing)\n  - [License](#license)\n  - [Acknowledgments](#acknowledgments)\n    - [Key Contributors](#key-contributors)\n  - [Star History](#star-history)\n\n## One-Line Agent Setup\n\nIf you use Claude Code, Codex, Cursor, Windsurf, or another coding agent, you can hand it the setup instructions in one sentence:\n\n```text\nHelp me clone DeerFlow if needed, then bootstrap it for local development by following https://raw.githubusercontent.com/bytedance/deer-flow/main/Install.md\n```\n\nThat prompt is intended for coding agents. It tells the agent to clone the repo if needed, choose Docker when available, and stop with the exact next command plus any missing config the user still needs to provide.\n\n## Quick Start\n\n### Configuration\n\n1. **Clone the DeerFlow repository**\n\n   ```bash\n   git clone https://github.com/bytedance/deer-flow.git\n   cd deer-flow\n   ```\n\n2. **Run the setup wizard**\n\n   From the project root directory (`deer-flow/`), run:\n\n   ```bash\n   make setup\n   ```\n\n   This launches an interactive wizard that guides you through choosing an LLM provider, optional web search, and execution/safety preferences such as sandbox mode, bash access, and file-write tools. It generates a minimal `config.yaml` and writes your keys to `.env`. Takes about 2 minutes.\n\n   The wizard also lets you configure an optional web search provider, or skip it for now.\n\n   Run `make doctor` at any time to verify your setup and get actionable fix hints.\n   If you are opening a GitHub issue about a local setup or runtime problem, run\n   `make support-bundle`. The command prints reporter next steps, writes a\n   `*-issue-summary.md` file to paste into the issue, a `*-issue-draft.md` file\n   for AI-assisted issue filing, and an optional evidence zip under\n   `.deer-flow/support-bundles/`. If an AI assistant files the issue, start from\n   the draft and replace every REQUIRED placeholder instead of inventing missing\n   facts. Attach the zip only if a maintainer asks for it, or if the summary\n   alone is not enough. Maintainers and AI triage tools can start with\n   `triage.json`; the bundle includes redacted diagnostics and file manifests\n   only, and does not include `.env`, raw conversation messages, or user file\n   contents.\n\n   > **Advanced / manual configuration**: If you prefer to edit `config.yaml` directly, run `make config` instead to copy the full template. See `config.example.yaml` for the complete reference including CLI-backed providers (Codex CLI, Claude Code OAuth), OpenRouter, Responses API, subagent runtime caps such as `subagents.max_total_per_run`, and more.\n\n   Optional per-model pricing must use one currency across all priced models.\n   DeerFlow disables Console cost estimates when currencies are mixed rather\n   than presenting an invalid aggregate.\n\n   <details>\n   <summary>Manual model configuration examples</summary>\n\n   ```yaml\n   models:\n     - name: gpt-4o\n       display_name: GPT-4o\n       use: langchain_openai:ChatOpenAI\n       model: gpt-4o\n       api_key: $OPENAI_API_KEY\n\n     - name: openrouter-gemini-2.5-flash\n       display_name: Gemini 2.5 Flash (OpenRouter)\n       use: langchain_openai:ChatOpenAI\n       model: google/gemini-2.5-flash-preview\n       api_key: $OPENROUTER_API_KEY\n       base_url: https://openrouter.ai/api/v1\n\n     - name: gpt-5-responses\n       display_name: GPT-5 (Responses API)\n       use: langchain_openai:ChatOpenAI\n       model: gpt-5\n       api_key: $OPENAI_API_KEY\n       use_responses_api: true\n       output_version: responses/v1\n\n     - name: qwen3-32b-vllm\n       display_name: Qwen3 32B (vLLM)\n       use: deerflow.models.vllm_provider:VllmChatModel\n       model: Qwen/Qwen3-32B\n       api_key: $VLLM_API_KEY\n       base_url: http://localhost:8000/v1\n       supports_thinking: true\n       when_thinking_enabled:\n         extra_body:\n           chat_template_kwargs:\n             enable_thinking: true\n   ```\n\n   OpenRouter and similar OpenAI-compatible gateways should be configured with `langchain_openai:ChatOpenAI` plus `base_url`. If you prefer a provider-specific environment variable name, point `api_key` at that variable explicitly (for example `api_key: $OPENROUTER_API_KEY`).\n\n   To route OpenAI models through `/v1/responses`, keep using `langchain_openai:ChatOpenAI` and set `use_responses_api: true` with `output_version: responses/v1`.\n\n   For vLLM 0.19.0, use `deerflow.models.vllm_provider:VllmChatModel`. For Qwen-style reasoning models, DeerFlow toggles reasoning with `extra_body.chat_template_kwargs.enable_thinking` and preserves vLLM's non-standard `reasoning` field across multi-turn tool-call conversations. Legacy `thinking` configs are normalized automatically for backward compatibility. If the endpoint reports a cumulative usage snapshot on every streaming chunk, set `cumulative_stream_usage: true` so DeerFlow converts those snapshots into per-chunk deltas; the option is disabled by default and leaves usage unchanged when a stable completion id is unavailable. Reasoning models may also require the server to be started with `--reasoning-parser ...`. If your local vLLM deployment accepts any non-empty API key, you can still set `VLLM_API_KEY` to a placeholder value.\n\n   CLI-backed provider examples:\n\n   ```yaml\n   models:\n     - name: gpt-5.4\n       display_name: GPT-5.4 (Codex CLI)\n       use: deerflow.models.openai_codex_provider:CodexChatModel\n       model: gpt-5.4\n       supports_thinking: true\n       supports_reasoning_effort: true\n\n     - name: claude-sonnet-4.6\n       display_name: Claude Sonnet 4.6 (Claude Code OAuth)\n       use: deerflow.models.claude_provider:ClaudeChatModel\n       model: claude-sonnet-4-6\n       max_tokens: 4096\n       supports_thinking: true\n   ```\n\n   - Codex CLI reads `~/.codex/auth.json`\n   - Claude Code accepts `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_AUTH_TOKEN`, `CLAUDE_CODE_CREDENTIALS_PATH`, or `~/.claude/.credentials.json`\n   - ACP agent entries are separate from model providers — if you configure `acp_agents.codex`, point it at a Codex ACP adapter such as `npx -y @zed-industries/codex-acp`\n   - On macOS, export Claude Code auth explicitly if needed:\n\n   ```bash\n   eval \"$(python3 scripts/export_claude_code_oauth.py --print-export)\"\n   ```\n\n   API keys can also be set manually in `.env` (recommended) or exported in your shell:\n\n   ```bash\n   OPENAI_API_KEY=your-openai-api-key\n   TAVILY_API_KEY=your-tavily-api-key\n   ```\n\n   </details>\n\n### Running the Application\n\n#### Deployment Sizing\n\nUse the table below as a practical starting point when choosing how to run DeerFlow:\n\n| Deployment target | Starting point | Recommended | Notes |\n|---------|-----------|------------|-------|\n| Local evaluation / `make dev` | 4 vCPU, 8 GB RAM, 20 GB free SSD | 8 vCPU, 16 GB RAM | Good for one developer or one light session with hosted model APIs. `2 vCPU / 4 GB` is usually not enough. |\n| Docker development / `make docker-start` | 4 vCPU, 8 GB RAM, 25 GB free SSD | 8 vCPU, 16 GB RAM | Image builds, bind mounts, and sandbox containers need more headroom than pure local dev. |\n| Long-running server / `make up` | 8 vCPU, 16 GB RAM, 40 GB free SSD | 16 vCPU, 32 GB RAM | Preferred for "
+    },
+    "brief": {
+      "summary": "DeerFlow 是用于长时任务的开源超级智能体框架",
+      "problem": "让智能体协作完成需持续数分钟到数小时的复杂任务",
+      "highlights": [
+        "可以组织子智能体开展深度研究",
+        "可以在沙箱中执行代码并处理文件",
+        "可以通过技能和工具扩展任务能力"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "研究人员",
+        "自动化创作者"
+      ],
+      "why_trending": "总 Star 约7.9万，今日新增209，且本周首次收录",
+      "caveat": "资料提示部署不当可能带来安全风险",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "bytedance/deer-flow",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "支持技能与子Agent的长流程编排",
+      "generated_by_ai": true,
+      "velocity_score": 70,
+      "freshness_score": 20,
+      "ranking_score": 59.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "TencentCloud/TencentDB-Agent-Memory",
+      "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+      "description": "TencentDB Agent Memory is a team-level memory hub for AI Agents — turning conversations, docs, and code into four reusable memory assets (Chat Memory, Skill, LLM-Wiki, Code-Graph) that are governed, shared, and equipped across agents and frameworks.",
+      "language": "TypeScript",
+      "total_stars": 10353,
+      "forks": 991,
+      "stars_today": 227,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 227
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai-agent",
+        "embedding",
+        "llm",
+        "local-first",
+        "long-term-memory",
+        "memory",
+        "openclaw-plugin",
+        "vector-search"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-07T06:34:26Z",
+      "updated_at": "2026-08-02T04:01:30Z",
+      "pushed_at": "2026-07-29T15:59:52Z",
+      "open_issues": 405,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "feat/server_team",
+      "readme": "\n<div align=\"center\">\n\n<img src=\"./assets/images/logo.png\" alt=\"TencentDB Agent Memory\" width=\"880\" />\n\n### Agents remember. Humans innovate.\n\n<a href=\"https://trendshift.io/repositories/29310?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-29310\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/29310\" alt=\"TencentCloud%2FTencentDB-Agent-Memory | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n[![npm](https://img.shields.io/npm/v/@tencentdb-agent-memory/memory-tencentdb?color=blue)](https://www.npmjs.com/package/@tencentdb-agent-memory/memory-tencentdb)\n[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)\n[![Node](https://img.shields.io/badge/node-%3E=22.16-brightgreen)](https://nodejs.org/)\n[![OpenClaw](https://img.shields.io/badge/OpenClaw-%3E=2026.3.13-orange)](https://github.com/openclaw/openclaw)\n[![Hermes](https://img.shields.io/badge/Hermes-Gateway-7B61FF)](https://hermes-agent.nousresearch.com/docs/)\n[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/dJQM6mKMF)\n\n[Installation](#installation) · [What is it?](#what-is-tencentdb-agent-memory) · [Team Play](#one-play-style-build-a-growing-agent-team-for-a-one-person-company) · [Technical Implementation](#technical-implementation) · [Benchmark](#benchmark)\n\n[**English**](./README.md) · [简体中文](./README_CN.md)\n\n</div>\n\n---\n\n> **Latest:** Team Memory Beta is evolving quickly — install it and start exploring in minutes.\n\n<td>\n   <video src=\"https://github.com/user-attachments/assets/efb1a808-1f86-4cfe-802c-f7453f7ca938\" width=\"100%\" controls autoplay loop muted playsinline></video>\n</td>\n\n# Installation\n\nStart all three services in one go (`memory-core` + `memory-hub` + `proxy`):\n\n```bash\ngit clone https://github.com/Tencent/TencentDB-Agent-Memory.git\ncd TencentDB-Agent-Memory/deploy/global-images\ncp .env.example .env\n$EDITOR .env       # Fill in two sets of LLM parameters (memory group + proxy group)\n./start-all.sh     # Launch everything with one command; when finished, it prints a one-liner you can paste directly into Claude\n```\n\nOpen the panel: [http://localhost:8125](http://localhost:8125).\n\nComplete installation documentation (standalone Memory Hub deployment, Proxy + Claude Code usage, stop and cleanup, port reference, etc.) is available in [**INSTALL.md**](./INSTALL.md) (中文: [INSTALL_CN.md](./INSTALL_CN.md)).\n\n### Migrating data from an older version\n\nIf you're already on an older release (v1.x / v0.x) and want to bring your existing data over to v2.0.0+, we provide a migration tool:\n\nSee [**Data Migration Tool (v2 → v3)**](./MemoryCore/scripts/migrate-v2-to-v3/README.md) for full usage and flags. New installations can skip this.\n\n# What is TencentDB Agent Memory?\n\nWe started from a practical question: **How do you reduce repetitive work when using Agents?**\n\nIf project context has already been explained, it shouldn't need to be repeated in a new session. If documents have already been read, every Agent shouldn't have to start again from page one. A workflow that already works shouldn't have to be rediscovered next time.\n\nMemory here means more than just \"remembering conversations.\" **Any information that helps the next Agent avoid reinventing the wheel should be saved, organized, and reused.**\n\n```text\nExisting information → Reusable memory assets → Fewer turns → Less rework → More stable results and higher efficiency\n```\n\n### Let experience accumulate, flow, and pass on to the next Agent\n\n**Memory Hub** for Agent teams closes the loop across the entire experience lifecycle: work produces assets, assets circulate through the team, and new members can load the team's save file on day one.\n\n1. **Automatic asset extraction**: Extract Chat Memory and Skills from conversations and tasks; convert documents and code into Wiki and CodeGraph; then manage, review, and route them consistently.\n2. **Portable & multi-Agent compatible**: Memory assets are decoupled from Agent frameworks — they can move across frameworks and be shared and maintained by multiple Agents and team members.\n3. **Cold-start friendly**: Import existing documents, codebases, and Agent conversation sessions. New Agent teams can start from existing experience instead of learning from scratch.\n\n### 🧠 A brain that remembers people and context\n\n- **Chat Memory** retains preferences, facts, decisions, and interaction history.\n- Each Agent automatically gets its own memory when created — no need to re-introduce yourself next time.\n- L0 Conversation → L1 Atom → L2 Scenario → L3 Persona — raw conversations are distilled layer by layer.\n\n<img width=\"\" src=\"assets/images/chat_memory.cn.png\" alt=\"image.png\" />\n\n> \"Don't refactor the old auth module — mobile is still using it.\" — Context this costly shouldn't depend on humans repeating it every time.\n\n### ⚡ A Skill library that accumulates expertise\n\n- After completing complex work, Agents can extract and manage reusable Skills from conversations and tool calls, and import them into the context of a designated Agent when needed.\n- A Skill isn't just a prompt snippet; it has versions, resource files, trigger boundaries, execution steps, and validation rules.\n- Personal Skills are private by default; after review, they can be shared with the team and assigned to other Agents.\n\n<img width=\"\" src=\"assets/images/skill.cn.png\" alt=\"image.png\" />\n\n> Troubleshooting, code review, release checklists — learn it once, and the whole team can use it.\n\n### 📖 A knowledge map that reads both docs and code\n\n- **Wiki** turns product docs, design specs, and ops runbooks into structured pages with a link graph. (Inspired by Karpathy's LLM knowledge base.)\n\n<img src=\"./assets/images/wiki.cn.png\" alt=\"image.png\" />\n\n- **CodeGraph** indexes code symbols, files, call relationships, and impact paths.\n<img width=\"\" src=\"assets/images/codegraph.cn.png\" alt=\"image.png\" />\n\n- Agents can search, read, inspect callers/callees, and perform impact analysis before modifying code.\n\n> Wiki keeps Agents from reading every file list before getting to work. CodeGraph doesn't just tell them \"the code is here\" — it tells them \"changing this might affect those.\"\n\n### 🛡️ A team memory panel controlled by humans\n\n- Create teams and Agents in Memory Hub; review, share, and equip memory assets.\n- Manage ownership, versions, status, visibility, usage counts, and Agent bindings in one place.\n- `private` belongs strictly to the Owner; `team` is visible to all team members; `restricted` grants precise access via User / Role / Agent ACLs.\n\n<img width=\"\" src=\"assets/images/asset.cn.png\" alt=\"image.png\" />\n\n\n## Cold Start: Load the Save File, Then Get to Work\n\nMost Agents' first task is re-learning your project. TencentDB Agent Memory turns the learning cost you've already paid into a save file:\n\n<img alt=\"Cold Start: import codebase, docs, and history into Memory Hub\" src=\"assets/images/flowchart3.png\" />\n\nSpecifically, these existing assets can be imported directly and processed automatically in the panel:\n\n- **Codebases**: Import existing repositories — **CodeGraph** automatically indexes symbols, files, call relationships, and impact paths.\n- **Documents & files**: Import relevant docs and files — **Wiki** automatically generates structured pages with a link graph.\n- **Conversation sessions**: Import past Agent conversation sessions — **Skills and Chat Memory** are automatically extracted as reusable assets.\n\n> Stop retraining every Agent. Give it the save file.\n\n## One Play Style: Build a Growing Agent Team for a One-Person Company\n\nOpen Memory Hub and create a team:\n\n```text\nTiny but Serious Inc.\n├── 👤 You · Set goals / Make decisions\n├── 🔭 Scout · Research / Find opportunities\n├── 🛠 Builder · Write code / Build products\n├── 🧪 Reviewer · Test / Find issues\n└── 🧠 Agent Memory · Preserve the team's experience\n```\n\nYou're not opening four disconnected chat windows — you're assembling a squad with different roles that can inherit the team's accumulated experience.\n\n### Recruit first, then equip\n\n```text\n🔭 Scout\n   ├── User interview Chat Memory\n   ├── Market research Wiki\n   └── Competitive analysis Skill\n\n🛠 Builder\n   ├── Product Wiki\n   ├── Project CodeGraph\n   └── Feature Delivery Skill\n\n🧪 Reviewer\n   ├── Historical incident Chat Memory\n   ├── Project CodeGraph\n   └── Release Checklist Skill\n```\n\nDifferent roles, different loadouts. Less noise — give each Agent the memory assets it actually needs to get work done.\n\n**The company can be tiny. Experience can compound forever.**\n\n## Memory Assets, Not a Chat Log Warehouse\n\nRAG answers \"what can be found?\" Team Memory also answers \"who can use it, which version is valid, and which Agent should receive it.\"\n\n| | Chat History | Standard RAG | TencentDB Agent Memory |\n| :--- | :---: | :---: | :---: |\n| Cross-session user understanding | △ | △ | ✅ Chat Memory |\n| Distilled executable experience | — | — | ✅ Skill |\n| Document structure & relationships | — | △ Chunk retrieval | ✅ Wiki + Link Graph |\n| Code call graphs & impact scope | — | △ Text match | ✅ CodeGraph |\n| Ownership / Version / Status | — | — | ✅ |\n| Team sharing & Agent loadout | — | — | ✅ |\n| Private / Team / ACL | — | △ | ✅ |\n\n## Memory Hub Is Not a Display Board — It's a Control Panel\n\n| Play Style | What you do in the Hub |\n| :--- | :--- |\n| **Team Up** | Create teams, add people and Agents, define sharing boundaries |\n| **Asset Library** | Browse, search, review, and manage Chat Memory, Skills, Wiki, and CodeGraph |\n| **Agent Loadout** | Bind different memory assets to different Agents; adjust priority and usage mode |\n| **Knowledge Workshop** | Build Wiki and CodeGraph; monitor processing status and asset metadata |\n| **Access Control** | Switch between private, team, and ACL-based access; revoke sharing when needed |\n\nWhen you open an asset, what matters is not just \"what it says,\" but also \"where it came from, which version it is, who it's assigned to, and whether it's been used recently.\"\n\n## Every Loop Gains Experience\n\n<img alt=\"Every Loop Gains Experience: continuous accumulation, making every use smarter\" src=\"assets/images/flowchart4.png\" />\n\nMemory doesn't run the Agent loop; it ensures the next iteration inherits the previous one's results: valuable interactions stay in Chat Memory, proven workflows are distilled into Skills, and document/code changes are updated through Wiki ingest and CodeGraph sync.\n\n**Without Memory, loops may just repeat faster. With inherited memory, each iteration has the chance to be better than the last.**\n\n## One Agent Team: Shared Experience, Not Shared Privacy\n\nNew Chat Memory and Skills are private by default. Sharing is an explicit action, not a default leak.\n\n| Visibility | Semantics |\n| :--- | :--- |\n| `private` | Only the Owner can read — not even team admins |\n| `team` | Team members can read; the Owner / Admin can manage |\n| `restricted` | Precise access via User / Role / Agent ACL |\n| `agent` | For targeted equipping of Agents within the same team |\n\nYou can assign the \"Release Skill\" to the Release Agent, the \"Architecture Wiki\" to all development Agents, and CodeGraph to Coder and Reviewer.\n\n## Technical Implementation\n\nTencentDB Agent Memory doesn't aim to \"store everything.\" It solves three problems: **what's worth keeping, who can use it, and how to retrieve less while retrieving the right things next time.**\n\n<img alt=\"Technical overview: layering (L0–L3), Memory Assets, Memory Hub, identity-based assembly for Agents\" src=\"assets/images/flowchart5.png\" />\n\n### 1. Memory isn't flat records — it grows in layers\n\nConversations are first saved as L0, then refined by an async pipeline into multiple levels of granularity:\n\n| Layer | What it stores | Primary use |\n| :--- | :--- | :--- |\n| **L0 Conversation** | Raw conversations with full context | Verify exact wording, timestamps, and sources |\n| **L1 Atom** | Facts, preferences, constraints, "
+    },
+    "brief": {
+      "summary": "面向多智能体团队的共享记忆中心",
+      "problem": "减少智能体重复学习项目资料和工作流程",
+      "highlights": [
+        "可以沉淀对话记忆和可复用技能",
+        "可以导入文档与代码生成知识索引",
+        "可以统一审核、共享和分配记忆资产"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "智能体团队",
+        "个人开发者"
+      ],
+      "why_trending": "今日新增227 Star，总 Star 超1万，本周首次收录",
+      "caveat": "项目仍处于 Beta，且需 Node.js 22.16 或更高版本",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "TencentCloud/TencentDB-Agent-Memory",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "为Agent提供团队记忆与技能",
+      "generated_by_ai": true,
+      "velocity_score": 71,
+      "freshness_score": 40,
+      "ranking_score": 56.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "worldwonderer/novel-to-game",
+      "url": "https://github.com/worldwonderer/novel-to-game",
+      "description": "Agent Skills that turn novels into source-grounded, fully playable games for Claude Code, Codex, and Kimi Code(K3).",
+      "language": "Markdown",
+      "total_stars": 492,
+      "forks": 76,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-game-development",
+        "claude-code",
+        "claude-code-skills",
+        "claude-skills",
+        "codex",
+        "game-design",
+        "game-development",
+        "game-prototyping",
+        "gamedev",
+        "kimi-code",
+        "narrative-design",
+        "novel-to-game",
+        "skills",
+        "story-adaptation",
+        "story-to-game"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-18T16:29:56Z",
+      "updated_at": "2026-08-02T03:58:57Z",
+      "pushed_at": "2026-08-02T03:48:48Z",
+      "open_issues": 1,
+      "homepage": "https://plateau.vibecoco.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# NovelToGame\n\n> Turn a novel in any language into a source-grounded, fully playable game.\n\n[![Validate](https://github.com/worldwonderer/novel-to-game/actions/workflows/validate.yml/badge.svg)](https://github.com/worldwonderer/novel-to-game/actions/workflows/validate.yml) [![Latest release](https://img.shields.io/github/v/release/worldwonderer/novel-to-game?display_name=tag&sort=semver)](https://github.com/worldwonderer/novel-to-game/releases/latest) [![License](https://img.shields.io/github/license/worldwonderer/novel-to-game)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/worldwonderer/novel-to-game?style=flat&logo=github)](https://github.com/worldwonderer/novel-to-game/stargazers)\n\nNovelToGame is an open-source Agent Skills toolkit for Claude Code, Codex, and Kimi Code. It turns novel adaptation into a staged workflow: source analysis, concept selection, world and art direction, implementation, and runtime QA.\n\nBring a novel in any language and choose the target runtime. Generated artifacts follow the requested language; build and QA stay on the chosen platform instead of silently falling back to an easier substitute.\n\n[中文](README_ZH.md) · [Play Online](#play-online) · [Quick Start](#quick-start) · [Workflow](#workflow) · [Skills](#skills) · [Artifacts](#artifacts) · [Contributing](#contributing)\n\n## Play Online\n\n### Project Plateau · Featured 3D adaptation\n\nA real-time **first-person 3D field-photography game** adapted from Arthur Conan Doyle's *The Lost World*. Cross a connected plateau, observe a living Iguanodon family, expose four glass plates under aerial pressure, and return with the views that survived.\n\n#### 36-second trailer\n\nhttps://github.com/user-attachments/assets/4d0b501e-09be-49b6-9070-c605afce3fae\n\n**[Play in your browser — no install](https://plateau.vibecoco.ai)** · **[Explore the complete case study](examples/project-plateau/)** · [Share feedback](https://github.com/worldwonderer/novel-to-game/discussions/7)\n\n### More playable adaptations\n\n| [Journey to the West · Three Borrowings of the Banana Fan](examples/journey-to-the-west/) | [Jin Ping Mei · Ledger of Desire](examples/jin-ping-mei/) |\n|---|---|\n| [![Three Borrowings title screen](examples/journey-to-the-west/screenshots/title.jpg)](https://xiyouji.vibecoco.ai) | [![Ledger of Desire title screen](examples/jin-ping-mei/screenshots/title.jpg)](https://jinpingmei.vibecoco.ai) |\n| Turn-based systems RPG with elements, formations, transformations, a companion, and a multi-stage boss | 18+ six-day relationship strategy game built around character agency, resources, social debts, and three endings |\n| **[Play in browser](https://xiyouji.vibecoco.ai)** | **[Play in browser](https://jinpingmei.vibecoco.ai)** |\n\nEach case study includes source provenance, product constraints, adaptation analysis, concept and design decisions, runnable source, and QA evidence.\n\n## Why NovelToGame\n\nA one-line “turn this book into a game” prompt often produces a generic reskin or a clickable plot summary. NovelToGame keeps the adaptation traceable and gives each major decision a clear owner:\n\n- **Source-grounded adaptation:** extract rules, spaces, character agency, conflicts, and visual anchors with citations;\n- **Real game design:** turn source evidence into player verbs, systems, levels, feedback, failure, and outcomes;\n- **Target-runtime delivery:** build for the approved platform or engine without implementation silently redesigning the game;\n- **Evidence-based QA:** verify startup, input, state changes, complete runs, outcomes, restart, and target display modes and devices.\n\n## Quick Start\n\n### 1. Install the seven skills\n\n| Agent CLI | Install | Invoke |\n|---|---|---|\n| Claude Code | `npx skills add worldwonderer/novel-to-game -g -y -a claude-code -s '*'` | `/novel-to-game` |\n| Codex | `npx skills add worldwonderer/novel-to-game -g -y -a codex -s '*'` | `$novel-to-game` |\n| Kimi Code | `npx skills add worldwonderer/novel-to-game -g -y -a kimi-code-cli -s '*'` | `/skill:novel-to-game` |\n\nInstall adapters for all three CLIs on the same machine:\n\n```bash\nnpx skills add worldwonderer/novel-to-game -g -y -s '*' \\\n  -a claude-code -a codex -a kimi-code-cli\n```\n\nCloning the repository also enables project-local skill discovery in all three CLIs.\n\n### 2. Start an adaptation\n\nGive the agent a novel file, directory, or link:\n\n```text\nUse novel-to-game quick to adapt this novel into a fully playable game.\nRecommend the target platform, genre, and engine from the source, and keep the first build to about 15 minutes.\nLet the player enter the world as an original character with a new playable route through its conflict.\n```\n\n`quick` is the hands-off option: after confirming your requirements, the agent compares three ways to turn the novel into a game, chooses the most promising one, and continues through design, build, and QA. Choose `director` if you want to review those three proposals and decide which one should be built.\n\n<details>\n<summary><strong>Native plugin installation</strong></summary>\n\n#### Claude Code\n\n```text\n/plugin marketplace add worldwonderer/novel-to-game\n/plugin install novel-to-game@novel-to-game-skills\n/novel-to-game:novel-to-game quick\n```\n\n#### Codex\n\n```bash\ncodex plugin marketplace add worldwonderer/novel-to-game\ncodex plugin add novel-to-game@novel-to-game-skills\n```\n\n#### Kimi Code 0.27 or newer\n\n```text\n/plugins install https://github.com/worldwonderer/novel-to-game\n/reload\n/skill:novel-to-game quick\n```\n\n</details>\n\n## Workflow\n\nThe orchestrator locks `PRODUCT_BRIEF.md`, then hands the adaptation through six stages with separate ownership. Failed QA returns to the build for another repair pass until the evidence clears the gate.\n\n```text\nNovel → Source analysis → Concept → World design → Art direction → Build ⇄ QA → Playable game\n```\n\nConcept selection, experience and level design, and art direction remain separately reviewable. Build targets the chosen runtime; QA verifies that same runtime with real execution evidence.\n\n## Skills\n\n| Skill | Responsibility |\n|---|---|\n| [`novel-to-game`](skills/novel-to-game/) | Confirm requirements, choose a mode, orchestrate stage handoffs, and recover progress |\n| [`novel-game-analyze`](skills/novel-game-analyze/) | Extract cited rules, verbs, spaces, agents, systems, and signature moments |\n| [`game-concept`](skills/game-concept/) | Generate three materially different directions, reject invalid options, and choose one |\n| [`game-world-design`](skills/game-world-design/) | Define the player promise, core loop, world response, systems, levels, failure, and outcomes |\n| [`game-art-direction`](skills/game-art-direction/) | Define camera, composition, visual grammar, colour, light, materials, HUD, motion, and sound |\n| [`game-build`](skills/game-build/) | Compress an approved build brief and drive implementation to a fully playable build |\n| [`game-qa`](skills/game-qa/) | Verify commands, states, screenshots, and real play paths without overstating subjective results |\n\n## Artifacts\n\nEach run creates a compact, self-contained adaptation workspace:\n\n```text\ngame-adaptations/<project>/\n  PRODUCT_BRIEF.md\n  analysis/SOURCE_BIBLE.md\n  concepts/CONCEPT.md\n  design/GAME_DESIGN.md\n  design/ART_DIRECTION.md\n  build/BUILD_BRIEF.md\n  build/app/\n  qa/QA_REPORT.md\n  _progress.md\n```\n\nCore design documents remain independent of any single model or game engine. The approved target runtime determines the implementation and QA environment.\n\n## Contributing\n\nReproducible bugs, skill gaps backed by evidence, and example proposals that demonstrate a distinct adaptation lesson are welcome. Read the [contribution guide](CONTRIBUTING.md) and use the repository's structured issue and pull request templates.\n\n## License\n\nNovelToGame is released under the [MIT License](LICENSE).\n\n## Acknowledgments\n\nThanks to the [linux.do](https://linux.do) community for early feedback and support.\n"
+    },
+    "brief": {
+      "summary": "把小说按来源证据改编成可玩的游戏",
+      "problem": "解决小说改编易变成剧情摘要、缺少真实玩法的问题",
+      "highlights": [
+        "可以把小说改编成可玩的游戏",
+        "可以分阶段完成分析、设计、构建与测试",
+        "可以在三种 Agent CLI 中启动改编流程"
+      ],
+      "target_users": [
+        "小说改编开发者",
+        "独立游戏制作人",
+        "Agent CLI 用户"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有492个Star",
+      "caveat": "需使用 Claude Code、Codex 或 Kimi Code",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "worldwonderer/novel-to-game",
+      "score": 98,
+      "category": "互动叙事",
+      "reason": "将小说转为可玩的叙事游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 61.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "aqm857886159/Nomi",
+      "url": "https://github.com/aqm857886159/Nomi",
+      "description": "Open-source, local-first desktop app for AI video creation: write a script → generate images & video → edit on a timeline → export. Bring your own model & API key — everything runs on your machine. Built with Electron + React.",
+      "language": "TypeScript",
+      "total_stars": 388,
+      "forks": 81,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-video",
+        "ai-video-generator",
+        "bring-your-own-key",
+        "content-creation",
+        "creative-tools",
+        "desktop-app",
+        "electron",
+        "image-generation",
+        "local-first",
+        "offline",
+        "react",
+        "storyboard",
+        "text-to-image",
+        "text-to-video",
+        "timeline-editor",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-05-04T13:38:29Z",
+      "updated_at": "2026-08-02T03:54:42Z",
+      "pushed_at": "2026-08-02T03:54:20Z",
+      "open_issues": 0,
+      "homepage": "https://nomiaqm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/nomi-logo.svg\" alt=\"Nomi\" width=\"80\" />\n</p>\n\n# Nomi\n\n**Direct the shot. Not just the prompt.**\n\nNomi is an open-source, local-first AI video workbench that keeps your story, storyboard, visual anchors, generation canvas, and timeline connected.\n\n[简体中文](README.zh-CN.md) · [Website](https://nomiaqm.com/en/) · [Download](https://github.com/aqm857886159/Nomi/releases/latest) · [Community](https://github.com/aqm857886159/Nomi/discussions) · [For Teams](https://nomiaqm.com/en/#teams) · [Watch the 60s film](https://nomiaqm.com/assets/video/launch-film-en.mp4) · [Documentation](docs/user-guide.md)\n\n## WeChat / 微信联系\n\n### Join the Nomi user group / 加入 Nomi 用户群\n\n<p align=\"center\">\n  <a href=\"docs/media/nomi-canvas-group-wechat.png\"><img src=\"docs/media/nomi-canvas-group-wechat.png\" alt=\"Nomi 用户群微信二维码\" width=\"220\" /></a>\n</p>\n\n<p align=\"center\">\n  <strong>Scan to join the user group. / 扫码加入 Nomi 用户群</strong><br />\n  Product feedback from the group goes directly into ongoing iteration. / 群内反馈会直接进入产品迭代。\n</p>\n\n### Maintainer & project collaboration / 添加作者与项目合作\n\n<p align=\"center\">\n  <a href=\"docs/media/qingyang-wechat.jpg\"><img src=\"docs/media/qingyang-wechat.jpg\" alt=\"Nomi 作者青阳的微信二维码\" width=\"180\" /></a>\n</p>\n\n<p align=\"center\">\n  If the group QR expires, or for custom builds, integrations, white-label delivery, and ongoing iteration, add <strong>TZ857886159</strong>.<br />\n  群码失效，或沟通定制开发、系统集成、贴牌交付与持续迭代，请添加作者微信 <strong>TZ857886159</strong>。\n</p>\n\nInternational community: [GitHub Discussions](https://github.com/aqm857886159/Nomi/discussions) · Project inquiry: [Business Inquiry](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml)\n\n[![Latest release](https://img.shields.io/github/v/release/aqm857886159/Nomi?label=release)](https://github.com/aqm857886159/Nomi/releases/latest)\n![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-1a1816)\n[![License](https://img.shields.io/badge/license-AGPL--3.0--only-1a1816)](LICENSE)\n\n[![Nomi director workflow](marketing/assets/video/hero-poster.jpg)](https://nomiaqm.com/assets/video/launch-film-en.mp4)\n\n## Why Nomi\n\n- **Connected context** — Story, characters, storyboard, generated evidence, and timeline stay in one project instead of being copied between disconnected tools.\n- **Visual anchors** — Lock characters, locations, props, camera, and style before generation so later shots inherit the same world.\n- **Directable workflow** — Arrange the sequence on canvas, connect references, choose generation results, and finish on a real timeline.\n- **Agentic creation over MCP** — Connect Claude Code, Codex, or Cursor with one click. The assistant can call Nomi over MCP, use Skills to create a project, storyboard shots, connect references, and advance an editable first cut. You keep final control over the images, edits, and export.\n\n## Download\n\n| System | Build | Download |\n|---|---|---|\n| macOS | Apple Silicon | [Nomi-mac-arm64.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-arm64.dmg) |\n| macOS | Intel | [Nomi-mac-intel.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-intel.dmg) |\n| Windows | Windows 10 / 11 | [Nomi-windows-setup.exe](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-windows-setup.exe) |\n\n<details>\n<summary>First launch warning on macOS or Windows</summary>\n\n- **macOS:** Move `Nomi.app` to Applications, run `xattr -cr /Applications/Nomi.app` in Terminal, then open it again.\n- **Windows:** In the SmartScreen prompt, choose **More info** → **Run anyway**.\n\n</details>\n\n## Quick start\n\n1. **Connect a model.** Choose a curated provider and enter one API key, or add your own OpenAI-, Responses-, or Anthropic-compatible endpoint.\n2. **Write the intent.** Start with a story or one shot. Ask Nomi—or a connected AI assistant over MCP—to build an editable storyboard and canvas plan.\n3. **Direct and export.** Review visual anchors, generate images or video with your configured models, choose the results, arrange the timeline, and export MP4.\n\nRead the [user guide](docs/user-guide.md), [provider guide](docs/provider-integration.md), or [CLI + MCP guide](docs/guide/capability-core-cli-mcp.md).\n\n## Community\n\nJoin [GitHub Discussions](https://github.com/aqm857886159/Nomi/discussions) to share workflows, report friction, and follow what is being built next. WeChat users can use the group and maintainer QR codes at the top of this README; the [Chinese README](README.zh-CN.md#用户群) contains the full Chinese guide.\n\n## For Teams\n\nNomi is open source for creators. We also provide **Custom builds**, **Integrations**, **White-label / commercial licenses**, and **Ongoing iteration** for teams that need Nomi adapted to a real delivery workflow.\n\n[Discuss a project](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml). The form is public: share only a non-confidential summary and never post credentials, private contact details, budget details, or NDA-protected information.\n\n## Developers\n\nRequires Node.js 20+ and pnpm.\n\n```bash\ngit clone https://github.com/aqm857886159/Nomi.git\ncd Nomi\ncorepack enable\npnpm install\npnpm dev\n```\n\n```text\nelectron/    Electron main process, local runtime, storage, and model calls\nsrc/         React + Vite + Tailwind workbench\nskills/      Skill Pack v2; see docs/skill-pack-format.md\n```\n\nUseful checks:\n\n```bash\npnpm run test\npnpm run typecheck\npnpm run gates\n```\n\n## Contributing\n\nBug reports, feature proposals, documentation, and code contributions are welcome. External contributors sign the one-time [Contributor License Agreement](CLA.md) when a pull request is opened.\n\n- [Report a bug](https://github.com/aqm857886159/Nomi/issues/new?template=bug_report.yml)\n- [Request a feature](https://github.com/aqm857886159/Nomi/issues/new?template=feedback.yml)\n- [Join a discussion](https://github.com/aqm857886159/Nomi/discussions)\n\n## License\n\nCurrent releases are licensed under AGPL-3.0-only; historical releases published under Apache-2.0 keep their original license.\n\nSee [LICENSE](LICENSE). Contact the maintainer through the [Business inquiry](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml) for a commercial license covering closed-source integration or white-label distribution.\n"
+    },
+    "brief": {
+      "summary": "本地优先的开源 AI 视频制作桌面工具",
+      "problem": "串联脚本、生成、剪辑和导出流程",
+      "highlights": [
+        "可以从脚本生成分镜和素材",
+        "可以在时间线上编排并导出视频",
+        "可以接入自有模型和 API 密钥"
+      ],
+      "target_users": [
+        "独立创作者",
+        "视频制作团队",
+        "开源开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码更新",
+      "caveat": "需要自行提供模型或 API 密钥",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aqm857886159/Nomi",
+      "score": 96,
+      "category": "AI 视频",
+      "reason": "脚本生成视频并支持时间线编辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "blender/blender",
+      "url": "https://github.com/blender/blender",
+      "description": "Official mirror of Blender",
+      "language": "C++",
+      "total_stars": 19457,
+      "forks": 3082,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "animation",
+        "b3d",
+        "computer-graphics",
+        "modeling",
+        "rendering"
+      ],
+      "license_name": "",
+      "created_at": "2019-10-09T12:47:28Z",
+      "updated_at": "2026-08-02T03:46:21Z",
+      "pushed_at": "2026-08-02T03:45:50Z",
+      "open_issues": 0,
+      "homepage": "https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nKeep this document short & concise,\nlinking to external resources instead of including content in-line.\nSee 'release/text/readme.html' for the end user read-me.\n-->\n\n> [!IMPORTANT]\n> Cloning from this [GitHub mirror](https://github.com/blender/blender) may cause Git LFS errors. To avoid this, use `GIT_LFS_SKIP_SMUDGE=1` when doing your initial clone.  \n> See [the documentation](https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror) for full instructions.\n\nBlender\n=======\n\nBlender is the free and open source 3D creation suite.\nIt supports the entirety of the 3D pipeline—modeling, rigging, animation, simulation, rendering, compositing,\nmotion tracking and video editing.\n\n![Blender screenshot](https://code.blender.org/wp-content/uploads/2018/12/springrg.jpg \"Blender screenshot\")\n\nProject Pages\n-------------\n\n- [Main Website](http://www.blender.org)\n- [Reference Manual](https://docs.blender.org/manual/en/latest/index.html)\n- [User Community](https://www.blender.org/community/)\n\nDevelopment\n-----------\n\n- [Build Instructions](https://developer.blender.org/docs/handbook/building_blender/)\n- [Code Review & Bug Tracker](https://projects.blender.org)\n- [Developer Forum](https://devtalk.blender.org)\n- [Developer Documentation](https://developer.blender.org/docs/)\n\n\nLicense\n-------\n\nBlender as a whole is licensed under the GNU General Public License, Version 3.\nIndividual files may have a different but compatible license.\n\nSee [blender.org/about/license](https://www.blender.org/about/license) for details.\n"
+    },
+    "brief": {
+      "summary": "Blender 是覆盖完整 3D 流程的开源创作套件",
+      "problem": "为 3D 内容制作提供建模、动画、渲染等工具",
+      "highlights": [
+        "可以制作 3D 模型并进行绑定动画",
+        "可以完成渲染、合成和视频编辑",
+        "可以进行模拟与动作捕捉处理"
+      ],
+      "target_users": [
+        "3D 艺术家",
+        "动画创作者",
+        "独立游戏开发者"
+      ],
+      "why_trending": "总 Star 超 1.9 万，本周首次收录且近期持续更新",
+      "caveat": "GitHub 镜像克隆可能遇到 Git LFS 错误",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "blender/blender",
+      "score": 98,
+      "category": "动画",
+      "reason": "完整的3D建模动画制作套件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "lukaszliniewicz/Pandrator",
+      "url": "https://github.com/lukaszliniewicz/Pandrator",
+      "description": "Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.",
+      "language": "Python",
+      "total_stars": 600,
+      "forks": 44,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audiobook",
+        "audiobook-creator",
+        "audiobook-maker",
+        "chatterbox",
+        "dubbing",
+        "dubbing-ai",
+        "kokoro",
+        "pdf-to-audio",
+        "rvc",
+        "silero",
+        "subtitle-to-speech",
+        "subtitle-to-voice",
+        "text-processing",
+        "text-to-speech",
+        "voice-clone",
+        "voice-cloning",
+        "voiceover",
+        "voxtral",
+        "xtts",
+        "xttsv2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-03-20T14:46:13Z",
+      "updated_at": "2026-08-02T03:41:46Z",
+      "pushed_at": "2026-08-02T03:35:52Z",
+      "open_issues": 16,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/lukaszliniewicz/Pandrator/main/pandrator.png\" alt=\"Pandrator\" width=\"180\" />\n</p>\n\n# Pandrator\n\nPandrator is a local-first workspace for creating audiobooks, subtitles, and\nvoiceovers. It brings document preparation, transcription, optional AI\ncorrection and translation, speech generation, review, and export into one\nbrowser interface.\n\nLocal speech and transcription models can keep your media on your own\ncomputer. Cloud language and speech providers are optional.\n\n## Quick start\n\nThe current release is\n[Pandrator 0.8.2](https://github.com/lukaszliniewicz/Pandrator/releases/tag/v.0.8.2)\nwith Pandrator Manager 0.9.12. The Manager installs Pandrator, launches it, and\nlets you add or remove speech components later. Docker and WSL are not\nrequired.\n\n### Windows\n\n1. Download\n   [PandratorManager-0.9.12-windows-x86_64.exe](https://github.com/lukaszliniewicz/Pandrator/releases/download/v.0.8.2/PandratorManager-0.9.12-windows-x86_64.exe).\n2. Run it and choose the parent folder for your installation.\n3. Let the Manager install Pandrator, then open the browser interface.\n4. Under **Providers & services**, install only the local models you want.\n\nThe Windows executable is not Authenticode-signed, so Windows may show\n**Unknown publisher** or a SmartScreen warning. The\n[release page](https://github.com/lukaszliniewicz/Pandrator/releases/tag/v.0.8.2)\ncollects the checksums for all downloadable files in one `SHA256SUMS` file.\n\n### Linux\n\nDownload the AppImage, make it executable, and run it:\n\n```bash\nchmod +x PandratorManager-0.9.12-x86_64.AppImage\n./PandratorManager-0.9.12-x86_64.AppImage\n```\n\nThe first launch asks where to create the managed `Pandrator` folder. On a\nheadless machine, choose the workspace explicitly:\n\n```bash\n./PandratorManager-0.9.12-x86_64.AppImage \\\n  setup --workspace /srv/pandrator --no-open\n```\n\nIf AppImage mounting is unavailable, prefix the command with\n`APPIMAGE_EXTRACT_AND_RUN=1`.\n\n### Updating\n\nDownload and run the newer Manager file for your operating system. It reuses\nthe remembered installation when possible; if it asks for a folder, choose the\nsame parent folder as before. Then use **Review update** in the Manager for\nPandrator or any installed engine. Projects, generated media, and other user\ndata are kept separately from replaceable application runtimes.\n\nThe Manager keeps the application, model environments, caches, services, and\ndata inside the selected workspace. It does not install operating-system\npackages. Calibre is optional and is needed only for MOBI conversion.\n\n### A good first setup\n\n- For a lightweight ready-made voice, start with **Kokoro**.\n- For voice cloning, start with **Qwen3 TTS Base** or **XTTS v2**.\n- For transcription and subtitles, install **CrispASR**.\n- Add an LLM provider only if you want AI-assisted correction, translation,\n  research, or speech-text optimization.\n- Add **RVC** only if you want to convert generated speech into a trained\n  target voice.\n\nYou can begin with one component and add the others whenever you need them.\n\n## What you can make\n\n### Audiobooks\n\n- Import TXT, PDF, EPUB, DOCX, MOBI, or pasted text.\n- Clean difficult documents with deterministic tools, OCR, and an optional\n  reviewable AI workflow.\n- Detect structure and chapters, normalize text, and split it for speech.\n- Generate speech in segments, compare takes, edit text, regenerate selected\n  passages, and apply optional RVC conversion.\n- Export WAV, MP3, Opus, FLAC, or M4B with chapters, metadata, and cover art.\n\n### Subtitles and voiceovers\n\n- Start from SRT subtitles or common audio and video files.\n- Transcribe speech with word timestamps and optional diarization.\n- Correct, translate, split, merge, and retime subtitles in a side-by-side\n  editor.\n- Generate and synchronize dubbed speech without changing the source media.\n- Export subtitles alone or create dubbed video with original, mixed, or\n  replacement audio and soft, burned, original-language, translated, or\n  bilingual subtitles.\n\n### Voices and providers\n\n- Use local TTS services, OpenAI, Google Gemini, or a compatible custom speech\n  endpoint.\n- Connect local OpenAI-compatible LLM servers such as LM Studio or supported\n  cloud providers.\n- Record or upload reference voices, keep transcripts with them, and preview\n  built-in voices before generation.\n- Import RVC models and retain both original and converted takes.\n\n## Choosing local models\n\nThe Manager shows the available compute variants, model licences, and\ndownloads before making any changes.\n\n| Component | Best suited to | Typical compute |\n|---|---|---|\n| Kokoro 82M | Lightweight built-in voices | CPU, CUDA, and supported modern AMD GPUs |\n| Qwen3 TTS | Built-in voices and multilingual cloning | CPU, CUDA, Vulkan, or Metal |\n| XTTS v2 | Mature multilingual voice cloning | CPU or CUDA |\n| VoxCPM2 | Large multilingual voice cloning | CUDA |\n| Fish S2 Pro | Broad-language voice cloning | Backend-dependent |\n| Voxtral 4B | Preset voices | WGPU-compatible accelerator |\n| Silero | Efficient regional language packs | CPU |\n| Chatterbox | English and multilingual cloning | CPU or CUDA |\n| Magpie 357M | Preset multilingual voices | CPU or CUDA |\n| CrispASR | Transcription, timestamps, and diarization | CPU, CUDA, Vulkan, or Apple Silicon |\n| RVC | Speech-to-speech voice conversion | CPU or CUDA |\n\nLanguage support differs by model. Qwen3, XTTS, VoxCPM, Fish, and Chatterbox\ncover many common multilingual cloning workflows; Silero and Fish add\nespecially broad regional coverage. CrispASR offers Whisper large-v3 for the\nbroadest transcription coverage and Parakeet TDT for a smaller set of\nprimarily European languages. Pandrator filters choices by the language and\ncapabilities reported by each installed service.\n\nHardware needs vary with model size, quantization, input length, and compute\nbackend. A GPU makes many models faster, but several useful configurations run\non CPU.\n\n## Files and exports\n\n| Category | Supported formats |\n|---|---|\n| Documents | TXT, PDF, EPUB, DOCX, MOBI, or pasted text |\n| Subtitles | SRT |\n| Audio input | AAC, AIFF, FLAC, M4A/MKA, MP3, OGG, Opus, WAV, WMA |\n| Video input | MP4, MKV, WebM, AVI, MOV |\n| Audiobook and audio output | M4B, MP3, Opus, FLAC, WAV |\n| Video output | MP4-oriented export with selectable audio and subtitle tracks |\n\nURL imports use `yt-dlp` for supported public media sources. You are\nresponsible for following the source service's terms and applicable law.\n\n## AI correction and translation\n\nLLMs are optional. Pandrator can use them for subtitle correction,\nglossary-aware translation, document-cleaning assistance, and pronunciation\nor speech-text improvements. Each step creates a separate, reviewable result;\nAI-optimized speech text does not silently replace the text shown in exported\nsubtitles.\n\nModels can have their own temperature, reasoning, and token-price settings.\nWhen a provider reports an authoritative cost, Pandrator records it.\nOtherwise, it estimates the cost from token usage and your configured rates.\n\nOptional Jina research can help resolve uncertain names and terminology. It\nuses explicit search limits and keeps a source ledger with the result.\n\n## Updating, repair, and data\n\nOpen Pandrator Manager and choose **Maintenance → Check for update** to update\nthe Manager. Updates for Pandrator and local services appear as reviewable\nactions under **Install & launch** or **Providers & services**.\n\nInstall, update, repair, and removal actions show what will change before they\nrun. Components are staged and checked before becoming active. User data is\nkept separately and is preserved by default during uninstall; deleting it\nrequires a separate confirmation.\n\nClosing the browser does not stop an active generation job. Reopen Pandrator\nfrom the Manager, launcher, or optional tray. Keep an independent backup of\nimportant projects before a major update.\n\nFor command-line recovery, automation, and advanced deployment details, see\nthe\n[Pandrator Manager guide](https://github.com/lukaszliniewicz/Pandrator/tree/main/pandrator_manager).\n\n## Remote and headless use\n\nPandrator and its recovery interface listen on `127.0.0.1` by default. You can\nalso run one Pandrator installation on a home server, a LAN or VPN host, an\nexternal server, or a GPU pod.\n\nFor an Internet-facing installation, use stable HTTPS addresses through a\nreverse proxy or ingress:\n\n```bash\npandrator-manager-launcher setup \\\n  --workspace /srv/pandrator \\\n  --remote-setup-url https://recovery.example.com \\\n  --remote-pandrator-url https://pandrator.example.com \\\n  --trusted-proxy-hops 1 \\\n  --no-open\n```\n\nWhen the ingress runs in another container or network namespace, add\n`--network-bind-host 0.0.0.0` and restrict the listener with the platform's\nnetwork policy. Persist both the Pandrator data directory and the Manager\nworkspace. Use a VPN or HTTPS for regular remote use; plain HTTP is available\nonly as an explicit trusted-private-network option.\n\nPandrator is designed for one owner, not as a public multi-user service.\n\n## Agent access with Pandrator MCP\n\n`pandrator-mcp` lets an MCP-capable agent explain Pandrator, inspect an\ninstallation, edit sessions safely, run workflow plans, and carry out bounded\nManager recovery actions. The sidecar runs on the same computer as the agent\nand can connect to either a local installation or one fixed remote Pandrator\nserver.\n\nIt includes secret-free configuration generators for Codex, Claude Code,\nOpenCode, and Antigravity. Credentials are enrolled with owner approval and\nstored in the operating-system credential store rather than in MCP\nconfiguration or model-visible arguments.\n\nThe\n[Pandrator MCP guide](https://github.com/lukaszliniewicz/Pandrator/tree/main/pandrator_mcp)\nwalks through:\n\n- local, LAN/VPN, external HTTPS, and pod targets;\n- least-privilege scopes and identity pinning;\n- owner-approved login and credential revocation;\n- optional recovery while the Pandrator application is stopped;\n- diagnostics and host configuration; and\n- a guarded prompt an agent can use to help prepare a server or pod.\n\n## Privacy and security\n\n- Local models keep processing on your machine. Cloud providers may receive\n  documents, subtitles, media, or voice samples and may charge for use.\n- Local access binds to loopback by default. Remote access must be enabled\n  explicitly and requires owner authentication.\n- Provider credentials are write-only through the normal API and are redacted\n  from routine diagnostics and job events.\n- The simplest credential option stores the secret in Pandrator's local\n  database. Protect the data directory and use full-disk encryption where\n  appropriate.\n- The optional `credential-stores` extra can use Windows Credential Manager,\n  macOS Keychain, or Linux Secret Service. Environment variables and\n  owner-restricted secret files are also supported.\n- For remote use, keep proxy and host validation enabled, use a dedicated data\n  root, and expose only the interfaces you need.\n\nAlways inspect diagnostics before sharing them, especially when third-party\nlibraries or providers are involved.\n\n## Running from source\n\nPackaged Manager releases are the easiest way to use Pandrator. Development\nfrom source requires Python 3.11 or 3.12, Node.js 24, and\n[Pixi](https://pixi.sh/):\n\n```bash\ngit clone https://github.com/lukaszliniewicz/Pandrator.git\ncd Pandrator\npixi install\npixi run -e web-build web-build\npixi run serve-web\n```\n\nRun the worker in a second terminal:\n\n```bash\npixi run run-worker\n```\n\nUse `pandrator --help` for command-line session, workflow, provider, voice,\nexport, authentication, migration, and diagnostic commands. Add `--json` when\nyou need machine-readable output.\n\nPython packages are also available for advanced installations and automation:\n\n```bash\npython -m pip install pandrator\npipx install pandrator-manager\npipx install \"pandrator-mcp[credential-stores,manager]\"\n```\n\nThe native Manager remains the simplest"
+    },
+    "brief": {
+      "summary": "本地将文档转成有声书，也能制作配音视频",
+      "problem": "分散的文档、字幕和语音处理流程难以统一完成",
+      "highlights": [
+        "可以把PDF、EPUB等导出为有声书",
+        "可以翻译字幕并生成同步配音视频",
+        "可以本地克隆声音并反复试听修改"
+      ],
+      "target_users": [
+        "有声书制作者",
+        "视频配音人员",
+        "本地化创作者"
+      ],
+      "why_trending": "本周首次收录，已有600个Star且近期持续更新",
+      "caveat": "模型和硬件需求不同，Windows安装包未签名",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "lukaszliniewicz/Pandrator",
+      "score": 97,
+      "category": "语音 / 配音",
+      "reason": "本地有声书制作与视频配音翻译",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.5
+    }
+  }
+]
