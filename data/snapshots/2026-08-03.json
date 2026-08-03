@@ -1,0 +1,523 @@
+[
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees.",
+      "language": "Python",
+      "total_stars": 64907,
+      "forks": 5364,
+      "stars_today": 659,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 659
+    },
+    "details": {
+      "topics": [
+        "agent-infrastructure",
+        "ai-agent",
+        "ai-search",
+        "automation",
+        "bilibili",
+        "claude-code",
+        "cli",
+        "cursor",
+        "free-api",
+        "llm-tools",
+        "mcp",
+        "python",
+        "reddit-scraper",
+        "twitter-scraper",
+        "web-scraper",
+        "xiaohongshu",
+        "youtube-transcript"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-24T02:10:24Z",
+      "updated_at": "2026-08-03T04:03:07Z",
+      "pushed_at": "2026-07-25T10:20:07Z",
+      "open_issues": 187,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">👁️ Agent Reach</h1>\n\n<p align=\"center\">\n  <strong>给你的 AI Agent 一键装上互联网能力</strong>\n</p>\n\n<p align=\"center\">\n  当下最稳的接入方式，替你选好、装好、体检好——接入方式会换代，你不用操心\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/24387\"><img src=\"https://trendshift.io/api/badge/repositories/24387\" alt=\"Trendshift GitHub Trending #1 Repository of the Day\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge\" alt=\"MIT License\"></a>\n  <a href=\"https://www.python.org/\"><img src=\"https://img.shields.io/badge/Python-3.10+-green.svg?style=for-the-badge&logo=python&logoColor=white\" alt=\"Python 3.10+\"></a>\n  <a href=\"https://github.com/Panniantong/agent-reach/stargazers\"><img src=\"https://img.shields.io/github/stars/Panniantong/agent-reach?style=for-the-badge\" alt=\"GitHub Stars\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#快速上手\">快速开始</a> · <a href=\"docs/README_en.md\">English</a> · <a href=\"docs/README_ja.md\">日本語</a> · <a href=\"docs/README_ko.md\">한국어</a> · <a href=\"#支持的平台\">支持平台</a> · <a href=\"#设计理念\">设计理念</a>\n</p>\n\n---\n\n## 为什么需要 Agent Reach？\n\nAI Agent 已经能帮你写代码、改文档、管项目——但你让它去网上找点东西，它就抓瞎了：\n\n- 📺 \"帮我看看这个 YouTube 教程讲了什么\" → **看不了**，拿不到字幕\n- 🐦 \"帮我搜一下推特上大家怎么评价这个产品\" → **搜不了**，Twitter API 要付费\n- 📖 \"去 Reddit 上看看有没有人遇到过同样的 bug\" → **403 被封**，服务器 IP 被拒\n- 📕 \"帮我看看小红书上这个品的口碑\" → **打不开**，必须登录才能看\n- 📺 \"B站上有个技术视频，帮我总结一下\" → **拿不到**，通用下载工具被 B站风控全面拦截\n- 🔍 \"帮我在网上搜一下最新的 LLM 框架对比\" → **没有好用的搜索**，要么付费要么质量差\n- 🌐 \"帮我看看这个网页写了啥\" → **抓回来一堆 HTML 标签**，根本没法读\n- 📦 \"这个 GitHub 仓库是干嘛的？Issue 里说了什么？\" → 能用，但认证配置很麻烦\n- 📡 \"帮我订阅这几个 RSS 源，有更新告诉我\" → 要自己装库写代码\n\n**这些不难实现，但是需要自己折腾配置**\n\n每个平台都有自己的门槛——要付费的 API、要绕过的封锁、要登录的账号、要清洗的数据。你要一个一个去踩坑、装工具、调配置，光是让 Agent 能读个推特就得折腾半天。\n\n**Agent Reach 把这件事变成一句话：**\n\n```\n帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n```\n\n复制给你的 Agent，几分钟后它就能读推特、搜 Reddit、看 YouTube、刷小红书了。\n\n**已经装过了？更新也是一句话：**\n\n```\n帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md\n```\n\n> ⭐ **Star 这个项目**，我们会持续追踪各平台的变化、接入新的渠道。你不用自己盯——平台封了我们修，有新渠道我们加。\n\n### ✅ 在你用之前，你可能想知道\n\n| | |\n|---|---|\n| 💰 **完全免费** | 所有工具开源、所有 API 免费。唯一可能花钱的是服务器代理（$1/月），本地电脑不需要 |\n| 🔒 **隐私安全** | Cookie 只存在你本地，不上传不外传。代码完全开源，随时可审查 |\n| 🔄 **持续换代** | 每个平台都是「首选 + 备选」多后端路由。某个接入方式失效了，我们换下一个，你无感（2026-06 实例：yt-dlp 被 B站风控封死 → 已切换 bili-cli，用户零操作） |\n| 🤖 **兼容所有 Agent** | Claude Code、OpenClaw、Cursor、Windsurf……任何能跑命令行的 Agent 都能用 |\n| 🩺 **自带诊断** | `agent-reach doctor` 一条命令告诉你哪个通、哪个不通、怎么修 |\n\n---\n\n## 支持的平台\n\n| 平台 | 装好即用 | 配置后解锁 | 怎么配 |\n|------|---------|-----------|-------|\n| 🌐 **网页** | 阅读任意网页 | — | 无需配置 |\n| 📺 **YouTube** | 字幕提取 + 视频搜索 | — | 无需配置 |\n| 📡 **RSS** | 阅读任意 RSS/Atom 源 | — | 无需配置 |\n| 🔍 **全网搜索** | — | 全网语义搜索 | 自动配置（MCP 接入，免费无需 Key） |\n| 📦 **GitHub** | 读公开仓库 + 搜索 | 私有仓库、提 Issue/PR、Fork | 告诉 Agent「帮我登录 GitHub」 |\n| 🐦 **Twitter/X** | 读单条推文 | 搜索推文、浏览时间线、读长文 | 告诉 Agent「帮我配 Twitter」 |\n| 📺 **B站** | 搜索 + 视频详情（bili-cli，无需登录） | 字幕（OpenCLI） | 告诉 Agent「帮我配 B站」 |\n| 📖 **Reddit** | —（没有零配置路径：匿名接口已被封） | 搜索 + 读帖子和评论 | 桌面装 OpenCLI 用浏览器登录态；或 rdt-cli + Cookie |\n| 📘 **Facebook** | — | 搜索、主页、Feed、群组列表 | 桌面装 OpenCLI（复用 Chrome 登录态） |\n| 📷 **Instagram** | — | 用户搜索、Profile、用户最近帖子、Explore | 桌面装 OpenCLI（复用 Chrome 登录态） |\n| 📕 **小红书** | — | 搜索、阅读、评论 | OpenCLI 只用用户已有 Chrome 会话；MCP/存量工具用 Cookie-Editor |\n| 💼 **LinkedIn** | Jina Reader 读公开页面 | Profile 详情、公司页面、职位搜索 | 告诉 Agent「帮我配 LinkedIn」 |\n| 💻 **V2EX** | 热门帖子、节点帖子、帖子详情+回复、用户信息 | — | 无需配置 |\n| 📈 **雪球** | 股票行情、搜索股票、热门帖子、热门股票排行 | — | 告诉 Agent「帮我配雪球」 |\n| 🎙️ **小宇宙播客** | — | 播客音频转文字（Whisper 转录，免费 Key） | 告诉 Agent「帮我配小宇宙播客」 |\n\n> **不知道怎么配？不用查文档。** 直接告诉 Agent「帮我配 XXX」，它知道需要什么、会一步一步引导你。\n>\n> 🍪 Twitter 只接受用户通过 Cookie-Editor 手工导出的内容。Agent Reach 不替用户执行小红书登录，也不读取小红书浏览器 Cookie；OpenCLI 只使用用户已经存在且明确控制的 Chrome 会话。`agent-reach configure xhs-cookies` 不会把 Cookie 注入 OpenCLI / Chrome；没有现成会话时，改用 Cookie-Editor 导出后配置 xiaohongshu-mcp / 存量工具。\n>\n> Twitter Cookie 保存后仅供 `agent-reach doctor` 检查配置是否齐全；直接运行上游 `twitter` 命令前，仍需在当前进程环境中显式设置 `TWITTER_AUTH_TOKEN` 和 `TWITTER_CT0`。\n>\n> 🔒 Cookie 只存在你本地，不上传不外传。代码完全开源，随时可审查。\n> 💻 本地电脑不需要代理。代理只有部署在服务器上才需要（~$1/月）。\n\n---\n\n## 快速上手\n\n> ⚠️ **OpenClaw 用户请先确认 exec 权限已开启**\n>\n> Agent Reach 依赖 Agent 执行 shell 命令（`pip install`、`mcporter`、`twitter` 等）。如果你的 OpenClaw 使用了默认的 `messaging` 工具配置，Agent 将无法执行命令。**安装前请先开启 exec 权限**：\n>\n> ```bash\n> openclaw config set tools.profile \"coding\"\n> ```\n> 或在 `~/.openclaw/openclaw.json` 中设置 `\"tools\": { \"profile\": \"coding\" }`。\n> 设置后重启 Gateway（`openclaw gateway restart`）并开启新对话即可。其他平台（Claude Code、Cursor、Windsurf 等）不受此限制。\n\n复制这句话给你的 AI Agent（Claude Code、OpenClaw、Cursor 等）：\n\n```\n帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n```\n\n就这一步。Agent 会自己完成剩下的所有事情。\n\n> 🔄 **已安装过？** 更新也是一句话：\n> ```\n> 帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md\n> ```\n\n> 🛡️ **担心安全？** 可以用安全模式——不会自动装系统包，只告诉你需要什么：\n> ```\n> 帮我安装 Agent Reach（安全模式）：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n> 安装时使用 --safe 参数\n> ```\n\n<details>\n<summary>它会做什么？（点击展开）</summary>\n\n1. **安装 CLI 工具** — `pip install` 装好 `agent-reach` 命令行（自带 yt-dlp、feedparser）\n2. **安装系统基建** — 自动检测并安装 Node.js、gh CLI、mcporter\n3. **配置搜索引擎** — 通过 MCP 接入 Exa（免费，无需 API Key）\n4. **检测环境** — 判断是本地电脑还是服务器，给出对应的配置建议\n5. **注册 SKILL.md** — 在 Agent 的 skills 目录安装使用指南，以后 Agent 遇到\"全网调研\"、\"搜推特\"、\"看视频\"这类需求，会自动知道该调哪个上游工具\n6. **问你要不要更多** — 默认只激活 6 个零配置渠道；小红书、Twitter、Reddit、Facebook、Instagram 这些需要登录态的，Agent 会列菜单问你要哪些，点名才装\n\n安装完之后，`agent-reach doctor` 一条命令告诉你每个渠道的状态、当前走哪条路。\n</details>\n\n---\n\n## 装好就能用\n\n不需要任何配置，告诉 Agent 就行：\n\n- \"帮我看看这个链接\" → `curl https://r.jina.ai/URL` 读任意网页\n- \"这个 GitHub 仓库是做什么的\" → `gh repo view owner/repo`\n- \"这个 YouTube 视频讲了什么\" → `yt-dlp` 提取字幕\n- \"B站搜一下 AI 教程\" → `bili search`（无需登录）\n- \"全网搜一下 LLM 框架对比\" → Exa 语义搜索\n- \"订阅这个 RSS\" → `feedparser` 解析\n\n**不需要记命令。** Agent 读了 SKILL.md 之后自己知道该调什么。需要登录的平台（小红书、Twitter、Reddit、Facebook、Instagram），告诉 Agent「帮我配 XXX」即可解锁。\n\n---\n\n## 能力边界：读取页面 vs 提取复杂网页数据\n\n当任务涉及动态页面、筛选、分页、详情页或多步导航时，可以使用 [BrowserAct](https://www.browseract.ai/Agent)。BrowserAct 支持从任意网站提取数据。只需描述所需数据，BrowserAct 就会在真实浏览器中探索并测试网页，生成可靠、可复用的数据采集 Bot，并返回结构化结果。内置隐身浏览和验证码处理，并提供高质量住宅代理。无需代码\n\n---\n\n## 设计理念\n\n**Agent Reach 是一个能力层（capability layer），不是又一个工具。**\n\n它比任何具体实现高一层——负责**选型、安装、体检、路由**，不负责底层读取本身。读取由 Agent 直接调用上游工具完成，没有包装层。\n\n你给一个新 Agent 装环境的时候，总要花时间去找工具、装依赖、调配置——Twitter 用什么读？Reddit 怎么登录？小红书的 CLI 停更了换什么？每次都要重新踩一遍。Agent Reach 做的事情很简单：**当下最稳的接入方式，我们替你选好、装好、体检好。接入方式会换代（2026 年 3 月一批单平台 CLI 集体停更，我们换了路由），你不用操心。**\n\n### 🔌 每个平台 = 首选 + 备选的有序后端列表\n\n换接入方式 = 调整列表顺序，不是重写代码。`agent-reach doctor` 会告诉你每个平台**当前在用哪个后端**。\n\n```\nchannels/\n├── web.py          → Jina Reader\n├── twitter.py      → twitter-cli ▸ OpenCLI ▸ bird\n├── youtube.py      → yt-dlp\n├── github.py       → gh CLI\n├── bilibili.py     → bili-cli ▸ OpenCLI ▸ 搜索 API（yt-dlp 已被 B站风控封死，退役）\n├── reddit.py       → OpenCLI ▸ rdt-cli（无零配置路径，必须登录态）\n├── facebook.py     → OpenCLI（桌面浏览器登录态）\n├── instagram.py    → OpenCLI（桌面浏览器登录态）\n├── xiaohongshu.py  → OpenCLI ▸ xiaohongshu-mcp ▸ xhs-cli\n├── linkedin.py     → linkedin-mcp ▸ Jina Reader\n├── rss.py          → feedparser\n├── exa_search.py   → Exa via mcporter\n└── __init__.py     → 渠道注册（doctor 检测用）\n```\n\n每个渠道文件按序**真实探测**各候选后端（不只是看命令存不存在），第一个完整可用的当选；坏掉的会给出修复处方。实际的读取和搜索由 Agent 直接调用上游工具完成。\n\n### 当前选型\n\n| 场景 | 首选 | 备选 | 为什么这么选 |\n|------|------|------|-----------|\n| 读网页 | [Jina Reader](https://github.com/jina-ai/reader) | — | 免费，不需要 API Key |\n| 读推特 | [twitter-cli](https://github.com/public-clis/twitter-cli) | [OpenCLI](https://github.com/jackwener/opencli) | 实测搜索稳定；OpenCLI 走浏览器登录态兜底 |\n| Reddit | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | [rdt-cli](https://github.com/public-clis/rdt-cli) | 匿名接口已被封、官方 API 审批制——只剩登录态路线 |\n| Facebook | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | — | Graph API/Groups API 权限收紧；浏览器登录态是当前最实用路径 |\n| Instagram | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | 官方 Graph API（Business/Creator + 审批） | instaloader 类路径不稳定；OpenCLI 复用真实浏览器会话 |\n| YouTube 字幕 + 搜索 | [yt-dlp](https://github.com/yt-dlp/yt-dlp) | — | 154K Star，YouTube 仍是最佳（注意：不再用于 B站） |\n| B站 | [bili-cli](https://github.com/public-clis/bilibili-cli) | OpenCLI ▸ 搜索 API | yt-dlp 被 B站风控 412 封死（2026-06 实测），bili-cli 无登录可搜可读 |\n| 搜全网 | [Exa](https://exa.ai) via [mcporter](https://github.com/nicobailon/mcporter) | — | AI 语义搜索，MCP 接入免 Key |\n| GitHub | [gh CLI](https://cli.github.com) | — | 官方工具，认证后完整 API 能力 |\n| 读 RSS | [feedparser](https://github.com/kurtmckee/feedparser) | — | Python 生态标准选择 |\n| 小红书 | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | [xiaohongshu-mcp](https://github.com/xpzouying/xiaohongshu-mcp)（服务器）▸ xhs-cli | OpenCLI 只用用户已有会话；其余后端用 Cookie-Editor 手工导出 |\n| LinkedIn | [linkedin-scraper-mcp](https://github.com/stickerdaniel/linkedin-mcp-server) | Jina Reader | MCP 服务，浏览器自动化 |\n\n> 📌 这些都是「当前选型」，基于真机实测定期复核。某条路失效了我们换下一条——`agent-reach doctor` 永远告诉你现在走的是哪条。\n\n---\n\n## 安全性\n\nAgent Reach 在设计上重视安全：\n\n| 措施 | 说明 |\n|------|------|\n| 🔒 **凭据本地存储** | Cookie、Token 只存在你本机 `~/.agent-reach/config.yaml`，文件权限 600（仅所有者可读写），不上传不外传 |\n| 🛡️ **安全模式** | `agent-reach install --safe` 不会自动修改系统，只列出需要什么，由你决定装不装 |\n| 👀 **完全开源** | 代码透明，随时可审查。所有依赖工具也是开源项目 |\n| 🔍 **Dry Run** | `agent-reach install --dry-run` 预览所有操作，不做任何改动 |\n| 🧩 **可插拔架构** | 不信任某个组件？换掉对应的 channel 文件即可，不影响其他 |\n\n### 🍪 Cookie 安全建议\n\n> ⚠️ **封号风险提醒：** 使用 Cookie 登录的平台（Twitter、小红书等），通过脚本/API 调用**存在被平台检测并封号的风险**。请务必使用**专用小号**，不要用你的主账号。\n\n需要 Cookie 或登录态的平台（Twitter、小红书、Reddit、Facebook、Instagram 等）建议使用**专用小号**，不要用主账号。原因有二：\n1. **封号风险** — 平台可能检测到非正常浏览器的 API 调用行为，导致账号被限制或封禁\n2. **安全风险** — Cookie 等同于完整登录权限，用小号可以在凭据泄露时限制影响范围\n\n### 📦 安装方式\n\n| 方式 | 命令 | 适合场景 |\n|------|------|---------|\n| 一键全自动（默认） | `agent-reach install --env=auto` | 个人电脑、开发环境 |\n| 安全模式 | `agent-reach install --env=auto --safe` | 生产服务器、多人共用机器 |\n| 仅预览 | `agent-reach install --env=auto --dry-run` | 先看看会做什么 |\n\n### 🗑️ 卸载\n\n```bash\nagent-reach uninstall\n```\n\n会清除：`~/.agent-reach/`（含所有 token/cookie）、各 Agent 的 skill 文件、mcporter 中的 MCP 配置。\n\n```bash\n# 只预览，不实际删除\nagent-reach uninstall --dry-run\n\n# 只删 skill 文件，保留 token 配置（重装时用）\nagent-reach uninstall --keep-config\n```\n\n卸载 Python 包本身：`pip uninstall agent-reach`\n\n---\n\n## ⭐ 为什么值得 Star\n\n这个项目我自己每天在用，所以我会一直维护它。\n\n- 有新需求或者大家提了想要的渠道，我会陆续加上\n- 每个渠道我会尽量保证**能用、好用、免费**\n- 平台改了反爬或者 API 变了，我会想办法解决\n\n为 Web 4.0 基建贡献一份自己的力量。\n\nStar 一下，下次需要的时候能找到。⭐\n\n---\n\n## 致谢\n\n[OpenCLI](https://github.com/jackwener/opencli) · [twitter-cli](https://github.com/public-clis/twitter-cli) · [rdt-cli](https://github.com/public-clis/rdt-cli) · [xiaohongshu-mcp](https://github.com/xpzouying/xiaohongshu-mcp) · [xhs-cli](https://github.com/jackwener/xiaohongshu-cli) · [bili-cli](https://github.com/public-clis/bilibili-cli) · [yt-dlp](https://github.com/yt-dlp/yt-dlp) · [Jina Reader](https://github.com/jina-ai/reader) · [Exa](https://exa.ai) · [mcporter](https://github.com/nicobailon/mcporter) · [feedparser](https://github.com/kurtmckee/feedparser) · [linkedin-scraper-mcp](https://github.com/stickerdaniel/linkedin-mcp-server)\n\n## 联系\n\n- 📧 **Email:** pnt01@foxmail.com\n- 🐦 **Twitter/X:** [@Neo_Reidlab](https://x.com/Neo_Reidlab)\n\n## 业务合作 / Agent 落地\n\n我正在承接 Agent 相关的定制与落地合作。\n\n如果你在企业生产、运营、市场、投研、数据处理、内容处理或其他业务流程里，有希望用 Agent 自动化的环节，欢迎加我微信交流。\n\n不需要你已经想清楚方案。只要你有真实流程、真实问题或真实需求，我可以一起判断 Agent 能不能解决、怎么做。\n\n加好友请备注：`业务 + 你想让 Agent 帮你做什么`\n\nBuilder 也欢迎备注：`Builder + 你在做什么`\n\n只是想进交流群，备注：`加群`\n\n<p align=\"center\">\n  <img src=\"docs/wechat-group-qr.jpg\" width=\"280\" alt=\"WeChat QR\">\n</p>\n\n> Bug 反馈和功能请求请用 [GitHub Issues](https://github.com/Panniantong/Agent-Reach/issues)，更容易跟踪。\n\n## License\n\n[MIT](LICENSE)\n\n## 友情链接\n\n[方舟 Agent Plan 模型订阅套餐](https://dis.chatdesks.cn/chatdesk/hsyqAgent-Reach.html) — 集成了包含 Doubao-Seed、Doubao-Seedance、Doubao-Seedream 等在内的字节跳动自研 SOTA 级模型，覆盖文本、代码、图像、视频等多模态任务。最新支持 MiniMax-M3、DeepSeek-V4 系列、GLM-5.2、Doubao-Seed-2.0 系列、Kimi-K2.6 等模型，工具不限。超全模态模型与 Harness 升级一步到位，深度支持 Agent 框架与 AI 编程工具。一次订阅，可以为不同任务切换合适的 AI 引擎。\n\n[腾讯云 OpenClaw](https://www.tencentcloud.com/act/pro/intl-openclaw?referral_code=G76Y819A&lang=zh&pg=) — 在腾讯云Lighthouse秒级部署OpenClaw全能助手，可通过对话丝滑接入Agent Reach，给你的OpenClaw一键装上互联网能力。\n\n[Agent Skills Hub](https://agentskillshub.top/) — 找 Claude 技能和 MCP 服务器，不用猜哪个安全：133,000+ 个条"
+    },
+    "brief": {
+      "summary": "为 AI Agent 接入多平台互联网读取与搜索能力",
+      "problem": "解决 Agent 难以稳定读取和搜索各类网站的问题",
+      "highlights": [
+        "可以读取网页、GitHub 和 RSS 内容",
+        "可以提取 YouTube 字幕并搜索 B 站视频",
+        "可以配置 Twitter、Reddit、小红书等平台"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "自动化工作流用户",
+        "技术调研人员"
+      ],
+      "why_trending": "今日新增 659 个 Star，总 Star 超 6.4 万",
+      "caveat": "部分平台需要登录态，接入方式可能变化",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Panniantong/Agent-Reach",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "为Agent接入多平台检索",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 59.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "HarbourMasters/Lighthouse",
+      "url": "https://github.com/HarbourMasters/Lighthouse",
+      "description": "",
+      "language": "C",
+      "total_stars": 243,
+      "forks": 19,
+      "stars_today": 65,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 65
+    },
+    "details": {
+      "topics": [],
+      "license_name": "CC0-1.0",
+      "created_at": "2024-11-27T23:45:54Z",
+      "updated_at": "2026-08-03T04:01:13Z",
+      "pushed_at": "2026-08-03T01:14:25Z",
+      "open_issues": 35,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "develop",
+      "readme": "[comment]: <> (Todo: Make Light Mode Image)\n[comment]: <> (Todo: Make Dark Mode Image)\n\n# Lighthouse\nHarbour Masters port of Banjo Kazooie\n\nLead Developer: \n* Malkierian\n\nDevelopers:\n* JeodC\n* Caladius\n\n## Discord\nOfficial Discord: https://discord.com/invite/shipofharkinian\n\nIf you're having any trouble after reading through this `README`, feel free ask for help in the Lighthouse text channels. Please keep in mind that we do not condone piracy.\n\n# Quick Start\n\nLighthouse does not include any copyrighted assets.  You are required to provide a supported copy of the game.\n\n### 1. Verify your ROM dump\nAny retail version listed below is supported. You can verify you have dumped a supported copy of the game by using the SHA-1 File Checksum Online at https://www.romhacking.net/hash/. \n\n* `baserom.us.v10.z64`: `1fe1632098865f639e22c11b9a81ee8f29c75d7a`\n* `baserom.us.v11.z64`: `ded6ee166e740ad1bc810fd678a84b48e245ab80`\n* `baserom.jp.z64`:     `90726d7e7cd5bf6cdfd38f45c9acbf4d45bd9fd8`\n* `baserom.pal.z64`:    `bb359a75941df74bf7290212c89fbc6e2c5601fe`\n\nIf you have multiple regions of the game and want to use them as language packs, see `# Language Packs` below.\n\n### 2. Verify your ROM is in .z64 format\nYour ROM needs to be in .z64 format. If it's in .n64 format, use the following to convert it to a .z64: https://hack64.net/tools/swapper.php\n\n### 3. Download Lighthouse from [Releases](https://github.com/HarbourMasters/Lighthouse/releases)\n\n### 4. Generating the OTR from the ROM and Play!\n\n#### Windows\n* Extract every file from the zip into a folder of your choosing.\n* Run lighthouse.exe and select your compatible ROM.\n\n#### Linux\n* Extract every file from the zip into a folder of your choosing.\n* Execute lighthouse.appimage. You may have to chmod +x the appimage via terminal.\n\n#### MacOS\n* Extract every file from the zip into a folder of your choosing.\n* Run lighthouse and select your compatible ROM.\n\n# Configuration\n\nLighthouse ships with a file with many standard controller mappings that can be used as-is with most controllers. If your controller isn't recognized by Lighthouse, or isn't working properly, you can create your own custom mapping using the built-in mapper in the Settings menu.\n\n### Default keyboard configuration\n| N64 | A | B | Z | Start | Analog stick | C buttons | D-Pad |\n| - | - | - | - | - | - | - | - |\n| Keyboard | X | C | Z | Space | WASD | Arrow keys | TFGH |\n\n### Other shortcuts\n| Keys | Action |\n| - | - |\n| ESC | Toggle menubar |\n| Ctrl+R | Reset |\n| F11 | Fullscreen |\n| Tab | Toggle Alternate assets |\n\n### Graphics Backends\nCurrently, there are three rendering APIs supported: DirectX11 (Windows), OpenGL (all platforms), and Metal (macOS). You can change which API to use in the `Settings` menu of the menubar, which requires a restart.  If you're having an issue with crashing, you can change the API in the `lighthouse.cfg.json` file by finding the line `\"Backend\":{`... and changing the `id` value to `2` and set the `Name` to `OpenGL`. `DirectX 11` with id `1` is the default on Windows. `Metal` with id `3` is the default on macOS.\n\n# Language Packs\n\nLighthouse supports using multiple regions of Banjo-Kazooie as language packs. Generate your base `bk.o2r` file and once Lighthouse has started, open the imgui menu. Under General -> Languages, you will be able to select another ROM to extract as a language pack. PAL supports UK, French, and German, and Japanese adds Japanese support. After the language pack is generated, the language it brings will be added to the dropdown menu.\n\n# Romhacks\n\nMany romhacks can be extracted from patched ROMs and used as mods with Lighthouse. This can be done in-game using the Romhacks menu in the Settings section. If any hack isn't fully supported, the menu should inform you when extracting the mod. Most supported romhacks currently haven't been fully tested, so there may still be some issues.\n\n_NOTE: When using romhacks, only US v1.0 is supported, inherited from Banjo's Backpack. Therefore, it is recommended to use **US v1.0** as your base `bk.o2r` file.\n\n# Custom Assets\n\nCustom assets are packed in `.o2r` or `.otr` files. To use custom assets, place them in the `mods` folder.\n\nIf you're interested in creating and/or packing your own custom asset `.o2r`/`.otr` files, check out the following tools:\n* [**retro - OTR and O2R generator**](https://github.com/HarbourMasters64/retro)\n* [**fast64 - Blender plugin (Note that BK64 is not supported at this time)**](https://github.com/HarbourMasters/fast64)\n\n# Development\n\n### Building\nIf you want to manually compile Lighthouse, please consult the [building instructions](https://github.com/HarbourMasters/Lighthouse/blob/main/docs/BUILDING.md).\n\n### Playtesting\nIf you want to playtest a continuous integration build, you can find them at the links below. Keep in mind that these are for playtesting only, and you will likely encounter bugs and possibly crashes.\n\n* [Windows](https://nightly.link/HarbourMasters/Lighthouse/workflows/main/main/Lighthouse-windows.zip)\n* [macOS](https://nightly.link/HarbourMasters/Lighthouse/workflows/main/main/Lighthouse-mac.zip)\n* [Linux](https://nightly.link/HarbourMasters/Lighthouse/workflows/main/main/Lighthouse-linux.zip)\n\n<a href=\"https://github.com/Kenix3/libultraship/\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/poweredbylus.darkmode.png\">\n    <img alt=\"Powered by libultraship\" src=\"./docs/poweredbylus.lightmode.png\">\n  </picture>\n</a>\n\n# Special Thanks:\n\n* The Banjo decomp team\n* Fredomato, scorched11 for work on rando\n"
+    },
+    "brief": {
+      "summary": "Banjo-Kazooie 的跨平台开源移植项目",
+      "problem": "让玩家在现代系统运行 Banjo-Kazooie",
+      "highlights": [
+        "可以在 Windows、Linux 和 macOS 上运行游戏",
+        "可以自定义手柄、键盘映射和图形后端",
+        "可以加载语言包、ROM 补丁和自定义资源"
+      ],
+      "target_users": [
+        "复古游戏玩家",
+        "ROM Hack 玩家",
+        "开源移植开发者"
+      ],
+      "why_trending": "今日新增 65 个 Star，本周首次收录",
+      "caveat": "不含游戏版权素材，需自行提供兼容 ROM",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "HarbourMasters/Lighthouse",
+      "score": 72,
+      "category": "ACG 资源 / Mod",
+      "reason": "班卓熊重制与移植项目",
+      "generated_by_ai": true,
+      "velocity_score": 55,
+      "freshness_score": 20,
+      "ranking_score": 52.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 46587,
+      "forks": 4593,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 2420
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-08-03T04:01:10Z",
+      "pushed_at": "2026-08-03T02:25:00Z",
+      "open_issues": 201,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.10.2/AIRI-0.10.2-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.10.2/AIRI-0.10.2-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven VTuber open source projects,"
+    },
+    "brief": {
+      "summary": "AIRI 是可自托管的虚拟角色陪伴项目",
+      "problem": "让虚拟角色进入日常互动和游戏场景",
+      "highlights": [
+        "可以进行实时语音聊天",
+        "可以让角色游玩 Minecraft",
+        "可以让角色游玩 Factorio"
+      ],
+      "target_users": [
+        "VTuber 开发者",
+        "虚拟角色爱好者",
+        "开源项目研究者"
+      ],
+      "why_trending": "总 Star 达46587，近期仍有代码更新",
+      "caveat": "项目有201个未解决 Issue，稳定性资料未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 96,
+      "category": "3D / VTuber",
+      "reason": "自托管AI VTuber伴侣",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 20,
+      "ranking_score": 76.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "renpy/renpy",
+      "url": "https://github.com/renpy/renpy",
+      "description": "The Ren'Py Visual Novel Engine",
+      "language": "Ren'Py",
+      "total_stars": 6685,
+      "forks": 915,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 5
+    },
+    "details": {
+      "topics": [
+        "engine",
+        "game",
+        "novel",
+        "python",
+        "renpy",
+        "visual",
+        "visual-novel"
+      ],
+      "license_name": "",
+      "created_at": "2012-06-28T01:21:22Z",
+      "updated_at": "2026-08-03T03:55:31Z",
+      "pushed_at": "2026-08-03T03:55:18Z",
+      "open_issues": 284,
+      "homepage": "http://www.renpy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "==============================\nThe Ren'Py Visual Novel Engine\n==============================\n\nhttps://www.renpy.org\n\n\nBranches\n========\n\nThe following branches are the most interesting.\n\n``fix``\n    The fix branch is used for fixes to the current version of Ren'Py that do\n    not require dangerous changes. The fix branch is also the source of the\n    documentation on https://www.renpy.org/. This branch is automatically\n    merged into master on a regular basis.\n\n    Pull requests that contain fixes or documentation improvements should be\n    made to the fix branch. When a feature release is made (for example, going from 8.6.x to 8.7.0),\n    the master branch is copied to the fix branch. Fix releases are made from this branch.\n\n``master``\n    The master branch is where the main focus of development is. This branch\n    will eventually become the next release of Ren'Py.\n\n    Pull requests that contain new features, that require incompatible changes,\n    or major changes to Ren'Py's internals should be targeted at the master\n    branch.\n\n    Feature releases are made from this branch.\n\n\nGetting Started\n===============\n\nRen'Py depends on a number of Python modules written in Cython and C. For\nchanges to Ren'Py that only involve Python modules, you can use the modules\nfound in the latest nightly build. Otherwise, you'll have to compile the\nmodules yourself.\n\nThe development scripts assume a POSIX-like platform. The scripts should run\non Linux or macOS, and can be made to run on Windows using an environment\nlike MSYS.\n\nNightly Build\n-------------\n\nNightly builds can be downloaded from:\n\n   https://nightly.renpy.org\n\nNote that the latest nightly build is at the bottom of the list. Once you've\nunpacked the nightly, change into this repository, and run::\n\n    ./after_checkout.sh <path-to-nightly>\n\nOnce this script completes, you should be able to run Ren'Py using renpy.sh,\nrenpy.app, or renpy.exe, as appropriate for your platform.\n\nIf the current nightly build doesn't work, please wait 24 hours for a new\nbuild to occur. If that build still doesn't work, contact Tom (`pytom at bishoujo.us`,\nor @renpytom on Twitter/X) to find out what's wrong.\n\nThe ``doc`` symlink will dangle until documentation is built, as described\nbelow.\n\nCompiling the Modules\n----------------------\n\nBuilding the modules requires you have the many dependencies installed on\nyour system. On Ubuntu and Debian, these dependencies can be installed with\nthe command::\n\n    sudo apt install python3-dev libassimp-dev libavcodec-dev libavformat-dev \\\n        libswresample-dev libswscale-dev libharfbuzz-dev libfreetype6-dev libfribidi-dev libsdl2-dev \\\n        libsdl2-image-dev libsdl2-gfx-dev libsdl2-mixer-dev libsdl2-ttf-dev libjpeg-dev pkg-config\n\nRen'Py requires SDL_image 2.6 or greater. If your distribution doesn't include\nthat version, you'll need to download it from:\n\n    https://github.com/libsdl-org/SDL_image/tree/SDL2\n\nWe strongly suggest using a package manager to create virtual environment and\nmanage dependencies. We have tested with `uv <https://docs.astral.sh/uv/>`_ but\nother package managers should work as well. To create a virtual environment and\ninstall dependencies, open a new terminal and run::\n\n    uv sync\n\nAfter that, compile extension modules and run Ren'Py using the command::\n\n    ./run.sh\n\n\nOther Platforms\n---------------\n\nWhere supported, Ren'Py will attempt to find include directories and library paths\nusing pkg-config. If pkg-config is not present, include and library paths can be\nspecified using CFLAGS and LDFLAGS.\n\nIf RENPY_CFLAGS is present in the environment and CFLAGS is not, setup.py\nwill set CFLAGS to RENPY_CFLAGS. The same is true for RENPY_LDFLAGS,\nRENPY_CC, RENPY_CXX, and RENPY_LD.\n\nSetup.py does not support cross-compiling. See https://github.com/renpy/renpy-build\nfor software that cross-compiles Ren'Py for many platforms. The renpy-build system\nalso include some runtime components for Android, iOS, and web.\n\n\nDocumentation\n=============\n\nBuilding\n--------\n\nBuilding the documentation requires Ren'Py to work. You'll either need to\nlink in a nightly build, or compile the modules as described above. You'll\nalso need the `Sphinx <https://www.sphinx-doc.org>`_ documentation generator.\nIf you have pip working, install Sphinx using::\n\n    pip install -U sphinx sphinx_rtd_theme sphinx_rtd_dark_mode sphinx-tabs\n\nOnce Sphinx is installed, change into the ``sphinx`` directory inside the\nRen'Py checkout and run::\n\n    ./build.sh\n\nFormat\n------\n\nRen'Py's documentation consists of reStructuredText files found in sphinx/source, and\ngenerated documentation found in function docstrings scattered throughout the code. Do\nnot edit the files in the ``sphinx/source/inc`` folder directly, as they will be\noverwritten.\n\nDocstrings may include tags on the first few lines:\n\n\\:doc: `section` `kind`\n    Indicates that this function should be documented. `section` gives\n    the name of the include file the function will be documented in, while\n    `kind` indicates the kind of object to be documented (one of ``function``,\n    ``method`` or ``class``. If omitted, `kind` will be auto-detected.\n\\:name: `name`\n    The name of the function to be documented. Function names are usually\n    detected, so this is only necessary when a function has multiple aliases.\n\\:args: `args`\n    This overrides the detected argument list. It can be used if some arguments\n    to the function are deprecated.\n\nFor example::\n\n    def warp_speed(factor, transwarp=False):\n        \"\"\"\n        :doc: warp\n        :name: renpy.warp_speed\n        :args: (factor)\n\n        Exceeds the speed of light.\n\n        `factor`\n            The warp factor. See Sternbach (1991) for details.\n\n        `transwarp`\n            If True, use transwarp. This does not work on all platforms.\n        \"\"\"\n\n        renpy.engine.warp_drive.engage(factor)\n\n\nTranslating\n===========\n\nFor best practices when it comes to translating the launcher and template\ngame, please read:\n\nhttps://lemmasoft.renai.us/forums/viewtopic.php?p=321603#p321603\n\n\nContributing\n============\n\nFor bug fixes, documentation improvements, and simple changes, just make a pull request. For nontrivial changes,\nplease file an issue first so we can discuss the planned change.\n\n\nEfficiency Tools (including Language Models)\n============================================\n\nThe goal of Ren'Py is to provide tools that enable human creativity in the form of visual novels and similar styles\nof games. In service of this goal, developers may use tools that increase their efficiency, including tools that use\nlanguage models.\n\nEvery change to Ren'Py must be created by a human that understands both the change, the\nportions of Ren'Py affected by this change, and the copyright implications of the change. Examples of uses of\nefficiency tools that we consider appropriate include completion where the human only accepts suggestions that\nthey understand and that are correct, and prompts that cause changes that can be immediately\nreviewed by a human for correctness. Larger changes may be created by prompting for smaller changes with reviews\nat each step.\n\nWe do not accept changes where a human does not fully understand the change and how it affects Ren'Py. Large changes\nmade with minimal human review (\"vibe coding\") are not acceptable. If you'd like to make such a change, it's better to\njust bring the idea to us on GitHub and let us make the change. Changes made by agents without human review are not\nacceptable.\n\nOur use of AI is intended to not require disclosure in the\n`Steam Content Survey <https://partner.steamgames.com/doc/gettingstarted/contentsurvey#5>`_. Specifically, we\ndon't use diffusion models or other techniques to generate game content consumed by players, and we do not require\ncreators to use any AI tools, or provide any such tools for creators to use.\n\nAs a special case, we allow machine translation of system messages when there is no human translator for the language.\nWhen a human translator becomes available, their work takes precedence. This exception allows system messages to be\ntranslated to improve accessibility.\n\nLicense\n=======\n\nFor the complete licensing terms, please read:\n\nhttps://www.renpy.org/doc/html/license.html\n\nBy contributing to Ren'Py, you agree to license your contributions under the MIT license. When contributing, you may\nchoose to:\n\n* Retain copyright in your contribution. If you choose this, please \"Copyright (year) Your Name <your email>\" in the\n  copyright notice for any file you change.\n* Assign copyright in your contribution to Tom Rothamel <pytom@bishoujo.us>. This is assumed to be the default if\n  you don't specify otherwise.\n"
+    },
+    "brief": {
+      "summary": "用于制作视觉小说和类似游戏的开源引擎",
+      "problem": "帮助开发者编写、构建和发布视觉小说类游戏",
+      "highlights": [
+        "可以制作视觉小说和类似风格的游戏",
+        "可以通过脚本与 Python 模块开发内容",
+        "可以参与引擎修复和文档改进"
+      ],
+      "target_users": [
+        "视觉小说开发者",
+        "独立游戏团队",
+        "Ren'Py贡献者"
+      ],
+      "why_trending": "总 Star 约6685，本周首次收录且近期持续更新",
+      "caveat": "从源码构建需要较多系统依赖，资料中未说明发布平台",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "renpy/renpy",
+      "score": 95,
+      "category": "互动叙事",
+      "reason": "专用于视觉小说开发",
+      "generated_by_ai": true,
+      "velocity_score": 24,
+      "freshness_score": 20,
+      "ranking_score": 56.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "SysAdminDoc/OpenCut",
+      "url": "https://github.com/SysAdminDoc/OpenCut",
+      "description": "A free, open-source Premiere Pro extension that brings AI-powered video editing automation, caption generation, audio processing, and visual effects, all running locally on your machine. This project aims to replace all of the leading paid Premiere extensions and products on the market.",
+      "language": "Python",
+      "total_stars": 34,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "automation",
+        "premiere-pro",
+        "python",
+        "video-editing"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T19:19:08Z",
+      "updated_at": "2026-08-03T03:30:25Z",
+      "pushed_at": "2026-08-03T03:30:13Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# OpenCut\n\n![Version](https://img.shields.io/badge/version-1.46.0-blue)\n![License](https://img.shields.io/badge/license-MIT-green)\n![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-0078D4)\n![Python](https://img.shields.io/badge/Python-3.11--3.14-3776AB?logo=python&logoColor=white)\n![Premiere Pro](https://img.shields.io/badge/Premiere%20Pro-2019+-9999FF?logo=adobepremierepro&logoColor=white)\n![Routes](https://img.shields.io/badge/API%20Routes-1544-orange)\n![Tests](https://img.shields.io/badge/Tests-12400+-brightgreen)\n\n> Route count is generated from `opencut/_generated/route_manifest.json` and\n> reflects **shipped** routes only — each route is tagged\n> `implemented` / `dependency-gated` / `stub`, and strategic 501 stubs are\n> excluded from the advertised count. Run\n> `python -m opencut.tools.dump_route_manifest --check` to verify it is in\n> sync with the live Flask app, and `GET /system/route-readiness` for the live\n> shipped count and stub list.\n\n> **OpenCut replaces ~$1,400/year of video-editing subscriptions** with a free, MIT-licensed Premiere Pro extension. Unlimited silence-cut direct to timeline, stem separation, voice cloning, animated captions, local LLM highlights, and multi-platform social export -- with no subscriptions, no usage caps, and no API keys required for core local features. Cloud providers, Edge-TTS, downloads, telemetry, and social uploads are optional, explicit network features.\n\n---\n\n## Project planning\n\n- [ROADMAP.md](ROADMAP.md) is the only active open-work tracker.\n- [CHANGELOG.md](CHANGELOG.md) records shipped release-facing changes.\n- [RESEARCH.md](RESEARCH.md) summarizes the current research direction and points to archived research inputs.\n- [docs/RESEARCH_COMPETITIVE_TEARDOWN_2026-06-10.md](docs/RESEARCH_COMPETITIVE_TEARDOWN_2026-06-10.md) preserves the June 2026 competitive teardown evidence.\n\n---\n\n## Naming & distribution\n\n**Decision (2026-06-14):** the product keeps the name **OpenCut**, but the\npackage-manager distribution token is **`opencut-ppro`**.\n\nThere is an unrelated, popular browser-based editor also called *OpenCut*\n([github.com/OpenCut-app/OpenCut](https://github.com/OpenCut-app/OpenCut),\n~48K stars). To keep search, PyPI, Homebrew, and winget unambiguous — and to\nstay distinct from it when it relaunches — this project distributes under a\nqualified token: the **`-ppro`** suffix marks the Adobe **Premiere Pro**\nintegration that uniquely identifies this tool. So:\n\n- **Reserved distribution name:** `opencut-ppro` on PyPI, Homebrew, and winget.\n  None of those package channels is published as of 2026-07-22, so this README\n  provides source-checkout commands only.\n- **Unchanged:** the product name *OpenCut*, the Python import package\n  (`import opencut`), the CLI commands (`opencut`, `opencut-server`,\n  `opencut-mcp-server`), and the CEP/UXP extension IDs\n  (`com.opencut.panel`, `com.opencut.uxp`).\n\nThe `opencut-ppro` name is reserved-by-decision here and in `pyproject.toml`;\nthe actual PyPI publish (via trusted publishing) is tracked in the roadmap and\nis the one step that needs the maintainer's PyPI account.\n\n---\n\n## Quick Start\n\n### Prerequisites\n\n- **Adobe Premiere Pro** 2019 or later (CEP panel) / 25.6+ (UXP panel)\n- **Windows 10/11, macOS, or Linux** (Windows installer, macOS/Linux source launchers, and Linux Flatpak/AppImage release packaging)\n- **Python 3.11-3.14** for source installs; the Windows installer bundles its own runtime\n- **FFmpeg** must be installed and on your system PATH for all video/audio processing. The Windows installer handles this automatically; source installs require a manual install (see below)\n\n### Installation\n\n**Option A -- Windows Installer (recommended for Windows):**\n\nThe latest published Windows installer is [OpenCut v1.25.1](https://github.com/SysAdminDoc/OpenCut/releases/tag/v1.25.1). It predates the current source tree. Release artifacts are named `OpenCut-Setup-<version>.exe` and handle everything: server, FFmpeg, CEP extension, registry, and optional model downloads. No Python is needed for that packaged release; use Option B or C for the current source version.\n\nEvery assembled installer includes `release-composition.json`,\n`opencut-artifact-sbom.cyclonedx.json`, `THIRD-PARTY-NOTICES.txt`, and\n`ffmpeg-provenance.json` beside the installed application. These records bind\nthe direct and transitive Python packages, packaged payloads, and bundled\nFFmpeg binary to SHA-256 hashes and document the exact FFmpeg source and build\nprovenance needed to reproduce the GPL-covered component.\n\n**Option B -- Install.bat (recommended for Windows source installs):**\n\nThis is the easiest way to install from source on Windows. It handles FFmpeg, Python dependencies, the CEP extension, registry keys, and launcher creation in one step.\n\n```\ngit clone https://github.com/SysAdminDoc/OpenCut.git\ncd OpenCut\n```\n\nThen right-click `Install.bat` and select **Run as Administrator**. The installer will:\n1. Install or upgrade FFmpeg and reject builds below 8.1.2\n2. Verify Python 3.11-3.14 is on your PATH (unsupported versions are rejected before installation)\n3. Install all Python dependencies (Flask, click, rich, etc.)\n4. Install the OpenCut Python package\n5. Optionally install Whisper for caption generation\n6. Copy the CEP extension to Adobe's extensions folder\n7. Set the `PlayerDebugMode` registry key so unsigned extensions load\n8. Create `Start-OpenCut.bat` on your desktop to launch the backend server\n\nAfter the installer finishes, you are ready to use OpenCut -- see **Launch** below.\n\n**Option C -- From source (manual):**\n\nIf you prefer manual control or are on macOS/Linux, follow these steps:\n\n1. **Install FFmpeg 8.1.2 or newer** and make sure it is on your system PATH. OpenCut blocks older and unparseable builds before media processing because releases before 8.1.2 are affected by CVE-2026-8461:\n   - Windows: `winget install Gyan.FFmpeg` or download from https://ffmpeg.org/download.html and add the `bin` folder to your PATH\n   - macOS: `brew install ffmpeg`\n   - Linux: `sudo apt install ffmpeg` (Debian/Ubuntu) or equivalent for your distro\n   - Verify: `python scripts/verify_ffmpeg_provenance.py` must report `RESULT: OK`\n\n2. **Clone and install the Python package:**\n   ```bash\n   git clone https://github.com/SysAdminDoc/OpenCut.git\n   cd OpenCut\n   python -m pip install -e \".\"\n   ```\n   Add a supported optional profile after the core install as needed (see\n   [Dependency Tiers](#dependency-tiers)). On Windows, if `python`\n   is not found, use `py -3.12 -m pip install -e \".\"`. If you get permission\n   errors, add `--user` to the pip command.\n\n3. **Install the CEP extension** (for the Premiere Pro panel):\n   - Windows: copy the folder `extension/com.opencut.panel` to `%APPDATA%\\Adobe\\CEP\\extensions\\` (create the `extensions` folder if it does not exist)\n   - macOS: copy to `~/Library/Application Support/Adobe/CEP/extensions/`\n   - Then set the debug registry key so Premiere loads unsigned extensions:\n     - Windows: open `regedit`, navigate to `HKCU\\Software\\Adobe\\CSXS.18` (create the key if needed), add a String value `PlayerDebugMode` set to `1`. Repeat for CSXS.17, .16, etc. to cover your Premiere version.\n     - macOS: `defaults write com.adobe.CSXS.18 PlayerDebugMode 1`\n\n4. **Start the server:** `python -m opencut.server`\n\nAdd `torch-stack` or narrower feature extras only when you need Torch-backed\nbackends such as Demucs separation, pyannote diarization,\nRealESRGAN/GFPGAN restoration, or TransNetV2 scene detection. WhisperX 3.8.x is\nnot an installable OpenCut extra because its `torchvision <0.24` requirement\nconflicts with the `torchvision >=0.25` / Torch 2.10 security floor. The\nDependency Dashboard reports that incompatibility instead of recommending a\nvulnerable environment.\n\nSupported base runtimes are CPython 3.11, 3.12, 3.13, and 3.14 on Windows,\nLinux, and macOS. Optional extras are resolver-tested across their declared\nlanes; `ai-gpu` is limited to Windows and Linux, generic macOS targets exclude\nthe `ai`/`all` bundles, and macOS Python 3.14 also excludes caption bundles\nuntil onnxruntime publishes matching wheels. Validate all declared lanes with:\n\n```bash\npython scripts/check_dependency_matrix.py --matrix\n```\n\n**Option D -- Docker:**\n\n```bash\nopenssl rand -hex 32 > .opencut-auth-token\nchmod 600 .opencut-auth-token\nexport OPENCUT_REMOTE_AUTH_TOKEN_FILE=./.opencut-auth-token\ndocker compose up opencut-server\ndocker compose --profile gpu up opencut-server-gpu\ndocker compose --profile mcp up opencut-mcp\n```\n\nDocker publishes the HTTP API on port 5679 and persists data under\n`/home/opencut/.opencut`. It does not publish the optional WebSocket 5680 or\nMCP 5681 sidecars by default; the explicit `mcp` profile publishes MCP with the\nsame mounted API token. All CPU, GPU, and MCP Compose profiles require the host\nsecret file and boot without a desktop credential vault or plaintext-storage\nopt-in. The image validates a private runtime copy as a regular, non-symlink\n`0400` file; the value is never placed in Compose environment variables,\nOpenCut JSON, logs, image layers, or API responses.\n\nCompose mounts are read-only by design. Rotate one by atomically replacing the\nhost secret, then recreate the affected services with\n`docker compose up -d --force-recreate`; do not use `/auth/rotate` for this\nlane. A direct, owner-writable `0600` secret-file backend supports\n`opencut-server --rotate-auth`, while a `0400` file returns the explicit\n`REMOTE_AUTH_TOKEN_FILE_READ_ONLY` error. The image builds FFmpeg 8.1.2 from\nthe checksum-pinned upstream source archive and fails its build-time provenance\ngate if the binary falls below OpenCut's security floor. Image assembly also\ninstalls Python from the universal `requirements-release-lock.txt` with\n`--require-hashes`\nand generates the same resolved SBOM, notices, and composition manifest as the\ndesktop release lanes.\n\n**Option E -- Linux desktop package:**\n\nThe repository includes Flatpak and AppImage packaging for local release builds,\nbut no Flatpak or AppImage is currently published. See\n[`docs/LINUX_DISTRIBUTION.md`](docs/LINUX_DISTRIBUTION.md) for the\n`io.github.sysadmindoc.opencut` contract and local package-build command.\n\n### Uninstall data safety\n\nWindows uninstallers remove the application and integrations but preserve\n`%USERPROFILE%\\.opencut` by default, including settings, jobs, journals,\nindexes, plugins, models, and project/agent state. The separate **Also remove**\nchoice is unchecked and creates a verified ZIP in `Documents\\OpenCut Backups`\nbefore deleting data. If backup validation or deletion fails, the data is kept.\n\nAutomated WPF removal must add `--remove-user-data`; the Inno uninstaller uses\n`/REMOVEUSERDATA`. Custom paths use `--user-data-dir` and\n`--user-data-backup-dir` (WPF), or `/USERDATADIR=` and\n`/USERDATABACKUPDIR=` (Inno). Quiet uninstall without the dedicated removal\nflag always preserves user data.\n\n### Launch\n\n1. **Start the backend server** -- this must be running before the panel can connect:\n   - Windows (installer): double-click `Start-OpenCut.bat` on your desktop or in the OpenCut folder\n   - Windows (source): open a terminal in the OpenCut folder and run `python -m opencut.server`\n   - macOS: run `./OpenCut-Server.command` or `python -m opencut.server`\n   - Linux: run `./OpenCut-Server.sh` or `python -m opencut.server`\n   - You should see output like `Running on http://127.0.0.1:5679` -- **keep this terminal window open**\n2. Open Premiere Pro and go to **Window > Extensions > OpenCut**\n3. The panel should show a green connection indicator. Select a clip and start editing.\n\n### Troubleshooting\n\n**Panel says \"Server offline\" or won't connect:**\nThe OpenCut panel connects to a backend server running on `http://127.0.0.1:5679`. If the panel cannot connect:\n- Make sure the backend server is running (step 1 above). You need a terminal window open with `python -m opencut.server` running.\n- Check the terminal f"
+    },
+    "brief": {
+      "summary": "面向 Premiere Pro 的本地 AI 视频编辑扩展",
+      "problem": "减少字幕、静音剪辑和音频处理等重复工作",
+      "highlights": [
+        "可以自动生成字幕并制作动态字幕",
+        "可以剪除静音并直接写入时间线",
+        "可以本地处理音频、分离人声与背景声"
+      ],
+      "target_users": [
+        "Premiere 剪辑师",
+        "视频内容创作者",
+        "本地化部署团队"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，但今日新增 Star 为 0",
+      "caveat": "需安装 Premiere Pro、FFmpeg，部分功能还需额外依赖",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "SysAdminDoc/OpenCut",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "本地AI视频剪辑自动化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "MyNiuuu/AniCrafter",
+      "url": "https://github.com/MyNiuuu/AniCrafter",
+      "description": "[ACM MM 2026] AniCrafter: Customizing Realistic Human-Centric Animation via Avatar-Background Conditioning in Video Diffusion Models",
+      "language": "Python",
+      "total_stars": 140,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-gaussian-splatting",
+        "character-animation",
+        "diffusion-transformer",
+        "human-centric",
+        "image-to-video",
+        "video-diffusion-model",
+        "video-editing",
+        "video-to-video",
+        "wan-i2v"
+      ],
+      "license_name": "",
+      "created_at": "2025-05-25T11:06:41Z",
+      "updated_at": "2026-08-03T03:49:19Z",
+      "pushed_at": "2026-08-03T03:49:12Z",
+      "open_issues": 4,
+      "homepage": "https://myniuuu.github.io/AniCrafter",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n\n  <h2>AniCrafter: Customizing Realistic Human-Centric Animation via Avatar-Background Conditioning in Video Diffusion Models </h2>\n<div>\n    <a href='https://myniuuu.github.io/' target='_blank'>Muyao Niu</a> <sup>1,2</sup> &nbsp;\n    <a href='https://github.com/ljzycmd' target='_blank'>Mingdeng Cao</a><sup>1</sup> &nbsp;\n    <a href='https://yifever20002.github.io/' target='_blank'>Yifan Zhan</a><sup>1</sup> &nbsp;\n    <a href='https://qtzhu.me/' target='_blank'>Qingtian Zhu</a><sup>1</sup> &nbsp; \n    <a href='https://github.com/mm2319' target='_blank'>Mingze Ma</a><sup>1</sup> &nbsp;\n    <a href='https://github.com/zhaojiancheng007' target='_blank'>Jiancheng Zhao</a><sup>1</sup> &nbsp; \n<div>\n<div>\n    <a href='https://zengyh1900.github.io/' target='_blank'>Yanhong Zeng</a><sup>2</sup> &nbsp; \n    <a href='https://zzh-tech.github.io/' target='_blank'>Zhihang Zhong</a><sup>2</sup> &nbsp; \n    <a href='https://jimmysuen.github.io/' target='_blank'>Xiao Sun</a><sup>2</sup> &nbsp; \n    <a href='https://scholar.google.com/citations?user=JD-5DKcAAAAJ&hl=en' target='_blank'>Yinqiang Zheng</a><sup>1</sup> &nbsp; \n</div>\n<div>\n    <sup>1</sup> The University of Tokyo &nbsp; <sup>2</sup> Shanghai Artificial Intelligence Laboratory &nbsp; <sup>*</sup> Corresponding Authors &nbsp; \n</div>\n\n\n\n<a href='https://arxiv.org/abs/2505.20255'><img src='https://img.shields.io/badge/ArXiv-PDF-red'></a> &nbsp; <a href='https://myniuuu.github.io/AniCrafter'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp; <a href='https://huggingface.co/MyNiuuu/Anicrafter_release'><img src='https://img.shields.io/badge/🤗 HuggingFace-AniCrafter-yellow'></a>\n\n> 🚧 $\\color{red}{\\textsf{Note: The code in this repository corresponds to the arXiv v1 version of the paper (not the accepted ACM MM version).}}$\n> $\\color{red}{\\textsf{The homepage and arXiv paper has been updated, yet the code for our new version are still under preparation. Stay tuned!}}$\n\n\n\n## TL;DR\n\n> We leverage **\"3DGS Avatar + Background Video\"** as guidance for the video diffusion model to **insert and animate anyone into any scene following given motion sequence**.\n\n<div align=\"center\">\n  <h3>\n    <img src=\"assets/teaser.jpeg\"/>\n  </h3>\n</div>\n\n\n<!-- <table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"13%\">\n      <img src=\"assets/character_image/000000.jpg\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/0.gif\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/1.gif\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/2.gif\"/>\n      <br />\n    </td>\n  </tr>\n</table> -->\n\n\n\n<!-- <table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"13%\">\n      <img src=\"assets/character_image/000001.jpg\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/3.gif\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/4.gif\"/>\n      <br />\n    </td>\n    <td align=\"center\" width=\"29%\">\n      <img src=\"assets/demo_videos/5.gif\"/>\n      <br />\n    </td>\n  </tr>\n</table> -->\n\n\n\n\n## 🔥🔥🔥 New Features/Updates\n\n- (2026.07.14) AniCrafter is accepted to ACM MM 2026! 🎉 We will release the new version of our model in the following days!\n- (2025.07.22) We support Unified Sequence Parallel (USP) for multi-GPU inference.\n- (2025.07.03) We have released the cross-character inference script to replace the person in the source video!\n- (2025.07.02) Our [Project Page](https://myniuuu.github.io/AniCrafter) 🏠 is online!\n- (2025.07.01) We have released the model and inference script to insert and animate the character into the background video following SMPLX motion sequences! \n- If you find this work interesting, please do not hesitate to give a ⭐!\n\n\n\n## 📰 CODE RELEASE\n\n\n- [x] (2025.07.01) Release model checkpoint and cross-character inference script.\n- [x] (2025.07.03) Release the complete cross-character inference script including data preprocessing (mask parsing + SMPLX estimation + background inpainting).\n- [x] (2025.07.22) We support Unified Sequence Parallel (USP) for multi-GPU inference.\n- [ ] Release training codes.\n\n\n## ⚙️ Environment Setup\n\n### 🌍 Virtual Enviroment\n\n```\nconda create -n anicrafter python=3.10\nconda activate anicrafter\nbash install_cu124.sh\n\npip install xfuser  # Unified Sequence Parallel (USP) for multi-GPU inference \n```\n\n\n### 📦 Download Checkpoints\n\n```\nhuggingface-cli download Wan-AI/Wan2.1-I2V-14B-720P --local-dir ./Wan2.1-I2V-14B-720P\nhuggingface-cli download MyNiuuu/Anicrafter_release --local-dir ./Anicrafter_release\nmv ./Anicrafter_release/gfpgan ./gfpgan\nmv ./Anicrafter_release/pretrained_models ./pretrained_models\n```\n\n\n## 🏃 Cross-Character Inference from Background Video and Motions\n\nRun the following commands to insert and animate the character into the background video following SMPLX motion sequences. The pipeline consists of following key functions:\n- Reconstructing 3DGS Avatar from single image using [LHM](https://github.com/aigc3d/LHM)\n- Animating the 3DGS Avatar according to the SMPLX sequences to obtain the spatial aligned avatar renderings\n- Combine avatar rendering and background video to form the \"Avatar + Background\" condition\n- Run the diffusion model to obtain the final animation results \n\n### Single GPU Inference\n\n```\npython run_pipeline.py \\\n--ckpt_path ./pretrained_models/anicrafter \\\n--wan_base_ckpt_path ./Wan2.1-I2V-14B-720P \\\n--character_image_path ./demo/character_images/000000.jpg \\\n--scene_path ./demo/videos/scene_000000 \\\n--save_root ./infer_result\n```\n\n### Multi-GPU Inference with Unified Sequence Parallel (USP) for acceleration\n\n```\ntorchrun \\\n--nproc_per_node=8 \\\n--master_port=16333 \\\nrun_pipeline_usp.py \\\n--ckpt_path ./pretrained_models/anicrafter \\\n--wan_base_ckpt_path ./Wan2.1-I2V-14B-720P \\\n--character_image_path ./demo/character_images/000000.jpg \\\n--scene_path ./demo/videos/scene_000000 \\\n--save_root ./infer_result\n```\n\n## 🏃 Cross-Character Inference from in-the-wild Videos \nRun the following commands to replace the person in the source video with our complete data preprocessing pipeline, which contains the following components:\n\n- Parsing human masks\n- Estimating SMPLX parameters and rendering SMPLX mesh videos\n- Background inpainting based on the human masks\n- Reconstructing 3DGS Avatar from single image using [LHM](https://github.com/aigc3d/LHM)\n- Animating the 3DGS Avatar according to the SMPLX sequences to obtain the spatial aligned avatar renderings\n- Combine avatar rendering and background video to form the \"Avatar + Background\" condition\n- Run the diffusion model to obtain the final animation results \n\n\n### ⚙️ Additional Environment Setup\n\n```\n\ncd engine/pose_estimation\npip install mmcv==1.3.9\npip install -v -e third-party/ViTPose\npip install ultralytics\npip install av\ncd ../..\npip install numpy==1.23.5\n\n\nmkdir weights\ncd weights\nwget https://github.com/sczhou/ProPainter/releases/download/v0.1.0/cutie-base-mega.pth\nwget https://github.com/sczhou/ProPainter/releases/download/v0.1.0/i3d_rgb_imagenet.pt\nwget https://github.com/sczhou/ProPainter/releases/download/v0.1.0/ProPainter.pth\nwget https://github.com/sczhou/ProPainter/releases/download/v0.1.0/raft-things.pth\nwget https://github.com/sczhou/ProPainter/releases/download/v0.1.0/recurrent_flow_completion.pth\ncd ..\n\n# or you can mannually download from https://github.com/sczhou/ProPainter/releases/tag/v0.1.0\n```\n\n### Single GPU Inference\n\n```\n# Mask + SMPLX + Inpainting + Avatar Recon + Rendering + Diffusion\n# You could change the hyper-parameters of the inpainting algorithm to obtain optimal results\n\npython run_pipeline_with_preprocess.py \\\n--video_root ./demo/origin_videos/raw_video \\\n--ckpt_path ./pretrained_models/anicrafter \\\n--wan_base_ckpt_path ./Wan2.1-I2V-14B-720P \\\n--character_image_path ./demo/character_images/000000.jpg \\\n--save_root ./infer_result_replace\n```\n\n### Multi-GPU Inference with Unified Sequence Parallel (USP) for acceleration\n\n```\n# Mask + SMPLX + Inpainting + Avatar Recon + Rendering + Diffusion\n# You could change the hyper-parameters of the inpainting algorithm to obtain optimal results\n\ntorchrun \\\n--nproc_per_node=8 \\\n--master_port=16333 \\\nrun_pipeline_with_preprocess_usp.py \\\n--video_root ./demo/origin_videos/raw_video \\\n--ckpt_path ./pretrained_models/anicrafter \\\n--wan_base_ckpt_path ./Wan2.1-I2V-14B-720P \\\n--character_image_path ./demo/character_images/000000.jpg \\\n--save_root ./infer_result_replace\n```\n\n## Citation\n```\n@article{niu2025anicrafter,\n  title={AniCrafter: Customizing Realistic Human-Centric Animation via Avatar-Background Conditioning in Video Diffusion Models},\n  author={Niu, Muyao and Cao, Mingdeng and Zhan, Yifan and Zhu, Qingtian and Ma, Mingze and Zhao, Jiancheng and Zeng, Yanhong and Zhong, Zhihang and Sun, Xiao and Zheng, Yinqiang},\n  journal={arXiv preprint arXiv:2505.20255},\n  year={2025}\n}\n```\n\n## Acknowledgements\nWe sincerely appreciate the code release of the following projects: [LHM](https://github.com/aigc3d/LHM), [Unianimate-DiT](https://github.com/ali-vilab/UniAnimate-DiT), [Diffusers](https://github.com/huggingface/diffusers), and [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio)\n"
+    },
+    "brief": {
+      "summary": "将角色插入视频场景并按动作生成动画",
+      "problem": "角色替换和跨场景动画制作流程复杂",
+      "highlights": [
+        "可以把单张角色图插入背景视频",
+        "可以按SMPLX动作驱动角色动画",
+        "可以替换原视频中的人物角色"
+      ],
+      "target_users": [
+        "动画研究者",
+        "视频创作者",
+        "AI视频开发者"
+      ],
+      "why_trending": "本周首次收录，已获140 Star且近期有更新",
+      "caveat": "代码对应论文v1，训练代码尚未发布",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "MyNiuuu/AniCrafter",
+      "score": 91,
+      "category": "AI 视频",
+      "reason": "扩散模型生成人物动画视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "Tencent/libpag",
+      "url": "https://github.com/Tencent/libpag",
+      "description": "The official rendering library for PAG (Portable Animated Graphics) files that renders After Effects animations natively across multiple platforms.",
+      "language": "HTML",
+      "total_stars": 5743,
+      "forks": 532,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "after-effects",
+        "animation",
+        "keyframes",
+        "libpag",
+        "pag"
+      ],
+      "license_name": "",
+      "created_at": "2020-09-22T04:32:20Z",
+      "updated_at": "2026-08-03T03:42:48Z",
+      "pushed_at": "2026-08-03T03:42:15Z",
+      "open_issues": 210,
+      "homepage": "https://pag.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<img src=\"resources/readme/logo.png\" alt=\"PAG Logo\" width=\"553\"/>\n\n[![license](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/Tencent/libpag/blob/master/LICENSE.txt) \n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/libpag/pulls) \n[![codecov](https://codecov.io/gh/Tencent/libpag/branch/main/graph/badge.svg)](https://codecov.io/gh/Tencent/libpag)\n[![autotest](https://github.com/Tencent/libpag/actions/workflows/autotest.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/autotest.yml)\n[![build](https://github.com/Tencent/libpag/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/build.yml)\n[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Tencent/libpag)](https://github.com/Tencent/libpag/releases)\n\n\n[![Cloud Studio](https://cs-res.codehub.cn/common/assets/icon-badge.svg)](https://cloudstudio.net/a/20987965736472576?channel=share&sharetype=Markdown)\n\nEnglish | [简体中文](./README.zh_CN.md) | [Homepage](https://pag.io)\n\n## Introduction\n\nlibpag is a real-time rendering library for PAG (Portable Animated Graphics) files, capable of \nrendering both vector-based and raster-based animations across various platforms, including iOS, \nAndroid, OpenHarmony, macOS, Windows, Linux, and the Web.\n\nPAG is an open-source file format designed for recording animations. You can create and export PAG \nfiles from Adobe After Effects using the PAGExporter plugin and preview them in the PAGViewer app, \nboth available on macOS and Windows.\n\nPAG is widely used in major Tencent apps like WeChat, Mobile QQ, Honor of Kings, Tencent Video, and \nQQ Music, as well as in thousands of third-party apps, reaching hundreds of millions of users.\n\n## Advantages\n\n- **Highly efficient file format**\n\n<img src=\"resources/readme/intro_1.png\" alt=\"intro_1\" width=\"282\"/>\n\nBenefiting from its highly efficient binary format, PAG files decode 10 times faster than JSON files \nand are about 50% smaller in file size for the same animations. Designers can also easily include \nbeautiful animations with bitmaps or audiovisual media in a single file without needing additional \nattachments.\n\n- **All AE features supported**\n\n<img src=\"resources/readme/intro_2.png\" alt=\"intro_2\" width=\"282\"/>\n\nWhile other solutions may only support exporting limited vector-based AE features, PAG combines \nvector-based and raster-based exporting techniques to support all AE animations in a single file. \nThis means third-party plugin effects in AE can also be exported.\n\n- **Measurable performance**\n\n<img src=\"resources/readme/intro_4.png\" alt=\"intro_4\" width=\"282\"/>\n\nPAG provides a monitoring panel in PAGViewer that displays normalized performance data for PAG files,\nmaking it easy for designers to review and optimize performance without needing developers. With \nnumerous automatic optimization techniques from the PAGExporter plugin, you can create animations \nwith impressive visual effects and excellent performance more efficiently.\n\n\nPAGViewer includes a monitoring panel \n- **Runtime editable animations**\n\n<img src=\"resources/readme/intro_5.png\" alt=\"intro_5\" width=\"282\"/>\n\nWith the flexible editing APIs from the PAG SDK, developers can easily modify the layer structure of\na single PAG file, combine multiple PAG files into one composition, or replace text and images with \nall pre-designed animation effects applied at runtime. This significantly reduces the coding work \nrequired for features like video templates.\n\n## System Requirements\n\n- iOS 9.0+\n- Android 5.0+\n- HarmonyOS Next 5.0.0(12)+\n- macOS 10.15+\n- Windows 7.0+\n- Chrome 69.0+ (Web)\n- Safari 15.0+ (Web)\n\n## Getting Started\n\nWe currently only publish precompiled libraries for iOS, Android, macOS, Web, and OpenHarmony. You \ncan build libraries of other platforms from the source code. The latest releases can be downloaded\nfrom [here](https://github.com/Tencent/libpag/releases).\n\n### iOS Integration\n\nYou can download the framework from the release page or add `libpag` to your project using CocoaPods.\nTo add the pod to your Podfile, include:\n\n```\npod 'libpag'\n```\n\nAnd then run:\n\n```\npod install\n```\n\nAfter installing the CocoaPod, import `libpag` into your project with:\n\n```\n#import <libpag/xxx.h>\n```\n\n### Android Integration\n\nYou can download the AAR from the release page or add `libpag` to your project using Maven:\n\nEdit the `build.gradle` file in the root of your project and add `mavenCentral()` to the `repositories` section:\n\n```\nbuildscript {\n    repositories {\n        mavenCentral()\n    }\n    dependencies {\n        classpath 'com.android.tools.build:gradle:3.2.1'\n    }\n}\n```\n\nAdd libpag to `app/build.gradle` (*`4.0.5.10` should be replaced with the latest release version*):\n\n```\ndependencies {\n    implementation 'com.tencent.tav:libpag:4.0.5.10'\n}\n```\n\nAdd the following rule to your proguard rules to prevent incorrect obfuscation:\n\n```\n  -keep class org.libpag.** {*;}\n  -keep class androidx.exifinterface.** {*;}\n```\n\nFinally, run gradle sync and build your project.\n\n### OpenHarmony Integration\n\nYou can download the HAR file from the [release](https://github.com/Tencent/libpag/releases) page, \nor add `libpag` to your project using OHPM:\n\n```\nohpm install @tencent/libpag\n```\n\nAlternatively, you can add it to your project manually. Add the following lines to `oh-package.json5` \nin your app module.\n\n```\n\"dependencies\": {\n\"@tencent/libpag\": \"^1.0.1\",\n}\n```\n\nThen run:\n\n```\nohpm install\n```\n\n### Web Integration\n\nCopy the following code into an HTML file and open it in your browser:\n\n```html\n<canvas class=\"canvas\" id=\"pag\"></canvas>\n<script src=\"https://unpkg.com/libpag@latest/lib/libpag.min.js\"></script>\n<script>\n  window.libpag.PAGInit().then((PAG) => {\n    const url = 'https://pag.io/file/like.pag';\n    fetch(url)\n      .then((response) => response.blob())\n      .then(async (blob) => {\n        const file = new window.File([blob], url.replace(/(.*\\/)*([^.]+)/i, '$2'));\n        // Do Something.\n      });\n  });\n</script>\n```\nMore information：[Web SDK Guide](./web/README.md)\n\n\n### Example\n\nExplore these projects to learn how to use the libpag APIs:\n\n- [https://github.com/libpag/pag-ios](https://github.com/libpag/pag-ios)\n- [https://github.com/libpag/pag-android](https://github.com/libpag/pag-android)\n- [https://github.com/libpag/pag-web](https://github.com/libpag/pag-web)\n\n### Documentation\n\n- [iOS API Reference](https://pag.io/apis/ios/index.html)\n- [Android API Reference](https://pag.io/apis/android/index.html)\n- [Web API Reference](https://pag.io/apis/web/index.html)\n\nYou can find additional documentation on [pag.io](https://pag.io/docs/home.html)\n\n## Development\n\nWe recommend using the CLion IDE on macOS for development.\n\n### Branch Management\n\n- The `main` branch is our active development branch, containing the latest features and bug fixes.\n- The `release/` branches are our stable milestone branches, fully tested. We periodically create a\n  `release/{version}` branch from the `main` branch. After a `release/{version}` branch is created, \n  only high-priority fixes are checked into it.\n\n**Note: This repository only contains the latest code since PAG 4.0. For legacy PAG 3.0 versions, \nyou can download the precompiled libraries from [here](https://github.com/Tencent/libpag/releases).**\n\n### Build Prerequisites\n\n- Xcode 11.0+\n- GCC 9.0+\n- Visual Studio 2019+\n- NodeJS 14.14.0+\n- Ninja 1.9.0+\n- CMake 3.13.0+\n- QT 6.2.0+\n- NDK 28+ (**28.0.13004108 recommended**)\n- Emscripten 3.1.58+\n\n### Dependency Management\n\nlibpag uses the [depsync](https://github.com/domchen/depsync) tool to manage third-party dependencies.\n\n**For macOS platform：**\n\nRun the script located in the root directory of the project:\n\n```\n./sync_deps.sh\n```\n\nThis script will automatically install the necessary tools and sync all third-party repositories.\n\n**For other platforms：**\n\nFirst, ensure you have the latest version of Node.js installed (you may need to restart your \ncomputer afterward). Then, run the following command to install the depsync tool:\n\n```\nnpm install -g depsync\n```\n\nThen, run `depsync` in the root directory of the project.\n\n```\ndepsync\n```\n\nYou might need to enter your Git account and password during synchronization. Ensure you have \nenabled the `git-credential-store` so that `CMakeList.txt` can automatically trigger synchronization \nnext time.\n\n### Build\n\nAfter synchronization, you can open the project with CLion and build the PAG library.\n\n**For macOS:**\n\nNo additional CLion configuration is needed.\n\n**For Windows:**\n\nFollow these steps to configure CLion correctly:\n\n- Ensure you have installed the **[Desktop development with C++]** and **[Universal Windows Platform development]** components for VS2019.\n- Open the **File->Settings** panel, go to **Build, Execution, Deployment->Toolchains**, and set the toolchain to **Visual Studio** with **amd64 (Recommended)** or **x86** architecture.\n\n**Note: If you encounter issues during the CMake build, update to the latest version of the CMake \ncommand-line tool and try again.**\n\n## Support Us\n\nIf you find libpag helpful, please give us a **Star**. We truly appreciate your support :)\n\n\n[![Star History Chart](https://api.star-history.com/svg?repos=Tencent/libpag&type=Date)](https://star-history.com/#Tencent/libpag&Date)\n\n\n## License\n\nlibpag is licensed under the [Apache Version 2.0 License](./LICENSE.txt)\n\nThe copyright notice pertaining to the Tencent code in this repo was previously in the name of \"THL\nA29 Limited\". That entity has now been de-registered. You should treat all previously distributed\ncopies of the code as if the copyright notice was in the name of \"Tencent\".\n\n## Privacy Policy\n\nPlease refer to the [PAG SDK Personal Information Processing Rules](https://privacy.qq.com/document/preview/01e79d0cc7a2427ba774b88c6beff0fd) when using the libpag SDK.\n\n## Contribution\n\nIf you have any ideas or suggestions to improve libpag, feel free to submit an\n[issue](https://github.com/Tencent/libpag/issues/new/choose) or a [pull request](https://github.com/Tencent/libpag/pulls). \nBefore doing so, please read our [Contributing Guide](./CONTRIBUTING.md).\n\n\n"
+    },
+    "brief": {
+      "summary": "跨平台原生渲染 After Effects 动画的 PAG 库",
+      "problem": "解决 AE 动画在多平台运行和运行时修改的问题",
+      "highlights": [
+        "可以在移动端和 Web 播放 PAG 动画",
+        "可以运行时替换动画中的文字和图片",
+        "可以制作可编辑的视频模板"
+      ],
+      "target_users": [
+        "客户端开发者",
+        "动画设计师",
+        "视频模板开发者"
+      ],
+      "why_trending": "总 Star 5743，本周首次收录且近期持续更新",
+      "caveat": "仅部分平台提供预编译库，其他平台需自行构建",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Tencent/libpag",
+      "score": 88,
+      "category": "动画",
+      "reason": "跨平台原生动画渲染库",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "vchelaru/FlatRedBall",
+      "url": "https://github.com/vchelaru/FlatRedBall",
+      "description": "Cross-platform 2D game engine focused on ultimate productivity built in .NET",
+      "language": "C#",
+      "total_stars": 562,
+      "forks": 70,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "c-sharp",
+        "cross-platform",
+        "dotnet",
+        "gamedev",
+        "graphics",
+        "monogame",
+        "nes",
+        "pixel-art",
+        "productivity",
+        "snes",
+        "xna"
+      ],
+      "license_name": "MIT",
+      "created_at": "2016-01-14T00:49:02Z",
+      "updated_at": "2026-08-03T04:03:25Z",
+      "pushed_at": "2026-08-03T04:02:54Z",
+      "open_issues": 96,
+      "homepage": "http://flatredball.com",
+      "archived": false,
+      "default_branch": "NetStandard",
+      "readme": "![FlatRedBall](Content/logo-512.png)\n\n\n\n[![Join the chat](https://img.shields.io/discord/586997072373481494)](https://discord.gg/tG5RBgw)\n[![Website](https://img.shields.io/website?url=https%3A%2F%2Fflatredball.com)](https://flatredball.com)\n[![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FFlatRedBall)](https://twitter.com/FlatRedBall)\n![Activity](https://img.shields.io/github/last-commit/vchelaru/FlatRedBall/NetStandard)\n\nThe FlatRedBall Game Engine is designed to boost your productivity as a game developer, with a particular focus on building 2D games of any genre. It provides a powerful editor to help you organize your projects. At runtime, the FlatRedBall engine provides efficiency, stability, and features which have been refined for over two decades.\n\n![image](https://github.com/vchelaru/FlatRedBall/assets/729631/8fc4fbcb-93d7-4d26-9cbb-9b48329d6c36)\n\nThe FlatRedBall Engine utilizes the C# programming language, operating on the full version of .NET for uncompromised access to modern language features and all NuGet packages. Games can be launched effortlessly via the FlatRedBall Editor or directly from Visual Studio (or any other IDE), streamlining the development process.\n\nFlatRedBall is mature and continually improving. Reported issues are resolved or commented soon after they are created. We actively watch PRs and keep them from piling up. Commits are being made almost daily - [check the commit history to see the activity for yourself.](https://github.com/vchelaru/FlatRedBall/commits/NetStandard)\n\n![Alt](https://repobeats.axiom.co/api/embed/7ae6b028681112a205f4f998d47149e5e6db7920.svg \"Repobeats analytics image\")\n\n## Downloading FlatRedBall\n\nFor instructions on how to download FlatRedBall (both prebuilt and how to build from source), see [https://flatredball.com/download/](https://docs.flatredball.com/flatredball)\n\nDirect link to FlatRedBall Editor: https://files.flatredball.com/content/FrbXnaTemplates/DailyBuild/FRBDK.zip\n\n## What kind of Features does FlatRedBall Offer?\n\nToo many to list here! If you want to see a list with images and animations, check out the Features Page: https://docs.flatredball.com/flatredball/flatredball-features\n\n## Questions? Problems?\nThe fastest way to get help is to ask in our discord chat: https://discord.gg/tG5RBgw\n\nIf you prefer, you can also file issues on Github: https://github.com/vchelaru/FlatRedBall/issues\n\nOf course, FlatRedBall has the best documentation: https://docs.flatredball.com/\n\n## Contributing to FlatRedBall\n\nIf you're interested in helping out, check out our Contributors section here: https://docs.flatredball.com/flatredball/contributing\n\n## FlatRedBall Games\n\nFlatRedBall has been used to build dozens of commercial games. Here are some of our favorites:\n\n### The Incredible Baron\nhttps://store.steampowered.com/app/441510/The_Incredible_Baron/\n![](https://cdn.akamai.steamstatic.com/steam/apps/441510/ss_e5c57fb9e20cf5bc30fbca294c34625996b74c13.1920x1080.jpg?t=1467392584)\n![](https://cdn.akamai.steamstatic.com/steam/apps/441510/ss_1a5d77330dfd090e41c006c5f79ecd8bba3b142b.1920x1080.jpg?t=1467392584)\n\n### Cranky Chibi Cthulhu\nhttps://store.steampowered.com/app/2631990/Cranky_Chibi_Cthulhu/\n![image](https://github.com/vchelaru/FlatRedBall/assets/729631/d4a0bef8-dc40-41da-b190-d6c9b06f45d9)\n![image](https://github.com/vchelaru/FlatRedBall/assets/729631/fd77bf43-b2de-4996-9ba1-8d8a9ac7d6ce)\n\n### Battlecrypt Bombers\nhttps://store.steampowered.com/app/2188930/BattleCrypt_Bombers/\n![](https://cdn.akamai.steamstatic.com/steam/apps/2188930/ss_8a28cbfd0d6c82367a92554c0c5d22b1fcc15c6d.1920x1080.jpg?t=1667404368)\n![](https://cdn.akamai.steamstatic.com/steam/apps/2188930/ss_9848faf1b09e7f988f6668bf11d2b718603a7ffc.1920x1080.jpg?t=1667404368)\n\n### WeeRPG\nhttps://store.steampowered.com/app/1586330/WeeRPG/\n![](https://cdn.akamai.steamstatic.com/steam/apps/1586330/ss_a94e20f5581c4fd7264fe7c2558e7c18ae701516.1920x1080.jpg?t=1651849095)\n![](https://cdn.akamai.steamstatic.com/steam/apps/1586330/ss_ee09e0985bf865a6933b67307ce2920db5265dbe.1920x1080.jpg?t=1651849095)\n\n### Deadvivors\nhttps://enxebregames.com/\n![](https://enxebregames.com/assets/images/gallery01/c9710fba_original.jpg)\n![](https://enxebregames.com/assets/images/gallery01/a52f3d0f_original.jpg)\n\n### Super Refresh Men (iOS and Android)\nhttps://www.youtube.com/watch?v=Irn64qHmakA&t=338s&ab_channel=Techzamazing\n![](Content/GameScreenshots/SuperRefreshMen1.png)\n![](Content/GameScreenshots/SuperRefreshMen2.png)\n\n### Masteroid\nhttps://store.steampowered.com/app/1148320/Masteroid/\n![](https://cdn.akamai.steamstatic.com/steam/apps/1148320/ss_b1113f512185319b0245659150c3285c12002f53.1920x1080.jpg?t=1580139970)\n![](https://cdn.akamai.steamstatic.com/steam/apps/1148320/ss_2de5ea55f7bfebfa8b690ca07ea390db619b6d26.1920x1080.jpg?t=1580139970)\n\n### KosmoSquad\nhttps://store.steampowered.com/app/1448070/KosmoSquad/\n![](https://cdn.akamai.steamstatic.com/steam/apps/1448070/ss_61c7bc5936ca829c8ea8da9ba38fd17cdb82b100.1920x1080.jpg?t=1605029685)\n![](https://cdn.akamai.steamstatic.com/steam/apps/1448070/ss_ad4dfcce16f20d6428f3e7f257e5b8ba9b3ca021.1920x1080.jpg?t=1605029685)\n\n### King Randall's Party\nhttps://store.steampowered.com/app/921450/King_Randalls_Party/\n![](https://cdn.akamai.steamstatic.com/steam/apps/921450/ss_a351ab3a6ac0b21ef419b52b138dce265dff2b33.1920x1080.jpg?t=1548201312)\n![](https://cdn.akamai.steamstatic.com/steam/apps/921450/ss_a4aa1ac83243d2c8c1bd03509f9657d051b8f304.1920x1080.jpg?t=1548201312)\n\n### A.R.E.S.: Extinction Agenda EX\nhttps://store.steampowered.com/app/315340/ARES_Extinction_Agenda_EX/\n![](https://cdn.akamai.steamstatic.com/steam/apps/315340/ss_df111c7b8bec2423b707382d810e763b56681180.1920x1080.jpg?t=1448639170)\n![](https://cdn.akamai.steamstatic.com/steam/apps/315340/ss_4bdabef936241ef5ed62d0b049025f66496c7abd.1920x1080.jpg?t=1448639170)\n\n### Fusion: Sentient (Windows Phone 7)\nhttps://www.microsoft.com/en-us/p/fusion-sentient/9wzdncrfhwd3?activetab=pivot:overviewtab#\n![](Content/GameScreenshots/FusionSentient1.png)\n![](Content/GameScreenshots/FusionSentient2.png)\n"
+    },
+    "brief": {
+      "summary": "FlatRedBall 是面向跨平台 2D 游戏的 .NET 引擎。",
+      "problem": "帮助开发者更高效地制作和管理跨平台 2D 游戏。",
+      "highlights": [
+        "可以用编辑器组织 2D 游戏项目",
+        "可以用 C# 和 .NET 开发游戏",
+        "可以直接从编辑器或 IDE 启动游戏"
+      ],
+      "target_users": [
+        "C# 游戏开发者",
+        "独立游戏团队",
+        "2D 游戏初学者"
+      ],
+      "why_trending": "本周首次收录，项目近期几乎每日提交。",
+      "caveat": "GitHub 有 96 个开放问题，具体支持平台资料中未说明。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "vchelaru/FlatRedBall",
+      "score": 84,
+      "category": "游戏开发",
+      "reason": "跨平台2D游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.0
+    }
+  }
+]
