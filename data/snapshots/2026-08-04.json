@@ -1,0 +1,532 @@
+[
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "jamiepine/voicebox",
+      "url": "https://github.com/jamiepine/voicebox",
+      "description": "The open-source AI voice studio. Clone, dictate, create.",
+      "language": "TypeScript",
+      "total_stars": 48791,
+      "forks": 5997,
+      "stars_today": 412,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 412
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "cuda",
+        "mlx",
+        "qwen3-tts",
+        "qwen3-tts-ui",
+        "voice-ai",
+        "voice-clone",
+        "whisper"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-25T12:27:03Z",
+      "updated_at": "2026-08-04T03:41:58Z",
+      "pushed_at": "2026-07-28T02:20:57Z",
+      "open_issues": 577,
+      "homepage": "https://voicebox.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/assets/icon-dark.webp\" alt=\"Voicebox\" width=\"120\" height=\"120\" />\n</p>\n\n<h1 align=\"center\">Voicebox</h1>\n\n<p align=\"center\">\n  <strong>The open-source AI voice studio.</strong><br/>\n  Clone any voice. Generate speech. Dictate into any app. Talk to agents in voices you own.<br/>\n  The full voice I/O stack, running locally on your machine.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/jamiepine/voicebox/releases\">\n    <img src=\"https://img.shields.io/github/downloads/jamiepine/voicebox/total?style=flat&color=blue\" alt=\"Downloads\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/releases/latest\">\n    <img src=\"https://img.shields.io/github/v/release/jamiepine/voicebox?style=flat\" alt=\"Release\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/stargazers\">\n    <img src=\"https://img.shields.io/github/stars/jamiepine/voicebox?style=flat\" alt=\"Stars\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/blob/main/LICENSE\">\n    <img src=\"https://img.shields.io/github/license/jamiepine/voicebox?style=flat\" alt=\"License\" />\n  </a>\n  <a href=\"https://deepwiki.com/jamiepine/voicebox\">\n    <img src=\"https://img.shields.io/static/v1?label=Ask&message=DeepWiki&color=5B6EF7\" alt=\"Ask DeepWiki\" />\n  </a>\n</p>\n\n<p align=\"center\">\n    <a href=\"https://trendshift.io/repositories/21213\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/21213\" alt=\"jamiepine%2Fvoicebox | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://voicebox.sh\">voicebox.sh</a> •\n  <a href=\"https://docs.voicebox.sh\">Docs</a> •\n  <a href=\"#download\">Download</a> •\n  <a href=\"#features\">Features</a> •\n  <a href=\"#api\">API</a> •\n  <a href=\"docs/content/docs/overview/troubleshooting.mdx\">Troubleshooting</a>\n</p>\n\n<br/>\n\n<p align=\"center\">\n  <a href=\"https://voicebox.sh\">\n    <img src=\"landing/public/assets/app-screenshot-1.webp\" alt=\"Voicebox App Screenshot\" width=\"800\" />\n  </a>\n</p>\n\n<p align=\"center\">\n  <em>Click the image above to watch the demo video on <a href=\"https://voicebox.sh\">voicebox.sh</a></em>\n</p>\n\n<br/>\n\n<p align=\"center\">\n  <img src=\"landing/public/assets/app-screenshot-2.webp\" alt=\"Voicebox Screenshot 2\" width=\"800\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"landing/public/assets/app-screenshot-3.webp\" alt=\"Voicebox Screenshot 3\" width=\"800\" />\n</p>\n\n<br/>\n\n## What is Voicebox?\n\nVoicebox is a **local-first AI voice studio** — a free and open-source alternative to **ElevenLabs** and **WisprFlow** in one app. Clone voices from a few seconds of audio, generate speech in 23 languages across 7 TTS engines, dictate into any text field with a global hotkey, and give any MCP-aware AI agent a voice of your choosing.\n\nThe two cloud incumbents sit on opposite halves of the voice I/O loop — ElevenLabs on output, WisprFlow on input. Voicebox does both, bridges them with a bundled local LLM for refinement and per-profile personas, and runs the whole thing on your machine.\n\n- **Complete privacy** — models, voice data, and captures never leave your machine\n- **7 TTS engines** — Qwen3-TTS, Qwen CustomVoice, LuxTTS, Chatterbox Multilingual, Chatterbox Turbo, HumeAI TADA, and Kokoro\n- **Voice cloning and preset voices** — zero-shot cloning from a reference sample, or 50+ curated preset voices via Kokoro and Qwen CustomVoice\n- **23 languages** — from English to Arabic, Japanese, Hindi, Swahili, and more\n- **Post-processing effects** — pitch shift, reverb, delay, chorus, compression, and filters\n- **Expressive speech** — paralinguistic tags like `[laugh]`, `[sigh]`, `[gasp]` via Chatterbox Turbo; natural-language delivery control via Qwen CustomVoice\n- **Unlimited length** — auto-chunking with crossfade for scripts, articles, and chapters\n- **Stories editor** — multi-track timeline for conversations, podcasts, and narratives\n- **Voice input** — global dictation hotkey with push-to-talk and toggle modes, accessibility-verified auto-paste on macOS, in-app mic on every text field, Whisper-based STT\n- **Agent voice output** — one tool call (`voicebox.speak`) and any MCP-aware agent (Claude Code, Cursor, Cline) speaks to you in a voice you've cloned\n- **Voice personalities** — attach a free-form persona to any voice profile, then Compose, Rewrite, or Respond via a bundled local LLM — agents can invoke the same modes over MCP\n- **API-first** — REST API plus a built-in MCP server for integrating voice I/O into your own apps and agents\n- **Native performance** — built with Tauri (Rust), not Electron\n- **Runs everywhere** — macOS (MLX/Metal), Windows (CUDA), Linux, AMD ROCm, Intel Arc, Docker\n\n---\n\n## Download\n\n| Platform              | Download                                               |\n| --------------------- | ------------------------------------------------------ |\n| macOS (Apple Silicon) | [Download DMG](https://voicebox.sh/download/mac-arm)   |\n| macOS (Intel)         | [Download DMG](https://voicebox.sh/download/mac-intel) |\n| Windows               | [Download MSI](https://voicebox.sh/download/windows)   |\n| Docker                | `docker compose up`                                    |\n\n> **[View all binaries →](https://github.com/jamiepine/voicebox/releases/latest)**\n\n> **Linux** — Pre-built binaries are not yet available. See [voicebox.sh/linux-install](https://voicebox.sh/linux-install) for build-from-source instructions.\n\n> **Having trouble?** See the [Troubleshooting Guide](docs/content/docs/overview/troubleshooting.mdx) for common install, generation, model-download, and GPU issues.\n\n---\n\n## Features\n\n### Multi-Engine Voice Cloning\n\nSeven TTS engines with different strengths, switchable per-generation:\n\n| Engine                      | Languages | Strengths                                                                                                                                |\n| --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |\n| **Qwen3-TTS** (0.6B / 1.7B) | 10        | High-quality multilingual cloning, delivery instructions (\"speak slowly\", \"whisper\")                                                     |\n| **Qwen CustomVoice**        | 10        | 9 curated preset voices with natural-language delivery control — no reference audio required                                             |\n| **LuxTTS**                  | English   | Lightweight (~1GB VRAM), 48kHz output, 150x realtime on CPU                                                                              |\n| **Chatterbox Multilingual** | 23        | Broadest language coverage — Arabic, Danish, Finnish, Greek, Hebrew, Hindi, Malay, Norwegian, Polish, Swahili, Swedish, Turkish and more |\n| **Chatterbox Turbo**        | English   | Fast 350M model with paralinguistic emotion/sound tags                                                                                   |\n| **TADA** (1B / 3B)          | 10        | HumeAI speech-language model — 700s+ coherent audio, text-acoustic dual alignment                                                        |\n| **Kokoro**                  | 8         | 50 curated preset voices, tiny 82M model, fast CPU inference                                                                             |\n\n### Emotions & Paralinguistic Tags\n\nOnly **Chatterbox Turbo** interprets paralinguistic tags like `[laugh]` and\n`[sigh]`. Qwen3-TTS, LuxTTS, Chatterbox Multilingual, and HumeAI TADA read them\nliterally as text.\n\nWith **Chatterbox Turbo** selected, type `/` in the text input to open the tag\ninserter and add expressive tags inline with speech:\n\n`[laugh]` `[chuckle]` `[gasp]` `[cough]` `[sigh]` `[groan]` `[sniff]` `[shush]` `[clear throat]`\n\n### Post-Processing Effects\n\n8 audio effects powered by Spotify's `pedalboard` library. Apply after generation, preview in real time, build reusable presets.\n\n| Effect           | Description                                   |\n| ---------------- | --------------------------------------------- |\n| Pitch Shift      | Up or down by up to 12 semitones              |\n| Reverb           | Configurable room size, damping, wet/dry mix  |\n| Delay            | Echo with adjustable time, feedback, and mix  |\n| Chorus / Flanger | Modulated delay for metallic or lush textures |\n| Compressor       | Dynamic range compression                     |\n| Gain             | Volume adjustment (-40 to +40 dB)             |\n| High-Pass Filter | Remove low frequencies                        |\n| Low-Pass Filter  | Remove high frequencies                       |\n\nShips with 4 built-in presets (Robotic, Radio, Echo Chamber, Deep Voice) and supports custom presets. Effects can be assigned per-profile as defaults.\n\n### Unlimited Generation Length\n\nText is automatically split at sentence boundaries and each chunk is generated independently, then crossfaded together. Works with all engines.\n\n- Configurable auto-chunking limit (100–5,000 chars)\n- Crossfade slider (0–200ms) for smooth transitions\n- Max text length: 50,000 characters\n- Smart splitting respects abbreviations, CJK punctuation, and `[tags]`\n\n### Generation Versions\n\nEvery generation supports multiple versions with provenance tracking:\n\n- **Original** — clean TTS output, always preserved\n- **Effects versions** — apply different effects chains from any source version\n- **Takes** — regenerate with a new seed for variation\n- **Source tracking** — each version records its lineage\n- **Favorites** — star generations for quick access\n\n### Async Generation Queue\n\nGeneration is non-blocking. Submit and immediately start typing the next one.\n\n- Serial execution queue prevents GPU contention\n- Real-time SSE status streaming\n- Failed generations can be retried\n- Stale generations from crashes auto-recover on startup\n\n### Voice Profile Management\n\n- Create profiles from audio files or record directly in-app\n- Import/export profiles to share or back up\n- Multi-sample support for higher quality cloning\n- Per-profile default effects chains\n- Organize with descriptions and language tags\n\n### Stories Editor\n\nMulti-voice timeline editor for conversations, podcasts, and narratives.\n\n- Multi-track composition with drag-and-drop\n- Inline audio trimming and splitting\n- Auto-playback with synchronized playhead\n- Version pinning per track clip\n\n### Global Dictation & Voice Input\n\nThe other half of the voice I/O loop. Hold a hotkey anywhere on your system, speak, release — on macOS the transcript pastes straight into the focused text field. Or hit the mic on any Voicebox text input and dictate directly into the app.\n\n- **Configurable chord bindings** — hold-to-speak and tap-to-toggle chords, each rebindable in the in-app chord picker. Holding push-to-talk and tapping `Space` mid-hold upgrades into a toggle session without a gap in audio\n- **Target-aware paste (macOS)** — accessibility-verified injection into the focused text field, with atomic clipboard save/restore so your clipboard isn't clobbered\n- **First-run permissions UX** — in-app gates walk you through the macOS Accessibility and Input Monitoring grants with deep-links to System Settings\n- **In-app mic button** on every Voicebox text field — generation form, profile descriptions, story titles, anywhere you'd type\n- **LLM refinement** — optional cleanup of ums, stutters, and false starts before paste\n- **On-screen pill** — floating overlay surfacing `recording`, `transcribing`, `refining`, and `speaking` states. Same pill agents use when they speak to you, so there's one mental model for both directions of the loop\n\n### Speech-to-Text\n\nVoicebox runs OpenAI Whisper for transcription — the same model that backs dictation, the Captures tab, and the `/transcribe` API. Running on MLX (Apple Silicon) or PyTorch (CUDA / ROCm / DirectML / CPU) depending on your platform.\n\n| Size                          | Notes                                            "
+    },
+    "brief": {
+      "summary": "本地运行的开源 AI 语音工作室",
+      "problem": "解决语音克隆、语音生成和跨应用听写需求",
+      "highlights": [
+        "可以克隆声音并生成多语言语音",
+        "可以用全局快捷键向任意应用听写",
+        "可以让兼容 MCP 的智能体开口说话"
+      ],
+      "target_users": [
+        "配音与内容创作者",
+        "AI 应用开发者",
+        "重视隐私的用户"
+      ],
+      "why_trending": "今日新增 412 Star，总 Star 已达 48791",
+      "caveat": "Linux 暂无预构建二进制，需自行编译",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jamiepine/voicebox",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地声音克隆与语音工作室",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 71.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "livekit/agents",
+      "url": "https://github.com/livekit/agents",
+      "description": "A framework for building realtime voice AI agents 🤖🎙️📹",
+      "language": "Python",
+      "total_stars": 12064,
+      "forks": 3461,
+      "stars_today": 148,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 148
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "ai",
+        "openai",
+        "real-time",
+        "video",
+        "voice"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2023-10-19T23:00:55Z",
+      "updated_at": "2026-08-04T03:44:06Z",
+      "pushed_at": "2026-08-04T03:38:11Z",
+      "open_issues": 736,
+      "homepage": "https://docs.livekit.io/agents",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--BEGIN_BANNER_IMAGE-->\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"/.github/banner_dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"/.github/banner_light.png\">\n  <img style=\"width:100%;\" alt=\"The LiveKit icon, the name of the repository and some sample code in the background.\" src=\"https://raw.githubusercontent.com/livekit/agents/main/.github/banner_light.png\">\n</picture>\n\n<!--END_BANNER_IMAGE-->\n<br />\n\n![PyPI - Version](https://img.shields.io/pypi/v/livekit-agents)\n[![PyPI Downloads](https://static.pepy.tech/badge/livekit-agents/month)](https://pepy.tech/projects/livekit-agents)\n[![Slack community](https://img.shields.io/endpoint?url=https%3A%2F%2Flivekit.io%2Fbadges%2Fslack)](https://livekit.io/join-slack)\n[![Twitter Follow](https://img.shields.io/twitter/follow/livekit)](https://twitter.com/livekit)\n[![Ask DeepWiki for understanding the codebase](https://deepwiki.com/badge.svg)](https://deepwiki.com/livekit/agents)\n[![License](https://img.shields.io/github/license/livekit/livekit)](https://github.com/livekit/livekit/blob/master/LICENSE)\n\n<br />\n\nLooking for the JS/TS library? Check out [AgentsJS](https://github.com/livekit/agents-js)\n\n## What is Agents?\n\n<!--BEGIN_DESCRIPTION-->\n\nThe Agent Framework is designed for building realtime, programmable participants\nthat run on servers. Use it to create conversational, multi-modal voice\nagents that can see, hear, and understand.\n\n<!--END_DESCRIPTION-->\n\n## Features\n\n- **Flexible integrations**: A comprehensive ecosystem to mix and match the right STT, LLM, TTS, and Realtime API to suit your use case.\n- **Integrated job scheduling**: Built-in task scheduling and distribution with [dispatch APIs](https://docs.livekit.io/agents/build/dispatch/) to connect end users to agents.\n- **Extensive WebRTC clients**: Build client applications using LiveKit's open-source SDK ecosystem, supporting all major platforms.\n- **Telephony integration**: Works seamlessly with LiveKit's [telephony stack](https://docs.livekit.io/sip/), allowing your agent to make calls to or receive calls from phones.\n- **Exchange data with clients**: Use [RPCs](https://docs.livekit.io/home/client/data/rpc/) and other [Data APIs](https://docs.livekit.io/home/client/data/) to seamlessly exchange data with clients.\n- **Semantic turn detection**: Uses a transformer model to detect when a user is done with their turn, helps to reduce interruptions.\n- **MCP support**: Native support for MCP. Integrate tools provided by MCP servers with one line of code.\n- **Builtin test framework**: Write tests and use judges to ensure your agent is performing as expected.\n- **Open-source**: Fully open-source, allowing you to run the entire stack on your own servers, including [LiveKit server](https://github.com/livekit/livekit), one of the most widely used WebRTC media servers.\n\n## Installation\n\nTo install the core Agents library, along with plugins for popular model providers:\n\n```bash\npip install \"livekit-agents[openai,deepgram,cartesia]\"\n```\n\n## Docs and guides\n\nDocumentation on the framework and how to use it can be found [here](https://docs.livekit.io/agents/)\n\n### Building with AI coding agents\n\nIf you're using an AI coding assistant to build with LiveKit Agents, we recommend the following setup for the best results:\n\n1. **Install the [LiveKit Docs MCP server](https://docs.livekit.io/mcp)** — Gives your coding agent access to up-to-date LiveKit documentation, code search across LiveKit repositories, and working examples.\n\n2. **Install the [LiveKit Agent Skill](https://github.com/livekit/agent-skills)** — Provides your coding agent with architectural guidance and best practices for building voice AI applications, including workflow design, handoffs, tasks, and testing patterns.\n\n   ```shell\n   npx skills add livekit/agent-skills --skill livekit-agents\n   ```\n\nThe Agent Skill works best alongside the MCP server: the skill teaches your agent *how to approach* building with LiveKit, while the MCP server provides the *current API details* to implement it correctly.\n\n## Core concepts\n\n- Agent: An LLM-based application with defined instructions.\n- AgentSession: A container for agents that manages interactions with end users.\n- entrypoint: The starting point for an interactive session, similar to a request handler in a web server.\n- AgentServer: The main process that coordinates job scheduling and launches agents for user sessions.\n\n## Usage\n\n### Simple voice agent\n\n---\n\n```python\nfrom livekit.agents import (\n    Agent,\n    AgentServer,\n    AgentSession,\n    JobContext,\n    RunContext,\n    cli,\n    function_tool,\n    inference,\n)\n\n\n@function_tool\nasync def lookup_weather(\n    context: RunContext,\n    location: str,\n):\n    \"\"\"Used to look up weather information.\"\"\"\n\n    return {\"weather\": \"sunny\", \"temperature\": 70}\n\n\nserver = AgentServer()\n\n\n@server.rtc_session()\nasync def entrypoint(ctx: JobContext):\n    session = AgentSession(\n        vad=inference.VAD(),\n        # any combination of STT, LLM, TTS, or realtime API can be used\n        # this example shows LiveKit Inference, a unified API to access different models via LiveKit Cloud\n        # to use model provider keys directly, replace with the following:\n        # from livekit.plugins import deepgram, openai, cartesia\n        # stt=deepgram.STT(model=\"nova-3\"),\n        # llm=openai.LLM(model=\"gpt-4.1-mini\"),\n        # tts=cartesia.TTS(model=\"sonic-3\", voice=\"9626c31c-bec5-4cca-baa8-f8ba9e84c8bc\"),\n        stt=inference.STT(\"deepgram/nova-3\", language=\"multi\"),\n        llm=inference.LLM(\"google/gemma-4-31b-it\"),  # low-latency gemma, hosted on LiveKit\n        tts=inference.TTS(\"cartesia/sonic-3\", voice=\"9626c31c-bec5-4cca-baa8-f8ba9e84c8bc\"),\n    )\n\n    agent = Agent(\n        instructions=\"You are a friendly voice assistant built by LiveKit.\",\n        tools=[lookup_weather],\n    )\n\n    await session.start(agent=agent, room=ctx.room)\n    await session.generate_reply(instructions=\"greet the user and ask about their day\")\n\n\nif __name__ == \"__main__\":\n    cli.run_app(server)\n```\n\nYou'll need the following environment variables for this example:\n\n- LIVEKIT_URL\n- LIVEKIT_API_KEY\n- LIVEKIT_API_SECRET\n\n### Multi-agent handoff\n\n---\n\nThis code snippet is abbreviated. For the full example, see [multi_agent.py](examples/voice_agents/multi_agent.py)\n\n```python\n...\nclass IntroAgent(Agent):\n    def __init__(self) -> None:\n        super().__init__(\n            instructions=f\"You are a story teller. Your goal is to gather a few pieces of information from the user to make the story personalized and engaging.\"\n            \"Ask the user for their name and where they are from\"\n        )\n\n    async def on_enter(self):\n        self.session.generate_reply(instructions=\"greet the user and gather information\")\n\n    @function_tool\n    async def information_gathered(\n        self,\n        context: RunContext,\n        name: str,\n        location: str,\n    ):\n        \"\"\"Called when the user has provided the information needed to make the story personalized and engaging.\n\n        Args:\n            name: The name of the user\n            location: The location of the user\n        \"\"\"\n\n        context.userdata.name = name\n        context.userdata.location = location\n\n        story_agent = StoryAgent(name, location)\n        return story_agent, \"Let's start the story!\"\n\n\nclass StoryAgent(Agent):\n    def __init__(self, name: str, location: str) -> None:\n        super().__init__(\n            instructions=f\"You are a storyteller. Use the user's information in order to make the story personalized.\"\n            f\"The user's name is {name}, from {location}\",\n            # override the default model, switching to Realtime API from standard LLMs\n            llm=openai.realtime.RealtimeModel(voice=\"echo\"),\n            chat_ctx=chat_ctx,\n        )\n\n    async def on_enter(self):\n        self.session.generate_reply()\n\n\n@server.rtc_session()\nasync def entrypoint(ctx: JobContext):\n    userdata = StoryData()\n    session = AgentSession[StoryData](\n        vad=inference.VAD(),\n        stt=\"deepgram/nova-3\",\n        llm=\"google/gemma-4-31b-it\",  # low-latency gemma, hosted on LiveKit\n        tts=\"cartesia/sonic-3:9626c31c-bec5-4cca-baa8-f8ba9e84c8bc\",\n        userdata=userdata,\n    )\n\n    await session.start(\n        agent=IntroAgent(),\n        room=ctx.room,\n    )\n...\n```\n\n### Testing\n\nAutomated tests are essential for building reliable agents, especially with the non-deterministic behavior of LLMs. LiveKit Agents include native test integration to help you create dependable agents.\n\n```python\n@pytest.mark.asyncio\nasync def test_no_availability() -> None:\n    llm = google.LLM()\n    async with AgentSession(llm=llm) as sess:\n        await sess.start(MyAgent())\n        result = await sess.run(\n            user_input=\"Hello, I need to place an order.\"\n        )\n        result.expect.skip_next_event_if(type=\"message\", role=\"assistant\")\n        result.expect.next_event().is_function_call(name=\"start_order\")\n        result.expect.next_event().is_function_call_output()\n        await (\n            result.expect.next_event()\n            .is_message(role=\"assistant\")\n            .judge(llm, intent=\"assistant should be asking the user what they would like\")\n        )\n\n```\n\n## Examples\n\nFor more examples and detailed setup instructions, see the [examples directory](examples/). For even more examples, see the [python-agents-examples](https://github.com/livekit-examples/python-agents-examples) repository.\n\n<table>\n<tr>\n<td width=\"50%\">\n<h3>🎙️ Starter Agent</h3>\n<p>A starter agent optimized for voice conversations.</p>\n<p>\n<a href=\"examples/voice_agents/basic_agent.py\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>🔄 Multi-user push to talk</h3>\n<p>Responds to multiple users in the room via push-to-talk.</p>\n<p>\n<a href=\"examples/voice_agents/push_to_talk.py\">Code</a>\n</p>\n</td>\n</tr>\n\n<tr>\n<td width=\"50%\">\n<h3>🎵 Background audio</h3>\n<p>Background ambient and thinking audio to improve realism.</p>\n<p>\n<a href=\"examples/voice_agents/background_audio.py\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>🛠️ Dynamic tool creation</h3>\n<p>Creating function tools dynamically.</p>\n<p>\n<a href=\"examples/voice_agents/dynamic_tool_creation.py\">Code</a>\n</p>\n</td>\n</tr>\n\n<tr>\n<td width=\"50%\">\n<h3>☎️ Outbound caller</h3>\n<p>Agent that makes outbound phone calls</p>\n<p>\n<a href=\"https://github.com/livekit-examples/outbound-caller-python\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>📋 Structured output</h3>\n<p>Using structured output from LLM to guide TTS tone.</p>\n<p>\n<a href=\"examples/voice_agents/structured_output.py\">Code</a>\n</p>\n</td>\n</tr>\n\n<tr>\n<td width=\"50%\">\n<h3>🔌 MCP support</h3>\n<p>Use tools from MCP servers</p>\n<p>\n<a href=\"examples/voice_agents/mcp\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>💬 Text-only agent</h3>\n<p>Skip voice altogether and use the same code for text-only integrations</p>\n<p>\n<a href=\"examples/other/text_only.py\">Code</a>\n</p>\n</td>\n</tr>\n\n<tr>\n<td width=\"50%\">\n<h3>📝 Multi-user transcriber</h3>\n<p>Produce transcriptions from all users in the room</p>\n<p>\n<a href=\"examples/other/transcription/multi-user-transcriber.py\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>🎥 Video avatars</h3>\n<p>Add an AI avatar with Tavus, Bithuman, LemonSlice, and more</p>\n<p>\n<a href=\"examples/avatar_agents/\">Code</a>\n</p>\n</td>\n</tr>\n\n<tr>\n<td width=\"50%\">\n<h3>🍽️ Restaurant ordering and reservations</h3>\n<p>Full example of an agent that handles calls for a restaurant.</p>\n<p>\n<a href=\"examples/voice_agents/restaurant_agent.py\">Code</a>\n</p>\n</td>\n<td width=\"50%\">\n<h3>👁️ Gemini Live vision</h3>\n<p>Full example (including iOS app) of Gemini Live agent that can see.</p>\n<p>\n<a href=\"https://github.com/livekit-examples/vision-demo\">Code</a>\n</p>\n</td>\n</tr>\n\n</table>\n\n## Running your agent\n\n### Testing in terminal\n\n```shell\npython myagent.py console\n```\n\nRuns your agent in terminal mode, enabling local audio input and output for testing.\nThis mode doesn't require external servers or dependen"
+    },
+    "brief": {
+      "summary": "用于构建实时、多模态语音 AI 代理的 Python 框架",
+      "problem": "解决语音代理的实时交互、调度和模型接入问题",
+      "highlights": [
+        "可以构建可听、可看、可对话的语音代理",
+        "可以接入多种语音识别、模型和语音合成服务",
+        "可以通过电话、WebRTC 与用户交互"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "AI Agent 开发者",
+        "实时通信团队"
+      ],
+      "why_trending": "今日新增148 Star，本周首次收录，总 Star 达12064且近期仍活跃",
+      "caveat": "示例需要配置 LiveKit 及相关服务的环境变量",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "livekit/agents",
+      "score": 75,
+      "category": "语音 / 配音",
+      "reason": "实时多模态语音智能体框架",
+      "generated_by_ai": true,
+      "velocity_score": 66,
+      "freshness_score": 20,
+      "ranking_score": 57.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "MartinDelophy/ai-video-editor",
+      "url": "https://github.com/MartinDelophy/ai-video-editor",
+      "description": "Local-first browser AI video editor with WebGPU AI music, AI repair, voiceovers, captions, talking avatars, and deterministic export.",
+      "language": "JavaScript",
+      "total_stars": 440,
+      "forks": 41,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-music",
+        "ai-video-editor",
+        "ai-voiceover",
+        "automatic-captions",
+        "browser-ai",
+        "joyvasa",
+        "liveportrait",
+        "modelscope",
+        "onnx",
+        "pwa",
+        "react",
+        "talking-avatar",
+        "text-to-speech",
+        "video-editor",
+        "video-processing",
+        "video-restoration",
+        "webassembly",
+        "webcodecs",
+        "webgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-09T04:43:11Z",
+      "updated_at": "2026-08-04T03:25:32Z",
+      "pushed_at": "2026-08-04T02:50:08Z",
+      "open_issues": 9,
+      "homepage": "https://video-editor.ai-creator.top/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Timeline Studio — Browser AI Video Editor\n\n**English** | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Português](README.pt-BR.md) | [ไทย](README.th.md) | [Tiếng Việt](README.vi.md) | [Русский](README.ru.md)\n\n[![Live Demo](https://img.shields.io/badge/Live_Demo-Timeline_Studio-35ead9?style=flat-square)](https://video-editor.ai-creator.top/)\n[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-Aug%2025%20Launch-orange)](https://www.producthunt.com/p/timeline-studio-2)\n[![MIT License](https://img.shields.io/github/license/MartinDelophy/ai-video-editor?style=flat-square)](LICENSE)\n[![skills.sh](https://skills.sh/b/MartinDelophy/ai-video-editor)](https://skills.sh/MartinDelophy/ai-video-editor)\n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)\n<a href=\"https://toolindex.net/tools/timeline-studio?ref=badge\" target=\"_blank\" rel=\"noopener\">\n  <img src=\"https://toolindex.net/badge/timeline-studio/small.svg?theme=dark\" alt=\"Timeline Studio - Listed on Tool Index\" width=\"130\" height=\"30\" />\n</a>\n> Timeline Studio is launching on Product Hunt Aug 25 (PDT).\n> Follow our page to share technical feedback on launch day!\n\n## Responsible use of deep synthesis\n\nThis tool uses deep-synthesis technology and is intended solely for technical research and learning.\n\nUsers must ensure that they:\n\n- use only facial images or videos of themselves or people who have provided lawful authorization;\n- do not create or distribute any illegal, infringing, false, or misleading content;\n- do not present generated content as authentic footage or impersonate another person without their consent.\n\nUsers are solely responsible for any legal liability arising from violations of these requirements.\n\n## Project updates\n\n- **July 31, 2026 — Face swap:** replace the identity in a selected visual clip with browser-local face detection, tracking, and preview.\n- **July 28, 2026 — v0.8.0:** contributor onboarding and release documentation were refreshed.\n- See the public [Roadmap](ROADMAP.md) for planned work, [Releases](https://github.com/MartinDelophy/ai-video-editor/releases) for shipped changes, and [Issues](https://github.com/MartinDelophy/ai-video-editor/issues) for focused tasks and bugs.\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/77422?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-77422\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/77422/daily?language=JavaScript\" alt=\"MartinDelophy%2Fai-video-editor | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/77422?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-77422\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/77422/weekly?language=JavaScript\" alt=\"MartinDelophy%2Fai-video-editor | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://www.producthunt.com/products/timeline-studio-2?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-timeline-studio-2\" target=\"_blank\" rel=\"noopener noreferrer\"><img alt=\"Timeline Studio - Local-first AI video editing in your browser | Product Hunt\" width=\"250\" height=\"54\" src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1196911&amp;theme=light&amp;t=1785378187636\"></a>\n</p>\n\nTimeline Studio is a local-first AI video editor that runs in the browser. It combines a CapCut-style multi-track timeline with WebGPU AI music and repair, multilingual voiceovers, automatic captions, talking-avatar generation, and deterministic offline export.\n\n[Open the editor](https://video-editor.ai-creator.top/) · [Watch on YouTube](https://youtu.be/bqKhpPPa-qo) · [Hugging Face Space](https://huggingface.co/spaces/haixin/timeline-studio)\n\n## Video demo\n\n### Auto Edit\n\nVisual analysis, keyframes, captions, and export.\n\nhttps://github.com/user-attachments/assets/e8327caa-429e-40ff-a7fe-a59e6cf7a464\n\n### AI Repair\n\nTimed watermark removal with before/after review.\n\nhttps://github.com/user-attachments/assets/aea9f5b4-c720-4b0c-9067-5ec124eef982\n\n### AI Voiceover\n\nhttps://github.com/user-attachments/assets/304a744e-d620-4380-9c17-19af3726f5a4\n\n![Timeline Studio editor](docs/screenshots/editor-timeline.png)\n\n## AI capabilities\n\n- **Multilingual voiceover:** Chinese Piper/VITS ONNX voices, English Kokoro 82M, and browser Piper voices for German, Spanish, French, Italian, and Brazilian Portuguese.\n- **Local AI music:** Stable Audio 3 Small Q4 ONNX runs through WebGPU with translated free-form prompts, 30/60/90/120-second choices, waveform-aware long-track looping, persistent model caching, and automatic insertion into My Assets.\n- **Automatic captions:** Whisper small q8 ONNX with waveform-aware timing and conservative Chinese recognition cleanup.\n- **Smart framing:** YOLOS tiny subject detection and MODNet portrait matting for smart crop, caption avoidance, and background removal across images and complete videos.\n- **AI Repair:** browser-local MI-GAN watermark/object removal with multiple timed repair regions, plus NanoVSR 644K WebGPU 4× restoration for images and videos with synchronized before/after comparison.\n- **AI vocal separation:** isolate vocals and place the instrumental stem on the music track without leaving the browser workflow.\n- **Digital human:** JoyVASA audio-to-motion and LivePortrait neural rendering with WebGPU, 256px preview and 512px quality paths.\n- **Local-first inference:** large models are lazy-loaded, revision-pinned, and cached by the service worker; supported workflows run without uploading project media to an editing backend.\n\n## Resilient model delivery\n\nBrowser AI models are mirrored on both Hugging Face and ModelScope. Timeline Studio uses ModelScope first for Chinese interfaces and domestic sessions, uses Hugging Face first elsewhere, remembers the first working source for the current runtime, and automatically falls back to the other source when needed. Cache identities are shared across both providers, so switching routes does not download the same revision twice.\n\n- Stable Audio: [Hugging Face](https://huggingface.co/haixin/stable-audio-3-small-music-onnx) · [ModelScope](https://www.modelscope.cn/models/martindelophy/stable-audio-3-small-music-onnx/files?version=main)\n- Voice models: [Hugging Face](https://huggingface.co/haixin/timeline-studio-voice-models/tree/f6aa4cf8fb440352b9f36c637dd310d047011e52) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-voice-models/files?version=14a0656f5a111a0052dfca586fbe2ceb18b54adf) (mixed upstream licenses; see the repository model card)\n- Timeline Studio ONNX models: [Hugging Face](https://huggingface.co/haixin/timeline-studio-onnx-models) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-onnx-models/files?version=main)\n- Vocal remover: [Hugging Face](https://huggingface.co/haixin/timeline-studio-vocal-remover) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-vocal-remover/files?version=main)\n\n## Editing and export\n\n- Contiguous main Visuals track plus timed picture-in-picture overlays.\n- Direct canvas selection, movement, proportional resize, rotation, masks, filters, effects, animation, speed, and explicit keyframes.\n- Captions, stickers, voiceover, separated source audio, and music on independent timed tracks.\n- CapCut-style snapping, alignment guides, clip menus, split/duplicate/delete, timeline zoom, undo/redo, and portable `.timeline` projects.\n- Native media playback for a responsive preview; export uses a separate deterministic offline rendering path.\n- WebCodecs MP4/WebM composition with shared preview/export geometry, audio mixing, captions, overlays, effects, and MediaRecorder fallback.\n- Installable PWA with a cached app shell and multilingual UI.\n\n## Agent Skill\n\nThe repository includes the [AI Video Editing Skill for Codex, Claude Code, Copilot and Gemini CLI](skills/edit-timeline-studio/README.md), backed by [`edit-timeline-studio`](skills/edit-timeline-studio/SKILL.md) for planning, executing, and verifying editable video timelines.\n\nIt helps an agent:\n\n- inspect media and preserve the user's editing brief;\n- describe reversible edits with stable clip IDs and explicit timestamps;\n- operate the hosted or local editor through the browser compatibility path;\n- validate declarative edit plans with `skills/edit-timeline-studio/scripts/validate_edit_plan.mjs`;\n- verify track placement, transitions, captions, overlays, audible audio, and final export artifacts;\n- keep the editable `.timeline` project as the source of truth instead of returning only an opaque render.\n\nThe versioned headless command runner loads and inspects portable projects, validates revisioned JSON plans, applies supported operations transactionally, supports dry runs and idempotent operation IDs, and writes a new `.timeline` archive without rewriting its media files. It also renders the documented portable Visuals + Voiceover + Music subset to a verified H.264/AAC MP4. Browser control remains the compatibility path for richer compositions and operations that are not in the command registry yet.\n\n```bash\nnpm run agent -- project.inspect /absolute/path/project.timeline\nnpm run agent -- track.inspect /absolute/path/project.timeline visuals\nnpm run agent -- clip.inspect /absolute/path/project.timeline visual-123\nnpm run agent -- transcript.inspect /absolute/path/project.timeline voice-123\nnpm run agent -- project.diff /absolute/path/edit-plan.json\nnpm run agent -- project.run /absolute/path/edit-plan.json\nnpm run agent -- project.render /absolute/path/render-request.json\n```\n\nThe legacy `inspect` and `run` aliases remain available. The write registry supports ffprobe-backed, hashed visual/audio import to Visuals, Music, or the portable Voiceover slot, plus transactional timed edits, captions, source-accurate Visuals/Overlays, transitions, validated properties, track state, and ratio changes. Read commands return project, track, clip, transcript, media-inventory, and field-level predicted diffs. See the [command contract](skills/edit-timeline-studio/references/command-contract.md) for the plan envelope.\n\nInstall through the public [skills.sh](https://skills.sh/MartinDelophy/ai-video-editor) directory (the current CLI requires Node.js 22.20.0 or later):\n\n```bash\nnpx skills add MartinDelophy/ai-video-editor --skill edit-timeline-studio\n```\n\nOr install it with GitHub CLI 2.90.0 or later:\n\n```bash\n# Claude Code\ngh skill install MartinDelophy/ai-video-editor edit-timeline-studio --agent claude-code --scope user\n\n# Codex\ngh skill install MartinDelophy/ai-video-editor edit-timeline-studio --agent codex --scope user\n```\n\nTo install the tested release instead of following the latest release, add `--pin v0.7.1`. Preview the Skill before installing with:\n\n```bash\ngh skill preview MartinDelophy/ai-video-editor edit-timeline-studio\n```\n\n## Roadmap\n\n- **Now:** expand the versioned command registry, harden deterministic offline export, and improve timeline editing reliability.\n- **Next:** expand headless render parity and expose the shared command engine through MCP.\n- **Later:** add collaborative review workflows, a plugin extension surface, and more locally verified AI models.\n\nRoadmap priorities are shaped in [GitHub Discussions](https://github.com/MartinDelophy/ai-video-editor/discussions). Feature requests and real-world workflow feedback are welcome.\n\n## Help wanted\n\nTimeline Studio is looking for contributors interested in browser media, WebCodecs, WebGPU/ONNX, timeline UX, localization, testing, and documentation.\n\n- Try the [live editor](https://video-editor.ai-creator.top/) and report reproducible bugs in [Issues](https://github.com/MartinDelophy/"
+    },
+    "brief": {
+      "summary": "浏览器本地运行的多功能 AI 视频编辑器",
+      "problem": "无需上传项目媒体，也能完成剪辑、配音、字幕和导出",
+      "highlights": [
+        "可以在浏览器中剪辑多轨视频并离线导出",
+        "可以生成配音、字幕、音乐和数字人画面",
+        "可以修复画面、抠像并分离人声与伴奏"
+      ],
+      "target_users": [
+        "独立视频创作者",
+        "短视频制作团队",
+        "本地 AI 开发者"
+      ],
+      "why_trending": "本周首次收录，已有440个 Star，且近期持续更新",
+      "caveat": "需注意浏览器性能、模型许可及深度合成授权",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "MartinDelophy/ai-video-editor",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "集成AI能力的本地视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 59.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "cBournhonesque/lightyear",
+      "url": "https://github.com/cBournhonesque/lightyear",
+      "description": "A networking library to make multiplayer games for the Bevy game engine",
+      "language": "Rust",
+      "total_stars": 1095,
+      "forks": 153,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 2
+    },
+    "details": {
+      "topics": [
+        "bevy",
+        "gamedev",
+        "multiplayer",
+        "networking",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2023-02-07T02:10:39Z",
+      "updated_at": "2026-08-04T03:34:49Z",
+      "pushed_at": "2026-08-04T03:34:27Z",
+      "open_issues": 63,
+      "homepage": "https://cbournhonesque.github.io/lightyear/book",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Lightyear\n\n[![crates.io](https://img.shields.io/crates/v/lightyear)](https://crates.io/crates/lightyear)\n[![docs.rs](https://docs.rs/lightyear/badge.svg)](https://docs.rs/lightyear)\n[![codecov](https://codecov.io/gh/cBournhonesque/lightyear/branch/main/graph/badge.svg?token=N1G28NQB1L)](https://codecov.io/gh/cBournhonesque/lightyear)\n\nA library for writing server-authoritative multiplayer games with [Bevy](https://bevyengine.org/). Compatible with wasm\nvia WebTransport.\n\nhttps://github.com/cBournhonesque/lightyear/assets/8112632/7b57d48a-d8b0-4cdd-a16f-f991a394c852\n\n*Demo using one server with 2 clients. The entity is predicted (slightly ahead of server) on the controlling client and\ninterpolated (slightly behind server) on the other client.\nThe server only sends updates to clients 10 times per second but the clients still see smooth updates.*\n\n## Getting started \n\nYou can first check out the [examples](https://github.com/cBournhonesque/lightyear/tree/main/examples).\n\nTo quickly get started, you can follow\nthis [tutorial](https://cbournhonesque.github.io/lightyear/book/tutorial/title.html), which re-creates\nthe [simple_box](https://github.com/cBournhonesque/lightyear/tree/main/examples/simple_box) example.\n\nYou can also find more information in this WIP [book](https://cbournhonesque.github.io/lightyear/book/).\n\n## Repository layout\n\nWorkspace crate sources live under `crates/`, grouped by role. Directory names drop the `lightyear_` prefix, but Cargo package names keep it.\n\n- `crates/io`: low-level IO links and backends such as `aeronet`, `link`, `udp`, `crossbeam`, `websocket`, and `webtransport`\n- `crates/connection`: connection abstractions and adapters such as `connection`, `raw_connection`, `netcode`, and `steam`\n- `crates/core`: the top-level `lightyear` crate plus shared core, sync, utils, and frame interpolation crates\n- `crates/inputs`: input crates such as `inputs`, `inputs_native`, `input_bei`, and `inputs_leafwing`\n- `crates/replication`: replication, prediction, and interpolation crates\n- `crates/transport`: serialization, transport, and message crates\n- `crates/integration`: Bevy ecosystem integrations such as Avian\n- `crates/platform`, `crates/deterministic`, `crates/tools`, and `crates/tests`: platform support, deterministic replication, tooling, and test support\n\n## Related projects\n\n- [lightyear-template](https://github.com/Piefayth/lightyear-template/tree/main): opiniated template for a bevy + lightyear starter project\n\n### Games\n\n- [Lumina](https://github.com/nixon-voxell/lumina)\n- [cycles.io](https://github.com/cBournhonesque/jam5) for bevy jam 5: https://cbournhonesque.itch.io/cyclesio\n\n\n## Features\n\n\n- Transport-agnostic: *Lightyear* is compatible with a number of IO backends, including:\n    - UDP sockets\n    - WebTransport (using QUIC): available on both native and wasm!\n    - WebSocket: available on both native and wasm!\n    - Steam: use the SteamWorks SDK to send messages over the Steam network\n- Serialization\n    - *Lightyear* uses `postcard` as a default serializer, but you can provide your own serialization function\n- Message passing\n    - *Lightyear* supports sending packets with different guarantees of ordering and reliability through the use of\n      channels.\n    - Packet fragmentation (for messages larger than ~1200 bytes) is supported\n- Input handling\n    - *Lightyear* has special handling for player inputs (mouse presses, keyboards).\n      They are buffered every tick on the `Client`, and *lightyear* makes sure that the client input for tick `N` will\n      be processed on tick `N` on the server.\n      Inputs are protected against packet-loss: each packet will contain the client inputs for the last few frames.\n    - With the `leafwing` feature, there is a special integration with\n      the [`leafwing-input-manager`](https://github.com/Leafwing-Studios/leafwing-input-manager) crate, where\n      your `leafwing` inputs are networked for you!\n    - Also supports the [`bevy-enhanced-input`](https://github.com/projectharmonia/bevy_enhanced_input) crate!\n- Deterministic replication\n    - *Lightyear* supports deterministic replication when only inputs are replicated. The simulation needs to be deterministic.\n      The deterministic replication is compatible with both lockstep and prediction/rollback.\n- World Replication\n    - Entities that have the `Replicate` bundle will be automatically replicated to clients.\n- Advanced replication\n    - **Client-side prediction**: with just a one-line change, you can enable client-prediction with rollback on the\n      client, so that your inputs can feel responsive\n    - **Snapshot interpolation**: with just a one-line change, you can enable Snapshot interpolation so that entities\n      are smoothly interpolated even if replicated infrequently.\n    - **Client-authoritative replication**: you can also replicate entities from the client to the server. The authority over the entity is transferable between the client and the server.\n    - **Pre-spawning predicted entities**: you can spawn Predicted entities on the client first, and then transfer the\n      authority to the server. This ensures that the entity is spawned immediately, but will still be controlled by the server.\n    - **Entity mapping**: *lightyear* also supports replicating components/messages that contain references to other\n      entities. The entities will be mapped from the local World to the remote World.\n    - **Interest management**: *lightyear* supports replicating only a subset of the World to clients. Interest\n      management is made flexible by the use of `Rooms`\n    - **Input Delay**: you can add a custom amount of input-delay as a trade-off between having a more responsive game\n      or more miss-predictions\n    - **Bandwidth Management**: you can set a cap to the bandwidth for the connection. Then messages will be sent in\n      decreasing order of priority (that you can set yourself), with a priority-accumulation scheme\n    - **Lag Compensation** is available so that predicted entities can interact with interpolated entities (used most often for fps games)\n- Configurable\n    - *Lightyear* is highly configurable: you can configure the size of the input buffer, the amount of\n      interpolation-delay, the packet send rate, etc.\n- Observability\n    - *Lightyear* uses the `tracing` and `metrics` libraries to emit spans and logs around most events (\n      sending/receiving messages, etc.).\n- Examples\n    - *Lightyear* has plenty of examples demonstrating all these features, as well as the integration with other bevy\n      crates such as `avian`\n\n\n\n## Supported bevy version\n\n| Lightyear | Bevy |\n|-----------|------|\n| 0.28      | 0.19 |\n| 0.26-0.27 | 0.18 |\n| 0.25      | 0.17 |\n| 0.20-0.24 | 0.16 |\n| 0.18-0.19 | 0.15 |\n| 0.16-0.17 | 0.14 |\n| 0.10-0.15 | 0.13 |\n| 0.1-0.9   | 0.12 |\n"
+    },
+    "brief": {
+      "summary": "Lightyear 是面向 Bevy 的多人游戏网络库",
+      "problem": "帮助 Bevy 游戏实现服务器权威的多人联机",
+      "highlights": [
+        "可以为多人游戏同步实体和玩家输入",
+        "可以加入客户端预测与回滚",
+        "可以通过 WebTransport 支持 WASM 联机"
+      ],
+      "target_users": [
+        "Bevy 游戏开发者",
+        "Rust 开发者",
+        "多人游戏团队"
+      ],
+      "why_trending": "本周首次收录，已有1095 Star且近期仍在更新",
+      "caveat": "需要匹配对应的 Bevy 版本，资料未说明性能数据",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cBournhonesque/lightyear",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "Bevy多人游戏网络库",
+      "generated_by_ai": true,
+      "velocity_score": 14,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "HIllya51/LunaTranslator",
+      "url": "https://github.com/HIllya51/LunaTranslator",
+      "description": "视觉小说翻译器 / Visual Novel Translator",
+      "language": "C++",
+      "total_stars": 12595,
+      "forks": 1129,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "ocr",
+        "reverse-engineering",
+        "translator",
+        "visual-novel",
+        "win32"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2022-09-28T03:10:53Z",
+      "updated_at": "2026-08-04T03:35:26Z",
+      "pushed_at": "2026-08-04T03:16:27Z",
+      "open_issues": 71,
+      "homepage": "https://lunatranslator.org/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n### 简体中文  | [English](#lunatranslator) | [繁體中文](https://docs.lunatranslator.org/cht/) | [한국어](https://docs.lunatranslator.org/ko/) | [日本語](https://docs.lunatranslator.org/ja/) | [Tiếng Việt](https://docs.lunatranslator.org/vi/) | [Русский язык](https://docs.lunatranslator.org/ru/)\n\n---\n\n# LunaTranslator  <span style=\"float: right;\">[【软件下载 & 常见问题】](https://docs.lunatranslator.org/zh/README.html)</span>\n\n\n\n> **视觉小说翻译器**\n\n**如果使用中遇到困难，可以查阅[使用说明](https://docs.lunatranslator.org/zh)、观看[我的B站视频](https://space.bilibili.com/592120404/video)，也欢迎加入[QQ群](https://qm.qq.com/q/mPSu3sG5ri) <a href=\"https://qm.qq.com/q/mPSu3sG5ri\"><img src=\"https://img.shields.io/badge/1059137614-EB1923?style=for-the-badge&logo=qq&logoColor=white&label=QQ&color=5865F2\" alt=\"Discord\"></a>**\n\n\n\n\n## 功能支持\n\n- **[HOOK](https://docs.lunatranslator.org/zh/hooksettings.html)** 主要使用HOOK提取游戏文本，几乎适配了所有的常见和冷门的视觉小说\n\n- **[内嵌翻译](https://docs.lunatranslator.org/zh/embedtranslate.html)** 部分游戏还可以直接内嵌翻译到游戏中，以获取沉浸式体验\n\n- **[HOOK模拟器](https://docs.lunatranslator.org/zh/emugames.html)** 对NS/PSP/PSV/PS2上的大部分游戏，支持HOOK模拟器直接读取游戏文本\n\n- **[OCR](https://docs.lunatranslator.org/zh/useapis/ocrapi.html)** 内置较高精度的OCR模型，并支持许多其他在线&离线OCR引擎，以便灵活的读取任意文本\n\n- **[丰富的翻译接口](https://docs.lunatranslator.org/zh/guochandamoxing.html)** 支持几乎所有翻译引擎，包括大语言模型翻译、离线翻译等\n\n- **[语言学习](https://docs.lunatranslator.org/zh/qa1.html)** 支持日语分词及假名注音，支持AnkiConnect，支持Yomitan插件\n\n- **[语音合成](https://docs.lunatranslator.org/zh/ttsengines.html)** 支持大量在线&离线语音合成引擎\n\n- **[语音识别](https://docs.lunatranslator.org/zh/sr.html)** 在Windows 10和Windows 11上，可以使用Windows语音识别。\n\n## 开源许可\n\nLunaTranslator使用 [GPLv3](../LICENSE) 许可证。\n\n## 支持作者\n\n软件维护不易，如果您感觉该软件对你有帮助，欢迎通过[爱发电](https://afdian.com/a/HIllya51)，或微信扫码赞助，您的支持将成为软件长期维护的助力，谢谢~\n\n<a href=\"https://afdian.com/a/HIllya51\"><img width=\"200\" src=\"https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png\" alt=\"\"></a>\n\n<img src='../src/files/static/zan.jpg' style=\"height: 300px !important;\">\n\n---\n\n# LunaTranslator  \n\n> **Visual Novel Translator**\n\n## Community\n\nIf you encounter any difficulties while using the software, you can check the [User Guide](https://docs.lunatranslator.org/en), or join our [Discord](https://discord.com/invite/ErtDwVeAbB).\n\n<a href=\"https://discord.gg/invite/ErtDwVeAbB\"><img src=\"https://img.shields.io/discord/1262692128031772733?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\"></a>\n\n## Features\n\n\n- **[HOOK](https://docs.lunatranslator.org/en/hooksettings.html)** Primarily uses HOOK to extract game text, compatible with almost all popular and niche visual novels.  \n\n- **[Embedded Translation](https://docs.lunatranslator.org/en/embedtranslate.html)** Some games also support directly embedding translations into the game for an immersive experience.\n\n- **[HOOK Emulator](https://docs.lunatranslator.org/en/emugames.html)** Supports HOOK emulators to directly extract text from most games on NS/PSP/PSV/PS2.\n\n- **[OCR](https://docs.lunatranslator.org/en/useapis/ocrapi.html)** Built-in high-precision OCR model, supporting many other online & offline OCR engines for flexible text extraction.  \n\n- **[Rich Translation APIs](https://docs.lunatranslator.org/en/guochandamoxing.html)** Supports almost all translation engines, including large language model translation, offline translation, and more.\n\n- **[Language Learning](https://docs.lunatranslator.org/en/qa1.html)** Supports Japanese word segmentation and kana annotation, supports AnkiConnect, supports Yomitan plugin\n\n- **[Text-to-Speech](https://docs.lunatranslator.org/en/ttsengines.html)** Supports a wide range of online & offline text-to-speech engines.  \n\n- **[Speech Recognition](https://docs.lunatranslator.org/en/sr.html)** On Windows 10 and Windows 11, you can use Windows Speech Recognition.\n\n## License\n\nLunaTranslator uses [GPLv3](../LICENSE) License\n\n\n## Sponsors\n\nSoftware maintenance is not easy. If you find this software helpful, feel free to support me via [Patreon](https://patreon.com/HIllya51). Your support will contribute to the long-term maintenance of the software. Thank you~\n\n<a href=\"https://patreon.com/HIllya51\" target='_blank'><img width=\"200\" src=\"../docs/become_a_patron_4x1_black_logo_white_text_on_coral.svg\"></a>\n\n\n| <img src=\"https://signpath.org/assets/favicon.png\" width=\"25\" height=\"25\" align=\"center\"> | Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). |\n| :--- | :--- |\n\n"
+    },
+    "brief": {
+      "summary": "面向视觉小说的文本提取与翻译工具",
+      "problem": "解决外语视觉小说难以读取和翻译的问题",
+      "highlights": [
+        "可以提取视觉小说文本并翻译",
+        "可以用OCR读取游戏画面文字",
+        "可以为部分游戏嵌入译文"
+      ],
+      "target_users": [
+        "视觉小说玩家",
+        "日语学习者",
+        "翻译工具开发者"
+      ],
+      "why_trending": "总Star达12595，本周首次收录且近期有更新",
+      "caveat": "采用GPLv3，使用前需确认许可要求",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "HIllya51/LunaTranslator",
+      "score": 92,
+      "category": "ACG 本地化",
+      "reason": "视觉小说专用翻译器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "mlm-games/Miniter",
+      "url": "https://github.com/mlm-games/Miniter",
+      "description": "Basic non-linear video editor for basic clip concatination and trimming (web will be slower, but does export)",
+      "language": "Rust",
+      "total_stars": 81,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "video-editing",
+        "video-editing-software",
+        "video-editor"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-02-25T13:52:53Z",
+      "updated_at": "2026-08-04T02:59:00Z",
+      "pushed_at": "2026-08-04T02:58:52Z",
+      "open_issues": 21,
+      "homepage": "https://mlm-games.github.io/Miniter/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "Will keep it unarchived to let issues be opened, but it is (mostly, since i can't follow through) in maintenance mode.\n\n## Old readme, has been updated to use a rust backend sincd 0.7, but might also plan on a rust-based UI too (though importing would be a lot harder)\n\nMiniter is a basic Compose Multiplatform Video Editor mainly for Android, and Linux.\n\n\nIs limited by ffmpeg-based android libs, hence planning to instead focus on a rust based editor directly for linux (and android later since it is easier to have a single codebase in it, basic tasks are covered here for now), so this is basically a prototype that works well for simple tasks, like trimming, and combining multiple tracks (on android), while transitions and text overlays work better on desktop. \n\n\n> Android save workaround: After saving your project, if the videos aren't loaded on opening an old project, just reimport the videos (that were intially present) in the tracks, and delete them (to just load the video into cache), to re-load the videos in the project.\n"
+    },
+    "brief": {
+      "summary": "面向安卓和 Linux 的基础非线性视频编辑器",
+      "problem": "解决简单视频剪辑、拼接和多轨合并需求",
+      "highlights": [
+        "可以裁剪视频片段并导出成品",
+        "可以拼接多个片段制作简单视频",
+        "可以在桌面端使用转场和文字叠加"
+      ],
+      "target_users": [
+        "安卓用户",
+        "Linux 桌面用户",
+        "基础剪辑创作者"
+      ],
+      "why_trending": "本周首次收录，近期有更新；总 Star 为 81",
+      "caveat": "项目处于维护模式，安卓旧项目可能需重新导入视频",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mlm-games/Miniter",
+      "score": 82,
+      "category": "视频剪辑",
+      "reason": "基础视频拼接与裁剪",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "streamcoreai/streamcore-server",
+      "url": "https://github.com/streamcoreai/streamcore-server",
+      "description": "Open-source realtime voice agent server in Go with WebRTC (WHIP), barge-in, streaming STT/LLM/TTS pipelines, plugin system, multi-language SDKs, SIP telephony, ESP32 support & fully local mode.",
+      "language": "Go",
+      "total_stars": 94,
+      "forks": 14,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-framework",
+        "ai-voice-agent",
+        "conversational-ai",
+        "esp32",
+        "go",
+        "golang",
+        "local-ai",
+        "open-source-ai",
+        "realtime-ai",
+        "realtime-voice-agent",
+        "sip",
+        "speech-to-text",
+        "stt",
+        "telephony",
+        "text-to-speech",
+        "tts",
+        "voice-agent",
+        "voice-ai",
+        "webrtc",
+        "webrtc-whip"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-28T13:04:05Z",
+      "updated_at": "2026-08-04T03:03:20Z",
+      "pushed_at": "2026-08-04T03:03:16Z",
+      "open_issues": 0,
+      "homepage": "https://www.streamcore.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# StreamCore\n\n**Realtime media infrastructure for AI-powered applications.**\n\nStreamCore handles the latency-sensitive media path between users, devices, communication networks, and AI services.\n\nIt provides WebRTC audio transport, session management, streaming speech integration, interruption handling, realtime events, and client SDKs — while your application stays in control of the agent, the models, the tools, and the business logic.\n\n> **StreamCore is the realtime media layer between your users and your intelligence.**\n>\n> Bring your own agent. StreamCore handles the realtime media.\n\nUse StreamCore to build:\n\n- voice agents\n- realtime copilots\n- live translation\n- AI-hosted audio experiences\n- embedded voice devices\n- phone and communication applications\n- custom realtime AI products\n\nThis repository is the Go media runtime — the core server component of the StreamCore project family.\n\n## The problem StreamCore solves\n\nBuilding an agent demo is easy. Building reliable realtime media infrastructure around it is not.\n\nOnce a prototype has to become a product, the hard parts are not prompts:\n\n| Problem | What StreamCore does today |\n|---------|----------------------------|\n| WebRTC connectivity | Pion-based peer, full ICE gathering, WHIP signaling over a single HTTP POST |\n| NAT traversal | Built-in STUN/TURN server — no external coturn container |\n| Audio transport | Opus over RTP in both directions, decode/encode handled for you |\n| Turn-taking | Adaptive VAD that tracks each call's noise floor, plus a debounce that merges a caller's mid-sentence pauses into one turn |\n| Interruption | Barge-in on a faster VAD profile: agent audio ducks first, backchannels (\"mm-hm\", \"yeah okay\") are filtered out, and a confirmed interrupt cancels in-flight LLM and TTS |\n| Streaming provider integration | Streaming STT, streaming LLM, and chunk-streaming TTS so audio starts before synthesis finishes — wired end to end |\n| Session state | Server-generated session IDs, multi-peer sessions, lifecycle and teardown |\n| Realtime events | DataChannel events for transcript, response, agent state, and latency timings |\n| Client integration | SDKs for TypeScript, React Native, Python, Go, and Rust |\n| Telephony | SIP bridge component that transcodes PCMU ↔ Opus and connects over WHIP |\n| Auth | Optional JWT auth on `/whip` with a short-lived token endpoint |\n| Latency visibility | DataChannel timing events, plus a per-turn latency breakdown (endpointing, merge, embedding, vector search, LLM, TTS) in the logs |\n\nAnything not in that table — horizontal scaling, session reconnection, a metrics endpoint — is in [Roadmap](#roadmap), not in the product yet.\n\n## How it fits\n\n```text\n┌───────────────────────────────────────────────┐\n│              Applications                     │\n│ Voice agents · Copilots · Translation · Rooms │\n└───────────────────────┬───────────────────────┘\n                        │ SDKs and realtime events\n┌───────────────────────▼───────────────────────┐\n│           StreamCore Media Runtime            │\n│                                               │\n│ WebRTC · RTP · Opus · Sessions · Interruption │\n│ VAD · Streaming audio · Network traversal     │\n└───────────────┬───────────────────┬───────────┘\n                │                   │\n       ┌────────▼────────┐  ┌───────▼──────────┐\n       │ AI and speech   │  │ Application and  │\n       │ services        │  │ agent backends   │\n       │ STT · TTS · LLM │  │ Tools · APIs     │\n       └─────────────────┘  └──────────────────┘\n```\n\nStreamCore can run a complete speech-to-agent-to-speech pipeline, but that is only one way to use it.\n\n## More than an agent framework\n\nMost agent frameworks start with prompts, tools, and model orchestration. StreamCore starts one layer lower: the realtime media path — transport, codecs, speech streaming, turn-taking, interruption, network traversal, session state, and communication with AI services.\n\nYour agent does not have to live inside StreamCore. There are four supported ways to own the intelligence:\n\n**1. Keep your agent behind a tool call.** Plugins (Python, TypeScript, JavaScript over JSON-RPC) and native Go tools let the conversation call into your existing backend — your APIs, your orchestration, your data. StreamCore streams the result back as speech.\n\n**2. Point the model layer at your own infrastructure.** `llm.provider = \"ollama\"` with a custom `base_url` targets any Ollama-compatible endpoint you run, including one that fronts your own routing or model stack.\n\n**3. Implement the LLM interface directly.** The model layer is a small Go interface in [`internal/llm/llm.go`](./internal/llm/llm.go):\n\n```go\ntype Client interface {\n    Chat(ctx context.Context, userText string, onChunk func(string), onSentence func(string)) (string, error)\n    // OneShot is a single non-streaming call, independent of conversation\n    // state. Used for background work such as the rolling summary.\n    OneShot(ctx context.Context, system, user string) (string, error)\n    SetTools(tools []ToolDefinition)\n    SetToolHandler(handler func(ctx context.Context, call ToolCall) (string, error))\n    AppendSystemPrompt(text string)\n    Reset()\n}\n```\n\nImplement it against your agent server, register it in `NewClient`, and the entire media path — transport, VAD, barge-in, TTS chunking, events — works unchanged.\n\n**4. Use StreamCore's optional built-in agent runtime.** LLM orchestration, tools, skills, RAG, and conversation history ship in the box if you want them. See [Optional agent runtime](#optional-agent-runtime).\n\nA generic HTTP / OpenAI-compatible agent endpoint that requires no Go code is on the [roadmap](#roadmap); today option 3 is a small file, not a fork.\n\n## Realtime media capabilities\n\n**Transport and connectivity**\n\n- Bidirectional Opus audio over WebRTC (`sendrecv`)\n- WHIP signaling ([RFC 9725](https://www.rfc-editor.org/rfc/rfc9725.html)) — one HTTP `POST` for SDP exchange, no persistent signaling socket\n- Full ICE gathering on both sides, no trickle ICE\n- Built-in STUN/TURN server using Pion (UDP **and TCP** 3478, relay range 50001–60000) — TCP so callers behind UDP-blocking firewalls still connect\n- Optional JWT auth on `/whip`, with `POST /token` issuing 1-hour tokens\n- `/health` endpoint and graceful shutdown with a forced-exit safety net\n\n**Media path**\n\n- Opus decode → PCM → pipeline → PCM → Opus encode → RTP\n- Energy-based VAD with configurable onset/offset frame counts, adapting to each call's noise floor so a quiet caller on a clean line and a caller beside a road both register\n- Barge-in on a faster VAD profile: agent audio ducks while the caller talks over it and recovers if the interruption turns out to be a backchannel\n- Turn debounce that merges consecutive final transcripts, so \"I want to… um… book a table\" is answered once, not twice\n- Sentence-boundary chunking so TTS starts before the LLM finishes, and chunk-level streaming so audio plays before a sentence is fully synthesized\n- Optional per-utterance delivery tags — the model may prefix a sentence with `[warm]`, `[empathetic]`, `[calm]`, or `[excited]`, which map to provider voice controls and are never spoken aloud\n- Thinking sound — an optional tone played through the RTP stream while a slow tool runs (500 ms grace period)\n\n**Sessions and events**\n\n- Server-generated session IDs, in-memory session manager\n- Multiple peers per session, each with an inbound or outbound direction\n- DataChannel `events` channel for `transcript`, `response`, `state`, and `timing`\n- Per-turn latency breakdown logged when `pipeline.debug = true`, separating endpointing, turn merge, embedding, vector search, LLM, and TTS\n- Inbound DataChannel messages routed into the pipeline (used today for camera image chunks)\n\n**Clients**\n\n- TypeScript (`@streamcore/js-sdk`), Python (`streamcore`), Go (`github.com/streamcoreai/go-sdk`), Rust\n- React Native / Expo (`@streamcore/react-native-sdk`) — built, not yet published to npm\n\n## Supported endpoints and integrations\n\n| Endpoint type | Status | How |\n|---------------|--------|-----|\n| Browser | Available | TypeScript SDK over WHIP |\n| Mobile | Available | React Native / Expo SDK (`react-native-webrtc` peer dependency) |\n| Backend service / worker | Available | Go, Python, or Rust SDK |\n| CLI and TUI | Available | Go and Rust examples |\n| Telephony (SIP) | Available | [`sip-server`](https://github.com/streamcoreai/sip-server) bridges PCMU/RTP ↔ Opus/WHIP, inbound and outbound |\n| Embedded device | Experimental | ESP32-S3 firmware in [`esp32`](https://github.com/streamcoreai/esp32) speaking WHIP directly |\n\n| AI integration | Providers |\n|----------------|-----------|\n| Streaming STT | Deepgram, AssemblyAI, OpenAI, VibeVoice (local) |\n| LLM | OpenAI, Ollama (local or self-hosted) |\n| Streaming TTS | Cartesia, Deepgram, ElevenLabs, Speechify, VibeVoice (local) |\n| Retrieval | pgvector, Supabase |\n| Custom tools | Python / TypeScript / JavaScript plugins, native Go tools |\n\n## Demo\n\n<a href=\"https://www.loom.com/share/ee079aca75aa4fa1ba6a5e51302fbd56\" target=\"_blank\">\n  <img src=\"https://cdn.loom.com/sessions/thumbnails/ee079aca75aa4fa1ba6a5e51302fbd56-e4ee3f1f1a14a51d.jpg\" alt=\"Demo Video\" />\n</a>\n\n## Sponsors & Supporters\n\n<!-- The public live demo is powered by generous API credits from our sponsors. -->\n\n<div align=\"center\">\n<!-- Logos will go here once received -->\n</div>\n\nThank you! Interested in sponsoring? Reach out for logo placement on GitHub + demo page.\n\n## Quick start\n\n### Prerequisites\n\nFor Docker: Docker and Docker Compose.\n\nFor local development:\n\n- Go 1.22+\n- Node.js 20+ and npm\n- Python 3.10+ for Python plugins or examples\n- Rust 1.87+ for Rust SDKs or examples\n\n### Run the media runtime\n\n```bash\ncp config.toml.example config.toml\n# Edit config.toml with your provider credentials\n\ngo run .\n```\n\nOr with Docker:\n\n```bash\ndocker build -t streamcore-server .\ndocker run --rm -p 8080:8080 -v \"$(pwd)/config.toml:/config.toml:ro\" streamcore-server\n```\n\nThe server listens on `:8080`. Clients connect to `http://localhost:8080/whip`.\n\n### Connect a client\n\n```bash\ngit clone https://github.com/streamcoreai/examples.git\ncd examples/typescript\nnpm install\nnpm run dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000). It connects to `http://localhost:8080/whip` by default.\n\n### Connect your own backend\n\nThe point of StreamCore is that the intelligence is yours. The fastest path is a tool that calls your service — the agent keeps talking while your backend does the work.\n\n```bash\nmkdir -p plugins/plugins/orders-lookup\n```\n\n`plugins/plugins/orders-lookup/plugin.yaml`\n\n```yaml\nname: orders.lookup\ndescription: Look up an order by ID in the company order system\nversion: 1\nlanguage: python\nentrypoint: main.py\nthinking_sound: true\nparameters:\n  type: object\n  properties:\n    order_id:\n      type: string\n      description: The customer's order ID\n  required:\n    - order_id\n```\n\n`plugins/plugins/orders-lookup/main.py`\n\n```python\nimport os, requests\nfrom streamcoreai_plugin import StreamCoreAIPlugin\n\nplugin = StreamCoreAIPlugin()\n\n@plugin.on_execute\ndef handle(params):\n    r = requests.get(\n        f\"{os.environ['BACKEND_URL']}/orders/{params['order_id']}\",\n        timeout=10,\n    )\n    r.raise_for_status()\n    order = r.json()\n    return f\"Order {order['id']} is {order['status']}, arriving {order['eta']}.\"\n\nplugin.run()\n```\n\nRestart the server. Your backend is now part of a realtime voice session, and StreamCore handled every millisecond of the media path around it.\n\nTo own the whole conversation rather than one tool call, implement the `llm.Client` interface described in [More than an agent framework](#more-than-an-agent-framework).\n\n### Fully local (no API keys)\n\nRun everything on your own hardware with Ollama for the LLM and VibeVoice for STT/TTS.\n\n**1. Install and start Ollama**\n\n```bash\nbrew install ollama            # macOS; see https://ollama.ai for Linux\nollama serve\nollama pull gpt-oss:20b\n```\n\n**2. Start the VibeVo"
+    },
+    "brief": {
+      "summary": "面向实时语音应用的开源 Go 媒体服务端",
+      "problem": "降低 WebRTC、语音流处理和打断控制的开发难度",
+      "highlights": [
+        "可以构建实时语音代理和智能副驾",
+        "可以接入 STT、LLM、TTS 流式链路",
+        "可以连接 SIP 电话或嵌入式设备"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "实时 AI 团队",
+        "通信产品开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码提交",
+      "caveat": "横向扩展和断线重连仍在路线图中",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "streamcoreai/streamcore-server",
+      "score": 80,
+      "category": "语音 / 配音",
+      "reason": "实时语音智能体服务端",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 46.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "rive-app/rive-unity",
+      "url": "https://github.com/rive-app/rive-unity",
+      "description": "Unity runtime for Rive",
+      "language": "C#",
+      "total_stars": 206,
+      "forks": 21,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "animation",
+        "design",
+        "game-development",
+        "rive",
+        "ui",
+        "unity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-10-31T03:49:34Z",
+      "updated_at": "2026-08-04T03:44:11Z",
+      "pushed_at": "2026-08-04T03:44:05Z",
+      "open_issues": 30,
+      "homepage": "https://rive.app/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![Discord badge](https://img.shields.io/discord/532365473602600965)\n![Twitter handle](https://img.shields.io/twitter/follow/rive_app.svg?style=social&label=Follow)\n\n# Rive Unity\n\n![rive x unity image](https://github.com/rive-app/rive/assets/13705472/65130bf0-dff8-49cd-ae3a-9abe159c4b20)\n\nA Unity runtime library for [Rive](https://rive.app). This is currently a **technical preview** for Mac and Windows installs of Unity. We're hoping to gather feedback about the API and feature-set as we expand platform support.\n\n## Unity Version Support\n\nThe package supports Unity LTS versions from 2021 upwards (including Unity 6).\n\n### Rendering support\n\nCurrently supported platforms and backends include:\n\n- [WebGL](WEBGL.md)\n- Metal on Mac\n- Metal on iOS\n- D3D11 on Windows\n- OpenGL on Windows\n- OpenGL on Android\n- Vulkan on Windows\n- Vulkan on Android\n- Vulkan on Linux (x86_64)\n\nPlanned support for:\n\n- D3D12\n\n### Feature support\n\nThe rive-unity runtime uses the latest Rive C++ runtime.\n\n| Feature                                                                                                                                  | Supported   |\n| ---------------------------------------------------------------------------------------------------------------------------------------- | ----------- |\n| [Animation Playback](https://rive.app/community/doc/animation-playback/docDKKxsr7ko)                            | ✅           |\n| [Fit and Alignment](https://rive.app/community/doc/layout/docBl81zd1GB)                               | ✅           |\n| [Listeners](https://rive.app/community/doc/listeners/docRlEVvrCZW)                         | ✅           |\n| [Setting State Machine Inputs](https://rive.app/community/doc/state-machines/docHnjaSeIIr) | ✅           |\n| [Listening to Events](https://rive.app/community/doc/rive-events/docvlavjXfq8)             | ✅           |\n| [Updating text at runtime](https://rive.app/community/doc/text/docn2E6y1lXo)               | ✅           |\n| [Out-of-band assets](https://rive.app/community/doc/loading-assets/doc1etuJJdEC)           | ✅           |\n| [Procedural rendering](https://rive.app/community/doc/procedural-rendering/docF2fNqCP1W)   | ✅           |\n| PNG images                                                                                                                               | ✅           |\n| WEBP and JPEG images                                                                                                                     | ✅  |\n\n\n## Table of contents\n\n- ⭐️ [Rive Overview](#rive-overview)\n- 🚀 [Getting Started](#getting-started)\n- 👨‍💻 [Contributing](#contributing)\n- ❓ [Issues](#issues)\n\n## Rive overview\n\n[Rive](https://rive.app) is a real-time interactive design and animation tool that helps teams\ncreate and run interactive animations anywhere. Designers and developers use our collaborative\neditor to create motion graphics that respond to different states and user inputs. Our lightweight\nopen-source runtime libraries allow them to load their animations into apps, games, and websites.\n\n🏡 [Homepage](https://rive.app/)\n\n📘 [General help docs](https://rive.app/community/doc/introduction/docvphVOrBbl) · [Rive Unity docs](https://rive.app/community/doc/unity/doc31LHoppdv)\n\n🛠 [Learning Rive](https://rive.app/learn-rive/)\n\n## Getting started\n\nSee the official examples repository to easily run a project locally: https://github.com/rive-app/rive-unity-examples\n\nSee the [Rive Unity docs](https://rive.app/community/doc/unity/doc31LHoppdv) for more information.\n\nYou will need a Unity editor that supports OpenGL or D3D11 for Windows, or a Mac with ARM64 (M1, M2, etc) architecture and OS 11.0 or later.\n\nSelect either D3D11/OpenGL for Windows, or Metal for Mac/iOS as the Graphics API under Project Settings -> Player in Unity.\n\nYou can install the Rive package for Unity by opening the Package Manager (Window -> Package Manager) and adding the [latest release](https://github.com/rive-app/rive-unity/releases) as a git dependency, for example (replace 0.0.0 with the [latest release](https://github.com/rive-app/rive-unity/releases)):\n\n```\ngit@github.com:rive-app/rive-unity.git?path=package#v0.0.0\n```\n\nOr through HTTP (replace 0.0.0 with the [latest release](https://github.com/rive-app/rive-unity/releases)):\n\n```\nhttps://github.com/rive-app/rive-unity.git?path=package#v0.0.0\n```\n\nYou can also add it manually to your projects `Packages/manifest.json` file (replace 0.0.0 with the [latest release](https://github.com/rive-app/rive-unity/releases)):\n\n```json\n{\n  \"dependencies\": {\n    \"app.rive.rive-unity\": \"git@github.com:rive-app/rive-unity.git?path=package#v0.0.0\"\n  }\n}\n```\n\n### Awesome Rive\n\nFor even more examples and resources on using Rive at runtime or in other tools, checkout the [awesome-rive](https://github.com/rive-app/awesome-rive) repo.\n\n## Contributing\n\nWe love contributions! Check out our [contributing docs](./CONTRIBUTING.md) to get more details into how to run this project, the examples, and more all locally.\n\n## Issues\n\nHave an issue with using the runtime, or want to suggest a feature/API to help make your development\nlife better? Log an issue in our [issues](https://github.com/rive-app/rive-unity/issues) tab! You\ncan also browse older issues and discussion threads there to see solutions that may have worked for\ncommon problems.\n"
+    },
+    "brief": {
+      "summary": "把 Rive 交互动画接入 Unity 项目的运行库",
+      "problem": "Unity 项目缺少加载和控制 Rive 动画的运行时支持",
+      "highlights": [
+        "可以在 Unity 中播放 Rive 动画",
+        "可以响应状态机输入和事件",
+        "可以运行时更新动画文本"
+      ],
+      "target_users": [
+        "Unity 游戏开发者",
+        "交互界面开发者",
+        "动画设计师"
+      ],
+      "why_trending": "本周首次收录，近期有更新，但总 Star 为 206",
+      "caveat": "目前仍是技术预览，平台和图形后端有限",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "rive-app/rive-unity",
+      "score": 85,
+      "category": "动画",
+      "reason": "Unity实时动画运行时",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  }
+]
