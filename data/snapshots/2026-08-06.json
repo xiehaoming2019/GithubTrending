@@ -1,0 +1,527 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "huangruiteng/loopx",
+      "url": "https://github.com/huangruiteng/loopx",
+      "description": "Lightweight loop engineering state kernel for long-running AI agent teams. Agent-loop agnostic across Codex, Claude Code, and other coding agents, with durable goals, quota-aware auto-wake, executable todos, evidence logs, and verifiable handoffs.",
+      "language": "Python",
+      "total_stars": 2299,
+      "forks": 171,
+      "stars_today": 326,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 326
+    },
+    "details": {
+      "topics": [
+        "agent-control-plane",
+        "agent-ops",
+        "ai-agents",
+        "codex",
+        "long-running-agents",
+        "loop-engineering",
+        "loopx",
+        "workflow-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-31T14:58:56Z",
+      "updated_at": "2026-08-06T03:43:31Z",
+      "pushed_at": "2026-08-06T03:09:00Z",
+      "open_issues": 28,
+      "homepage": "https://my.feishu.cn/wiki/CaL5wMk9ui17ngkWzeUcMlAYnZg",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<h1 align=\"center\">LoopX</h1>\n\n<img src=\"docs/assets/loopx-social-preview.png\" alt=\"LoopX loop engineering social preview banner\" width=\"560\">\n\n**The local control plane for long-running AI agent work.**\n\n<sub>Keep objectives, gates, todos, evidence, quota, and handoffs stable while Codex, Claude Code, Cursor, or your own runtime executes bounded turns.</sub>\n\n[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/huangruiteng/loopx?display_name=tag)](https://github.com/huangruiteng/loopx/releases/latest) [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml) [![Local first](https://img.shields.io/badge/control--plane-local--first-brightgreen.svg)](docs/public-private-boundary.md) [![Loop Agents](https://img.shields.io/badge/status-loop%20agents%20early-orange.svg)](docs/product/release-readiness.md)\n\n[Public website](https://huangruiteng.github.io/loopx/) · [Docs](https://huangruiteng.github.io/loopx/docs/) · [Try LoopX](#try-loopx) · [See real loops](#evidence) · [How it works](#why-loopx) · [User manual](https://my.feishu.cn/wiki/CaL5wMk9ui17ngkWzeUcMlAYnZg) · [简体中文](README.zh-CN.md)\n\n**把会干活的 Agent，接成可管理、可复盘、可持续改进的数字员工。**\n\n</div>\n\n---\n\nA lightweight state kernel and agent-agnostic local control plane for loop\nengineering, LoopX keeps long-running work reviewable, restartable, and easier\nto hand off across turns, tools, and agents. It does not replace your agent\nruntime.\n\n**Loop engineering for long-running AI agents and peer agent teams.**\n\n> Keep the loop moving. Keep the judgment human.\n\n<a id=\"how-it-works\"></a>\n\n## Why LoopX\n\nAn agent can finish a task in one session. Long-running work is harder:\nobjectives change, owner decisions appear, evidence goes stale, agents hand work\nto peers, and a scheduler can keep spending after no useful transition remains.\nChat memory and a timer are not enough to govern that.\n\nLoopX keeps the durable control state in one compact layer:\n\n```text\nobjective / issue / project\n   │\n   ▼\nLoopX state: objective + gates + todos + scope + evidence + quota\n   │\n   ├─ human judgment needed? ── yes ─▶ ask a concrete question and wait\n   │\n   ├─ safe fallback available? ──────▶ run one bounded agent slice\n   │\n   ▼\nCodex / Claude Code / Cursor / shell agent executes one turn\n   │\n   ▼\nwrite evidence + handoff + next todo ─▶ quota decides the next tick\n```\n\n![LoopX control-plane board](docs/assets/control-plane-board.svg)\n\nA useful mental model is an\n**[agent-native Kanban for long-running work](docs/development/control-plane-course/00-concept-primer.md)**.\nCards carry identity, authority, evidence, and continuation. Moves are validated\noperators such as claim, gate, monitor, and writeback. The board is a\nprojection; LoopX state remains the source of truth.\n\nRegistered agents are peers. Claims, leases, task boundaries, capabilities, and\ntyped continuation decide who acts next; no durable leader identity is\nrequired.\n\nLoopX is useful when you run:\n\n- multi-day engineering, research, benchmark, or experiment objectives;\n- issue and PR loops that must preserve scope, evidence, and review state;\n- recurring heartbeat or monitor work;\n- projects with owner, safety, publication, or private-data gates;\n- peer-agent teams where ownership, leases, and handoff matter;\n- creator, research, or operations workflows whose progress must remain\n  legible to a non-engineering operator.\n\nLoopX is not an autonomous production controller. Dangerous permissions,\npublishing, production writes, and final ownership stay with the human.\n\n<a id=\"see-it-in-action\"></a>\n\n## Evidence\n\nThese are not one-turn demos. The OpenViking Issue-Fix and Auto ML trajectories\neach span **200+ hours of elapsed loop lifetime** across many bounded turns,\ndecisions, and evidence updates. Elapsed lifetime is wall-clock project time,\nnot 200 hours of continuous model execution or a claim of unattended\nproduction autonomy. Open each visual to inspect the public-safe graph,\nevidence branches, and decisions preserved across turns.\n\n### Open-Source Issue Fix\n\n**200+ hour public contribution arc: PR delivery and reusable fix knowledge\nevolve together.**\n\n<a href=\"docs/assets/long-running-loop-openviking-trajectory.png\">\n  <img src=\"docs/assets/long-running-loop-openviking-trajectory.png\" alt=\"Open-source issue-fix trajectory linking focused PR delivery with reusable LoopX capabilities\" width=\"420\">\n</a>\n\nLoopX's creator uses this path as an\n[OpenViking contributor](https://github.com/volcengine/OpenViking/pulls?q=is%3Apr+author%3Ahuangruiteng).\nThe represented public contribution sequence spans more than 200 elapsed hours\nfrom its first PR creation to the latest represented review or update. The\n[Issue-Fix capability](docs/capabilities/issue-fix/README.md) keeps rolling\nrepository context, revision-stamped fix knowledge, and reviewer-facing\npreferences separate; linked PRs plus current checkout source and tests remain\nauthoritative.\n\n### Auto ML Experiment\n\n**200+ hour owner-run experiment arc: hypotheses, matched evidence, invalid\nlineages, running replicates, and promote/stop gates remain visible in one\ngraph.**\n\n<a href=\"docs/assets/long-running-loop-ml-experiment-trajectory.png\">\n  <img src=\"docs/assets/long-running-loop-ml-experiment-trajectory.png\" alt=\"Auto ML Experiment trajectory with experiment lineages, evidence gates, and promotion decisions\" width=\"760\">\n</a>\n\nThe redacted public-safe graph preserves decision lineage across that 200+ hour\nelapsed window. It is trajectory evidence, not a claim of continuous compute,\nindependent reproduction, or a production result.\n\n### Auto Research\n\n**Proposer, executor, and evaluator/promoter agents iterate in parallel while\ntodo, quota, evidence, and targeted wake remain visible.**\n\n<a href=\"docs/assets/auto-research-multi-agent-showcase.png\">\n  <img src=\"docs/assets/auto-research-multi-agent-showcase.png\" alt=\"Auto Research multi-agent workspace with proposer, executor, evaluator/promoter, todo, quota, evidence, and targeted wake activity\">\n</a>\n\nMore inspectable surfaces:\n\n- the [public homepage](https://huangruiteng.github.io/loopx/) for the product\n  narrative, quick start, and long-running evidence;\n- the [showcase catalog](docs/showcases/README.md), including\n  [blocked-P0 safe rotation](docs/showcases/cases/0617-blocked-p0-safe-rotation.md),\n  [LoopX self-iteration](docs/showcases/cases/0619-loopx-self-iteration.md), and\n  [dynamic workflow orchestration](docs/showcases/cases/0619-dynamic-workflow-hardware-agent.html);\n- the [cross-runtime implementation review demo](docs/product/use-cases/cross-runtime/cross-runtime-impl-review-demo.md);\n- the public [user manual](https://my.feishu.cn/wiki/CaL5wMk9ui17ngkWzeUcMlAYnZg).\n\n<a id=\"quick-start\"></a>\n\n## Try LoopX\n\nRequirements: Python 3.11+, `curl`, `tar`, and a macOS or Linux shell. Git is\nonly needed for contributor clone/canary workflows. The Python package has no\nruntime dependencies outside the standard library.\n\nInstall without cloning:\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/huangruiteng/loopx/main/scripts/install-from-github.sh | bash\nexport PATH=\"$HOME/.local/bin:$PATH\"\nloopx doctor\n```\n\nThen connect from your project root:\n\n```bash\ncd /path/to/your-project\nloopx connect\nloopx status\n```\n\nIf the project has not been initialized and `connect` tells you state is\nmissing, use the guided path:\n\n```bash\nloopx start-goal --guided --project . --goal-text \"Your long-running objective\"\n```\n\nLoopX should reuse existing state rather than overwrite it. Keep `.loopx/`,\n`.codex/goals/`, and `.local/` ignored.\n\n### Start From Your Agent\n\n| Host | Recommended start | Loop driver |\n| --- | --- | --- |\n| Codex App | Ask the agent to connect this project to LoopX, run `loopx doctor`, preserve existing state, and report the current gate and next todo. Then use `$loopx <complex task>` or choose `loopx` from `/skills`. | Codex App heartbeat automation, refreshed from `quota should-run.scheduler_hint` |\n| Codex App over SSH | `loopx agent-onboard --agent-type codex-app-ssh --project .` | The returned visible `/goal <task_body>` |\n| Codex CLI | Start `codex` in the project, ask it to connect and diagnose LoopX, then use `$loopx <complex task>` or `/skills`. | Visible `/goal <task_body>`; no hidden headless execution by default |\n| Claude Code | Install the opt-in adapter, then run `/loopx <task>` followed by `/loop`. | Native Claude Code `/loop` gated by LoopX |\n| OpenCode | Install the static command facade; opt in to `--with-goal-bridge` for recurring goals. | OpenCode command facade and explicit goal bridge |\n| Cursor, shell, or custom runner | Use the installer and `loopx doctor`; connect manually or call LoopX from your runner. | Your shell, scheduler, or runner |\n\nThe exact, copy-ready setup messages and host recovery paths live in\n[Getting Started](docs/guides/getting-started.md). Host integrations can inspect\nthe [Codex App host command registry contract](docs/reference/protocols/codex-app-host-command-registry-v0.md),\nthe [Codex CLI packaged install path](docs/product/runtimes/codex-cli/codex-cli-packaged-install.md),\nor the [Claude Code adapter](loopx/claude_goal_mode/README.md).\n\nFor custom runners, read\n[Embed LoopX in Your Agent Runner](docs/guides/custom-agent-runner-integration.md)\nand the [worker bridge install contract](docs/integrations/worker-bridge-install-contract.md).\nThe core tick is deliberately small:\n\n```text\nloopx quota should-run      # should this registered agent act now?\nloopx todo claim            # who owns this slice?\nloopx todo update           # what changed?\nloopx refresh-state         # what should the next turn see?\nloopx quota spend-slot      # account for a completed, validated slice\n```\n\nA successful connection has:\n\n- `loopx doctor` passing;\n- `.loopx/registry.json` and a projected active goal state;\n- `loopx status` showing the current objective, concrete user gate, and next\n  agent todo;\n- a visible loop driver or an exact activation instruction;\n- local runtime state ignored rather than committed.\n\nClone-based install is only for contributors who want the live canary wrapper:\n\n```bash\ngit clone https://github.com/huangruiteng/loopx ~/loopx\n~/loopx/scripts/install-local.sh\nloopx doctor\n```\n\n<a id=\"capability-surface\"></a>\n\n## Capabilities\n\nLoopX folds its control-plane mechanics into five questions:\n\n| Question | What LoopX keeps visible |\n| --- | --- |\n| What is the objective? | The active goal, explicit scope, and current authority. |\n| What happens next? | Ordered user and agent todos, ownership, claims, and leases. |\n| What needs human judgment? | Concrete user gates instead of a vague \"waiting for owner.\" |\n| What evidence changed? | Compact run history, validation, blockers, and accepted writeback. |\n| May the loop continue? | Quota, capabilities, safe fallback, scheduler hints, and stop conditions. |\n\n### Control-Plane Surface\n\n| Surface | What it does | Start with |\n| --- | --- | --- |\n| Goal state and status | Tracks active state, todos, claims, gates, evidence, run history, and first-screen attention. | `loopx status`, `loopx diagnose`, `loopx review-packet` |\n| Quota and interaction contract | Decides whether a turn should deliver, ask, wait, self-repair, or stay quiet. | `loopx quota should-run`, [quota allocation](docs/quota-allocation.md) |\n| Agent runtime bridges | Keeps Codex App, Codex CLI, Claude Code, and generic workers aligned with the same guard. | `loopx heartbeat-prompt`, `loopx codex-cli-bootstrap-message`, `loopx worker-bridge` |\n| Operator surfaces | Renders compact status without making the browser the state authority. | `loopx serve-status`, [dashboard](apps/presentation/dashboard/README.md) |\n| External projections | Projects todos and gates into collaboration surfaces while LoopX remains authoritative. | `loopx lark-kanban`, [Lark Kanban adapter](docs/integrations/lark-kanban-control-plane-adapter.md) |\n"
+    },
+    "brief": {
+      "summary": "面向长期 AI Agent 任务的本地状态控制层",
+      "problem": "解决跨多轮 Agent 工作难以持续、复盘和交接的问题",
+      "highlights": [
+        "可以管理目标、门槛和可执行待办",
+        "可以记录证据并支持 Agent 交接",
+        "可以按配额唤醒不同编码 Agent"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "多 Agent 团队",
+        "长期研发项目负责人"
+      ],
+      "why_trending": "今日新增 326 Star，本周首次收录",
+      "caveat": "不是自主生产控制器，关键决策仍需人工",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "huangruiteng/loopx",
+      "score": 92,
+      "category": "AI Agent / Skills",
+      "reason": "管理长周期 Agent 工作流",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 70,
+      "ranking_score": 75.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "TencentCloud/TencentDB-Agent-Memory",
+      "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+      "description": "TencentDB Agent Memory is a team-level memory hub for AI Agents — turning conversations, docs, and code into four reusable memory assets (Chat Memory, Skill, LLM-Wiki, Code-Graph) that are governed, shared, and equipped across agents and frameworks.",
+      "language": "TypeScript",
+      "total_stars": 15224,
+      "forks": 1385,
+      "stars_today": 1892,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 4871
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai-agent",
+        "embedding",
+        "llm",
+        "local-first",
+        "long-term-memory",
+        "memory",
+        "openclaw-plugin",
+        "vector-search"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-07T06:34:26Z",
+      "updated_at": "2026-08-06T03:42:37Z",
+      "pushed_at": "2026-08-05T08:04:09Z",
+      "open_issues": 520,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "feat/server_team",
+      "readme": "\n<div align=\"center\">\n\n<img src=\"./assets/images/logo.png\" alt=\"TencentDB Agent Memory\" width=\"880\" />\n\n### Agents remember. Humans innovate.\n\n<a href=\"https://trendshift.io/repositories/29310?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-29310\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/29310\" alt=\"TencentCloud%2FTencentDB-Agent-Memory | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n[![npm](https://img.shields.io/npm/v/@tencentdb-agent-memory/memory-tencentdb?color=blue)](https://www.npmjs.com/package/@tencentdb-agent-memory/memory-tencentdb)\n[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)\n[![Node](https://img.shields.io/badge/node-%3E=22.16-brightgreen)](https://nodejs.org/)\n[![OpenClaw](https://img.shields.io/badge/OpenClaw-%3E=2026.3.13-orange)](https://github.com/openclaw/openclaw)\n[![Hermes](https://img.shields.io/badge/Hermes-Gateway-7B61FF)](https://hermes-agent.nousresearch.com/docs/)\n[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/dJQM6mKMF)\n\n[Installation](#installation) · [What is it?](#what-is-tencentdb-agent-memory) · [Team Play](#one-play-style-build-a-growing-agent-team-for-a-one-person-company) · [Technical Implementation](#technical-implementation) · [Benchmark](#benchmark)\n\n[**English**](./README.md) · [简体中文](./README_CN.md)\n\n</div>\n\n---\n\n> **Latest:** Team Memory Beta is evolving quickly — install it and start exploring in minutes.\n\n<td>\n   <video src=\"https://github.com/user-attachments/assets/efb1a808-1f86-4cfe-802c-f7453f7ca938\" width=\"100%\" controls autoplay loop muted playsinline></video>\n</td>\n\n# Installation\n\nStart all three services in one go (`memory-core` + `memory-hub` + `proxy`):\n\n```bash\ngit clone https://github.com/Tencent/TencentDB-Agent-Memory.git\ncd TencentDB-Agent-Memory/deploy/global-images\ncp .env.example .env\n$EDITOR .env       # Fill in two sets of LLM parameters (memory group + proxy group)\n./start-all.sh     # Launch everything with one command; when finished, it prints a one-liner you can paste directly into Claude\n```\n\nOpen the panel: [http://localhost:8125](http://localhost:8125).\n\nComplete installation documentation (standalone Memory Hub deployment, Proxy + Claude Code / CodeBuddy usage, stop and cleanup, port reference, etc.) is available in [**INSTALL.md**](./INSTALL.md) (中文: [INSTALL_CN.md](./INSTALL_CN.md)).\n\n### Migrating data from an older version\n\nIf you're already on an older release (v1.x / v0.x) and want to bring your existing data over to v2.0.0+, we provide a migration tool:\n\nSee [**Data Migration Tool (v2 → v3)**](./MemoryCore/scripts/migrate-v2-to-v3/README.md) for full usage and flags. New installations can skip this.\n\n# What is TencentDB Agent Memory?\n\nWe started from a practical question: **How do you reduce repetitive work when using Agents?**\n\nIf project context has already been explained, it shouldn't need to be repeated in a new session. If documents have already been read, every Agent shouldn't have to start again from page one. A workflow that already works shouldn't have to be rediscovered next time.\n\nMemory here means more than just \"remembering conversations.\" **Any information that helps the next Agent avoid reinventing the wheel should be saved, organized, and reused.**\n\n```text\nExisting information → Reusable memory assets → Fewer turns → Less rework → More stable results and higher efficiency\n```\n\n### Let experience accumulate, flow, and pass on to the next Agent\n\n**Memory Hub** for Agent teams closes the loop across the entire experience lifecycle: work produces assets, assets circulate through the team, and new members can load the team's save file on day one.\n\n1. **Automatic asset extraction**: Extract Chat Memory and Skills from conversations and tasks; convert documents and code into Wiki and CodeGraph; then manage, review, and route them consistently.\n2. **Portable & multi-Agent compatible**: Memory assets are decoupled from Agent frameworks — they can move across frameworks and be shared and maintained by multiple Agents and team members.\n3. **Cold-start friendly**: Import existing documents, codebases, and Agent conversation sessions. New Agent teams can start from existing experience instead of learning from scratch.\n\n### 🧠 A brain that remembers people and context\n\n- **Chat Memory** retains preferences, facts, decisions, and interaction history.\n- Each Agent automatically gets its own memory when created — no need to re-introduce yourself next time.\n- L0 Conversation → L1 Atom → L2 Scenario → L3 Persona — raw conversations are distilled layer by layer.\n\n<img width=\"\" src=\"assets/images/chat_memory.cn.png\" alt=\"image.png\" />\n\n> \"Don't refactor the old auth module — mobile is still using it.\" — Context this costly shouldn't depend on humans repeating it every time.\n\n### ⚡ A Skill library that accumulates expertise\n\n- After completing complex work, Agents can extract and manage reusable Skills from conversations and tool calls, and import them into the context of a designated Agent when needed.\n- A Skill isn't just a prompt snippet; it has versions, resource files, trigger boundaries, execution steps, and validation rules.\n- Personal Skills are private by default; after review, they can be shared with the team and assigned to other Agents.\n\n<img width=\"\" src=\"assets/images/skill.cn.png\" alt=\"image.png\" />\n\n> Troubleshooting, code review, release checklists — learn it once, and the whole team can use it.\n\n### 📖 A knowledge map that reads both docs and code\n\n- **Wiki** turns product docs, design specs, and ops runbooks into structured pages with a link graph. (Inspired by Karpathy's LLM knowledge base.)\n\n<img src=\"./assets/images/wiki.cn.png\" alt=\"image.png\" />\n\n- **CodeGraph** indexes code symbols, files, call relationships, and impact paths.\n<img width=\"\" src=\"assets/images/codegraph.cn.png\" alt=\"image.png\" />\n\n- Agents can search, read, inspect callers/callees, and perform impact analysis before modifying code.\n\n> Wiki keeps Agents from reading every file list before getting to work. CodeGraph doesn't just tell them \"the code is here\" — it tells them \"changing this might affect those.\"\n\n### 🛡️ A team memory panel controlled by humans\n\n- Create teams and Agents in Memory Hub; review, share, and equip memory assets.\n- Manage ownership, versions, status, visibility, usage counts, and Agent bindings in one place.\n- `private` belongs strictly to the Owner; `team` is visible to all team members; `restricted` grants precise access via User / Role / Agent ACLs.\n- Two role layers: **global System Admin** manages users and teams (creating teams, adding members) and can also use Wiki, CodeGraph, Skill, and other asset management features; **Team-level roles** include Admin (team manager) and Member (regular member), responsible for asset collaboration and access control within a team. Asset ownership is tracked via Owner — the Owner automatically has management permissions for their assets.\n\n<img width=\"\" src=\"assets/images/asset.cn.png\" alt=\"image.png\" />\n\n\n## Cold Start: Load the Save File, Then Get to Work\n\nMost Agents' first task is re-learning your project. TencentDB Agent Memory turns the learning cost you've already paid into a save file:\n\n<img alt=\"Cold Start: import codebase, docs, and history into Memory Hub\" src=\"assets/images/flowchart3.png\" />\n\nSpecifically, these existing assets can be imported directly and processed automatically in the panel:\n\n- **Codebases**: Import existing repositories — **CodeGraph** automatically indexes symbols, files, call relationships, and impact paths.\n- **Documents & files**: Import relevant docs and files — **Wiki** automatically generates structured pages with a link graph.\n- **Conversation sessions**: Import past Agent conversation sessions — **Skills and Chat Memory** are automatically extracted as reusable assets.\n\n> Stop retraining every Agent. Give it the save file.\n\n## One Play Style: Build a Growing Agent Team for a One-Person Company\n\nOpen Memory Hub and create a team:\n\n```text\nTiny but Serious Inc.\n├── 👤 You · Set goals / Make decisions\n├── 🔭 Scout · Research / Find opportunities\n├── 🛠 Builder · Write code / Build products\n├── 🧪 Reviewer · Test / Find issues\n└── 🧠 Agent Memory · Preserve the team's experience\n```\n\nYou're not opening four disconnected chat windows — you're assembling a squad with different roles that can inherit the team's accumulated experience.\n\n### Recruit first, then equip\n\n```text\n🔭 Scout\n   ├── User interview Chat Memory\n   ├── Market research Wiki\n   └── Competitive analysis Skill\n\n🛠 Builder\n   ├── Product Wiki\n   ├── Project CodeGraph\n   └── Feature Delivery Skill\n\n🧪 Reviewer\n   ├── Historical incident Chat Memory\n   ├── Project CodeGraph\n   └── Release Checklist Skill\n```\n\nDifferent roles, different loadouts. Less noise — give each Agent the memory assets it actually needs to get work done.\n\n**The company can be tiny. Experience can compound forever.**\n\n## Memory Assets, Not a Chat Log Warehouse\n\nRAG answers \"what can be found?\" Team Memory also answers \"who can use it, which version is valid, and which Agent should receive it.\"\n\n| | Chat History | Standard RAG | TencentDB Agent Memory |\n| :--- | :---: | :---: | :---: |\n| Cross-session user understanding | △ | △ | ✅ Chat Memory |\n| Distilled executable experience | — | — | ✅ Skill |\n| Document structure & relationships | — | △ Chunk retrieval | ✅ Wiki + Link Graph |\n| Code call graphs & impact scope | — | △ Text match | ✅ CodeGraph |\n| Ownership / Version / Status | — | — | ✅ |\n| Team sharing & Agent loadout | — | — | ✅ |\n| Private / Team / ACL | — | △ | ✅ |\n\n## Memory Hub Is Not a Display Board — It's a Control Panel\n\n| Play Style | What you do in the Hub |\n| :--- | :--- |\n| **Team Up** | Create teams, add people and Agents, define sharing boundaries |\n| **Asset Library** | Browse, search, review, and manage Chat Memory, Skills, Wiki, and CodeGraph |\n| **Agent Loadout** | Bind different memory assets to different Agents; adjust priority and usage mode |\n| **Knowledge Workshop** | Build Wiki and CodeGraph; monitor processing status and asset metadata |\n| **Access Control** | Switch between private, team, and ACL-based access; revoke sharing when needed |\n\nWhen you open an asset, what matters is not just \"what it says,\" but also \"where it came from, which version it is, who it's assigned to, and whether it's been used recently.\"\n\n## Every Loop Gains Experience\n\n<img alt=\"Every Loop Gains Experience: continuous accumulation, making every use smarter\" src=\"assets/images/flowchart4.png\" />\n\nMemory doesn't run the Agent loop; it ensures the next iteration inherits the previous one's results: valuable interactions stay in Chat Memory, proven workflows are distilled into Skills, and document/code changes are updated through Wiki ingest and CodeGraph sync.\n\n**Without Memory, loops may just repeat faster. With inherited memory, each iteration has the chance to be better than the last.**\n\n## One Agent Team: Shared Experience, Not Shared Privacy\n\nNew Chat Memory and Skills are private by default. Sharing is an explicit action, not a default leak.\n\n| Visibility | Semantics |\n| :--- | :--- |\n| `private` | Only the Owner can read — not even team admins |\n| `team` | Team members can read; the Owner / Admin can manage |\n| `restricted` | Precise access via User / Role / Agent ACL |\n| `agent` | For targeted equipping of Agents within the same team |\n\nYou can assign the \"Release Skill\" to the Release Agent, the \"Architecture Wiki\" to all development Agents, and CodeGraph to Coder and Reviewer.\n\n## Technical Implementation\n\nTencentDB Agent Memory doesn't aim to \"store everything.\" It solves three problems: **what's worth keeping, who can use it, and how to retrieve less while retrieving the right things next time.**\n\n<img alt=\"Technical overview: layering (L0–L3), Memory Assets, Memory Hub, identity-based "
+    },
+    "brief": {
+      "summary": "面向团队的 AI Agent 记忆与知识资产中心",
+      "problem": "减少 Agent 重复理解项目、文档和工作流程的成本",
+      "highlights": [
+        "可以沉淀对话记忆和可复用 Skills",
+        "可以把文档与代码整理成 Wiki、CodeGraph",
+        "可以统一审核、共享和分配团队记忆资产"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "团队技术负责人",
+        "使用 Claude Code 的开发者"
+      ],
+      "why_trending": "今日新增 1892 Star，总 Star 已达 15224",
+      "caveat": "项目仍在快速演进，资料未说明完整稳定性",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "TencentCloud/TencentDB-Agent-Memory",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "提供团队级 Agent 记忆与技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 75.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "description": "Production-grade engineering skills for AI coding agents.",
+      "language": "JavaScript",
+      "total_stars": 82059,
+      "forks": 8830,
+      "stars_today": 226,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 226
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "antigravity",
+        "claude-code",
+        "codex",
+        "cursor",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-15T20:20:26Z",
+      "updated_at": "2026-08-06T03:46:03Z",
+      "pushed_at": "2026-08-05T19:09:28Z",
+      "open_issues": 148,
+      "homepage": "https://skills.addy.ie",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Agent Skills\n\n**Production-grade engineering skills for AI coding agents.**\n\nSkills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development.\n\n<a href=\"https://trendshift.io/repositories/25200\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/25200\" alt=\"addyosmani%2Fagent-skills | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n\n![Addy's Agent Skills](https://addyosmani.com/assets/images/addys-agent-skills.jpg)\n\n```\n  DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP\n ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐\n │ Idea │ ───▶ │ Spec │ ───▶ │ Code │ ───▶ │ Test │ ───▶ │  QA  │ ───▶ │  Go  │\n │Refine│      │  PRD │      │ Impl │      │Debug │      │ Gate │      │ Live │\n └──────┘      └──────┘      └──────┘      └──────┘      └──────┘      └──────┘\n  /spec          /plan          /build        /test         /review       /ship\n```\n\n---\n\n## Commands\n\n8 slash commands that map to the development lifecycle. Each one activates the right skills automatically.\n\n| What you're doing | Command | Key principle |\n|-------------------|---------|---------------|\n| Define what to build | `/spec` | Spec before code |\n| Plan how to build it | `/plan` | Small, atomic tasks |\n| Build incrementally | `/build` | One slice at a time |\n| Prove it works | `/test` | Tests are proof |\n| Review before merge | `/review` | Improve code health |\n| Audit web performance | `/webperf` | Measure before you optimize |\n| Simplify the code | `/code-simplify` | Clarity over cleverness |\n| Ship to production | `/ship` | Faster is safer |\n\nWant fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: every task is still test-driven and committed individually, and it pauses on failures or risky steps.\n\nSkills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.\n\n---\n\n## Quick Start\n\n**Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):\n\n```bash\nnpx skills add addyosmani/agent-skills            # install all 24 skills\nnpx skills add addyosmani/agent-skills --list     # browse before installing\n```\n\nOr grab individual skills:\n\n```bash\nnpx skills add addyosmani/agent-skills --skill code-review-and-quality   # five-axis review before merge\nnpx skills add addyosmani/agent-skills --skill interview-me              # requirements interrogation, one question at a time\nnpx skills add addyosmani/agent-skills --skill test-driven-development   # red-green-refactor, enforced\n```\n\n> **Installing one skill?** A per-skill `npx` install copies only\n> `skills/<name>/`, not the repo-level `references/` directory. The skill still\n> works, but paths to supplementary shared checklists are unavailable. Use a\n> whole-repo integration, clone the repository, or copy the needed checklist into\n> a `references/` directory inside the installed skill. This portability gap is\n> tracked in [#361](https://github.com/addyosmani/agent-skills/issues/361).\n\nPrefer a native integration? Pick your tool below.\n\n<details>\n<summary><b>Claude Code (recommended)</b></summary>\n\n**Marketplace install:**\n\n```\n/plugin marketplace add addyosmani/agent-skills\n/plugin install agent-skills@addy-agent-skills\n```\n\n> **SSH errors?** The marketplace clones repos via SSH. If you don't have SSH keys set up on GitHub, either [add your SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) or use the full HTTPS URL to force HTTPS cloning during the marketplace-add step:\n> ```bash\n> /plugin marketplace add https://github.com/addyosmani/agent-skills.git\n> /plugin install agent-skills@addy-agent-skills\n> ```\n>\n> If `/plugin install` still fails with `git@github.com: Permission denied (publickey)` on Windows or macOS, the recommended workaround is to configure Git once to rewrite GitHub SSH URLs to HTTPS for subprocess clones:\n> ```bash\n> git config --global url.\"https://github.com/\".insteadOf git@github.com:\n> ```\n\n**Local / development:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nclaude --plugin-dir /path/to/agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Cursor</b></summary>\n\nPut workflow skills under `.cursor/skills/` (sync from `agent-skills/skills/`) and short policies in `.cursor/rules/*.mdc` — do not paste full skills into rules. See [docs/cursor-setup.md](docs/cursor-setup.md).\n\n</details>\n\n<details>\n<summary><b>Antigravity CLI</b></summary>\n\nInstall as a native plugin for skills, subagents, and slash commands. See [docs/antigravity-setup.md](docs/antigravity-setup.md).\n\n**Install from the repo:**\n\n```bash\nagy plugin install https://github.com/addyosmani/agent-skills.git\n```\n\n**Install from a local clone:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nagy plugin install ./agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Gemini CLI</b></summary>\n\nInstall as native skills for auto-discovery, or add to `GEMINI.md` for persistent context. See [docs/gemini-cli-setup.md](docs/gemini-cli-setup.md).\n\n**Install from the repo:**\n\n```bash\ngemini skills install https://github.com/addyosmani/agent-skills.git --path skills\n```\n\n**Install from a local clone:**\n\n```bash\ngemini skills install ./agent-skills/skills/\n```\n\n</details>\n\n<details>\n<summary><b>Windsurf</b></summary>\n\nAdd skill contents to your Windsurf rules configuration. See [docs/windsurf-setup.md](docs/windsurf-setup.md).\n\n</details>\n\n<details>\n<summary><b>OpenCode</b></summary>\n\nUses agent-driven skill execution via AGENTS.md and the `skill` tool.\n\nSee [docs/opencode-setup.md](docs/opencode-setup.md).\n\n</details>\n\n<details>\n<summary><b>GitHub Copilot</b></summary>\n\nUse agent definitions from `agents/` as Copilot personas and skill content in `.github/copilot-instructions.md`. See [docs/copilot-setup.md](docs/copilot-setup.md).\n\n</details>\n\n<details>\n  <summary><b>Kiro IDE & CLI </b></summary>\n  Skills for Kiro reside under \".kiro/skills/\" and can be stored under Project or Global level. Kiro also supports Agents.md. See Kiro docs at https://kiro.dev/docs/skills/\n</details>\n\n<details>\n<summary><b>Codex</b></summary>\n\nInstall as a native Codex plugin (Codex CLI v0.122+):\n\n```bash\ncodex plugin marketplace add addyosmani/agent-skills\n```\n\nCodex reads the root `skills/` directory directly through `.codex-plugin/plugin.json`. Once installed, invoke skills in chat using `@` (e.g., `@spec-driven-development`). See [docs/codex-setup.md](docs/codex-setup.md) for local installation and troubleshooting.\n\n</details>\n\n<details>\n<summary><b>Other Agents</b></summary>\n\nSkills are plain Markdown - they work with any agent that accepts system prompts or instruction files. See [docs/getting-started.md](docs/getting-started.md).\n\n</details>\n\n\n\n---\n\n## Adoption\n\nAlready installed? How you roll the pack out depends on your codebase. The **[Adoption Guide](docs/adoption-guide.md)** covers two paths: the full lifecycle from day one for a greenfield project, or an incremental, verification-first rollout for an established codebase.\n\n---\n\n## All 24 Skills\n\nThe commands above are entry points. The pack includes 24 skills total — 23 lifecycle skills plus the `using-agent-skills` meta-skill. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.\n\n### Meta - Discover which skill applies\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |\n\n### Define - Clarify what to build\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes \"interview me\" / \"grill me\" |\n| [idea-refine](skills/idea-refine/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |\n| [spec-driven-development](skills/spec-driven-development/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |\n\n### Plan - Break it down\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [planning-and-task-breakdown](skills/planning-and-task-breakdown/SKILL.md) | Decompose specs into small, verifiable tasks with acceptance criteria and dependency ordering | You have a spec and need implementable units |\n\n### Build - Write the code\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [incremental-implementation](skills/incremental-implementation/SKILL.md) | Thin vertical slices - implement, test, verify, commit. Feature flags, safe defaults, rollback-friendly changes | Any change touching more than one file |\n| [test-driven-development](skills/test-driven-development/SKILL.md) | Red-Green-Refactor, test pyramid (80/15/5), test sizes, DAMP over DRY, Beyonce Rule, browser testing | Implementing logic, fixing bugs, or changing behavior |\n| [context-engineering](skills/context-engineering/SKILL.md) | Feed agents the right information at the right time - rules files, context packing, MCP integrations | Starting a session, switching tasks, or when output quality drops |\n| [source-driven-development](skills/source-driven-development/SKILL.md) | Ground every framework decision in official documentation - verify, cite sources, flag what's unverified | You want authoritative, source-cited code for any framework or library |\n| [doubt-driven-development](skills/doubt-driven-development/SKILL.md) | Adversarial fresh-context review of every non-trivial decision in-flight - CLAIM → EXTRACT → DOUBT → RECONCILE → STOP, with optional user-authorized cross-model escalation | Stakes are high (production, security, irreversible), working in unfamiliar code, or a confident output is cheaper to verify now than to debug later |\n| [frontend-ui-engineering](skills/frontend-ui-engineering/SKILL.md) | Component architecture, design systems, state management, responsive design, WCAG 2.1 AA accessibility | Building or modifying user-facing interfaces |\n| [api-and-interface-design](skills/api-and-interface-design/SKILL.md) | Contract-first design, Hyrum's Law, One-Version Rule, error semantics, boundary validation | Designing APIs, module boundaries, or public interfaces |\n\n### Verify - Prove it works\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [browser-testing-with-devtools](skills/browser-testing-with-devtools/SKILL.md) | Chrome DevTools MCP for live runtime data - DOM inspection, console logs, network traces, performance profiling | Building or debugging anything that runs in a browser |\n| [debugging-and-error-recovery](skills/debugging-and-error-recovery/SKILL.md) | Five-step triage: reproduce, localize, reduce, fix, guard. Stop-the-line rule, safe fallbacks | Tests fail, builds break, or behavior is unexpected |\n\n### Review - Quality gates before merge\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [code-review-and-quality](skills/code-review-and"
+    },
+    "brief": {
+      "summary": "为 AI 编程代理提供工程化工作流技能",
+      "problem": "让 AI 编程代理更稳定地完成开发流程",
+      "highlights": [
+        "可以用命令推进需求到上线",
+        "可以自动执行测试与代码审查",
+        "可以安装到多种 AI 编程代理"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "软件开发团队",
+        "项目维护者"
+      ],
+      "why_trending": "总 Star 82059，今日新增 226，本周首次收录",
+      "caveat": "单独安装技能可能缺少共享参考文件",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "addyosmani/agent-skills",
+      "score": 96,
+      "category": "AI Agent / Skills",
+      "reason": "直接提供编码 Agent Skills",
+      "generated_by_ai": true,
+      "velocity_score": 71,
+      "freshness_score": 40,
+      "ranking_score": 71.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "OneYoungMean/KimodoUnityBridge",
+      "url": "https://github.com/OneYoungMean/KimodoUnityBridge",
+      "description": "Free Local Unity AI Motion Generate Tool.Based By Nvlab Kimodo. ",
+      "language": "C#",
+      "total_stars": 90,
+      "forks": 16,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 1
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "kimodo",
+        "motion",
+        "nvidia",
+        "unity"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-19T09:07:32Z",
+      "updated_at": "2026-08-06T03:44:15Z",
+      "pushed_at": "2026-08-06T03:44:09Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[演示视频](https://www.bilibili.com/video/BV1HG7361Env) . [完整的Demo](https://github.com/OneYoungMean/KimodoUnityBridge_FullDemo) .[快速开始](FastBegin.md) . [使用说明](Manual/README.md)\n\n# License\n[Apache License 2.0](https://github.com/OneYoungMean/KimodoUnityBridge/blob/main/LICENSE)\n\n# 2.0.6 更新点速览\n- **新增 ARDY 流式生成**、History/seek、Playback Reserve，以及 KMB History/Future Clip 约束协议/API。\n- **新增 `KimodoRuntimeMotionDriver`** ，支持 Runtime 连续生成、实时重定向、提示词更新与运行时约束。\n- **支持 Windows、macOS、Linux**；NVIDIA CUDA 是当前最完整的加速路线，Apple MPS、AMD/ROCm 与 Intel XPU 为实验性支持。\n- 重构生成管线和 QuickServer 通讯，统一 Session、任务状态、取消与 KMB 直接传输。\n- 缩减服务器包体，改进下载站点探测、错误提示和生成进度反馈。\n- 普通 Kimodo 的超过 10 秒生成现在由 QuickServer 自动均分为连续片段；后续片段复用前段末尾姿态完成过渡，整条约束仍按原始时间轴处理。\n- 改进 Timeline 首尾约束、约束预览、Avatar 自动解析和前后片段对齐。\n\n\n## 更新注意事项\n**从 1.x 升级时，请先在 Server Manager 停止服务器，再点击 `Reinstall Kimodo Server` 重铺运行目录；该操作会保留已有的 `models` 目录。**\n***\n\n# KimodoUnityBridge\n![](Manual/Kimodo%20Unity%20Bridge_01.png)\n**开箱即用，完全运行在本地的免费 AI 人形动画生成系统**[快速开始](FastBegin.md) .   \n* 基于 https://github.com/nv-tlabs/kimodo  |  https://github.com/nv-tlabs/ardy\n* 基于 https://github.com/OneYoungMean/NvlabKimodoQuickServer (感谢[Aero-Ex](https://gist.github.com/Aero-Ex) 他的文档解决了我很大问题)\n* CPU/GPU 模式自适应；支持 Windows、macOS、Linux，无法使用加速器时会回退 CPU。\n* 完全本地部署，你无需为任何内容付任何费用（也不必为此感到自责）！\n* 一款开源AI插件, 可以根据提示词生成你想要的人物角色动画！\n\n## 要求\n- Unity 2022.3+，Windows、macOS 和 Linux 平台。\n- 内存>=8G,硬盘空间>=16G\n- NVIDIA CUDA 是当前最完整的 GPU 路线；Apple MPS、AMD/ROCm 与 Intel XPU 属于实验性支持。\n- 始终可用，但 CPU 生成速度会明显慢于 GPU。\n\n## 特性\n\n- **即开即用的设计** 你无需担心该项目需要安装各种前置依赖/环境配置/设备限制等问题,作者已经完整测试过了，你也不用担心安装导致本地环境被破坏或者残留文件，所有的内容都是即开即用/即删即走的！\n\n- **Kimodo 核心生成能力** 支持提示词、FullBody、Root2D 与末端约束，以及完整 Root Motion。具体可用项以当前模型 Profile 和工具面板为准。\n\n- **自适应Retarget动画** 产生的动画现在会根据你的角色自适应，如果你的角色是Generic的，那么它就只会给你骨骼动画，Humanoid的就会给你肌肉动画，无需担心各种动画Transition的问题！\n\n- **极其低的学习曲线!** 作者已经帮你们把门槛踏平了!无需任何复杂的添加与操作,只需要输入提示词，放置约束，点击generate 然后等待结果生成就可以了！\n\n- **Runtime 功能支持!** `KimodoRuntimeMotionDriver` 支持连续生成、实时重定向、提示词更新和运行时约束；发布前可通过 **Kimodo → Install Kimodo Runtime To StreamingAssets** 安装运行环境。\n\n- **高度自由的Constraint功能!** 你可以从一段已有的动画当中创建pose constraint，也可以手动创建一个pose constraint并编辑它们。你甚至可以生成一些kimodo动画，然后从里面挑选合适的姿势，放下constraint marker 采样它们！\n\n- **贴近实际的新功能**  KimodoUnityBridge支持收尾帧约束/自动匹配上一个动画末尾等独特功能，你可以用这些功能很方便做出长动画/Loop动画/过渡动画等效果！\n\n- **Animator Tool路线** 我们的目标不仅仅是在timeline上使用，我们更希望能为用户提供Animator当中的各种功能，很快你就能看到一键优化状态机动画！一键优化过渡动画！甚至是基于Motion Matching的完整动画管线，我们都在考虑当中！\n\n- **简洁的操作界面!** 是的,我们已经将大部分能够优化的操作界面已经优化掉了,现在不会再有多余的选项出现,并且你可以直接在inspector看到统计的数据.  \n\n- **完整的内部源码!** 不打包dll,提供所有的运行细节以及大量的注释!你可以任意定修改某一部分,已获得想要的物理效果与特殊性质,并且大可不必担心随之而来的耦合问题!  \n\n- **免费!以及作者长期在线!** 作者只想让更多的Unity开发者能够用上便宜好用的动画！ 有issue必回!包君满意!\n\n### 已知问题\nkimodo runtime生成暂时有点卡顿  \nfeet/hand 手动调整约束位置暂时不可用  \n\n### Bug Report\n由于项目较大且开发时间较短，bug难免有所疏漏，在这里提前给用户老爷抱歉啦，如果你很不幸（或者说很幸运）遇到了bug，请提交一下[Editor.log](https://blog.csdn.net/codingriver/article/details/86551964)  ，方便作者改进和维护，感激不尽！\n\n### 最后,如果你喜欢本项目记得给本项目star!\n```C#\n[省略掉的吐槽很辛苦的话]\n[省略掉的吐槽自己如何摆烂的话]\n[省略掉的小声BB的话]\n肴核既尽，不知东方之既白\n```\n## 致谢 \n感谢以下人员对本项目的付出！  \n[AkiKurisu](https://github.com/AkiKurisu )     \n"
+    },
+    "brief": {
+      "summary": "在Unity中本地用AI生成角色动作动画",
+      "problem": "降低Unity角色动画制作的环境配置与制作门槛",
+      "highlights": [
+        "可以用提示词生成角色动作",
+        "可以制作长动画、循环和过渡动画",
+        "可以在运行时连续生成并重定向动作"
+      ],
+      "target_users": [
+        "Unity开发者",
+        "动画技术美术",
+        "独立游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有90个Star",
+      "caveat": "CPU生成较慢，Runtime生成暂有卡顿",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "OneYoungMean/KimodoUnityBridge",
+      "score": 88,
+      "category": "动画",
+      "reason": "Unity AI 动作生成工具",
+      "generated_by_ai": true,
+      "velocity_score": 9,
+      "freshness_score": 70,
+      "ranking_score": 56.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "A-kirami/webgal-craft",
+      "url": "https://github.com/A-kirami/webgal-craft",
+      "description": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
+      "language": "TypeScript",
+      "total_stars": 22,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "game-development",
+        "visual-novel",
+        "visual-novel-editor",
+        "webgal"
+      ],
+      "license_name": "MPL-2.0",
+      "created_at": "2025-10-24T07:39:30Z",
+      "updated_at": "2026-08-06T03:38:01Z",
+      "pushed_at": "2026-08-06T03:37:54Z",
+      "open_issues": 0,
+      "homepage": "https://webgalcraft.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft\">\n    <br />\n    <img src=\"./public/webgal-craft-logo.svg\" alt=\"WebGAL Craft Logo\" width=\"160\" />\n    <br />\n    <h1 align=\"center\">WebGAL Craft</h1>\n  </a>\n</p>\n\n<p align=\"center\">\n  面向 WebGAL 创作者的跨平台视觉小说工作室\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"./LICENSE\">\n    <img src=\"https://img.shields.io/badge/license-MPL--2.0-blue\" alt=\"License MPL-2.0\" />\n  </a>\n  <img src=\"https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-6f42c1\" alt=\"Supported platforms: Windows, macOS, Linux\" />\n  <br />\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img src=\"https://img.shields.io/github/v/release/A-kirami/webgal-craft?include_prereleases&&color=70aeff&style=social\" alt=\"Release Version\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/stargazers\" target=\"__blank\"\n    ><img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/A-kirami/webgal-craft?style=social\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img alt=\"GitHub downloads\" src=\"https://img.shields.io/github/downloads/A-kirami/webgal-craft/total?style=social\"\n  /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\">下载最新版</a>\n  ·\n  <a href=\"https://webgalcraft.com\">官方网站</a>\n  ·\n  <a href=\"https://github.com/A-kirami/webgal-craft/issues\">反馈问题</a>\n  ·\n  <a href=\"https://qm.qq.com/q/W2Dt9V2F66\">加入交流群</a>\n</p>\n\nWebGAL Craft 是一款为 [WebGAL](https://github.com/OpenWebGAL/WebGAL) 游戏创作者设计的创作工具。它把项目管理、脚本编辑、资源浏览、可视化语句编辑和实时预览放在同一个工作流里，让创作者可以更直接地组织素材、编写演出并检查游戏效果。\n\n## 特性\n\n**资源管理**\n\n集中管理立绘、背景、音效等项目素材，在创作过程中随取随用。\n\n**可视化编辑**\n\n在可视化界面中组织剧情、对白和演出参数，同时保留脚本编辑能力，兼顾上手效率与精细控制。\n\n**本地历史版本**\n\n自动记录场景保存历史，脚本变更可追溯、可回退，长篇项目也能更稳妥地维护。\n\n**快速预览**\n\n在编辑器中实时预览演出效果，边创作边验证，减少在编辑器和游戏窗口之间反复切换。\n\n**引擎与模板切换**\n\n按作品需要管理和切换 WebGAL 引擎与项目模板，便于适配不同版本和制作风格。\n\n**演出参数复用**\n\n保存常用语句默认值与语句组，减少重复配置和手写脚本，让创作流程更稳定。\n\n## 下载安装\n\n前往 [Releases](https://github.com/A-kirami/webgal-craft/releases) 下载适合你系统的最新版本。\n\n| 平台 | 构建 | 推荐下载 |\n| --- | --- | --- |\n| Windows | 64-bit | `.exe` |\n| macOS | Intel / Apple Silicon | `.dmg` |\n| Linux | x64 | `.AppImage` / `.deb` |\n\n## 快速上手\n\n> [!IMPORTANT]\n> WebGAL Craft 需要 WebGAL `4.6.2` 或以上版本的引擎，可在 [WebGAL Releases](https://github.com/OpenWebGAL/WebGAL/releases) 获取\n\n1. 下载并安装适合你系统的 WebGAL Craft。\n2. 打开 WebGAL Craft，在主页安装游戏引擎。\n3. 创建新游戏，或导入已有 WebGAL 游戏目录。\n4. 进入编辑后，在文本/可视化编辑器、资源面板和预览面板之间完成创作。\n\n## 贡献\n\nWebGAL Craft 欢迎任何形式的贡献，详情请阅读[贡献指南](./.github/CONTRIBUTING.md)。\n\n## 许可证\n\nCode: [MPL-2.0](./LICENSE), 2026, Akirami\n\nLogo: CC-BY-NC-ND, Designs by Akirami\n\n## 鸣谢\n\n### 贡献者\n\n感谢以下贡献者对 WebGAL Craft 作出的贡献\n\n<a href=\"https://github.com/A-kirami/webgal-craft/graphs/contributors\">\n  <img src=\"https://contrib.rocks/image?repo=A-kirami/webgal-craft\" />\n</a>\n"
+    },
+    "brief": {
+      "summary": "面向WebGAL创作者的跨平台视觉小说工作室",
+      "problem": "分散管理素材、脚本和预览，制作流程不连贯",
+      "highlights": [
+        "可以集中管理立绘、背景和音效",
+        "可以可视化编写剧情并实时预览",
+        "可以追踪和回退场景脚本版本"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "WebGAL开发者",
+        "独立游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新，适合关注",
+      "caveat": "需要WebGAL 4.6.2或以上版本引擎",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "A-kirami/webgal-craft",
+      "score": 92,
+      "category": "互动叙事",
+      "reason": "视觉小说创作工作室",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "Agions/vynaro",
+      "url": "https://github.com/Agions/vynaro",
+      "description": "Vynaro (叙影 AI) - 下一代 7 步全自动 AI 影视解说与第一人称视频创作工具 (Tauri 2 + Rust + React 19)",
+      "language": "TypeScript",
+      "total_stars": 337,
+      "forks": 61,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video",
+        "capcut",
+        "ffmpeg",
+        "first-person-narrator",
+        "react",
+        "rust",
+        "subtitle-generator",
+        "tauri",
+        "text-to-speech",
+        "typescript",
+        "video-editing",
+        "video-narration",
+        "vynaro"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-02-28T16:03:40Z",
+      "updated_at": "2026-08-06T03:28:38Z",
+      "pushed_at": "2026-08-06T03:35:08Z",
+      "open_issues": 1,
+      "homepage": "https://agions.github.io/vynaro/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- markdownlint-disable MD060 MD040 MD041 MD047 -->\n\n<div align=\"center\">\n\n<img src=\"assets/logo-horizontal.png\" width=\"640\" alt=\"Vynaro 叙影 AI 视频解说创作工具\" style=\"border-radius: 16px; box-shadow: 0 0 32px rgba(245,200,66,0.2);\" />\n\n[![Version](https://img.shields.io/badge/Version-v2.5.0-F5C842?style=flat-square&logo=git&logoColor=1A1A20)](https://github.com/agions/vynaro/releases) [![Tauri](https://img.shields.io/badge/Tauri-v2.0-7C3AED?style=flat-square&logo=tauri&logoColor=white)](https://tauri.app) [![Rust](https://img.shields.io/badge/Rust-1.85%2B-F97316?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org) [![React](https://img.shields.io/badge/React-19.0-06B6D4?style=flat-square&logo=react&logoColor=white)](https://react.dev) [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org) [![License](https://img.shields.io/badge/License-MIT-10B981?style=flat-square&logo=open-source-initiative&logoColor=white)](LICENSE)  \n[![Pipeline](https://img.shields.io/badge/Pipeline-7--Step%20Auto-D97706?style=flat-square&logo=timeline)](https://github.com/agions/vynaro) [![LLM](https://img.shields.io/badge/LLM-11%20Providers-F5C842?style=flat-square&logo=openai&logoColor=1A1A20)](https://github.com/agions/vynaro) [![TTS](https://img.shields.io/badge/TTS-Zero--shot%20Clone-22C55E?style=flat-square&logo=microphone)](https://github.com/agions/vynaro) [![Export](https://img.shields.io/badge/Export-CapCut%20Draft-EC4899?style=flat-square&logo=video)](https://github.com/agions/vynaro)\n\n</div>\n\n---\n\n## 🎬 核心定位\n\n**Vynaro（叙影）** 是一款基于 **Tauri 2 + Rust + React 19** 深度研发的桌面端 AI 视频叙事与解说编辑器。\n\n专为短剧拆条、电影解说、自媒体故事化创作设计，通过 **7 步卡片智能流水线**，自动完成影视/短剧片段的高完播率成片转化与剪映工程草稿（`.draft`）原生导出。\n\n素材导入 ➔ 智能拆条 ➔ AI 独白脚本 ➔ TTS 配音与克隆 ➔ VAD 字幕对齐 ➔ 音画混流 ➔ 多平台/剪映草稿导出\n\n---\n\n## 🖥️ 真实高保真桌面界面展示\n\n<div align=\"center\">\n\n| 首页 Dashboard 概览 | 素材资产管理面板 |\n| :---: | :---: |\n| <img src=\"assets/vynaro_dashboard_cover.png\" width=\"460\" alt=\"Vynaro 首页 Dashboard 真实高保真截图\" style=\"border-radius: 8px; border: 1px solid #27272A;\" /> | <img src=\"assets/vynaro_assets_cover.png\" width=\"460\" alt=\"Vynaro 素材资产管理真实高保真截图\" style=\"border-radius: 8px; border: 1px solid #27272A;\" /> |\n\n| 7 步全自动解说生产工作区 | 11 大模型与 TTS 设置表单 |\n| :---: | :---: |\n| <img src=\"assets/vynaro_production_cover.png\" width=\"460\" alt=\"Vynaro 7 步解说生产工作区真实高保真截图\" style=\"border-radius: 8px; border: 1px solid #27272A;\" /> | <img src=\"assets/vynaro_settings_cover.png\" width=\"460\" alt=\"Vynaro 模型设置表单真实高保真截图\" style=\"border-radius: 8px; border: 1px solid #27272A;\" /> |\n\n</div>\n\n---\n\n## ⚡ 7 步全自动智能流水线\n\n```mermaid\ngraph LR\n    S1[\"📥 Step 1<br>素材导入\"] --> S2[\"✂️ Step 2<br>智能拆条\"]\n    S2 --> S3[\"🤖 Step 3<br>AI 独白脚本\"]\n    S3 --> S4[\"🎙️ Step 4<br>TTS & 克隆\"]\n    S4 --> S5[\"📝 Step 5<br>VAD 字幕对齐\"]\n    S5 --> S6[\"🎬 Step 6<br>多轨音画混流\"]\n    S6 --> S7[\"📤 Step 7<br>剪映/多平台导出\"]\n```\n\n| 步骤 | 模块名称 | 核心技术与执行细节 |\n| :--- | :--- | :--- |\n| **Step 1** | **📥 素材导入与预处理** | 本地极速提取音视频流元数据（Resolution / FPS / Codec），自动生成缩略图 |\n| **Step 2** | **✂️ FFmpeg 智能拆条** | 基于 FFmpeg 场景切面探测、情绪峰值吸附与关键帧序列化索引 |\n| **Step 3** | **🤖 AI 第一人称独白** | 支持 Qwen 3.8 / DeepSeek R1 / GPT-4o 等 11 大 LLM，提供主角独白/影评/吐槽 4 大风格 |\n| **Step 4** | **🎙️ TTS 配音与人声克隆** | Edge-TTS + OpenAI-TTS + GPT-SoVITS 人声克隆，集成实时黄金波形与本地服务探针 |\n| **Step 5** | **📝 VAD 字幕精准对齐** | 基于 FFmpeg `silencedetect` 语音端点检测，自动生成 SRT / VTT / ASS 字幕 |\n| **Step 6** | **🎬 画面-声音智能混流** | 多轨时间轴毫秒级对齐，支持 BGM 背景降噪与音量比例调配 (`amix`) |\n| **Step 7** | **📤 剪映草稿与多平台导出**| 原生导出剪映二次剪辑工程草稿 (`.draft`) 与 1080P 竖屏 (9:16) 成片 |\n\n---\n\n## 🧠 大模型与 TTS 引擎能力矩阵\n\n### 11 大主流 LLM 引擎支持\n* 🇨🇳 **通义千问 (Qwen)**: `qwen3.8-max` / `qwen-plus`\n* 🇨🇳 **DeepSeek**: `deepseek-v4-pro` / `deepseek-r1` / `deepseek-v3`\n* 🇺🇸 **OpenAI**: `gpt-5.6-sol` / `gpt-4o` / `gpt-4o-mini`\n* 🇺🇸 **Claude**: `claude-sonnet-5` / `claude-3-5-sonnet`\n* 🇺🇸 **Gemini**: `gemini-3.6-flash` / `gemini-3.1-pro`\n* 🇨🇳 **Kimi (月之暗面)**: `kimi-k3` / `moonshot-v1`\n* 🇨🇳 **智谱 GLM**: `glm-5.2` / `glm-4-plus`\n* 🇨🇳 **豆包 (Doubao)**: `doubao-seed-2-1-pro` / `doubao-pro-128k`\n* 🇨🇳 **腾讯混元 (Hunyuan)**: `hunyuan-pro`\n* 🏠 **本地模型 (Local)**: Ollama / LMStudio (`llama3.2` / `qwen2.5`)\n\n---\n\n## 🏛️ 项目架构设计\n\n```\nvynaro/\n├── apps/\n│   └── desktop/          # Tauri 2.0 + React 19 + TypeScript 桌面端 UI\n├── crates/\n│   ├── vynaro-core       # 核心类型 (AppContext / VynaroError)\n│   ├── vynaro-domain     # 领域模型 (Project / Timeline / MediaFile)\n│   ├── vynaro-detect     # FFmpeg 探针 / 场景切分 / 音画混流\n│   ├── vynaro-script     # 11 大 LLM 客户端与独白脚本引擎\n│   ├── vynaro-voice      # Edge-TTS / OpenAI-TTS / GPT-SoVITS\n│   ├── vynaro-subtitle   # FFmpeg silencedetect VAD 端点检测与字幕生成\n│   ├── vynaro-compose    # 7 步流水线状态机与 DAG 执行器\n│   ├── vynaro-export     # 剪映草稿 (.draft) 生成器与平台预设\n│   ├── vynaro-storage    # 本地 SQLite / JSON 存储\n│   └── vynaro-update     # 应用自动更新引擎\n└── Makefile              # 常用构建与测试指令\n```\n\n---\n\n## 🛠️ 本地开发环境搭建\n\n```bash\n# 1. 克隆代码仓库\ngit clone https://github.com/agions/vynaro.git\ncd vynaro\n\n# 2. 安装前端依赖\npnpm install\n\n# 3. 启动 Tauri 2 开发桌面端\npnpm desktop dev\n\n# 4. 类型检查与代码校验\ncargo check --workspace\ncd apps/desktop && npx tsc --noEmit\n```\n\n---\n\n## 📜 许可证\n\n基于 **[MIT License](LICENSE)** 许可协议开源。\n\n© 2026 Agions  · Powered by Tauri 2, Rust & React 19\n"
+    },
+    "brief": {
+      "summary": "Vynaro 将影视素材自动制作成解说视频",
+      "problem": "影视解说制作涉及剪辑、脚本、配音和字幕等多步操作",
+      "highlights": [
+        "可以自动拆条并生成第一人称解说脚本",
+        "可以完成配音、字幕对齐和音画混流",
+        "可以导出剪映草稿与竖屏成片"
+      ],
+      "target_users": [
+        "影视解说创作者",
+        "短视频编辑",
+        "自媒体团队"
+      ],
+      "why_trending": "本周首次收录，已有337个Star且近期持续更新",
+      "caveat": "部分模型和配音服务的使用条件资料中未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Agions/vynaro",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "自动化 AI 影视视频创作",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "hajimehoshi/ebiten",
+      "url": "https://github.com/hajimehoshi/ebiten",
+      "description": "A dead simple 2D game engine for Go",
+      "language": "Go",
+      "total_stars": 13380,
+      "forks": 777,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ebiten",
+        "ebitengine",
+        "game",
+        "game-2d",
+        "game-development",
+        "game-engine",
+        "game-engine-2d",
+        "game-library",
+        "gamedev",
+        "go",
+        "golang",
+        "golang-library"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2013-06-16T15:13:01Z",
+      "updated_at": "2026-08-06T03:17:38Z",
+      "pushed_at": "2026-08-06T03:17:26Z",
+      "open_issues": 292,
+      "homepage": "https://ebitengine.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Ebitengine (v2)\n\n[![Go Reference](https://pkg.go.dev/badge/github.com/hajimehoshi/ebiten/v2.svg)](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n[![Build Status](https://github.com/hajimehoshi/ebiten/actions/workflows/test.yml/badge.svg)](https://github.com/hajimehoshi/ebiten/actions?query=workflow%3Atest)\n\n**A dead simple 2D game engine for Go**\n\nEbitengine (formerly known as Ebiten) is an open source game engine for the Go programming language. Ebitengine's simple API allows you to quickly and easily develop 2D games that can be deployed across multiple platforms.\n\n* [Website (ebitengine.org)](https://ebitengine.org)\n* [API Reference](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n* [Cheat Sheet](https://ebitengine.org/en/documents/cheatsheet.html)\n* [Awesome Ebitengine](https://github.com/sedyh/awesome-ebitengine)\n\n![Overview](https://ebitengine.org/images/overview2.png)\n\n## Platforms\n\n* [Windows](https://ebitengine.org/en/documents/install.html?os=windows)\n* [macOS](https://ebitengine.org/en/documents/install.html?os=darwin)\n* [Linux](https://ebitengine.org/en/documents/install.html?os=linux)\n* [FreeBSD](https://ebitengine.org/en/documents/install.html?os=freebsd)\n* [Android](https://ebitengine.org/en/documents/mobile.html) (Cgo required)\n* [iOS](https://ebitengine.org/en/documents/mobile.html) (Cgo required)\n* [WebAssembly](https://ebitengine.org/en/documents/webassembly.html)\n* Nintendo Switch (Cgo required)\n* Xbox (Cgo required) (Xbox support is limited and not available to everyone. Negotiations are currently underway to make it accessible to all.)\n\nFor installation on desktops, see [the installation instruction](https://ebitengine.org/en/documents/install.html).\n\n## Features\n\n* 2D Graphics (Geometry and color transformation by matrices, Various composition modes, Offscreen rendering, Text rendering, Automatic batches, Automatic texture atlas, Custom shaders)\n* Input (Mouse, Keyboard, Gamepads, Touches)\n* Audio (Ogg/Vorbis, MP3, WAV, PCM)\n\n## Packages\n\n* [ebiten](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n  * [audio](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio)\n    * [mp3](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/mp3)\n    * [vorbis](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/vorbis)\n    * [wav](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/wav)\n  * [colorm](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/colorm)\n  * [ebitenutil](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/ebitenutil)\n  * [inpututil](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/inpututil)\n  * [mobile](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/mobile)\n  * [text/v2](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/text/v2)\n  * [vector](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/vector)\n  * [exp/shaderprecomp](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/shaderprecomp)\n  * [exp/textinput](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/textinput)\n  * [exp/vmhost](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/vmhost)\n\n## AI coding agents\n\nIf you use an AI coding agent to write or modify Ebitengine code or applications, point it at the [`skills`](skills) directory, which holds skills for working with this repository.\n\n## Community\n\n- [Discord](https://discord.gg/3tVdM5H8cC)\n- `#ebitengine` channel in [Gophers Slack](https://blog.gopheracademy.com/gophers-slack-community/)\n- [GitHub Discussion](https://github.com/hajimehoshi/ebiten/discussions)\n- [`r/ebitengine` in Reddit](https://www.reddit.com/r/ebitengine/)\n\n## License\n\nEbitengine is licensed under Apache license version 2.0. See [LICENSE](LICENSE) file.\n\n[The Ebitengine logo](https://ebitengine.org/images/logo.png) by Hajime Hoshi is licensed under [the Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).\n\nEbitengine bundles third-party libraries. See [NOTICE.md](NOTICE.md) for their licenses.\n"
+    },
+    "brief": {
+      "summary": "用 Go 快速开发并跨平台发布 2D 游戏",
+      "problem": "降低 2D 游戏开发与多平台发布的复杂度",
+      "highlights": [
+        "可以开发桌面端 2D 游戏",
+        "可以接入键盘、手柄和触控输入",
+        "可以输出到移动端与 WebAssembly"
+      ],
+      "target_users": [
+        "Go 开发者",
+        "独立游戏开发者",
+        "游戏开发学习者"
+      ],
+      "why_trending": "本周首次收录，累计 Star 超 1.3 万且近期仍有更新",
+      "caveat": "部分移动端和主机平台需要 Cgo，Xbox 支持有限",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hajimehoshi/ebiten",
+      "score": 91,
+      "category": "游戏开发",
+      "reason": "成熟的 Go 2D 游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "voxelize/voxelize",
+      "url": "https://github.com/voxelize/voxelize",
+      "description": ":mushroom: Full stack voxel engine",
+      "language": "TypeScript",
+      "total_stars": 657,
+      "forks": 110,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "baltaazr",
+        "game",
+        "game-engine",
+        "gamedev",
+        "javascript",
+        "rust",
+        "shaoruu",
+        "threejs",
+        "typescript",
+        "voxelize"
+      ],
+      "license_name": "MIT",
+      "created_at": "2022-02-03T03:04:24Z",
+      "updated_at": "2026-08-06T03:42:06Z",
+      "pushed_at": "2026-08-06T03:42:02Z",
+      "open_issues": 1,
+      "homepage": "https://shaoruu.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"examples/client/src/assets/logo-circle.png\" width=\"100\" height=\"100\" alt=\"Voxelize logo\" />\n\n<h1>Voxelize</h1>\n\n<p>A multiplayer, <i>super fast</i>, voxel engine in your browser!</p>\n\n<a href=\"https://discord.gg/9483RZtWVU\">\n  <img alt=\"Discord Server\" src=\"https://img.shields.io/discord/1229328337713762355?label=Discord&logo=Discord&style=for-the-badge\">\n</a>\n<a href=\"https://www.npmjs.com/package/@voxelize/core\">\n  <img alt=\"npm\" src=\"https://img.shields.io/npm/v/@voxelize/core?logo=npm&style=for-the-badge\">\n</a>\n<a href=\"https://crates.io/crates/voxelize\">\n  <img alt=\"crates.io\" src=\"https://img.shields.io/crates/v/voxelize?style=for-the-badge\"/>\n</a>\n\n<p>\n  <a href=\"https://docs.voxelize.io\">Documentation</a>\n  ·\n  <a href=\"https://docs.rs/voxelize/latest/voxelize/\">Rust API</a>\n  ·\n  <a href=\"https://create.town\">Live Showcase</a>\n</p>\n\n</div>\n\n![Town, a production world built on Voxelize](assets/town-hub2-massif-4k.webp)\n\n<p align=\"center\"><i><a href=\"https://create.town\">Town</a>, a live multiplayer world running on Voxelize in production.</i></p>\n\n## Why Voxelize\n\nVoxelize powers persistent, multiplayer voxel worlds that run in any modern browser. No installs, no plugins. \n\n- **Build custom blocks**: register any blocks of any shape, size, and material. Blocks can also hold custom metadata through block entities.\n- **Create custom entities**: pigs, cows, sheeps, any entities you can imagine. They can roam around and interact with blocks and players.\n- **Realtime multiplayer**: authoritative server with entity, chat, and event synchronization out of the box.\n- **Any world generation**: define your own world generation and generate infinitely large worlds.\n\n<p align=\"center\">\n  <img src=\"assets/creature-axolotl-greenhouse-pond.webp\" alt=\"Axolotl on the bank of a terraced pond inside a glass greenhouse\" />\n</p>\n\n<p align=\"center\"><i>Custom blocks, instanced creatures, water, and voxel lighting in the browser.</i></p>\n\n## Architecture\n\nBoth the server and the client are extremely optimized for performance and scalability. The server is written in Rust, and the client is written in TypeScript.\n\n```text\n┌───────────────────────────────┐                      ┌───────────────────────────────┐\n│   Browser client (TS)         │      WebSocket       │   Authoritative server (Rust) │\n│                               │◄────────────────────►│                               │\n│   @voxelize/core (Three.js)   │  @voxelize/protocol  │   voxelize (ECS worlds)       │\n│   physics-engine · raycast    │  @voxelize/transport │   voxelize-mesher (meshing)   │\n│   voxelize-wasm-mesher (WASM) │  (shared protobuf)   │   voxelize-core (voxel data)  │\n└───────────────────────────────┘                      └───────────────────────────────┘\n```\n\n- **Rust authoritative server** — `voxelize` runs [ECS](https://amethyst.github.io/specs/docs/tutorials/)-driven worlds: chunk generation, physics, entities, and events all live server-side.\n- **TypeScript / Three.js client** — `@voxelize/core` renders worlds in the browser and stays in sync over WebSocket.\n- **Shared protocol and transport** — `@voxelize/protocol` defines the protobuf messages; `@voxelize/transport` moves them.\n- **WASM meshing** — `voxelize-wasm-mesher` compiles the server's mesher to WebAssembly, so client-side remeshing follows the same geometry rules as server-side meshing.\n- **Headless agents** — `@voxelize/agent` drives real browser clients headlessly for testing, measurement, and bots.\n\n## In Production\n\n[**Town**](https://create.town) is a live, persistent multiplayer building world built on Voxelize, with custom textures, entities, and more.\n\n<p align=\"center\">\n  <img src=\"assets/creature-ashen-dragon-volcano.webp\" alt=\"Ashen dragon breathing fire on the flank of a volcano at night\" />\n</p>\n\n<p align=\"center\"><i>Server-driven creature behavior and particle VFX over emissive volcanic terrain</i></p>\n\n<table>\n  <tr>\n    <td width=\"50%\">\n      <img src=\"assets/creature-capybara-lounge.webp\" alt=\"Capybara lounging on open ground\" /><br />\n      <sub><i>Instanced creatures with server-driven behavior (capybaras)</i></sub>\n    </td>\n    <td width=\"50%\">\n      <img src=\"assets/mars-basalt-golem-ridge.webp\" alt=\"Basalt golem standing on a Mars ridge\" /><br />\n      <sub><i>A basalt golem on Mars</i></sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\">\n      <img src=\"assets/creature-obsidian-golem.webp\" alt=\"Obsidian golem with an emissive core under a dusk sky\" /><br />\n      <sub><i>Obsidian golem with an emissive core</i></sub>\n    </td>\n    <td width=\"50%\">\n      <img src=\"assets/interior-chapel-stained-glass.webp\" alt=\"Chapel interior lit through stained-glass windows\" /><br />\n      <sub><i>Colored glass, voxel lighting, and custom block geometry</i></sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\">\n      <img src=\"assets/underwater-tangs.webp\" alt=\"School of tangs in an underwater exhibit\" /><br />\n      <sub><i>Tropical fish and clams in my coral garden</i></sub>\n    </td>\n    <td width=\"50%\">\n      <img src=\"assets/vfx-hologram-row-night.webp\" alt=\"Row of emissive creature holograms at night\" /><br />\n      <sub><i>Hologram block using custom block entities</i></sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\">\n      <img src=\"assets/circuits-copper-adder-console.webp\" alt=\"Block-built hex display reading 1F, driven by copper circuitry\" /><br />\n      <sub><i>A 4-bit copper adder driving a block-built hex display</i></sub>\n    </td>\n    <td width=\"50%\">\n      <img src=\"assets/underwater-lantern-garden.webp\" alt=\"Sunken lantern garden with kelp and glowing plants under water fog\" /><br />\n      <sub><i>Under the sea, kelp</i></sub>\n    </td>\n  </tr>\n</table>\n\n## Quick Start\n\nPrerequisites: [Rust](https://www.rust-lang.org/tools/install), [Node.js](https://nodejs.org/en/download/), [pnpm](https://pnpm.io/installation), [cargo-watch](https://crates.io/crates/cargo-watch), [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/), and [protoc](https://grpc.io/docs/protoc-installation/).\n\n```bash\ngit clone https://github.com/voxelize/voxelize.git\ncd voxelize\n\npnpm install   # install dependencies\npnpm proto     # generate protocol buffers\npnpm build     # build WASM mesher + all packages\npnpm demo      # run the demo server and client\n```\n\nThen open http://localhost:3000.\n\nI strongly recommend using Voxelize as a submodule of the workspace you're building.\n\n## Packages\n\n### npm\n\n| Package | Description |\n| --- | --- |\n| [`@voxelize/core`](packages/core) | The client engine: rendering, world sync, inputs, and utilities on Three.js |\n| [`@voxelize/agent`](packages/agent) | Headless puppeteer-backed agent SDK for Voxelize worlds |\n| [`@voxelize/transport`](packages/transport) | WebSocket transport for Voxelize protocol messages |\n| [`@voxelize/protocol`](packages/protocol) | Shared protobuf message definitions |\n| [`@voxelize/physics-engine`](packages/physics-engine) | Voxel-aware AABB physics with auto-stepping |\n| [`@voxelize/raycast`](packages/raycast) | Voxel raycasting |\n| [`@voxelize/debug`](packages/debug) | In-game debug panels |\n| [`@voxelize/aabb`](packages/aabb) | Axis-aligned bounding box math |\n\n### Rust crates\n\n| Crate | Description |\n| --- | --- |\n| [`voxelize`](server) | The authoritative multiplayer server engine |\n| [`voxelize-core`](crates/core) | Core types and utilities — the single source of truth for voxel data encoding |\n| [`voxelize-mesher`](crates/mesher) | Chunk meshing logic |\n| [`voxelize-wasm-mesher`](crates/wasm-mesher) | WebAssembly wrapper around the mesher for client-side use |\n\n## Documentation\n\n- [Guides and tutorials](https://docs.voxelize.io) — client-side concepts, world building, and API walkthroughs\n- [Rust API reference](https://docs.rs/voxelize/latest/voxelize/) — server-side engine documentation\n\n## Development\n\nUseful workspace commands:\n\n```bash\npnpm watch        # rebuild TS packages and WASM mesher on change\npnpm test         # TypeScript tests (vitest)\npnpm test:rust    # Rust mesher and lighting tests\npnpm bench        # criterion benchmarks (mesher, lights)\npnpm check        # cargo check across all targets\npnpm lint         # eslint with autofix\n```\n\nNotes on faster local builds:\n\n- The server watch loop (`pnpm demo:rs`) builds with the `release-dev` profile: the same `opt-level = 3` runtime performance as `release`, but with incremental compilation and minimal debug info for much faster edit-rebuild cycles. Published builds should keep using `--release`.\n- If you consume Voxelize as a submodule of a parent cargo workspace, cargo takes profiles from the parent's root `Cargo.toml` — copy the `[profile.release-dev]` block there to get the same fast iteration.\n- Rust >= 1.90 links with the fast bundled `rust-lld` on x86_64 Linux out of the box; see `.cargo/config.toml` for opt-in lld linking on other platforms and an opt-in `sccache` shared cache.\n\n## Community\n\nQuestions, showcases, and engine discussion happen on [Discord](https://discord.gg/9483RZtWVU). Issues and pull requests are welcome on [GitHub](https://github.com/voxelize/voxelize).\n\n## License\n\n[MIT](LICENSE)\n\n## Assets Used\n\n- [Connection Serif Font (SIL Open Font)](https://fonts2u.com/connection-serif.font)\n- Pixel Perfection by XSSheep, modified — licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)\n\n---\n\n<sub>Voxelize is an independent open-source project. It is not affiliated with, endorsed by, or connected to any commercial voxel game or its publishers.</sub>\n"
+    },
+    "brief": {
+      "summary": "面向浏览器的全栈多人体素引擎",
+      "problem": "帮助开发者构建可持久化的多人方块世界",
+      "highlights": [
+        "可以在浏览器运行多人方块世界",
+        "可以自定义方块、实体和世界生成",
+        "可以用无头代理测试浏览器客户端"
+      ],
+      "target_users": [
+        "多人游戏开发者",
+        "网页游戏开发者",
+        "体素世界创作者"
+      ],
+      "why_trending": "本周首次收录，已有657个 Star，近期仍在更新",
+      "caveat": "需要同时准备 Rust、Node.js、pnpm 等环境",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "voxelize/voxelize",
+      "score": 91,
+      "category": "游戏开发",
+      "reason": "完整体素游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.5
+    }
+  }
+]
