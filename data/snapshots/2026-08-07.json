@@ -1,0 +1,525 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 207306,
+      "forks": 17906,
+      "stars_today": 1873,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1873
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-08-07T03:21:30Z",
+      "pushed_at": "2026-08-06T19:49:51Z",
+      "open_issues": 294,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship — you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one — installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take — make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap — see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent — including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis — who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)** — Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)** — Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)** — Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)** — Turn the current conversation into a spec and publish it to the issue tracker. No interview — just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)** — Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** — Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker — resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bug"
+    },
+    "brief": {
+      "summary": "面向真实工程开发的可组合 AI 编程代理技能集",
+      "problem": "帮助 AI 代理减少需求误解、低质量代码和调试失控",
+      "highlights": [
+        "可以用提问会话明确开发需求",
+        "可以用 TDD 技能推动测试驱动开发",
+        "可以用调试技能分阶段排查问题"
+      ],
+      "target_users": [
+        "AI 辅助开发者",
+        "软件工程团队",
+        "代码代理爱好者"
+      ],
+      "why_trending": "今日新增 1873 Star，总 Star 超 20 万且近期活跃",
+      "caveat": "不同安装方式的更新和可编辑性不同，勿重复安装",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的智能体技能",
+      "generated_by_ai": true,
+      "velocity_score": 99,
+      "freshness_score": 40,
+      "ranking_score": 73.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "language": "Shell",
+      "total_stars": 268181,
+      "forks": 23966,
+      "stars_today": 858,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 858
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-09T19:45:18Z",
+      "updated_at": "2026-08-07T03:21:59Z",
+      "pushed_at": "2026-08-07T00:29:59Z",
+      "open_issues": 322,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Superpowers\n\nSuperpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.\n\n\n## Quickstart\n\nGive your agent Superpowers: [Claude Code](#claude-code), [Antigravity](#antigravity), [Codex App](#codex-app), [Codex CLI](#codex-cli), [Cursor](#cursor), [Factory Droid](#factory-droid), [Gemini CLI](#gemini-cli), [GitHub Copilot CLI](#github-copilot-cli), [Kimi Code](#kimi-code), [OpenCode](#opencode), [Pi](#pi).\n\n## How it works\n\nIt starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. \n\nOnce it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. \n\nAfter you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. \n\nNext up, once you say \"go\", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.\n\nThere's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.\n\n## Commercial Services\n\nIf you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.\n\n## Installation\n\nInstallation differs by harness. If you use more than one, install Superpowers separately for each one.\n\n### Claude Code\n\nSuperpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)\n\n#### Official Marketplace\n\n- Install the plugin from Anthropic's official marketplace:\n\n  ```bash\n  /plugin install superpowers@claude-plugins-official\n  ```\n\n#### Superpowers Marketplace\n\nThe Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.\n\n- Register the marketplace:\n\n  ```bash\n  /plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin from this marketplace:\n\n  ```bash\n  /plugin install superpowers@superpowers-marketplace\n  ```\n\n### Antigravity\n\nInstall Superpowers as a plugin from this repository:\n\n```bash\nagy plugin install https://github.com/obra/superpowers\n```\n\nAntigravity runs the plugin's session-start hook, so Superpowers is active from\nthe first message. Reinstall with the same command to update.\n\n### Codex App\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- In the Codex app, click on Plugins in the sidebar.\n- You should see `Superpowers` in the Coding section.\n- Click the `+` next to Superpowers and follow the prompts.\n\n### Codex CLI\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- Open the plugin search interface:\n\n  ```bash\n  /plugins\n  ```\n\n- Search for Superpowers:\n\n  ```bash\n  superpowers\n  ```\n\n- Select `Install Plugin`.\n\n### Cursor\n\n- In Cursor Agent chat, install from marketplace:\n\n  ```text\n  /add-plugin superpowers\n  ```\n\n- Or search for \"superpowers\" in the plugin marketplace.\n\n### Factory Droid\n\n- Register the marketplace:\n\n  ```bash\n  droid plugin marketplace add https://github.com/obra/superpowers\n  ```\n\n- Install the plugin:\n\n  ```bash\n  droid plugin install superpowers@superpowers\n  ```\n\n### Gemini CLI\n\n- Install the extension:\n\n  ```bash\n  gemini extensions install https://github.com/obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  gemini extensions update superpowers\n  ```\n\n### GitHub Copilot CLI\n\n- Register the marketplace:\n\n  ```bash\n  copilot plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin:\n\n  ```bash\n  copilot plugin install superpowers@superpowers-marketplace\n  ```\n\n### Kimi Code\n\nSuperpowers is available in Kimi Code's plugin marketplace.\n\n- Open Kimi Code's plugin manager:\n\n  ```text\n  /plugins\n  ```\n\n- Go to `Marketplace` > `Superpowers` and install it.\n\n- Or install directly from this repository:\n\n  ```text\n  /plugins install https://github.com/obra/superpowers\n  ```\n\n- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)\n\n### OpenCode\n\nOpenCode uses its own plugin install; install Superpowers separately even if you\nalready use it in another harness.\n\n- Tell OpenCode:\n\n  ```\n  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md\n  ```\n\n- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)\n\n### Pi\n\nInstall Superpowers as a Pi package from this repository:\n\n```bash\npi install git:github.com/obra/superpowers\n```\n\nFor local development, run Pi with this checkout loaded as a temporary package:\n\n```bash\npi -e /path/to/superpowers\n```\n\nThe Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.\n\n## The Basic Workflow\n\n1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.\n\n2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.\n\n3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.\n\n4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.\n\n5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.\n\n6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.\n\n7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.\n\n**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.\n\n## What's Inside\n\n### Skills Library\n\n**Testing**\n- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)\n\n**Debugging**\n- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)\n- **verification-before-completion** - Ensure it's actually fixed\n\n**Collaboration** \n- **brainstorming** - Socratic design refinement\n- **writing-plans** - Detailed implementation plans\n- **executing-plans** - Batch execution with checkpoints\n- **dispatching-parallel-agents** - Concurrent subagent workflows\n- **requesting-code-review** - Pre-review checklist\n- **receiving-code-review** - Responding to feedback\n- **using-git-worktrees** - Parallel development branches\n- **finishing-a-development-branch** - Merge/PR decision workflow\n- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)\n\n**Meta**\n- **writing-skills** - Create new skills following best practices (includes testing methodology)\n- **using-superpowers** - Introduction to the skills system\n\n## Philosophy\n\n- **Test-Driven Development** - Write tests first, always\n- **Systematic over ad-hoc** - Process over guessing\n- **Complexity reduction** - Simplicity as primary goal\n- **Evidence over claims** - Verify before declaring success\n\nRead [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).\n\n## Contributing\n\nThe general contribution process for Superpowers is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.\n\n1. Fork the repository\n2. Switch to the 'dev' branch\n3. Create a branch for your work\n4. Follow the `writing-skills` skill for creating and testing new and modified skills\n5. Submit a PR, being sure to fill in the pull request template.\n\nSkill-behavior tests use the drill eval harness from [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Plugin-infrastructure tests live at `tests/` and run via the relevant `run-*.sh` or `npm test`.\n\nSee `skills/writing-skills/SKILL.md` for the complete guide.\n\n## Updating\n\nSuperpowers updates are somewhat coding-agent dependent, but are often automatic.\n\n## License\n\nMIT License - see LICENSE file for details\n\n## Visual companion telemetry\n\nBecause skills and plugins don't provide any feedback to creators, we have no idea how many of you are using Superpowers. By default, the Prime Radiant logo on brainstorming's optional visual companion feature is loaded from our website. It includes the version of Superpowers in use. It does not include any details about your project, prompt, or coding agent. We don't see your clicks or anything about what you're building. This helps us have a rough idea of how many folks are using Superpowers and which version of Superpowers they're using. It's 100% optional. To disable this, set the environment variable `SUPERPOWERS_DISABLE_TELEMETRY` to any true value. Superpowers also honors Claude Code's `DISABLE_TELEMETRY` and `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` opt-outs.\n\n## Community\n\nSuperpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).\n\n- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers\n- **Issues**: https://github.com/obra/superpowers/issues\n- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions\n"
+    },
+    "brief": {
+      "summary": "为编程代理提供技能与软件开发流程的方法框架",
+      "problem": "让编程代理先明确需求，再按计划、测试和评审完成开发",
+      "highlights": [
+        "可以让代理先梳理需求并确认设计",
+        "可以按任务拆分并调用子代理开发",
+        "可以用测试驱动和代码评审检查结果"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "软件开发团队",
+        "项目维护者"
+      ],
+      "why_trending": "本周首次收录，今日新增858 Star，总Star超26万",
+      "caveat": "不同编程工具需要分别安装，兼容细节资料中未说明",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "obra/superpowers",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码智能体的技能工作流",
+      "generated_by_ai": true,
+      "velocity_score": 89,
+      "freshness_score": 40,
+      "ranking_score": 72.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "cloudflare/computer",
+      "url": "https://github.com/cloudflare/computer",
+      "description": "Give your agent a computer 👾",
+      "language": "TypeScript",
+      "total_stars": 4907,
+      "forks": 246,
+      "stars_today": 2802,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2802
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-05T10:38:15Z",
+      "updated_at": "2026-08-07T03:20:52Z",
+      "pushed_at": "2026-08-06T16:13:02Z",
+      "open_issues": 22,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Cloudflare Computer\n\nCloudflare Computer is a virtual filesystem that lives inside a\nDurable Object. The Durable Object holds the authoritative state in\nSQLite and exposes one pluggable execution surface through\n`workspace.runtime`. Three backends ship today:\n\n- **Container** projects the SQLite state into a sandbox container as\n  a real FUSE mount. A sandbox-side daemon (`computerd`) mounts the state\n  as a filesystem and syncs changes back over a capnweb RPC channel.\n  Full Linux userland, real binaries, real network.\n- **Isolate shell** runs [just-bash](https://github.com/vercel-labs/just-bash)\n  in a Dynamic Worker. It reaches the authoritative Workspace over\n  Workers RPC, so there is no second store or sync round trip.\n- **Isolate JavaScript** runs an ECMAScript module in a fresh Dynamic\n  Worker with structured input/results, durable relative imports,\n  configured libraries, Workspace-backed `node:fs/promises`, and trusted `ws:git` and\n  `ws:artifacts` modules.\n\nA Workspace may register multiple backends under stable IDs.\n`workspace.runtime.exec(source, { backend })` is the single execution\nentry point; the selected backend defines whether `source` is a shell\ncommand or an ECMAScript module. Backends connect lazily on first use.\n\nWorkspace can also be constructed without a backend at all, giving\ncallers the filesystem on its own.\n\n> [!IMPORTANT]\n> **PREVIEW ONLY** This package is provided as a preview for feedback only.\n> APIs are unstable and the design is subject to change.\n>\n> Suitable for experiments, exploration and prototypes. It is NOT suitable\n> for production use at this time.\n>\n> The specification under [`docs/`](docs/) is forward-looking — read it for\n> intent, not as description of the code today.\n\n## Using it\n\nIf you want to build on Cloudflare Computer, install\n[`@cloudflare/computer`](packages/computer/README.md) and follow that\npackage's README — it has the installation steps, the entrypoint map,\nand worked examples of the `fs` and `runtime` surfaces.\n\nTo contribute feedback, see [`CONTRIBUTING.md`](CONTRIBUTING.md).\nApproved collaborators should follow [`COLLABORATORS.md`](COLLABORATORS.md)\nfor setup, build, and test instructions.\n\n## Examples\n\nThe [`examples/`](examples) directory holds runnable consumers of the\npublic surface. Each is a Worker workspace with its own README.\n\n- [`examples/container`](examples/container) — runs `computerd` inside a\n  container, mounts a workspace, and talks to a Durable Object over\n  capnweb. A `write` / `read` / `exec` HTTP surface.\n- [`examples/worker-shell`](examples/worker-shell) — same HTTP surface as the\n  container example, but the shell runs [just-bash](https://github.com/vercel-labs/just-bash)\n  in a Dynamic Worker loaded through `env.LOADER`. No container.\n- [`examples/worker-javascript`](examples/worker-javascript) — mirrors\n  `worker-shell`, but `exec` evaluates an ECMAScript module in a Dynamic\n  Worker instead of running a shell command.\n- [`examples/think`](examples/think) — a [`@cloudflare/think`](https://www.npmjs.com/package/@cloudflare/think)\n  chat agent that uses the workspace as its working directory, reachable\n  from a terminal.\n- [`examples/think-compare-runtimes`](examples/think-compare-runtimes) —\n  a web UI that runs the same agent task against the container and\n  worker runtimes side by side.\n- [`examples/tutorial`](examples/tutorial) — a step-by-step build: one\n  endpoint, one agent that writes a markdown recipe card on the host and\n  runs `pandoc` on it in the container to produce a PDF.\n- [`examples/artifacts`](examples/artifacts) — generates a Worker project\n  in a workspace and publishes it to Cloudflare Artifacts as a\n  clone-ready repo.\n- [`examples/assets`](examples/assets) — turns a prompt into an image with\n  Workers AI, writes it to the workspace, and returns a shareable link\n  through `@cloudflare/computer/assets`.\n\n## Repository layout\n\nThe repo is a small monorepo. Each package has its own README with\npackage-specific status and usage notes.\n\n- [`packages/dofs`](packages/dofs/README.md) (`@cloudflare/dofs`) —\n  Durable Object SQLite-backed virtual filesystem, sync protocol\n  building blocks, and a `@platformatic/vfs` provider for Node.\n- [`packages/rpc`](packages/rpc/README.md)\n  (`@cloudflare/computer-rpc`) — capnweb wire types and\n  server/client helpers shared between the Durable Object and `computerd`.\n- [`packages/computerd`](packages/computerd/README.md)\n  (`@cloudflare/computerd`) — the `computerd` daemon: a FUSE mount plus\n  HTTP/WebSocket RPC server that runs inside the sandbox container.\n- [`packages/computer`](packages/computer/README.md)\n  (`@cloudflare/computer`) — the top-level Computer package\n  consumed by Durable Objects. Work in progress.\n- [`packages/computer-computerd-linux-x64`](packages/computer-computerd-linux-x64/README.md)\n  — private Docker image context for the prebuilt `computerd` linux-x64\n  binary. The image, not an npm package, is the release artifact.\n\n## Performance\n\ncomputerd's FUSE mount beats real disk on metadata-heavy work and\ntrails it on large sequential I/O. See\n[`docs/19_performance.md`](docs/19_performance.md) for the full `fs-bench`\nnumbers, a `cloudflare/sandbox-sdk` `npm install` comparison, and how\nto reproduce them.\n\n## Documentation\n\n- [`docs/`](docs/README.md) — design specification. Forward-looking;\n  treat as intent.\n- [`docs/19_performance.md`](docs/19_performance.md) — filesystem benchmarks.\n\n## Contributing\n\nWe accept bug reports, fix proposals, feature requests, and design\nproposals through issues and discussions. We do not accept unsolicited\npull requests. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the public\ncontribution paths.\n\nApproved collaborators should follow\n[`COLLABORATORS.md`](COLLABORATORS.md) for setup, formatting, testing,\ncommit message, and pull request conventions.\n\nIf you're working in this repo as an agent, start with\n[`AGENTS.md`](AGENTS.md) and the skills under\n[`.agents/skills/`](.agents/skills/).\n\n## License\n\nMIT. See [`LICENSE`](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "为智能体提供可持久化的虚拟计算机环境",
+      "problem": "让智能体能安全访问文件、执行代码并保存工作状态",
+      "highlights": [
+        "可以为智能体提供持久化工作目录",
+        "可以在容器或 Worker 中执行代码",
+        "可以构建文件处理和生成类智能体"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "Cloudflare Workers 开发者",
+        "原型验证团队"
+      ],
+      "why_trending": "今日新增 2802 Star，本周首次收录，关注度快速上升",
+      "caveat": "目前仅供预览，API 不稳定，不适合生产使用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cloudflare/computer",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "为智能体提供可执行计算机环境",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 70,
+      "ranking_score": 68.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "Blizaine/Maestro",
+      "url": "https://github.com/Blizaine/Maestro",
+      "description": "An all-in-one, 100% local AI video, image, and music studio. Director mode plans full music videos and short films from a single prompt. Built on the WanGP pipeline. Install via Pinokio.",
+      "language": "Python",
+      "total_stars": 228,
+      "forks": 28,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-video",
+        "image-generation",
+        "local-ai",
+        "ltx-video",
+        "music-generation",
+        "pinokio",
+        "text-to-video",
+        "video-generation",
+        "wan"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-08T12:02:05Z",
+      "updated_at": "2026-08-07T03:16:52Z",
+      "pushed_at": "2026-08-07T02:14:36Z",
+      "open_issues": 24,
+      "homepage": "https://pinokio.computer",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Maestro\n\nA one-click AI **video, image, and audio studio** for creators. Maestro pairs a modern React UI with a powerful generation backend and adds a **Director mode** that uses an LLM to plan music videos and short films from a single prompt. Optimized for the latest LTX-2.3 models & LoRAs, with support for virtually all open weight models.  \n\n![Maestro UI](Maestro_UI_02.jpg)\n\n## What it does\n\n### 🎬 Director Mode — automatic music videos and short films\nThe flagship feature. Drop in an audio track or write a story; a local LLM plans every shot, writes screenplays/lyrics, generates start frames & keyframes with character consistency, polishes prompts per model & LoRA-specific prompting guides, and runs the full multi-clip generation. Two skills:\n\n- **Music Video** — beat-aware shot planning aligned to your audio. The LLM analyzes BPM, sections (verse/chorus/bridge), and energy, then writes shots that hit the downbeats. Speaker transcription & diarization lets you name and target different voices or singers.\n- **Short Film** — screenplay-driven scenes with named characters, dialogue, and continuity across cuts. Pacing-bias slider controls cut frequency.\n  \n- **Auto Mode** runs the entire pipeline end-to-end (analyze → plan → generate images → generate clips → combine). Manual mode lets you review and edit at every step.\n- **Director v2 architecture** with structured shot planning, mode-specific prompt renderers, and a 3-pass refinement (screenplay → shot breakdown → per-model polish). Director v2 optimizes what the LLM is being asked to do across several passes, with each pass optimizing the LLM request for creativity (when writing the screenplay), structured outputs (when outputting JSON), and prompt refinement, which injects LoRA prompting guides into the context.  \n\n### ⚡ Performance Auto-Tune — zero-config setup\nDetects your GPU, VRAM, and RAM on first launch and picks the right profile, quantization, VAE tiling, and VRAM safety coefficient. No more \"Profile 1 vs 2 vs 4.5\" guesswork. Power users still have full manual control under \"Show advanced settings.\"\n\n- **OOM recovery banner** auto-suggests lowering the VRAM headroom when a generation runs out, with one-click apply.\n- **Live download status** during model setup (\"Downloading transcription model (first use downloads ~300MB)...\" instead of a vague spinner).\n\n### 🎨 Studio Mode — full manual control\nDirect access to every model and every knob:\n- **Video** — MiniMax H3 with native synchronized audio, LTX-2.3, Wan1/2, Hunyuan, and many more.\n- **Image** — Flux 2 Klein 9B, Krea 2 RAW/Turbo and Identity Edit, Qwen Image Edit, and many more\n- **Audio** — TTS: Kugelaudio, Qwen3 TTS. Music: ACE-Step. SFX: MMAudio\n- **Multi-clip generation** with per-clip prompts, seamless overlapping (sliding window) transitions, and shared LoRAs\n- **Blend video Mode** Remember Sora 1 blend mode, where you could overlap two videos, and use AI to blend them together? \n- **Frames Injection (KFI)** for character continuity in long videos\n- **Sliding window** for arbitrarily long generations\n- **Spatial upsampling, film grain, codec selection** as post-processing options\n\n### 🤖 Local LLM — built-in, no setup\nMaestro auto-downloads `llama-server` (~600 MB one-time) and your chosen GGUF model on first use. Defaults to **Gemma 4 4B (Recommended)** — fast, capable, and runs comfortably on smaller GPUs. Auto-detects CUDA and binds the LLM to GPU when available.\n\n- Pre-curated registry: Gemma 4 (2B / 4B / 26B MoE / 31B) and Qwen3.6 27B — uncensored/abliterated instruct variants tuned for creative prompting\n- **External providers** also supported: OpenAI, Anthropic, custom OpenAI-compatible endpoints (currently experimental)\n- **Vision support** so LLMs can enhance prompting based on reference images\n- Auto-unloads after 60s idle to free VRAM for video gen\n\n### 🛒 Built-in CivitAI LoRA browser\n- Search, filter, and one-click install any LoRA from CivitAI without leaving Maestro\n- **LoRA update detection** — Check button refreshes from CivitAI, shows update badges on outdated LoRAs\n- **My LoRAs view** with filters for Updates and direct uninstall\n- **AI-generated LoRA prompting guides** Helps remove the guesswork from LoRAs. AI generates LoRA guides when LoRA is downloaded based on CIVITAI and HuggingFace repos. The guides explain what each LoRA does and how to use it, provide prompt examples, and recommend weight settings that are automatically applied when LoRA is selected. \n- **Recommended weight ranges** (sourced from CivitAI sidecars, HuggingFace, or fallback heuristics) shown directly on the weight sliders\n- **Multi-LoRA pack auto-extraction** for archives that bundle several LoRAs\n\n### 🎭 Themes\nThree theme families, each with a dark and a light variant, switchable in Settings → System:\n- **Golden Hour** (default) — warm cinematic palette with sunset-gradient CTAs and spotlight bezels; warm paper with burnt orange in daylight\n- **Classic** — the original cool charcoal palette with blue accents; cool paper in daylight\n- **Onyx** — minimalist monochrome, pure black with neutral grey surfaces; white and grey in daylight\n\nAppearance mode is **Dark / Light / Auto** — Auto follows your system's appearance and switches live when it changes.\n\n### 🛠️ Edit Mode\n- **Retake** — re-roll a section of an existing video with a new prompt\n- **Edit Anything** — modify, add, or remove elements from existing videos using text prompts and In-Context LoRA models\n- **Outpaint** — extend a video's frame in any direction while preserving its original action, timing, and audio\n- **Repaint** — use SCAIL-2 to repaint characters, objects, or scenes while retaining the source motion and camera work\n- **Recast** — map one or more people in a video to replacement characters, including multi-shot scenes and group shots\n\n### 📂 Workspaces\nMultiple isolated output directories with a quick switcher in the sidebar. Useful for separating client projects, NSFW vs SFW, or experiments. Pinned and favorited outputs are tracked per workspace.\n\n### 🔒 Mature mode + experimental gate\n- **NSFW mode** is opt-in with a disclaimer step. Disabled by default. Gates uncensored model variants, NSFW LoRAs in the CivitAI browser, and the Settings → Services NSFW toggle.\n- **Experimental features gate** hides power-user toggles (external API keys, Voice Reference, Inpaint, Restyle, Wan2GP Enhancer) by default for a focused first-launch experience.\n\n### 📊 Director Pipeline Dashboard\nView all past Director runs with their full state — clip plans, generated images, generated clips, polish diffs. Re-run any clip without re-running the whole pipeline.\n\n## Updates\n\nThe version you are running is shown next to the Maestro title in the UI. To update, use the launcher's Update button in Pinokio.\n\n### v1.6.1 (2026-08-06)\n\n**MiniMax H3 Turbo mode**\n- Added the H3 Turbo LoRA to the Full H3 model lists as a managed, first-use download.\n- Added an experimental one-click Turbo mode for Full First & Last and Full Omni models.\n- Turbo mode uses six inference steps and starts at LoRA strength 0.70.\n- The active Turbo LoRA is shown in Advanced settings so its strength can be tuned per generation.\n- User-adjusted Turbo strengths are preserved while duplicate Turbo adapters and incompatible Pruned-model combinations remain blocked.\n\n### v1.6.0 (2026-08-06)\n\n**MiniMax H3 Omni Reference**\n- Added MiniMax H3 Omni for generating new video and synchronized audio from ordered image, video, voice, motion, and sound references.\n- References can be reordered, labeled with their intended role, and used for identity, appearance, scene, motion, voice, performance, ambience, or music conditioning.\n- Added both recommended Pruned 20B and optional Full 33B Omni models.\n- Added Match Output reference preparation for consumer GPUs and an optional Maximum Detail mode for higher-memory systems.\n- Improved reference-video memory use with output-aware sizing, chunked projections, dedicated attention workspace, and safer model re-profiling.\n\n**Expanded H3 models and performance options**\n- Simplified the model choices to First & Last and Omni, with clear Pruned 20B and Full 33B variants and concise explanations in the selector.\n- Added Full 33B support for both workflows, including ConvRot checkpoint loading, fused projection handling, and memory-efficient streaming.\n- Added selectable NVFP4-AWQ, GGUF Q2/Q4, Quanto INT8, and BF16 Qwen3-VL text encoders with hardware-aware recommendations.\n- Added support for the MiniMax H3 Turbo LoRA on compatible Full 33B models with true 4, 6, and 8-evaluation schedules.\n- Incompatible Turbo LoRA and Pruned-model combinations are rejected before loading instead of failing after a long generation.\n\n**H3 Studio workflow and prompting**\n- Omni generations are limited to the native 345-frame maximum: 14.375 seconds at 24 FPS, displayed as 14.4 seconds, with sliding-window controls automatically hidden.\n- First & Last uses the same native 14.4-second maximum per window and can now generate longer videos by continuing each window from the preceding final frame.\n- Long First & Last runs preserve the requested duration, remove continuation overlap, keep synchronized audio aligned, and apply an optional end image only to the final window.\n- Fixed portrait and other selected aspect ratios being forced or decoded as 16:9.\n- Improved H3 Prompt Enhance for exact dialogue retention, stable speaker IDs, voice-reference intent, opening ambience, silent intervals, and reduced gibberish or invented speech.\n\n**MiniMax H3 in Director**\n- Added model-aware Director workflows for both First & Last and Omni models.\n- First & Last can create prompt-only shots or use optional generated start/end frames, while Omni can condition shots on character, location, voice, video, soundtrack, and other project references.\n- Director no longer spends time writing or generating unused start images for H3 prompt-only workflows.\n- H3 shot prompts now carry the project world, location, wardrobe, character blocking, screen position, dialogue, soundscape, and continuity needed by independently generated clips.\n- Added stable project-wide speaker mapping, locked screenplay dialogue, duration-aware pacing, and multi-speaker exchanges with camera changes inside a single H3 clip.\n- Incomplete or altered local-LLM shot plans are repaired deterministically without silently truncating, moving, duplicating, or rewriting approved dialogue.\n- Dashboard repair and regeneration recreate the same H3 references and timing, including exact per-shot audio conditioning and one clean final soundtrack.\n\n**Compatibility and reliability**\n- Director model lists now show only image and video models that support the selected automated workflow.\n- Native audio generation is distinguished from audio-reference input so incompatible models are no longer offered for audio-driven jobs.\n- Reduced console noise by hiding successful system-stat polling while retaining failures and meaningful API requests.\n- Interrupted saved Director jobs are now reported as interrupted instead of disappearing as missing projects.\n- Expanded automated coverage for H3 checkpoints, quantization, Omni reference packing, Turbo LoRA, Studio continuation, Director compatibility, dialogue planning, memory behavior, and UI contracts.\n\n### v1.5.5 (2026-08-04)\n\n**MiniMax H3 local audio-video generation**\n- Added native local MiniMax H3 Base FL2VA support with text-to-video, image-to-video, and first/last-frame video generation.\n- H3 generates synchronized 32 kHz stereo audio together with the video instead of requiring a separate audio pass.\n- Added approximately 5-15 second generation at 24 FPS with landscape, portrait, square, native 768p, and lower-VRAM resolution options.\n- Added automatic, revision-pinned provisioning for the compact scaled-FP8 transformer, NVFP4 Qwen3-VL conditioner, video VAE, audio VAE, tokenizer, and processor assets.\n- The initial integration focuses on H3 Base FL2VA; H3 Ref2VA"
+    },
+    "brief": {
+      "summary": "本地运行的一体化 AI 视频、图像和音乐工作室",
+      "problem": "将多种生成模型和多步骤创作流程整合到本地工具中",
+      "highlights": [
+        "可以用一句提示规划并生成音乐视频或短片",
+        "可以手动生成和编辑视频、图像、音乐与音效",
+        "可以本地管理模型、LoRA和多个创作工作区"
+      ],
+      "target_users": [
+        "AI视频创作者",
+        "独立短片制作人",
+        "本地模型用户"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有228个Star",
+      "caveat": "首次使用会下载模型；具体硬件要求资料中未说明",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Blizaine/Maestro",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "本地生成音乐视频与短片",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 56.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "xixihhhh/hotclip",
+      "url": "https://github.com/xixihhhh/hotclip",
+      "description": "免费开源的 AI 剪辑 / 直播切片工具:长视频、直播回放、播客一键切成爆款竖屏短视频——AI 找高光金句、自动加字幕、横屏转竖屏,本地运行无水印不上传 | Free open-source Opus Clip alternative, 100% local: AI clips long videos & livestream VODs into viral 9:16 shorts. No credits, no watermark, no uploads. Win/macOS.",
+      "language": "TypeScript",
+      "total_stars": 59,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-clip-generator",
+        "auto-subtitles",
+        "bilibili",
+        "claude-skill",
+        "desktop-app",
+        "douyin",
+        "electron",
+        "livestream",
+        "local-first",
+        "long-video-to-shorts",
+        "mcp-server",
+        "opus-clip-alternative",
+        "podcast-clipper",
+        "short-form-video",
+        "speech-recognition",
+        "tiktok",
+        "video-clipping",
+        "video-editing",
+        "youtube-shorts"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-04T09:55:25Z",
+      "updated_at": "2026-08-07T03:15:58Z",
+      "pushed_at": "2026-08-07T03:15:32Z",
+      "open_issues": 2,
+      "homepage": "https://xixihhhh.github.io/hotclip/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<a href=\"https://github.com/xixihhhh/hotclip/releases/latest\">\n  <img src=\"docs/readme-hero.png\" alt=\"HotClip 爆款切片 — 本地 AI · 一键切片:长视频、直播回放一键切成爆款竖屏短视频\" width=\"100%\">\n</a>\n\n# HotClip 爆款切片 — 免费开源的 AI 直播切片 / 视频剪辑工具\n\n**长视频、直播回放一键切成爆款竖屏短视频**\n\n**简体中文** | [English](README.en.md) | [官网](https://xixihhhh.github.io/hotclip/) | [下载](https://github.com/xixihhhh/hotclip/releases/latest) | [FAQ](#常见问题) | [反馈](https://github.com/xixihhhh/hotclip/issues)\n\n<p>\n  <a href=\"https://github.com/xixihhhh/hotclip/releases/latest\"><img src=\"https://img.shields.io/github/v/release/xixihhhh/hotclip?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC&color=ff5722\" alt=\"最新版本\"></a>\n  <a href=\"https://github.com/xixihhhh/hotclip/releases\"><img src=\"https://img.shields.io/github/downloads/xixihhhh/hotclip/total?label=%E4%B8%8B%E8%BD%BD%E9%87%8F&color=ff9800\" alt=\"下载量\"></a>\n  <img src=\"https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-Windows%20%7C%20macOS-blue\" alt=\"平台\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/github/license/xixihhhh/hotclip?label=%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE\" alt=\"License\"></a>\n  <a href=\"https://github.com/xixihhhh/hotclip/stargazers\"><img src=\"https://img.shields.io/github/stars/xixihhhh/hotclip?style=social\" alt=\"GitHub stars\"></a>\n</p>\n\n**AI 自动找爆点(附理由) · 横屏转竖屏 9:16 · 自动加动态字幕 · 去气口剪口头禅**\n\n无水印 · 无积分制 · 不限时长 · 素材不上传 · 连注册都不用\n\n</div>\n\n## ⬇️ 下载安装\n\n**[去 Releases 页下载最新版 »](https://github.com/xixihhhh/hotclip/releases/latest)**\n\n| 平台 | 文件 | 说明 |\n|---|---|---|\n| Windows 安装版 | `HotClip-x.y.z-win-x64.exe` | 双击安装即用 |\n| Windows 绿色版 | `HotClip-x.y.z-win-x64.zip` | 免安装,解压即用 |\n| macOS(Apple 芯片) | `HotClip-x.y.z-mac-arm64.dmg` | 拖进「应用程序」 |\n\n> ⚠️ 当前版本未做代码签名:Windows SmartScreen 提示时点「更多信息 → 仍要运行」;macOS 首次打开用右键 → 打开(或到「系统设置 → 隐私与安全性」允许)。代码签名已在规划中。\n>\n> 不用 Python、不用 Docker、不用命令行——下载安装包双击即开。\n\n<!-- TODO(P0): 在此处放 30-60 秒实操 demo mp4(README 网页编辑器直接拖入 mp4 生成 user-attachments 页内播放器):\n     内容:拖入直播回放 → 爆点候选卡片弹出 → 一键导出 → 竖屏成片带动态字幕播放 2 秒 -->\n\n<!-- TODO(P0): 在此处放「成片效果」表格:<table> 并排 2-3 个竖屏成片 <video>(中文播客金句 / 带货直播高能 / 中英混说),每个配一行标题 -->\n\n## 直播切片怎么做?三步出片\n\n<p align=\"center\">\n  <img src=\"docs/readme-story.png\" alt=\"一条长视频变成多个爆款短片:AI 智能识别高光时刻,一键生成竖版爆款短视频\" width=\"100%\">\n</p>\n\n1. **导入**:把播客、直播回放、课程、Vlog 丢进来(MP4 / MKV / MOV / FLV / TS,纯音频也行),数小时的直播回放直接进,全程本地处理\n2. **AI 找爆点**:本地逐字转写 → AI 通读全文挑出金句、冲突、高能片段,每条附**爆款分、开场钩子和推荐理由**,切点精确到词;看不顺眼的取消勾选即可\n3. **一键出片**:竖屏 9:16 成片直接导出——人脸跟随取景、动态逐字字幕、标题贴片、响度归一,附封面图和发布文案,打开就能发**抖音 / 快手 / B站 / 视频号 / 小红书 / TikTok**\n\n## 界面预览\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/04-highlights.png\" width=\"840\" alt=\"AI 爆点候选:四维打分 + 钩子 + 逐句边界微调\">\n</p>\n<p align=\"center\"><sub><b>AI 通读全文挑爆点</b> —— 每条候选附爆款分、钩子、四维分项(钩子 / 结构 / 价值 / 热点)、悬念句与逐字精确切点;弱片自动标「不建议发布」,勾选取舍全在你手。</sub></p>\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/screenshots/01-import.png\" alt=\"导入长视频\"><br/><sub>① <b>导入</b> 播客 / 直播回放 / 课程 —— 全程本地处理,素材不上传</sub></td>\n    <td width=\"50%\"><img src=\"docs/screenshots/02-engines.png\" alt=\"选择转写引擎\"><br/><sub>② <b>选转写引擎</b> —— 三档本地(SenseVoice / Paraformer / FireRedASR2)+ 可选云端,隐私分级明标</sub></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/screenshots/03-transcript.png\" alt=\"逐字转写\"><br/><sub>③ <b>逐字转写</b> —— 带时间戳的逐句稿,是找爆点和字幕的地基</sub></td>\n    <td width=\"50%\"><img src=\"docs/screenshots/05-export.png\" alt=\"一键出片\"><br/><sub>④ <b>一键出片</b> —— 竖屏成片直接发,附封面图与 clips.json 元数据</sub></td>\n  </tr>\n</table>\n\n> 截图为真实界面(演示素材:一段带货直播回放)。**觉得切得准,就点个 ⭐——每颗星都是让更多人不用再给积分制付费的一票,Star + Watch 还能第一时间收到新版本通知。**\n\n## 谁在用:直播切片 · 切片带货 · 播客剪辑 · 口播剪辑\n\n- **主播 / 切片手(直播切片、录播切片)**:下播后把几小时直播回放自动切成高光短视频;开「录播监听」后 7×24 无人值守,录完自动出片;弹幕热度直接进爆点判断\n- **带货 / 矩阵团队(切片带货,已授权)**:商品讲解模式按转化逻辑选段,一键全托管批量出片,每条附发布文案、封面图与 clips.json 元数据,120+ 违禁词规则发布前点名;**一片多版**出差异化包装、**平台发布包**按各平台规格整理齐套素材,多账号多平台拿起来直接发\n- **播客主(播客剪辑、播客视频化)**:纯音频也能出片——自动合成波形动画画面 + 金句字幕,播客节目直接变竖屏视频\n- **知识区 UP 主 / 口播博主(口播剪辑)**:自动去气口、剪口头禅、删停顿,长口播变利落短视频,字幕逐字点亮\n\n## 和 OpusClip、剪映智能切片的区别\n\n市面上的 AI 切片工具,要么**按分钟扣积分**(一期 2 小时播客烧光整月额度,积分月底还清零),要么**必须上传云端**(未发布素材/客户内容不敢传),要么切点稀烂、中文支持名不副实;开源侧则几乎全是命令行,小白装不起来。HotClip 把两边的坑同时填上:\n\n| | HotClip | OpusClip / Klap / Vizard 等 SaaS | 剪映/CapCut 智能切片 | FunClip / autoclip 等开源 |\n|---|---|---|---|---|\n| 价格 | **免费开源** | $15-29+/月,按源视频分钟扣积分,积分月底清零 | 核心功能进会员/Pro | 免费 |\n| 素材去向 | **全程本地,不上传** | 必须上传云端 | 云端处理为主 | 本地 |\n| 水印/时长限制 | **无** | 免费档有水印、限时长、项目 3 天过期 | 部分模板有限制 | 无 |\n| 账号 | **无需注册** | 需注册,退订删项目 | 需登录 | 无 |\n| 小白可用 | **双击安装即用** | 网页版,易用 | 易用 | 命令行/Docker/自部署 |\n| 切点质量 | **逐字对齐精确到词,附理由可否决** | 黑盒打分,常被抱怨断章取义 | 黑盒 | 按句切,无爆点排序 |\n| 竖屏字幕 | **9:16 重构 + 逐字点亮字幕内置** | 有(付费档) | 自动字幕已进付费 | 多数无竖屏重构 |\n\n<sub>竞品信息核对于 2026-07,具体以各家官网为准。详细英文对比:[HotClip vs OpusClip](https://xixihhhh.github.io/hotclip/alternatives/opus-clip.html)</sub>\n\n## 功能一览\n\n> 「导入 → AI 找爆点 → 竖屏+逐字字幕成片」三步全流程可下载可用。每组点开看细节——细节里全是真功能,不是形容词。\n\n### 🎙️ 本地转写:三档引擎,逐字时间戳\n\n快速 SenseVoice(五语种,170MB)/ 均衡 Paraformer(中文更准)/ 最准 FireRedASR2(普通话/方言/中英混说)——全部本地运行、普通 CPU 就能跑,首次自动下载(国内镜像优先、断点续传);另有云端档 ElevenLabs(自带 Key,只上传音轨)。\n\n<details>\n<summary><b>展开细节</b>:转写缓存 · 逐句稿即点即改 · 热词词表 · 说话人分离</summary>\n\n- **转写结果本地缓存**:同一个文件下次再开、换设置多切几条,跳过重转写秒进挑爆点;文件改动或换引擎自动失效\n- **逐句稿即点即改(转写纠错)**:每句 hover 出铅笔当场改,字幕、双语翻译、发布文案全用修正后文本,该句逐字时间轴自动重建\n- **热词词表(专有名词一次纠错,期期自动修正)**:人名/品牌/术语改一处,一键应用到全片同错句并入词表;之后每次转写自动整词替换,词表更新后同素材直接用缓存重放、不重跑识别\n- **多人对谈「谁在说话」**:一键说话人分离(本地 pyannote + 3D-Speaker,零上传),逐句标注谁在说;AI 按说话人挑段不断章取义,气泡字幕按人上色\n</details>\n\n### 🔥 AI 找爆点:六路证据链,每一刀都有理由\n\nLLM 只负责«挑哪段»并引用原文,时间戳由逐字转写**反向对齐**——不让 AI 猜时间。每条候选附爆款分、开场钩子、推荐理由与四维分项,弱片自动标「不建议发布」。\n\n<details>\n<summary><b>展开细节</b>:复评质量门 · 弹幕/表情/视觉信号 · 画面复核 · 参考爆款 · 省钱漏斗 · 商品模式</summary>\n\n- **AI 复评质量门**:严格评审员二次盲评,钩子/结构/价值/热点四维分项打分,每维一句话理由,另给一条可烧上片头的悬念句\n- **爆款分=排名不是玄学**:四维加权后按候选间相对排名归一(推荐档 76-99),同批次可直接比大小,不受批间漂移影响\n- **画面声音证据**:响度峰值与镜头切换密度本地采集注入判断,不再纯文本盲选\n- **弹幕热度信号**:自动发现录播旁同名弹幕 .xml(录播姬约定),滑窗密度+高能词加权圈出观众实时高能段——观众逐秒投的票,证据力最强\n- **表情峰值信号**:YuNet + FER+(几 MB 的 MIT 协议模型)找大笑/惊讶/激动峰值,零配置让 AI「看见」情绪爆点\n- **视觉爆点信号(可选)**:本机 Ollama 视觉模型抽帧研判画面高能时刻,专治逐字稿里看不见的画面梗;抽帧接触表九帧拼一张,VLM 调用数 20→3\n- **AI 画面复核(可选)**:检测后对头部候选再抽九宫格让视觉模型过目——画面炸裂加分、信号候选画面死气降分、画面与标题货不对板标警告,看点写进推荐理由;本机 Ollama 免费,视觉设置填 API Key 即切云端模型\n- **参考视频驱动**:丢一条想对标的爆款切片,本地实测节奏生成风格画像,选段向对标靠拢(CLI `--reference`)\n- **审阅反馈回流**:你采用/否决的候选自动落进本地偏好档,下次「同类优先/同类少选」,越用越懂你;偏好数据不出本机\n- **端侧两级漏斗(省钱)**:本机小模型先初筛,云端只精读入围段——长视频云端 token 花费降一个量级,切点精度零损失\n- **镜头切点吸附**:TransNetV2 本地检测真实镜头边界,切点自动吸附(词边界守卫绝不切掉说话)\n- **商品讲解模式(带货直播切片)**:填商品词,按「试用实测 > 卖点 > 价格机制」转化逻辑选段;纯憋单拉互动段(平台判违规)明确排除\n- **切片时长档**:短·10-30s / 标准·8-40s / 长·40-90s 一键切换重选段,目标时长作为硬约束进提示词\n</details>\n\n### 📝 字幕与文案:自动加字幕、发布文案一步到位\n\n动态字幕多款样式一档切换——关键词高亮、大字弹出、气泡特效、动态极简——词级时间戳驱动、语义断行不拦腰截断,SRT 可导出、双语可选;AI 起的爆款标题自动烧进顶部贴片,发布文案带标签生成。\n\n<details>\n<summary><b>展开细节</b>:气泡特效字幕 · 开场钩子 · 双语 · Hormozi 大字 · 违禁词 lint · AIGC 标识</summary>\n\n- **语义断行(免 Key)**:顺着标点在真实子句处换行,长句无标点时回看结构助词断行——等价于头部项目用 LLM 插 `[br]`,但零额外调用\n- **气泡特效字幕(Web 渲染引擎)**:内置 Chromium 离屏逐帧渲染 CSS 字幕层——自适应圆角气泡底、关键词渐变金字、弹性入场,libass 做不出的效果一档切换\n- **开场钩子(黄金3秒)**:AI 写的悬念句自动大字烧在开头 2 秒上三分之一,淡入淡出避开主体;没写出悬念句自动不加\n- **Hormozi 大字爆点字幕**:带货营销风,特大加粗、硬阴影、逐词点亮\n- **双语字幕(出海一步到位)**:整句语境翻译烧成副轨,中文源自动译英;跳剪压缩时译文行同步重映射\n- **SRT 字幕文件导出**:时间轴已对齐跳剪/剪口头禅后的成片,断行与烧录字幕一致\n- **发布文案生成**:每条切片生成钩子风标题 + 3-6 个垂类标签 + 简介,落 `.post.txt` 与 clips.json;8 种钩子角度 × 5 类 CTA 可选\n- **平台违禁词 lint**:120+ 本地规则扫标题/文案/字幕,绝对化用语/医疗宣称/导流话术发布前点名,零上传\n- **AIGC 标识(合规内建)**:按《人工智能生成合成内容标识办法》一键打标——显式画面标识 + 隐式元数据标识\n</details>\n\n### 🎬 成片质量:像人剪的,不是机切的\n\n人脸跟随智能取景(镜头级三模式)、气口跳剪、剪口头禅、响度归一 -14 LUFS、帧精确切割——制作链一步到位,每条切片出片后还有自我质检。\n\n<details>\n<summary><b>展开细节</b>:横屏转竖屏 · 去气口 · 降噪 · 音效 · BGM · 质检自修复 · 智能封面 · 高潮前置 · 爆点闪现 · 精准切点</summary>\n\n- **人脸跟随智能取景(横屏转竖屏 9:16)**:自动检测并跟随人脸(静止/平滑横移/One Euro 跟踪三模式),无人脸自动回退居中裁剪\n- **去录屏UI**:手机直播录屏的状态栏/固定UI/黑边,时域方差自动检测裁除\n- **气口跳剪(自动去气口)**:剪掉停顿静音并拼接,字幕时间轴同步重映射;「无词且声学静默」双重判定,笑声掌声不误删\n- **剪口头禅**:嗯/呃、结巴重复自动剪除(词表刻意保守),剪了什么逐条写进 clips.json\n- **响度标准化**:每条按 EBU R128 归一到 -14 LUFS 社媒标准,整批音量一致;跳剪后按拼接后音轨计算\n- **一键降噪**:双高通(24dB/oct 压电流声)+ 谱减降噪进出片链,实测静音段底噪 -7.9dB、人声只动 0.2dB\n- **音效打点**:whoosh 卡多段拼接/高潮前置的硬切缝、「叮」卡全片情绪最高点、开场钩子上屏轻响——规则打点每条最多 3 个宁缺毋滥;音效本地合成零素材零版权,想换真实音效包替换同名 wav 即可\n- **背景音乐(BGM 闪避)**:选个本地音频自动循环铺满全片,音量压在人声之下、说话时自动闪避、结尾淡出;混音是独立后处理趟,视频流直拷零画质损失\n- **出片自我质检 + 自我修复**:黑屏/长静音/响度/时长/切点半词复核写进 clips.json;可自愈的告警当场修好(裁边/重归一),修完重检变好才采纳\n- **高潮前置(cold-open)**:最炸的钩子句自动剪到开头再接正片——完播率手法,商业工具锁在付费档;定位失败自动跳过,宁可不做不可做错\n- **爆点闪现(flash-forward)**:正片开始前先闪 0.3-1 秒全片最炸瞬间再切回——悬念开场手法(全网仅 0.04% 切片有 visual hook);与高潮前置自动二选一,定位失败自动跳过\n- **精准切点(Paraformer 二遍对齐)**:导出前对选中片段二遍解码,一体化词级时间戳(±50ms,超过强制对齐)修正字幕、跳剪与切点——快档转写的时间戳短板由它补齐;首次自动下载 ~240MB 模型,对不上(如背景音乐段)自动回退\n- **智能封面选帧**:自动选切片内响度最高一帧当封面(通常是情绪最高点),避开转场\n- **帧精确切割**:快速定位+重编码,爆点第一秒不糊不偏;数小时 FLV/TS 直接进\n- **导出可取消 + 实时进度**:ffmpeg 进度流式回报,随时一键取消,已完成切片保留\n</details>\n\n### 🧰 审阅与工作流:AI 粗剪,人终剪\n\n导出前应用内看片微调:切片审阅台(波形时间轴拖手柄逐词调切点)、字幕安全区预览(九平台真实遮挡遮罩)、出片偏好记忆、品牌样式模板。\n\n<details>\n<summary><b>展开细节</b>:审阅台 · 安全区 · 发布包 · 一片多版 · 品牌模板 · 双画幅 · 合集 · EDL · 设置页</summary>\n\n- **切片审阅台**:应用内直接播放候选,波形时间轴拖两端手柄逐词微调(自动吸附字词边界),一键还原 AI 切点;手调过的切点导出时机器不再改人的决定\n- **字幕安全区预览**:一键叠加平台 UI 遮挡遮罩(抖音/快手/B站竖屏/视频号/小红书/TikTok/Reels/Shorts + 通用并集九档,按实测数据画)\n- **平台发布包(切完就能发)**:导出后按平台整理齐套素材到「发布包/」——每平台一个文件夹:视频(硬链接不占双份磁盘)+ 按平台画幅重裁的封面(小红书 3:4、B站 16:10、视频号 6:7)+ 按平台上限适配的文案(小红书标题硬截 20 字、话题数各按平台建议),manifest 记录适配了什么;打开文件夹逐平台上传即可\n- **一片多版(多账号真差异)**:同一切片一次出 2-3 版差异化包装——不同钩子角度的贴片标题、开场悬念句、发布文案,封面自动抓下一个响度峰;多账号分发靠增量价值,不做抽帧/镜像那类已被平台判搬运的像素级去重\n- **品牌样式模板**:主高亮色/字幕字号位置/logo 水印配一次存成预设,每条切片自动带上;用了什么写进回执\n- **一键双画幅**:同批切片竖屏之外再出一版横屏(自动去标题贴片、字幕换底部布局),竖版发抖音、横版发B站一次搞定\n- **精华合集一键成片**:整批切片流复制拼接成合集(秒级零损),附章节时间戳,B站/YouTube 周更形态现成\n- **时间线 EDL 导出**:`timeline.edl`(CMX3600)含跳剪的每一刀,导入 DaVinci / Premiere 重链源片继续精修\n- **Audiogram 音频成片**:纯音频源自动合成深色底+品牌色波形动画画面,播客也有「画面」\n- **出片偏好记忆 + 标题即点即改**:开关组合自动记住;候选标题点铅笔就改,文件名/贴片/文案全跟着走\n- **设置页**:模型存放位置可见可搬家(跨盘走「复制→校验→才删原件」)、导出画质三档(省空间档体积小 66%)、默认字幕样式与导出位置\n- **新版本提示**:启动静默检查,有新版页头亮小徽标;断网全静默\n</details>\n\n### 🤖 批量与生态:CLI / MCP / Agent Skill\n\n一键全托管(导入后点一个按钮全自动出片)+ 录播监听 7×24 无人值守 + Headless CLI + 本地 MCP Server——**唯一本地不上传的切片 Agent 工具链**。\n\n<details>\n<summary><b>展开细节</b>:录播监听 · CLI · MCP · Claude Code 技能 · doctor</summary>\n\n- **录播监听(7×24 无人值守)**:盯住录播姬/OBS 输出目录,新录播落稳自动转写→找爆点→出片;「连续两轮大小不变」才算录完绝不切半截,单文件失败跳过绝不循环烧费用\n- **Headless CLI**(与桌面端产物完全一致):\n\n  ```bash\n  pnpm cli transcribe 直播回放.mp4                 # 端侧逐字转写(带缓存)\n  pnpm cli highlights 直播回放.mp4 --json          # AI 爆点候选,先审后剪\n  pnpm cli clip 直播回放.mp4 --max-clips 10        # 全托管出片 + 质检报告\n  pnpm cli doctor --download                       # 环境自检 + 预下载模型\n  ```\n\n- **本地 MCP Server**:Claude Code / Claude Desktop 注册后,一句「把这个 4 小时录播切 10 条爆点」就是完整交付;三个工具 `clip_video` / `detect_highlights` / `transcribe_video`\n\n  ```json\n  {\n    \"mcpServers\": {\n      \"hotclip\": {\n        \"command\": \"npx\",\n        \"args\": [\"-y\", \"tsx\", \"src/mcp/server.ts\"],\n        \"cwd\": \"/path/to/hotclip\",\n        \"env\": {\n          \"HOTCLIP_LLM_BASE_URL\": \"http://localhost:11434/v1\",\n          \"HOTCLIP_LLM_MODEL\": \"qwen3:8b\"\n        }\n      }\n    }\n  }\n  ```\n\n- **官方 Agent Skill**:把这段话直接粘给 Claude Code / Codex,Agent 会自己完成安装:\n\n  > 请安装 HotClip 作为我的本地切片技能:`git clone https://github.com/xixihhhh/hotclip.git && cd hotclip && pnpm install`,然后把 `skills/hotclip/` 复制到我的 Agent skills 目录(Claude Code 为 `~/.claude/skills/hotclip/`),并按 `skills/hotclip/SKILL.md` 里的说明配置 LLM 环境变量。装好后用一段测试视频跑 `pnpm cli highlights` 验证。\n\n- **clips.json 处理回执**:每条片 AI 动了什么(字幕样式/取景模式/跳剪比例/剪了几个口头禅)一目了然,可审计,矩阵管线直接取用\n- **模型自带干粮也行**:默认本地免费模型;更强的爆点判断可一键接 [Atlas Cloud](https://www.atlascloud.ai)、fal.ai 或任意 OpenAI 兼容接口,或本机 Ollama 完全离线\n</details>\n\n## 最近更新\n\n**[v0.12.0](https://github.com/xixihhhh/hotclip/releases/tag/v0.12.0)**(2026-08-05)「挑得准、开场炸」:**爆点闪现(flash-forward)**——正片开始前先闪 0.3-1 秒全片最炸瞬间再切回,悬念开场手法(全网仅 0.04% 切片做了 visual hook);与高潮前置自动二选一,定位失败自动跳过。**AI 画面复核**——检测后对头部候选抽九宫格接触表让视觉模型过目:画面炸裂加分、信号候选画面死气降分、画面与标题货不对板标警告,看点写进推荐理由;本机 Ollama 免费,视觉设置填 API Key 即切云端模型。**精准切点**——导出前用 Paraformer 对选中片段二遍解码,一体化词级时间戳(±50ms,超过强制对齐)修正字幕、跳剪与切点,快档转写(SenseVoice)的时间戳短板补齐;对不上自动回退,绝不改坏。**钩子兑付校验**——钩子里承诺的数字必须真出现在片中,没兑付的写进质检报告,防「标题党切片」。**字幕现代化**——默认样式换「关键词高亮」(整句扫色的老卡拉OK已过时,降为备选样式);「逐词弹色」升级:当前词品牌色点亮+阻尼弹入,对齐 2026 逐词字幕主流形态。另修复桌面端 4 个从未生效的导出开关(降噪/高潮前置/合集/双画幅)。\n\n<details>\n<summary><b>历史版本</b>(v0.4.3 → v0.11.0)与里程碑一览</summary>\n\n- **[v0.11.0](https://github.com/xixihhhh/hotclip/releases/tag/v0.11.0)**(2026-08-05)「切完就能发」:**平台发布包**(导出后按平台整理齐套素材:硬链接视频+按平台画幅重裁封面+按平台上限适配文案,manifest 记录适配项);**一片多版**(同片 2-"
+    },
+    "brief": {
+      "summary": "本地运行的 AI 长视频转竖屏短视频工具",
+      "problem": "长视频和直播回放剪辑耗时，难以快速找到高光片段",
+      "highlights": [
+        "可以把直播回放切成带字幕的竖屏短视频",
+        "可以将播客音频制作成带波形和字幕的视频",
+        "可以批量生成封面、标题和平台发布文案"
+      ],
+      "target_users": [
+        "主播和切片团队",
+        "播客与口播创作者",
+        "知识区视频作者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有59个Star",
+      "caveat": "当前版本未做代码签名，系统可能弹出安全提示",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "xixihhhh/hotclip",
+      "score": 92,
+      "category": "视频剪辑",
+      "reason": "本地AI长视频自动切片剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 56.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "perso-ai/perso-dubbing-plugin",
+      "url": "https://github.com/perso-ai/perso-dubbing-plugin",
+      "description": "AI video auto-dubbing plugin for coding agents — translate & dub videos into multiple languages via the Perso Dubbing API. Works with Claude Code, Cursor, Codex & Antigravity.",
+      "language": "JavaScript",
+      "total_stars": 30,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agent",
+        "ai-dubbing",
+        "audio-separation",
+        "claude-code",
+        "codex",
+        "cursor",
+        "dubbing",
+        "localization",
+        "perso-dubbing",
+        "skills",
+        "text-to-speech",
+        "tts",
+        "video-dubbing",
+        "video-translation",
+        "video-translator",
+        "voice-cloning",
+        "voice-separation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-26T00:23:24Z",
+      "updated_at": "2026-08-07T02:41:33Z",
+      "pushed_at": "2026-08-07T02:41:22Z",
+      "open_issues": 2,
+      "homepage": "https://perso.ai/dubbing",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# Perso Dubbing Plugin\n\n**Every video, every language. Dub, subtitle, and clip right from your coding agent.**\n*\"Dub this video into English\" is the whole workflow.*\n\n[![Perso AI](https://img.shields.io/badge/Perso%20AI-Dubbing-5A4FF3?style=flat-square)](https://perso.ai/dubbing)\n![Node.js](https://img.shields.io/badge/Node.js-18%2B-1a1a1a?style=flat-square)\n![Agent Skills](https://img.shields.io/badge/Agent%20Skills-SKILL.md-1a1a1a?style=flat-square)\n![Hosts](https://img.shields.io/badge/Claude%20%C2%B7%20Codex%20%C2%B7%20Antigravity-1a1a1a?style=flat-square)\n[![MIT](https://img.shields.io/badge/MIT-5A4FF3?style=flat-square)](LICENSE)\n\n<sub>\n\n**English** ｜ [한국어](docs/ko/README.md) ｜ [Español](docs/es/README.md) ｜ [Português](docs/pt/README.md) ｜ [Русский](docs/ru/README.md) ｜ [Bahasa Indonesia](docs/id/README.md) ｜ [Deutsch](docs/de/README.md) ｜ [ไทย](docs/th/README.md) ｜ [日本語](docs/ja/README.md) ｜ [繁體中文](docs/zh-TW/README.md) ｜ [简体中文](docs/zh-CN/README.md) ｜ [Tiếng Việt](docs/vi/README.md) ｜ [Français](docs/fr/README.md)\n\n</sub>\n\n</div>\n\n<br>\n\n| Feature | You say | You get | |\n|---|---|---|---|\n| **Dubbing** | *\"Dub this video into Japanese\"* | The same video, re-voiced | |\n| **Lip-sync** | *\"…with lip-sync\"* | Mouth matched to the dubbed audio | |\n| **Voice separation** | *\"Split the voice from the music\"* | Voice and background tracks | |\n| **Subtitles from speech** | *\"Make me an English SRT\"* | An SRT extracted via STT | |\n| **Subtitle translation** | *\"Translate subs.srt into Spanish\"* | Translated SRT, timing intact, QA included | ![FREE](https://img.shields.io/badge/FREE-5A4FF3?style=flat-square) |\n| **Styled subtitles** | *\"Burn these subtitles onto the video\"* | Styled subtitles on the video | ![FREE](https://img.shields.io/badge/FREE-5A4FF3?style=flat-square) |\n| **Short clips** | *\"Cut 2:00–3:00 as a short\"* | A 9:16 clip, reframed | ![FREE](https://img.shields.io/badge/FREE-5A4FF3?style=flat-square) |\n| **AI highlights** | *\"Pick the best moments as shorts\"* | AI-selected highlight clips | |\n\nFiles, folders, and YouTube/TikTok URLs all work.\n\n<br>\n\n## Install\n\n> **Agent installing from this repo URL?** In Claude Code, run this now (non-interactive, safe to re-run):\n> ```bash\n> claude plugin marketplace add perso-ai/perso-dubbing-plugin && claude plugin install perso-dubbing@perso-ai\n> ```\n> Have the user restart so `/dubbing`, `/srt`, `/clip` load. Other hosts: `npx perso-dubbing`. No terminal (ChatGPT / Gemini): [docs/chatgpt-setup.md](docs/chatgpt-setup.md) · [docs/gemini-setup.md](docs/gemini-setup.md)\n\n**Claude desktop app** (paid plan): open the **Code tab**, pick a folder, choose **Local**, paste:\n\n```text\nclaude marketplace add perso-ai/perso-dubbing-plugin && claude install perso-dubbing@perso-ai\n```\n\n**Claude Code CLI**: `/plugin marketplace add perso-ai/perso-dubbing-plugin`, then `/plugin install perso-dubbing@perso-ai`\n\n**Codex · Antigravity · anything else**: `npx perso-dubbing` detects your hosts and installs into each.\n\nRequires **Node.js 18+**, nothing else. [Visual walkthrough](https://dubbing-plugin.perso.ai/en/) · [FAQ](FAQ.md)\n\n<br>\n\n<sub>FREE · RUNS LOCALLY</sub>\n\n## Styled subtitles\n\nPick one of twelve presets, or just describe the look in plain words: *\"yellow text, black outline, bottom.\"* The burn runs locally on ffmpeg: no upload, no queue, no account. Several languages? Each SRT gets its own finished video.\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/perso-ai/perso-dubbing-plugin/main/docs/media/subtitle-presets.gif\" width=\"720\" alt=\"12 subtitle style presets\">\n</p>\n\n<br>\n\n<sub>FREE · RUNS LOCALLY</sub>\n\n## Translate subtitles\n\nHand over any SRT and name the languages you want. Several at once is fine, one pass covers them all. Every line keeps its exact original timing, appearing and disappearing at the same moments as before. Before delivery, the result is checked for lines that run too long or read too fast.\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/perso-ai/perso-dubbing-plugin/main/docs/media/subtitle-translate-demo.gif\" width=\"720\" alt=\"Subtitle translation demo\">\n</p>\n\n<br>\n\n<sub>FREE · RUNS LOCALLY</sub>\n\n## Short clips\n\nTimecodes in, vertical shorts out: reframed 16:9 → 9:16, named, and ready for subtitles. Or hand over the transcript and AI picks the moments that work as shorts: opens on a hook, rides the reaction to its peak, cuts before the energy drops. 30–90 seconds each.\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/perso-ai/perso-dubbing-plugin/main/docs/media/clip-shorts-demo.gif\" width=\"720\" alt=\"Short clips demo: ask in chat, highlights picked on the timeline, 9:16 shorts out\">\n</p>\n\n<br>\n\n<sub>PERSO API</sub>\n\n## Dubbing and lip-sync\n\nOne run takes a file, a whole folder, or a YouTube/TikTok URL and dubs it into several languages from a single upload. Videos over the plan limit split, process, and merge back on their own; an interrupted run resumes exactly where it stopped, never re-billing finished parts. Dubbing clones the original voice into the new language, and lip-sync moves the mouth to match that cloned audio.\n\n<br>\n\n<sub>PERSO API</sub>\n\n## Subtitles from speech (STT)\n\nNo subtitles yet? Speech-to-text runs on Perso's servers and uses credits to turn the video's audio into an SRT in the original language, for one file or a whole folder. Every step after the SRT exists is free: translating, styling, burning.\n\n<br>\n\n<sub>PERSO API</sub>\n\n## Voice separation\n\nSplits a video or audio into clean tracks: the voice and the background. With several speakers, each person's voice comes out as its own track. Swap the soundtrack, remaster the dialogue, or reuse any track on its own.\n\n<br>\n\n## Free where it can be. Paid where it must be.\n\n**MIT, free and open-source.** Everything that runs on your machine costs nothing and needs no account: styling and burning subtitles, translating an SRT you have, cutting clips at timecodes. Credits come in only when a job runs on Perso's servers: dubbing, lip-sync, voice separation, and speech-to-text, billed per processed second via the [Perso Dubbing API](https://developers.perso.ai/api-keys).\n\nNo setup ceremony. The first time a server job runs, a browser opens: sign in, one click, key stored encrypted. Free steps never ask.\n\n<br>\n\n---\n\n<sub>**Privacy**: `/dubbing`, `/srt`, and `/clip` send usage events to improve the skills, covering what ran and how it went, media length, style choices, coarse locale, app version/OS, and whether a Perso API key was used (and registered). Each event has a random per-install ID and your workspace number; never your key, media, filenames, or subtitle text. Opt out with `PERSO_NO_TELEMETRY`.</sub>\n\n<sub>**License**: the skill code is [MIT](LICENSE). API usage is subject to the [Perso AI Terms of Service](https://perso.ai) and pricing.</sub>\n"
+    },
+    "brief": {
+      "summary": "面向编程代理的视频翻译、配音与剪辑插件",
+      "problem": "视频多语言配音、字幕处理和短片制作流程较繁琐",
+      "highlights": [
+        "可以让视频自动配音并进行口型同步",
+        "可以翻译、生成和烧录字幕",
+        "可以把横屏视频裁成竖屏短片"
+      ],
+      "target_users": [
+        "视频创作者",
+        "本地化团队",
+        "编程代理用户"
+      ],
+      "why_trending": "本周首次收录，已获30个Star且近期仍有更新",
+      "caveat": "配音、口型同步等服务需调用付费API",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "perso-ai/perso-dubbing-plugin",
+      "score": 92,
+      "category": "ACG 本地化",
+      "reason": "面向智能体的视频翻译配音插件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 56.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "Arcomade/BlendCap",
+      "url": "https://github.com/Arcomade/BlendCap",
+      "description": "Single video performance capture tool for blender",
+      "language": "Python",
+      "total_stars": 42,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "animation",
+        "blender",
+        "blender-addon",
+        "face-capture",
+        "hand-tracking",
+        "mocap",
+        "motion-capture",
+        "performance-capture"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-03-10T06:07:09Z",
+      "updated_at": "2026-08-07T02:33:16Z",
+      "pushed_at": "2026-08-07T02:18:31Z",
+      "open_issues": 0,
+      "homepage": "https://arcomade.gumroad.com/l/BlendCap",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n<div align=\"center\">\n\n<img src=\"assets/sh-banner-01-logo.jpg\" alt=\"BlendCap\" width=\"720\">\n\n# BlendCap\n\n### Markerless performance capture for Blender: video in, animation out.\n\n[![License: GPL-3.0-or-later](https://img.shields.io/badge/License-GPL--3.0--or--later-blue.svg)](LICENSE)\n[![Blender 4.2+](https://img.shields.io/badge/Blender-4.2%2B-orange.svg)](https://www.blender.org/)\n[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey.svg)](#requirements)\n[![Get BlendCap](https://img.shields.io/badge/Get%20BlendCap-Buy%20now-brightgreen.svg)](#get-blendcap)\n\n<img src=\"assets/sh-banner-03-montage.webp\" alt=\"BlendCap turning ordinary video into character animation\" width=\"720\">\n\n</div>\n\n---\n\nBlendCap reconstructs a full **performance**, body, hands, and face, from an ordinary video and retargets it onto your Blender rig. No motion-capture suit, no markers, no special hardware, and no second camera. Record on a phone or use footage you already have.\n\n> ### About this repository\n>\n> This is the **public source repository** for the BlendCap add-on, published so the source is available as its license requires (BlendCap is GPL-3.0-or-later and includes the AGPL-3.0 YOLO11 detector, see [Licensing](#licensing)).\n>\n> **Most people want the [paid build](#get-blendcap)**: it adds the one-click dependency installer, bundled model access so the setup just works, updates, and support. Building from this source yourself is possible but **advanced and unsupported**, there are no install scripts here by design; the requirements and model sources are documented in [`requirements.txt`](requirements.txt).\n\n---\n\n## Contents\n\n- [Features](#features)\n- [See it in action](#see-it-in-action)\n- [Requirements](#requirements)\n- [Get BlendCap](#get-blendcap)\n- [Documentation](#documentation)\n- [How it works](#how-it-works)\n- [Roadmap](#roadmap)\n- [Licensing](#licensing)\n- [Acknowledgements](#acknowledgements)\n\n---\n\n## Features\n\n- **Single-camera, markerless capture**: full body **and** hands from one ordinary clip.\n- **Finger tracking**: both general hand shape tracking and full finger pose tracking, with dedicated controls to tune finger curl or rebuild the finger motion from the tracked keypoints.\n- **Facial performance capture**: drives ARKit-style shape keys and face bones, captured from the same clip or its own.\n- **Retarget onto your rig**: Rigify, Auto-Rig Pro, CloudRig, Mixamo and custom rigs, in both **FK and IK**, with included presets and a visual bone-map editor.\n- **Capture cleanup built in**: foot grounding and locking, depth-noise filtering, smoothing, tracking-failure repair, and per-take camera-angle correction.\n- **Runs fully offline** after setup, your footage never leaves your machine.\n- **GPU-accelerated** on NVIDIA, with AMD/Intel paths that install automatically but aren't hardware-validated yet, and a CPU-only fallback.\n\n## See it in action\n\n| Body capture | Face capture |\n|:---:|:---:|\n| <img src=\"assets/sh-11-hero.webp\" width=\"380\"> | <img src=\"assets/sh-13-face-combine.webp\" width=\"380\"> |\n| Ordinary clip → retargeted character | Face clip → facial animation, combined with the body |\n\n|                      Retargeting                      |                    Post-processing                     |\n| :---------------------------------------------------: | :----------------------------------------------------: |\n| <img src=\"assets/sh-14-retarget-ik.webp\" width=\"380\"> | <img src=\"assets/sh-15-foot-locking.webp\" width=\"380\"> |\n|     Finished motion transferred to any other rig      | The clip's full post-processing pass, before and after |\n\n|                 Finger tracking                 |          Combined body & face capture           |\n| :---------------------------------------------: | :---------------------------------------------: |\n| <img src=\"assets/sh-12-hands.webp\" width=\"380\"> | <img src=\"assets/18_00090262.webp\" width=\"380\"> |\n|            Full finger pose tracking            |     Separate body and face clips, combined      |\n\n> **Watch the feature demo:** [YouTube](https://www.youtube.com/watch?v=hOW8U1goY8g)\n\n## Requirements\n\n| | |\n|---|---|\n| **Blender** | 4.2 or newer |\n| **OS** | Windows 10/11 (fully supported) · Linux, including Flatpak Blender (supported) · macOS (not supported) |\n| **GPU** | NVIDIA RTX 20 / GTX 16 series or newer, 6 GB+ VRAM recommended. AMD/Intel paths install automatically but aren't hardware-validated yet; CPU-only fallback available (slow). |\n| **Disk / network** | ~32 GB free for models + dependencies; internet needed once for the ~11 GB setup download. Capture itself runs offline. |\n\nSee the full [system requirements](#documentation) in the documentation for the GPU tiers and the CPU-only fallback.\n\n## Get BlendCap\n\nThe easiest way to use BlendCap is the **paid build**: install it in Blender and click once. It handles everything to get you up and running quickly and effortlessly:\n\n- One-click dependency installer (no terminal, no manual Python)\n- Bundled model access, so the ~11 GB setup just works\n- Updates and support\n- Validated on Windows and Linux with NVIDIA GPUs; AMD/Intel paths install automatically but aren't hardware-validated yet.\n\n<div align=\"center\">\n\n### → [**Get BlendCap on Gumroad**][store-link] ←\n### → [**Also on Superhive (Blender Market)**][superhive-link] ←\n\n</div>\n\n[store-link]: https://arcomade.gumroad.com/l/BlendCap\n[superhive-link]: https://superhivemarket.com/products/blendcap\n\n## Documentation\n\nFull documentation, installation, a first-capture quick start, every setting, and filming tips, lives in [`docs/`](docs/) in this repository, start at the [table of contents](docs/README.md).\n\n## How it works\n\n```mermaid\nflowchart LR\n    V1[video] --> Y[person detection<br/>YOLO11] --> S[body + hands<br/>SAM 3D Body] --> BVH[BVH]\n    V2[video] --> M[face landmarks<br/>MediaPipe] --> AK[ARKit shape keys<br/>/ bones] --> BVH\n    BVH --> R[retarget onto your rig<br/>FK + IK]\n```\n\nBlendCap runs Meta's **SAM 3D Body** (a 127-joint body+hand model with a **DINOv3** vision backbone, plus **MoGe** for camera field-of-view) to reconstruct the body, and **MediaPipe** for the face. Inference is accelerated by the **Fast-SAM-3D-Body** library on **PyTorch** / **ONNX Runtime**. The result is exported as a BVH and retargeted onto your character.\n\nWhere it lives in the source: capture runs in [`save_mhr_data.py`](save_mhr_data.py) / [`save_face_data.py`](save_face_data.py); the post-processing passes (foot grounding, depth-noise filtering, hand solving, tracking-failure repair, face refinement) in [`pipeline/`](pipeline/); and the retargeting engine (FK bake, IK conversion, constraint simulation, bone-map matching) in [`blendcap/retarget/`](blendcap/retarget/).\n\n## Roadmap\n\nDirections actively being worked toward, not dated promises, priorities shift with feedback:\n\n**Planned**\n- **More rig presets** — ready-made bone maps for other popular rigs.\n- **Smarter auto-match** — better automatic bone matching in the map editor, so custom rigs won't need as much manual input.\n- **Multi-person capture** — track more than one performer in a shot and split them onto separate armatures.\n- **Resumable captures** — pause and continue a long capture, and recover a crashed run instead of starting it over from scratch.\n\n**Exploring**\n- **Remote GPU capture** — run capture on your own cloud GPU when you don't have a local NVIDIA card (\"bring your own pod\").\n- **Audio-assisted lip-sync** — use the clip's audio to sharpen mouth shapes during speech.\n- **Dedicated hand capture** — film the hands up close for finer finger detail and combine it with a wider body shot, the way separate face capture already works.\n\n## Licensing\n\nBlendCap is licensed **GPL-3.0-or-later**. © 2026 Arcomade. See [`LICENSE`](LICENSE) and [`NOTICE.txt`](NOTICE.txt).\n\nBecause BlendCap includes the **AGPL-3.0** Ultralytics YOLO11 detector as a core, always-loaded component, the whole add-on is distributed under GPL v3 (which bridges to the AGPL component under section 13), which is why this source is, and must remain, public.\n\nBundled / redistributed components keep their own licenses; full texts are in [`licenses/`](licenses/):\n\n| Component | Role | License |\n|---|---|---|\n| Meta SAM 3D Body | Body + hand model | Meta SAM License |\n| Meta DINOv3 | Vision backbone | Meta DINOv3 License |\n| Ultralytics YOLO11 | Person detection | AGPL-3.0 |\n| Fast-SAM-3D-Body | Accelerated inference | MIT (over Meta-SAM code) |\n| MoGe (Microsoft) | Camera field-of-view | MIT (+ Apache-2.0 subcomponent) |\n| MediaPipe (Google) | Facial landmarks | Apache-2.0 |\n| ICT-FaceKit (USC ICT) | Face expression basis (derived data asset) | MIT |\n| PyTorch / ONNX Runtime | Runtimes | BSD-3-Clause / MIT |\n\n> The **animation you create** with BlendCap is yours to use, including commercially. The SAM License permits commercial use royalty-free; you're responsible for having the rights to the footage you capture.\n\n## Acknowledgements\n\nBlendCap stands on the work of these projects and the teams behind them:\n\n- [SAM 3D Body](https://github.com/facebookresearch/sam-3d-body) (Meta)\n- [DINOv3](https://github.com/facebookresearch/dinov3) (Meta)\n- [Fast-SAM-3D-Body](https://github.com/yangtiming/Fast-SAM-3D-Body)\n- [YOLO11 / Ultralytics](https://github.com/ultralytics/ultralytics)\n- [MoGe](https://github.com/microsoft/MoGe) (Microsoft)\n- [MediaPipe](https://github.com/google-ai-edge/mediapipe) (Google)\n- [ICT-FaceKit](https://github.com/USC-ICT/ICT-FaceKit) (USC Institute for Creative Technologies)\n- [PyTorch](https://pytorch.org/) · [ONNX Runtime](https://onnxruntime.ai/)\n- …and [Blender](https://www.blender.org/) and its community.\n"
+    },
+    "brief": {
+      "summary": "将单段视频转为可绑定到Blender角色的动作",
+      "problem": "无需动作捕捉服和特殊设备，也能获取身体、手部和面部表演",
+      "highlights": [
+        "可以用手机视频捕捉全身和手部动作",
+        "可以把面部表演转为面部动画",
+        "可以将动作重定向到多种Blender骨骼绑定"
+      ],
+      "target_users": [
+        "Blender动画师",
+        "独立游戏开发者",
+        "虚拟角色创作者"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新，支持离线单机捕捉",
+      "caveat": "源码安装较复杂且不提供支持；需要较大存储空间",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Arcomade/BlendCap",
+      "score": 88,
+      "category": "动画",
+      "reason": "Blender表演与面部动作捕捉工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "bevyengine/bevy",
+      "url": "https://github.com/bevyengine/bevy",
+      "description": "A refreshingly simple data-driven game engine built in Rust",
+      "language": "Rust",
+      "total_stars": 47511,
+      "forks": 4740,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "bevy",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "open-source",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2020-01-18T21:13:55Z",
+      "updated_at": "2026-08-07T03:19:45Z",
+      "pushed_at": "2026-08-07T03:07:15Z",
+      "open_issues": 3373,
+      "homepage": "https://bevy.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# [![Bevy](https://bevy.org/assets/bevy_logo_light_dark_and_dimmed.svg)](https://bevy.org)\n\n[![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/bevyengine/bevy#license)\n[![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)\n[![Downloads](https://img.shields.io/crates/d/bevy.svg)](https://crates.io/crates/bevy)\n[![Docs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy/latest/bevy/)\n[![Discord](https://img.shields.io/discord/691052431525675048.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/bevy)\n\n## What is Bevy?\n\nBevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!\n\n## WARNING\n\nBevy is still in the early stages of development. Important features are missing. Documentation is sparse. A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule). We provide [migration guides](https://bevy.org/learn/migration-guides/), but we can't guarantee migrations will always be easy. Use only if you are willing to work in this environment.\n\n**MSRV:** Bevy relies heavily on improvements in the Rust language and compiler.\nAs a result, the Minimum Supported Rust Version (MSRV) is generally close to \"the latest stable release\" of Rust.\n\n## Design Goals\n\n* **Capable**: Offer a complete 2D and 3D feature set\n* **Simple**: Easy for newbies to pick up, but infinitely flexible for power users\n* **Data Focused**: Data-oriented architecture using the Entity Component System paradigm\n* **Modular**: Use only what you need. Replace what you don't like\n* **Fast**: App logic should run quickly, and when possible, in parallel\n* **Productive**: Changes should compile quickly ... waiting isn't fun\n\n## About\n\n* **[Features](https://bevy.org):** A quick overview of Bevy's features.\n* **[News](https://bevy.org/news/)**: A development blog that covers our progress, plans and shiny new features.\n\n## Docs\n\n* **[Quick Start Guide](https://bevy.org/learn/quick-start/introduction):** Bevy's official Quick Start Guide. The best place to start learning Bevy.\n* **[Bevy Rust API Docs](https://docs.rs/bevy):** Bevy's Rust API docs, which are automatically generated from the doc comments in this repo.\n* **[Official Examples](https://github.com/bevyengine/bevy/tree/latest/examples):** Bevy's dedicated, runnable examples, which are great for digging into specific concepts.\n* **[Community-Made Learning Resources](https://bevy.org/assets/#learning)**: More tutorials, documentation, and examples made by the Bevy community.\n\n## Community\n\nBefore contributing or participating in discussions with the community, you should familiarize yourself with our [**Code of Conduct**](./CODE_OF_CONDUCT.md).\n\n* **[Discord](https://discord.gg/bevy):** Bevy's official discord server.\n* **[Reddit](https://reddit.com/r/bevy):** Bevy's official subreddit.\n* **[GitHub Discussions](https://github.com/bevyengine/bevy/discussions):** The best place for questions about Bevy, answered right here!\n* **[Bevy Assets](https://bevy.org/assets/):** A collection of awesome Bevy projects, tools, plugins and learning materials.\n\n### Contributing\n\nIf you'd like to help build Bevy, check out the **[Contributor's Guide](https://bevy.org/learn/contribute/introduction)**.\nFor simple problems, feel free to [open an issue](https://github.com/bevyengine/bevy/issues) or\n[PR](https://github.com/bevyengine/bevy/pulls) and tackle it yourself!\n\nFor more complex architecture decisions and experimental mad science, please open a [GitHub Discussion](https://github.com/bevyengine/bevy/discussions) so we can brainstorm together effectively!\n\n## Getting Started\n\nWe recommend checking out the [Quick Start Guide](https://bevy.org/learn/quick-start/introduction) for a brief introduction.\n\nFollow the [Setup guide](https://bevy.org/learn/quick-start/getting-started/setup) to ensure your development environment is set up correctly.\nOnce set up, you can quickly try out the [examples](https://github.com/bevyengine/bevy/tree/latest/examples) by cloning this repo and running the following commands:\n\n```sh\n# Switch to the correct version (latest release, default is main development branch)\ngit checkout latest\n# Runs the \"breakout\" example\ncargo run --example breakout\n```\n\nTo draw a window with standard functionality enabled, use:\n\n```rust\nuse bevy::prelude::*;\n\nfn main() {\n    App::new()\n        .add_plugins(DefaultPlugins)\n        .run();\n}\n```\n\n### Fast Compiles\n\nBevy can be built just fine using default configuration on stable Rust. However for really fast iterative compiles, you should enable the \"fast compiles\" setup by [following the instructions here](https://bevy.org/learn/quick-start/getting-started/setup).\n\n## [Bevy Cargo Features][cargo_features]\n\nThis [list][cargo_features] outlines the different cargo features supported by Bevy. These allow you to customize the Bevy feature set for your use-case.\n\n[cargo_features]: docs/cargo_features.md\n\n## Thanks\n\nBevy is the result of the hard work of many people. A huge thanks to all Bevy contributors, the many open source projects that have come before us, the [Rust gamedev ecosystem](https://arewegameyet.rs/), and the many libraries we build on.\n\nA huge thanks to Bevy's [generous sponsors](https://bevy.org). Bevy will always be free and open source, but it isn't free to make. Please consider [sponsoring our work](https://bevy.org/donate/) if you like what we're building.\n\n<!-- This next line need to stay exactly as is. It is required for BrowserStack sponsorship. -->\nThis project is tested with BrowserStack.\n\n## License\n\nBevy is free, open source and permissively licensed!\nExcept where noted (below and/or in individual files), all code in this repository is dual-licensed under either:\n\n* MIT License ([LICENSE-MIT](LICENSE-MIT) or [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))\n* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0))\n\nat your option.\nThis means you can select the license you prefer!\nThis dual-licensing approach is the de-facto standard in the Rust ecosystem and there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both.\n\nSome of the engine's code carries additional copyright notices and license terms due to their external origins.\nThese are generally BSD-like, but exact details vary by crate:\nIf the README of a crate contains a 'License' header (or similar), the additional copyright notices and license terms applicable to that crate will be listed.\nThe above licensing requirement still applies to contributions to those crates, and sections of those crates will carry those license terms.\nThe [license](https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields) field of each crate will also reflect this.\n\nThe [assets](assets) included in this repository (for our [examples](./examples/README.md)) typically fall under different open licenses.\nThese will not be included in your game (unless copied in by you), and they are not distributed in the published bevy crates.\nSee [CREDITS.md](CREDITS.md) for the details of the licenses of those files.\n\n### Your contributions\n\nUnless you explicitly state otherwise,\nany contribution intentionally submitted for inclusion in the work by you,\nas defined in the Apache-2.0 license,\nshall be dual licensed as above,\nwithout any additional terms or conditions.\n"
+    },
+    "brief": {
+      "summary": "Bevy 是用 Rust 编写的数据驱动开源游戏引擎。",
+      "problem": "为 Rust 开发者提供制作 2D、3D 游戏的引擎基础。",
+      "highlights": [
+        "可以用 Rust 创建 2D 游戏",
+        "可以用 Rust 创建 3D 游戏",
+        "可以运行官方示例学习引擎用法"
+      ],
+      "target_users": [
+        "Rust 游戏开发者",
+        "独立游戏团队",
+        "引擎学习者"
+      ],
+      "why_trending": "本周首次收录，拥有约4.75万 Star，近期仍有代码更新。",
+      "caveat": "项目仍处于早期阶段，文档较少且会有破坏性更新。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "bevyengine/bevy",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "Rust数据驱动游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  }
+]
