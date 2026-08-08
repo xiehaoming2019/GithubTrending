@@ -1,0 +1,531 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 208902,
+      "forks": 18033,
+      "stars_today": 2152,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2152
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-08-08T02:24:46Z",
+      "pushed_at": "2026-08-07T15:50:46Z",
+      "open_issues": 306,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship — you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one — installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take — make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap — see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent — including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis — who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)** — Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)** — Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)** — Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)** — Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)** — Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)** — Turn the current conversation into a spec and publish it to the issue tracker. No interview — just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)** — Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges — written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)** — Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)** — Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker — resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to answer a design question — a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bug"
+    },
+    "brief": {
+      "summary": "面向软件工程代理的可组合技能集合",
+      "problem": "帮助编码代理减少需求偏差、冗余表达和代码缺陷",
+      "highlights": [
+        "可以用提问流程明确开发需求",
+        "可以用TDD技能引导测试驱动开发",
+        "可以用调试技能分阶段定位问题"
+      ],
+      "target_users": [
+        "AI辅助开发者",
+        "软件工程团队",
+        "编码代理使用者"
+      ],
+      "why_trending": "今日新增2152个Star，项目连续上榜",
+      "caveat": "Codex原生插件仍在路线图中，资料未说明完成时间",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的 Agent 工程技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "PrimeIntellect-ai/prime-agent",
+      "url": "https://github.com/PrimeIntellect-ai/prime-agent",
+      "description": "A self-improving RLM agent for coding workflows and long-running autonomous tasks.",
+      "language": "TypeScript",
+      "total_stars": 6675,
+      "forks": 532,
+      "stars_today": 2293,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2293
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-05-08T01:42:41Z",
+      "updated_at": "2026-08-08T02:24:05Z",
+      "pushed_at": "2026-08-08T00:27:52Z",
+      "open_issues": 252,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://primeintellect.ai\">\n    <picture>\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/40c36e38-c5bd-4c5a-9cb3-f7b902cd155d\">\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/6414bc9b-126b-41ca-9307-9e982430cde8\">\n      <img alt=\"Prime Intellect\" src=\"https://github.com/user-attachments/assets/6414bc9b-126b-41ca-9307-9e982430cde8\" width=\"312\" style=\"max-width: 100%;\">\n    </picture>\n  </a>\n</p>\n\n<h3 align=\"center\">\nPrime Agent: A Self-Improving RLM Agent\n</h3>\n\n<p align=\"center\">\n  <a href=\"packages/coding-agent/docs/index.md\">Documentation</a> &bull;\n  <a href=\"https://github.com/PrimeIntellect-ai/verifiers\">Verifiers</a> &bull;\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-rl\">PRIME-RL</a> &bull;\n  <a href=\"https://github.com/badlogic/pi-mono\">pi-mono</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/ci.yml\">\n    <img src=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/ci.yml/badge.svg\" alt=\"CI\" />\n  </a>\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/build-binaries.yml\">\n    <img src=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/build-binaries.yml/badge.svg\" alt=\"Build Binaries\" />\n  </a>\n</p>\n\nPrime Agent is an open-source coding and research agent for general and long-running work. It is designed around two core abstractions:\n\n- The **[Recursive Language Model (RLM)](https://www.primeintellect.ai/blog/rlm)** treats context as variables (*prompt-as-a-variable*) and tools like recursive subagents as function calls (*programmatic tool /sub-agent calling*) inside a persistent REPL.\n- The **[Continual Harness](https://arxiv.org/abs/2605.09998)** stores supplemental prompts, memories, skill descriptions, and reusable subagent specifications as durable state that Prime Agent can refine through small, evidence-backed updates, local to the session by default.\n\nPrime Agent combines a persistent Python control environment with durable harness state, so useful working context and reusable operating patterns can outlive a single chat window.\n\n- **Everything is programmatic:** persistent IPython is the built-in model tool; file operations, shell commands, tool use, subagents, and context management happen through code.\n- **Subagents are built in:** `rlm(...)` spawns real child agents for parallel or background work and returns their results programmatically.\n- **The harness can improve:** `/refine` reviews the current trajectory and can apply small, evidence-backed updates to supplemental harness state. It never rewrites the immutable base system prompt, and recorded snapshots support rollback.\n- **Skills are executable:** skills are importable Python packages, and the built-in skill creator can turn recurring workflows into project or personal skills.\n- **Sessions run in the background:** daemon-backed agents keep running when the terminal disconnects and can be reattached later.\n- **Agents communicate directly:** running agents can exchange messages and orchestrate one another without routing everything through the user.\n- **Long tasks keep moving:** automatic compaction, persistent goals, heartbeats, schedules, autonomous mode, and retained subagents preserve progress across turns and terminal sessions.\n\n## Getting Started\n\nInstall the latest stable release on macOS or Linux:\n\n```bash\ncurl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh\n```\n\nThe installer downloads a versioned release, verifies its SHA-256 checksum, installs the `prime-agent` command, and can prepare the IPython runtime used by the agent.\n\nStart Prime Agent from the repository or directory you want it to work in:\n\n```bash\ncd /path/to/project\nprime-agent\n```\n\nOn first launch, run `/login` to choose a subscription or API-key provider. Prime Agent works in the current directory and can run commands and modify files there. Use a disposable clone, clean worktree, or another checkpoint you can inspect and restore.\n\n> [!WARNING]\n> Prime Agent executes model-generated Python and project commands with your user permissions. Its worker and kernel processes improve lifecycle isolation and recovery; they are **not** a security sandbox. Review changes and use trusted repositories, instructions, skills, and extensions only. Run untrusted code or instructions in an external sandbox or restricted environment.\n\nUseful commands:\n\n```bash\nprime-agent agents                   # Browse running, idle, and saved sessions\nprime-agent attach <agent>           # Reattach to a running session\nprime-agent --resume <path|id>       # Resume a saved session\nprime-agent status                   # Inspect background service state\nprime-agent doctor [--fix]           # Inspect or repair background services\nprime-agent update [--force]         # Update Prime Agent\nprime-agent shutdown [--force]       # Stop every agent, worker, and background service\n```\n\n## Built for Long-Running Work\nPrime Agent is built for long-running work, especially for evaluations in research. These features are available in the TUI, and when run autonomously. \n\n- **Continual Harness:** `/refine` can persist focused, reviewable lessons as supplemental prompts, memories, reusable skill descriptions, or subagent specifications, with recorded refinement history. It does not replace packaging and reviewing new executable skills.\n- **Direct agent-to-agent communication:** running agents and retained subagents can discover one another, exchange messages, and steer active work.\n- **Daemon-backed continuity:** active sessions, IPython state, schedules, and subagents keep running when the terminal detaches and can be reattached later.\n- **Heartbeats and schedules:** `/heartbeat`, `rlm_heartbeat`, and `prime-agent schedule` can re-enter a session periodically or at a specific time.\n- **Persistent goals:** `/goal` keeps an objective and its progress active across turns until it is completed, paused, or cleared.\n- **Bounded autonomous mode:** `/autonomous` continues within configured turn, token, and time budgets and can run user-defined quality gates. A passed gate checks only what that gate verifies; reaching a limit does not imply task success.\n\n## Documentation\n\n- [Quickstart](packages/coding-agent/docs/quickstart.md) — install, authenticate, and run a first session\n- [Usage and CLI reference](packages/coding-agent/docs/usage.md) — commands, sessions, autonomous limits, and output modes\n- [Long-running and background agents](packages/coding-agent/docs/long-running-agents.md) — detach and reattach, goals, heartbeats, and schedules\n- [RLM programming model](packages/coding-agent/docs/rlm.md) — persistent IPython, subagents, skills, and the trust model\n- [JSON mode](packages/coding-agent/docs/json.md) and [RPC mode](packages/coding-agent/docs/rpc.md) — headless automation and integrations\n- [Skills](packages/coding-agent/docs/skills.md) — install and create reusable capabilities\n- [Provider setup](packages/coding-agent/docs/providers.md) — subscription and API-key providers\n- [Architecture overview](packages/coding-agent/docs/architecture.md) — daemon, worker, kernel, and persistence boundaries\n- [Development](packages/coding-agent/docs/development.md) — build and run from source\n\n## Acknowledgements\n\nOur agent and TUI is built on top of [`pi`](https://github.com/earendil-works/pi). We thank the authors of `pi` for their valuable work.\n\n## License\n\nPrime Agent is fully open source and released under the [MIT License](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "面向编码与长期任务的可持续改进开源智能体",
+      "problem": "解决智能体难以持续运行、保留上下文和协作的问题",
+      "highlights": [
+        "可以让智能体在后台持续执行编码任务",
+        "可以通过子智能体并行处理研究工作",
+        "可以保存目标、记忆和可复用技能"
+      ],
+      "target_users": [
+        "开发者",
+        "AI Agent 研究者",
+        "自动化运维人员"
+      ],
+      "why_trending": "今日新增2293 Star，总Star达6675，首次收录即受关注",
+      "caveat": "会以用户权限执行代码，不是安全沙箱",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "PrimeIntellect-ai/prime-agent",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "面向长期自主编码与研究任务",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 68.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "google/skills",
+      "url": "https://github.com/google/skills",
+      "description": "Agent Skills for Google products and technologies",
+      "language": "Python",
+      "total_stars": 16277,
+      "forks": 1291,
+      "stars_today": 327,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 327
+    },
+    "details": {
+      "topics": [
+        "google",
+        "googlecloud",
+        "skills"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-31T19:02:20Z",
+      "updated_at": "2026-08-08T02:24:55Z",
+      "pushed_at": "2026-08-07T22:50:54Z",
+      "open_issues": 32,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Agent Skills\n\n[![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-green)](https://skills.sh/google/skills)\n\nThis repository contains [Agent Skills](https://agentskills.io/home) for Google\nproducts and technologies, including [Google Cloud](https://cloud.google.com).\n\n> [!NOTE]\n> This repository is under active development.\n\n## Installation\n\n```bash\nnpx skills add google/skills\n```\n\nFrom the `npx install` command, you can select the specific skills from this\nrepo to install.\n\n## Available Skills\n\n<!-- BEGIN SKILLS -->\n- **Getting started with Google Cloud**\n  - [**Authenticating to Google Cloud**](./skills/cloud/google-cloud-recipe-auth)\n  - [**Google Cloud Recipe: Foundation Builder**](./skills/cloud/google-cloud-recipe-foundation-builder)\n  - [**Onboarding to Google Cloud**](./skills/cloud/google-cloud-recipe-onboarding)\n- **Multi-product solution skills**\n  - [**Google Cloud solution-architecture workflow**](./skills/cloud/google-cloud-solution-architecture)\n  - [**Agentic analytics across cloud providers and data types**](./skills/cloud/google-cloud-solution-agentic-analytics-spark-knowledge-catalog)\n  - [**Borderless open data lakehouse agentic AI system**](./skills/cloud/google-cloud-solution-agentic-ai-borderless-data-lakehouse)\n  - [**Build and deploy AI agents on Google Cloud**](./skills/cloud/google-cloud-solution-build-deploy-agents)\n  - [**Data science workflow with AI agents solution**](./skills/cloud/google-cloud-solution-agentic-ai-data-science-workflow)\n  - [**Live bidirectional multimodal streaming agentic AI solution**](./skills/cloud/google-cloud-solution-agentic-ai-bidirectional-streaming)\n  - [**Migrate AI Workloads to GKE Inference**](./skills/cloud/google-cloud-solution-guided-gke-ai-migration)\n  - [**RAG for enterprise search using GKE and AlloyDB**](./skills/cloud/google-cloud-solution-rag-enterprise-search-gke-sqldb)\n  - [**Secure n-tier serverless web application with strict private application tiers**](./skills/cloud/google-cloud-solution-n-tier-serverless-web-app)\n- **AI/ML**\n  - [**Agent Platform Alert Configuration**](./skills/cloud/agent-platform-alert-configuration)\n  - [**Agent Platform Endpoint Management**](./skills/cloud/agent-platform-endpoint-management)\n  - [**Agent Platform Eval Flywheel Skill**](./skills/cloud/agent-platform-eval-flywheel)\n  - [**Agent Platform GenAI Inference Skill**](./skills/cloud/agent-platform-inference)\n  - [**Agent Platform Model Garden Deploy Skill**](./skills/cloud/agent-platform-deploy)\n  - [**Agent Platform Model Registry Management**](./skills/cloud/agent-platform-model-registry)\n  - [**Agent Platform Model Tuning**](./skills/cloud/agent-platform-tuning)\n  - [**Agent Platform Prompt Management**](./skills/cloud/agent-platform-prompt-management)\n  - [**Agent Platform RAG Engine Management**](./skills/cloud/agent-platform-rag-engine-management)\n  - [**Agent Platform Troubleshooting**](./skills/cloud/agent-platform-troubleshooting)\n  - [**Agent Platform Tuning Management**](./skills/cloud/agent-platform-tuning-management)\n  - [**BigQuery AI & ML**](./skills/cloud/bigquery-ai-ml)\n  - [**Gemini API in Agent Platform**](./skills/cloud/gemini-api)\n  - [**Gemini Enterprise Agent Platform - Managed Agents API Skill**](./skills/cloud/gemini-agents-api)\n  - [**Gemini Interactions API Skill**](./skills/cloud/gemini-interactions-api)\n  - [**LiveAPI Service Skill**](./skills/cloud/gemini-live-api)\n  - [**Migrating from Gemini API in AI Studio to Agent Platform**](./skills/cloud/agent-platform-migrate-from-ai-studio)\n  - [**Skill Registry**](./skills/cloud/agent-platform-skill-registry)\n- **Infrastructure**\n  - [**GKE AI/ML Inference**](./skills/cloud/gke-inference)\n  - [**GKE App Onboarding**](./skills/cloud/gke-app-onboarding)\n  - [**GKE Backup & Disaster Recovery**](./skills/cloud/gke-backup-dr)\n  - [**GKE Basics & Critical Gotchas**](./skills/cloud/gke-basics)\n  - [**GKE Batch & HPC Workloads**](./skills/cloud/gke-batch-hpc)\n  - [**GKE Cluster Autoscaler**](./skills/cloud/gke-cluster-autoscaler)\n  - [**GKE Cluster Creation**](./skills/cloud/gke-cluster-creation)\n  - [**GKE ComputeClasses**](./skills/cloud/gke-compute-classes)\n  - [**GKE Golden Path Configuration**](./skills/cloud/gke-golden-path)\n  - [**GKE JobSet Interruption Troubleshooting**](./skills/cloud/gke-ai-troubleshooting-jobset-interruption)\n  - [**GKE Manifest Generation Skill**](./skills/cloud/gke-manifest-generation)\n  - [**GKE Multi-Tenancy**](./skills/cloud/gke-multitenancy)\n  - [**GKE Networking**](./skills/cloud/gke-networking)\n  - [**GKE Productionize Skill**](./skills/cloud/gke-productionize)\n  - [**GKE Reliability**](./skills/cloud/gke-reliability)\n  - [**GKE Service Networking Skill**](./skills/cloud/gke-service-networking)\n  - [**GKE Storage**](./skills/cloud/gke-storage)\n  - [**GKE TPU Dynamic Slices Monitoring & Management**](./skills/cloud/gke-tpu-dynamic-slices-monitoring)\n  - [**GKE Upgrades & Maintenance**](./skills/cloud/gke-upgrades)\n  - [**GKE Workload Scaling**](./skills/cloud/gke-workload-scaling)\n  - [**GKE Workload Troubleshooting Skill**](./skills/cloud/gke-workload-troubleshooting)\n  - [**Google Cloud global external Application Load Balancer Configuration Skill**](./skills/cloud/google-cloud-global-frontend-configuration)\n  - [**Google Cloud Networking Observability Expert**](./skills/cloud/google-cloud-networking-observability)\n  - [**Google Cloud Storage Basics**](./skills/cloud/google-cloud-storage-basics)\n- **Databases and analytics**\n  - [**AlloyDB Basics**](./skills/cloud/alloydb-basics)\n  - [**BigFrames (BigQuery DataFrame) basics**](./skills/cloud/bigquery-bigframes)\n  - [**BigQuery Asset Impact Analysis**](./skills/cloud/datalineage-bigquery-asset-impact-analysis)\n  - [**BigQuery Basics**](./skills/cloud/bigquery-basics)\n  - [**Bigtable Basics**](./skills/cloud/bigtable-basics)\n  - [**Cloud SQL Basics**](./skills/cloud/cloud-sql-basics)\n  - [**Data Lineage Summary**](./skills/cloud/datalineage-summary)\n  - [**Managed Service for Apache Airflow (formerly Cloud Composer) Migration Guide**](./skills/cloud/managed-airflow-migrations)\n  - [**Spanner Basics**](./skills/cloud/spanner-basics)\n- **Developer tools**\n  - [**Developer Device Platform**](./skills/cloud/developer-device-platform-basics)\n  - [**gcloud CLI Skill for AI Agents**](./skills/cloud/gcloud)\n  - [**Google Agents CLI Onboarding**](./skills/cloud/google-agents-cli-onboarding)\n- **Management tools**\n  - [**Cloud Monitoring Chart Generation Skill (`cloud-monitoring-chart-generation`)**](./skills/cloud/cloud-monitoring-chart-generation)\n  - [**Configuring Cloud Logging**](./skills/cloud/cloud-logging-configuration-basics)\n  - [**Configuring Cross-Project Logging**](./skills/cloud/cloud-logging-cross-project-configuration)\n  - [**Generate Logging Query Language queries**](./skills/cloud/cloud-logging-query-generation)\n  - [**GKE Cost Analysis**](./skills/cloud/gke-cost-analysis)\n  - [**GKE Cost Optimization**](./skills/cloud/gke-cost-optimization)\n  - [**GKE Observability**](./skills/cloud/gke-observability)\n  - [**GKE TPU Metrics Monitoring Guide**](./skills/cloud/gke-tpu-metrics-monitoring)\n  - [**Handle Disruption on GPUs and TPUs Troubleshooting**](./skills/cloud/gke-ai-troubleshooting-handle-disruption-gpu-tpu)\n  - [**Metric Selection (Service Query & Local Keyword Filtering)**](./skills/cloud/cloud-monitoring-metric-selection)\n  - [**SLO Alert Configuration Setup Wizard**](./skills/cloud/google-cloud-slo-alert-configuration)\n  - [**TPU Connection Failure and VBAR OOM Troubleshooting**](./skills/cloud/gke-ai-troubleshooting-tpu-vbar-oom)\n  - [**Workload Manager Basics**](./skills/cloud/workload-manager-basics)\n- **Well-Architected Framework**\n  - [**Google Cloud Well-Architected Framework skill for the Cost Optimization pillar**](./skills/cloud/google-cloud-waf-cost-optimization)\n  - [**Google Cloud Well-Architected Framework skill for the Operational Excellence pillar**](./skills/cloud/google-cloud-waf-operational-excellence)\n  - [**Google Cloud Well-Architected Framework skill for the Performance Optimization pillar**](./skills/cloud/google-cloud-waf-performance-optimization)\n  - [**Google Cloud Well-Architected Framework skill for the Reliability pillar**](./skills/cloud/google-cloud-waf-reliability)\n  - [**Google Cloud Well-Architected Framework skill for the Security pillar**](./skills/cloud/google-cloud-waf-security)\n  - [**Google Cloud Well-Architected Framework skill for the Sustainability pillar**](./skills/cloud/google-cloud-waf-sustainability)\n- **Security and identity**\n  - [**GKE Platform Security**](./skills/cloud/gke-platform-security)\n  - [**GKE Workload Security**](./skills/cloud/gke-workload-security)\n  - [**SecOps Detection Coverage Skill**](./skills/cloud/detection-engineering-coverage-evaluation)\n- **Web and app hosting**\n  - [**Cloud Run Basics**](./skills/cloud/cloud-run-basics)\n  - [**Firebase Basics**](./skills/cloud/firebase-basics)\n- **Advertising**\n  - [**AI Migration Agent Instructions for the Google Mobile Ads SDK**](./skills/ads/google-mobile-ads-android-migrate-to-next-gen)\n  - [**Data Manager API Audience Ingestion**](./skills/ads/data-manager-api-audience-ingestion)\n  - [**Data Manager API Event Ingestion**](./skills/ads/data-manager-api-event-ingestion)\n  - [**Data Manager API Setup**](./skills/ads/data-manager-api-setup)\n  - [**Google Ads API Account Performance Diagnostics Skill**](./skills/ads/google-ads-api-account-diagnostics)\n  - [**Google Ads API MCP Server Installation**](./skills/ads/google-ads-api-mcp-setup)\n  - [**Google Ads API Quickstart**](./skills/ads/google-ads-api-quickstart)\n  - [**Google Mobile Ads SDK - Banner Ads**](./skills/ads/google-mobile-ads-banner)\n  - [**Google Mobile Ads SDK - Install**](./skills/ads/google-mobile-ads-get-started)\n  - [**Google Mobile Ads SDK - Interstitial Ads**](./skills/ads/google-mobile-ads-interstitial)\n  - [**Google Mobile Ads SDK - Rewarded Ads**](./skills/ads/google-mobile-ads-rewarded)\n  - [**IMA SDK basics**](./skills/ads/ima-sdk-basics)\n- **Others**\n  - [**Getting Started with Google Analytics Admin API**](./skills/analytics/google-analytics-admin-api-basics)\n  - [**Getting Started with Google Analytics Data API**](./skills/analytics/google-analytics-data-api-basics)\n<!-- END SKILLS -->\n\n## Additional Google skills\n\n-   [**Flutter Skills**](https://github.com/flutter/skills)\n-   [**Dart Skills**](https://github.com/dart-lang/skills)\n-   [**Advanced Google Cloud Storage Skills**](https://github.com/gemini-cli-extensions/google-cloud-storage)\n-   [**Agent Development Kit (ADK) Skills**](https://github.com/google/agents-cli)\n-   [**Firestore Skills**](https://github.com/firebase/agent-skills/tree/main/skills/firebase-firestore)\n-   [**Genkit Skills**](https://github.com/genkit-ai/skills)\n\n## Plugins\n\nThis repo also bundles Google product plugins (Skills + MCP servers) for agent harnesses.\n\n| Agent harness | Install |\n| :--- | :--- |\n| **Claude Code** | `claude plugin marketplace add google/skills`, then `claude plugin install <plugin>@google-plugins` |\n| **Codex** | `codex plugin marketplace add google/skills`, then install from the `/plugins` browser |\n| **Antigravity CLI** | `agy plugin install https://github.com/google/skills/<plugin-path>` |\n\n## Support\n\nIf you need help or encounter issues with these skills, search for existing\nissues or open a new one in the\n[GitHub Issue Tracker](https://github.com/google/skills/issues).\n\n## Contributing\n\nWe welcome contributions to improve our skills. You can help by:\n\n*   [Reporting bugs or inaccuracies](https://github.com/google/skills/issues) in\n    the skill Markdown files.\n*   Suggesting new skills to add to this repository (for example, Google\n    technologies or recipes) by filing a feature request.\n\n## License\n\nYou are free to copy, modify, and distribute these skills under the terms of the\nApache 2.0 license. See the `LICENSE` file for details.\n"
+    },
+    "brief": {
+      "summary": "面向 Google 产品与云技术的 Agent Skills 集合",
+      "problem": "帮助智能体处理 Google Cloud 与相关产品任务",
+      "highlights": [
+        "可以安装 Google Cloud 入门与认证技能",
+        "可以辅助构建和部署 AI Agent",
+        "可以管理 GKE、BigQuery 与监控任务"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "Google Cloud 用户",
+        "云平台运维人员"
+      ],
+      "why_trending": "今日新增 327 Star，总 Star 16277，且本周首次收录",
+      "caveat": "项目仍在积极开发，具体适用范围需逐项确认",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "google/skills",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "面向 Google 产品的 Agent Skills",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 60.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 39968,
+      "forks": 3803,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 454
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-08-08T02:20:33Z",
+      "pushed_at": "2026-08-08T02:25:17Z",
+      "open_issues": 202,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes --full-depth\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas a non-interactive `skills add` without `--skill` installs all 19.\n>\n> `--full-depth` does a full clone of the repo's current `main`. Without it, `skills add` fetches the skills.sh registry blob, which lags `main` by hours — you'd get an older copy of a skill. (`hyperframes skills update` already installs full-depth.)\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 19 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes --full-depth`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 19. Use `npx skills add heygen-com/hyperframes --all --full-depth` to install all 19 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name> --full-depth` for just one (bare name, no leading `/`). Keep `--full-depth` — it installs the current `main`; without it `skills add` fetches the skills.sh blob, which lags by hours.\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                           |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                   |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                    |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                      |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                       |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local file or paste-ready block + ledger record, generate via TTS/music/image models when the catalog misses, transcribe, caption, remove backgrounds, and reuse assets across projects. One shared audio engine + manifest tracking. |\n| `/hyperframes-cli`       | CLI dev loop — `init`, `lint`, `check`, `snapshot`, `preview`, `render`, `publish`, `doctor`, plus HeyGen-hosted cloud rendering (`cloud render`) and AWS Lambda rendering (`lambda deploy / render / progress`).                                                                                                                                |\n| `/hyperframes-registry`  | Install and wire registry blocks and components into compositions via `hyperframes add`. A"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和媒体生成确定性 MP4 视频",
+      "problem": "视频制作常需在代码、动画和渲染工具间反复切换",
+      "highlights": [
+        "可以让 AI 代理按提示创建视频",
+        "可以制作产品介绍和知识讲解视频",
+        "可以为视频添加字幕、图表和动效"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "视频开发者",
+        "内容创作者"
+      ],
+      "why_trending": "总 Star 近4万，近期持续活跃，且面向 AI 代理制作视频",
+      "caveat": "需要 Node.js 22 或更高版本",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "为 Agent 提供视频渲染与动画",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 68.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "Volumetenrectify/ae-motion-compiler",
+      "url": "https://github.com/Volumetenrectify/ae-motion-compiler",
+      "description": "Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.",
+      "language": "HTML",
+      "total_stars": 108,
+      "forks": 49,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "abobe",
+        "ae",
+        "after",
+        "after-effects",
+        "animation",
+        "effects",
+        "motion-graphics",
+        "video-editing"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-09T19:22:00Z",
+      "updated_at": "2026-08-08T01:49:52Z",
+      "pushed_at": "2026-08-08T01:49:48Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎬 ae-motion-compiler\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 🚀 Motion Graphics Automation Framework for After Effects\n\nae-motion-compiler is an advanced scripting framework that automates repetitive animation tasks in After Effects. Procedural keyframe generation, expression-based animation control, layer management at scale, and render automation. Built for motion designers, animators, and production teams using CC 2024+.\n\nAccelerate motion graphics production through intelligent automation.\n\n## 📦 Latest\n\n**Version**: 2.4.2 (CC 2024+)\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 📖 Index\n- [Details](#🎯-details)\n- [System](#💻-system)\n- [Setup](#📦-setup)\n- [Config](#⚙️-config)\n- [Animation](#🎨-animation)\n- [Tools](#✨-tools)\n- [Support](#🔌-support)\n- [Plans](#🗺️-plans)\n- [Contribute](#🤝-contribute)\n- [Security](#🛡️-security)\n- [Help](#🔧-help)\n- [Legal](#📄-legal)\n- [Info](#⚠️-info)\n\n## 🎯 Details\n\nae-motion-compiler streamlines motion graphics workflows through procedural animation. Define animation patterns once, apply across hundreds of layers. Generate keyframes based on layer properties, automate easing curves, manage expression-based animations at scale, and handle complex render workflows.\n\nIncludes keyframe generators, expression builders, layer organizers, and batch automation tools.\n\n```mermaid\ngraph TD\n    A[Animation Template] --> B[Expression Engine]\n    B --> C[Pattern Recognition]\n    C --> D[Keyframe Generation]\n    D --> E[Layer Application]\n    E --> F[Easing Control]\n    F --> G[Preview]\n    G --> H[Batch Render]\n    H --> I[Output]\n    \n    style A fill:#fff3e0\n    style B fill:#e3f2fd\n    style D fill:#f3e5f5\n    style H fill:#e8f5e9\n    style I fill:#fce4ec\n```\n\n## 💻 System\n\n| Component | Min | Recommended |\n|-----------|-----|-------------|\n| **OS** | ![Windows](https://img.shields.io/badge/Windows-10-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-10.15-000000?style=flat) | ![Windows](https://img.shields.io/badge/Windows-11-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-12-000000?style=flat) |\n| **After Effects** | CC 2024 | CC 2026 current |\n| **Memory** | 8 GB | 16 GB+ |\n| **Storage** | 800 MB | 2.5 GB SSD |\n| **CPU** | 4-core | 8-core+ |\n\n## 📦 Setup\n\nInstalls:\n1. Compatibility check\n2. Script deployment\n3. Expression templates\n4. Configuration\n\n### Manual\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run build\nnpm run install:ae\n```\n\n### First Use\n\n1. Open After Effects\n2. **File → Scripts → ae-motion-compiler**\n3. Main panel opens\n4. Load project template\n\n## ⚙️ Config\n\n### Preferences\n\nSet in script settings:\n\n```yaml\ncore:\n  version: \"2.4\"\n  auto_update: true\n  undo_groups: true\n\nkeyframes:\n  default_easing: \"ease-in-out\"\n  keyframe_spacing: \"uniform\"\n  auto_bezier: true\n  preserve_velocity: true\n\nexpressions:\n  validation: true\n  error_reporting: true\n  performance_mode: \"balanced\"\n  syntax_highlight: true\n\nlayers:\n  batch_limit: 500\n  hierarchy_preserve: true\n  naming_convention: \"kebab-case\"\n  auto_organize: true\n\nrender:\n  queue_management: true\n  output_format: \"mp4\"\n  render_settings: \"high-quality\"\n  monitor_progress: true\n\nexport:\n  include_metadata: true\n  preserve_structure: true\n  backup_source: true\n```\n\n### Templates\n\n- **slide** — Sliding text animations\n- **scale** — Growth/shrink sequences\n- **rotate** — Rotation patterns\n- **color** — Color transition animations\n- **morph** — Shape morphing\n- **stagger** — Cascading effects\n- **bounce** — Physics-based motion\n- **wave** — Wave propagation\n\n## 🎨 Animation\n\n### Keyframe Generation\n\n```javascript\n// Generate keyframes\nanimationEngine.generateKeyframes({\n  layer: \"Title\",\n  property: \"position\",\n  startValue: [0, 0],\n  endValue: [1920, 1080],\n  duration: 3000,\n  easing: \"ease-in-out\"\n});\n```\n\n### Expression Control\n\n```javascript\n// Build expression\nexpressionBuilder.create({\n  type: \"wiggle\",\n  frequency: 2,\n  amplitude: 10,\n  apply_to: \"rotation\"\n});\n```\n\n### Batch Animation\n\n```javascript\n// Apply to multiple layers\nbatchAnimator.apply({\n  layers: [\"all\"],\n  template: \"slide\",\n  offset: 100,\n  duration: 2000,\n  stagger: true\n});\n```\n\n## ✨ Tools\n\n| Tool | Purpose | Use |\n|------|---------|-----|\n| **Keyframe Generator** | Procedural keyframes | Automated timing |\n| **Expression Builder** | Expression creation | Dynamic properties |\n| **Layer Manager** | Organization | Batch operations |\n| **Easing Curve Editor** | Curve control | Animation feel |\n| **Renderer Manager** | Render automation | Batch output |\n| **Timeline Organizer** | Timeline control | Comp structure |\n| **Effect Applier** | Effect automation | Consistent effects |\n| **Preview Player** | Quick preview | Real-time check |\n\n## 🔌 Support\n\n| Feature | Status | Details |\n|---------|--------|---------|\n| **Script-based Animation** | ✅ Full | Procedural keyframes |\n| **Expression Generation** | ✅ Full | Custom expressions |\n| **Batch Processing** | ✅ Full | Multi-layer ops |\n| **Render Automation** | ✅ Full | Queue management |\n| **Effect Presets** | 🟡 Beta | Effect application |\n| **Plugin Integration** | 🟡 Beta | Third-party tools |\n| **Cloud Sync** | 🔶 Alpha | Project backup |\n| **Remote Control** | 🔶 Alpha | API access |\n\n**Status**: ✅ Ready · 🟡 In Progress · 🔶 Development\n\n## 🗺️ Plans\n\n### Q1 2026: Performance\n- Faster keyframe generation\n- Optimized expression parsing\n- Reduced memory usage\n- Better GPU support\n\n### Q2 2026: Features\n- Advanced motion paths\n- Physics engine integration\n- Procedural rigging\n- Puppet pin automation\n\n### Q3 2026: Intelligence\n- Smart ease suggestions\n- Auto-timing optimization\n- Motion prediction\n- Keyframe interpolation\n\n### Q4 2026: Integration\n- Plugin marketplace\n- Effect library\n- Workflow templates\n- Team collaboration\n\n## 🤝 Contribute\n\nHelp develop ae-motion-compiler:\n\n1. **Report Issues** — Bug reports and edge cases\n2. **Suggest Features** — Animation ideas welcome\n3. **Share Templates** — Animation patterns\n4. **Write Docs** — Usage guides\n5. **Test Beta** — Early access program\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run dev\nnpm test\n```\n\n## 🛡️ Security\n\n### Data Protection\n- Local processing only\n- No cloud uploads\n- Project backups preserved\n- Encrypted settings\n\n### System Safety\n- Safe script execution\n- Memory management\n- Error recovery\n- Automatic cleanup\n\n### Stability\n- Crash prevention\n- Undo capability\n- Version control\n- Safe rollback\n\n## 🔧 Help\n\n### Issues\n\n| Problem | Solution |\n|---------|----------|\n| **Script won't load** | Check After Effects version |\n| **Keyframes not generating** | Verify layer selection |\n| **Expression error** | Check syntax in builder |\n| **Slow performance** | Reduce batch size |\n| **Memory error** | Close other applications |\n\n### Support\n\n- **Docs**: GitHub Wiki tutorials\n- **Discord**: Community support\n- **Issues**: Bug tracker\n- **Email**: support@motion-compiler.dev\n\n## 📄 License\n\nMIT License - [LICENSE](LICENSE) file.\n\n**Copyright © 2026 Motion Compiler Contributors**\n\n## ⚠️ Info\n\nIndependent project, not affiliated with Adobe Inc. After Effects trademark belongs to Adobe.\n\n### Key Points\n\n1. **License** — Valid After Effects CC 2024+ required\n2. **Terms** — Follow Adobe guidelines\n3. **Backups** — Keep project files safe\n4. **Testing** — Test animations before output\n5. **Performance** — Monitor system resources\n6. **Updates** — Stay current with versions\n7. **Expertise** — Animation skills still essential\n\n### Disclaimer\n\nScript-generated animations require human review and refinement. Quality depends on template design and parameter settings. Professional judgment remains essential for production work. This tool accelerates workflow, not replaces animation expertise.\n\n---\n\n## 🎬 Automate Your Motion Graphics\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n**Accelerate animation production.** Download ae-motion-compiler and streamline your workflow.\n\n*\"Automate repetition. Enhance creativity. Faster production.\"*\n"
+    },
+    "brief": {
+      "summary": "面向After Effects的动效自动化脚本框架",
+      "problem": "减少重复动效制作、图层管理和批量渲染工作",
+      "highlights": [
+        "可以批量生成图层关键帧和缓动效果",
+        "可以用表达式控制复杂动画",
+        "可以自动管理图层并批量渲染"
+      ],
+      "target_users": [
+        "动效设计师",
+        "动画师",
+        "后期制作团队"
+      ],
+      "why_trending": "本周首次收录，已有108个Star和49个Fork，近期仍有更新",
+      "caveat": "需After Effects CC 2024+；许可证信息存在不一致",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Volumetenrectify/ae-motion-compiler",
+      "score": 92,
+      "category": "动画",
+      "reason": "After Effects 动效与渲染自动化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 58.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "KyaniteLabs/kinocut",
+      "url": "https://github.com/KyaniteLabs/kinocut",
+      "description": "Guardrailed video editing MCP server for AI agents. FFmpeg, Hyperframes, repurposing tools, Python client, and CLI. Local, fast, free.",
+      "language": "Python",
+      "total_stars": 101,
+      "forks": 24,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-tools",
+        "ai-agents",
+        "ai-video",
+        "claude",
+        "claude-code",
+        "cli",
+        "cursor",
+        "ffmpeg",
+        "hyperframes",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "media-automation",
+        "model-context-protocol",
+        "python",
+        "python-library",
+        "subtitles",
+        "video",
+        "video-automation",
+        "video-editing"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-21T01:27:25Z",
+      "updated_at": "2026-08-08T02:23:44Z",
+      "pushed_at": "2026-08-08T02:26:04Z",
+      "open_issues": 0,
+      "homepage": "https://kinocut.dev/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <a href=\"https://kyanitelabs.tech\">\n    <img src=\"assets/kinocut-hero.webp\" alt=\"Kinocut - guardrailed video editing for AI agents\" width=\"100%\">\n  </a>\n</p>\n\n<!-- mcp-name: io.github.KyaniteLabs/kinocut -->\n\n<h1 align=\"center\">Kinocut</h1>\n\n<p align=\"center\">\n  <strong>Guardrailed video editing MCP server for AI agents.</strong><br>\n  Local-first FFmpeg tools, Video Receipts, quality gates, Hyperframes, and Shorts/Reels repurposing —\n  for Claude Code, Cursor, and any MCP client. Free, Apache-2.0. Formerly mcp-video.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://pypi.org/project/kinocut/\"><img src=\"https://img.shields.io/pypi/v/kinocut.svg\" alt=\"PyPI\"></a>\n  <a href=\"https://kinocut.dev/\"><img src=\"https://img.shields.io/badge/site-kinocut.dev-0A0A0A\" alt=\"kinocut.dev\"></a>\n  <a href=\"https://git.kyanitelabs.tech/KyaniteLabs/kinocut/actions\"><img src=\"https://img.shields.io/badge/Forgejo%20CI-actions-blue\" alt=\"CI\"></a>\n  <img src=\"https://img.shields.io/badge/MCP-194%20tools-orange.svg\" alt=\"194 MCP tools on development tip\">\n  <img src=\"https://img.shields.io/badge/CLI-165%20commands-orange.svg\" alt=\"165 CLI commands on development tip\">\n  <img src=\"https://img.shields.io/badge/python-3.11%2B-blue.svg\" alt=\"Python 3.11+\">\n  <img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"Apache 2.0\">\n</p>\n\n<p align=\"center\">\n  <a href=\"#see-it-work\">Demo</a> &bull;\n  <a href=\"#status-and-releases\">Status</a> &bull;\n  <a href=\"#whats-in-1131-latest-release\">1.13.1</a> &bull;\n  <a href=\"#changelog\">Changelog</a> &bull;\n  <a href=\"#beyond-1130-draft--gated\">Beyond</a> &bull;\n  <a href=\"#installation\">Install</a> &bull;\n  <a href=\"#quick-start\">Quick Start</a> &bull;\n  <a href=\"#mcp-tools\">Tools</a> &bull;\n  <a href=\"docs/TOOLS.md\">Tool Reference</a> &bull;\n  <a href=\"docs/RESCUE.md\">Rescue</a> &bull;\n  <a href=\"docs/AI_VIDEO_REVIEW_AND_SALVAGE.md\">AI-video</a> &bull;\n  <a href=\"#agent-skill\">Agent Skill</a> &bull;\n  <a href=\"https://kinocut.dev/\">kinocut.dev</a> &bull;\n  <a href=\"#what-is-kinocut\">What is Kinocut?</a> &bull;\n  <a href=\"#faq\">FAQ</a> &bull;\n  <a href=\"llms.txt\">llms.txt</a>\n</p>\n\n> Kinocut is a free, open-source **video editing MCP server** and **AI agent** workflow engine (plus Python client and `kino` CLI) that lets AI agents trim, caption, repurpose, and quality-gate local video media with typed tools and Video Receipts — not invented FFmpeg flags.\n\n## Table of contents\n\n- [What is Kinocut?](#what-is-kinocut)\n- [See It Work](#see-it-work)\n- [Installation](#installation)\n- [Quick Start](#quick-start)\n- [MCP Tools](#mcp-tools)\n- [Status and releases](#status-and-releases)\n- [Changelog](#changelog)\n- [FAQ](#faq)\n- [Agent Skill](#agent-skill)\n\n---\n\n## What is Kinocut?\n\n**TL;DR:** Kinocut is a free, local-first **video editing MCP server** (plus Python client and `kino` CLI) so AI agents can trim, caption, repurpose, and quality-gate media with typed tools and **Video Receipts** — not invented FFmpeg flags.\n\n**Kinocut** is a free, open-source **[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server**, Python library, and **`kino` CLI** that gives AI agents a **guardrailed local video-editing surface**. It wraps **FFmpeg** (and optional Hyperframes / Whisper extras) with typed tools, preflight validation, **Video Receipt** provenance, and quality/release checkpoints so agent-produced media can be inspected before publish.\n\n| | |\n| --- | --- |\n| **Also known as** | `kino` (CLI); formerly **mcp-video** / `mcp_video` |\n| **Latest published release** | **[1.13.1](https://github.com/KyaniteLabs/kinocut/releases/tag/v1.13.1)** (2026-08-07) |\n| **Product site** | [kinocut.dev](https://kinocut.dev/) |\n| **PyPI** | [`kinocut`](https://pypi.org/project/kinocut/) |\n| **MCP Registry** | [`io.github.KyaniteLabs/kinocut`](https://registry.modelcontextprotocol.io/v0/servers/io.github.KyaniteLabs%2Fkinocut/versions/latest) |\n| **Source** | [GitHub](https://github.com/KyaniteLabs/kinocut) (public collab) · [Forgejo](https://git.kyanitelabs.tech/KyaniteLabs/kinocut) (**canonical source**) |\n| **License** | Apache-2.0 |\n| **Runs on** | Your machine (macOS, Linux, Windows) — FFmpeg required on `PATH` |\n| **Not** | A hosted cloud editor, credit-metered SaaS, or untyped FFmpeg shell wrapper |\n\n**Best-fit searches:** video editing MCP server · AI agent video editing · FFmpeg MCP · Claude Code video tools · Cursor MCP video · Shorts/Reels automation · local AI video workflow · guardrailed agentic media.\n\nMachine-readable brief for AI crawlers: [`llms.txt`](llms.txt) · site: [kinocut.dev/llms.txt](https://kinocut.dev/llms.txt).\n\n## See It Work\n\nTell the agent what you want in plain language:\n\n*\"Trim this interview to the strongest 45 seconds, add burned captions, make it vertical, and quality-check it before export.\"*\n\nKinocut turns that into typed, guardrailed tool calls - no FFmpeg flags to guess, no silently broken exports:\n\n```python\nfrom kinocut import Client\nvideo = Client()\n\nclip = video.trim(\"interview.mp4\", start=\"00:02:15\", duration=\"00:00:45\")\nvideo.ai_transcribe(clip.output_path, output_srt=\"captions.srt\")\ncaptioned = video.subtitles(clip.output_path, subtitle_file=\"captions.srt\")\nshort = video.resize(captioned.output_path, aspect_ratio=\"9:16\")\nvideo.release_checkpoint(short.output_path)  # thumbnail + quality gate before you publish\n```\n\n**Primary job:** turn a local interview or podcast into **captioned vertical clips with a Video Receipt** agents can re-run and humans can approve.\n\n**Three things people use it for**\n\n- **Repurposing** — one recording into captioned Shorts, Reels, and TikTok packages with manifests and review artifacts.\n- **Podcast & interview cuts** — find the strongest segment, normalize audio, add chapters, and export.\n- **Agent-driven media in CI** — repeatable, reviewable edits from Claude Code, Cursor, Codex-style clients, or scripts.\n\n**Paths:** [Install matrix](docs/INSTALL.md) · [Golden path](docs/GOLDEN_PATH.md) · [Prompts](docs/PROMPTS.md) · [Tutorial](docs/TUTORIAL_PODCAST_TO_SHORTS.md) · [Compare](docs/COMPARE.md) · [When to recommend](docs/RECOMMEND.md)\n\n## Status and releases\n\n| Surface | Version / tip | What it means |\n| --- | --- | --- |\n| **PyPI / npm / GitHub Release** | **[1.13.1](https://github.com/KyaniteLabs/kinocut/releases/tag/v1.13.1)** (2026-08-07) | Latest **published** Kinocut. Install with `pip install kinocut`. |\n| **This repository (`master`)** | **1.13.1** · **194 MCP tools / 165 CLI commands** | Intent/watching/TE + still/plate surface matches published package. |\n| **Next public release** | **TBD** | Post-release pillars and human programs remain gated; further bumps need a new go-ahead. |\n\nInstall from PyPI when you want the stable package. Clone or install from `master` only when you intentionally need unreleased surfaces.\n\n## What's in 1.13.1 (latest release)\n\nKinocut **1.13.1** is what you get from `pip install kinocut` today. It introduces the intent/watching/TE multiplier surface on top of still/plate (1.12) and the 1.11.x identity line:\n\n- **Intent-verb surface** — Semantic intent routing via `video_intent` / `intent` tools supporting ~10 verbs to dry-run plans without silent media mutations.\n- **Watching guardrail floor** — Validation and quality checkpoints (`video_review_run`, `video_review_decide`) performing metric QC (blackdetect/LUFS) and narrative first-15s inspection.\n- **B-roll proposals** — `video_propose_broll` / `propose-broll` for human-reviewable, non-silent B-roll insertion.\n- **Caption translation** — ES-first captions translation (`video_translate_captions`) and a language coverage honesty matrix.\n- **Trusted execution (TE) QoL & tooling** — QoL additions including `init`, `estimate`, `brand-kit`, `cutfile-validate`, `publish-validate`, hook-candidates, and plans for audiograms, punch-zoom, and seek-frame.\n- **Still/plate editor** — `still-match` / `still-grade` / `still-gate` / `image-edit` / `still-package` (MCP + CLI + Client), with receipts and fail-closed cohesion gate ([docs/STILL_PLATES.md](docs/STILL_PLATES.md)).\n- **Canonical counts** — Grow public surface to **194 MCP tools** and **165 CLI commands** (fully synchronized across standard, test, and client interfaces).\n- **Project, docs, package metadata, and discovery surfaces** pointed at **[kinocut.dev](https://kinocut.dev/)**.\n- **Compatibility window** — `mcp-video==1.6.5` installs `kinocut==1.13.1`; `mcp_video` imports, `MCP_VIDEO_*` env vars, `~/.mcp-video` data, `mcp-video://` resources, and legacy receipt keys remain supported **on the 1.13.x line**.\n\nAlso already on the published line from earlier 1.x surfaces:\n\n- Agent **workflow engine** (`video_workflow_*` / `workflow-*`) with plan, render, resume, variants, and hashed receipts\n- Dedicated **video rescue** plan/render/inspect pipeline ([docs/RESCUE.md](docs/RESCUE.md))\n- **Post-rescue planning** tools (semantic timelines, EDLs, transforms, restoration, composition, autopilot, egress contracts)\n- **Layered compositing** with full-canvas blend modes, rotation/pivot, and `layer_plan` v2 receipts\n- Expanded preflight guardrails for filters, merge, audio, overlay/chroma, text, and layout mismatches\n\nFull notes: [CHANGELOG.md](CHANGELOG.md) · [v1.13.1 release](https://github.com/KyaniteLabs/kinocut/releases/tag/v1.13.1)\n\n## Beyond 1.13.1 (draft / gated)\n\n**1.13.1 is the latest published release.** Live directory submissions, launch posts, and first-10 real-user runs remain operator/human residual (`docs/HUMAN_GATES.md`) and are **not** claimed complete.\n\n### Staged and Gated Surfaces\n\nWhile the core FFmpeg editing, workflow engine, still/plate editing, AI-video review/salvage, and sound capabilities are fully integrated and published in **1.13.1**, the following surfaces remain gated, partial, or unreleased:\n\n- **Desktop MCPB Packaging:** The staged desktop package (`mcpb/`) is a staged configuration and is **not** a published self-contained native runtime yet (pending FFmpeg provenance, licensing, and clean-machine gates). See [docs/MCPB.md](docs/MCPB.md).\n- **Sonic World Audio (`kinocut_sound`):** While the S1–S12 capabilities are integrated on the published line, the remaining slices are blocked or gated:\n  - **S13 (Host Joins / bindings):** Blocked — external owner receipts incomplete.\n  - **S14 (Dual-class Benchmark):** Partial — x86 available, Apple Silicon host unavailable.\n  - **S15 (Adversarial Gate):** Gated under a release STOP — requires S13 receipts, dual-class benchmarks, and explicit human authorization.\n- **Trusted Execution Kernel:** The protected-timeline trusted execution kernel is post-program/gated and does not execute without the named upstream contract and human gating ([docs/plans/2026-07-09-kinocut-trusted-execution-layer.md](docs/plans/2026-07-09-kinocut-trusted-execution-layer.md)).\n- **Paid Generative / Dubbing Plans:** Generative spend-capped plans and TTS dubbing remain non-executable draft definitions until external backends and credentials are configured.\n\nProduct checklist: [ROADMAP.md](ROADMAP.md).\n\n## Agent Workflow Engine\n\nAgents can **plan, validate, render, recover, and prove** a multi-step local video job from\na single JSON job-spec — through MCP (`video_workflow_*`), the CLI (`workflow-*`), or the\nPython client (`Client.workflow_*`) — with receipts strong enough for another agent or a\nhuman to trust before *and* after a render. Ops are a small allowlist\n(`probe | trim | resize | convert | merge | add_text | composite_layers`) mapped 1:1 to the same vetted engine\nfunctions the individual tools use; media references are symbolic and workspace-confined;\neverything fails closed.\n\n```json\n{\n  \"schema_version\": 1,\n  \"name\": \"captioned-vertical-short\",\n  \"sources\": { \"hero\": { \"path\": \"input/hero.mp4\" } },\n  \"steps\": [\n    { \"id\": \"trim-hero\", \"op\": \"trim\", \"inputs\": { \"src\": \"@sources.hero\" },\n      \"params\": { \"start\": 0, \"duration\": 6 }, \"output\": \"@work/hero_trim.mp4\" },\n    { \"id\": \"vertical\", \"o"
+    },
+    "brief": {
+      "summary": "面向 AI Agent 的本地视频剪辑 MCP 服务",
+      "problem": "让 AI 更安全、可复查地完成视频剪辑和短片再利用",
+      "highlights": [
+        "可以把访谈剪成带字幕的竖屏短片",
+        "可以将播客片段改造成 Shorts、Reels",
+        "可以在发布前检查质量并留存视频凭证"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "视频创作者",
+        "播客与访谈团队"
+      ],
+      "why_trending": "本周首次收录且近期有更新；总 Star 101，今日新增为 0",
+      "caveat": "需本机安装 FFmpeg；资料未说明更多兼容限制",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "KyaniteLabs/kinocut",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "面向 Agent 的视频剪辑 MCP 服务",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "esengine/estella",
+      "url": "https://github.com/esengine/estella",
+      "description": "A fast 2D game engine — TypeScript SDK, C++/WebAssembly core, visual editor. Ship one project to web, desktop, WeChat MiniGames, playable ads, and native Android / iOS.",
+      "language": "TypeScript",
+      "total_stars": 426,
+      "forks": 45,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "android",
+        "cpp",
+        "ecs",
+        "game-editor",
+        "game-engine",
+        "gamedev",
+        "ios",
+        "typescript",
+        "webassembly",
+        "webgl",
+        "webgpu",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-25T07:34:59Z",
+      "updated_at": "2026-08-08T02:19:31Z",
+      "pushed_at": "2026-08-08T02:19:27Z",
+      "open_issues": 0,
+      "homepage": "https://estellaengine.com/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<img src=\".github/logo.png\" width=\"120\" alt=\"Estella logo\" />\n\n# Estella\n\n**A fast 2D game engine powered by WebAssembly and ECS**\n\n[![CI](https://github.com/esengine/estella/actions/workflows/build.yml/badge.svg)](https://github.com/esengine/estella/actions/workflows/build.yml)\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/esengine/estella)](https://github.com/esengine/estella/releases)\n[![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)\n[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop%20%7C%20WeChat%20%7C%20Android%20%7C%20iOS-green.svg)]()\n[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/esengine/estella)\n\n[Website](https://estellaengine.com) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Discord](https://discord.gg/sAX6PXZ9) • [QQ群: 481923584](https://qm.qq.com/q/BONa5LXQ0U)\n\n</div>\n\n---\n\n## What is Estella?\n\nEstella is a **2D game engine** with a TypeScript SDK driven by a high-performance **C++/WebAssembly** backend. It ships with a visual editor for scene editing and project management, and outputs games that run in **web browsers**, on the **desktop**, in **WeChat MiniGames**, as single-file **playable ads**, and as native **Android / iOS** apps.\n\n<div align=\"center\">\n  <img src=\"docs/assets/editor-hero-c5bfd2f3.png\" alt=\"An action-RPG scene open in the Estella editor\" width=\"900\" />\n  <br/>\n  <sub><i>Celestial Heights — an action-RPG scene in the Estella editor, with the full scene graph in the outliner.</i></sub>\n</div>\n\n## Why Estella?\n\n- **Fast** — C++ rendering pipeline compiled to WebAssembly, not interpreted JS\n- **Type-safe** — First-class TypeScript SDK with `defineSystem`, `defineComponent`, and `Query`\n- **Data-oriented** — Entity-Component-System architecture for scalable game logic\n- **Visual editor** — Scene hierarchy, inspector, asset browser — no JSON editing\n- **Cross-platform** — One codebase, deploy to web, desktop, WeChat MiniGames, playable ads, and native mobile\n- **Spine & Physics** — Built-in Spine animation and physics support\n\n## Features\n\n| Feature | Description |\n|---------|-------------|\n| **Visual Editor** | Scene editor with hierarchy, inspector, and asset management |\n| **ECS Architecture** | Compose entities from reusable components, drive behavior with systems |\n| **WebGL / WebGPU Rendering** | Sprites, cameras, Spine animations, custom shaders — all in WebAssembly |\n| **TypeScript SDK** | Type-safe API: `defineSystem`, `defineComponent`, `Query`, `Commands` |\n| **Cross-Platform** | One project → web, desktop, WeChat MiniGames, playable ads, and native Android / iOS |\n| **Native mobile** | A real arm64 app rendering through an embedded Dawn (Metal / Vulkan) — not a WebView |\n\n## Getting Started\n\n### Install\n\nDownload the editor for Windows or macOS from [estellaengine.com](https://estellaengine.com/#download)\n— served from the project's mirror, always the newest release. Every build is also on the\n[releases page](https://github.com/esengine/estella/releases).\n\n### Create a Project\n\n1. Open the editor and click **New Project**\n2. Enter a project name, select a location, and click **Create**\n\nThe editor creates a project with a default scene containing a Camera entity.\n\n### Write Game Logic\n\nAdd entities and components in the scene editor, then write systems in TypeScript:\n\n```typescript\nimport {\n    defineComponent, defineSystem, addSystem,\n    Query, Mut, Res, Time, LocalTransform\n} from 'esengine';\n\nconst Speed = defineComponent('Speed', { value: 200 });\n\naddSystem(defineSystem(\n    [Res(Time), Query(Mut(LocalTransform), Speed)],\n    (time, query) => {\n        for (const [entity, transform, speed] of query) {\n            transform.position.x += speed.value * time.delta;\n        }\n    }\n));\n```\n\nPress **F5** in the editor to preview.\n\n## Documentation\n\nFull documentation: [estellaengine.com/docs](https://estellaengine.com/docs)\n\n- [Introduction](https://estellaengine.com/docs/getting-started/introduction/)\n- [Installation](https://estellaengine.com/docs/getting-started/installation/)\n- [Quick Start](https://estellaengine.com/docs/getting-started/quick-start/)\n- [ECS Architecture](https://estellaengine.com/docs/core-concepts/ecs/)\n- [Components](https://estellaengine.com/docs/core-concepts/components/)\n- [Systems](https://estellaengine.com/docs/core-concepts/systems/)\n- [Building & Exporting](https://estellaengine.com/docs/publishing/overview/)\n- [Android & iOS](https://estellaengine.com/docs/publishing/android-ios/)\n\n## Contributing\n\nWe welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.\n\n## License\n\nEstella is licensed under the [Apache License, Version 2.0](LICENSE).\n\nYou may use, modify, and distribute it **for any purpose, including commercial use**,\nfree of charge. There is no separate commercial license and no noncommercial\nrestriction. We follow [Semantic Versioning](VERSIONING.md) and keep a\n[CHANGELOG](CHANGELOG.md).\n\nTwo things to keep in mind:\n\n- **Trademarks.** Apache-2.0 grants rights to the code, not to the \"Estella\" /\n  \"ESEngine\" names or logos. You may state that your project uses Estella, but\n  please don't imply endorsement or ship a fork under the Estella name.\n- **Spine is separate.** The bundled [Spine Runtimes](third_party) are **not** open\n  source. If you ship a game that uses Estella's Spine integration, you need a valid\n  Spine license from Esoteric Software — independent of Estella's Apache-2.0 license.\n  See [NOTICE](NOTICE).\n\nHow the project sustains itself (sponsorship, optional hosted/pro add-ons,\nmarketplace, and support) is described openly in [BUSINESS_MODEL.md](BUSINESS_MODEL.md).\n"
+    },
+    "brief": {
+      "summary": "Estella 是面向多平台发布的 2D 游戏引擎。",
+      "problem": "减少 2D 游戏跨平台开发与发布的重复工作。",
+      "highlights": [
+        "可以用可视化编辑器制作游戏场景",
+        "可以用 TypeScript 编写 ECS 游戏逻辑",
+        "可以发布到网页、桌面和移动端"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "TypeScript 开发者",
+        "小游戏制作团队"
+      ],
+      "why_trending": "本周首次收录，已有 426 个 Star，近期仍在更新。",
+      "caveat": "Spine 运行时不属于开源部分，使用需另行授权。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "esengine/estella",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "跨平台 2D 游戏引擎与编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "hwdsl2/docker-kokoro",
+      "url": "https://github.com/hwdsl2/docker-kokoro",
+      "description": "Docker image to run a self-hosted Kokoro TTS server with an OpenAI-compatible audio speech API. 50+ voices across 9 languages, streaming support, all major audio formats, NVIDIA GPU (CUDA) acceleration, offline mode, and persistent model cache. Multi-arch: amd64, arm64.",
+      "language": "Python",
+      "total_stars": 22,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audio",
+        "cuda",
+        "deep-learning",
+        "docker",
+        "docker-compose",
+        "docker-image",
+        "gpu",
+        "kokoro",
+        "kokoro-tts",
+        "linux",
+        "openai",
+        "openai-compatible",
+        "self-hosted",
+        "speech",
+        "speech-synthesis",
+        "streaming",
+        "text-to-speech",
+        "tts",
+        "voice-synthesis"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-09T13:23:46Z",
+      "updated_at": "2026-08-08T02:21:28Z",
+      "pushed_at": "2026-08-08T02:21:25Z",
+      "open_issues": 0,
+      "homepage": "https://hub.docker.com/r/hwdsl2/kokoro-server",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[English](README.md) | [简体中文](README-zh.md) | [繁體中文](README-zh-Hant.md) | [Русский](README-ru.md)\n\n# Kokoro Text-to-Speech on Docker\n\n[![Build Status](https://github.com/hwdsl2/docker-kokoro/actions/workflows/main.yml/badge.svg)](https://github.com/hwdsl2/docker-kokoro/actions/workflows/main.yml) &nbsp;[![Docker Pulls](https://raw.githubusercontent.com/hwdsl2/badges/main/img/docker-pulls-kokoro-server.svg)](https://hub.docker.com/r/hwdsl2/kokoro-server) &nbsp;[![License: MIT](docs/images/license.svg)](https://opensource.org/licenses/MIT) &nbsp;[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://vpnsetup.net/kokoro-notebook)\n\nPart of the [Self-Hosted AI Stack](https://github.com/hwdsl2/self-hosted-ai-stack) — deploy a complete self-hosted AI stack with a single command.\n\nDocker image to run a [Kokoro](https://github.com/hexgrad/kokoro) text-to-speech server. Provides an OpenAI-compatible audio speech API. Based on Debian (python:3.12-slim). Designed to be simple, private, and self-hosted.\n\n**Features:**\n\n- OpenAI-compatible `POST /v1/audio/speech` endpoint — any app using the OpenAI TTS API switches with a one-line change\n- 54 high-quality voices across 9 languages (English, Japanese, Chinese, Spanish, French, Italian, and more)\n- Accepts OpenAI voice-name aliases (`alloy`, `nova`, `echo`, ...) that map to local Kokoro voices, plus native Kokoro voice IDs (`af_heart`, `bm_george`, ...)\n- Audio stays on your server — no data sent to third parties\n- All major output formats supported: `mp3`, `wav`, `flac`, `opus`, `aac`, `pcm`\n- Streaming support — set `stream_format` to `\"audio\"` or `\"sse\"` to receive audio as each sentence is synthesized, reducing time-to-first-audio\n- NVIDIA GPU (CUDA) acceleration for faster inference (`:cuda` image tag)\n- Offline/air-gapped mode — run without internet access using pre-cached model (`KOKORO_LOCAL_ONLY`)\n- Automatically built and published via [GitHub Actions](https://github.com/hwdsl2/docker-kokoro/actions)\n- Persistent model cache via a Docker volume\n- Multi-arch: `linux/amd64`, `linux/arm64`\n\n**Also available:**\n\n- AI stack: [Self-Hosted AI Stack](https://github.com/hwdsl2/self-hosted-ai-stack)\n- Try it online: [Open in Colab](https://vpnsetup.net/kokoro-notebook) — no Docker or installation required\n- Related AI services: [Whisper](https://github.com/hwdsl2/docker-whisper), [Embeddings](https://github.com/hwdsl2/docker-embeddings), [LiteLLM](https://github.com/hwdsl2/docker-litellm), [Ollama](https://github.com/hwdsl2/docker-ollama), [Docling](https://github.com/hwdsl2/docker-docling), [MCP Gateway](https://github.com/hwdsl2/docker-mcp-gateway)\n- Book: [The Self-Hosted AI Builder’s Guide](https://www.amazon.com/dp/B0HDCKSD6V) — use this service in a complete private AI stack\n\n## Community\n\n- 📬 [Subscribe for project updates](https://selfhostedstack.beehiiv.com/subscribe?utm_campaign=ai) (1–2 emails/month) — get free AI and VPN deployment guides (PDF)\n- 💬 Join the [r/selfhostedstack](https://www.reddit.com/r/selfhostedstack/) community for discussions and showcases\n- ⭐ Star the repository if you find it useful — it helps others discover it\n\n<details>\n<summary>Self-hosted VPN & networking projects</summary>\n\n- [Setup IPsec VPN](https://github.com/hwdsl2/setup-ipsec-vpn)\n- [IPsec VPN on Docker](https://github.com/hwdsl2/docker-ipsec-vpn-server)\n- [WireGuard](https://github.com/hwdsl2/docker-wireguard)\n- [OpenVPN](https://github.com/hwdsl2/docker-openvpn)\n- [Headscale](https://github.com/hwdsl2/docker-headscale)\n\n</details>\n\n## Quick start\n\nUse this command to set up a Kokoro TTS server:\n\n```bash\ndocker run \\\n    --name kokoro \\\n    --restart=always \\\n    -v kokoro-data:/var/lib/kokoro \\\n    -p 8880:8880 \\\n    -d hwdsl2/kokoro-server\n```\n\n<details>\n<summary><strong>GPU quick start (NVIDIA CUDA)</strong></summary>\n\nIf you have an NVIDIA GPU, use the `:cuda` image for hardware-accelerated inference:\n\n```bash\ndocker run \\\n    --name kokoro \\\n    --restart=always \\\n    --gpus=all \\\n    -v kokoro-data:/var/lib/kokoro \\\n    -p 8880:8880 \\\n    -d hwdsl2/kokoro-server:cuda\n```\n\n**Requirements:** NVIDIA GPU, [NVIDIA driver](https://www.nvidia.com/en-us/drivers/) 575.57.08+ (Linux) or 576.57+ (Windows), and the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) installed on the host. The `:cuda` image is `linux/amd64` only.\n\n</details>\n\n**Important:** This image requires at least 1.5 GB of available RAM due to the PyTorch runtime and Kokoro model. Systems with 1 GB or less of total RAM are not supported.\n\n**Note:** For internet-facing deployments, using a [reverse proxy](#using-a-reverse-proxy) to add HTTPS is **strongly recommended**. In that case, also replace `-p 8880:8880` with `-p 127.0.0.1:8880:8880` in the `docker run` command above, to prevent direct access to the unencrypted port.\n\nThe Kokoro model (~320 MB) is downloaded and cached on first start. Check the logs to confirm the server is ready:\n\n```bash\ndocker logs kokoro\n```\n\nOnce you see \"Kokoro text-to-speech server is ready\", synthesize your first audio file:\n\n```bash\ncurl http://your_server_ip:8880/v1/audio/speech \\\n    -H \"Content-Type: application/json\" \\\n    -d '{\"model\":\"tts-1\",\"input\":\"Hello, world!\",\"voice\":\"af_heart\"}' \\\n    --output speech.mp3\n```\n\n## Requirements\n\n- A Linux server (local or cloud) with Docker installed\n- Supported architectures: `amd64` (x86_64), `arm64` (e.g. Raspberry Pi 4/5, AWS Graviton)\n- Minimum RAM: ~1.5 GB free (model is ~320 MB; PyTorch runtime uses additional memory)\n- Internet access for the initial model download (the model is cached locally afterwards). Not required if using `KOKORO_LOCAL_ONLY=true` with a pre-cached model.\n\n**For GPU acceleration (`:cuda` image):**\n\n- NVIDIA GPU with CUDA support (Compute Capability 6.0+)\n- [NVIDIA driver](https://www.nvidia.com/en-us/drivers/) 575.57.08+ (Linux) or 576.57+ (Windows) installed on the host\n- [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) installed\n- The `:cuda` image supports `linux/amd64` only\n\nFor internet-facing deployments, see [Using a reverse proxy](#using-a-reverse-proxy) to add HTTPS.\n\n## Download\n\nGet the trusted build from the [Docker Hub registry](https://hub.docker.com/r/hwdsl2/kokoro-server/):\n\n```bash\ndocker pull hwdsl2/kokoro-server\n```\n\nFor NVIDIA GPU acceleration, pull the `:cuda` tag instead:\n\n```bash\ndocker pull hwdsl2/kokoro-server:cuda\n```\n\nAlternatively, you may download from [Quay.io](https://quay.io/repository/hwdsl2/kokoro-server):\n\n```bash\ndocker pull quay.io/hwdsl2/kokoro-server\ndocker image tag quay.io/hwdsl2/kokoro-server hwdsl2/kokoro-server\n```\n\nSupported platforms: `linux/amd64` and `linux/arm64`. The `:cuda` tag supports `linux/amd64` only.\n\n## Environment variables\n\nAll variables are optional. Fresh installs with a mounted `/var/lib/kokoro` volume auto-generate a Bearer token. Existing installs without a key remain open for backward compatibility.\n\nThis Docker image uses the following variables, that can be declared in an `env` file (see [example](kokoro.env.example)):\n\n| Variable | Description | Default |\n|---|---|---|\n| `KOKORO_VOICE` | Default voice for synthesis. See [voices](#available-voices) for all options. Accepts Kokoro voice IDs (`af_heart`) or OpenAI aliases (`alloy`, `ballad`, etc.). | `af_heart` |\n| `KOKORO_SPEED` | Default speech speed. Range: `0.25` (slowest) to `4.0` (fastest). | `1.0` |\n| `KOKORO_PORT` | HTTP port for the API (1–65535). | `8880` |\n| `KOKORO_LANG_CODE` | If set, loads only that language pipeline at startup (`a`=American English, `b`=British English, `e`=Spanish, `f`=French, `h`=Hindi, `i`=Italian, `j`=Japanese, `p`=Brazilian Portuguese, `z`=Mandarin Chinese). When unset, the pipeline is auto-selected from the `KOKORO_VOICE` prefix. Additional pipelines are created on demand when a request uses a different language. | *(not set)* |\n| `KOKORO_API_KEY` | Optional Bearer token. Fresh persistent installs auto-generate one. If set, all API requests must include `Authorization: Bearer <key>`. Set explicitly empty to disable authentication. | Auto-generated for fresh persistent installs |\n| `KOKORO_LOG_LEVEL` | Log level: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`. | `INFO` |\n| `KOKORO_LOCAL_ONLY` | When set to any non-empty value (e.g. `true`), disables all HuggingFace model downloads. For offline or air-gapped deployments with pre-cached model. | *(not set)* |\n| `KOKORO_DISABLE_USAGE_COUNTS` | Set to `1` to disable anonymous aggregate usage counts. | *(not set)* |\n\n**Note:** In your `env` file, you may enclose values in single quotes, e.g. `VAR='value'`. Do not add spaces around `=`. If you change `KOKORO_PORT`, update the `-p` flag in the `docker run` command accordingly.\n\nExample using an `env` file:\n\n```bash\ncp kokoro.env.example kokoro.env\n# Edit kokoro.env with your settings, then:\ndocker run \\\n    --name kokoro \\\n    --restart=always \\\n    -v kokoro-data:/var/lib/kokoro \\\n    -v ./kokoro.env:/kokoro.env:ro \\\n    -p 8880:8880 \\\n    -d hwdsl2/kokoro-server\n```\n\nThe env file is bind-mounted into the container, so changes are picked up on every restart without recreating the container.\n\n<details>\n<summary>Alternatively, pass it with <code>--env-file</code></summary>\n\n```bash\ndocker run \\\n    --name kokoro \\\n    --restart=always \\\n    -v kokoro-data:/var/lib/kokoro \\\n    -p 8880:8880 \\\n    --env-file=kokoro.env \\\n    -d hwdsl2/kokoro-server\n```\n\n</details>\n\n## Using docker-compose\n\n```bash\ncp kokoro.env.example kokoro.env\n# Edit kokoro.env as needed, then:\ndocker compose up -d\ndocker logs kokoro\n```\n\nExample `docker-compose.yml` (already included):\n\n```yaml\nservices:\n  kokoro:\n    image: hwdsl2/kokoro-server\n    container_name: kokoro\n    restart: always\n    ports:\n      - \"8880:8880/tcp\"  # For a host-based reverse proxy, change to \"127.0.0.1:8880:8880/tcp\"\n    volumes:\n      - kokoro-data:/var/lib/kokoro\n      - ./kokoro.env:/kokoro.env:ro\n\nvolumes:\n  kokoro-data:\n    name: kokoro-data\n```\n\n**Note:** For internet-facing deployments, using a [reverse proxy](#using-a-reverse-proxy) to add HTTPS is **strongly recommended**. In that case, also change `\"8880:8880/tcp\"` to `\"127.0.0.1:8880:8880/tcp\"` in `docker-compose.yml`, to prevent direct access to the unencrypted port.\n\n<details>\n<summary><strong>Using docker-compose with GPU (NVIDIA CUDA)</strong></summary>\n\nA separate `docker-compose.cuda.yml` is provided for GPU deployments:\n\n```bash\ncp kokoro.env.example kokoro.env\n# Edit kokoro.env as needed, then:\ndocker compose -f docker-compose.cuda.yml up -d\ndocker logs kokoro\n```\n\nExample `docker-compose.cuda.yml` (already included):\n\n```yaml\nservices:\n  kokoro:\n    image: hwdsl2/kokoro-server:cuda\n    container_name: kokoro\n    restart: always\n    ports:\n      - \"8880:8880/tcp\"  # For a host-based reverse proxy, change to \"127.0.0.1:8880:8880/tcp\"\n    volumes:\n      - kokoro-data:/var/lib/kokoro\n      - ./kokoro.env:/kokoro.env:ro\n    deploy:\n      resources:\n        reservations:\n          devices:\n            - driver: nvidia\n              count: 1\n              capabilities: [gpu]\n\nvolumes:\n  kokoro-data:\n    name: kokoro-data\n```\n\n</details>\n\n## API reference\n\nThe API is compatible with [OpenAI's text-to-speech endpoint](https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create). Any application already calling `https://api.openai.com/v1/audio/speech` can switch to self-hosted by setting:\n\nOpenAI voice names are accepted as local aliases for client compatibility. These aliases map to Kokoro voices and do not reproduce OpenAI's proprietary voices. The `voice` field may be a string or an object with an `id` field; unknown voices return `400`.\n\n```\nOPENAI_BASE_URL=http://your_server_ip:8880\n```\n\n### Synthesize speech\n\n```\nPOST /v1/audio/speech\nContent-Type: application/json\n```\n\n**Request body:**\n\n| Field | Type | Required "
+    },
+    "brief": {
+      "summary": "用 Docker 自建兼容 OpenAI API 的 Kokoro 语音服务",
+      "problem": "为应用提供私有、可离线部署的多语言文字转语音接口",
+      "highlights": [
+        "可以为应用快速接入 OpenAI 兼容的语音接口",
+        "可以输出 MP3、WAV、FLAC 等多种音频格式",
+        "可以用 NVIDIA GPU 加速，或在离线环境运行"
+      ],
+      "target_users": [
+        "自托管开发者",
+        "语音应用开发者",
+        "隐私敏感团队"
+      ],
+      "why_trending": "本周首次收录，近期有更新，但今日新增 Star 为 0",
+      "caveat": "至少需要约 1.5GB 可用内存；CUDA 镜像仅支持 amd64",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hwdsl2/docker-kokoro",
+      "score": 90,
+      "category": "语音 / 配音",
+      "reason": "自托管多语种 Kokoro TTS 服务",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  }
+]
