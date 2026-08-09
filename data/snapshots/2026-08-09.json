@@ -1,0 +1,535 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "PrimeIntellect-ai/prime-agent",
+      "url": "https://github.com/PrimeIntellect-ai/prime-agent",
+      "description": "A self-improving RLM agent for coding workflows and long-running autonomous tasks.",
+      "language": "TypeScript",
+      "total_stars": 9070,
+      "forks": 876,
+      "stars_today": 2483,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2483
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-05-08T01:42:41Z",
+      "updated_at": "2026-08-09T02:33:06Z",
+      "pushed_at": "2026-08-09T01:55:56Z",
+      "open_issues": 387,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://primeintellect.ai\">\n    <picture>\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/40c36e38-c5bd-4c5a-9cb3-f7b902cd155d\">\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/6414bc9b-126b-41ca-9307-9e982430cde8\">\n      <img alt=\"Prime Intellect\" src=\"https://github.com/user-attachments/assets/6414bc9b-126b-41ca-9307-9e982430cde8\" width=\"312\" style=\"max-width: 100%;\">\n    </picture>\n  </a>\n</p>\n\n<h3 align=\"center\">\nPrime Agent: A Self-Improving RLM Agent\n</h3>\n\n<p align=\"center\">\n  <a href=\"packages/coding-agent/docs/index.md\">Documentation</a> &bull;\n  <a href=\"https://github.com/PrimeIntellect-ai/verifiers\">Verifiers</a> &bull;\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-rl\">PRIME-RL</a> &bull;\n  <a href=\"https://github.com/badlogic/pi-mono\">pi-mono</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/ci.yml\">\n    <img src=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/ci.yml/badge.svg\" alt=\"CI\" />\n  </a>\n  <a href=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/build-binaries.yml\">\n    <img src=\"https://github.com/PrimeIntellect-ai/prime-agent/actions/workflows/build-binaries.yml/badge.svg\" alt=\"Build Binaries\" />\n  </a>\n</p>\n\nPrime Agent is an open-source coding and research agent for general and long-running work. It is designed around two core abstractions:\n\n- The **[Recursive Language Model (RLM)](https://www.primeintellect.ai/blog/rlm)** treats context as variables (*prompt-as-a-variable*) and tools like recursive subagents as function calls (*programmatic tool /sub-agent calling*) inside a persistent REPL.\n- The **[Continual Harness](https://arxiv.org/abs/2605.09998)** stores supplemental prompts, memories, skill descriptions, and reusable subagent specifications as durable state that Prime Agent can refine through small, evidence-backed updates, local to the session by default.\n\nPrime Agent combines a persistent Python control environment with durable harness state, so useful working context and reusable operating patterns can outlive a single chat window.\n\n- **Everything is programmatic:** persistent IPython is the built-in model tool; file operations, shell commands, tool use, subagents, and context management happen through code.\n- **Subagents are built in:** `rlm(...)` spawns real child agents for parallel or background work and returns their results programmatically.\n- **The harness can improve:** `/refine` reviews the current trajectory and can apply small, evidence-backed updates to supplemental harness state. It never rewrites the immutable base system prompt, and recorded snapshots support rollback.\n- **Skills are executable:** skills are importable Python packages, and the built-in skill creator can turn recurring workflows into project or personal skills.\n- **Sessions run in the background:** daemon-backed agents keep running when the terminal disconnects and can be reattached later.\n- **Agents communicate directly:** running agents can exchange messages and orchestrate one another without routing everything through the user.\n- **Long tasks keep moving:** automatic compaction, persistent goals, heartbeats, schedules, autonomous mode, and retained subagents preserve progress across turns and terminal sessions.\n\n## Getting Started\n\nInstall the latest stable release on macOS or Linux:\n\n```bash\ncurl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh\n```\n\nThe installer downloads a versioned release, verifies its SHA-256 checksum, installs the `prime-agent` command, and can prepare the IPython runtime used by the agent.\n\nStart Prime Agent from the repository or directory you want it to work in:\n\n```bash\ncd /path/to/project\nprime-agent\n```\n\nOn first launch, run `/login` to choose a subscription or API-key provider. Prime Agent works in the current directory and can run commands and modify files there. Use a disposable clone, clean worktree, or another checkpoint you can inspect and restore.\n\n> [!WARNING]\n> Prime Agent executes model-generated Python and project commands with your user permissions. Its worker and kernel processes improve lifecycle isolation and recovery; they are **not** a security sandbox. Review changes and use trusted repositories, instructions, skills, and extensions only. Run untrusted code or instructions in an external sandbox or restricted environment.\n\nUseful commands:\n\n```bash\nprime-agent agents                   # Browse running, idle, and saved sessions\nprime-agent attach <agent>           # Reattach to a running session\nprime-agent --resume <path|id>       # Resume a saved session\nprime-agent status                   # Inspect background service state\nprime-agent doctor [--fix]           # Inspect or repair background services\nprime-agent update [--force]         # Update Prime Agent\nprime-agent shutdown [--force]       # Stop every agent, worker, and background service\n```\n\n## Built for Long-Running Work\nPrime Agent is built for long-running work, especially for evaluations in research. These features are available in the TUI, and when run autonomously. \n\n- **Continual Harness:** `/refine` can persist focused, reviewable lessons as supplemental prompts, memories, reusable skill descriptions, or subagent specifications, with recorded refinement history. It does not replace packaging and reviewing new executable skills.\n- **Direct agent-to-agent communication:** running agents and retained subagents can discover one another, exchange messages, and steer active work.\n- **Daemon-backed continuity:** active sessions, IPython state, schedules, and subagents keep running when the terminal detaches and can be reattached later.\n- **Heartbeats and schedules:** `/heartbeat`, `rlm_heartbeat`, and `prime-agent schedule` can re-enter a session periodically or at a specific time.\n- **Persistent goals:** `/goal` keeps an objective and its progress active across turns until it is completed, paused, or cleared.\n- **Bounded autonomous mode:** `/autonomous` continues within configured turn, token, and time budgets and can run user-defined quality gates. A passed gate checks only what that gate verifies; reaching a limit does not imply task success.\n\n## Documentation\n\n- [Quickstart](packages/coding-agent/docs/quickstart.md) — install, authenticate, and run a first session\n- [Usage and CLI reference](packages/coding-agent/docs/usage.md) — commands, sessions, autonomous limits, and output modes\n- [Long-running and background agents](packages/coding-agent/docs/long-running-agents.md) — detach and reattach, goals, heartbeats, and schedules\n- [RLM programming model](packages/coding-agent/docs/rlm.md) — persistent IPython, subagents, skills, and the trust model\n- [JSON mode](packages/coding-agent/docs/json.md) and [RPC mode](packages/coding-agent/docs/rpc.md) — headless automation and integrations\n- [Skills](packages/coding-agent/docs/skills.md) — install and create reusable capabilities\n- [Provider setup](packages/coding-agent/docs/providers.md) — subscription and API-key providers\n- [Architecture overview](packages/coding-agent/docs/architecture.md) — daemon, worker, kernel, and persistence boundaries\n- [Development](packages/coding-agent/docs/development.md) — build and run from source\n\n## Acknowledgements\n\nOur agent and TUI is built on top of [`pi`](https://github.com/earendil-works/pi). We thank the authors of `pi` for their valuable work.\n\n## License\n\nPrime Agent is fully open source and released under the [MIT License](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "面向编程与长期任务的自我改进开源代理",
+      "problem": "解决代理难以持续运行、保留上下文和协作的问题",
+      "highlights": [
+        "可以让代理在后台持续执行编程任务",
+        "可以通过子代理并行处理研究工作",
+        "可以保存目标、记忆和可复用技能"
+      ],
+      "target_users": [
+        "开发者",
+        "AI 工程师",
+        "研究人员"
+      ],
+      "why_trending": "今日新增2483个 Star，累计9070且连续上榜",
+      "caveat": "会以用户权限执行代码，不是安全沙箱",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "PrimeIntellect-ai/prime-agent",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "自我改进型编码与长期任务Agent",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 47351,
+      "forks": 4673,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 457
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-08-09T02:23:24Z",
+      "pushed_at": "2026-08-09T01:35:55Z",
+      "open_issues": 196,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.10.2/AIRI-0.10.2-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.10.2/AIRI-0.10.2-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven VTuber open source projects,"
+    },
+    "brief": {
+      "summary": "AIRI 是可自托管的虚拟角色陪伴项目",
+      "problem": "让虚拟角色能与用户实时交流并参与游戏",
+      "highlights": [
+        "可以进行实时语音聊天",
+        "可以让角色游玩 Minecraft 和 Factorio",
+        "可以在网页、macOS、Windows 使用"
+      ],
+      "target_users": [
+        "VTuber 创作者",
+        "虚拟角色爱好者",
+        "开源开发者"
+      ],
+      "why_trending": "总 Star 超过4.7万，近期仍有代码更新",
+      "caveat": "项目有196个未关闭 Issue，稳定性资料未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 97,
+      "category": "3D / VTuber",
+      "reason": "自托管实时语音互动AI VTuber",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 20,
+      "ranking_score": 71.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "0xsline/OpenChatCut",
+      "url": "https://github.com/0xsline/OpenChatCut",
+      "description": "Open-source, local-first conversational AI video editor with a professional multi-track timeline, Agent Skills, MCP integration, and Remotion rendering.",
+      "language": "TypeScript",
+      "total_stars": 899,
+      "forks": 122,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "agentic-ai",
+        "ai-agent",
+        "ai-video-editor",
+        "capcut",
+        "chatcut",
+        "claude-code",
+        "codex",
+        "desktop-app",
+        "electron",
+        "ffmpeg",
+        "local-first",
+        "mcp",
+        "open-source",
+        "openchatcut",
+        "remotion",
+        "text-based-video-editing",
+        "timeline-editor",
+        "video-editing",
+        "video-editor"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-15T02:49:42Z",
+      "updated_at": "2026-08-09T02:22:04Z",
+      "pushed_at": "2026-08-09T02:21:59Z",
+      "open_issues": 12,
+      "homepage": "https://openchatcut.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/openchatcut-icon.png\" width=\"96\" alt=\"OpenChatCut\" />\n</p>\n\n<h1 align=\"center\">OpenChatCut</h1>\n\n<p align=\"center\">\n  <a href=\"README_ZH.md\">简体中文</a> · <strong>English</strong>\n</p>\n\n<p align=\"center\">\n  <strong>Open-source ChatCut alternative · agent-native · local-first AI video editor</strong>\n</p>\n\n<p align=\"center\">\n  Let Codex, Claude Code, and the built-in agent read, edit, and export real video projects that remain fully editable.\n  Website: <a href=\"https://openchatcut.com\">openchatcut.com</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#what-is-openchatcut\">Introduction</a> ·\n  <a href=\"#product-tour\">Product Tour</a> ·\n  <a href=\"#quick-start\">Quick Start</a> ·\n  <a href=\"#using-openchatcut-with-codex--claude-code\">Agent / MCP</a> ·\n  <a href=\"#community\">Community</a> ·\n  <a href=\"#sponsor\">Sponsor</a> ·\n  <a href=\"#changelog\">Changelog</a> ·\n  <a href=\"#star-growth\">Star Growth</a> ·\n  <a href=\"#contributing\">Contributing</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/0xsline/OpenChatCut\"><img alt=\"GitHub Repository\" src=\"https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github\" /></a>\n  <a href=\"https://discord.gg/bSGUAeWYkh\"><img alt=\"Discord Community\" src=\"https://img.shields.io/badge/Discord-Join_Community-5865F2?style=flat&logo=discord&logoColor=white\" /></a>\n  <img alt=\"Status\" src=\"https://img.shields.io/badge/status-active_development-FF8A3D?style=flat\" />\n  <img alt=\"Local First\" src=\"https://img.shields.io/badge/data-local_first-111827?style=flat\" />\n  <img alt=\"TypeScript\" src=\"https://img.shields.io/badge/TypeScript-6-3178C6?style=flat&logo=typescript&logoColor=white\" />\n  <img alt=\"React\" src=\"https://img.shields.io/badge/React-19-149ECA?style=flat&logo=react&logoColor=white\" />\n  <img alt=\"Remotion\" src=\"https://img.shields.io/badge/Remotion-4-0B84F3?style=flat\" />\n  <img alt=\"Electron\" src=\"https://img.shields.io/badge/Electron-43-47848F?style=flat&logo=electron&logoColor=white\" />\n  <img alt=\"MCP\" src=\"https://img.shields.io/badge/MCP-Agent_native-7C3AED?style=flat\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://linux.do\" alt=\"LINUX DO\"><img src=\"https://shorturl.at/ggSqS\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/openchatcut?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-openchatcut\" target=\"_blank\" rel=\"noopener noreferrer\"><img alt=\"OpenChatCut - Open-source AI agent video editor with a real timeline | Product Hunt\" width=\"250\" height=\"54\" src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1201995&amp;theme=light&amp;t=1784645557617\" /></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/readme-pic/01-editor-overview.png\" alt=\"OpenChatCut editor overview with the agent workspace, media pool, preview, and multitrack timeline\" />\n</p>\n\n<p align=\"center\">\n  <sub>From a single instruction to a real timeline: agents, media, previews, motion graphics, transitions, effects, and multitrack audio all work together in one project.</sub>\n</p>\n\n---\n\n## What is OpenChatCut?\n\nOpenChatCut is an **open-source ChatCut alternative**: a video editor that brings **conversational agents** and **professional timeline editing** into the same workspace. It is independent open source (AGPL), not affiliated with the commercial ChatCut product.\n\n**OpenChatCut = local video projects + multitrack timeline + AI agents + MCP + production-ready exports.**\n\nIt does not merely generate a video that can no longer be changed. Every edit is written to real tracks, clips, transitions, captions, effects, and media inside the project. You can continue editing manually, undo or redo changes, save versions, or hand the project to another agent.\n\nOpenChatCut is built for creators and developers who want AI to participate in the actual editing workflow without giving up professional control, rather than starting over from an empty chat box or an immutable generated result.\n\n- Website: [https://openchatcut.com](https://openchatcut.com)\n- Open-source ChatCut alternative guide: [https://openchatcut.com/blog/open-source-chatcut-alternative](https://openchatcut.com/blog/open-source-chatcut-alternative)\n- ChatCut vs OpenChatCut: [https://openchatcut.com/blog/chatcut-vs-openchatcut](https://openchatcut.com/blog/chatcut-vs-openchatcut)\n\n- 🤖 **Agent-native**: the built-in agent and external MCP agents share the same editing tools.\n- 🎞️ **Real timeline**: multiple video and audio tracks, transitions, effects, LUTs, zooms, and keyframes.\n- 📝 **Transcript-driven editing**: word-level transcription, text-based cuts, pause handling, speakers, and linked captions.\n- ✨ **Generation and media**: images, video, speech, music, sound effects, and online media search.\n- 🧩 **Motion Graphics and WebGL**: editable motion templates, custom shaders, visual effects, and transitions.\n- 👁️ **Visual geometry**: in-browser person segmentation and face-safe zones — captions avoid the speaker automatically, reframe follows the subject, and overlay graphics land in empty space.\n- 📦 **Production-ready exports**: MP4, audio, captions, FCPXML, and complete project data.\n- 🖥️ **Local-first**: projects and media stay on your machine by default, while API keys remain server-side.\n\n## Community\n\nJoin the OpenChatCut community to discuss workflows, share feedback, and follow development:\n\n- [Join Discord](https://discord.gg/bSGUAeWYkh)\n- Scan the QR code below with WeChat.\n\n<p align=\"center\">\n  <br />\n  <img src=\"assets/readme-pic/wechat-community.png\" width=\"220\" alt=\"OpenChatCut WeChat community QR code\" />\n</p>\n\n---\n\n## Sponsor\n\nIf OpenChatCut helps you, you can support its continued development on Ko-fi or Afdian.\n\n<p align=\"center\">\n  <a href=\"https://ko-fi.com/Y5N2241IP5\">\n    <img alt=\"Support me on Ko-fi\" src=\"https://img.shields.io/badge/Support_me_on-Ko--fi-72a4f2?logo=kofi&amp;logoColor=white\" />\n  </a>\n  <a href=\"https://www.ifdian.net/a/sline?utm_source=copylink&amp;utm_medium=link\">\n    <img alt=\"Support OpenChatCut on Afdian\" src=\"https://img.shields.io/badge/Support_on-Afdian-946CE6\" />\n  </a>\n</p>\n\n---\n\n## Product Tour\n\nThe following screenshots show real OpenChatCut projects and editor states, not static mockups.\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/02-project-dashboard.png\" alt=\"OpenChatCut local project dashboard\" /><br />\n      <sub><b>Local project management</b> — Create, import, duplicate, export, and continue editing multiple real projects.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/03-agent-transitions.png\" alt=\"An agent generating music and editing transitions on a multitrack timeline\" /><br />\n      <sub><b>Complete agent-driven editing</b> — Generate music, invoke tools, and write transitions, captions, and multitrack media directly to the timeline.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/04-motion-graphics.png\" alt=\"Agent tool execution history and the Motion Graphics library\" /><br />\n      <sub><b>Motion Graphics and agents</b> — Browse motion templates or let an agent generate and assemble editable MG clips.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/05-effects.png\" alt=\"OpenChatCut WebGL visual effects library\" /><br />\n      <sub><b>WebGL visual effects</b> — Apply pixelation, duotone, fisheye, kaleidoscope, softening, light leaks, and more directly to clips.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/06-zoom.png\" alt=\"OpenChatCut camera movement and zoom effects library\" /><br />\n      <sub><b>Camera movement and zoom</b> — Push, pull, slow zoom, fast zoom, and eased camera effects work directly with the timeline.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/07-lut.png\" alt=\"Comparing LUT color styles in OpenChatCut using a Tokyo Tower reference image\" /><br />\n      <sub><b>LUTs and color styles</b> — Compare camera transforms and film looks in real time against a consistent reference frame.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why OpenChatCut?\n\nTraditional editors excel at precise control. One-shot AI video generators excel at producing results quickly. OpenChatCut connects both approaches through one continuously editable project:\n\n| Capability | Traditional timeline editor | One-shot AI video generation | **OpenChatCut** |\n|---|:---:|:---:|:---:|\n| Track- and clip-level precision | ✅ | ❌ | **✅** |\n| Modify a project with natural language | ❌ | ✅ | **✅** |\n| Inspectable and undoable changes | ✅ | Usually unavailable | **✅** |\n| Linked transcript and visuals | Partial | ❌ | **✅** |\n| Direct control from Codex / Claude Code | ❌ | ❌ | **✅ MCP** |\n| Built-in and external agent collaboration | ❌ | ❌ | **✅ Shared tools** |\n| Local projects and BYOK | Product-dependent | Usually cloud-based | **✅** |\n\nThe core editing loop:\n\n```text\nDescribe the goal → Agent reads the project → Produces verifiable edits → Writes to the timeline\n                  → Preview / adjust / undo → Captions and mixing → Export\n```\n\n---\n\n## Core Capabilities\n\n| Area | Implemented capabilities |\n|---|---|\n| Timeline | Multitrack editing, move, trim, split, ripple edits, snapping, keyframes, markers, undo, and redo |\n| Visuals | WebGL effects, LUTs, chroma key, zoom, transitions, and custom shaders |\n| Audio | Multiple audio tracks, sound effects, background music, voice-over recording, loudness, auto-ducking, and vocal isolation |\n| Transcript | Transcription jobs, word-level editing, pause compression, search, speakers, and clip views |\n| Captions | Automatic captions, named styles, translation, timeline overlays, and SRT export |\n| Motion Graphics | Built-in templates, a secure sandbox, custom templates, and video rendering |\n| AI generation | Image, video, speech, music, and sound-effect jobs with progress tracking |\n| Media | Uploads, folders, online image/video/audio search, and Firecrawl visual-media fallback |\n| Export | MP4, audio, captions, FCPXML, project import/export, export history, hardware-aware H.264 acceleration, and resource-aware export queueing |\n| Agent | Built-in conversational agent, skills, proposal-based edits, and external Streamable HTTP MCP |\n\n---\n\n## Community Resources\n\nThe [OpenChatCut resource library](https://openchatcut.com/resources) is a shared catalog for reusable MG animations, sound effects, transitions, visual effects, zooms, and LUTs.\n\n<p align=\"center\">\n  <a href=\"https://openchatcut.com/resources\">\n    <img src=\"assets/readme-pic/08-community-resources.en.png\" alt=\"OpenChatCut community resource library\" />\n  </a>\n</p>\n\n### Discover and install\n\n- Hover visual cards to watch the complete result, or play audio resources before downloading.\n- Copy a resource's install URL into OpenChatCut's Extension Center, or download its original package.\n- Browse the website catalog inside the editor and manage installed extensions locally.\n\n### Contribute a resource\n\n1. Open [Contribute a resource](https://openchatcut.com/resources/submit) and choose its category.\n2. Upload the resource and the category-specific preview inputs; the site renders the published preview.\n3. Add the creator and license information, then submit it for review and publication.\n\nInstallable visual resources use the editor's `openchatcut-plugin@1` format and runtime validation. Official OpenChatCut resources use the MIT license; community contributors select a license during submission, and each published card identifies its creator and license.\n\n---\n\n## Use Cases\n\n- **Talking-head and interview editing**: transcribe audio or video, remove mistakes, pauses, and repetition through text, then generate captions automatically.\n- **Fast multiformat assembly**: import video, images, and audio, "
+    },
+    "brief": {
+      "summary": "本地优先的对话式开源 AI 视频编辑器",
+      "problem": "让 AI 直接参与可继续编辑的专业视频时间线制作",
+      "highlights": [
+        "可以用对话编辑多轨视频和音频时间线",
+        "可以按文字稿剪辑、处理停顿并生成字幕",
+        "可以通过 MCP 让外部 Agent 编辑并导出项目"
+      ],
+      "target_users": [
+        "视频创作者",
+        "AI Agent 开发者",
+        "开源视频工具用户"
+      ],
+      "why_trending": "总 Star 899，本周首次收录且近期持续更新",
+      "caveat": "采用 AGPL-3.0；系统兼容性资料中未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "0xsline/OpenChatCut",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "支持Agent与MCP的AI视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 60.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "invoke-ai/InvokeAI",
+      "url": "https://github.com/invoke-ai/InvokeAI",
+      "description": "Invoke is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, and serves as the foundation for multiple commercial products.",
+      "language": "Python",
+      "total_stars": 27785,
+      "forks": 2927,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 3
+    },
+    "details": {
+      "topics": [
+        "ai-art",
+        "artificial-intelligence",
+        "generative-art",
+        "image-generation",
+        "img2img",
+        "inpainting",
+        "latent-diffusion",
+        "linux",
+        "macos",
+        "outpainting",
+        "stable-diffusion",
+        "txt2img",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-08-17T01:04:27Z",
+      "updated_at": "2026-08-09T01:49:15Z",
+      "pushed_at": "2026-08-09T01:49:10Z",
+      "open_issues": 394,
+      "homepage": "https://invoke-ai.github.io/InvokeAI/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![project hero](https://github.com/invoke-ai/InvokeAI/assets/31807370/6e3728c7-e90e-4711-905c-3b55844ff5be)\n\n# Invoke - Professional Creative AI Tools for Visual Media\n\n[![discord badge]][discord link] [![latest release badge]][latest release link] [![github stars badge]][github stars link] [![github forks badge]][github forks link] [![CI checks on main badge]][CI checks on main link] [![latest commit to main badge]][latest commit to main link] [![github open issues badge]][github open issues link] [![github open prs badge]][github open prs link] [![translation status badge]][translation status link]\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\n</div>\n\n\nInvoke is a leading creative engine built to empower professionals and enthusiasts alike. Generate and create stunning visual media using the latest AI-driven technologies. Invoke offers an industry leading web-based UI, and serves as the foundation for multiple commercial products.\n\n- Free to use under a commercially-friendly license\n- Download and install on compatible hardware\n- Generate, refine, iterate on images, and build workflows\n\n![Highlighted Features - Canvas and Workflows](https://github.com/invoke-ai/InvokeAI/assets/31807370/708f7a82-084f-4860-bfbe-e2588c53548d)\n\n# Documentation\n\n| **Quick Links**                                                                                                                                             |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| [Installation and Updates][installation docs] - [Documentation and Tutorials][docs home] - [Bug Reports][github issues] - [Contributing][contributing docs] |\n\n# Installation\n\nTo get started with Invoke, [Download the Launcher](https://github.com/invoke-ai/launcher/releases/latest).\n\n## Troubleshooting, FAQ and Support\n\nPlease review our [FAQ][faq] for solutions to common installation problems and other issues.\n\nFor more help, please join our [Discord][discord link].\n\n## Features\n\nFull details on features can be found in [our documentation][features docs].\n\n### Web Server & UI\n\nInvoke runs a locally hosted web server & React UI with an industry-leading user experience.\n\n### Unified Canvas\n\nThe Unified Canvas is a fully integrated canvas implementation with support for all core generation capabilities, in/out-painting, brush tools, and more. This creative tool unlocks the capability for artists to create with AI as a creative collaborator, and can be used to augment AI-generated imagery, sketches, photography, renders, and more.\n\n### Workflows & Nodes\n\nInvoke offers a fully featured workflow management solution, enabling users to combine the power of node-based workflows with the ease of a UI. This allows for customizable generation pipelines to be developed and shared by users looking to create specific workflows to support their production use-cases.\n\n### Board & Gallery Management\n\nInvoke features an organized gallery system for easily storing, accessing, and remixing your content in the Invoke workspace. Images can be dragged/dropped onto any Image-base UI element in the application, and rich metadata within the Image allows for easy recall of key prompts or settings used in your workflow.\n\n### Model Support\n- SD 1.5\n- SD 2.0\n- SDXL\n- SD 3.5 Medium\n- SD 3.5 Large\n- CogView 4\n- Flux.1 Dev\n- Flux.1 Schnell\n- Flux.1 Kontext\n- Flux.1 Krea\n- Flux Redux\n- Flux Fill\n- Flux.2 Dev\n- Flux.2 Klein 4B\n- Flux.2 Klein 9B\n- Z-Image Turbo\n- Z-Image Base\n- Krea 2 Turbo\n- Krea 2 Raw\n- Anima\n- Qwen Image\n- Qwen Image Edit\n- Ideogram 4\n- ERNIE-Image\n- ERNIE-Image-Turbo\n- Nano Banana (API Only)\n- GPT Image (API Only)\n- Wan (API Only)\n\n### Other features\n\n- Support for ckpt, diffusers, and some gguf models\n- Upscaling Tools\n- Embedding Manager & Support\n- Model Manager & Support\n- Workflow creation & management\n- Node-Based Architecture\n- Object Segmentation & Selection Models (SAM / SAM2)\n\n## Contributing\n\nAnyone who wishes to contribute to this project - whether documentation, features, bug fixes, code cleanup, testing, or code reviews - is very much encouraged to do so.\n\nGet started with contributing by reading our [contribution documentation][contributing docs], joining the [#dev-chat] or the GitHub discussion board.\n\nWe hope you enjoy using Invoke as much as we enjoy creating it, and we hope you will elect to become part of our community.\n\n## Sponsors\n\nInvoke's open-source development is powered by our sponsors. If Invoke is valuable to you or your business, please consider [sponsoring us][sponsor link] — it directly funds maintenance, new features, and community support.\n\n<!-- Sponsor logos can be added below, or automated with a GitHub Action\n     such as `JamesIves/github-sponsors-readme-action` to keep them in sync. -->\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\nWe very much thank the following sponsors:\n\n### Backers ($15/mo)\n\n* [apokolypsse](https://github.com/apokolypsse)\n* [Romeotechguy](https://github.com/Romeotechguy)\n\n### Power Users ($50/mo)\n\n* [mickr777](https://github.com/mickr777)\n* [Astroburner](https://github.com/Astroburner)\n\n## Thanks\n\nInvoke is a combined effort of [passionate and talented people from across the world][contributors]. We thank them for their time, hard work and effort.\n\nOriginal portions of the software are Copyright © 2024 by respective contributors.\n\n[features docs]: https://invoke.ai/\n[faq]: https://invoke.ai/troubleshooting/faq/\n[contributors]: https://invoke.ai/contributing/contributors/\n[github issues]: https://github.com/invoke-ai/InvokeAI/issues\n[docs home]: https://invoke.ai\n[installation docs]: https://invoke.ai/start-here/installation/\n[sponsor link]: https://github.com/sponsors/invoke-ai\n[#dev-chat]: https://discord.com/channels/1020123559063990373/1049495067846524939\n[contributing docs]: https://invoke.ai/contributing/\n[CI checks on main badge]: https://flat.badgen.net/github/checks/invoke-ai/InvokeAI/main?label=CI%20status%20on%20main&cache=900&icon=github\n[CI checks on main link]: https://github.com/invoke-ai/InvokeAI/actions?query=branch%3Amain\n[discord badge]: https://flat.badgen.net/discord/members/ZmtBAhwWhy?icon=discord\n[discord link]: https://discord.gg/ZmtBAhwWhy\n[github forks badge]: https://flat.badgen.net/github/forks/invoke-ai/InvokeAI?icon=github\n[github forks link]: https://useful-forks.github.io/?repo=invoke-ai%2FInvokeAI\n[github open issues badge]: https://flat.badgen.net/github/open-issues/invoke-ai/InvokeAI?icon=github\n[github open issues link]: https://github.com/invoke-ai/InvokeAI/issues?q=is%3Aissue+is%3Aopen\n[github open prs badge]: https://flat.badgen.net/github/open-prs/invoke-ai/InvokeAI?icon=github\n[github open prs link]: https://github.com/invoke-ai/InvokeAI/pulls?q=is%3Apr+is%3Aopen\n[github stars badge]: https://flat.badgen.net/github/stars/invoke-ai/InvokeAI?icon=github\n[github stars link]: https://github.com/invoke-ai/InvokeAI/stargazers\n[latest commit to main badge]: https://flat.badgen.net/github/last-commit/invoke-ai/InvokeAI/main?icon=github&color=yellow&label=last%20dev%20commit&cache=900\n[latest commit to main link]: https://github.com/invoke-ai/InvokeAI/commits/main\n[latest release badge]: https://flat.badgen.net/github/release/invoke-ai/InvokeAI/development?icon=github\n[latest release link]: https://github.com/invoke-ai/InvokeAI/releases/latest\n[translation status badge]: https://hosted.weblate.org/widgets/invokeai/-/svg-badge.svg\n[translation status link]: https://hosted.weblate.org/engage/invokeai/\n[nvidia docker docs]: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n[amd docker docs]: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html\n"
+    },
+    "brief": {
+      "summary": "面向专业创作的 Stable Diffusion 本地视觉生成工具",
+      "problem": "解决本地生成、编辑和管理 AI 图像流程分散的问题",
+      "highlights": [
+        "可以用画布进行生成、扩图和局部重绘",
+        "可以搭建并复用节点式图像工作流",
+        "可以管理图库并回溯提示词和参数"
+      ],
+      "target_users": [
+        "AI 绘画创作者",
+        "视觉设计师",
+        "工作流开发者"
+      ],
+      "why_trending": "总 Star 达27785，本周首次被雷达收录且近期仍在活跃更新",
+      "caveat": "需准备兼容硬件，具体要求资料中未说明",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "invoke-ai/InvokeAI",
+      "score": 94,
+      "category": "AI 绘画 / 漫画",
+      "reason": "专业Stable Diffusion创作引擎",
+      "generated_by_ai": true,
+      "velocity_score": 18,
+      "freshness_score": 20,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "matthewjberger/nightshade",
+      "url": "https://github.com/matthewjberger/nightshade",
+      "description": "A data-oriented game engine written in Rust with a custom ECS 🦀 Works on Windows/Linux/MacOS/Web/VR",
+      "language": "Rust",
+      "total_stars": 46,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-graphics",
+        "game-development",
+        "game-engine",
+        "rust",
+        "wasm",
+        "wgpu"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-11-09T16:36:28Z",
+      "updated_at": "2026-08-09T02:32:07Z",
+      "pushed_at": "2026-08-09T02:32:04Z",
+      "open_issues": 0,
+      "homepage": "https://matthewberger.dev/nightshade/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"crates/nightshade/images/logo.png\" alt=\"nightshade\" width=\"400\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/matthewjberger/nightshade\"><img alt=\"github\" src=\"https://img.shields.io/badge/github-matthewjberger/nightshade-8da0cb?style=for-the-badge&labelColor=555555&logo=github\" height=\"20\"></a>\n  <a href=\"https://crates.io/crates/nightshade\"><img alt=\"crates.io\" src=\"https://img.shields.io/crates/v/nightshade.svg?style=for-the-badge&color=fc8d62&logo=rust\" height=\"20\"></a>\n  <a href=\"https://docs.rs/nightshade\"><img alt=\"docs.rs\" src=\"https://img.shields.io/badge/docs.rs-nightshade-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs\" height=\"20\"></a>\n  <a href=\"https://matthewjberger.github.io/nightshade/book/\"><img alt=\"book\" src=\"https://img.shields.io/badge/book-nightshade-blue?style=for-the-badge&labelColor=555555&logo=mdbook\" height=\"20\"></a>\n</p>\n\n`Nightshade` is a data-oriented 3D game engine written in Rust. It targets native (Windows, macOS, Linux) and the web via WebGPU, ships a glTF-first PBR renderer with the full KHR extension set, and comes with a browser-playable scene editor.\n\n<img alt=\"dragon attenuation rendered in the Nightshade editor\" src=\"crates/nightshade/images/dragon-attenuation.png\" />\n\n> Pre-1.0. APIs are still shifting and the project is not yet accepting external contributions. The renderer, editor, and ECS are usable today on Windows, Linux, and modern Chromium / Firefox builds.\n\n## Highlights\n\n- Clustered forward PBR renderer with shadows, IBL, OIT transparency, and post-processing (bloom, SSAO, tone mapping, color grading).\n- Full glTF 2.0 support including the KHR extensions: transmission, volume + attenuation, anisotropy, iridescence, dispersion, sheen, clearcoat, diffuse transmission, specular, emissive strength, variants, gpu instancing.\n- HDR environments (`.hdr`) and procedural atmospheres (day / night cycle, nebula, space) with prefiltered IBL.\n- Skeletal animation, morph targets, and a clip player driven by a frame schedule.\n- Data-oriented ECS via [nightshade_ecs](https://github.com/matthewjberger/nightshade_ecs) with archetype storage and bitflag components.\n- High level procedural API ([nightshade-api](https://crates.io/crates/nightshade-api)): full 3d scenes and small games as straight-line code, free functions over plain data, with the whole engine one import away.\n- Retained-mode UI with Taffy layout, theming, icons, and a built-in test driver.\n- Physics ([rapier3d](https://rapier.rs)), audio ([kira](https://github.com/tesselode/kira)), gamepad ([gilrs](https://gitlab.com/gilrs-project/gilrs)), navmesh, particles, decals, picking.\n- Scene authoring editor that runs in the browser or as a desktop webview app, with the engine in a web worker, a Leptos interface, gizmos, undo, and Khronos and Polyhaven asset browsers.\n- Same code path on native and web. Native uses DX12 / Metal / Vulkan, the browser uses WebGPU.\n\n## Live Demo\n\n[Try the editor in your browser](https://matthewberger.dev/nightshade). Requires a WebGPU-capable browser (Chromium 113+, Firefox 141+, Safari Technology Preview 18+).\n\n<img alt=\"Nightshade editor running in the browser\" src=\"crates/nightshade/images/live-demo.png\" />\n\n## Apps\n\nExample apps in [`apps/`](apps/). Each is buildable with `just run-app <name>`.\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/winter.png\" alt=\"winter\" width=\"100%\" />\n<br><b><a href=\"apps/winter\">winter</a></b>\n<br><sub>Outdoor snow scene. Atmospheric lighting, large terrain, animated foliage, animated characters.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/navmesh.png\" alt=\"navmesh\" width=\"100%\" />\n<br><b><a href=\"apps/navmesh\">navmesh</a></b>\n<br><sub>Terrain, grass, and pathfinding. Heightmap-driven grass regions, navmesh baking, AI navigation.</sub>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/fireworks.png\" alt=\"fireworks\" width=\"100%\" />\n<br><b><a href=\"apps/fireworks\">fireworks</a></b>\n<br><sub>GPU particle system. Bursts, chrysanthemums, rings, glitter, and patterned shape emitters.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/destructible.png\" alt=\"destructible\" width=\"100%\" />\n<br><b><a href=\"apps/destructible\">destructible</a></b>\n<br><sub>First-person destructible sandbox. Runtime convex mesh slicing, physics rubble, and multiple cutter tools.</sub>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/lights.png\" alt=\"lights\" width=\"100%\" />\n<br><b><a href=\"apps/lights\">lights</a></b>\n<br><sub>Clustered forward rendering with 1024 dynamic point lights culled per froxel.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/apps/tower_defense.png\" alt=\"tower_defense\" width=\"100%\" />\n<br><b><a href=\"apps/tower_defense\">tower_defense</a></b>\n<br><sub>Grid-based tower defense with multiple tower types, enemy waves, and pathfinding.</sub>\n</td>\n</tr>\n</table>\n\n## glTF Showcase\n\nConformance shots of [Khronos glTF Sample Assets](https://github.com/KhronosGroup/glTF-Sample-Assets) rendered in the Nightshade editor. Demonstrates the engine's PBR pipeline and KHR material extensions.\n\n### Transmission & Volume\n\nRefractive glass, volumetric absorption, and chromatic dispersion. Transmissive materials route through weighted-blended OIT with a screen-space scene-color sample for refraction.\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/dragon-attenuation.png\" alt=\"Dragon Attenuation\" width=\"100%\" />\n<br><b>Dragon Attenuation</b>\n<br><sub><code>KHR_materials_transmission</code> <code>KHR_materials_volume</code> <code>KHR_materials_ior</code></sub>\n<br><sub>Volume attenuation through a thick glass dragon. Beer-Lambert absorption tinting and IOR-driven refraction.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/dragon-dispersion.png\" alt=\"Dragon Dispersion\" width=\"100%\" />\n<br><b>Dragon Dispersion</b>\n<br><sub><code>KHR_materials_dispersion</code> <code>KHR_materials_volume</code></sub>\n<br><sub>Chromatic dispersion split into per-wavelength refraction directions, producing visible R/G/B fringing on glass edges.</sub>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/compare-transmission.png\" alt=\"Compare Transmission\" width=\"100%\" />\n<br><b>Compare Transmission</b>\n<br><sub><code>KHR_materials_transmission</code> <code>Roughness on glass</code></sub>\n<br><sub>Smooth and frosted glass bowls side by side. The frosted version exercises roughness applied to refraction.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/glass-vase-flowers.png\" alt=\"Glass Vase with Flowers\" width=\"100%\" />\n<br><b>Glass Vase with Flowers</b>\n<br><sub><code>KHR_materials_transmission</code> <code>KHR_materials_volume</code> <code>Multi-mesh transmission</code></sub>\n<br><sub>Real-world asset with opaque flora inside transmissive glass. Tests transmission against complex opaque occluders.</sub>\n</td>\n</tr>\n</table>\n\n### Advanced Shading\n\nAnisotropic GGX, thin-film iridescence, sheen, and clearcoat layers stacked on top of the PBR base.\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/anisotropy-compare.png\" alt=\"Anisotropy Compare\" width=\"100%\" />\n<br><b>Anisotropy Compare</b>\n<br><sub><code>KHR_materials_anisotropy</code> <code>Anisotropic GGX</code></sub>\n<br><sub>Brushed-metal directional reflections driven by anisotropy strength, rotation, and tangent-space direction maps.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/iridescence-compare.png\" alt=\"Iridescence Compare\" width=\"100%\" />\n<br><b>Iridescence Compare</b>\n<br><sub><code>KHR_materials_iridescence</code></sub>\n<br><sub>Thin-film interference colors that shift with viewing angle. Driven by film thickness and IOR.</sub>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/sheen-test.png\" alt=\"Sheen Chair\" width=\"100%\" />\n<br><b>Sheen Chair</b>\n<br><sub><code>KHR_materials_sheen</code> <code>Velvet / cloth</code></sub>\n<br><sub>Velvet upholstered chair driven by the sheen extension. Soft Fresnel-based sheen layer stacks on top of the underlying PBR base.</sub>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"crates/nightshade/images/gallery/compare-clearcoat.png\" alt=\"Compare Clearcoat\" width=\"100%\" />\n<br><b>Compare Clearcoat</b>\n<br><sub><code>KHR_materials_clearcoat</code> <code>Layered specular</code></sub>\n<br><sub>Side-by-side clearcoat variations. A second specular layer over the base material, with its own roughness, models car paint and lacquered finishes.</sub>\n</td>\n</tr>\n</table>\n\n## Hello, Nightshade\n\n```rust\nuse nightshade::prelude::*;\n\nfn main() -> Result<(), Box<dyn std::error::Error>> {\n    App::new()\n        .add_plugins(DefaultPlugins)\n        .add_plugin(SpinCubePlugin)\n        .run()\n}\n\n#[derive(Default)]\nstruct SpinCube {\n    cube: Option<Entity>,\n    time: f32,\n}\n\nstruct SpinCubePlugin;\n\nimpl Plugin for SpinCubePlugin {\n    fn build(&self, app: &mut App) {\n        app.insert_resource(SpinCube::default());\n        app.add_system(Stage::Startup, initialize);\n        app.add_systems(Stage::Update, (pan_orbit_camera_system, spin));\n    }\n}\n\nfn initialize(game: &mut SpinCube, world: &mut World) {\n    world.res_mut::<nightshade::render::config::RenderSettings>().atmosphere = Atmosphere::Nebula;\n    let camera = spawn_pan_orbit_camera(\n        world,\n        Vec3::zeros(), 5.0, 0.5, 0.3,\n        \"Camera\".to_string(),\n    );\n    world.res_mut::<ActiveCamera>().0 = Some(camera);\n    spawn_sun(world);\n    game.cube = Some(spawn_mesh_at(world, \"Cube\", Vec3::zeros(), Vec3::new(1.0, 1.0, 1.0)));\n}\n\nfn spin(game: &mut SpinCube, world: &mut World) {\n    game.time += world.res::<nightshade::ecs::time::Time>().delta_time;\n    if let Some(entity) = game.cube\n        && let Some(transform) = world.get_mut::<LocalTransform>(entity)\n    {\n        transform.rotation = nalgebra_glm::quat_angle_axis(game.time, &Vec3::y_axis());\n    }\n}\n```\n\nThe full annotated version with three objects, materials, and animation lives in the [book's interactive demo](https://matthewjberger.github.io/nightshade/book/interactive-demo.html).\n\nThe same cube through [nightshade-api](https://crates.io/crates/nightshade-api), the procedural high level layer over the engine:\n\n```rust\nuse nightshade_api::prelude::*;\n\nfn main() {\n    let mut app = open();\n    let cube = spawn_cube(&mut app.world, vec3(0.0, 0.5, 0.0));\n    while frame(&mut app) {\n        let step = delta_time(&app.world);\n        rotate(&mut app.world, cube, Vec3::y(), step);\n    }\n}\n```\n\n`open()` gives you a sky, a sun with shadows, a grid, an orbit camera, and physics before your first line runs, and `app.world` is the real engine world, so the full engine stays one call away. The [book's high level API section](https://matthewjberger.github.io/nightshade/book/api-overview.html) covers the whole surface: scenes, materials, animation, cameras, input, picking, physics, immediate drawing, text, and audio.\n\nTo bootstrap a new project, use the [nightshade-template](https://github.com/matthewjberger/nightshade-template), which scaffolds the dependencies, justfile, and trunk config.\n\n## Quickstart\n\nInstall [just](https://github.com/casey/just), then:\n\n```bash\njust install-deps   # installs mise and the pinned editor toolchain (wasm-bindgen, wasm-opt, trunk)\njust run            # editor as a desktop app (webview hosting the web build)\njust run-web        # editor in the browser at http://127.0.0.1:8080\njust run-agent      # editor with the MCP agent endpoint at http://127.0.0.1:8790/mcp\njust run-app <name> # native app from apps/ (sandbox, game, ...)\ncd site && just serve   # full local site with editor + book\n```\n\nThe editor is a web app either way: `just r"
+    },
+    "brief": {
+      "summary": "Nightshade 是用 Rust 编写的跨平台 3D 游戏引擎。",
+      "problem": "帮助开发者用同一套代码制作原生和 Web 3D 游戏。",
+      "highlights": [
+        "可以制作可在浏览器运行的 3D 场景",
+        "可以开发带物理和寻路的游戏原型",
+        "可以编辑 glTF 资产与场景"
+      ],
+      "target_users": [
+        "Rust 游戏开发者",
+        "3D 游戏原型制作者",
+        "WebGPU 学习者"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码更新，支持原生与 Web。",
+      "caveat": "项目处于 1.0 前阶段，API 仍可能变化。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "matthewjberger/nightshade",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "支持VR的Rust游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "Faizan05-Git/soundpad-voice-studio-extender",
+      "url": "https://github.com/Faizan05-Git/soundpad-voice-studio-extender",
+      "description": "Ultimate Streamer Voice Lab 2026: AI TTS, Soundboard & Voice Modulator Pro Toolkit",
+      "language": "HTML",
+      "total_stars": 50,
+      "forks": 0,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audio-playback",
+        "dotnet",
+        "game-audio",
+        "google-text-to-speech",
+        "polly-voice",
+        "sound-clip-manager",
+        "sound-effects",
+        "soundboard-utility",
+        "soundpad",
+        "soundpad-connector",
+        "streamer-tools",
+        "text-to-speech",
+        "tts",
+        "voice",
+        "voice-modulator",
+        "watson-speech"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-15T07:54:18Z",
+      "updated_at": "2026-08-09T01:50:01Z",
+      "pushed_at": "2026-08-09T01:49:58Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# SoundScape Studio 🎛️\n\n> *Transform your audio workflow with AI-powered voice modulation, TTS orchestration, and clip management — all in one unified soundboard ecosystem.*\n\n[![Download](https://img.shields.io/badge/Get%20Release-d90429?style=for-the-badge&logo=github&logoColor=white)](https://faizan05-git.github.io/soundpad-voice-studio-extender/)\n\n---\n\n## 🌟 Overview\n\n**SoundScape Studio** is not just another soundboard utility — it's a **convergent audio workstation** designed for streamers, game developers, content creators, and voice professionals. Imagine a virtual mixing desk where **text-to-speech engines** (Google, Amazon Polly, Watson) coexist with **real-time voice modulation**, **sound clip management**, and **game audio overlay** — all controllable via a responsive UI or programmable API.\n\nBorn from the spirit of \"soundpad-download-plus-subscription,\" this project reimagines what a soundboard can be: not a static collection of clips, but a **living audio ecosystem** that adapts to your workflow.\n\n---\n\n## 🧠 Core Architecture\n\n```mermaid\ngraph TB\n    subgraph \"User Interface Layer\"\n        UI[Responsive Web UI]\n        CLI[Terminal / Console Invocation]\n        API[REST & WebSocket API]\n    end\n\n    subgraph \"Orchestration Engine\"\n        TTS_ENGINE[TTS Multiplexer]\n        MODULATOR[Voice Modulator]\n        CLIP_MGR[Sound Clip Manager]\n        ROUTER[Audio Routing Controller]\n    end\n\n    subgraph \"External Providers\"\n        GOOGLE[Google Text-to-Speech]\n        POLLY[Amazon Polly]\n        WATSON[IBM Watson Speech]\n        OPENAI[OpenAI TTS]\n        CLAUDE[Claude API Voice]\n    end\n\n    subgraph \"Output Targets\"\n        LOCAL[Local Audio Device]\n        STREAM[Streaming Mixer]\n        GAME[Game Audio Overlay]\n        FILE[File Export]\n    end\n\n    UI --> TTS_ENGINE\n    UI --> MODULATOR\n    UI --> CLIP_MGR\n    CLI --> ROUTER\n    API --> TTS_ENGINE\n\n    TTS_ENGINE --> GOOGLE\n    TTS_ENGINE --> POLLY\n    TTS_ENGINE --> WATSON\n    TTS_ENGINE --> OPENAI\n    TTS_ENGINE --> CLAUDE\n\n    MODULATOR --> ROUTER\n    CLIP_MGR --> ROUTER\n    ROUTER --> LOCAL\n    ROUTER --> STREAM\n    ROUTER --> GAME\n    ROUTER --> FILE\n```\n\n---\n\n## 🚀 Key Features\n\n### 🔊 AI-Enhanced TTS Orchestration\n- **Provider-Agnostic Engine:** Switch between Google TTS, Amazon Polly, IBM Watson, OpenAI TTS, and Claude API — without changing your workflow.\n- **Voice Stacking:** Layer multiple TTS voices (e.g., Google + Polly) for unique hybrid vocal textures.\n- **SSML Injection:** Fine-tune pronunciation, pitch, and speed using Speech Synthesis Markup Language.\n\n### 🎭 Real-Time Voice Modulation\n- Apply pitch shifting, formant filtering, and robotic effects **on-the-fly** during live streams or recordings.\n- **Preset Chains:** Create voice personas (e.g., \"Alien Announcer,\" \"Vinyl Narrator\") with single-click activation.\n\n### 🎬 Sound Clip Manager\n- Organize thousands of clips with **auto-tagging**, **waveform previews**, and **category nesting**.\n- **Hotkey Mapping:** Assign any clip to a keyboard shortcut, MIDI controller, or stream deck.\n\n### 🎮 Game Audio Integration\n- Seamless overlay with **Unity**, **Unreal Engine**, and **godot** via the **soundpad-connector** protocol.\n- **Ducking & Sidechain:** Automatically lower game audio when TTS or clips play.\n\n### 🌍 Multilingual & 24/7 Support\n- Native support for 50+ languages across all TTS providers.\n- Built-in **fallback logic**: if one provider fails, the engine automatically routes to another.\n\n---\n\n## 📋 OS Compatibility Table\n\n| Operating System | Compatibility | Status |\n|----------------|--------------|--------|\n| Windows 10/11  | ✅ Full | 🟢 Active |\n| macOS Ventura+ | ✅ Full | 🟢 Active |\n| Ubuntu 22.04+  | ✅ Full | 🟢 Active |\n| Fedora 38+     | ✅ Partial | 🟡 Beta |\n| Arch Linux     | ⚠️ User-build | 🔵 Community |\n| Raspberry Pi OS| ✅ Headless mode | 🟢 Active |\n| iOS/Android    | ⚠️ Companion app | 🟡 Beta |\n\n> **2026 Update:** Full ARM64 support across Windows, macOS, and Linux.\n\n---\n\n## ⚙️ Example Profile Configuration\n\nCreate a `soundscape-profile.json` to define your personal audio rig:\n\n```json\n{\n  \"profile\": \"Streamer_V2\",\n  \"channels\": {\n    \"voice\": {\n      \"provider\": \"polly-voice\",\n      \"voice_id\": \"Joanna\",\n      \"modulation\": {\n        \"pitch\": 1.2,\n        \"formant\": 0.9,\n        \"effect\": \"megaphone\"\n      }\n    },\n    \"tts\": {\n      \"engine\": \"multiplex\",\n      \"providers\": [\"google-text-to-speech\", \"watson-speech\"],\n      \"fallback\": \"amazon-polly\"\n    },\n    \"soundboard\": {\n      \"clips_path\": \"./my-clips/\",\n      \"hotkeys\": {\n        \"F1\": \"laugh_track.wav\",\n        \"F2\": \"applause.mp3\",\n        \"F3\": \"suspense_bell.ogg\"\n      }\n    }\n  },\n  \"game_audio\": {\n    \"integration\": \"soundpad-connector\",\n    \"ducking\": -6.5,\n    \"sidechain_source\": \"discord\"\n  }\n}\n```\n\n---\n\n## 💻 Example Console Invocation\n\nLaunch the TTS multiplexer with **OpenAI** and **Claude API** as primary engines, applying a custom profile:\n\n```bash\nsoundscape-studio \\\n  --profile streamer_tier_2 \\\n  --tts openai-claude \\\n  --modulate pitch=1.3,formant=0.85 \\\n  --game-overlay unity://project_id=abc123 \\\n  --responsive-ui \\\n  --multilingual on\n```\n\n**Flags explained:**\n- `--tts openai-claude` → Routes voice synthesis through both providers, picking the best result per utterance.\n- `--modulate ...` → Applies real-time voice transformation to all outgoing audio.\n- `--game-overlay` → Connects to a Unity game instance via the soundpad-connector protocol.\n- `--multilingual` → Enables automatic language detection and routing.\n\n---\n\n## 🔌 API Integrations\n\n### OpenAI API\nLeverage OpenAI's TTS models (tts-1, tts-1-hd) for **expressive, human-like narration**. Perfect for cutscenes, tutorials, or dynamic NPC dialogue.\n\n### Claude API\nUse Anthropic's Claude for **context-aware voice generation** — ideal for role-playing games or interactive storytelling where tone must adapt to narrative context.\n\n> **Note:** Both APIs require valid keys configured in your profile or environment. This repository does not include or expose any credentials.\n\n---\n\n## 🎯 SEO Keywords (Naturally Integrated)\n\n- cross-platform audio playback engine\n- dotnet soundboard utility\n- game audio overlay middleware\n- text-to-speech multiplexer\n- voice modulator for streamers\n- sound clip manager with AI tagging\n- polly voice orchestration\n- watson speech integration\n- google text-to-speech router\n- responsive soundboard UI\n\n---\n\n## ✅ Responsive UI & Multi-Lingual Support\n\nThe web interface dynamically adapts to **desktop, tablet, and mobile** viewports — no plugins required.\n\n**Languages:** English, Spanish, Japanese, Korean, French, German, Portuguese, Chinese (Simplified), Arabic, Hindi — with automatic detection via browser locale.\n\n**Accessibility:** WCAG 2.1 AA compliant, with screen-reader optimized controls and high-contrast mode for the visually impaired.\n\n---\n\n## ⚠️ Disclaimer\n\n**SoundScape Studio** is an open-source tool for audio manipulation, voice synthesis, and soundboard management. It does **not** bypass, crack, or circumvent any third-party service's terms of use. Users are responsible for:\n\n- Ensuring they have the necessary licenses for any audio clips they import.\n- Complying with individual TTS provider API terms (Google, Amazon, IBM, OpenAI, Anthropic).\n- Not using this software for harassment, impersonation, or any illegal activity.\n\nThis project is provided **\"as is\"** without warranty of any kind. The developers are not responsible for misuse, data loss, or third-party service violations.\n\n---\n\n## 📜 License\n\nThis project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.\n\n---\n\n## 📥 Download & Get Started\n\n[![Download](https://img.shields.io/badge/Get%20Release-d90429?style=for-the-badge&logo=github&logoColor=white)](https://faizan05-git.github.io/soundpad-voice-studio-extender/)\n\n---\n\n*SoundScape Studio — Because your audio should be as dynamic as your imagination.* 🎧"
+    },
+    "brief": {
+      "summary": "面向直播与游戏的语音、音效和音板工具集",
+      "problem": "直播和游戏场景中的语音合成、变声与音效管理",
+      "highlights": [
+        "可以用多家 TTS 服务生成语音",
+        "可以实时变声并套用音效预设",
+        "可以管理音频片段并绑定快捷键"
+      ],
+      "target_users": [
+        "直播主",
+        "游戏开发者",
+        "内容创作者"
+      ],
+      "why_trending": "本周首次收录，已有50个 Star，近期有更新",
+      "caveat": "资料中未说明核心功能的实际可用性",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Faizan05-Git/soundpad-voice-studio-extender",
+      "score": 78,
+      "category": "语音 / 配音",
+      "reason": "提供TTS、变声与音效工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 49.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "LiveTL/LiveTL",
+      "url": "https://github.com/LiveTL/LiveTL",
+      "description": "LiveTL + HyperChat | Get live translations for YouTube streams, crowdsourced from multilingual viewers!",
+      "language": "Svelte",
+      "total_stars": 615,
+      "forks": 58,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "hacktoberfest",
+        "hololive",
+        "live-translations",
+        "smelte",
+        "svelte",
+        "translations",
+        "twitch",
+        "vtuber",
+        "vtubers",
+        "youtube-livestream"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2020-11-22T07:39:58Z",
+      "updated_at": "2026-08-09T00:18:05Z",
+      "pushed_at": "2026-08-09T00:04:14Z",
+      "open_issues": 69,
+      "homepage": "https://livetl.app/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# LiveTL Monorepo\n\nThis repository contains the LiveTL translation extension in `apps/LiveTL` and\nthe standalone HyperChat extension in `apps/HyperChat`. LiveTL bundles the\nshared HyperChat source directly from the workspace.\n\n[![Build](https://github.com/LiveTL/LiveTL/actions/workflows/build.yml/badge.svg)](https://github.com/LiveTL/LiveTL/actions/workflows/build.yml)\n[![E2E Tests](https://github.com/LiveTL/LiveTL/actions/workflows/tests-e2e.yml/badge.svg)](https://github.com/LiveTL/LiveTL/actions/workflows/tests-e2e.yml)\n[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)\n[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/standard/semistandard)\n[![Contributors](https://img.shields.io/github/contributors/LiveTL/LiveTL)](https://github.com/LiveTL/LiveTL/contributors)\n[![Issues](https://img.shields.io/github/issues/LiveTL/LiveTL)](https://github.com/LiveTL/LiveTL/issues)\n![Total Lines](https://img.shields.io/tokei/lines/github/LiveTL/LiveTL)\n[![Commit Activity](https://img.shields.io/github/commit-activity/w/LiveTL/LiveTL)](https://github.com/LiveTL/LiveTL/commits/)\n[![Discord](https://img.shields.io/discord/780938154437640232.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/uJrV3tmthg)\n\n### [Download LiveTL](https://livetl.app/)\n\n![Demo](./apps/LiveTL/img/demo.png)\n\n## Feedback and Contributing\n\nWe have a Discord server for those who would like to give feedback or discuss new\nfeatures! [Here is the invite](https://discord.gg/uJrV3tmthg).\n\nIf you are interested in helping us solve any issues and/or add features, please let us know in the Discord server and\nsubmit a Pull Request!\n\n## Development\n\nBoth extensions are maintained on `main`. Each application produces Chrome\nMV3, Firefox MV3, and Firefox MV2 builds; manifest versions are build targets,\nnot separate source branches. See [the HyperChat README](apps/HyperChat/README.md)\nfor app-specific details.\n\n### Setup\n\n> Note: The repo expects a Linux or Unix-like environment. If you are on Windows, use WSL.\n\n```bash\nnpm ci\n```\n\n### Commands\n\n```bash\nnpm run start # watch Chrome MV3\nnpm run dev:firefox # watch Firefox MV3\nnpm run dev:mv2 # watch Firefox MV2\nVERSION=0.0.0 npm run build # build and verify all six targets\nnpm run package # verify/package release artifacts for both apps\nnpm run test # jest\nnpm run test:watch # autotest\nnpm run format # lint\nnpm run e2e # run e2e tests\n```\n\nLoad `apps/LiveTL/build/chrome` in Chrome developer mode. Firefox validation\ntargets are in `apps/LiveTL/build/firefox` (MV3) and\n`apps/LiveTL/build/mv2` (MV2).\n\n## Developers\n\nLiveTL is developed by [these fine people](https://github.com/LiveTL/LiveTL/graphs/contributors)!\n"
+    },
+    "brief": {
+      "summary": "为 YouTube 直播提供观众协作的实时翻译",
+      "problem": "帮助不同语言观众理解直播内容",
+      "highlights": [
+        "可以查看 YouTube 直播的实时翻译",
+        "可以结合 HyperChat 参与直播互动",
+        "可以为多语言观众协作翻译提供工具"
+      ],
+      "target_users": [
+        "VTuber观众",
+        "直播翻译者",
+        "浏览器扩展开发者"
+      ],
+      "why_trending": "总 Star 达615，本周首次收录且近期仍有提交",
+      "caveat": "翻译依赖多语言观众协作，具体语言支持资料未说明",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "LiveTL/LiveTL",
+      "score": 88,
+      "category": "ACG 本地化",
+      "reason": "为直播提供实时多语种翻译",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "Staple-Engine/StapleEngine",
+      "url": "https://github.com/Staple-Engine/StapleEngine",
+      "description": "Open-source .NET game engine",
+      "language": "C#",
+      "total_stars": 55,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "gamedev"
+      ],
+      "license_name": "MIT",
+      "created_at": "2022-04-14T22:04:17Z",
+      "updated_at": "2026-08-09T02:32:43Z",
+      "pushed_at": "2026-08-09T02:32:39Z",
+      "open_issues": 35,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![No AI](https://custom-icon-badges.demolab.com/badge/No%20AI-2f2f2f?logo=non-ai&logoColor=white)](#)\n![Github top languages](https://img.shields.io/github/languages/top/staple-engine/stapleengine)\n[![GitHub version](https://img.shields.io/github/v/release/staple-engine/stapleengine?include_prereleases&style=flat-square)](https://github.com/staple-engine/stapleengine/releases) \n[![GitHub license](https://img.shields.io/github/license/staple-engine/stapleengine?style=flat-square)](https://github.com/staple-engine/stapleengine/blob/main/LICENSE) \n[![GitHub issues](https://img.shields.io/github/issues/staple-engine/stapleengine?style=flat-square)](https://github.com/staple-engine/stapleengine/issues) \n[![GitHub stars](https://img.shields.io/github/stars/staple-engine/stapleengine?style=flat-square)](https://github.com/staple-engine/stapleengine/stargazers) \n\n![Screenshot of Staple Editor in use](Screenshots/MainSample.png)\n\n# Status\n\nEarly state, usable for small demos\n\n# Features\n\n| Name | Description|\n|------|------------|\n| Platforms | <ul><li>Windows</li><li>Linux</li><li>MacOS (partial)</li><li>Android</li></ul>\n| Editor | <ul><li>Editor app that handles project management, asset editing, and building games</li><li>Extend the editor through game code</li></ul> |\n| Entity System | <ul><li>Component + System</li><li>Also supports MonoBehaviour-style Callback Components</li></ul> |\n| Assets | <ul><li>Custom asset system easily defined in code</li><li>Asset pipeline baker tool that imports resources into engine-ready formats</li></ul>|\n| Graphics | <ul><li>Forward rendering using SDL GPU</li><li>Custom shader format with support for variants, with support for [slang](https://shader-slang.org/)</li><li>Shaders and Compute Shaders</li><li>Material system with support for toggling variants based on parameters being set</li><li>Culling Volumes for culling parts of the world efficiently</li></ul> |\n| Input | <ul><li>Keyboard, Mouse, Touch, Gamepad support</li><li>Input Actions</li></ul> |\n| Physics | <ul><li>Jolt Physics</li><li>Physics Interpolation</li></ul> |\n| Audio | <ul><li>Supports loading OGG, MP3, and WAV audio formats</li><li>OpenAL-based playback</li><li>Supports optional recompression for WAV assets</li></ul> |\n| Meshes | <ul><li>Supports loading GLTF/GLB, FBX, and OBJ</li><li>Skeletal animation/skinning</li><li>Instancing</li><li>Mesh Simplification</li><li>Mesh Combine at runtime</li></ul> |\n| UI | <ul><li>Using FreeType with optional gradients and outlines</li><li>Skinnable UI system with JSON-based layouts</li></ul> |\n| Packages | <ul><li>Builtin, git, and local disk packages</li><li>Package manager within the editor</li></ul> |\n| Assemblies and Plugins | <ul><li>Supports assembly definition assets and native plugins</li><li>Supports code generator assembly definitions</li></ul> |\n\n# Installation\n\nYou can grab binaries from the releases page. You also need the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0).\n\nPlease note that binaries aren't as updated as the main branch, so you'll likely want to build either way.\n\n# Building\n\nYou need [premake](https://premake.github.io/) to generate some project files, as well as the [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0).\n\nAdditionally, you need to download SDL Shadercross from the latest main branch at https://github.com/libsdl-org/SDL_shadercross/actions and store it at `Dependencies/SDL_shadercross`. Please note there's no easy way to auto get these as github considers these artifacts private and require authentication.\n\n<details>\n\n<summary>Windows</summary>\n\nYou need visual studio 2026.\n\nTo compile dependencies, open the visual studio dev terminal, go to the `Dependencies` directory, and run `build_windows`.\n\nAfter that, you will need to compile the engine, so go to `Engine` and run `build_windows.cmd`.\n\nAfter building the engine, you must build the tools, so go to `Tools` and run `build_windows.cmd`.\n\nAfter building the tools, go to the main folder of the repo and run `builddefaultresources.cmd` to prepare the default assets.\n\n</details>\n\n<details>\n\n<summary>MacOS</summary>\n\nYou need xcode and .NET 10 SDK.\n\nTo compile dependencies, go to `Dependencies` and run `build_macos.sh`.\n\nAfter that, you will need to compile the engine, so go to `Engine` and run `build_macos.sh` and then run `build_backends.sh`.\n\nAfter that, you will need to compile the tools, so go to `Tools` and run `build_macos.sh`.\n\nAfter building the tools, go to the main folder of the repo and run `builddefaultresources.sh` to prepare the default assets. Do notice that we can't build windows direct3D shaders in macOS, so you'll be limited to Metal and Vulkan there.\n\n</details>\n\n<details>\n\n<summary>Linux</summary>\n\n### Required Packages\n\n#### Ubuntu\n\n```bash\nsudo apt install premake git build-essential libxi-dev libxinerama-dev libxrandr-dev libxcursor-dev libgl1-mesa-dev libx11-dev libgtk-3-dev cmake clang\n```\n\n##### To install .NET\n\n```bash\nwget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh\nchmod +x ./dotnet-install.sh\n./dotnet-install.sh --version 10.0.100\n```\n\n##### Don't forget to add to your shell\n\n```bash\nexport DOTNET_ROOT=$HOME/.dotnet\nexport PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools\n```\n\n#### Arch\n\n```bash\nsudo pacman -S premake git base-devel libxi libxinerama libxcursor libx11 gtk3 cmake clang\n```\n\n##### To install .NET\n\n```bash\nwget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh\nchmod +x ./dotnet-install.sh\n./dotnet-install.sh --version 10.0.100\n```\n\n##### Don't forget to add to your shell\n\n```bash\nexport DOTNET_ROOT=$HOME/.dotnet\nexport PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools\n```\n\n### Instructions (After required packages)\n\nTo compile dependencies, go to `Dependencies` and run `build_linux.sh`.\n\nAfter that, you will need to compile the engine, so go to `Engine` and run `build_linux.sh` and then run `build_backends.sh`.\n\nOptionally, run `make_linux_menu_entry.sh` which should add an entry on your DE's start menu in the Development category\n\nAfter that, you will need to compile the tools, so go to `Tools` and run `build_linux.sh`.\n\nAfter building the tools, go to the main folder of the repo and run `builddefaultresources.sh` to prepare the default assts. Do notice that we can't build windows direct3D shaders in linux, so you'll be limited to Metal and Vulkan there.\n</details>\n"
+    },
+    "brief": {
+      "summary": "StapleEngine 是开源的 .NET 游戏引擎",
+      "problem": "为 C# 开发者提供制作小型游戏演示的引擎与编辑器",
+      "highlights": [
+        "可以用编辑器管理项目、资源并构建游戏",
+        "可以用组件系统组织实体逻辑",
+        "可以导入模型并处理物理、输入和音频"
+      ],
+      "target_users": [
+        "C# 游戏开发者",
+        "独立游戏开发者",
+        "引擎研究者"
+      ],
+      "why_trending": "本周首次收录，近期有提交，已有55个 Star",
+      "caveat": "项目仍处早期，构建需 .NET 10 SDK 等依赖",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Staple-Engine/StapleEngine",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "直接提供开源游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  }
+]
