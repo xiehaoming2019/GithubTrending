@@ -1,0 +1,558 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 229587,
+      "forks": 19625,
+      "stars_today": 3362,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3362
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-08-22T01:54:53Z",
+      "pushed_at": "2026-08-21T10:56:48Z",
+      "open_issues": 374,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向真实工程开发的可组合 AI Agent 技能集",
+      "problem": "帮助 AI 编程代理减少需求误解、代码缺陷和流程失控",
+      "highlights": [
+        "可以用提问流程澄清需求并建立共享术语",
+        "可以用 TDD 技能推动测试驱动开发",
+        "可以用调试技能分阶段定位代码问题"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "软件工程师",
+        "团队技术负责人"
+      ],
+      "why_trending": "今日新增3362 Star，且项目连续上榜",
+      "caveat": "不同安装方式可能重复安装；Codex 原生插件尚在规划",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的智能体技能集",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "language": "JavaScript",
+      "total_stars": 241808,
+      "forks": 36656,
+      "stars_today": 357,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 357
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "developer-tools",
+        "llm",
+        "mcp",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-18T00:51:51Z",
+      "updated_at": "2026-08-22T01:51:48Z",
+      "pushed_at": "2026-08-21T03:02:03Z",
+      "open_issues": 147,
+      "homepage": "https://ecc.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/hero.png\" alt=\"ECC - the agent harness operating system\" width=\"100%\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending\" alt=\"GitHub Trending Repository of the Day\" height=\"46\" />\n    </picture>\n  </a>\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank\" alt=\"Star History Global Rank\" height=\"46\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>Language:</strong>\n  <a href=\"README.md\">English</a> |\n  <a href=\"docs/pt-BR/README.md\">Português (Brasil)</a> |\n  <a href=\"README.zh-CN.md\">简体中文</a> |\n  <a href=\"docs/zh-TW/README.md\">繁體中文</a> |\n  <a href=\"docs/ja-JP/README.md\">日本語</a> |\n  <a href=\"docs/ko-KR/README.md\">한국어</a> |\n  <a href=\"docs/tr/README.md\">Türkçe</a> |\n  <a href=\"docs/ru/README.md\">Русский</a> |\n  <a href=\"docs/vi-VN/README.md\">Tiếng Việt</a> |\n  <a href=\"docs/th/README.md\">ไทย</a> |\n  <a href=\"docs/de-DE/README.md\">Deutsch</a> |\n  <a href=\"docs/es/README.md\">Español</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\"><img src=\"https://img.shields.io/discord/1496644400590094540?logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\" /></a>\n  <a href=\"https://ecc.tools\"><img src=\"https://img.shields.io/badge/Website-ecc.tools-E07856?logo=googlechrome&logoColor=white\" alt=\"Website\" /></a>\n  <a href=\"https://github.com/apps/ecc-tools\"><img src=\"https://img.shields.io/badge/GitHub%20App-ECC%20Tools-181717?logo=github&logoColor=white\" alt=\"GitHub App\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue.svg\" alt=\"MIT license\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/affaan-m/ECC/stargazers\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fstars&style=flat\" alt=\"Stars\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/network/members\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fforks&style=flat\" alt=\"Forks\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/graphs/contributors\"><img src=\"https://img.shields.io/github/contributors/affaan-m/ECC?style=flat\" alt=\"Contributors\" /></a>\n  <a href=\"https://github.com/marketplace/ecc-tools\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github\" alt=\"GitHub App installs\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/ecc-universal\"><img src=\"https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal&logo=npm\" alt=\"ecc-universal npm downloads\" /></a>\n  <a href=\"https://www.npmjs.com/package/ecc-agentshield\"><img src=\"https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield&logo=npm\" alt=\"ecc-agentshield npm downloads\" /></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white\" alt=\"Shell\" />\n  <img src=\"https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white\" alt=\"TypeScript\" />\n  <img src=\"https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white\" alt=\"Python\" />\n  <img src=\"https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white\" alt=\"Go\" />\n  <img src=\"https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white\" alt=\"Java\" />\n  <img src=\"https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white\" alt=\"Perl\" />\n  <img src=\"https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white\" alt=\"Markdown\" />\n</p>\n\n> [!WARNING]\n> **Official sources only.** Install ECC only from verified channels: the GitHub repository [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC), the npm packages [`ecc-universal`](https://www.npmjs.com/package/ecc-universal) and [`ecc-agentshield`](https://www.npmjs.com/package/ecc-agentshield), the [GitHub App](https://github.com/apps/ecc-tools), the plugin slug `ecc@ecc`, and the project website [ecc.tools](https://ecc.tools). Third-party re-uploads and unofficial mirrors are not maintained or reviewed by the project and may contain malware.\n\n## Install with Claude Code\n\nRun these commands inside Claude Code:\n\n```text\n/plugin marketplace add https://github.com/affaan-m/ECC\n/plugin install ecc@ecc\n```\n\nThat installs ECC's skills, agents, commands, and plugin-managed hooks. If you choose this path, stop there. Do not also run a full manual install into Claude Code.\n\n> Guided package setup is coming in `ecc-universal` 2.2.0. Use the native\n> Claude plugin commands above while npm remains on 2.1.0.\n\n<div align=\"center\">\n\n<table aria-label=\"ECC primary links\">\n<tr>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://ecc.tools/pricing\">\n    <img src=\"assets/images/community/ecc-tools-mark.svg\" height=\"42\" alt=\"ECC Tools\" /><br />\n    <strong>ECC Pro + GitHub App</strong>\n  </a><br />\n  <sub><a href=\"https://github.com/apps/ecc-tools\">Install free</a> · <a href=\"https://ecc.tools/pricing\">Private repos from $19/seat/mo</a></sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://github.com/sponsors/affaan-m\">\n    <img src=\"assets/images/community/heart.svg\" height=\"42\" alt=\"\" /><br />\n    <strong>Sponsor ECC</strong>\n  </a><br />\n  <sub>Fund the open-source project</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\">\n    <img src=\"assets/images/community/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n</div>\n\n<sub>**OSS stays free.** This repo is MIT-licensed forever. ECC Pro is the hosted GitHub App for private repos. <a href=\"https://github.com/sponsors/affaan-m\">Sponsors</a> and <a href=\"https://ecc.tools/pricing\">Pro subscribers</a> fund the work. That's why a single maintainer ships weekly across 7 harnesses.</sub>\n\n<div align=\"center\">\n\n<sub><strong>Partners &amp; sponsors</strong></sub>\n\n<p align=\"center\" aria-label=\"Partners and sponsors\">\n  <a href=\"https://www.coderabbit.ai\" title=\"CodeRabbit\"><img src=\"assets/images/sponsors/coderabbit.png\" height=\"54\" alt=\"CodeRabbit\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.greptile.com/go/ecc\" title=\"Greptile\"><img src=\"assets/images/sponsors/greptile.png\" height=\"54\" alt=\"Greptile\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.atlascloud.ai/?utm_source=github&amp;utm_medium=link&amp;utm_campaign=ECC\" title=\"Atlas Cloud\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/atlascloud-dark.svg\" /><img src=\"assets/images/sponsors/atlascloud.svg\" width=\"154\" alt=\"Atlas Cloud\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.moonshot.ai\" title=\"Moonshot AI - Kimi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/moonshot-dark.png\" /><img src=\"assets/images/sponsors/moonshot.png\" width=\"132\" alt=\"Moonshot AI - Kimi\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://compute.itomarkets.com\" title=\"Itô Markets\"><picture><source media=\"(prefers-color-scheme: light)\" srcset=\"assets/images/sponsors/ito-transparent-light.png\" /><img src=\"assets/images/sponsors/ito-transparent.png\" width=\"96\" alt=\"Itô Markets\" /></picture></a>\n</p>\n\n<sub><strong>Community sponsors:</strong> <a href=\"https://github.com/mikejmorgan-ai\">Mike Morgan</a> · <a href=\"https://github.com/jasonwu513\">@jasonwu513</a> · <a href=\"https://github.com/1anter\">@1anter</a> · <a href=\"https://github.com/massimotodaro\">@massimotodaro</a> · <a href=\"https://github.com/meadmccabe\">@meadmccabe</a></sub>\n\n<sub><a href=\"https://github.com/sponsors/affaan-m\"><strong>Become a Sponsor</strong></a> · <a href=\"SPONSORS.md\">Sponsor Tiers</a> · <a href=\"SPONSORING.md\">Sponsorship Program</a></sub>\n\n</div>\n\n<p align=\"center\"><a href=\"#install-ecc\">Jump to install ↓</a></p>\n\n# ECC\n\nYour agent can write code, but ECC gives it a coordinated engineering system and toolbox: it plans before it builds, verifies changes with tests, reviews its own work from a fresh context, remembers what matters, and turns repeated wins into reusable skills and workflows.\n\n```text\nplan -> test -> implement -> review -> verify -> remember -> improve\n```\n\nInstead of rebuilding that process in every prompt, you install it once and make it part of how your agent works.\n\n> Optimize the context window. Persist everything else.\n\nECC is MIT-licensed open source. It works best with Claude Code today, has a supported Codex sync path, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the [support status matrix](#platform-support) before assuming feature parity.\n\nAccess to 68 agents, 286 skills, and 94 legacy command shims, plus hooks, rules, memory, continuous learning, and AgentShield security scanning. The agents are specialized for planning, review, build repair, security, architecture, and domain work.\n\n| Included         |       Count | What it gives you                                                                    |\n| ---------------- | ----------: | ------------------------------------------------------------------------------------ |\n| Agents           |   68 agents | Planning, review, build repair, security, architecture, and domain work              |\n| Skills           |  286 skills | TDD, research, security, docs, frontend, data, ML, operations, and more              |\n| Commands         | 94 commands | Convenient entry points while ECC moves to a skills-first surface                    |\n| Hooks and memory |     Runtime | Enforcement, session summaries, continuous learning, instincts, and context controls |\n| Rules            |   Selective | Always-loaded standards you choose by language or project                            |\n| AgentShield      |    Included | Scanning for prompts, hooks, MCP config, permissions, secrets, and agent files       |\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n      <img src=\"assets/star-history-light.svg\" alt=\"ECC star history: first 40,000 stars, January 18 to February 7, 2026\" width=\"100%\" />\n    </picture>\n  </a>\n</p>\n\n## Install ECC\n\n> [!IMPORTANT]\n> Guided package setup is coming in `ecc-universal` 2.2.0. The current npm\n> release, 2.1.0, does not include the guided setup commands. Use the native\n> Claude plugin commands at the top of this README until 2.2.0 is published.\n\n### Pick one path only (per harness)\n\nYou can use ECC with Claude Code, Codex, and other harnesses at the same time. Choose one install method for each harness:\n\n- **Recommended today for Claude Code:** use the [native plugin commands above](#install-with-claude-code)\n- **Coming in release 2.2:** guided package setup for Claude Code, Codex, and Kimi Code; see the preview at the bottom of this install area\n- **Works:** Claude Code plugin + Codex native plugin\n- **Works:** Claude Code plugin + the legacy Codex sync flow\n- **Avoid:** Claude Code plugin + full Claude manual install\n- **Avoid:** Codex sync + Codex marketplace plugin\n\n**Do not stack install methods.** Installing ECC twice into the same harness can duplicate skills, commands, hooks, or configuration; installing it once into multiple harnesses does not.\n\nIf you already layered multiple installs and things look duplicated, skip straight to [Reset / Uninstall ECC](#reset--uninstall-ecc).\n\n**Install trouble?** Open the short [install or runtime problem form](https://github.com/affaan-m/ECC/issues"
+    },
+    "brief": {
+      "summary": "面向多种编程助手的智能体性能优化系统",
+      "problem": "帮助开发者管理智能体技能、记忆、安全与研究流程",
+      "highlights": [
+        "可以为 Claude Code 安装技能、代理和命令",
+        "可以在多种编程助手中复用智能体配置",
+        "可以通过插件管理相关钩子"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "智能体开发者",
+        "软件开发团队"
+      ],
+      "why_trending": "今日新增357 Star，总Star达241808，本周首次收录",
+      "caveat": "仅应从官方仓库、npm或GitHub App安装",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "affaan-m/ECC",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "智能体技能与工作流优化系统",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 40,
+      "ranking_score": 69.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "apache/maka",
+      "url": "https://github.com/apache/maka",
+      "description": "Apache Maka (Incubating) is a local-first AI agent workspace. Model messages, tool calls, tool results, permission decisions, and termination events are recorded as an append-only log.",
+      "language": "TypeScript",
+      "total_stars": 2033,
+      "forks": 243,
+      "stars_today": 148,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 148
+    },
+    "details": {
+      "topics": [
+        "agent-runtime",
+        "ai",
+        "ai-agent",
+        "apache",
+        "cli",
+        "desktop",
+        "electron",
+        "event-sourcing",
+        "llm",
+        "local-first",
+        "maka",
+        "tool-use",
+        "typescript"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-27T15:46:05Z",
+      "updated_at": "2026-08-22T01:42:34Z",
+      "pushed_at": "2026-08-22T01:47:14Z",
+      "open_issues": 285,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Maka\n\n[![CI](https://github.com/apache/maka/actions/workflows/ci.yml/badge.svg)](https://github.com/apache/maka/actions/workflows/ci.yml)\n[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)\n[![docs](https://img.shields.io/badge/docs-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue?logo=googletranslate&logoColor=white)](./README.zh-CN.md)\n\n![Maka — Your work. Your agent.](./.github/assets/maka-hero.en.png)\n\n**A local-first Agent workspace built for real work.**\n\nMaka does more than answer questions. With controlled permissions, it can inspect projects, execute tools, produce artifacts, and preserve model messages and tool calls as recoverable execution facts. Desktop, the terminal TUI, the non-interactive CLI, and Maka evaluation subjects all execute through Runtime Host.\n\n> [!IMPORTANT]\n> Maka is under active development. The macOS Apple Silicon desktop build is an early public release; data formats, CLI commands, and experimental capabilities may still change.\n\n## Why Maka\n\n- **Local-first instead of hosted-first**: sessions, settings, and run records stay on your machine by default. You choose the model connection: cloud API, local model, or compatible gateway.\n- **Log is the Runtime**: model messages, Tool Calls, Tool Results, and termination facts enter Runtime Event Log. Sessions, UI, model context, and recovery are projections over that log.\n- **Context is not history**: Tool Result pruning and LLM Compaction change what the next inference sees without treating recorded evidence as disposable context.\n- **One execution authority**: Runtime Host owns Session, Turn, agent lifecycle, continuation, tools, and events. Eval owns only experiment semantics and results.\n\nRead [Maka Backend Architecture](./ARCHITECTURE.md) for the complete design.\n\n## Surfaces\n\n| Entry point | Best for | Current capability |\n|---|---|---|\n| **Desktop** | Daily interaction, file and Artifact workflows, model and permission setup | Electron + React with streaming sessions, tool timelines, branching, search, and recovery |\n| **TUI / CLI** | Using Maka in the current project directory or running one non-interactive Turn | `maka`, `maka run`; shares workspace and model connections with Desktop |\n| **Eval** | Reproducible benchmark experiments across Maka and external subjects | `maka eval run <spec> --out <directory>` |\n\n## Current capabilities\n\n### Agent Runtime\n\n- Multiple model connections, streaming output, thinking, usage accounting, and provider-error normalization;\n- Local tools including `Read`, `Write`, `Edit`, `Bash`, `Glob`, and `Grep`;\n- Tool schema validation, dynamic availability, permission policy, watchdogs, abort, and error classification;\n- Runtime Event Log, AgentRun ledger, startup recovery, Turn Evidence, active Tool Result pruning, and history compaction.\n\n### Desktop workspace\n\n- Create, archive, search, rename, retry, regenerate, and branch sessions from a Turn;\n- Artifact lists and previews, workspace instructions, model settings, and permission settings;\n- Local memory, web search, and bot entry points;\n- Integrations are configured independently, and not every experimental entry is available by default.\n\n### Evaluation\n\n- Declarative multi-arm experiments expanded into task × repetition × subject cells;\n- Immutable per-cell attempts with targeted infrastructure replacement and earliest-valid selection;\n- A small result kernel for score, normalized usage, attributable cost, duration, status, failure reason, and artifacts;\n- Maka subjects execute only through Runtime Host; external competitors use generic external subject adapters.\n\n## Quick start\n\n### Download Desktop for macOS\n\nThe signed and notarized Desktop app is available from [GitHub Releases](https://github.com/apache/maka/releases/latest) for Apple Silicon Macs only (`arm64`).\n\n1. Download `Maka-<version>-mac-arm64.dmg`;\n2. Open the DMG and drag Maka to Applications;\n3. Install `ripgrep` with `brew install ripgrep` to enable Runtime's `Grep` tool;\n4. Launch Maka and configure your own model connection under `Settings → Models`.\n\nComputer Use is not included in this first public build. Intel Macs, Windows, and Linux packages are not supported yet.\n\n### Windows x64 preview\n\nWindows is still an unsigned preview, not a supported release tier. When a release includes Windows\nassets, follow the [Windows preview installation and verification guide](docs/windows-support.md#install-the-windows-x64-preview)\nbefore running `Maka-<version>-win-x64.exe`. SmartScreen will identify the installer as coming from\nan unknown publisher; do not bypass that warning unless the downloaded SHA-256 matches the checksum\npublished with the same release.\n\n### Requirements\n\n- Node.js 22.19 or newer (CI uses Node.js 24);\n- npm (the lockfile and scripts use npm; the current `packageManager` is npm 11);\n- Git;\n- `ripgrep`, used by Runtime's `Grep` tool.\n\n### Start Desktop\n\n```sh\ngit clone https://github.com/apache/maka.git\ncd maka\nnpm ci\nnpm run dev\n```\n\n`npm run dev` starts the Desktop development environment with HMR. To build every workspace before starting Electron, use:\n\n```sh\nnpm run dev:full\n```\n\nIf dependencies were installed with `ELECTRON_SKIP_BINARY_DOWNLOAD=1`, install the Electron platform binary before starting:\n\n```sh\nnode node_modules/electron/install.js\n```\n\n### First run\n\nMaka does not bundle a shared model account. On first launch:\n\n1. Open `Settings → Models`;\n2. Add an API, local-model, or supported account connection;\n3. Test it and choose a default model;\n4. Return to the workspace and start a task.\n\nThe app distinguishes configured, send-ready, and experimental connection states. An account flow that is not wired into Runtime is not presented as a usable model.\n\n## Terminal entry points\n\nFor the public npm package, see the [CLI installation and usage guide](./packages/cli/README.md).\nThe commands below run the development CLI from a source checkout.\n\nBuild the workspaces first:\n\n```sh\nnpm run build\n```\n\nThen start the TUI or run one Turn:\n\n```sh\nnpm run cli:dev\nnpm run cli:dev -- run \"Summarize this repository and identify its most important risk\"\nnpm run cli:dev -- run --graph \"Implement two independent slices, integrate them, then review the result\"\nnpm run cli:dev -- --help\n```\n\nThe TUI also accepts `/graph on`, `/graph off`, and `/graph <task>`. Non-interactive\n`--graph` runs wait for the durable Graph to finish before printing the final\nsupervisor output. Graph implementation operators use isolated Git worktrees, so\nthe source project must be a clean Git worktree.\n\nThe repository CLI uses the same `Maka Dev` profile as a development Desktop build. The\nreleased `maka` binary continues to use the `Maka` profile; the two profiles are not copied or\nsynchronized automatically. Evaluation specs and adapters live in [`packages/eval`](./packages/eval).\n\n## Architecture\n\nThe backend spine is:\n\n```text\nDesktop / TUI / CLI → Runtime Host → SessionManager → AgentRun\n                                             ↓\n                         Model + Tool Runtime → Runtime Event Log\n                                             ↓\n                              Context / Session / UI projections\n\nExperiment → Cells → Attempts → Results\n                    ↓\n       Runtime Host executes Maka subjects\n```\n\nStart with [ARCHITECTURE.md](./ARCHITECTURE.md). It provides the system map, code boundaries, problem-oriented reading paths, and six bilingual deep dives.\n\n## Repository layout\n\n```text\napps/desktop/       Electron main / preload / React renderer\n\npackages/core/      Pure contracts for Sessions, Events, Permissions, and Connections\npackages/storage/   SQLite operational state, configuration, and payload stores\npackages/runtime/   AgentRun, model adapters, tools, context, and recovery\npackages/eval/      Experiment cells, attempts, results, and executor/subject adapters\npackages/cli/       TUI and non-interactive CLI\npackages/ui/        Shared conversation, Markdown, Artifact, and UI primitives\n\ndocs/               Architecture, product, security, privacy, and test contracts\nscripts/            Build hygiene, visual checks, smoke tests, and release helpers\n```\n\n## Local data and security boundary\n\nMaka stores workspace data under Electron `userData` by default:\n\n```text\n<Electron userData>/workspaces/default/\n  runtime.sqlite\n  connection-catalog.json\n  credential-vault.json\n  settings.json\n  artifacts/\n```\n\nCurrent boundaries that matter:\n\n- The current connection catalog is `connection-catalog.json`. Existing `llm-connections.json` files stay on disk and are not imported;\n- Sessions, messages, execution ledgers, workflows, usage, Automations, and Daily Review live in `runtime.sqlite`;\n- Runtime Policy credentials, including Connection API/OAuth material, request headers, web-search keys, and proxy passwords, live in local plaintext `credential-vault.json`, behind the OS account boundary, with POSIX directory mode `0700` and file mode `0600` enforced;\n- Runtime Host client profile access credentials are separate and live under `<Electron userData>/runtime-host-client/credentials.json`. Pre-existing Electron `safeStorage` credential/token files are not imported; affected users must re-authenticate;\n- Renderer does not receive plaintext credentials. File writes, Shell, and dangerous tool calls pass through the permission engine;\n- Eval does not construct Runtime or read Runtime storage. Maka subjects connect to an existing Runtime Host.\n\nRead [SECURITY.md](./SECURITY.md) for security reporting and policy, and [docs/README.md](./docs/README.md) for current privacy and sandbox contracts.\n\n## Runtime storage and recovery\n\n`runtime.sqlite` is the sole operational authority. It owns RuntimeEvents,\nsession metadata and message history, Agent Graph control, core execution state,\nworkflow state, usage and pricing, Artifact metadata, Automations, Daily Review,\nand Runtime continuation records. Artifact payload bytes remain regular files under\n`artifacts/`; connections, credentials, settings, MCP configuration, skills,\nand device identity remain configuration files.\n\nThis storage generation does not import earlier File/JSONL authorities. On\nupgrade, legacy session titles may still be discoverable through current\nmetadata, but conversation history that exists only in legacy transcript files\nis not copied into `session_messages` and opens as an empty thread. Likewise,\npre-version or `safeStorage`-encrypted credential/token files are not migrated;\nusers with only those copies must re-authenticate. This data-loss boundary is\nintentional for this release and must be considered before upgrading an\nexisting workspace.\n\nFull operational backup uses the database owner's online SQLite backup API and\ncopies canonical Artifact payloads under the Artifact writer lock. Its manifest\nbinds every file by size and SHA-256. Validation checks the standalone SQLite\nsnapshot's integrity, foreign keys, schema registry and required tables,\ndecodes canonical session-message and Artifact records, and verifies Artifact\npayload sizes against SQLite metadata before restore. Backup and restore use\nowner-only file modes, file and directory synchronization, staging, and atomic\npublication.\n\nRuntime continuation remains opt-in:\n\n- `MAKA_RUNTIME_SAFE_BOUNDARY_RESUME=1` enables the Desktop interrupted-turn\n  **Safe resume** action, CLI/TUI `/resume`, and Desktop startup auto-resume.\n  These paths may call the configured model provider and consume tokens. Enable\n  the flag only when that behavior is explicitly desired.\n\nPhase 2 provides the durable write-side boundary and fail-closed safe-boundary\ncontinuation. Phase 3 reconciliation for indeterminate tool side effects is not\nimplemented yet; ambiguous tool outcomes remain parked rather than retried.\n\n## Development and verification\n\nBefore sending a change, read [CONTRIBUTING.md](./CONTRIBUTING.md).\n\nCommon repository-level commands:\n\n```sh\nnpm run build\nnpm run typecheck\nnpm test\nnpm run check:release\n```"
+    },
+    "brief": {
+      "summary": "Apache Maka 是本地优先的 AI Agent 工作台",
+      "problem": "让 Agent 执行工具时可控、可恢复，并保留完整运行记录",
+      "highlights": [
+        "可以在桌面端管理会话、权限和文件产物",
+        "可以通过 CLI 在项目目录执行 Agent 任务",
+        "可以用事件日志恢复运行并开展可复现实验"
+      ],
+      "target_users": [
+        "Agent 开发者",
+        "项目研发人员",
+        "评测实验人员"
+      ],
+      "why_trending": "今日新增 148 个 Star，本周首次收录",
+      "caveat": "仍在积极开发，数据格式和命令可能变化",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "apache/maka",
+      "score": 83,
+      "category": "AI Agent / Skills",
+      "reason": "本地优先智能体工作空间",
+      "generated_by_ai": true,
+      "velocity_score": 66,
+      "freshness_score": 70,
+      "ranking_score": 68.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 48200,
+      "forks": 4770,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 299
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-08-22T01:05:58Z",
+      "pushed_at": "2026-08-22T01:34:06Z",
+      "open_issues": 192,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.11.3/AIRI-0.11.3-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.11.3/AIRI-0.11.3-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven VTuber open source projects,"
+    },
+    "brief": {
+      "summary": "可自托管的AI虚拟角色伴侣，支持语音和游戏互动",
+      "problem": "让虚拟角色具备实时交流和游戏互动能力",
+      "highlights": [
+        "可以进行实时语音聊天",
+        "可以让角色玩《Minecraft》和《Factorio》",
+        "可以在网页、macOS和Windows上使用"
+      ],
+      "target_users": [
+        "VTuber开发者",
+        "AI伴侣爱好者",
+        "开源项目研究者"
+      ],
+      "why_trending": "总Star达4.82万，近期仍持续提交更新",
+      "caveat": "自托管所需模型与配置，资料中未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 96,
+      "category": "3D / VTuber",
+      "reason": "自托管实时语音VTuber伴侣",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 20,
+      "ranking_score": 69.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "Kevin-Liu-01/Claude-of-Tanks",
+      "url": "https://github.com/Kevin-Liu-01/Claude-of-Tanks",
+      "description": "A World of Tanks-style, Vite-powered, engine-free pure Three.js armored combat simulator resolving plate-level armor, ballistics, modules, spotting, and physics, with 102 vehicles and eight destructible battlefields. Playable entirely in the browser on desktop and mobile devices. Built end-to-end by a multi-agent Claude/Codex pipeline.",
+      "language": "JavaScript",
+      "total_stars": 86,
+      "forks": 15,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-game",
+        "browser-game",
+        "claude",
+        "game",
+        "gamedev",
+        "javascript",
+        "mobile-game",
+        "multi-agent",
+        "procedural-generation",
+        "tank-game",
+        "threejs",
+        "vite",
+        "webgl",
+        "world-of-tanks"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-29T17:14:28Z",
+      "updated_at": "2026-08-22T01:47:20Z",
+      "pushed_at": "2026-08-22T01:47:12Z",
+      "open_issues": 1,
+      "homepage": "https://claudeoftanks.kevinliu.studio",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://cot.kevinliu.studio\">\n    <img src=\"public/brand/og-image.png\" alt=\"Claude of Tanks armored battle with the crest badge and wordmark\">\n  </a>\n</p>\n\n<h1 align=\"center\">CLAUDE OF TANKS</h1>\n\n<p align=\"center\">\n  Free browser-native armored combat built with <strong>Three.js</strong>. Take 111 production-visible first-party procedural vehicles\n  across 16 battlefields with physical gunnery, plate-level armor, internal damage, guided missiles,\n  magazine autoloaders, terrain-following suspension, X-ray killcams, multiplayer rooms, and Scene Studio.\n</p>\n\n<table width=\"100%\" align=\"center\">\n<tr>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/\"><img src=\"public/brand/features/play.svg\" height=\"58\" alt=\"Play armored combat\"><br><strong>PLAY</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/docs\"><img src=\"public/brand/nav/docs.svg\" height=\"58\" alt=\"Open the armored vehicle field manual\"><br><strong>FIELD MANUAL</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/gallery\"><img src=\"public/brand/nav/tank-gallery.svg\" height=\"58\" alt=\"Open Tank Gallery\"><br><strong>TANK GALLERY</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/studio\"><img src=\"public/brand/nav/studio.svg\" height=\"58\" alt=\"Open Scene Studio\"><br><strong>SCENE STUDIO</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"docs/INDEX.md\"><img src=\"public/brand/features/modules.svg\" height=\"58\" alt=\"Open the engineering documentation\"><br><strong>ENGINEERING DOCS</strong></a></td>\n</tr>\n</table>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/featured/f10_studio_urban_crossfire.webp\" alt=\"Armored vehicles exchanging fire in an urban battle\"></td>\n<td width=\"50%\"><img src=\"public/media/featured/f9_studio_fjord_firefight.webp\" alt=\"Tanks fighting across the Fjord battlefield\"></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/featured/f8_studio_m1_firefight.webp\" alt=\"M1 Abrams firing during a close-range tank battle\"></td>\n<td width=\"50%\"><img src=\"public/media/featured/f6_studio_strv_steinburg_duel.webp\" alt=\"Strv 103 fighting through Steinburg\"></td>\n</tr>\n</table>\n\nThese are handmade, deterministic scenes captured with the current game renderer—not concept art. The\n[88-frame showcase archive](public/media/showcase-r1/manifest.json) contains 13 owner-selected scenes, 30 action frames,\n30 close foreground compositions, five directed Studio frames, and ten interface states. The\n[landing selection](public/media/landing-r1/manifest.json) records the six hero frames, feature reel, five camera-rail\nfilms, 24-shot mosaic, and directed Strv 122 versus Leclerc sequence now published on the site.\n\n## Fight, inspect, and direct\n\n<p>\n  <img src=\"public/brand/features/live-combat.svg\" width=\"52\" alt=\"Live tank combat icon\" title=\"Fight\">\n  <img src=\"public/brand/features/armor.svg\" width=\"52\" alt=\"Armor inspection icon\" title=\"Inspect\">\n  <img src=\"public/brand/nav/studio.svg\" width=\"72\" alt=\"Scene Studio icon\" title=\"Direct\">\n</p>\n\n- **Fight:** enter solo or multiplayer battles with physical shell travel, armor geometry, component damage, spotting,\n  terrain, collision, destructible structures, persistent wrecks, and authority-owned results.\n- **Inspect:** open any vehicle in Tank Gallery, articulate the live rig, isolate armor or internal anatomy, and export an\n  exact-surface review packet from the same specification used in combat.\n- **Direct:** stage any roster vehicle on any battlefield in Scene Studio, animate actors and cameras, schedule game FX,\n  and capture stills or video from reproducible scene data.\n\n## Current release\n\n| | Current runtime |\n| --- | --- |\n| Fleet | **111** production-visible and **148** keyed local-development procedural vehicles across **150** saved roster records; **0** GLB-sourced playables |\n| Worlds | **16** authored battlefields with shared structures, wrecks, utility networks, loose props, placement, collision, and destruction |\n| Authority | Fixed **60 Hz** movement, ballistics, armor, damage, spotting, bots, destructibles, and result |\n| Presentation | Direct Three.js/WebGL renderer with a measured **120 FPS** test path, adaptive quality, stable shadows, SMAA/FSR, and GPU recovery |\n| Play | Solo bots, persistent private rooms, LAN rooms, room chat, spectators, rematches, and dedicated ranked authority |\n| Platforms | Mouse/keyboard and complete touch controls with safe-area layout and device-adaptive rendering |\n| Tools | Scene Studio, Tank Gallery, exact-surface review, deterministic capture, vehicle anatomy, and release gates |\n\nThe provenance gate currently reports **121 first-party procedural battle playables, 0 GLB-sourced playables, and 7\nisolated comparison candidates**. Comparison inputs are never a playable loading path and are stripped from public builds.\n\n## Field footage\n\n<p>\n  <img src=\"public/brand/features/screenshots.svg\" width=\"52\" alt=\"In-engine battle screenshot icon\" title=\"In-engine footage\">\n  <img src=\"public/brand/features/camera-paths.svg\" width=\"52\" alt=\"Camera path icon\" title=\"Camera rails\">\n</p>\n\nEach frame below opens a looping WebM recorded from the game. The camera rails use live vehicles, maps, ballistics,\nrecoil, impacts, sparks, smoke, debris, and destruction effects.\n\n<table>\n<tr>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/01_desert-ground-rush.webm\"><img src=\"public/media/hero-rails-r2/01_desert-ground-rush.jpg\" alt=\"Open the Desert Ground Rush gameplay film\"></a><br><sub><b>Desert Ground Rush:</b> a low camera threads moving armor and incoming fire.</sub></td>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/04_urban-overhead-dive.webm\"><img src=\"public/media/hero-rails-r2/04_urban-overhead-dive.jpg\" alt=\"Open the Urban Overhead Dive gameplay film\"></a><br><sub><b>Urban Overhead Dive:</b> a rail camera drops into a close street engagement.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/02_winter-ice-orbit.webm\"><img src=\"public/media/hero-rails-r2/02_winter-ice-orbit.jpg\" alt=\"Open the Winter Ice Orbit gameplay film\"></a><br><sub><b>Winter Ice Orbit:</b> tanks exchange fire while the camera circles the frozen contact line.</sub></td>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/05_coastal-shell-skim.webm\"><img src=\"public/media/hero-rails-r2/05_coastal-shell-skim.jpg\" alt=\"Open the Coastal Shell Skim gameplay film\"></a><br><sub><b>Coastal Shell Skim:</b> a fast lateral pass follows the shell path through a beach assault.</sub></td>\n</tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"https://cot.kevinliu.studio/home\"><strong>OPEN THE FULL LANDING SHOWCASE</strong></a>\n</p>\n\n## Vehicle-specific mechanics\n\n<p>\n  <img src=\"public/brand/features/vehicle.svg\" width=\"52\" alt=\"Procedural vehicle icon\" title=\"Vehicle-specific systems\">\n  <img src=\"public/brand/features/missile.svg\" width=\"52\" alt=\"Guided missile icon\" title=\"Guided weapons\">\n  <img src=\"public/brand/features/modules.svg\" width=\"52\" alt=\"Internal tank modules icon\" title=\"Internal anatomy and autoloaders\">\n</p>\n\nThe fleet does not reduce every vehicle to the same gun and movement model. Specifications can add their own loading,\nguidance, suspension, ammunition, anatomy, and control behavior while remaining inside the fixed-step authority.\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/mechanic-strv-suspension.webp\" alt=\"Stridsvagn 103 using hydropneumatic suspension to aim on a slope\"><br><sub><b>Swedish siege suspension:</b> the Strv 103A, Strv 103B, and UDES 03 aim their fixed guns by pitching the physical hull. Wheels and both loaded track runs reshape around the solved pose.</sub></td>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/mechanic-mbt70-missile.webp\" alt=\"MBT-70 firing a guided Shillelagh missile\"><br><sub><b>Guided weapons:</b> the MBT-70 fires the Shillelagh as its primary round. IFVs carry vehicle-specific TOW, MILAN, Spike, Konkurs, Arkan, and Jyu-MAT launchers.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/gallery-carro45t-modules.webp\" alt=\"Carro 45t internal modules and crew shown in Tank Gallery\"><br><sub><b>Internal anatomy:</b> the Gallery shows crew, gun, turret ring, engine, fuel, ammunition, tracks, optics, radio, and vehicle-specific feed or missile systems.</sub></td>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/garage-fleet.webp\" alt=\"Claude of Tanks garage displaying the procedural vehicle fleet\"><br><sub><b>One shared fleet:</b> battle, garage, Gallery, Studio, bots, icons, diagrams, and technical dossiers read the same vehicle specifications—112 in production or 148 in keyed local development.</sub></td>\n</tr>\n</table>\n\n- **Magazine autoloaders** track ready rounds, intra-magazine cycle time, full replenishment, manual magazine reloads,\n  shell changes, and damage to the loading mechanism. The Leclerc, Type 90, PL-01, and four-round PL-01 105 each carry\n  their own magazine timings.\n- **Guided missiles** travel at visible weapon-specific speeds and steer toward the authority-owned aim point. Launcher\n  damage, rack damage, ammunition count, reload state, guidance, impact, and presentation all remain synchronized.\n- **Hydropneumatic aim** uses the same canonical pose for armor, muzzle, collision, wheels, tracks, remote snapshots, and\n  the camera; there is no separate visual-only tank tilt.\n- **Free look** keeps the sight and turret on target while the camera moves. Hold `Shift` on keyboard, `RB` on a standard\n  controller, or assign another binding in settings.\n\n## Combat systems\n\n<p>\n  <img src=\"public/brand/features/live-combat.svg\" width=\"52\" alt=\"Live combat icon\" title=\"Physical combat\">\n  <img src=\"public/brand/features/armor.svg\" width=\"52\" alt=\"Armor inspection icon\" title=\"Plate-level armor\">\n  <img src=\"public/brand/features/modules.svg\" width=\"52\" alt=\"Internal modules icon\" title=\"Internal damage\">\n</p>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/presentation-r1/ui_player_view.webp\" alt=\"Production battle HUD during live armored combat\"><br><sub><b>Battle HUD:</b> dual reticle, ammunition, modules, teams, minimap, chat, performance, and authority-owned combat feedback.</sub></td>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/killcam-modules.webp\" alt=\"X-ray killcam showing a T-90M shell path through an M1A2 Abrams SEPv3\"><br><sub><b>X-ray killcam:</b> the resolved shell path, struck plate, effective protection, penetration result, damaged modules, and crew.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/presentation-r1/ui_combat_firing.webp\" alt=\"Tank firing with current muzzle flash and recoil\"><br><sub><b>Physical gunnery:</b> finite world aim, bore convergence, resolved muzzle transform, visible recoil, dispersion, travel time, and gravity.</sub></td>\n<td width=\"50%\"><img src=\"public/media/presentation-r1/ui_explosion.webp\" alt=\"Tank destruction with fire, sparks, fragments, and smoke\"><br><sub><b>Destruction:</b> fire, sparks, smoke, detached remnants, persistent wreck state, and pooled effects driven by the completed hit.</sub></td>\n</tr>\n</table>\n\n- **Plate-level armor** resolves the actual plate, slope, impact angle, normalization, ricochet, overmatch, spaced armor,\n  composites, ERA, and separate kinetic/chemical protection.\n- **Five ammunition families** model muzzle velocity, gravity, penetration loss, ricochet, and damage differently.\n- **Internal anatomy** tracks crew, ammunition racks, engine, fuel, gun, turret ring, optics, radio, and tracks.\n- **Tank-specific mobility** combines drivetrain, terrain resistance, per-wheel support, suspension-damped hull attitude,\n  flexible terrain-following tracks, collision, ramming, and crushable cov"
+    },
+    "brief": {
+      "summary": "浏览器中的纯 Three.js 坦克战斗模拟器",
+      "problem": "在浏览器实现具备装甲、弹道和载具损伤的坦克战斗",
+      "highlights": [
+        "可以直接在桌面或手机浏览器进行坦克战斗",
+        "可以用场景工作室编排载具、地图和镜头",
+        "可以在坦克图鉴查看装甲与内部结构"
+      ],
+      "target_users": [
+        "浏览器游戏开发者",
+        "Three.js 学习者",
+        "坦克游戏爱好者"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码更新，已获86个 Star",
+      "caveat": "资料中的载具和战场数量存在不同说法，需以当前版本为准",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Kevin-Liu-01/Claude-of-Tanks",
+      "score": 92,
+      "category": "游戏开发",
+      "reason": "可直接游玩的3D坦克游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 58.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "elicoggins/keyboardwarrior",
+      "url": "https://github.com/elicoggins/keyboardwarrior",
+      "description": "A rhythm typing game built in Rust. Type letters in time with the music, using your existing Clone Hero / YARG chart library.",
+      "language": "",
+      "total_stars": 97,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "clone-hero",
+        "cross-platform",
+        "game",
+        "gamedev",
+        "guitar-hero",
+        "indie-game",
+        "macroquad",
+        "music-game",
+        "rhythm-game",
+        "rust",
+        "rust-gamedev",
+        "typing",
+        "typing-game",
+        "wasm",
+        "webassembly"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-29T23:49:13Z",
+      "updated_at": "2026-08-22T01:35:27Z",
+      "pushed_at": "2026-08-22T01:35:22Z",
+      "open_issues": 6,
+      "homepage": "https://keyboardwarrior.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Keyboard Warrior\n\nA rhythm typing game built in Rust.\n\nCopying off the homework of the wonderful projects [Clone Hero](https://clonehero.net) and [YARG](https://yarg.in/). \nFree, lightweight, and compatible with your existing chart library. Built-in bridge to [Chorus Encore](https://www.enchor.us/)\nto download community charts.\n\nAvailable on macOS, Windows and Linux, as well as a playable browser demo:\n\n**[▶ Play in your browser](https://keyboardwarrior.app)**\n\n## Trailer (audio on)\nhttps://github.com/user-attachments/assets/ad2dcd71-fcf9-4518-be31-2fefaadcb1bb\n\n\n## Gameplay\n\nKeyboard Warrior puts a spin on Guitar Hero-like rhythm games by assigning a letter to each note, forming words. Type the corresponding letter in rhythm to hit the note. **SPACE** unleashes your star power and **SHIFT** is your whammy bar.\n\n- **ENTER** — start the selected song\n- **SHIFT + ENTER** — practice mode: pick a start and end section, loop it,\n  and use **LEFT / RIGHT** to run it anywhere from 25% to 200% speed\n- **S** — cycle how the library is sorted (title, collection, artist, album,\n  decade, genre)\n- **Hold SPACE** — jump between category sections\n- **O** — options\n- **ESC** — pause\n\nCalibrate your latency the first time you play (**C** → calibration). Every\ndisplay and audio setup has some delay, and the game can't judge your timing\nfairly until it knows yours.\n\nIf you change your setup (switch to headphones, etc) **C** to recalibrate takes seconds.\n\n## Download\n\nGrab the latest release below or check out the [Releases page](../../releases).\n\n| Platform | File |\n| --- | --- |\n| macOS (Apple Silicon **and** Intel) | [`KeyboardWarrior-1.2.0-macOS-universal.zip`](https://github.com/elicoggins/keyboardwarrior/releases/download/v1.2.0/KeyboardWarrior-1.2.0-macOS-universal.zip) |\n| Windows (x86-64) | [`KeyboardWarrior-1.2.0-windows-x86_64.zip`](https://github.com/elicoggins/keyboardwarrior/releases/download/v1.2.0/KeyboardWarrior-1.2.0-windows-x86_64.zip) |\n| Linux (x86-64) | [`KeyboardWarrior-1.2.0-linux-x86_64.tar.gz`](https://github.com/elicoggins/keyboardwarrior/releases/download/v1.2.0/KeyboardWarrior-1.2.0-linux-x86_64.tar.gz) |\n\n### macOS: first launch\n\nmacOS will be annoying and refuse to open the app.\n\n1. Download the binary and stick it in your Applications folder.\n2. Double-click the app and macOS will block it. Click **Done**.\n3. Open **System Settings → Privacy & Security**, scroll to the Security\n   section, and click **Open Anyway** next to the message about Keyboard\n   Warrior.\n4. Confirm with **Open Anyway** and authenticate.\n\nYou only have to do this once - after that it launches normally.\n\n### Windows: first launch\n\nUnzip the folder anywhere and run `keyboardwarrior.exe`. Keep the\n`bundled_songs` folder next to it — that's where the game looks for the bundled music.\n\nWindows Defender SmartScreen will show a blue **\"Windows protected your PC\"**\nbox. Click **More info**, then **Run anyway**. Once again, only the first time.\n\n### Linux\n\nUnpack anywhere and run `./keyboardwarrior`. You'll need ALSA available\n(`libasound2` on Debian/Ubuntu). Keep the `bundled_songs` folder next to the\nbinary.\n\n## Adding songs\n\nKeyboard Warrior ships with a built-in bridge to [Chorus Encore](https://www.enchor.us/) - Search and download community charts from right inside the app.\n\nIt reads the same standardized file formats as other popular music rhythm games, which means there's also tons of resources online for sourcing charts yourself. Drop either format into your songs folder:\n\n- a **`.sng`** file\n- a **song folder** (`notes.mid` / `notes.chart`, `song.ini`, and audio stems\n  as `.opus` / `.ogg` / `.mp3` / `.wav`)\n\nYour songs live outside the app, so replacing it with a newer build never\ntouches your library:\n\n| | macOS | Windows | Linux |\n| --- | --- | --- | --- |\n| Your songs | `~/Library/Application Support/keyboardwarrior/songs/` | `%APPDATA%\\keyboardwarrior\\songs\\` | `~/.local/share/keyboardwarrior/songs/` |\n| Settings and scores | `~/Library/Application Support/keyboardwarrior/` | `%APPDATA%\\keyboardwarrior\\` | `~/.config/keyboardwarrior/` |\n\nOr point the app right at your existing library. Multiple directories supported at one time.\n\n## Bundled music\n\nThe songs that ship with the game are used under Creative Commons licenses,\nwith thanks to the artists and to the charters who built the note charts.\n\n| Song | Artist | License | Chart |\n| --- | --- | --- | --- |\n| Code Monkey | Jonathan Coulton | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) | NoisyPuppet |\n| Creepy Doll | Jonathan Coulton | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) | RockGamer |\n| Re: Your Brains | Jonathan Coulton | [CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/) | Harmonix |\n| Dirtbag | Brad Sucks | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | JRabes |\n| Certain Death | Brad Sucks | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | MB1Nightmare & Greninjo |\n| There's Something Wrong | Brad Sucks | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | MB1Nightmare & Greninjo |\n\nMusic by [Jonathan Coulton](https://www.jonathancoulton.com) and\n[Brad Sucks](https://www.bradsucks.net). Charts sourced from\n[Chorus Encore](https://www.enchor.us).\n\n## Terms\n\nFree to download, play and share.\n\nThe full terms are in [LICENSE.md](LICENSE.md), and the third-party open-source\ncomponents the game is built on are listed in\n[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md). A copy of both ships inside\nthe download.\n\nThis game is capable of two outbound network requests: The first checks for new versions of\nthe game, and the second is the optional Chorus Encore search and download. Nothing else is \nsent or collected. Songs, scores, and settings are completely local and private.\n\n## Bugs\n\nSomething broken? [Open an issue](../../issues/new/choose) — include the version\nfrom the options screen and, if it's a specific song, which one.\n\nIf the game **crashed**, there's a log worth attaching.\n\n| | Path |\n| --- | --- |\n| macOS | `~/Library/Application Support/keyboardwarrior/crash.log` |\n| Windows | `%APPDATA%\\keyboardwarrior\\crash.log` |\n| Linux | `~/.config/keyboardwarrior/crash.log` |\n\nWhat changed between versions is in [CHANGELOG.md](CHANGELOG.md).\n\n## Technology\n\n- **[Rust](https://www.rust-lang.org)** —  distills to single 12 MB binary\n- **[macroquad](https://macroquad.rs)** — window, rendering and input\n- **[cpal](https://github.com/RustAudio/cpal)** — drives custom mixer\n- **[symphonia](https://github.com/pdeljanov/Symphonia)** and **[libopus](https://opus-codec.org)** — stem decoding (opus, ogg/vorbis, mp3, wav, flac)\n- **[midly](https://github.com/kovaxis/midly)** — `.mid` chart parsing\n- **[WebAssembly](https://webassembly.org)** — web audio swap for WASM demo\n\nFull dependency list and licenses: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).\n\n## Support\n\nKeyboard Warrior is free to download, play and share at no cost.\nIf you are looking for a way to support the developer, [buy me a coffee on Ko-fi](https://ko-fi.com/elicoggins).\n\nYour support is never expected but always appreciated.\n"
+    },
+    "brief": {
+      "summary": "用键盘跟随音乐节奏演奏 Clone Hero 谱面",
+      "problem": "让已有节奏游戏谱面支持键盘打字玩法",
+      "highlights": [
+        "可以导入现有 Clone Hero/YARG 曲库",
+        "可以在浏览器或三大桌面系统游玩",
+        "可以搜索并下载社区音乐谱面"
+      ],
+      "target_users": [
+        "节奏游戏玩家",
+        "键盘练习爱好者",
+        "Rust 游戏开发者"
+      ],
+      "why_trending": "本周首次收录，已有97个 Star，近期仍有更新",
+      "caveat": "需要自行准备兼容谱面，并先校准音频延迟",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "elicoggins/keyboardwarrior",
+      "score": 86,
+      "category": "游戏开发",
+      "reason": "完整的音乐节奏打字游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "itsPremkumar/Automated-Video-Generator",
+      "url": "https://github.com/itsPremkumar/Automated-Video-Generator",
+      "description": "Agentic AI video generator — fully autonomous text-to-video pipeline with free TTS/voice-clone, auto-editing, captions, and 20+ single-task operations. Zero-cost, MIT.",
+      "language": "TypeScript",
+      "total_stars": 39,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agentic",
+        "ai",
+        "ai-video",
+        "automation",
+        "captions",
+        "chatterbox",
+        "content-creation",
+        "ffmpeg",
+        "kokoro",
+        "llm",
+        "mit-license",
+        "open-source",
+        "remotion",
+        "shorts",
+        "text-to-video",
+        "tts",
+        "video-editing",
+        "video-generation",
+        "voice-clone",
+        "youtube"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-30T05:34:12Z",
+      "updated_at": "2026-08-22T01:19:51Z",
+      "pushed_at": "2026-08-22T01:19:18Z",
+      "open_issues": 11,
+      "homepage": "https://github.com/itsPremkumar/Automated-Video-Generator",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\n🧠 Automated Video Generator\n   SEO keywords: automated video generator, free video generator, open source video generator,\n   ai video generator, text to video, remotion, edge tts, youtube shorts generator, tiktok\n   video generator, faceless youtube, content automation, self hosted video generator,\n   mcp server, model context protocol, stock media, pexels, pixabay, openverse, video pipeline,\n   react video, nodejs video, typescript video, batch video generation, voiceover, text to speech,\n   video creator, marketing video, explainer video, shorts automation, reels generator,\n   open source, MIT license, programmatic video, no api key, cc images\n-->\n\n<!-- hero video removed per user request -->\n\n<div align=\"center\">\n \n  <h1>Automated Video Generator</h1>\n  <p><strong>🆓 Free &bull; 🔓 Open Source &bull; 🏠 Self-Hosted &bull; 🤖 AI Text-to-Video</strong></p>\n  <p><b>Turn any script into a narrated, stock-footage video in minutes.</b><br/>No API key. No watermark. Runs 100% on your machine.</p>\n</div>\n\n<br/>\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/stargazers\"><img src=\"https://img.shields.io/github/stars/itsPremkumar/Automated-Video-Generator?style=for-the-badge&logo=github\" alt=\"GitHub stars\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/itsPremkumar/Automated-Video-Generator?style=for-the-badge\" alt=\"MIT license\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/itsPremkumar/Automated-Video-Generator/ci.yml?branch=main&style=for-the-badge&label=CI\" alt=\"CI status\"></a>\n  <a href=\"https://www.npmjs.com/package/automated-video-generator\"><img src=\"https://img.shields.io/npm/v/automated-video-generator?style=for-the-badge&color=cb0000\" alt=\"NPM version\"></a>\n  <a href=\"https://nodejs.org/\"><img src=\"https://img.shields.io/badge/Node.js-18%2B-2f7d32?style=for-the-badge\" alt=\"Node.js 18+\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/blob/main/CONTRIBUTING.md\"><img src=\"https://img.shields.io/badge/contributions-welcome-brightgreen?style=for-the-badge\" alt=\"Contributions welcome\"></a>\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest\"><img src=\"https://img.shields.io/badge/download-Windows_.exe-blue?style=for-the-badge&logo=windows\" alt=\"Download Windows\"></a>\n  <a href=\"https://github.com/sponsors/itsPremkumar\"><img src=\"https://img.shields.io/badge/Sponsor-%E2%9D%A4-red?style=for-the-badge&logo=github\" alt=\"GitHub Sponsors\"></a>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://star-history.com/#itsPremkumar/Automated-Video-Generator&Date\"><img src=\"https://api.star-history.com/svg?repos=itsPremkumar/Automated-Video-Generator&type=Date&theme=dark\" alt=\"Star History Chart\" width=\"600\"></a>\n</div>\n\n<br/>\n\n---\n\n## 📖 What is this?\n\n**Automated Video Generator** is a free, open-source, self-hosted pipeline that converts text scripts into polished MP4 videos. Give it a script — it fetches relevant stock visuals, generates natural voiceovers, synchronizes everything with Remotion, and exports a ready-to-share video.\n\nNo paid plans. No watermarks. No monthly limits. Just your machine, your scripts, and full control.\n\n<br/>\n\n<div align=\"center\">\n  <table>\n    <tr>\n      <td align=\"center\"><b>🎬 Input</b></td>\n      <td align=\"center\"><b>⚙️ Pipeline</b></td>\n      <td align=\"center\"><b>📦 Output</b></td>\n    </tr>\n    <tr>\n      <td align=\"center\">Text script<br/>or JSON job<br/>or AI prompt</td>\n      <td align=\"center\">Parse → Fetch media<br/>→ Generate voiceover<br/>→ Render with Remotion</td>\n      <td align=\"center\">MP4 video<br/>+ Thumbnail<br/>+ Scene data</td>\n    </tr>\n  </table>\n</div>\n\n<br/>\n\n---\n\n## ✨ Demo\n\n> A real short generated by the pipeline (no re-render, no edits) — script in, MP4 out:\n\n<div align=\"center\">\n  <a href=\"https://github.com/itsPremkumar/Automated-Video-Generator\">\n    <img src=\"assets/demo/demo-showcase.png\" alt=\"Automated Video Generator - Project Logo & GitHub Repository\" width=\"100%\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n  </a>\n  <br/>\n  <em>🎙️ Voiceover powered by <b>Voicebox Kokoro Heart</b> — realistic local AI narration. ✅ 32/32 quality checks passed on every output. 🔓 Free & open source.</em>\n</div>\n\n<div align=\"center\">\n  <img src=\"assets/diagrams/demo-flow.svg\" alt=\"How it works: script → pipeline → video\" width=\"720\" style=\"border-radius: 12px; margin-top: 12px;\">\n  <br/>\n  <em>Script → AI voiceover + stock media → MP4. Fully local.</em>\n</div>\n\n<hr/>\n\n## 🚀 Quick Start (5 minutes)\n\nChoose your path:\n\n| Path                                               | Time  | Difficulty | For           |\n| -------------------------------------------------- | ----- | ---------- | ------------- |\n| [Windows Desktop App](#windows-desktop-app)       | 2 min | ★☆☆        | Everyone      |\n| [One-Click Launcher](#one-click-launcher-windows) | 3 min | ★☆☆        | Windows users |\n| [Manual Setup](#manual-setup)                     | 5 min | ★★☆        | Developers    |\n| [Docker](#docker)                                 | 3 min | ★★☆        | DevOps        |\n| [npm (MCP)](#npm-mcp-server)                      | 1 min | ★☆☆        | AI agents     |\n\n### 🎬 Your first video in 2 commands\n\nNo API key required to run — Openverse + free CC sources provide stock footage out of the box. Voiceover uses the vendored Voicebox backend (Kokoro by default) with Edge-TTS fallback; **the Kokoro backend needs a one-time setup** — point `VOICEBOX_PYTHON` at a torch/kokoro venv (e.g. `C:/one/voicebox/.venv/Scripts/python.exe`) or it auto-falls back to the built-in Edge-TTS/Kokoro engine. Encoding is automatic: **Windows uses `h264_mf`** (Media Foundation, fast) and other platforms use `libx264`; `--gpu` selects AMF/NVENC/QSV when present. **For best results set `PEXELS_API_KEY`** (free): Pexels is the recommended provider and is skipped in keyless mode, so keyless runs use lower-relevance free sources.\n\n```bash\n# 1. Install (one time)\nnpm install\n\n# 2. Generate (reads input/scripts/input-scripts.json, writes output/<id>/<Title>.mp4)\nnpm run generate\n```\n\nThat's it. The CLI reads `input/scripts/input-scripts.json` (a sample job is pre-included) and renders an MP4 with AI voiceover + stock visuals + burned-in captions. With the bundled sample, find it at `output/pre7_productivity_tip/One Simple Trick To Beat Procrastination.mp4`.\n\nPrefer a GUI? Run `npm run dev` and open **http://localhost:3001** — paste a script, click **Generate Video**.\n\n<div align=\"center\">\n  <video src=\"assets/demo/demo-wide.mp4\" width=\"80%\" controls preload=\"metadata\" style=\"border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.25);\">\n    Your browser does not support the video tag. <a href=\"assets/demo/demo-wide.mp4\">Download MP4</a>\n  </video>\n  <br/>\n  <em>Real Voicebox-narrated video from the pipeline. Script → voiceover + stock media → MP4, fully local.</em>\n</div>\n\n### 🪟 Windows Desktop App\n\n**No Node.js, Python, or terminal required.**\n\nDownload the [latest Windows installer](https://github.com/itsPremkumar/Automated-Video-Generator/releases/latest), double-click, and the app opens the web portal automatically. Everything is bundled.\n\n### 📜 One-Click Launcher (Windows)\n\n```powershell\n.\\Start-Automated-Video-Generator.bat\n```\n\nOr the PowerShell version:\n\n```powershell\n.\\Start-Automated-Video-Generator.ps1\n```\n\nThe launcher auto-installs Node.js and Python (via `winget`), creates `.env`, installs dependencies, and opens the portal at `http://localhost:3001`.\n\n### 🛠️ Manual Setup\n\n**Prerequisites:** Node.js 18+, Python 3.8+, npm\n\n```bash\n# 1. Clone\ngit clone https://github.com/itsPremkumar/Automated-Video-Generator.git\ncd Automated-Video-Generator\n\n# 2. Install Node dependencies\nnpm install\n\n# 3. Install Python voice engine\npip install -r requirements.txt\n\n# 4. Configure environment\ncp .env.example .env\n# Edit .env — add PEXELS_API_KEY (free, get one at pexels.com/api)\n# No API key? Set OPENVERSE_ENABLED=true (it's the default)\n\n# 5. (Optional) Local AI generation — ComfyUI, CogVideoX, Real-ESRGAN, rembg\n#    Install the AI providers you want (all optional, all free, all offline):\n#    pip install diffusers transformers accelerate torch        # CogVideoX (T2V)\n#    pip install realesrgan basicsr                            # Real-ESRGAN (upscale)\n#    pip install rembg                                         # Background removal\n#    git clone https://github.com/comfyanonymous/ComfyUI.git  # ComfyUI (image/I2V)\n\n# 6. Start the web portal\nnpm run dev\n```\n\nOpen **http://localhost:3001/** — paste a script, click generate, and watch it render.\n\n### 🐳 Docker\n\nPre-built image (built + scanned by CI, pushed to GHCR):\n\n```bash\ndocker run -p 3001:3001 \\\n  -v \"$(pwd)/input:/app/input\" \\\n  -v \"$(pwd)/output:/app/output\" \\\n  ghcr.io/itspremkumar/automated-video-generator\n```\n\nOr build locally (pinned `node:20-bookworm`, full `npm ci`, edge-tts in a\nvenv to satisfy PEP 668, platform `linux/amd64`, healthcheck on `/api/health`):\n\n```bash\ndocker compose up --build\n```\n\n### 🚀 Production Deployment\n\nThe container is self-contained: it bundles the ffmpeg/ffprobe static\nbinaries and a Python venv with `edge-tts` for free, key-less narration.\nNo external services are required for the default pipeline.\n\n**Environment variables (all optional — sensible free defaults):**\n\n| Var | Default | Purpose |\n|-----|---------|---------|\n| `PORT` | `3001` | Web portal / API port |\n| `PEXELS_API_KEY` | _(none)_ | Free stock video. Without it, falls back to Openverse / Wikimedia / Internet Archive. |\n| `YOUTUBE_API_KEY` | _(none)_ | YouTube metadata enrichment (optional). |\n| `OPENVERSE_ENABLED` | `true` | Use Openverse CC media when no API key is set. |\n| `TTS_PROVIDER` | `voicebox` | `voicebox` (default — vendored in-repo Kokoro/Chatterbox) or `edge-tts` (free, CPU). The pipeline auto-spawns the vendored backend. |\n| `VOICEBOX_ENGINE` | _(none)_ | `kokoro` or `chatterbox_turbo` — only when `TTS_PROVIDER=voicebox`. |\n| `VOICEBOX_PROFILE_ID` | _(none)_ | A Voicebox profile id (preset or cloned voice). |\n\n**Voicebox (in-repo vendored, default narrator).**\nVoicebox is **vendored in-repo** at `src/speech/` (MIT, sourced from jamiepine/voicebox).\nIt is the **default TTS provider** — the pipeline auto-spawns it as `python -m speech.main`\nusing the in-repo venv. Kokoro (~800 MB VRAM) is the default narrator engine.\nIf the backend cannot start (missing venv, no GPU), the pipeline degrades gracefully\nback to Edge-TTS. For voice cloning, set `TTS_PROVIDER=voicebox` and provide a\n`VOICEBOX_PROFILE_ID`. See `docs/VOICEBOX_SETUP.md`.\n\n**Health & hardening:**\n- Healthcheck hits `GET /api/health` (container `HEALTHCHECK`).\n- No secrets are logged; output paths are sanitized against `../` traversal\n  at the dispatch chokepoint (`src/agentic/operations/security.ts`).\n- CI runs `typecheck` + `test:unit` + a Gitleaks secret scan + a Docker\n  build/push to GHCR on every push to `main`.\n\n\n\nThe MCP server lets AI agents (Claude Desktop, Claude Code, Cursor, etc.) create videos autonomously — it exposes 23 tools, 13 resources, and 4 prompts over stdio.\n\n**Quick connect (read-only safe mode — default):**\n\n```json\n{\n    \"mcpServers\": {\n        \"automated-video-generator\": {\n            \"command\": \"npx\",\n            \"args\": [\"automated-video-generator\"]\n        }\n    }\n}\n```\n\nOr run it locally:\n\n```bash\nnpm install\nnpm run mcp        # starts the MCP server on stdio\n```\n\n**⚠️ Safe mode (important):** By default the MCP server runs in **safe mode** — read tools (`read_input_script`, `list_output_videos`, `health_check`, etc.) work, but **all write/mutation tools are blocked** with `ForbiddenError: safe mode`. This protects your files from accidental changes by an agent.\n\nTo enable write tools (`write_input_script`,"
+    },
+    "brief": {
+      "summary": "将文字脚本自动生成带配音、素材和字幕的MP4视频",
+      "problem": "减少从脚本到成片的配音、找素材和剪辑工作",
+      "highlights": [
+        "可以把脚本生成带旁白和字幕的短视频",
+        "可以自动匹配素材并导出MP4和缩略图",
+        "可以本地运行并通过网页或命令行生成视频"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "内容运营人员",
+        "视频开发者"
+      ],
+      "why_trending": "本周首次收录，开源自托管且覆盖完整视频流程",
+      "caveat": "本地语音引擎需额外设置，素材相关性可能有限",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "itsPremkumar/Automated-Video-Generator",
+      "score": 97,
+      "category": "AI 视频",
+      "reason": "自动生成剪辑配音字幕视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "streamcoreai/streamcore-server",
+      "url": "https://github.com/streamcoreai/streamcore-server",
+      "description": "Open-source realtime voice agent server in Go with WebRTC (WHIP), barge-in, streaming STT/LLM/TTS pipelines, plugin system, multi-language SDKs, SIP telephony, ESP32 support & fully local mode.",
+      "language": "Go",
+      "total_stars": 181,
+      "forks": 23,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-framework",
+        "ai-voice-agent",
+        "conversational-ai",
+        "esp32",
+        "go",
+        "golang",
+        "local-ai",
+        "open-source-ai",
+        "realtime-ai",
+        "realtime-voice-agent",
+        "sip",
+        "speech-to-text",
+        "stt",
+        "telephony",
+        "text-to-speech",
+        "tts",
+        "voice-agent",
+        "voice-ai",
+        "webrtc",
+        "webrtc-whip"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-28T13:04:05Z",
+      "updated_at": "2026-08-22T01:25:21Z",
+      "pushed_at": "2026-08-22T01:25:13Z",
+      "open_issues": 20,
+      "homepage": "https://www.streamcore.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"./assets/logo.png\" alt=\"StreamCore\" width=\"320\" />\n\n# StreamCore\n\n### Realtime media infrastructure for AI-powered applications\n\n**Talk to your AI over WebRTC — with interruption, streaming speech, and NAT traversal handled.**<br/>\nOne Go binary. Bring your own agent.\n\n### [▶ Talk to it now at streamcore.ai](https://streamcore.ai)\n\nNo install, no signup — browser mic, and you can cut it off mid-sentence.\n\n[![CI](https://github.com/streamcoreai/streamcore-server/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/streamcoreai/streamcore-server/actions/workflows/ci.yml)\n[![Go](https://img.shields.io/github/go-mod/go-version/streamcoreai/streamcore-server?logo=go&logoColor=white)](./go.mod)\n[![WHIP RFC 9725](https://img.shields.io/badge/WHIP-RFC%209725-6f42c1)](https://www.rfc-editor.org/rfc/rfc9725.html)\n[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)\n[![Stars](https://img.shields.io/github/stars/streamcoreai/streamcore-server?logo=github&color=f5c518)](https://github.com/streamcoreai/streamcore-server/stargazers)\n[![Discord](https://img.shields.io/badge/join%20us%20on-discord-5865F2?logo=discord&logoColor=white)](https://discord.gg/xKGFaGWawT)\n[![Follow @jasonshen_](https://img.shields.io/badge/follow-%40jasonshen__-000000?logo=x&logoColor=white)](https://x.com/jasonshen_)\n\n[**Live demo**](https://streamcore.ai) · [**Quick start**](#quick-start) · [**Docs**](./docs/) · [**SDKs**](#sdks-and-examples) · [**Roadmap**](./docs/roadmap.md) · [**Discord**](https://discord.gg/xKGFaGWawT) · [简体中文](./README.zh-CN.md)\n\n</div>\n\n---\n\nAnyone can demo a voice agent. Then a real caller talks over it, pauses mid-sentence, dials in from behind a firewall that blocks UDP, or waits three seconds for the first word — and the demo stops being a product.\n\nStreamCore is the layer that handles all of that. It owns the latency-sensitive media path between your users and your AI: **WebRTC transport, adaptive turn-taking, barge-in, streaming STT/LLM/TTS, NAT traversal, session state, and realtime events** — across browsers, phones, backends, telephony, and embedded devices.\n\nWhat it deliberately does *not* own is your agent. Keep your prompts, tools, models, and business logic exactly where they are — [four supported ways](#bring-your-own-agent), no fork required.\n\nBuilt with it: voice agents, realtime copilots, live translation, AI-hosted audio rooms, embedded voice devices, and phone applications.\n\n## Demo\n\n**[streamcore.ai](https://streamcore.ai) runs this repo.** Open it, hit *Start Conversation*, and interrupt the agent\nwhile it is talking. Per-turn STT, LLM, and TTS latency is on screen while you do it.\n\n<a href=\"https://streamcore.ai\" target=\"_blank\">\n  <img src=\"https://cdn.loom.com/sessions/thumbnails/ee079aca75aa4fa1ba6a5e51302fbd56-e4ee3f1f1a14a51d.jpg\" alt=\"Talk to the live demo at streamcore.ai\" />\n</a>\n\nPrefer a recording? [Watch the walkthrough](https://www.loom.com/share/ee079aca75aa4fa1ba6a5e51302fbd56).\n\n## Quick start\n\n**Two terminals, five minutes, and you are talking to it.** Needs Go 1.25+ (or Docker) and API keys for an STT, LLM, and TTS provider. No keys? Run it [fully local](./docs/quickstart.md#fully-local-no-api-keys) with Ollama + VibeVoice.\n\n```bash\ncp config.toml.example config.toml   # add your provider credentials\ngo run .\n```\n\nThe server listens on `:8080`; clients connect to `http://localhost:8080/whip`.\n\nThen talk to it from a browser:\n\n```bash\ngit clone https://github.com/streamcoreai/examples.git\ncd examples/typescript && npm install && npm run dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000) and start talking.\n\nDocker, TURN ports, and production notes: [Quick start guide](./docs/quickstart.md).\n\n## What you get\n\n| | |\n|---|---|\n| **Transport** | WebRTC audio over WHIP ([RFC 9725](https://www.rfc-editor.org/rfc/rfc9725.html)) — one HTTP POST, no signaling socket. Opus/RTP both ways |\n| **Connectivity** | Built-in Pion STUN/TURN on UDP *and* TCP 3478 — no external coturn. A network handover or NAT rebind is recovered by ICE restart on the same session, so the conversation survives it |\n| **Turn-taking** | Adaptive VAD that tracks each call's noise floor, plus a debounce that merges mid-sentence pauses into one turn |\n| **Interruption** | Barge-in that ducks agent audio, filters backchannels (\"mm-hm\"), and cancels in-flight LLM and TTS on a confirmed interrupt |\n| **Streaming** | Streaming STT → streaming LLM → chunk-streaming TTS, so audio starts before synthesis finishes |\n| **Sessions & events** | Server-generated session IDs, multi-peer sessions, DataChannel events for transcript, response, state, and per-turn latency |\n| **Reach** | Browser, mobile, backend, CLI, [SIP telephony](https://github.com/streamcoreai/sip-server), and [ESP32](https://github.com/streamcoreai/esp32) endpoints |\n\nFull capability list: [Capabilities](./docs/capabilities.md).\n\n## Not built yet\n\nListed so the table above stays honest — unticked items are real gaps today, not soon-shipping promises. Ticked ones shipped recently and stay listed for a release or two so you can see what moved:\n\n- [x] **Session reconnection (server)** — a dropped connection recovers on the same session via ICE restart, so the conversation and the running pipeline survive it\n- [x] **Client-driven reconnection** — the TypeScript, React Native, Go and Rust SDKs recover a network change automatically: ICE restart first, then a resume redial if the connection failed\n- [x] **Session resume** — a drop past the point ICE restart can help is recovered by redialling with a single-use token, reattaching to the running conversation. Every SDK runs restart-then-resume as one ladder, so a backgrounded phone rejoins the same conversation\n- [x] **Panic recovery** — a panic in one call's goroutines now ends that call alone: it recovers, logs the stack, and the session is reaped like any other ended call\n- [x] **Session cap** — `server.max_sessions` bounds live sessions globally; past it, `POST /whip` returns 503 with `Retry-After`. Resumes are exempt\n- [x] **Env-var secrets** — every API key and secret can come from the environment (`OPENAI_API_KEY`, `STREAMCORE_JWT_SECRET`, …) instead of `config.toml`. See [Configuration](./docs/configuration.md#secrets-from-environment-variables)\n- [ ] **Metrics export** — `/health` and timing events exist, no Prometheus/OpenTelemetry\n- [ ] **Structured logging** — `log.Printf` text today, no JSON logs carrying `session_id`\n- [ ] **Versioned releases** — a Docker image ships to GHCR on each GitHub release, but no version in the binary and no tagged standalone binaries yet\n- [ ] **Horizontal scaling** — sessions live in process memory, so the server is single-node; reconnection and resume need sticky routing or an external store to work behind a load balancer\n- [x] **HTTP agent endpoint** — `llm.provider = \"agent\"` POSTs each turn to an agent you host in any language; replies stream back as speech\n- [ ] **Persistent memory** — the built-in runtime forgets callers between sessions; BYO agents can already persist their own\n\nFull TODO list, including ecosystem items: [Roadmap / TODO](./docs/roadmap.md). Want one of these? Say so in [Discord](https://discord.gg/xKGFaGWawT) — demand reorders the list.\n\n## Bring your own agent\n\nStreamCore starts one layer below prompt-and-tool frameworks: the media path. Your intelligence stays yours, five ways —\n\n1. **Tool call** — plugins (Python/TS/JS) or native Go tools call into your existing backend\n2. **Your agent** — set `llm.provider = \"agent\"` and each turn is POSTed to an HTTP endpoint you host, in any language\n3. **Your models** — point `llm.provider = \"ollama\"` at any Ollama-compatible URL you run\n4. **Your code** — implement one small Go interface; the whole media path works unchanged\n5. **Built in** — or use StreamCore's optional agent runtime with tools, skills, RAG, and history\n\nDetails and code: [Bring your own agent](./docs/bring-your-own-agent.md) · [Agent runtime](./docs/agent-runtime.md).\n\nProviders: Deepgram, AssemblyAI, OpenAI, Cartesia, ElevenLabs, MiniMax, Speechify, Ollama, VibeVoice (local), xAI Grok Voice (speech-to-speech), pgvector/Supabase for retrieval. See [Providers](./docs/providers.md).\n\n## Documentation\n\n| Page | What's in it |\n|------|--------------|\n| [Quick start](./docs/quickstart.md) | Docker, TURN ports, connecting a client, wiring your backend, fully-local setup |\n| [Capabilities](./docs/capabilities.md) | What the runtime does today, endpoints, AI integrations |\n| [Bring your own agent](./docs/bring-your-own-agent.md) | Five ways to own the intelligence, including the HTTP agent endpoint and the `llm.Client` interface |\n| [Agent runtime](./docs/agent-runtime.md) | Plugins, skills, RAG, document ingestion |\n| [Providers](./docs/providers.md) | Grok speech-to-speech, MiniMax, local VibeVoice, per-provider caveats |\n| [Configuration](./docs/configuration.md) | Full annotated `config.toml` reference |\n| [Protocol](./docs/protocol.md) | WHIP signaling, DataChannel events, auth |\n| [Architecture](./docs/architecture.md) | Media flow, why Go, package layout |\n\n## SDKs and examples\n\nConnect from anywhere — every SDK speaks the same WHIP + DataChannel protocol:\n\n[![npm](https://img.shields.io/npm/v/@streamcore/js-sdk?logo=npm&logoColor=white&label=%40streamcore%2Fjs-sdk)](https://github.com/streamcoreai/js-sdk)\n[![PyPI](https://img.shields.io/pypi/v/streamcore?logo=pypi&logoColor=white&label=streamcore)](https://github.com/streamcoreai/python-sdk)\n[![Go](https://pkg.go.dev/badge/github.com/streamcoreai/go-sdk.svg)](https://pkg.go.dev/github.com/streamcoreai/go-sdk)\n[![crates.io](https://img.shields.io/crates/v/streamcore-rust-sdk?logo=rust&logoColor=white&label=streamcore-rust-sdk)](https://github.com/streamcoreai/rust-sdk)\n\nReact Native / Expo (`@streamcore/react-native-sdk`) is built but not yet published to npm.\n\nPlugin SDKs: `@streamcore/plugin` and `streamcore-plugin` in [plugin-sdk](https://github.com/streamcoreai/plugin-sdk). Runnable browser, CLI, and TUI apps: [examples](https://github.com/streamcoreai/examples).\n\n## Sponsors & Supporters\n\n<!-- The public live demo is powered by generous API credits from our sponsors. -->\n\n<div align=\"center\">\n<!-- Logos will go here once received -->\n</div>\n\nThank you! Interested in sponsoring? Reach out for logo placement on GitHub + demo page.\n\n## Contributing\n\nRead [CONTRIBUTING.md](./CONTRIBUTING.md) first — it covers running the server locally, the four checks CI runs before you push, and the extra care the timing-sensitive media path needs. Good places to start: [`good first issue`](https://github.com/streamcoreai/streamcore-server/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) and [`help wanted`](https://github.com/streamcoreai/streamcore-server/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).\n\nClient SDKs, the SIP bridge, examples, and the ESP32 firmware live in their own repos under [`streamcoreai`](https://github.com/streamcoreai) — send those changes there.\n\n## Security\n\nFound a vulnerability? Don't open a public issue — report it privately through the [Security tab](https://github.com/streamcoreai/streamcore-server/security/advisories/new). [SECURITY.md](./SECURITY.md) covers scope, response targets, and the settings that matter on a public address — JWT auth on `/whip` above all.\n\n## Star history\n\n<!--\n  Live chart from star-history.com. GitHub restricted the stargazers API to repo\n  admins/collaborators on 2026-06-30, so the chart renders only when a sealed\n  (encrypted) GitHub token is supplied. If it ever shows \"GitHub restricted access\n  to star data\", that token has expired or been revoked — regenerate it at\n  https://star-history.com/#streamcoreai/streamcore-server&Date under \"Show\n  real-time chart on your README.md\" and replace sealed_token in all three URLs.\n-->\n<a href=\"https://www.star-history.com/?type=date&repos=streamcoreai%2Fstreamcore-serve"
+    },
+    "brief": {
+      "summary": "开源实时语音代理服务器，支持WebRTC与本地运行",
+      "problem": "解决语音代理的实时通话、打断和多端接入问题",
+      "highlights": [
+        "可以搭建可被用户随时打断的语音助手",
+        "可以接入浏览器、电话和ESP32设备",
+        "可以用本地模型运行语音代理，减少外部依赖"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "AI代理开发者",
+        "嵌入式开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获181颗Star",
+      "caveat": "当前会话存于单节点内存，不支持水平扩展",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "streamcoreai/streamcore-server",
+      "score": 91,
+      "category": "语音 / 配音",
+      "reason": "实时语音智能体与STT/TTS管线",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.5
+    }
+  }
+]
