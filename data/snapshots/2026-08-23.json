@@ -1,0 +1,524 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 232154,
+      "forks": 19813,
+      "stars_today": 2683,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2683
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-08-23T02:05:51Z",
+      "pushed_at": "2026-08-21T10:56:48Z",
+      "open_issues": 385,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向软件工程师的可组合 AI 编程代理技能集",
+      "problem": "帮助 AI 代理减少需求误解、代码缺陷和调试失控",
+      "highlights": [
+        "可以用提问流程澄清需求并形成文档",
+        "可以让代理按 TDD 流程编写和验证代码",
+        "可以用调试技能分阶段定位问题"
+      ],
+      "target_users": [
+        "软件工程师",
+        "AI 编程代理用户",
+        "团队技术负责人"
+      ],
+      "why_trending": "今日新增 2683 Star，且项目连续上榜",
+      "caveat": "不同安装方式的更新和可编辑性不同",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 92,
+      "category": "AI Agent / Skills",
+      "reason": "可复用Agent Skills集合",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "multica-ai/andrej-karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
+      "language": "",
+      "total_stars": 205333,
+      "forks": 21008,
+      "stars_today": 315,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 315
+    },
+    "details": {
+      "topics": [],
+      "license_name": "",
+      "created_at": "2026-01-27T03:53:13Z",
+      "updated_at": "2026-08-23T02:03:54Z",
+      "pushed_at": "2026-04-20T10:05:04Z",
+      "open_issues": 126,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Karpathy-Inspired Claude Code Guidelines\n\n> Check out my new project [Multica](https://github.com/multica-ai/multica) — an open-source platform for running and managing coding agents with reusable skills.\n>\n> Follow me on X: [https://x.com/jiayuan_jy](https://x.com/jiayuan_jy)\n\nA single `CLAUDE.md` file to improve Claude Code behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.\n\nEnglish | [简体中文](./README.zh.md)\n\n## The Problems\n\nFrom Andrej's post:\n\n> \"The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should.\"\n\n> \"They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do.\"\n\n> \"They still sometimes change/remove comments and code they don't sufficiently understand as side effects, even if orthogonal to the task.\"\n\n## The Solution\n\nFour principles in one file that directly address these issues:\n\n| Principle | Addresses |\n|-----------|-----------|\n| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |\n| **Simplicity First** | Overcomplication, bloated abstractions |\n| **Surgical Changes** | Orthogonal edits, touching code you shouldn't |\n| **Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |\n\n## The Four Principles in Detail\n\n### 1. Think Before Coding\n\n**Don't assume. Don't hide confusion. Surface tradeoffs.**\n\nLLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:\n\n- **State assumptions explicitly** — If uncertain, ask rather than guess\n- **Present multiple interpretations** — Don't pick silently when ambiguity exists\n- **Push back when warranted** — If a simpler approach exists, say so\n- **Stop when confused** — Name what's unclear and ask for clarification\n\n### 2. Simplicity First\n\n**Minimum code that solves the problem. Nothing speculative.**\n\nCombat the tendency toward overengineering:\n\n- No features beyond what was asked\n- No abstractions for single-use code\n- No \"flexibility\" or \"configurability\" that wasn't requested\n- No error handling for impossible scenarios\n- If 200 lines could be 50, rewrite it\n\n**The test:** Would a senior engineer say this is overcomplicated? If yes, simplify.\n\n### 3. Surgical Changes\n\n**Touch only what you must. Clean up only your own mess.**\n\nWhen editing existing code:\n\n- Don't \"improve\" adjacent code, comments, or formatting\n- Don't refactor things that aren't broken\n- Match existing style, even if you'd do it differently\n- If you notice unrelated dead code, mention it — don't delete it\n\nWhen your changes create orphans:\n\n- Remove imports/variables/functions that YOUR changes made unused\n- Don't remove pre-existing dead code unless asked\n\n**The test:** Every changed line should trace directly to the user's request.\n\n### 4. Goal-Driven Execution\n\n**Define success criteria. Loop until verified.**\n\nTransform imperative tasks into verifiable goals:\n\n| Instead of... | Transform to... |\n|--------------|-----------------|\n| \"Add validation\" | \"Write tests for invalid inputs, then make them pass\" |\n| \"Fix the bug\" | \"Write a test that reproduces it, then make it pass\" |\n| \"Refactor X\" | \"Ensure tests pass before and after\" |\n\nFor multi-step tasks, state a brief plan:\n\n```\n1. [Step] → verify: [check]\n2. [Step] → verify: [check]\n3. [Step] → verify: [check]\n```\n\nStrong success criteria let the LLM loop independently. Weak criteria (\"make it work\") require constant clarification.\n\n## Install\n\n**Option A: Claude Code Plugin (recommended)**\n\nFrom within Claude Code, first add the marketplace:\n```\n/plugin marketplace add forrestchang/andrej-karpathy-skills\n```\n\nThen install the plugin:\n```\n/plugin install andrej-karpathy-skills@karpathy-skills\n```\n\nThis installs the guidelines as a Claude Code plugin, making the skill available across all your projects.\n\n**Option B: CLAUDE.md (per-project)**\n\nNew project:\n```bash\ncurl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md\n```\n\nExisting project (append):\n```bash\necho \"\" >> CLAUDE.md\ncurl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md\n```\n\n## Using with Cursor\n\nThis repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.\n\n## Key Insight\n\nFrom Andrej:\n\n> \"LLMs are exceptionally good at looping until they meet specific goals... Don't tell it what to do, give it success criteria and watch it go.\"\n\nThe \"Goal-Driven Execution\" principle captures this: transform imperative instructions into declarative goals with verification loops.\n\n## How to Know It's Working\n\nThese guidelines are working if you see:\n\n- **Fewer unnecessary changes in diffs** — Only requested changes appear\n- **Fewer rewrites due to overcomplication** — Code is simple the first time\n- **Clarifying questions come before implementation** — Not after mistakes\n- **Clean, minimal PRs** — No drive-by refactoring or \"improvements\"\n\n## Customization\n\nThese guidelines are designed to be merged with project-specific instructions. Add them to your existing `CLAUDE.md` or create a new one.\n\nFor project-specific rules, add sections like:\n\n```markdown\n## Project-Specific Guidelines\n\n- Use TypeScript strict mode\n- All API endpoints must have tests\n- Follow the existing error handling patterns in `src/utils/errors.ts`\n```\n\n## Tradeoff Note\n\nThese guidelines bias toward **caution over speed**. For trivial tasks (simple typo fixes, obvious one-liners), use judgment — not every change needs the full rigor.\n\nThe goal is reducing costly mistakes on non-trivial work, not slowing down simple tasks.\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "一份改善 Claude Code 编程行为的指南文件",
+      "problem": "减少模型误解需求、过度设计和无关改动",
+      "highlights": [
+        "可以让模型先澄清假设再编码",
+        "可以约束代码保持简单，避免过度设计",
+        "可以用测试和目标标准验证任务结果"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "Cursor 用户",
+        "AI 编程工具开发者"
+      ],
+      "why_trending": "今日新增315 Star，总Star超20.5万，本周首次收录",
+      "caveat": "它是指导规则，不保证模型始终遵守",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "multica-ai/andrej-karpathy-skills",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "直接改进Claude Code行为的Skill",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "openai/codex",
+      "url": "https://github.com/openai/codex",
+      "description": "Lightweight coding agent that runs in your terminal",
+      "language": "Rust",
+      "total_stars": 113516,
+      "forks": 17375,
+      "stars_today": 1544,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1544
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-04-13T05:37:54Z",
+      "updated_at": "2026-08-23T02:05:46Z",
+      "pushed_at": "2026-08-23T01:31:37Z",
+      "open_issues": 13495,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer.\n<p align=\"center\">\n  <img src=\"https://github.com/openai/codex/blob/main/.github/codex-cli-splash.png\" alt=\"Codex CLI splash\" width=\"80%\" />\n</p>\n</br>\nIf you want Codex in your code editor (VS Code, Cursor, Windsurf), <a href=\"https://developers.openai.com/codex/ide\">install in your IDE.</a>\n</br>If you want the desktop app experience, run <code>codex app</code> or visit <a href=\"https://chatgpt.com/codex?app-landing-page=true\">the Codex App page</a>.\n</br>If you are looking for the <em>cloud-based agent</em> from OpenAI, <strong>Codex Web</strong>, go to <a href=\"https://chatgpt.com/codex\">chatgpt.com/codex</a>.</p>\n\n---\n\n## Quickstart\n\n### Installing and running Codex CLI\n\nRun the following on Mac or Linux to install Codex CLI:\n\n```shell\ncurl -fsSL https://chatgpt.com/codex/install.sh | sh\n```\n\nRun the following on Windows to install Codex CLI:\n\n```shell\npowershell -ExecutionPolicy ByPass -c \"irm https://chatgpt.com/codex/install.ps1 | iex\"\n```\n\nThe standalone installers download from `https://releases.openai.com/codex` by default and fall back to GitHub Releases if a metadata or asset download is unavailable. To force GitHub Releases, set `CODEX_INSTALLER_USE_RELEASES_OPENAI_COM` to `false` (`0` and `no` are also accepted):\n\n```shell\ncurl -fsSL https://chatgpt.com/codex/install.sh | CODEX_INSTALLER_USE_RELEASES_OPENAI_COM=false sh\n```\n\n```powershell\n$env:CODEX_INSTALLER_USE_RELEASES_OPENAI_COM='false'; irm https://chatgpt.com/codex/install.ps1 | iex\n```\n\nCodex CLI can also be installed via the following package managers:\n\n```shell\n# Install using npm\nnpm install -g @openai/codex\n```\n\n```shell\n# Install using Homebrew\nbrew install --cask codex\n```\n\nThen simply run `codex` to get started.\n\n<details>\n<summary>You can also go to the <a href=\"https://github.com/openai/codex/releases/latest\">latest GitHub Release</a> and download the appropriate binary for your platform.</summary>\n\nEach GitHub Release contains many executables, but in practice, you likely want one of these:\n\n- macOS\n  - Apple Silicon/arm64: `codex-aarch64-apple-darwin.tar.gz`\n  - x86_64 (older Mac hardware): `codex-x86_64-apple-darwin.tar.gz`\n- Linux\n  - x86_64: `codex-x86_64-unknown-linux-musl.tar.gz`\n  - arm64: `codex-aarch64-unknown-linux-musl.tar.gz`\n\nEach archive contains a single entry with the platform baked into the name (e.g., `codex-x86_64-unknown-linux-musl`), so you likely want to rename it to `codex` after extracting it.\n\n</details>\n\n### Using Codex with your ChatGPT plan\n\nRun `codex` and select **Sign in with ChatGPT**. We recommend signing into your ChatGPT account to use Codex as part of your Plus, Pro, Business, Edu, or Enterprise plan. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).\n\nYou can also use Codex with an API key, but this requires [additional setup](https://developers.openai.com/codex/auth#sign-in-with-an-api-key).\n\n## Docs\n\n- [**Codex Documentation**](https://developers.openai.com/codex)\n- [**Contributing**](./docs/contributing.md)\n- [**Installing & building**](./docs/install.md)\n- [**Open source fund**](./docs/open-source-fund.md)\n\nThis repository is licensed under the [Apache-2.0 License](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "在终端本地运行的轻量级编码代理",
+      "problem": "帮助开发者在终端使用 AI 协助编程",
+      "highlights": [
+        "可以在终端启动编码代理",
+        "可以通过 ChatGPT 账号或 API Key 使用",
+        "可以安装到 macOS、Linux 和 Windows"
+      ],
+      "target_users": [
+        "软件开发者",
+        "命令行用户"
+      ],
+      "why_trending": "今日新增 1544 个 Star，本周首次收录",
+      "caveat": "资料中未说明具体编码能力和使用限制",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "openai/codex",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "终端编码Agent，支持本地代理工作流",
+      "generated_by_ai": true,
+      "velocity_score": 97,
+      "freshness_score": 20,
+      "ranking_score": 68.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "language": "TypeScript",
+      "total_stars": 201838,
+      "forks": 60306,
+      "stars_today": 149,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 149
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
+      "license_name": "",
+      "created_at": "2019-06-22T09:24:21Z",
+      "updated_at": "2026-08-23T02:06:08Z",
+      "pushed_at": "2026-08-22T21:44:14Z",
+      "open_issues": 1069,
+      "homepage": "https://n8n.io",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "![Banner image](https://user-images.githubusercontent.com/10284570/173569848-c624317f-42b1-45a6-ab09-f0ea3c247648.png)\n\n# n8n – The Platform for AI Agents and Workflow Automation\n\nFair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the [cloud](https://app.n8n.cloud/login), and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production.\n\n![n8n.io - Screenshot](https://raw.githubusercontent.com/n8n-io/n8n/master/assets/n8n-screenshot-readme.png)\n\n## Key Capabilities\n\n- **AI-Native Automation Platform**: Build and operationalize AI workflows and multi-step agents using your own data, models, and tools\n- **Model Flexibility, No Lock-In**: Connect to OpenAI, Anthropic, Google, or open-source models and switch providers without changing your architecture\n- **From Prototype to Production**: Design multi-step AI workflows with logic, tool use, human approvals, and full observability\n- **Code When You Need It**: Combine visual building with JavaScript, Python, and npm packages for advanced AI workflows\n- **Enterprise-Ready AI**: Self-host or deploy securely with role-based access, audit trails, and support for sensitive data\n- **Leverage What Already Exists**: 1500+ integrations and 9,000+ workflow [templates](https://n8n.io/workflows) to connect AI with your existing systems\n\n## Quick Start\n\nTry n8n instantly with our install script (requires [Docker](https://www.docker.com/)):\n\n```sh\ncurl -fsSL https://get.n8n.io | sh\n```\n\nOr deploy manually with [Docker](https://docs.n8n.io/hosting/installation/docker/):\n\n```\ndocker volume create n8n_data\ndocker run -it --rm --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n\n```\n\nAccess the editor at http://localhost:5678\n\n## Resources\n\n- 📚 [Documentation](https://docs.n8n.io)\n- 🔧 [1500+ Integrations](https://n8n.io/integrations)\n- 💡 [Example Workflows](https://n8n.io/workflows)\n- 🤖 [AI & LangChain Guide](https://docs.n8n.io/advanced-ai/)\n- 👥 [Community Forum](https://community.n8n.io)\n- 📖 [Community Tutorials](https://community.n8n.io/c/tutorials/28)\n\n## Support\n\nNeed help? Our community forum is the place to get support and connect with other users:\n[community.n8n.io](https://community.n8n.io)\n\n## License\n\nn8n is [fair-code](https://faircode.io) distributed under the [Sustainable Use License](https://github.com/n8n-io/n8n/blob/master/LICENSE.md) and [n8n Enterprise License](https://github.com/n8n-io/n8n/blob/master/LICENSE_EE.md).\n\n- **Source Available**: Always visible source code\n- **Self-Hostable**: Deploy anywhere\n- **Extensible**: Add your own nodes and functionality\n\n[Enterprise Licenses](mailto:license@n8n.io) available for additional features and support.\n\nAdditional information about the license model can be found in the [docs](https://docs.n8n.io/sustainable-use-license/).\n\n## Contributing\n\nFound a bug 🐛 or have a feature idea ✨? Check our [Contributing Guide](https://github.com/n8n-io/n8n/blob/master/CONTRIBUTING.md) for a setup guide & best practices.\n\n## Join the Team\n\nWant to shape the future of automation? Check out our [job posts](https://n8n.io/careers) and join our team!\n\n## What does n8n mean?\n\n**Short answer:** It means \"nodemation\" and is pronounced as n-eight-n.\n\n**Long answer:** \"I get that question quite often (more often than I expected) so I decided it is probably best to answer it here. While looking for a good name for the project with a free domain I realized very quickly that all the good ones I could think of were already taken. So, in the end, I chose nodemation. 'node-' in the sense that it uses a Node-View and that it uses Node.js and '-mation' for 'automation' which is what the project is supposed to help with. However, I did not like how long the name was and I could not imagine writing something that long every time in the CLI. That is when I then ended up on 'n8n'.\" - **Jan Oberhauser, Founder and CEO, n8n.io**\n"
+    },
+    "brief": {
+      "summary": "n8n 是可视化搭建 AI 工作流的自动化平台。",
+      "problem": "连接不同服务，自动执行复杂的 AI 与业务流程。",
+      "highlights": [
+        "可以拖拽搭建多步骤 AI 工作流",
+        "可以连接模型、工具和现有业务系统",
+        "可以自托管，并用代码扩展流程"
+      ],
+      "target_users": [
+        "自动化开发者",
+        "AI 应用团队",
+        "需要自托管的企业"
+      ],
+      "why_trending": "本周首次收录，今日新增149个 Star，总 Star 超20万。",
+      "caveat": "采用 Sustainable Use License，商业使用需确认授权。",
+      "category": "创作者自动化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "n8n-io/n8n",
+      "score": 84,
+      "category": "创作者自动化",
+      "reason": "可编排Agent与创作自动化流程",
+      "generated_by_ai": true,
+      "velocity_score": 66,
+      "freshness_score": 20,
+      "ranking_score": 61.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "leancoderkavy/premiere-pro-mcp",
+      "url": "https://github.com/leancoderkavy/premiere-pro-mcp",
+      "description": "Local-first Adobe Premiere Pro MCP: 285 AI video editing tools, opt-in project context, CEP bridge, and capability-aware UXP.",
+      "language": "TypeScript",
+      "total_stars": 210,
+      "forks": 33,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adobe",
+        "adobe-premiere-pro",
+        "ai",
+        "ai-video-editing",
+        "cep",
+        "claude",
+        "creative-cloud",
+        "cursor",
+        "extendscript",
+        "local-first",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "model-context-protocol",
+        "premiere-automation",
+        "premiere-pro",
+        "typescript",
+        "video-automation",
+        "video-editing",
+        "video-editing-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-27T06:31:32Z",
+      "updated_at": "2026-08-23T00:16:57Z",
+      "pushed_at": "2026-08-23T00:45:15Z",
+      "open_issues": 3,
+      "homepage": "https://premiere-pro-mcp.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# Premiere Pro MCP\n\n[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fleancoderkavy%2Fpremiere-pro-mcp.svg)](https://mcptoplist.com/server/glama%2Fleancoderkavy%2Fpremiere-pro-mcp)\n\n**Give compatible AI assistants structured control over supported Adobe Premiere Pro workflows.**\n\n287 core tools across 33 modules, 4 resources, and 10 guided workflows. A connected UXP host adds 50 capability-gated tools.\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n[![Node.js](https://img.shields.io/badge/Node.js-20.19%2B-green.svg)](https://nodejs.org)\n[![MCP](https://img.shields.io/badge/MCP-1.29-purple.svg)](https://modelcontextprotocol.io)\n[![npm](https://img.shields.io/npm/v/premiere-pro-mcp.svg)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![Fly.io](https://img.shields.io/badge/Fly.io-deployed-7C3AED.svg)](https://premiere-pro-mcp.fly.dev)\n[![Premiere Pro](https://img.shields.io/badge/Premiere%20Pro-2020--2026-9999FF.svg)](https://www.adobe.com/products/premiere.html)\n\n</div>\n\n---\n\n![Premiere Pro MCP turns a structured AI request into an organized local editing workflow](landing/public/marketing/premiere-pro-mcp-campaign-hero-v1.png)\n\n## What is this?\n\nAn [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants like **Claude**, **Windsurf**, **Cursor**, **GitHub Copilot**, or any MCP-compatible client directly control Adobe Premiere Pro — importing media, editing timelines, applying effects, managing keyframes, exporting, and more.\n\n```text\n\"Add the B-roll clips to V2, apply a cross dissolve between each, color correct them to match the A-roll, and export a 1080p ProRes.\"\n```\n\nThe AI handles the entire workflow through 287 core tools spanning the supported ExtendScript, QE DOM, revisioned project-context retrieval, safe edit-planning, and connection-verification surfaces. A compatible, authenticated UXP panel adds 50 documented, capability-gated tools without replacing the production CEP bridge.\n\n### Latest release: 1.12.1\n\n- **MCP safety research:** ten documented recommendations now cover subscription streams,\n  contextual completions, workspace boundaries, resource metadata and canonical URIs.\n- **Trust boundaries:** the recommendations define prompt/resource-injection defenses, layered\n  end-to-end health checks, C2PA inspection limits, and UXP external-launch safeguards.\n- **Verification clarity:** semantic keyframe verification is scoped separately from implementation\n  and licensed Premiere Pro host confirmation.\n\nSee the [v1.12.1 release notes](https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v1.12.1)\nfor complete details. Live installation in Premiere Pro still requires host verification.\n\n---\n\n## Quick Start\n\n### Easiest supported path: Claude Desktop\n\n1. Download the current [Claude Desktop bundle (`.mcpb`)](https://github.com/leancoderkavy/premiere-pro-mcp/releases/download/v1.12.1/premiere-pro-mcp-1.12.1.mcpb).\n2. In Claude Desktop, open **Settings > Extensions > Advanced settings > Install Extension**, select the downloaded bundle, and restart Claude Desktop.\n3. Download the separate [signed Premiere connector (`.zxp`)](https://github.com/leancoderkavy/premiere-pro-mcp/releases/download/v1.12.1/MCPBridgeCEP.zxp). Open it with your trusted ZXP installer. If your computer has no ZXP installer, use the npm connector installer in **Advanced setup** below.\n4. Restart Premiere, open a project, then open **Window > Extensions > MCP Bridge**.\n5. In Claude, enter: `Safely check my Premiere connection with verify_premiere_connection. Make no changes.`\n\nThe Claude bundle contains the local MCP server, so this route does not require Node.js. The Premiere connector is a separate required install. The first prompt is read-only and reports whether the server is installed, configured, connected, and live-verified.\n\n### Other AI assistants\n\nCursor, VS Code/Copilot, Windsurf, and other MCP clients do not currently have a project-provided one-click installer. Use their MCP settings with the advanced npm route below. Keep the assistant, server, connector, and Premiere on the same computer.\n\n<details>\n<summary><strong>Advanced setup: npm or source</strong></summary>\n\n#### Before you begin\n\n- Node.js **20.19 or newer** on Windows or macOS.\n- Adobe Premiere Pro **2020–2026**. Keep Premiere, the CEP bridge, and your MCP client on the same computer for the recommended local setup.\n- Optional: [ffmpeg](https://ffmpeg.org/download.html) on `PATH` for `detect_silence`\n  (`brew install ffmpeg` on macOS or `winget install Gyan.FFmpeg` on Windows).\n  The production Docker image already includes it.\n\n#### 1. Install\n\n**Option A — npm:**\n\n```bash\nnpm install -g premiere-pro-mcp\n```\n\n**Option B — Clone from source:**\n\n```bash\ngit clone https://github.com/leancoderkavy/premiere-pro-mcp.git\ncd premiere-pro-mcp\nnpm install\nnpm run build\n```\n\n#### 2. Install the CEP plugin\n\n**If installed via npm:**\n\n```bash\npremiere-pro-mcp --install-cep\n```\n\n**If cloned from source:**\n\n```bash\nnpm run install-cep\n```\n\nThis installs the plugin into Premiere Pro's per-user extensions folder and enables debug mode.\n\n#### 3. Check the setup\n\n```bash\npremiere-pro-mcp --doctor\n```\n\nThen ask your MCP client to run `verify_premiere_connection`. The check is read-only.\n\n</details>\n\n---\n\n## Publishing to npm\n\nThe easiest repeatable path is the token-free GitHub Actions workflow:\n\n1. In the npm package settings, configure GitHub Actions as the trusted publisher for\n   `leancoderkavy/premiere-pro-mcp` and workflow file `npm-publish.yml`.\n2. Allow the `npm publish` action.\n3. Open **Actions -> Publish npm -> Run workflow** and keep the default `latest` tag.\n\nThe workflow installs dependencies, builds, runs tests, verifies the packed files, refuses to\nrepublish an existing version, then publishes through short-lived OIDC credentials with automatic\nprovenance. No npm token or recurring OTP is required.\n\nFor local publishing, use the guided helper:\n\n```bash\nnpm run publish:npm\n```\n\nUseful local variants:\n\n```bash\nnpm run publish:npm:dry-run\nNPM_OTP=123456 npm run publish:npm\nNPM_TOKEN=npm_xxx npm run publish:npm\n```\n\n<details>\n<summary>Manual installation (macOS)</summary>\n\n```bash\nmkdir -p ~/Library/Application\\ Support/Adobe/CEP/extensions\nln -s \"$(pwd)/cep-plugin\" ~/Library/Application\\ Support/Adobe/CEP/extensions/MCPBridgeCEP\n\n# Enable unsigned extensions (CSXS 9–14)\nfor v in 9 10 11 12 13 14; do\n  defaults write com.adobe.CSXS.$v PlayerDebugMode 1\ndone\n```\n\n</details>\n\n<details>\n<summary>Manual installation (Windows)</summary>\n\n1. Copy the `cep-plugin` folder to `%APPDATA%\\Adobe\\CEP\\extensions\\MCPBridgeCEP`\n2. Open Registry Editor and set these **String (`REG_SZ`)** values to `1` (not DWORD):\n   - `HKEY_CURRENT_USER\\Software\\Adobe\\CSXS.12\\PlayerDebugMode`\n   - (repeat for CSXS.9 through CSXS.14)\n\n</details>\n\n### 3. Configure your MCP client\n\nIf you installed from npm, configure the client to run the global command:\n\n```json\n{\n  \"mcpServers\": {\n    \"premiere-pro\": {\n      \"command\": \"premiere-pro-mcp\"\n    }\n  }\n}\n```\n\nIf you cloned the repository instead, use the source-build configuration shown below for your client.\n\n<details>\n<summary><strong>Claude Desktop</strong></summary>\n\nEdit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\\Claude\\claude_desktop_config.json` (Windows):\n\n```json\n{\n  \"mcpServers\": {\n    \"premiere-pro\": {\n      \"command\": \"node\",\n      \"args\": [\"/absolute/path/to/premiere-pro-mcp/dist/index.js\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Windsurf / Cascade</strong></summary>\n\nAdd to your MCP server configuration:\n\n```json\n{\n  \"premiere-pro\": {\n    \"command\": \"node\",\n    \"args\": [\"/absolute/path/to/premiere-pro-mcp/dist/index.js\"]\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>Cursor</strong></summary>\n\nAdd to `.cursor/mcp.json` in your project or global config:\n\n```json\n{\n  \"mcpServers\": {\n    \"premiere-pro\": {\n      \"command\": \"node\",\n      \"args\": [\"/absolute/path/to/premiere-pro-mcp/dist/index.js\"]\n    }\n  }\n}\n```\n\n</details>\n\n<details>\n<summary><strong>GitHub Copilot (VS Code)</strong></summary>\n\nAdd to your VS Code MCP server configuration:\n\n```json\n{\n  \"mcpServers\": {\n    \"premiere-pro\": {\n      \"command\": \"node\",\n      \"args\": [\"/absolute/path/to/premiere-pro-mcp/dist/index.js\"]\n    }\n  }\n}\n```\n\n</details>\n\n### 4. Verify the bridge in Premiere Pro\n\n1. Open (or restart) Premiere Pro\n2. The bridge starts automatically using the default temp directory (or its previously saved setting)\n3. Optionally go to **Window > Extensions > MCP Bridge** to confirm the green \"Running\" status or change the **Temp Directory** to match your MCP client config\n4. Ask your AI assistant to run `get_capabilities`, then `ping`, with Premiere open.\n5. For a safe first request, ask: *\"What is my current Premiere Pro project and active sequence? Do not make changes.\"*\n\nThe default bridge directory is derived from the operating system on both sides, so most local setups should not set `PREMIERE_TEMP_DIR`. If you override it, use the same absolute path in the MCP server and CEP panel; Windows and macOS paths are not interchangeable.\n\n### Codex plugin\n\nThis repository includes an installable Codex plugin that bundles the local MCP\nserver with a safety-oriented Premiere editing skill.\n\nFrom a clone of this repository:\n\n```bash\ncodex plugin marketplace add .\ncodex plugin add premiere-pro@premiere-pro-mcp\nnpx -y premiere-pro-mcp@1.12.1 --install-cep\n```\n\nRestart Premiere Pro and start a new Codex session after installation. The plugin\nlaunches `premiere-pro-mcp@1.12.1` through `npx`; the separate CEP installation is\nrequired because the MCP server communicates with the running Premiere host through\nthe local bridge.\n\nThe plugin source lives in [`plugins/premiere-pro`](plugins/premiere-pro), and the\nrepository marketplace manifest lives in\n[`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json).\n\n### Claude\n\nFor Claude Code, add this repository as a marketplace and install the plugin:\n\n```text\n/plugin marketplace add leancoderkavy/premiere-pro-mcp\n/plugin install premiere-pro@premiere-pro-mcp\n```\n\nThen install the Premiere bridge and start a new Claude Code session:\n\n```bash\nnpx -y premiere-pro-mcp@1.12.1 --install-cep\n```\n\nThe Claude Code package lives in\n[`claude-plugins/premiere-pro`](claude-plugins/premiere-pro), with its marketplace\nat [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json).\n\nClaude Desktop uses the self-contained MCP Bundle (`.mcpb`) format. Build and\nvalidate the current bundle with:\n\n```bash\nnpm run build:claude\n```\n\nInstall the resulting file from `artifacts/` through **Settings > Extensions >\nAdvanced settings > Install Extension**. The Premiere CEP bridge must still be\ninstalled separately.\n\n### Windows and macOS capability coverage\n\n| Surface | Windows | macOS | Verification boundary |\n| :------ | :------ | :---- | :-------------------- |\n| CEP production bridge | Premiere Pro 2020–2026 | Premiere Pro 2020–2026 | Run `get_capabilities`, then `ping` with Premiere open |\n| UXP preview bridge | Premiere Pro 25.6+ | Premiere Pro 25.6+ | Live loopback WebSocket and host API verification required |\n| npm CEP installer | Copies plugin and verifies `REG_SZ` debug keys | Copies plugin and verifies the installed manifest/debug settings | Restart Premiere after installation |\n| CI build and unit tests | Node 20, 22, and 24 | Node 20, 22, and 24 | GitHub-hosted OS runners; no Adobe host is available in CI |\n\n`get_capabilities` reports the current operating system, temp directory, CEP/UXP coverage, enabled authority profile, and any live-host verification still required. It also includes the full `tools` catalog generated from the tools registered by the server, including tools disabled by the active profile. Every entry identifies:\n\n- the execution backend (`local`, CEP/ExtendScript, QE, or orchestrator);\n- static support sta"
+    },
+    "brief": {
+      "summary": "让AI助手通过MCP控制本地Premiere Pro剪辑流程",
+      "problem": "减少AI与Premiere Pro之间手动传递操作的步骤",
+      "highlights": [
+        "可以让AI导入素材并编辑时间线",
+        "可以应用转场、特效并管理关键帧",
+        "可以执行导出和连接状态检查"
+      ],
+      "target_users": [
+        "视频剪辑师",
+        "AI视频创作者",
+        "Premiere自动化开发者"
+      ],
+      "why_trending": "本周首次收录，近期有提交，获210个Star",
+      "caveat": "需要安装Premiere连接器，并完成主机验证",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "leancoderkavy/premiere-pro-mcp",
+      "score": 98,
+      "category": "视频剪辑",
+      "reason": "Premiere专业MCP剪辑自动化工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 55.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "unslothai/unsloth",
+      "url": "https://github.com/unslothai/unsloth",
+      "description": "Local UI to run and train LLMs and diffusion models, including Qwen3.8, Kimi K3, MiniMax-H3, Gemma 4, DeepSeek-V4, FLUX and more.",
+      "language": "Python",
+      "total_stars": 74407,
+      "forks": 6733,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 301
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai",
+        "chatgpt",
+        "deepseek",
+        "fine-tuning",
+        "gemma",
+        "image-generation",
+        "llama",
+        "llm",
+        "llms",
+        "openai",
+        "python",
+        "qwen",
+        "reinforcement-learning",
+        "self-hosted",
+        "stable-diffusion",
+        "text-to-speech",
+        "tts",
+        "ui",
+        "unsloth"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2023-11-29T16:50:09Z",
+      "updated_at": "2026-08-23T02:05:32Z",
+      "pushed_at": "2026-08-23T02:02:16Z",
+      "open_issues": 1403,
+      "homepage": "https://unsloth.ai/docs",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\" style=\"margin:0;\">\n  <a href=\"https://unsloth.ai/docs\"><picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png\">\n    <img alt=\"Unsloth logo\" src=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png\" height=\"80\" style=\"max-width:100%;\">\n  </picture></a>\n</h1>\n<h3 align=\"center\" style=\"margin: 0; margin-top: 0;\">\nUnsloth is the first desktop app to run and train models.\n</h3>\n\n<p align=\"center\">\n  <a href=\"#-features\">Features</a> •\n  <a href=\"#-install\">Quickstart</a> •\n  <a href=\"#-free-notebooks\">Notebooks</a> •\n  <a href=\"https://unsloth.ai/docs\">Documentation</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://unsloth.ai/docs/desktop\">\n    <img height=\"400\" alt=\"unsloth desktop\" src=\"https://unsloth.ai/cgi/image/unsloth_qwen3.8_final_ut2eqWnYJ-SLmu0s7x522.png?format=raw\" />\n  </a>\n</p>\n\n## ⚡ Get started\nDownload the native Unsloth Desktop app for your operating system:\n<table>\n  <tr>\n    <td><b>Platform</b></td>\n    <td><b>Link</b></td>\n  </tr>\n  <tr>\n    <td><b>Windows</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Windows.exe'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>macOS</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-MacOS.dmg'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux / Ubuntu (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Ubuntu.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux (AppImage)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Linux.AppImage'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux (Arm64)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-ARM64.app.tar.gz'>Download</a></td>\n  </tr>\n</table>\n\nDownload from [Unsloth](https://unsloth.ai/download) or [GitHub Releases](https://github.com/unslothai/unsloth/releases).\n\nOr if you prefer to install manually:\n\n#### macOS, Linux, WSL:\n```bash\ncurl -fsSL https://unsloth.ai/install.sh | sh\n```\n#### Windows:\n```powershell\nirm https://unsloth.ai/install.ps1 | iex\n```\n#### Community:\n\n- [Discord](https://discord.gg/unsloth)\n- [𝕏 (Twitter)](https://x.com/UnslothAI)\n- [Reddit](https://reddit.com/r/unsloth)\n\n## ⭐ Features\nUnsloth lets you run, train, and deploy AI models locally, with support for all types of models.\n\n### Run & Build with AI\n* Run and train LLMs, diffusion, embedding, audio models: [Kimi K3](https://unsloth.ai/docs/models/kimi-k3), MiniMax-H3, Qwen3.8, [Muse Glimmer](https://unsloth.ai/docs/models/muse-glimmer), [DeepSeek-V4](https://unsloth.ai/docs/models/deepseek-v4), [Gemma 4](https://unsloth.ai/docs/models/gemma-4).\n* **Agents & Tools:** Use local models with [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex), and [MCP](https://unsloth.ai/docs/basics/mcp), including tool calling and code execution.\n* **Search & RAG:** Use private and unlimited web search, deep research, and RAG.\n* **Image and video:** Run and train [image](https://unsloth.ai/docs/basics/diffusion-image) and video diffusion or multimodal models\n* **Search:** Use private and unlimited web search, deep research, and RAG.\n* **Hardware:** Supports CPU, Apple, NVIDIA, AMD, Intel, and multi GPU setups.\n* **Remote Access:** Serve your local models remotely through secure [Cloudflare](https://unsloth.ai/docs/basics/how-to-serve-local-llms-anywhere-secure-remote-access-with-cloudflare-and-unsloth) HTTPS.\n* **Connect:** Serve models through an [OpenAI compatible API](https://unsloth.ai/docs/basics/api). Also connect your ChatGPT/Codex subscription and [cloud providers](https://unsloth.ai/docs/integrations/connections)\n\n\n### Train & Deploy\n* **Fine-tuning:** Train LLMs, diffusion, TTS, and embedding models 2× faster with 70% less VRAM with [no accuracy loss](https://unsloth.ai/blog#training)\n* **Complete support:** Supports [reinforcement learning](https://unsloth.ai/docs/get-started/reinforcement-learning-rl-guide), LoRA, QLoRA, full fine tuning, pretraining, RL, GRPO, DPO, and FP8.\n* **Export & Deploy:** [Export](https://unsloth.ai/docs/new/studio/export) or Deploy models with including [GGUF](https://unsloth.ai/docs/basics/inference-and-deployment/saving-to-gguf), NVFP4, FP8 and more formats.\n* **Datasets:** Build datasets from PDFs, CSVs, DOCX files, and more with [Data Recipes](https://unsloth.ai/docs/new/studio/data-recipe).\n  \n## 🚀 Unsloth Start\n\n[Unsloth Start](https://unsloth.ai/docs/integrations/unsloth-start) connects [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex) and other agents to local models with one command.\n\nStart Unsloth, load a model, open your project folder, then run:\n\n```bash\nunsloth start claude\n```\n\nReplace `claude` with any supported agent:\n\n| Agent | Command |\n| --- | --- |\n| Claude Code | `unsloth start claude` |\n| OpenAI Codex | `unsloth start codex` |\n| Hermes Agent | `unsloth start hermes` |\n| OpenClaw | `unsloth start openclaw` |\n| OpenCode | `unsloth start opencode` |\n\nClaude Code, Codex and OpenCode can keep their current model and use Unsloth as a local\nsubagent:\n\n```bash\nunsloth start claude --as-subagent --model unsloth/model-GGUF:quant\n```\n\n## 📥 Install\nUnsloth can be used in three ways: **[Unsloth Desktop](https://unsloth.ai/download)**, the desktop app; **[Unsloth Studio](https://unsloth.ai/docs/new/studio/)**, the web UI; or **Unsloth Core**, the code based version.\n\n### Unsloth Desktop (recommended)\n\nThe Tauri based desktop app is the easiest way to use Unsloth and needs no setup, so start here.\n\n<table>\n  <tr>\n    <td><b>Platform</b></td>\n    <td><b>Link</b></td>\n  </tr>\n  <tr>\n    <td><b>Windows</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Windows.exe'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>macOS</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-MacOS.dmg'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux / Ubuntu (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Ubuntu.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux (AppImage)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-Linux.AppImage'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux (Arm64)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.801-beta/Unsloth-Desktop-0_1_801_beta-ARM64.app.tar.gz'>Download</a></td>\n  </tr>\n</table>\n\n### Unsloth Studio (web UI)\nUnsloth Studio (Beta) works on **Windows, Linux, WSL** and **macOS**.\n\n* **CPU:** Supported for Chat and Data Recipes currently\n* **NVIDIA:** Training works on RTX 30/40/50, Blackwell, DGX Spark, Station and more\n* **macOS:** Training, MLX and GGUF inference are ALL supported.\n* **AMD:** Training, RL, chat and deployment work on Windows, WSL and Linux. [Read the AMD guide](https://unsloth.ai/docs/basics/amd).\n* **Intel:** Training and GGUF inference are supported on Intel GPUs (XPU).\n* **Vulkan:** GGUF inference is supported on [compatible GPUs, including Intel GPUs](https://github.com/unslothai/unsloth/pull/5819). Vulkan accelerates GGUF inference only; training still requires a supported PyTorch or MLX backend.\n* **Multi-GPU:** Available now, with a major upgrade on the way\n\n#### macOS, Linux, WSL:\n```bash\ncurl -fsSL https://unsloth.ai/install.sh | sh\n```\nUse the same command to update.\n\nThe GGUF inference backend can be changed from **Settings > System > GGUF inference engine** once Studio is running: pick CPU, CUDA, ROCm or Vulkan (only the ones with a build for your machine are listed) and Apply. The choice is recorded with the install, so updates keep it, and Automatic returns to hardware detection.\n\nTo pick it before the first launch instead, set `UNSLOTH_LLAMA_CPP_BACKEND` **before installing or updating**. It selects the llama.cpp binary bundle, so setting it only when launching Studio cannot replace an existing one, and it overrides whatever was chosen in Settings:\n\n```bash\nexport UNSLOTH_LLAMA_CPP_BACKEND=vulkan   # or cpu, cuda, rocm, auto\ncurl -fsSL https://unsloth.ai/install.sh | sh\n```\n\nOn Linux and WSL this is the path for the AMD GPUs Unsloth has no ROCm PyTorch wheels for: Polaris (RX 470/480/570/580/590) and RDNA 1 (RX 5500/5600/5700). torch stays on CPU there, so training and GPU inference are unavailable, but GGUF chat runs on the GPU through Vulkan. Not every pre-RDNA 2 card is in this group: Vega 20 (Radeon VII, MI50, `gfx906`) keeps a ROCm PyTorch path and the installer routes it there. The older `UNSLOTH_FORCE_VULKAN=1` still works and is read when `UNSLOTH_LLAMA_CPP_BACKEND` is unset.\n\nmacOS has no Vulkan llama.cpp bundle and does not need one: the installer always uses the Metal build, which covers Apple Silicon and the AMD GPUs in Intel Macs, and it says so and carries on if the variable is set.\n\n#### Windows:\n```powershell\nirm https://unsloth.ai/install.ps1 | iex\n```\nUse the same command to update.\n\nTo pick the GGUF inference backend before the first launch, set the environment variable before running the installer or updater (or change it later in **Settings > System > GGUF inference engine**):\n\n```powershell\n$env:UNSLOTH_LLAMA_CPP_BACKEND=\"vulkan\"   # or cpu, cuda, rocm, auto\nirm https://unsloth.ai/install.ps1 | iex\n```\n\nRe-running the current installer replaces a previously selected bundle when the backend differs. A separate Vulkan SDK is not required; the GPU driver must provide a working Vulkan runtime.\n\n#### Launch\n```bash\nunsloth studio -p 8888\n```\nFor LAN or cloud access, add `-H 0.0.0.0` (raw port only; add `--cloudflare` for a public URL), or turn it on later in Settings > API keys > LAN access. By default, Unsloth is accessible only locally.\n\nTo reach Unsloth over HTTPS, use `unsloth studio --secure`. Unsloth stays bound to localhost and is reached only through a free Cloudflare tunnel, which publishes it at a public `https://*.trycloudflare.com` URL (it fails closed if the tunnel can't start, so the raw port is never exposed). This makes Unsloth reachable from the internet, so anyone with the link and API key can use it and run code: keep your API key private (see Remote access below).\n\n#### Docker\nUse our [Docker image](https://hub.docker.com/r/unsloth/unsloth) ```unsloth/unsloth``` container. Run:\n```bash\ndocker run -d -e JUPYTER_PASSWORD=\"mypassword\" \\\n  -p 8888:8888 -p 8000:8000 -p 2222:22 \\\n  -v $(pwd)/work:/workspace/work \\\n  --gpus all \\\n  unsloth/unsloth\n  ```\n\n#### Developer, Nightly, Uninstall\nTo see developer, nightly and uninstallation etc. instructions, see [advanced installation](#-advanced-installation).\n\n### Unsloth Core (code-based)\n#### Linux, WSL:\n```bash\ncurl -LsSf https://astral.sh/uv/install.sh | sh\nuv venv unsloth_env --python 3.13\nsource unsloth_env/bin/activate\nuv pip install unsloth --torch-backend=auto\n```\n#### Windows:\n```powershell\nwinget install -e --id Python.Python.3.13\nwinget install --id=astral-sh.uv  -e\nuv venv unsloth_env --python 3.13\n.\\unsloth_env\\Scripts\\activate\nuv pip install unsloth --torch-backend=auto\n```\nFor Windows, `pip install unsloth` works only if you have PyTorch installed. Read our [Windows Guide](https://unsloth.ai/docs/get-started/install/windows-installation).\nYou can use the same Docker image as Unsloth Studio"
+    },
+    "brief": {
+      "summary": "本地运行、训练和部署多类 AI 模型的桌面工具",
+      "problem": "降低本地模型运行、微调和部署的操作门槛",
+      "highlights": [
+        "可以本地运行大语言、图像和音频模型",
+        "可以用 LoRA、QLoRA 等方式微调模型",
+        "可以连接 Claude Code、Codex 等智能体"
+      ],
+      "target_users": [
+        "AI 开发者",
+        "模型微调用户",
+        "本地部署爱好者"
+      ],
+      "why_trending": "总 Star 达 74407，项目近期仍在活跃更新",
+      "caveat": "Studio 标注为 Beta，具体硬件支持需核对",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "unslothai/unsloth",
+      "score": 62,
+      "category": "AI 绘画 / 漫画",
+      "reason": "支持扩散模型训练与本地生成",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 20,
+      "ranking_score": 52.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "Mudb0y/openevv",
+      "url": "https://github.com/Mudb0y/openevv",
+      "description": "Reimplementation of IBM's Embedded ViaVoice / ETI Eloquence SF in portable C",
+      "language": "C",
+      "total_stars": 20,
+      "forks": 6,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "eloquence",
+        "reverse-engineering",
+        "screen-reader",
+        "text-to-speech",
+        "viavoice"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-08-20T16:39:07Z",
+      "updated_at": "2026-08-23T02:04:36Z",
+      "pushed_at": "2026-08-23T02:04:20Z",
+      "open_issues": 4,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# openevv\n\nA portable Eloquence. IBM's Embedded ViaVoice text-to-speech engine, taken out of its 1999 Windows objects and rebuilt as C that compiles and speaks on a machine it was never meant to run on.\n\nIt speaks, and it speaks IBM's own samples: the audio is byte for byte identical to IBM's binary across all 81 test cases, from both a thirty-two and a sixty-four bit build. Nothing is borrowed at build time. No DLL, no SDK, no Wine.\n\n    make\n    ./build/evv -o hello.wav \"Hello from Eloquence.\"\n\nThat wants a C compiler, Python, and about a quarter of an hour, most of it compiling the rules. `make RULES=bytecode` is the same engine in half a minute with no Python, saying the same samples; it runs the rules interpreted rather than compiled, which costs rather more than half the speed. On Linux nothing plays the audio yet, so the engine writes a wave file; pipe it into a player to hear it at once:\n\n    ./build/evv \"Hello from Eloquence.\" | aplay -q -\n\nOn Windows there is a speak window. Take `evvspeak.exe` from the latest release, type something, pick one of the eight voices, and hear it; `evv.exe` beside it is the same engine on the command line. One file each, nothing to install, and `make win` builds both from here with mingw.\n\n`eci.dll` is in the release too: the same engine exporting the names IBM published, so a program written against IBM's library can load ours instead -- a screen reader add-on, for instance. It ships in both bitnesses, in folders that say which is which: an add-on that loads the engine into the reader's own process wants the reader's bitness, and the most used one hosts the engine in a thirty-two bit process of its own whatever the reader is.\n\n`./build/evv -h` says what the options are, and `./build/evv -l` says what each of the eight voices is set to.\n\n## What is here\n\n`src` is the engine: hand-written C, one file per object in IBM's own module decomposition, so that a file can be checked against the object it came from.\n\n`lang/enus` is US English: the rules, the constants they read, the sets, the link tables, the voice presets and the dictionary. This is the part lifted out of IBM's objects rather than written, and it is in the tree so that the engine builds without the SDK. `lang/dede` is German, lifted the same way. A build takes as many languages as it is given -- `make LANGS=\"lang/enus lang/dede\"` puts both in one binary and the caller picks between them. English is the one that is finished; German matches IBM over the cases there are for it. `docs/status.md` says in which configurations.\n\n`cli/evv.c` is the command above and `win/speak.c` is the speak window. `cli/probe.c` is the same engine behind a front that reports what it answered at every step, which is what `test` sets against IBM's binary case for case. `tools` holds the lifters, the decompiler and the analysers. `reference` builds IBM's own binary under Wine, which is what the tests compare against.\n\n## Documentation\n\n`docs/building.md` is what you need, what to build, and what each variable does.\n`docs/status.md` is what works, what does not, and what has not been started.\n`docs/tree.md` says what every directory is for.\n\n## Licence and provenance\n\nOur own work -- the engine, the two front ends, the tools, the tests and the documents -- is under the MIT licence in LICENSE.\n\nThe language data under `lang` is not ours. It is transcribed out of IBM's Embedded ViaVoice objects, byte for byte where the engine's arithmetic depends on it, and it is IBM's work. The MIT licence does not cover it and we are in no position to license it to anyone. NOTICE says what it is, whose it is, and who the rights in it may belong to today.\n\nNothing else of IBM's is here. The objects the port was read out of, and the headers and symbol tables it was read with, are not in the tree and are not needed to build. IBM still serves the SDK they came out of from its own public download host, and `docs/building.md` says where it is and what to do with it -- which is what anyone wanting to check this work against the original, or to add one of the seven other languages, would start from.\n"
+    },
+    "brief": {
+      "summary": "便携式 C 语言 Eloquence 文本转语音引擎重实现",
+      "problem": "让旧版 IBM Eloquence 脱离专有环境运行",
+      "highlights": [
+        "可以在 Linux 生成 WAV 语音文件",
+        "可以在 Windows 使用八种语音朗读文本",
+        "可以替代部分程序调用的 eci.dll"
+      ],
+      "target_users": [
+        "无障碍软件开发者",
+        "屏幕阅读器用户",
+        "C 语言开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有 20 个 Star",
+      "caveat": "语言数据源自 IBM，许可范围需单独确认",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Mudb0y/openevv",
+      "score": 68,
+      "category": "语音 / 配音",
+      "reason": "便携式经典文字转语音引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "jakubtomsu/ravn",
+      "url": "https://github.com/jakubtomsu/ravn",
+      "description": "[ALPHA] lightweight 2D and 3D engine for the joy of game development in Odin",
+      "language": "Odin",
+      "total_stars": 86,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cross-platform",
+        "framework",
+        "game-engine",
+        "gamedev",
+        "gpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-02T21:26:53Z",
+      "updated_at": "2026-08-23T01:47:41Z",
+      "pushed_at": "2026-08-23T01:47:37Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\r\n\r\n# RAVN\r\n\r\n(pronounced *raven*)\r\n\r\n### RAVN is a lightweight 2D and 3D engine for the joy of game development in [Odin](https://odin-lang.org).\r\n\r\n### [Discord](https://discord.com/invite/wn5jMMMYe4)\r\n\r\n</div>\r\n\r\n> [!WARNING]\r\n> ***EARLY ALPHA VERSION***\r\n>\r\n> Do NOT use for anything serious yet. Major features aren't fully finished and might break. There will be large breaking API changes.\r\n>\r\n> Windows is stable, but WASM+WebGPU or Linux builds might have bugs.\r\n\r\n\r\n\r\n## Principles\r\nA game library made specifically for small indie teams and fast iteration times.\r\nSomething *simple* you can prototype in, but also *stable* enough to make polishing a full game straightforward.\r\n\r\n- Batteries-included\r\n- Simple and hackable\r\n- Minimal dependencies\r\n- Code and Asset hotreloading\r\n- Zero hidden internal state\r\n- Modular architecture\r\n\r\n> Inspired by Sokol, PICO8 and Raylib.\r\n\r\n## Simple Example\r\n\r\n```odin\r\nimport rv \"ravn\"\r\n// Export app info to allow for hot reloading\r\n@export _app_desc := rv.App_Desc{update = _update}\r\n\r\nmain :: proc() {\r\n    rv.run_main_loop(_app_desc)\r\n}\r\n\r\n_update :: proc(_: rawptr) -> rawptr {\r\n    if rv.key_pressed(.Escape) { rv.request_shutdown() }\r\n    // Initialize camera for layer 0\r\n    rv.set_layer_params(0, rv.make_screen_camera(rv.get_screen_size()))\r\n    // Set up draw state\r\n    rv.set_draw_texture(rv.get_builtin_texture(.CGA8x8thick))\r\n    rv.draw_text_2d(\"Hello World! ☺\", {100, 100}, scale = 4, spacing = 1)\r\n    // Tell the GPU to render layer 0 to default render target\r\n    rv.render_layer(0, clear_color = rv.DARK_BLUE.rgb, clear_depth = true)\r\n    return nil\r\n}\r\n```\r\n\r\n# Getting Started\r\n\r\n## Prequisities\r\nInstall [Odin](https://github.com/odin-lang/Odin) and make sure it's in your path. Check the [Official Install docs](https://odin-lang.org/docs/install/) for more info.\r\n\r\nThe main branch here should always compile on the latest Odin master branch build.\r\n\r\nThere are no additional dependencies.\r\n\r\n## Project Setup\r\nThe recommended approach is using [git subtrees](https://github.com/git/git/blob/master/contrib/subtree/git-subtree.adoc), a nicer alternative to submodules or manual copy-pasting.\r\n\r\nHere are the commands to clone the library into your project, and to pull the latest upstream changes. It will appear just as a regular directory.\r\n```\r\ngit subtree add --prefix=ravn https://github.com/jakubtomsu/ravn main --squash\r\ngit subtree pull --prefix=ravn https://github.com/jakubtomsu/ravn main --squash\r\n```\r\n> In case you want to delete the entire subtree, just remove the folder. There shouldn't be any hidden metadata.\r\n\r\n## Examples\r\n\r\nYou can run demos from the [examples/](examples) directory with something like the following command:\r\n```\r\nodin run examples\\hello\r\nodin run build -- run_hot examples\\hello\r\n```\r\nTry the [hello](examples/hello/hello_example.odin) or [Snake Planet game](examples/snake_planet/snake_planet_example.odin) examples!\r\n\r\n\r\n# Docs\r\n\r\n## Web builds\r\n\r\nYou can run the following command to export your game to web:\r\n```\r\nodin run build -- export-web my_package\r\n```\r\nTo run the app locally, you must also create a tiny HTTP file server. VSCode live server extension or `python -m http.server <port>` is recommended.\r\n\r\n> [!NOTE]\r\n> In case you're having issues with rendering, you can test WebGPU is behaving correctly locally with `odin run my_package -define:GPU_BACKEND=WGPU`, however the wgpu-native used on desktop can be slightly different than the Chrome Dawn implementation.\r\n\r\n## Cross platform shaders\r\n\r\nThe engine comes with a few built-in shaders. Those always work everywhere by default.\r\n\r\nCompiling custom shaders is handled internally using the `shader_compiler` package when you load a shader from source.\r\nThis requires a ***slang compiler dynamic library*** on non-D3D11 builds. Install it from [slang github](https://github.com/shader-slang/slang) releases.\r\n\r\n- Windows: copy `slang.dll` and `slang-compiler.dll` into your project\r\n- Linux: copy `libslang-compiler.so.*` as `libslang.so` into your project.\r\n\r\n## Cheatsheet\r\n\r\nList of most common functions in an easily searchable way.\r\n\r\n> [!WARNING]\r\n> INCOMPLETE/OUTDATED\r\n\r\n### Drawing\r\n\r\n```odin\r\ndraw_sprite(...)\r\ndraw_mesh(...)\r\ndraw_triangle(...)\r\ndraw_line(...)\r\ndraw_text(...)\r\n```\r\n\r\n### Utils\r\n```odin\r\ndeg(degrees: f32) -> f32                    // Convert degrees to radians\r\nlerp(a, b: $T, t: f32) -> T                 // Linearly interpolate between A and B\r\nlexp(a, b: $T, rate: f32) -> T              // Exponential lerp for things like 'a = lexp(a, target, delta*10)'\r\nfade(alpha: f32) -> Vec4                    // Make a white color with a given alpha value\r\ngray(val: f32) -> Vec4                      // Value = 0 means black, = 1 means white\r\nvcast($T: typeid, v: [$N]$E) -> [N]T        // Cast from one type of vector to another\r\nrot90(v: [2]$T) -> [2]T                     // Rotate a 2D vector 90 degrees counter-clockwise\r\nunlerp(a, b: f32, x: f32) -> T              // Map x from range a..b to 0..1\r\nremap(x, a0, a1, b0, b1: f32) -> f32        // Map x from range a0..a1 to b0..b1\r\nsmoothstep(edge0, edge1, x: f32) -> f32     // Generates a smooth curve from x in range edge0..edge1\r\noklerp(a, b: Vec4, t: f32) -> Vec4          // Interpolate colors with OKLAB\r\n```\r\n\r\n\r\n\r\n# Contributing\r\nFor info about bug reports and contributing, see [CONTRIBUTING](CONTRIBUTING.md)\r\n\r\n"
+    },
+    "brief": {
+      "summary": "面向 Odin 的轻量级 2D/3D 游戏引擎",
+      "problem": "为 Odin 开发者提供简单、可快速迭代的游戏开发框架",
+      "highlights": [
+        "可以用示例快速制作 2D 游戏原型",
+        "可以导出支持 WebGPU 的网页版本",
+        "可以通过热重载加快代码和资源迭代"
+      ],
+      "target_users": [
+        "Odin 游戏开发者",
+        "独立游戏小团队"
+      ],
+      "why_trending": "本周首次收录，近期有更新，但总 Star 仅 86",
+      "caveat": "仍处于早期 Alpha，功能不完整且可能有破坏性变更",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jakubtomsu/ravn",
+      "score": 83,
+      "category": "游戏开发",
+      "reason": "轻量2D与3D游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 47.5
+    }
+  }
+]
