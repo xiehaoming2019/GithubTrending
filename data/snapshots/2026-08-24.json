@@ -1,0 +1,500 @@
+[
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 233942,
+      "forks": 19949,
+      "stars_today": 2447,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2447
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-08-24T02:01:08Z",
+      "pushed_at": "2026-08-21T10:56:48Z",
+      "open_issues": 389,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向真实软件开发的可组合 AI 编程代理技能集",
+      "problem": "帮助编程代理减少需求误解、代码缺陷和流程失控",
+      "highlights": [
+        "可以用提问流程澄清需求并建立共享术语",
+        "可以用 TDD 技能推动测试先行和持续反馈",
+        "可以用调试技能分阶段定位代码问题"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "软件开发者",
+        "工程团队"
+      ],
+      "why_trending": "今日新增2447 Star，且项目连续上榜",
+      "caveat": "Claude Code 插件与可编辑安装方式应二选一",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "可组合的Agent工程技能集合",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "freestylefly/awesome-gpt-image-2",
+      "url": "https://github.com/freestylefly/awesome-gpt-image-2",
+      "description": "Prompt as Code | GPT-Image2 工业级提示词引擎与模板库，470+ 个案例逆向工程，20+ 套工业级模板，并提炼出Skills，持续更新中",
+      "language": "JavaScript",
+      "total_stars": 12870,
+      "forks": 1438,
+      "stars_today": 401,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 401
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "ai-image-generation",
+        "chatgpt",
+        "dsh-plugin",
+        "gpt-image-2",
+        "image-prompts",
+        "prompt-as-code",
+        "prompt-engineering",
+        "skills",
+        "workflow-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-25T09:19:13Z",
+      "updated_at": "2026-08-24T02:01:37Z",
+      "pushed_at": "2026-08-23T07:17:20Z",
+      "open_issues": 11,
+      "homepage": "https://gpt-image2.canghe.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"./data/images/banner.svg\" alt=\"GPT-Image2 Prompt System\" width=\"800\" /></p>\n\n<h3 align=\"center\">Prompt as Code | GPT-Image2 Industrial Prompt Engine & Template Library, 500+ Reverse-Engineered Cases, 20+ Industrial Templates</h3>\n\n<p align=\"center\">\n  <a href=\"https://github.com/freestylefly/awesome-gpt-image-2\"><img src=\"https://img.shields.io/github/stars/freestylefly/awesome-gpt-image-2?style=flat-square&color=rgb(25%2C%20121%2C%20255)\" alt=\"Stars\"></a>\n  <a href=\"https://github.com/freestylefly/awesome-gpt-image-2\"><img src=\"https://img.shields.io/github/forks/freestylefly/awesome-gpt-image-2?style=flat-square&color=green\" alt=\"Forks\"></a>\n  <a href=\"https://github.com/freestylefly/awesome-gpt-image-2\"><img src=\"https://img.shields.io/badge/Cases-532-blueviolet?style=flat-square\" alt=\"Cases\"></a>\n  <a href=\"https://github.com/freestylefly/awesome-gpt-image-2\"><img src=\"https://img.shields.io/badge/100%25-Original_AI_Rewritten-green?style=flat-square\" alt=\"Original\"></a>\n  <a href=\"https://github.com/sponsors/freestylefly\"><img src=\"https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ff69b4?style=flat-square\" alt=\"Sponsor\"></a>\n</p>\n\n<p align=\"center\">\n  <strong>English</strong> | <a href=\"./README.zh-CN.md\">简体中文</a> | <a href=\"./README.ja.md\">日本語</a>\n</p>\n\n> Updated irregularly with new workflows. Stars are welcome.\n> This project is sponsored by [Ciyuan API](https://ciyuan.today/), an AI aggregation platform for cost-effective GPT Image 2 access.\n\n## 🌐 Visual Website\n\nUse the live site at [gpt-image2.canghe.ai](https://gpt-image2.canghe.ai/) to browse the gallery as a product experience: open large previews, copy full prompts, filter by style or scenario, test generation after Google sign-in, and jump back to the source case on GitHub.\n\n<p align=\"center\">\n  <a href=\"https://gpt-image2.canghe.ai/\">\n    <img src=\"data/images/site-preview.png\" alt=\"GPT-Image2 Gallery website preview\" width=\"900\">\n  </a>\n</p>\n\n## Paid Community\n\nThe GPT-Image2 discussion group is now a paid community. Sign in on the [community page](https://gpt-image2.canghe.ai/community), make a one-time **¥9.90** Alipay payment, and the protected group QR will appear only after the server confirms payment.\n\nFor payment, access, refund, or product questions, follow the WeChat official account **苍何** or scan the card below and send a message.\n\n<p align=\"center\">\n  <img src=\"src/assets/canghe-official-account.png\" alt=\"苍何 WeChat official account QR code and search card\" width=\"760\">\n</p>\n\n## ❤️ Sponsors\n\n> [Want to appear here?](data/images/sponsors/wechat-personal.jpg) Support the project through GitHub Sponsors, or search 苍何 on WeChat and send your product name plus a short sponsorship note.\n\n| Sponsor | Description |\n| ------- | ----------- |\n| <a href=\"https://apimart.ai/register?aff=oQgzUQ\"><img src=\"data/images/sponsors/apimart.jpg\" alt=\"APIMart\" width=\"240\"></a> | Thanks to APIMart for sponsoring this project! APIMart is a low-cost API platform for AI image & video generation — GPT-Image-2 from `$0.006/image`, 160+ images per dollar. One async API covers both image and video: submit a task, get an ID, fetch results via polling or callback. Batch tens of thousands of images without timeouts, switch models without changing code. Pay-as-you-go with no monthly fee — [sign up here](https://apimart.ai/register?aff=oQgzUQ) to get started. |\n| <a href=\"https://www.hiapi.ai/zh/register?aff=DzuH\"><img src=\"data/images/sponsors/hiapi.jpg\" alt=\"hiapi\" width=\"240\"></a> | Thanks to hiapi for sponsoring this project! hiapi is an AI image & video generation API platform — GPT-Image-2 (text-to-image, image edit, 1K–4K) alongside video models like Seedance, Kling and Wan, all through one unified async API: submit a task, get a `task_id`, fetch results by polling or callback, batch without timeouts, switch models without code changes. Every result is stored on hiapi's own CDN with **persistent storage**, so your image/video URLs stay available long-term and can be fetched anytime — no rushing to download and back them up yourself. Native Remote MCP and Agent Skills plug straight into Claude Code & Cursor. Chinese UI & docs, WeChat Pay, pay-as-you-go with no monthly fee — new users get $1 free credit (~50 images). [Sign up here](https://www.hiapi.ai/en/register?aff=DzuH&utm_source=github&utm_medium=sponsor&utm_campaign=awesome-gpt-image-2). |\n| <a href=\"https://www.packyapi.ai/register?aff=CV0c\"><img src=\"data/images/sponsors/packycode.png\" alt=\"PackyCode\" width=\"240\"></a> | Thanks to PackyCode for sponsoring this project! PackyCode is a stable, high-performance API relay provider for Claude Code, Codex, Gemini, and more. Automatic failover, smart routing, and unlimited concurrency help turn AI coding into a reliable productivity tool. [Register here](https://www.packyapi.ai/register?aff=CV0c) to get started. |\n| <a href=\"https://doloffer.com/friend/HuHEKQOk\"><img src=\"data/images/sponsors/doloffer.jpg\" alt=\"DolOffer\" width=\"240\"></a> | Thank you to DolOffer for supporting this project. DolOffer is a platform focused on digital product recommendations and deal sharing, helping users quickly discover useful tools, services, and limited-time benefits. It offers popular subscriptions including YouTube Premium, Claude, ChatGPT Plus, Spotify, and Apple Music at prices as low as 30% of official pricing or even lower, with genuine stable service and worry-free support. Register through our [exclusive link](https://doloffer.com/friend/HuHEKQOk) and enter promo code `AI8888` when topping up to get an extra 10% off. |\n| <a href=\"https://pptoken.cc/\"><img src=\"data/images/sponsors/pptoken.png\" alt=\"PPToken\" width=\"240\"></a> | Project sponsor. PPToken provides API relay and key distribution for ChatGPT, Claude, Gemini, and other mainstream AI models, with low-latency access, high availability, pay-as-you-go billing, and flexible subscription plans. |\n| <a href=\"https://ciyuan.today/\"><img src=\"data/images/sponsors/ciyuan-api.jpg\" alt=\"Ciyuan API\" width=\"240\"></a> | Project sponsor. Ciyuan API is an AI aggregation platform for stable, low-latency large-model API services, and supports this project in making GPT Image 2 exploration more practical for developers. |\n| <a href=\"https://github.com/sponsors/freestylefly\"><img src=\"https://img.shields.io/badge/GitHub%20Sponsors-freestylefly-ff69b4?style=for-the-badge\" alt=\"GitHub Sponsors\" width=\"240\"></a> | Community sponsor channel. GitHub Sponsors helps fund ongoing case collection, website maintenance, industrial template distillation, and Agent Skill updates. |\n\n<a name=\"section-vision\"></a>\n\n## ⚡️ Project Vision\n\nAfter GPT-Image2 became widely available, AI image generation moved from \"can it make an image?\" to \"can it make stable, controllable, reusable images?\" This project turns scattered community examples into Prompt-as-Code assets that are easier for agents and automation workflows to reuse.\n\nThe core goal is simple: compress prose-style prompts into structured protocols. When you need batch generation, template systems, or production workflows, this structure is more valuable than a pile of isolated examples.\n\n- 🧱 Atomic schema: split subjects, lighting, materials, layout, and visual details into composable parts\n- ⚙️ Workflow friendly: designed for agents, scripts, and automation systems\n- 🧬 Structured control: improve controllability for layout, copy, and information hierarchy\n\n## 📖 Quick Links\n\n- [Full case gallery](docs/gallery.md)\n- [Gallery Part 1: cases 1-165](docs/gallery-part-1.md)\n- [Gallery Part 2: cases 166-532](docs/gallery-part-2.md)\n- [Industrial prompt templates and pitfalls guide](docs/templates.md)\n- [Agent skill: GPT-Image2 Style Library](agents/skills/gpt-image-2-style-library/SKILL.md)\n- [MIT License](LICENSE)\n- [Full disclaimer](docs/disclaimer.md#section-disclaimer)\n\n## 🗂️ Category Overview\n\nStart with the case album to find a visual direction, then open the prompt template categories to turn that direction into reusable structure.\n\n### 🖼️ Case Album\n\n<table>\n  <tr>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🧩 UI & Interfaces</strong><br><sub>73 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-ui\"><img src=\"data/images/category-covers/ui.jpg\" alt=\"UI and interfaces\" width=\"220\"></a><br>\n      <sub>Apps, websites, dashboards, social screenshots, and product interfaces.</sub><br>\n      <a href=\"docs/gallery.md#cat-ui\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>📊 Charts & Infographics</strong><br><sub>52 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-infographic\"><img src=\"data/images/category-covers/infographic.jpg\" alt=\"Charts and infographics\" width=\"220\"></a><br>\n      <sub>Infographics, knowledge maps, technical explainers, and structured diagrams.</sub><br>\n      <a href=\"docs/gallery.md#cat-infographic\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>📰 Posters & Typography</strong><br><sub>86 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-poster\"><img src=\"data/images/category-covers/poster.jpg\" alt=\"Posters and typography\" width=\"220\"></a><br>\n      <sub>Event posters, covers, type-driven visuals, and strong layout compositions.</sub><br>\n      <a href=\"docs/gallery.md#cat-poster\"><strong>View Cases</strong></a>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🛍️ Products & E-commerce</strong><br><sub>41 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-product\"><img src=\"data/images/category-covers/product.jpg\" alt=\"Products and e-commerce\" width=\"220\"></a><br>\n      <sub>Product shots, detail pages, packaging, selling points, and ads.</sub><br>\n      <a href=\"docs/gallery.md#cat-product\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🏷️ Brand & Logos</strong><br><sub>27 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-brand\"><img src=\"data/images/category-covers/brand.jpg\" alt=\"Brand and logos\" width=\"220\"></a><br>\n      <sub>Logos, identity systems, brand touchpoints, and campaign visuals.</sub><br>\n      <a href=\"docs/gallery.md#cat-brand\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🏛️ Architecture & Spaces</strong><br><sub>12 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-architecture\"><img src=\"data/images/category-covers/architecture.jpg\" alt=\"Architecture and spaces\" width=\"220\"></a><br>\n      <sub>Architecture renders, interiors, city maps, and spatial concepts.</sub><br>\n      <a href=\"docs/gallery.md#cat-architecture\"><strong>View Cases</strong></a>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>📷 Photography & Realism</strong><br><sub>77 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-photo\"><img src=\"data/images/category-covers/photo.jpg\" alt=\"Photography and realism\" width=\"220\"></a><br>\n      <sub>Portraits, phone photography, film texture, and commercial photography.</sub><br>\n      <a href=\"docs/gallery.md#cat-photo\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🎨 Illustration & Art</strong><br><sub>58 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-illustration\"><img src=\"data/images/category-covers/illustration.jpg\" alt=\"Illustration and art\" width=\"220\"></a><br>\n      <sub>Illustration, art styles, material experiments, and decorative images.</sub><br>\n      <a href=\"docs/gallery.md#cat-illustration\"><strong>View Cases</strong></a>\n    </td>\n    <td width=\"33%\" valign=\"top\" align=\"center\">\n      <p><strong>🧍 Characters & People</strong><br><sub>29 cases</sub></p>\n      <a href=\"docs/gallery.md#cat-character\"><img src=\"data/images/category-covers/character.jpg\" alt=\"Characters and people\" width=\"220\"></a><br>\n      <sub>Character design, pose references, cards,"
+    },
+    "brief": {
+      "summary": "GPT-Image2提示词案例与工业模板库",
+      "problem": "解决提示词难复用、难控制和难批量自动化的问题",
+      "highlights": [
+        "可以查找不同风格的提示词案例",
+        "可以用模板组织批量生图流程",
+        "可以将提示词接入代理和自动化脚本"
+      ],
+      "target_users": [
+        "AI绘画创作者",
+        "提示词工程师",
+        "自动化开发者"
+      ],
+      "why_trending": "今日新增401个Star，本周首次收录",
+      "caveat": "案例效果和适用范围需自行验证",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "freestylefly/awesome-gpt-image-2",
+      "score": 94,
+      "category": "AI 绘画 / 漫画",
+      "reason": "GPT图像提示词与工作流模板库",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 72.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "Alishahryar1/free-claude-code",
+      "url": "https://github.com/Alishahryar1/free-claude-code",
+      "description": "Use Claude Code, Codex, Pi, and OpenCode for free (1.3B+ free tokens) from your terminal, app, IDE, or phone like OpenClaw (voice supported + ToS friendly)",
+      "language": "Python",
+      "total_stars": 48010,
+      "forks": 7893,
+      "stars_today": 1081,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1081
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-01-28T19:02:30Z",
+      "updated_at": "2026-08-24T02:01:01Z",
+      "pushed_at": "2026-08-24T01:47:40Z",
+      "open_issues": 343,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"assets/free-claude-code-wordmark-light.svg\">\n    <img src=\"assets/free-claude-code-wordmark-dark.svg\" alt=\"Free Claude Code\" width=\"610\">\n  </picture>\n</h1>\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)\n[![Python 3.14](https://img.shields.io/badge/python-3.14-3776ab.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)\n[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=for-the-badge)](https://github.com/astral-sh/uv)\n[![Testing: Pytest](https://img.shields.io/badge/Testing-Pytest-00c0ff.svg?style=for-the-badge)](https://github.com/Alishahryar1/free-claude-code/actions/workflows/tests.yml)\n[![Type checking: Ty](https://img.shields.io/badge/type%20checking-ty-ffcc00.svg?style=for-the-badge)](https://pypi.org/project/ty/)\n[![Code style: Ruff](https://img.shields.io/badge/code%20formatting-ruff-f5a623.svg?style=for-the-badge)](https://github.com/astral-sh/ruff)\n[![Logging: Loguru](https://img.shields.io/badge/logging-loguru-4ecdc4.svg?style=for-the-badge)](https://github.com/Delgan/loguru)\n\n[Quick Start](#quick-start) · [Providers](#choose-a-provider) · [Clients](#connect-your-client) · [Integrations](#optional-integrations) · [Manage](#manage-your-installation)\n\n</div>\n\n<p align=\"center\">\n  <em>Independent open-source project. Not affiliated with or endorsed by Anthropic. Claude and Claude Code are trademarks of Anthropic.</em>\n</p>\n\n## What You Get\n\n- **49 ToS-friendly providers. 1.3B+ free tokens every month.** Use free, paid, subscription, and local models from one searchable UI without putting your account at risk. FCC follows provider terms and removes integrations if they stop being allowed.\n- **9 coding agents. One model catalog.** Run [Claude Code](https://code.claude.com/docs/en/overview), [Codex](https://github.com/openai/codex), [Pi](https://github.com/earendil-works/pi), [OpenCode](https://github.com/anomalyco/opencode), [Cline](https://github.com/cline/cline), [Hermes](https://github.com/NousResearch/hermes-agent), [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), [Grok Build](https://github.com/xai-org/grok-build), or [Muse Code](https://research.meta.ai/blog/introducing-muse-code-and-muse-spark-1-2/) with your FCC models.\n- **Keep coding through provider outages.** After retries are exhausted, FCC automatically tries your next configured model without making you restart the turn—across every client.\n- **Up to 90% fewer terminal-output tokens.** Optional [RTK](https://github.com/rtk-ai/rtk) filters common command output, while five FCC optimizations handle quota probes, command-prefix detection, titles, suggestions, and filepaths without calling a provider.\n- **Terminal, desktop, IDE, or phone.** Work through native launchers, [VS Code](https://code.visualstudio.com/), [Codex App](https://learn.chatgpt.com/docs/app), [JetBrains](https://www.jetbrains.com/), [Discord](https://discord.com/), or [Telegram](https://telegram.org/).\n- **Voice notes in. Code out.** Talk to your agent using local [Whisper](https://github.com/openai/whisper) or [NVIDIA NIM](https://docs.nvidia.com/nim/speech/latest/asr/deploy-asr-models/whisper.html) transcription.\n- **Agent capabilities stay intact.** Stream responses, use tools, preserve native interleaved thinking for maximum performance, send images, and route [Fable](https://www.anthropic.com/claude/fable), [Opus](https://www.anthropic.com/claude/opus), [Sonnet](https://www.anthropic.com/claude/sonnet), and [Haiku](https://www.anthropic.com/claude/haiku) independently with compatible models.\n\nFree-tier availability and limits are controlled by each provider and may change.\n\n<div align=\"center\">\n  <img src=\"assets/pic.png\" alt=\"Claude Code running with Free Claude Code\" width=\"700\">\n  <p><em>Claude Code running with FCC.</em></p>\n</div>\n\n## Quick Start\n\n<a id=\"install\"></a>\n\n### 1. Install Or Update\n\nmacOS/Linux:\n\n```bash\ncurl -fsSL \"https://raw.githubusercontent.com/Alishahryar1/free-claude-code/main/scripts/install.sh\" | sh\n```\n\nWindows PowerShell:\n\n```powershell\n& ([scriptblock]::Create((irm \"https://raw.githubusercontent.com/Alishahryar1/free-claude-code/main/scripts/install.ps1\")))\n```\n\nRe-run the same command to update. When prompted, choose at least one coding agent and optionally RTK. You can review the installers before running them: [install.sh](scripts/install.sh) and [install.ps1](scripts/install.ps1).\n\n### 2. Start FCC\n\n#### Windows\n\nOpen **Free Claude Code** from your desktop or Start menu.\n\n#### macOS\n\nOpen **Free Claude Code** from your desktop or Applications folder.\n\n#### Linux\n\nRun:\n\n```bash\nfcc-server\n```\n\nFCC opens the Admin UI after starting. On Windows and macOS, use the tray or\nmenu-bar icon to open Admin, restart, or quit. When using `fcc-server`, keep its\nterminal open.\n\n<a id=\"nvidia-nim-provider\"></a>\n\n### 3. Configure NVIDIA NIM\n\n1. Create an API key at [build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys).\n2. Open the Admin UI URL from the server log.\n3. Paste the key into `NVIDIA_NIM_API_KEY`.\n4. Leave `MODEL` on the default `nvidia_nim/nvidia/nemotron-3-super-120b-a12b`, or search the model dropdown and select another model.\n5. Click **Validate**, then **Apply**.\n\nTo protect the local proxy with a bearer token, enable **Proxy Authentication**\nin Admin.\n\n<div align=\"center\">\n  <img src=\"assets/admin-page.png\" alt=\"Free Claude Code Admin UI\" width=\"700\">\n</div>\n\n### 4. Run Your Coding Agent\n\nClaude Code:\n\n```bash\nfcc-claude\n```\n\nCodex:\n\n```bash\nfcc-codex\n```\n\nPi:\n\n```bash\nfcc-pi\n```\n\nOpenCode:\n\n```bash\nfcc-opencode\n```\n\nCline:\n\n```bash\nfcc-cline\n```\n\nHermes:\n\n```bash\nfcc-hermes\n```\n\nDeepSeek Harness Web:\n\n```bash\nfcc-dsh\n```\n\nGrok Build:\n\n```bash\nfcc-grok\n```\n\nMuse Code:\n\n```bash\nfcc-muse\n```\n\n<a id=\"model-picker\"></a>\n\n<div align=\"center\">\n  <img src=\"assets/cc-model-picker.png\" alt=\"Claude Code model picker showing FCC models\" width=\"700\">\n  <p><em>Select an FCC model from Claude Code's native <code>/model</code> picker.</em></p>\n</div>\n\n## Choose A Provider\n\n1. Open a provider link below for its key, models, or setup instructions.\n2. In the Admin UI, configure the listed setting. For OpenAI, use\n   **Providers → Connected accounts** instead.\n3. Search the `MODEL` dropdown and select a model. If the provider cannot list\n   models, enter `<provider-id>/<exact-provider-model-id>` manually.\n4. Click **Validate**, then **Apply**.\n\nOptional: add an ordered **Fallback Models** list under **Model Config**. It\napplies to every connected client. A failed request may reach and consume usage\nfrom more than one provider before succeeding.\n\n<details>\n<summary><strong>Provider catalog</strong></summary>\n\n| Provider | Admin UI setting | Example `MODEL` |\n| --- | --- | --- |\n| [NVIDIA NIM](https://build.nvidia.com/settings/api-keys) | `NVIDIA_NIM_API_KEY` | `nvidia_nim/nvidia/nemotron-3-super-120b-a12b` |\n| [OpenRouter](https://openrouter.ai/keys) | `OPENROUTER_API_KEY` | `open_router/openrouter/free` |\n| [Groq](https://console.groq.com/keys) | `GROQ_API_KEY` | `groq/llama-3.3-70b-versatile` |\n| [ClinePass](https://docs.cline.bot/getting-started/clinepass) | `CLINE_API_KEY` | `cline_pass/cline-pass/kimi-k3` |\n| [OpenAI / ChatGPT](https://learn.chatgpt.com/docs/auth) | Connect ChatGPT in the Admin UI | `openai/<model-id>` |\n| [xAI (Grok)](https://console.x.ai/team/default/api-keys) | `XAI_API_KEY` | `xai/grok-4.5` |\n| [QwenCloud Token Plan](https://home.qwencloud.com/api-keys) | `QWENCLOUD_API_KEY` | `qwencloud/qwen3.7-plus` |\n| [QwenCloud Coding Plan](https://home.qwencloud.com/api-keys) | `QWENCLOUD_CODING_API_KEY` | `qwencloud_coding/qwen3.7-plus` |\n| [Together AI](https://api.together.ai/settings/api-keys) | `TOGETHER_API_KEY` | `together/zai-org/GLM-5.2` |\n| [DeepInfra](https://deepinfra.com/dash/api_keys) | `DEEPINFRA_API_KEY` | `deepinfra/deepseek-ai/DeepSeek-V4-Flash` |\n| [SiliconFlow](https://cloud.siliconflow.com/account/ak) | `SILICONFLOW_API_KEY` | `siliconflow/Qwen/Qwen3-32B` |\n| [Nebius Token Factory](https://tokenfactory.nebius.com/project/api-keys) | `NEBIUS_API_KEY` | `nebius/Qwen/Qwen3-30B-A3B` |\n| [Chutes](https://chutes.ai/docs/getting-started/authentication) | `CHUTES_API_KEY` | `chutes/Qwen/Qwen3-32B-TEE` |\n| [Featherless AI](https://featherless.ai/account/api-keys) | `FEATHERLESS_API_KEY` | `featherless/Qwen/Qwen3-32B` |\n| [Agnes AI](https://agnes-ai.com/) | `AGNES_API_KEY` | `agnes/agnes-2.0-flash` |\n| [ZenMux](https://zenmux.ai/platform/pay-as-you-go) | `ZENMUX_API_KEY` | `zenmux/deepseek/deepseek-v4-flash-free` |\n| [W&B Inference](https://wandb.ai/settings) | `WANDB_API_KEY` | `wandb/openai/gpt-oss-20b` |\n| [Azure OpenAI](https://learn.microsoft.com/azure/foundry/openai/how-to/chatgpt) | `AZURE_OPENAI_API_KEY` and `AZURE_OPENAI_BASE_URL` | `azure_openai/<deployment-name>` |\n| [Google AI Studio (Gemini)](https://aistudio.google.com/apikey) | `GEMINI_API_KEY` | `gemini/models/gemini-3.1-flash-lite` |\n| [Google Vertex AI](https://cloud.google.com/vertex-ai/generative-ai/docs/start/openai) | `VERTEX_PROJECT_ID` + ADC | `vertex/google/gemini-3.5-flash` |\n| [DeepSeek](https://platform.deepseek.com/api_keys) | `DEEPSEEK_API_KEY` | `deepseek/deepseek-chat` |\n| [Mistral La Plateforme](https://console.mistral.ai/) | `MISTRAL_API_KEY` | `mistral/devstral-small-latest` |\n| [Mistral Codestral](https://console.mistral.ai/) | `CODESTRAL_API_KEY` | `mistral_codestral/codestral-latest` |\n| [OpenCode Zen](https://opencode.ai/auth) | `OPENCODE_API_KEY` | `opencode_zen/gpt-5.3-codex` |\n| [OpenCode Go](https://opencode.ai/auth) | `OPENCODE_API_KEY` | `opencode_go/minimax-m2.7` |\n| [Vercel AI Gateway](https://vercel.com/docs/ai-gateway/models-and-providers) | `AI_GATEWAY_API_KEY` | `vercel/openai/gpt-5.5` |\n| [Amazon Bedrock](https://console.aws.amazon.com/bedrock/) | `AWS_BEARER_TOKEN_BEDROCK` | `bedrock/openai.gpt-oss-120b` |\n| [Hugging Face Inference Providers](https://huggingface.co/settings/tokens) | `HUGGINGFACE_API_KEY` | `huggingface/Qwen/Qwen3-Coder-480B-A35B-Instruct:fastest` |\n| [Cohere](https://dashboard.cohere.com/api-keys) | `COHERE_API_KEY` | `cohere/command-a-plus-05-2026` |\n| [GitHub Models](https://github.com/marketplace?type=models) | `GITHUB_MODELS_TOKEN` | `github_models/openai/gpt-4.1` |\n| [Wafer](https://wafer.ai/) | `WAFER_API_KEY` | `wafer/DeepSeek-V4-Pro` |\n| [Kimi API](https://platform.moonshot.ai/console/api-keys) | `KIMI_API_KEY` | `kimi/kimi-k2.5` |\n| [Kimi Code](https://www.kimi.com/code/console) | `KIMI_CODE_API_KEY` | `kimi_code/k3` |\n| [MiniMax](https://platform.minimax.io/user-center/basic-information/interface-key) | `MINIMAX_API_KEY` | `minimax/MiniMax-M3` |\n| [Cerebras Inference](https://cloud.cerebras.ai/) | `CEREBRAS_API_KEY` | `cerebras/gpt-oss-120b` |\n| [SambaNova](https://cloud.sambanova.ai/apis) | `SAMBANOVA_API_KEY` | `sambanova/Meta-Llama-3.3-70B-Instruct` |\n| [Kilo.ai](https://kilo.ai) | `KILO_API_KEY` | `kilo/kilo-auto/free` |\n| [Fireworks AI](https://fireworks.ai/account/api-keys) | `FIREWORKS_API_KEY` | `fireworks/accounts/fireworks/models/llama-v3p3-70b-instruct` |\n| [Novita AI](https://novita.ai/settings/key-management) | `NOVITA_API_KEY` | `novita/deepseek/deepseek-v4-flash-0731` |\n| [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) | `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` | `cloudflare/@cf/moonshotai/kimi-k2.6` |\n| [Z.ai Coding Plan](https://z.ai/manage-apikey/apikey-list) | `ZAI_API_KEY` | `zai/glm-5.2` |\n| [Z.ai API (pay as you go)](https://z.ai/manage-apikey/apikey-list) | `ZAI_API_KEY` | `zai_api/glm-4.7-flash` |\n| [TokenRouter](https://www.tokenrouter.com/) | `TOKENROUTER_API_KEY` | `tokenrouter/moonshotai/kimi-k3-free` |\n| [NaraRoute](https://router.bynara.id/) | `NARAROUTE_API_KEY` | `nararoute"
+    },
+    "brief": {
+      "summary": "统一接入多家模型和编码代理的免费终端工具",
+      "problem": "降低使用多种编码代理和模型的成本与切换难度",
+      "highlights": [
+        "可以在终端、IDE或手机运行编码代理",
+        "可以配置多个提供商并自动切换模型",
+        "可以用语音输入，让代理生成代码"
+      ],
+      "target_users": [
+        "个人开发者",
+        "AI编程尝试者",
+        "终端用户"
+      ],
+      "why_trending": "今日新增1081 Star，本周首次收录，总Star达48010",
+      "caveat": "免费额度和限制由各提供商决定，可能变化",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Alishahryar1/free-claude-code",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "多模型终端Agent与自动化入口",
+      "generated_by_ai": true,
+      "velocity_score": 92,
+      "freshness_score": 40,
+      "ranking_score": 70.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "openai/codex",
+      "url": "https://github.com/openai/codex",
+      "description": "Lightweight coding agent that runs in your terminal",
+      "language": "Rust",
+      "total_stars": 115367,
+      "forks": 17590,
+      "stars_today": 2715,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2715
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-04-13T05:37:54Z",
+      "updated_at": "2026-08-24T02:01:40Z",
+      "pushed_at": "2026-08-24T01:53:14Z",
+      "open_issues": 13573,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer.\n<p align=\"center\">\n  <img src=\"https://github.com/openai/codex/blob/main/.github/codex-cli-splash.png\" alt=\"Codex CLI splash\" width=\"80%\" />\n</p>\n</br>\nIf you want Codex in your code editor (VS Code, Cursor, Windsurf), <a href=\"https://developers.openai.com/codex/ide\">install in your IDE.</a>\n</br>If you want the desktop app experience, run <code>codex app</code> or visit <a href=\"https://chatgpt.com/codex?app-landing-page=true\">the Codex App page</a>.\n</br>If you are looking for the <em>cloud-based agent</em> from OpenAI, <strong>Codex Web</strong>, go to <a href=\"https://chatgpt.com/codex\">chatgpt.com/codex</a>.</p>\n\n---\n\n## Quickstart\n\n### Installing and running Codex CLI\n\nRun the following on Mac or Linux to install Codex CLI:\n\n```shell\ncurl -fsSL https://chatgpt.com/codex/install.sh | sh\n```\n\nRun the following on Windows to install Codex CLI:\n\n```shell\npowershell -ExecutionPolicy ByPass -c \"irm https://chatgpt.com/codex/install.ps1 | iex\"\n```\n\nThe standalone installers download from `https://releases.openai.com/codex` by default and fall back to GitHub Releases if a metadata or asset download is unavailable. To force GitHub Releases, set `CODEX_INSTALLER_USE_RELEASES_OPENAI_COM` to `false` (`0` and `no` are also accepted):\n\n```shell\ncurl -fsSL https://chatgpt.com/codex/install.sh | CODEX_INSTALLER_USE_RELEASES_OPENAI_COM=false sh\n```\n\n```powershell\n$env:CODEX_INSTALLER_USE_RELEASES_OPENAI_COM='false'; irm https://chatgpt.com/codex/install.ps1 | iex\n```\n\nCodex CLI can also be installed via the following package managers:\n\n```shell\n# Install using npm\nnpm install -g @openai/codex\n```\n\n```shell\n# Install using Homebrew\nbrew install --cask codex\n```\n\nThen simply run `codex` to get started.\n\n<details>\n<summary>You can also go to the <a href=\"https://github.com/openai/codex/releases/latest\">latest GitHub Release</a> and download the appropriate binary for your platform.</summary>\n\nEach GitHub Release contains many executables, but in practice, you likely want one of these:\n\n- macOS\n  - Apple Silicon/arm64: `codex-aarch64-apple-darwin.tar.gz`\n  - x86_64 (older Mac hardware): `codex-x86_64-apple-darwin.tar.gz`\n- Linux\n  - x86_64: `codex-x86_64-unknown-linux-musl.tar.gz`\n  - arm64: `codex-aarch64-unknown-linux-musl.tar.gz`\n\nEach archive contains a single entry with the platform baked into the name (e.g., `codex-x86_64-unknown-linux-musl`), so you likely want to rename it to `codex` after extracting it.\n\n</details>\n\n### Using Codex with your ChatGPT plan\n\nRun `codex` and select **Sign in with ChatGPT**. We recommend signing into your ChatGPT account to use Codex as part of your Plus, Pro, Business, Edu, or Enterprise plan. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).\n\nYou can also use Codex with an API key, but this requires [additional setup](https://developers.openai.com/codex/auth#sign-in-with-an-api-key).\n\n## Docs\n\n- [**Codex Documentation**](https://developers.openai.com/codex)\n- [**Contributing**](./docs/contributing.md)\n- [**Installing & building**](./docs/install.md)\n- [**Open source fund**](./docs/open-source-fund.md)\n\nThis repository is licensed under the [Apache-2.0 License](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "在终端本地运行的轻量级编程智能体",
+      "problem": "帮助开发者在终端中使用智能体完成编程工作",
+      "highlights": [
+        "可以在终端启动 Codex CLI",
+        "可以在 VS Code 等编辑器中使用 Codex",
+        "可以通过 ChatGPT 账户或 API 密钥登录"
+      ],
+      "target_users": [
+        "程序开发者",
+        "终端用户",
+        "代码维护者"
+      ],
+      "why_trending": "今日新增 2715 Star，且已连续上榜",
+      "caveat": "使用 API 密钥需额外配置，资料未说明具体限制",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "openai/codex",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "终端编码Agent，适合创作者自动化",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 20,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "Comfy-Org/ComfyUI",
+      "url": "https://github.com/Comfy-Org/ComfyUI",
+      "description": "The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface.",
+      "language": "Python",
+      "total_stars": 129422,
+      "forks": 15261,
+      "stars_today": 201,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 201
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "comfy",
+        "comfyui",
+        "python",
+        "pytorch",
+        "stable-diffusion"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2023-01-17T03:15:56Z",
+      "updated_at": "2026-08-24T02:00:19Z",
+      "pushed_at": "2026-08-23T20:02:12Z",
+      "open_issues": 4677,
+      "homepage": "https://www.comfy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n# ComfyUI\n**The most powerful and modular AI engine for content creation.**\n\n\n[![Website][website-shield]][website-url]\n[![Dynamic JSON Badge][discord-shield]][discord-url]\n[![Twitter][twitter-shield]][twitter-url]\n[![Matrix][matrix-shield]][matrix-url]\n<br>\n[![][github-release-shield]][github-release-link]\n[![][github-release-date-shield]][github-release-link]\n[![][github-downloads-shield]][github-downloads-link]\n[![][github-downloads-latest-shield]][github-downloads-link]\n\n[matrix-shield]: https://img.shields.io/badge/Matrix-000000?style=flat&logo=matrix&logoColor=white\n[matrix-url]: https://app.element.io/#/room/%23comfyui_space%3Amatrix.org\n[website-shield]: https://img.shields.io/badge/ComfyOrg-4285F4?style=flat\n[website-url]: https://www.comfy.org/\n<!-- Workaround to display total user from https://github.com/badges/shields/issues/4500#issuecomment-2060079995 -->\n[discord-shield]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2Fcomfyorg%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&logo=discord&logoColor=white&label=Discord&color=green&suffix=%20total\n[discord-url]: https://discord.com/invite/comfyorg\n[twitter-shield]: https://img.shields.io/twitter/follow/ComfyUI\n[twitter-url]: https://x.com/ComfyUI\n\n[github-release-shield]: https://img.shields.io/github/v/release/comfyanonymous/ComfyUI?style=flat&sort=semver\n[github-release-link]: https://github.com/comfyanonymous/ComfyUI/releases\n[github-release-date-shield]: https://img.shields.io/github/release-date/comfyanonymous/ComfyUI?style=flat\n[github-downloads-shield]: https://img.shields.io/github/downloads/comfyanonymous/ComfyUI/total?style=flat\n[github-downloads-latest-shield]: https://img.shields.io/github/downloads/comfyanonymous/ComfyUI/latest/total?style=flat&label=downloads%40latest\n[github-downloads-link]: https://github.com/comfyanonymous/ComfyUI/releases\n\n<img width=\"1590\" height=\"795\" alt=\"ComfyUI Screenshot\" src=\"https://github.com/user-attachments/assets/36e065e0-bfae-4456-8c7f-8369d5ea48a2\" />\n<br>\n</div>\n\nComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more...\n- ComfyUI natively supports the latest open-source state of the art models.\n- [Partner nodes](https://docs.comfy.org/tutorials/partner-nodes/overview#partner-nodes) provide access to the best closed source models such as Nano Banana, Seedance, Hunyuan3D, etc.\n- It is available on Windows, Linux, and macOS, locally with our [desktop application](https://www.comfy.org/download), our [portable install](#installing) or on our [cloud](https://www.comfy.org/cloud).\n- The most sophisticated workflows can be exposed through a simple UI thanks to App Mode.\n- It integrates seamlessly into production pipelines with our API endpoints.\n\n## Get Started\n\n### Local\n\n#### [Desktop Application](https://www.comfy.org/download)\n- The easiest way to get started.\n- Available on Windows & macOS.\n\n#### [Windows Portable Package](#installing)\n- Get the latest commits and completely portable.\n- Available on Windows.\n\n#### [Manual Install](#manual-install-windows-linux)\nSupports all operating systems and GPU types (NVIDIA, AMD, Intel, Apple Silicon, Ascend).\n\n### Cloud\n\n#### [Comfy Cloud](https://www.comfy.org/cloud)\n- Our official paid cloud version for those who can't afford local hardware.\n\n## Examples\nSee what ComfyUI can do with the [newer template workflows](https://comfy.org/workflows) or old [example workflows](https://comfyanonymous.github.io/ComfyUI_examples/).\n\n## Features\n- A visual node graph for building and reusing image, video, audio, 3D, and text workflows without code.\n- Reusable subgraphs, workflow templates, App Mode, and a local API for integrating workflows into applications.\n- Efficient local execution with asynchronous queueing, partial graph re-execution, smart VRAM and RAM management, model offloading, and support for quantized models.\n- Broad native model support. This is a representative list; browse the [workflow library](https://comfy.org/workflows/) for maintained, ready-to-run templates.\n  - [Image generation](https://comfy.org/workflows/tag/text-to-image/): Stable Diffusion 1.5, SDXL, SD3.5, Flux.1, Flux.2, Qwen Image, Z-Image, Hunyuan Image 2.1, HiDream, Lumina Image 2.0, Chroma, Anima, LongCat Image, Ideogram 4, Krea 2, MageFlow, Microsoft Lens, PixelDiT, Kandinsky 5, and Ernie Image.\n  - [Image editing](https://comfy.org/workflows/tag/image-edit/): Flux Kontext, Flux.2 Klein, Qwen Image Edit, HiDream E1.1 and O1, OmniGen2, Boogu, JoyImage Edit, MageFlow Edit, and LongCat Image Edit.\n  - [Video generation](https://comfy.org/workflows/tag/video-generation/): Wan 2.1 and 2.2, LTX-Video 2 and 2.3, HunyuanVideo 1.5, Kandinsky 5 Video, CogVideoX, Cosmos Predict2, Bernini-R, SCAIL 2, and Mochi.\n  - [Audio and video generation](https://comfy.org/workflows/): MiniMax H3 and LTX-AV.\n  - [Audio generation](https://comfy.org/workflows/tag/text-to-audio/): ACE-Step 1.5, Stable Audio 3 and MiniMax Music 3\n  - [3D and vision](https://comfy.org/workflows/): Hunyuan3D 2.1, TripoSplat, SeedVR2, SUPIR, Depth Anything 3, MoGe, SAM 3 and 3.1, RT-DETRv4, and BiRefNet.\n  - [Text generation](https://comfy.org/workflows/tag/text-generation/): Gemma 3 and 4, Qwen3, Qwen3.5, and Qwen3-VL, including multimodal inputs.\n- Load complete checkpoints or separate diffusion models, VAEs, text encoders, LoRAs, ControlNets, adapters, and upscalers from supported model formats.\n- Built-in tools for inpainting, outpainting, reference conditioning, masks and compositing, model merging, upscaling, frame interpolation, segmentation, depth estimation, and media processing.\n- Save and load workflows as JSON, or recover complete workflows and seeds from supported generated media.\n- Runs fully offline: core does not download anything unless you request it. Use `--disable-api-nodes` to disable the optional paid [Comfy API nodes](https://docs.comfy.org/tutorials/api-nodes/overview) and force all built-in functionality to stay offline.\n- Extend ComfyUI with custom nodes\n- Configure additional model locations with [`extra_model_paths.yaml`](extra_model_paths.yaml.example).\n\n\n## Release Process\n\nComfyUI follows a weekly release cycle targeting Monday but this regularly changes because of model releases or large changes to the codebase. There are three interconnected repositories:\n\n1. **[ComfyUI Core](https://github.com/comfyanonymous/ComfyUI)**\n   - Releases a new major stable version (e.g., v0.7.0) roughly every 2 weeks.\n   - Starting from v0.4.0 patch versions will be used for fixes backported onto the current stable release.\n   - Minor versions will be used for releases off the master branch.\n   - Patch versions may still be used for releases on the master branch in cases where a backport would not make sense.\n   - Commits outside of the stable release tags may be very unstable and break many custom nodes.\n   - Serves as the foundation for the desktop release\n\n2. **[Comfy Desktop](https://github.com/Comfy-Org/Comfy-Desktop)**\n   - Builds a new release using the latest stable core version\n\n3. **[ComfyUI Frontend](https://github.com/Comfy-Org/ComfyUI_frontend)**\n   - Every 2+ weeks frontend updates are merged into the core repository\n   - Features are frozen for the upcoming core release\n   - Development continues for the next release cycle\n\n## Shortcuts\n\n| Keybind                            | Explanation                                                                                                        |\n|------------------------------------|--------------------------------------------------------------------------------------------------------------------|\n| `Ctrl` + `Enter`                      | Queue up current graph for generation                                                                              |\n| `Ctrl` + `Shift` + `Enter`              | Queue up current graph as first for generation                                                                     |\n| `Ctrl` + `Alt` + `Enter`                | Cancel current generation                                                                                          |\n| `Ctrl` + `Z`/`Ctrl` + `Y`                 | Undo/Redo                                                                                                          |\n| `Ctrl` + `S`                          | Save workflow                                                                                                      |\n| `Ctrl` + `O`                          | Load workflow                                                                                                      |\n| `Ctrl` + `A`                          | Select all nodes                                                                                                   |\n| `Alt `+ `C`                           | Collapse/uncollapse selected nodes                                                                                 |\n| `Ctrl` + `M`                          | Mute/unmute selected nodes                                                                                         |\n| `Ctrl` + `B`                           | Bypass selected nodes (acts like the node was removed from the graph and the wires reconnected through)            |\n| `Delete`/`Backspace`                   | Delete selected nodes                                                                                              |\n| `Ctrl` + `Backspace`                   | Delete the current graph                                                                                           |\n| `Space`                              | Move the canvas around when held and moving the cursor                                                             |\n| `Ctrl`/`Shift` + `Click`                 | Add clicked node to selection                                                                                      |\n| `Ctrl` + `C`/`Ctrl` + `V`                  | Copy and paste selected nodes (without maintaining connections to outputs of unselected nodes)                     |\n| `Ctrl` + `C`/`Ctrl` + `Shift` + `V`          | Copy and paste selected nodes (maintaining connections from outputs of unselected nodes to inputs of pasted nodes) |\n| `Shift` + `Drag`                       | Move multiple selected nodes at the same time                                                                      |\n| `Ctrl` + `D`                           | Load default graph                                                                                                 |\n| `Alt` + `+`                          | Canvas Zoom in                                                                                                     |\n| `Alt` + `-`                          | Canvas Zoom out                                                                                                    |\n| `Ctrl` + `Shift` + LMB + Vertical drag | Canvas Zoom in/out                                                                                                 |\n| `P`                                  | Pin/Unpin selected nodes                                                                                           |\n| `Ctrl` + `G`                           | Group selected nodes                                                                                               |\n| `Q`                                 | Toggle visibility of the queue                                                                                     |\n| `H`                                  | Toggle visibility of history                                                                                       |\n| `R`                                  | Refresh graph                                                                                        "
+    },
+    "brief": {
+      "summary": "ComfyUI是基于节点图的模块化内容生成工具",
+      "problem": "让用户可视化搭建并复用图像、视频等生成流程",
+      "highlights": [
+        "可以搭建和复用图像生成工作流",
+        "可以生成或处理视频、音频和3D内容",
+        "可以通过API接入生产流程"
+      ],
+      "target_users": [
+        "AI内容创作者",
+        "视觉设计师",
+        "开发者"
+      ],
+      "why_trending": "今日新增201 Star，本周首次收录，总Star超12万",
+      "caveat": "复杂工作流和自定义节点可能带来兼容性问题",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Comfy-Org/ComfyUI",
+      "score": 97,
+      "category": "AI 绘画 / 漫画",
+      "reason": "节点式扩散创作核心工具",
+      "generated_by_ai": true,
+      "velocity_score": 70,
+      "freshness_score": 20,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 42326,
+      "forks": 4056,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 479
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-08-24T01:54:49Z",
+      "pushed_at": "2026-08-24T02:01:51Z",
+      "open_issues": 230,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas a non-interactive `skills add` without `--skill` installs all 20.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                  |\n| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                          |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                           |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                             |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                              |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local file or paste-ready block + ledger record, generate via TTS/music/image models when the catalog misses, transcribe, caption, remove backgrounds, and reuse assets across projects. One shared audio engine + manifest tracking.                        |\n| `/hyperframes-cli`       | CLI dev loop — `init`, `lint`, `check`, `snapshot`, `preview`, `render`, `publish`, `doctor`, plus HeyGen-hosted cloud rendering (`cloud render`) and AWS Lambda rendering (`lambda deploy / render / progress`).                                                                                                                                                       |\n| `/hyperframes-audio`     | Mix the audio already placed in a composition — voiceover carve (dip a music bed only in the bands the voice occupies, static or"
+    },
+    "brief": {
+      "summary": "用HTML和CSS制作可渲染的MP4视频",
+      "problem": "降低程序化视频制作与代理操作的门槛",
+      "highlights": [
+        "可以用AI代理生成产品介绍视频",
+        "可以制作字幕、幻灯片和动效",
+        "可以本地预览、检查并渲染MP4"
+      ],
+      "target_users": [
+        "AI开发者",
+        "视频创作者",
+        "前端工程师"
+      ],
+      "why_trending": "总Star超4.2万，近期仍有代码更新",
+      "caveat": "需要Node.js 22或更高版本",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 91,
+      "category": "视频剪辑",
+      "reason": "面向Agent的HTML视频渲染框架",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 71.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "jaredrhod/backtalk",
+      "url": "https://github.com/jaredrhod/backtalk",
+      "description": "Talk to your Claude Code agent out loud. Hold a key, speak, and it answers in a real voice about a second later, with all its tools and its own personality. The hearing and the voice run on free local models, no API keys.",
+      "language": "Python",
+      "total_stars": 28,
+      "forks": 21,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "claude",
+        "claude-code",
+        "kokoro",
+        "push-to-talk",
+        "python",
+        "speech-recognition",
+        "text-to-speech",
+        "voice",
+        "voice-assistant",
+        "whisper"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-08-16T15:33:45Z",
+      "updated_at": "2026-08-24T02:01:30Z",
+      "pushed_at": "2026-08-24T02:01:03Z",
+      "open_issues": 6,
+      "homepage": "https://jaredrhod.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# backtalk\n\n> **Never used Claude Code?** Start at [jaredrhod.com](https://jaredrhod.com): pick your situation and it routes you to the right path.\n\n**Runs on:** Claude Code only; the voice is built on Claude's agent SDK. The $20 Pro plan is enough.\n\nTalk to your Claude Code agent out loud. Hold a key, say the thing, and it answers through your speakers in a real voice about a second later, with all its tools, your project context, and its own personality. Your AI finally has something to say back.\n\nThe hearing and the voice run local: free, offline models on your machine, no voice API keys, no per-word costs. The brain is the Claude Code you already have. On a Claude subscription, talking works like any other session and uses your plan's usage, with nothing extra to buy. This is the same voice loop I run every day, the one you see answering in about a second on my videos, shipped as working code so your agent's job is pointing it at your setup, not building it from scratch.\n\n## What it does\n\n- **Hold a key, talk, release.** Your words are transcribed locally and handed to a live Claude Code session. The reply is spoken sentence by sentence as it's generated, with first audio in about 1 to 2 seconds on warm turns. Prefer no button at all? **Hands-free listening** is one spoken sentence away (\"go hands free\"), and the key keeps working there as your interrupt.\n- **It's YOUR agent talking.** The session runs in the folder whose CLAUDE.md defines your assistant: same name, same personality, same memory as your terminal sessions. backtalk has no personality of its own; it's a mouth and ears for whoever you already have. (No agent yet? The [ai-memory-vault](https://github.com/jaredrhod/ai-memory-vault) build ships with mine, Jarvis, ready to use.)\n- **Interrupt it.** Press the key while it's talking and it shuts up and listens. No headphones needed, because the mic only opens while you hold the key, so it never hears the speakers.\n- **Type instead whenever you want.** Typing in the terminal is the same conversation, and the reply is still spoken.\n- **It asks before it acts, in plain words.** When your agent wants to do something real, it asks out loud the way a person would (\"I want to change a note in your vault called Recipes\") and waits. An exact spoken yes approves; \"details\" reads you the exact command; anything else denies, with your words passed back as the reason, so \"no, put that in drafts instead\" actually steers it. Most read-only work passes without interrupting. Prefer auto-approve? Say \"stop asking for permission\" (or \"turn off the permission prompts\") and confirm; it changes its own config, and the first ask of every session reminds you the phrase exists.\n- **The voice console.** Session control by voice, so you never go back to the keyboard: \"clear the session\", \"compact the session\", \"switch to the deep model\" / \"back to the fast model\", \"set effort to low\" (or medium, high, max; this one saves itself as your default), \"usage report\", \"go hands free\" / \"push to talk mode\" for the microphone, \"stop asking for permission\" / \"start asking again\" for approvals. Exact phrases, spoken alone. (Credit where due: this grew out of a community member's own build shared in the Discord.)\n- **It can pick up where it left off.** Set `\"resume_last_session\": true` in the config and every launch reattaches to your previous conversation instead of starting cold, so closing the window stops costing you the thread. Off by default. And the built-in voice has a pace dial: `\"speed\"` in the config, 1.0 native, 1.15 brisker. (Credit where due: both grew out of a community proposal by aram-cloudstak.)\n- **Music ducks while it speaks** (Spotify, macOS) and comes back up after.\n- **It thinks out loud.** While the agent works, you hear the processing sound from my videos, so a pause never reads as a dead line. Silence it with `\"thinking_sound\": \"\"` in the config.\n\n## Install\n\n```\ngit clone https://github.com/jaredrhod/backtalk\ncd backtalk\n./install.sh\n```\n\nThe installer sets up a Python environment, the two local AI models (speech-to-text and the voice), and the one system library they need. First run downloads the models (about 1 GB total); everything after is instant. Prerequisites: [Claude Code](https://claude.com/claude-code) with a Claude subscription, and `uv` (the installer offers to install it).\n\n**The easy way to configure it:** open this folder in Claude Code and say *\"read backtalk.md and set me up.\"* The wizard picks your agent folder, your key, and your voice with you, then test-fires the whole loop.\n\n**Already in a Claude Code session with your agent?** One sentence does the whole install: *\"clone https://github.com/jaredrhod/backtalk.git, then read backtalk/backtalk.md and set me up.\"* Your agent runs the installer and the wizard for you.\n\n**The manual way:** copy `backtalk.json.example` to `backtalk.json` (your copy is untracked, so updates never touch it), then edit it. Point `agent_dir` at the folder whose CLAUDE.md is your agent, set `name` to your agent's name, pick a `ptt_key`. Then:\n\n```\n./run.sh\n```\n\nHold the key. Talk. Let go.\n\n## Windows\n\nWindows is the newest lane, and the setup runs through the wizard instead of the shell scripts (`install.sh` and `run.sh` are Mac and Linux). Open this folder in Claude Code and say *\"read backtalk.md and set me up\"*: the wizard installs uv, espeak-ng, the environment, and the models natively, then launches with `uv run python -m backtalk.main`. The ElevenLabs key lives in the `ELEVENLABS_API_KEY` environment variable on Windows for now (Credential Manager support is planned). Hit something rough? The Windows notes in `TROUBLESHOOTING.md` carry the known quirks, and issues are welcome.\n\n## The voice\n\nTwo engines, and the setup wizard offers you both instead of quietly defaulting.\n\n**Built-in (Kokoro), the free one.** Local, offline, no accounts, no per-word costs, and honestly a bit computer-sounding. The default voice is `bm_lewis`, a British male with exactly the butler register. Around 60 voices ship free; set `voice` in `backtalk.json` (the first letter picks the language: `a` is American, `b` is British, and there are Spanish, French, Hindi, Italian, Japanese, Portuguese, and Chinese voices too).\n\n**ElevenLabs, the natural one.** The human-sounding voice most people actually want, on your own API key. The free tier is enough to audition it; day-to-day talking runs on the paid starter plan. The wizard walks the whole thing with you: account, key into the keychain, then an audition of real voices through backtalk's own mouth until one fits. Want the exact voice from my videos? It's called **Tarquin** in the ElevenLabs voice library: search it by name and you're done hunting. Under the hood it is: set `elevenlabs.enabled` and your `voice_id` in the config, and have `ffmpeg` installed. **The key never goes in a file.** On macOS, seed it into the Keychain once with `security add-generic-password -a \"$USER\" -s backtalk-elevenlabs -T /usr/bin/security -w` (it prompts for the secret) and backtalk reads it from there. Linux: `secret-tool store --label backtalk service backtalk-elevenlabs`. The `ELEVENLABS_API_KEY` environment variable works as a last resort, but an export in a shell profile is a plaintext key on disk; the keychain is the grown-up path. Kokoro stays wired in as the automatic fallback, so if the cloud fails the voice degrades instead of going mute, and `logs/backtalk.log` records why.\n\n## Give it a face (optional)\n\nbacktalk writes tiny state files while it listens, thinks, and speaks, so anything can watch them and react in real time.\n\n- **[ai-visualizer](https://github.com/jaredrhod/ai-visualizer)** is the matching face: four full-screen visualizers, including the living circuit board from my videos. Point its `bus_dir` at this folder (or set `signals_dir` here to its folder) and it performs your actual conversation, idling, listening, thinking, and speaking along with the voice.\n- **[barehands](https://github.com/jaredrhod/barehands)**: point `barehands_state_dir` at its `state/` folder and the on-screen ring becomes your agent's face, breathing while idle, spinning while thinking, and pulsing with the voice while it talks.\n\nMind ([ai-memory-vault](https://github.com/jaredrhod/ai-memory-vault)), mouth (this), face (ai-visualizer), hands (barehands).\n\n## The fine print that matters\n\n- **Usage:** every spoken turn is a real Claude Code turn, so a long voice session uses your plan the same way a long typing session does. The config pins the fast model tier on purpose; it's most of the speed, and it's the lighter draw.\n- **Permissions: ask first, auto-approve by choice.** The default is `\"ask\"`: gated actions get a spoken permission check, answered by voice or by typing, and silence for about 75 seconds means no. `\"bypassPermissions\"` is auto-approve: the agent acts without asking, exactly like a terminal session with approvals off. Never hand-edit the file to switch; tell your agent to change it (takes effect the next time the voice line starts), or say \"stop asking for permission\" / \"start asking again\" in a voice session for a flip that happens immediately and saves itself.\n- **Two microphone modes, and the words mean what you think.** Push to talk (the default): the mic is closed except while you hold the key, so nothing records in the background, ever. **Hands-free listening**: always listening with voice detection; the setup asks which you want, \"go hands free\" / \"push to talk mode\" switches live and saves itself, and the talk key still works in hands-free as your interrupt. Tradeoffs in `TROUBLESHOOTING.md`. (Hands-free is about the MICROPHONE. Approvals are a separate setting called auto-approve; the two never share a name.)\n- **The talk key needs a global key listener.** For the key to work when the voice line isn't your focused window, the process has to watch keyboard events system-wide. `backtalk/ptt.py` compares each event against the one key you configured and discards the rest. It stores nothing and writes nothing anywhere. Ninety-one lines, so you can read all of it in a minute. macOS asks for Input Monitoring permission before it will run, which is the OS telling you what the program can see.\n- Something misbehaving? `TROUBLESHOOTING.md` covers the classics, and `logs/backtalk.log` has the receipts.\n\n## Credits\n\nSpeech recognition by [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (MIT) running [OpenAI Whisper](https://github.com/openai/whisper) models (MIT). Voice by [Kokoro](https://github.com/hexgrad/kokoro) (Apache 2.0) with [espeak-ng](https://github.com/espeak-ng/espeak-ng) (GPL-3.0, used as a system tool) for phonemization. Built on the [Claude Agent SDK](https://docs.claude.com/en/api/agent-sdk/overview).\n\n## Updating\n\nbacktalk improves continuously (several of its best fixes came from this community within hours of being reported). To update, double-click the `Update` icon setup left on your Desktop, or run `./update.sh` (`update.bat` on Windows) in this folder: either shows you what changed before applying it. Saying **\"pull the latest backtalk and tell me what changed\"** to your agent works too. Your config, your keys, and your agent's identity live outside the tracked files, so updates never touch them. Installed through fullstack-agent? `./fullstack-agent/update.sh` updates every piece at once and prints what changed.\n\n## The rest of it\n\nA voice is better with a face and a memory. The visualizer performs the conversation on screen while you talk, and the memory vault is what your agent actually speaks from, so it remembers you between sessions.\n\n- **The whole stack, one command.** [fullstack-agent](https://github.com/jaredrhod/fullstack-agent) installs the memory, the voice, the face, and the hands, and wires them together for you. Pick only the pieces you want: https://jaredrhod.com\n- **The videos.** Free series on all of it: https://youtube.com/@jaredrhod\n- **The Discord.** Th"
+    },
+    "brief": {
+      "summary": "让 Claude Code 支持本地语音对话与操作",
+      "problem": "解决终端代理只能键盘交互、缺少语音反馈的问题",
+      "highlights": [
+        "可以按住按键说话，让 Claude Code 语音回复",
+        "可以用语音确认操作、打断回复或切换会话",
+        "可以用本地模型完成语音识别和朗读"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "语音交互开发者",
+        "终端效率工具爱好者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，适合关注语音代理实践",
+      "caveat": "仅支持 Claude Code；需订阅，首次下载模型约 1GB",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jaredrhod/backtalk",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "本地语音输入与实时语音回复",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "Volumetenrectify/ae-motion-compiler",
+      "url": "https://github.com/Volumetenrectify/ae-motion-compiler",
+      "description": "Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.",
+      "language": "HTML",
+      "total_stars": 104,
+      "forks": 49,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "abobe",
+        "ae",
+        "after",
+        "after-effects",
+        "animation",
+        "effects",
+        "motion-graphics",
+        "video-editing"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-09T19:22:00Z",
+      "updated_at": "2026-08-24T01:27:40Z",
+      "pushed_at": "2026-08-24T01:27:36Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎬 ae-motion-compiler\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 🚀 Motion Graphics Automation Framework for After Effects\n\nae-motion-compiler is an advanced scripting framework that automates repetitive animation tasks in After Effects. Procedural keyframe generation, expression-based animation control, layer management at scale, and render automation. Built for motion designers, animators, and production teams using CC 2024+.\n\nAccelerate motion graphics production through intelligent automation.\n\n## 📦 Latest\n\n**Version**: 2.4.2 (CC 2024+)\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 📖 Index\n- [Details](#🎯-details)\n- [System](#💻-system)\n- [Setup](#📦-setup)\n- [Config](#⚙️-config)\n- [Animation](#🎨-animation)\n- [Tools](#✨-tools)\n- [Support](#🔌-support)\n- [Plans](#🗺️-plans)\n- [Contribute](#🤝-contribute)\n- [Security](#🛡️-security)\n- [Help](#🔧-help)\n- [Legal](#📄-legal)\n- [Info](#⚠️-info)\n\n## 🎯 Details\n\nae-motion-compiler streamlines motion graphics workflows through procedural animation. Define animation patterns once, apply across hundreds of layers. Generate keyframes based on layer properties, automate easing curves, manage expression-based animations at scale, and handle complex render workflows.\n\nIncludes keyframe generators, expression builders, layer organizers, and batch automation tools.\n\n```mermaid\ngraph TD\n    A[Animation Template] --> B[Expression Engine]\n    B --> C[Pattern Recognition]\n    C --> D[Keyframe Generation]\n    D --> E[Layer Application]\n    E --> F[Easing Control]\n    F --> G[Preview]\n    G --> H[Batch Render]\n    H --> I[Output]\n    \n    style A fill:#fff3e0\n    style B fill:#e3f2fd\n    style D fill:#f3e5f5\n    style H fill:#e8f5e9\n    style I fill:#fce4ec\n```\n\n## 💻 System\n\n| Component | Min | Recommended |\n|-----------|-----|-------------|\n| **OS** | ![Windows](https://img.shields.io/badge/Windows-10-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-10.15-000000?style=flat) | ![Windows](https://img.shields.io/badge/Windows-11-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-12-000000?style=flat) |\n| **After Effects** | CC 2024 | CC 2026 current |\n| **Memory** | 8 GB | 16 GB+ |\n| **Storage** | 800 MB | 2.5 GB SSD |\n| **CPU** | 4-core | 8-core+ |\n\n## 📦 Setup\n\nInstalls:\n1. Compatibility check\n2. Script deployment\n3. Expression templates\n4. Configuration\n\n### Manual\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run build\nnpm run install:ae\n```\n\n### First Use\n\n1. Open After Effects\n2. **File → Scripts → ae-motion-compiler**\n3. Main panel opens\n4. Load project template\n\n## ⚙️ Config\n\n### Preferences\n\nSet in script settings:\n\n```yaml\ncore:\n  version: \"2.4\"\n  auto_update: true\n  undo_groups: true\n\nkeyframes:\n  default_easing: \"ease-in-out\"\n  keyframe_spacing: \"uniform\"\n  auto_bezier: true\n  preserve_velocity: true\n\nexpressions:\n  validation: true\n  error_reporting: true\n  performance_mode: \"balanced\"\n  syntax_highlight: true\n\nlayers:\n  batch_limit: 500\n  hierarchy_preserve: true\n  naming_convention: \"kebab-case\"\n  auto_organize: true\n\nrender:\n  queue_management: true\n  output_format: \"mp4\"\n  render_settings: \"high-quality\"\n  monitor_progress: true\n\nexport:\n  include_metadata: true\n  preserve_structure: true\n  backup_source: true\n```\n\n### Templates\n\n- **slide** — Sliding text animations\n- **scale** — Growth/shrink sequences\n- **rotate** — Rotation patterns\n- **color** — Color transition animations\n- **morph** — Shape morphing\n- **stagger** — Cascading effects\n- **bounce** — Physics-based motion\n- **wave** — Wave propagation\n\n## 🎨 Animation\n\n### Keyframe Generation\n\n```javascript\n// Generate keyframes\nanimationEngine.generateKeyframes({\n  layer: \"Title\",\n  property: \"position\",\n  startValue: [0, 0],\n  endValue: [1920, 1080],\n  duration: 3000,\n  easing: \"ease-in-out\"\n});\n```\n\n### Expression Control\n\n```javascript\n// Build expression\nexpressionBuilder.create({\n  type: \"wiggle\",\n  frequency: 2,\n  amplitude: 10,\n  apply_to: \"rotation\"\n});\n```\n\n### Batch Animation\n\n```javascript\n// Apply to multiple layers\nbatchAnimator.apply({\n  layers: [\"all\"],\n  template: \"slide\",\n  offset: 100,\n  duration: 2000,\n  stagger: true\n});\n```\n\n## ✨ Tools\n\n| Tool | Purpose | Use |\n|------|---------|-----|\n| **Keyframe Generator** | Procedural keyframes | Automated timing |\n| **Expression Builder** | Expression creation | Dynamic properties |\n| **Layer Manager** | Organization | Batch operations |\n| **Easing Curve Editor** | Curve control | Animation feel |\n| **Renderer Manager** | Render automation | Batch output |\n| **Timeline Organizer** | Timeline control | Comp structure |\n| **Effect Applier** | Effect automation | Consistent effects |\n| **Preview Player** | Quick preview | Real-time check |\n\n## 🔌 Support\n\n| Feature | Status | Details |\n|---------|--------|---------|\n| **Script-based Animation** | ✅ Full | Procedural keyframes |\n| **Expression Generation** | ✅ Full | Custom expressions |\n| **Batch Processing** | ✅ Full | Multi-layer ops |\n| **Render Automation** | ✅ Full | Queue management |\n| **Effect Presets** | 🟡 Beta | Effect application |\n| **Plugin Integration** | 🟡 Beta | Third-party tools |\n| **Cloud Sync** | 🔶 Alpha | Project backup |\n| **Remote Control** | 🔶 Alpha | API access |\n\n**Status**: ✅ Ready · 🟡 In Progress · 🔶 Development\n\n## 🗺️ Plans\n\n### Q1 2026: Performance\n- Faster keyframe generation\n- Optimized expression parsing\n- Reduced memory usage\n- Better GPU support\n\n### Q2 2026: Features\n- Advanced motion paths\n- Physics engine integration\n- Procedural rigging\n- Puppet pin automation\n\n### Q3 2026: Intelligence\n- Smart ease suggestions\n- Auto-timing optimization\n- Motion prediction\n- Keyframe interpolation\n\n### Q4 2026: Integration\n- Plugin marketplace\n- Effect library\n- Workflow templates\n- Team collaboration\n\n## 🤝 Contribute\n\nHelp develop ae-motion-compiler:\n\n1. **Report Issues** — Bug reports and edge cases\n2. **Suggest Features** — Animation ideas welcome\n3. **Share Templates** — Animation patterns\n4. **Write Docs** — Usage guides\n5. **Test Beta** — Early access program\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run dev\nnpm test\n```\n\n## 🛡️ Security\n\n### Data Protection\n- Local processing only\n- No cloud uploads\n- Project backups preserved\n- Encrypted settings\n\n### System Safety\n- Safe script execution\n- Memory management\n- Error recovery\n- Automatic cleanup\n\n### Stability\n- Crash prevention\n- Undo capability\n- Version control\n- Safe rollback\n\n## 🔧 Help\n\n### Issues\n\n| Problem | Solution |\n|---------|----------|\n| **Script won't load** | Check After Effects version |\n| **Keyframes not generating** | Verify layer selection |\n| **Expression error** | Check syntax in builder |\n| **Slow performance** | Reduce batch size |\n| **Memory error** | Close other applications |\n\n### Support\n\n- **Docs**: GitHub Wiki tutorials\n- **Discord**: Community support\n- **Issues**: Bug tracker\n- **Email**: support@motion-compiler.dev\n\n## 📄 License\n\nMIT License - [LICENSE](LICENSE) file.\n\n**Copyright © 2026 Motion Compiler Contributors**\n\n## ⚠️ Info\n\nIndependent project, not affiliated with Adobe Inc. After Effects trademark belongs to Adobe.\n\n### Key Points\n\n1. **License** — Valid After Effects CC 2024+ required\n2. **Terms** — Follow Adobe guidelines\n3. **Backups** — Keep project files safe\n4. **Testing** — Test animations before output\n5. **Performance** — Monitor system resources\n6. **Updates** — Stay current with versions\n7. **Expertise** — Animation skills still essential\n\n### Disclaimer\n\nScript-generated animations require human review and refinement. Quality depends on template design and parameter settings. Professional judgment remains essential for production work. This tool accelerates workflow, not replaces animation expertise.\n\n---\n\n## 🎬 Automate Your Motion Graphics\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n**Accelerate animation production.** Download ae-motion-compiler and streamline your workflow.\n\n*\"Automate repetition. Enhance creativity. Faster production.\"*\n"
+    },
+    "brief": {
+      "summary": "面向 After Effects 的动效自动化脚本框架",
+      "problem": "减少重复制作关键帧、图层动画和批量渲染的工作",
+      "highlights": [
+        "可以批量生成图层关键帧和缓动",
+        "可以用模板快速制作文字与形状动效",
+        "可以管理队列并批量渲染输出"
+      ],
+      "target_users": [
+        "动效设计师",
+        "动画师",
+        "制作团队"
+      ],
+      "why_trending": "本周首次收录，已有104个 Star，近期仍有提交活动",
+      "caveat": "需要 After Effects CC 2024 或更高版本",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Volumetenrectify/ae-motion-compiler",
+      "score": 93,
+      "category": "动画",
+      "reason": "After Effects动效与渲染自动化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 57.0
+    }
+  }
+]
