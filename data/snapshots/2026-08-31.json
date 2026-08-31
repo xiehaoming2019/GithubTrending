@@ -1,0 +1,576 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "tt-a1i/archify",
+      "url": "https://github.com/tt-a1i/archify",
+      "description": "Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.",
+      "language": "JavaScript",
+      "total_stars": 35661,
+      "forks": 2288,
+      "stars_today": 3722,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3981
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "architecture-as-code",
+        "architecture-diagram",
+        "claude-skill",
+        "code-visualization",
+        "codex",
+        "coding-agents",
+        "data-flow-diagram",
+        "deepseek-harness",
+        "developer-tools",
+        "diagram-as-code",
+        "diagrams",
+        "diagrams-as-code",
+        "dsh-plugin",
+        "mermaid-alternative",
+        "opencode",
+        "sequence-diagram",
+        "software-architecture",
+        "system-design",
+        "text-to-diagram"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-15T05:27:37Z",
+      "updated_at": "2026-08-31T05:48:37Z",
+      "pushed_at": "2026-08-31T04:41:21Z",
+      "open_issues": 78,
+      "homepage": "https://tt-a1i.github.io/archify/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <strong>English</strong> · <a href=\"./README_ZH.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/31352?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-31352\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/31352\" alt=\"Archify on Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n![Archify product preview](docs/assets/archify-readme-hero.png)\n\n# Archify\n\n**Turn a codebase or system description into a polished, interactive system map — directly in chat.**\n\nArchify is a Node.js rendering and validation system for Cursor, Claude Code, Codex CLI, and OpenCode. Agents produce typed JSON IR; Archify deterministically compiles it into HTML/SVG.\n\n- **Open it and present** — five diagram types, four presets, dark/light themes, built-in brand marks, and finite motion\n- **Review architecture changes before merge** — compare two validated snapshots as Before / Delta / After, with exact added, removed, changed, moved, and rerouted facts\n- **Every interaction stays grounded** — search nodes, optionally open revision-verified source, trace upstream/downstream authored reach and exact routes, compare roles, and play guided stories without inventing topology\n- **One file, ready to trust and share** — typed JSON IR and deterministic checks produce self-contained HTML plus PNG, SVG, WebM, and 1200×630 share cards\n\n![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat-square)\n![Agent Skill](https://img.shields.io/badge/Agent-Skill-7C3AED?style=flat-square)\n![Stable Version](https://img.shields.io/badge/version-2.16.0-0891b2?style=flat-square)\n\n**Current stable version:** `v2.16.0`. See [Changelog](CHANGELOG.md#2160--2026-08-30).\n\n**[Project page](https://tt-a1i.github.io/archify/)** · **[Scenario guide](https://tt-a1i.github.io/archify/guide.html)** · **[Proof Lab](https://tt-a1i.github.io/archify/gallery.html)**\n\n```bash\nnpx skills add tt-a1i/archify -g\n```\n\nUsing Cursor? Open the [agent-aware quick start](https://tt-a1i.github.io/archify/start.html?agent=cursor&type=architecture) for exact global and project commands.\n\n**No repository is required:** describe the system in any agent chat.\n\n## ❤️ Sponsors\n\n<table>\n  <tr><td align=\"center\" width=\"240\"><a href=\"https://apinebula.ai/ref/wywnaATT\"><img src=\"docs/assets/sponsors/apinebula-archify.jpg\" alt=\"APINEBULA\" width=\"200\" /></a><br/><strong><a href=\"https://apinebula.ai/ref/wywnaATT\">APINEBULA</a></strong></td><td>APINEBULA sponsors Archify with one API for Claude, GPT, Gemini, and more. <a href=\"https://apinebula.ai/ref/wywnaATT\">Register through Archify</a> and use <strong><code>Archify</code></strong> for <strong>10% off</strong>.</td></tr>\n  <tr><td align=\"center\" width=\"240\"><a href=\"https://github.com/EverMind-AI/Raven\"><img src=\"docs/assets/sponsors/evermind-archify-raven.png\" alt=\"Archify × Raven\" width=\"200\" /></a><br/><strong><a href=\"https://github.com/EverMind-AI\">EverMind</a> · <a href=\"https://github.com/EverMind-AI/Raven\">Raven</a></strong></td><td>EverMind sponsors Archify and builds memory infrastructure for agents. Its <a href=\"https://github.com/EverMind-AI/Raven\"><strong>Raven</strong></a> harness supports Archify as a Skill for verified, interactive system maps.</td></tr>\n</table>\n\n> Want to sponsor Archify? [Contact us by email.](mailto:2801884530@qq.com)\n\n## See Archify in action\n\nThese are generated Archify artifacts, not product mockups. Click a frame to open its live, shareable state.\n\n<p align=\"center\">\n  <a href=\"https://tt-a1i.github.io/archify/gallery.html\"><img src=\"docs/assets/archify-live-proof.gif\" alt=\"Three verified Archify artifacts moving through Signal Flow, Blueprint, and Classic presets\" width=\"960\"/></a>\n  <br/>\n  <sub><strong>Three real generated artifacts.</strong> Signal Flow · Blueprint · Classic · <a href=\"https://tt-a1i.github.io/archify/gallery.html\">open the interactive Proof Lab ↗</a></sub>\n</p>\n\n| Guided story | Route probe | Semantic lens |\n|---|---|---|\n| [![Agent workflow playing one authored chapter](docs/assets/archify-demo-story.png)](https://tt-a1i.github.io/archify/gallery/artifacts/agent-tool-call.workflow.html?theme=dark&present=1&play=1#view=happy-path) | [![Cache-miss sequence showing the Web App to Postgres route](docs/assets/archify-demo-route.png)](https://tt-a1i.github.io/archify/gallery/artifacts/cache-miss.sequence.html?theme=dark&present=1#route=web~db) | [![Production architecture comparing backend and database roles](docs/assets/archify-demo-lens.png)](https://tt-a1i.github.io/archify/gallery/artifacts/production-deployment.architecture.html?theme=dark&present=1#lens=backend~database) |\n| Play one finite named chapter. | Inspect the shortest authored directed path. | Compare real traffic between semantic roles. |\n\nThe [Proof Lab](https://tt-a1i.github.io/archify/gallery.html) contains all 11 checked-in scenarios, their JSON sources, named views, and validation receipts.\n\n### A real repository, mapped from source\n\n[![MCO runtime architecture generated from the public mco-org/mco repository](docs/assets/mco-runtime-share-card.png)](https://tt-a1i.github.io/archify/cases/mco-runtime.architecture.html?theme=dark&present=1#view=dispatch-path)\n\nArchify traced [`mco-org/mco`](https://github.com/mco-org/mco) at `9f1a1cf` and produced this checked map. **[Open it ↗](https://tt-a1i.github.io/archify/cases/mco-runtime.architecture.html?theme=dark&present=1#view=dispatch-path)** · [trace reach ↗](https://tt-a1i.github.io/archify/cases/mco-runtime.architecture.html?theme=dark#focus=router&reach=downstream) · [typed source](docs/cases/mco-runtime.architecture.json)\n\n## Preview\n\nSame diagram, two themes, one click to switch:\n\n| Dark | Light |\n|---|---|\n| ![Dark theme](docs/assets/archify-dark.png) | ![Light theme](docs/assets/archify-light.png) |\n\nThe Export menu copies PNG to the clipboard and downloads static or motion formats:\n\n![Export menu](docs/assets/archify-menu.png)\n\nUse **Copy Share Card** when you want a canonical 1200×630 image for a README, release, or social post.\n\nAfter tracing a route, **Export → Route Share Card** downloads that authored path as a 1200×630 PNG with the full diagram retained for context.\n\n![Route Share Card showing the exact Users to API Server path with the full architecture retained as context](docs/assets/archify-route-share-card.png)\n\nAfter tracing authored `Upstream` or `Downstream` reach, **Export → Reach Share Card** captures that exact reading without claiming runtime impact.\n\n![MCO downstream Reach Share Card showing authored relationships from Command Router](docs/assets/mco-runtime-reach-share-card.png)\n\nOpen [`examples/web-app.html`](examples/web-app.html) locally to try the complete viewer.\n\n## Quick start\n\n### 1. Install\n\n```bash\nnpx skills add tt-a1i/archify -g\n```\n\nFor an explicit, non-interactive Cursor install:\n\n```bash\nnpx -y skills add tt-a1i/archify --skill archify --agent cursor --global --copy --yes\n```\n\nTo try without installing:\n\n```bash\nnpx skills use tt-a1i/archify@archify --agent codex\n```\n\n[DSH community opt-in](integrations/deepseek-harness/README.md): `dsh plugin --profile web add @tt-a1i/archify-dsh@0.1.0`\n\nThe [agent switcher](https://tt-a1i.github.io/archify/start.html?agent=cursor&type=architecture) covers `cursor`, `codex`, `claude-code`, and `opencode`. For Raven's manual ZIP install, extract [`archify.zip`](archify.zip) into `~/.raven/workspace/skills`; it yields `~/.raven/workspace/skills/archify`. Raven is not a switcher target.\n\nArchify may GET the fixed stable manifest solely to show an optional reminder; it never downloads or installs updates. Successful checks wait about 72 hours (±20%); active use retries failures after 6, then 24 hours. The server sees normal HTTP metadata (IP and time), but receives no version, Agent, project data, prompts, account/device ID, or ETag. You decide whether and when to update. Set `ARCHIFY_UPDATE_CHECK_DISABLED=1` to disable networking and reminder-state writes.\n\n### 2. Start from a description — no repository required\n\n```text\nUse Archify to draw: Browser -> API -> Redis cache -> PostgreSQL fallback.\n```\n\nFor source evidence, open a repository and ask:\n\n```text\nAnalyze this repository, then use archify to create a high-level runtime architecture diagram.\nShow 8–12 core components, one primary path, external dependencies, and trust boundaries.\nPut supporting detail in cards instead of adding more edges.\n```\n\n### 3. Refine in chat\n\nContinue with focused requests such as `add Redis`, `move auth to the left`, or `highlight the rollback path`. Archify keeps the typed source available for targeted iteration.\n\n## Choose the right diagram\n\n| Type | Best for | Include in your prompt |\n|---|---|---|\n| **Architecture** | Components, services, storage, boundaries | Scope, core components, primary path |\n| **Workflow** | CI/CD, approvals, tool calls, runbooks | Participants, order, branches, exceptions |\n| **Sequence** | API calls, cache fallback, auth, async traces | Callers, callees, returns, timing |\n| **Data Flow** | Pipelines, lineage, PII, consumers | Sources, transforms, stores, boundaries |\n| **Lifecycle** | States, retries, waits, terminal outcomes | States, events, retry and cancellation paths |\n\nArchitecture's optional `deployment-ownership` profile fails closed when authored owners, region placement, private database scope, or named crossings are missing; it is never implicit and does not inspect live infrastructure. See the [checked deployment proof](https://tt-a1i.github.io/archify/gallery.html#proof-deployment-ownership).\n\nFor design or PR review, Architecture Delta compares validated Before / Delta / After snapshots with a machine receipt. Select an authored change or play one finite, viewer-only Review; it infers no impact, risk, or merge safety.\n\n`node archify/bin/archify.mjs compare architecture base.json head.json architecture-delta.html --json`\n\n[![Architecture Delta showing added, removed, changed, and moved authored facts](docs/assets/architecture-delta-proof.jpg)](examples/checkout-platform-delta.html)\n\nNot sure which one fits? Use the [interactive scenario guide](https://tt-a1i.github.io/archify/guide.html), or ask the zero-dependency CLI:\n\n```bash\nnode archify/bin/archify.mjs guide \"Show an API request with Redis cache miss\"\nnode archify/bin/archify.mjs guide \"Map Kafka topics, consumer groups, replay, and DLQ\" --json\n```\n\nWorkflow keeps the happy path clear across lanes:\n\n![Workflow example](docs/assets/archify-workflow.png)\n\nSequence explains one interaction over time:\n\n![Sequence example](docs/assets/archify-sequence.png)\n\nData Flow makes movement and sensitivity boundaries explicit:\n\n![Data Flow example](docs/assets/archify-dataflow.png)\n\nLifecycle separates progress, waits, retries, and terminal outcomes:\n\n![Lifecycle example](docs/assets/archify-lifecycle.png)\n\nArchitecture examples: [`web-app`](examples/web-app.html) · [`Archify pipeline`](examples/archify-repo.html) · [`grid placement`](examples/archify-repo-grid.html) · [`desktop agent`](examples/maka-architecture.html)\n\n## Why Archify\n\n- **Layout judgment over generic auto-layout** — the agent chooses hierarchy, spacing, routes, and emphasis; shared automatic endpoints spread deterministically instead of piling arrows on one midpoint.\n- **Typed JSON IR** — every renderer-backed mode has a schema and reproducible source.\n- **Atomic validation before delivery** — schema, layout, HTML/SVG, route, and label-to-route clearance checks must all pass before a showcase artifact replaces the last known good output.\n- **Failures come with a repair receipt** — `validate --json` and `deliver --json` return stable rule codes, the exact subject, measured evidence, and only supported repair controls instead of a Node stack or an unstructured retry guess.\n- **Last-good live preview** — an optional desktop loop watches one JSON file, refreshes only after the latest ca"
+    },
+    "brief": {
+      "summary": "把系统描述或代码库生成可验证的交互式架构图",
+      "problem": "架构信息难整理、核对和分享",
+      "highlights": [
+        "可以从代码库生成系统架构图",
+        "可以对比架构变更前后差异",
+        "可以导出 PNG、SVG、WebM 和分享卡片"
+      ],
+      "target_users": [
+        "软件架构师",
+        "开发团队",
+        "编码代理用户"
+      ],
+      "why_trending": "今日新增 3722 Star，且项目连续上榜",
+      "caveat": "图表依赖已验证的描述，不代表真实运行影响",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "tt-a1i/archify",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "面向编程代理的可视化技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "mvanhorn/last30days-skill",
+      "url": "https://github.com/mvanhorn/last30days-skill",
+      "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+      "language": "Python",
+      "total_stars": 60621,
+      "forks": 5302,
+      "stars_today": 230,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 230
+    },
+    "details": {
+      "topics": [
+        "ai-prompts",
+        "ai-skill",
+        "bluesky",
+        "claude",
+        "claude-code",
+        "clawhub",
+        "deep-research",
+        "hackernews",
+        "instagram",
+        "openclaw",
+        "polymarket",
+        "recency",
+        "reddit",
+        "research",
+        "social-media",
+        "tiktok",
+        "trends",
+        "twitter",
+        "web-search",
+        "youtube"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-23T20:37:37Z",
+      "updated_at": "2026-08-31T05:47:21Z",
+      "pushed_at": "2026-08-30T18:45:02Z",
+      "open_issues": 183,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# /last30days\n\nEnglish | [Français](README.fr.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md)\n\n<p align=\"center\">\n  <img src=\"media/pr-assets/last30days-ad.gif\" width=\"720\" alt=\"last30days - an AI agent-led search engine that searches people, not editors\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/mvanhorn/last30days-skill\">\n    <img src=\"https://img.shields.io/badge/%231-Repository%20Of%20The%20Day-6f42c1?style=for-the-badge&logo=github&label=GITHUB%20TRENDING\" alt=\"GitHub Trending #1 Repository Of The Day\" />\n  </a>\n  <br/>\n  <a href=\"https://trendshift.io/repositories/21997\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/repositories/21997\" alt=\"mvanhorn/last30days-skill | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/>\n  </a>\n</p>\n\n**An AI agent-led search engine scored by upvotes, likes, and real money - not editors.**\n\nThis README tracks the current v3 pipeline. The runtime skill spec lives in [skills/last30days/SKILL.md](skills/last30days/SKILL.md), which is the source of truth for the latest command and setup behavior.\n\n**Claude Code (recommended — auto-updates via marketplace):**\n```\n/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days\n```\n\n**Codex, Cursor, Copilot, Gemini CLI, or any of 50+ [Agent Skills](https://agentskills.io) hosts:**\n```\nnpx skills add mvanhorn/last30days-skill -g\n```\n(`-g` installs globally for your user, available across all projects. Drop it to scope per-project.)\n\nMore install options (claude.ai web, OpenClaw, manual) in the [Install](#install) section below.\n\nZero config. Reddit, HN, Polymarket, and GitHub work immediately. Run it once and the setup wizard unlocks X, YouTube, TikTok, arXiv, Techmeme, and more in 30 seconds.\n\n---\n\nReddit upvotes. X likes. YouTube transcripts. TikTok engagement. Polymarket odds backed by real money and insider information. That's millions of people voting with their attention and their wallets every day. /last30days searches all of it in parallel, scores it by what real people actually engage with, and an AI agent judge synthesizes it into one brief.\n\nGoogle aggregates editors. /last30days searches people.\n\nYou can't get this search anywhere else because no single AI has access to all of it. Google search doesn't touch Reddit comments or X posts. ChatGPT has a deal with Reddit but can't search X or TikTok. Gemini has YouTube but not Reddit. Claude has none of them natively. Each platform is a walled garden with its own API, its own tokens, its own auth. But you can bring your own keys and browser sessions, and suddenly an AI agent can search all of them at once, score them against each other, and tell you what actually matters.\n\nThat's the unlock. Not one better search engine. A dozen disconnected platforms, bridged by an agent.\n\n```\n/last30days Peter Steinberger\n```\n\nYou have a meeting tomorrow. You Google them. You get their LinkedIn from 2023. /last30days gives you what they're actually doing this month: joined OpenAI to work on Codex, fighting Anthropic's ban on third-party agents, shipping 23 PRs at 85% merge rate, building \"LobsterOS\" for cross-device agent control, and r/ClaudeCode hit 569 upvotes debating whether he's a hero or \"insufferable.\" Scattered across X posts, Reddit threads, YouTube transcripts, and GitHub commits. None of it was on Google.\n\n## Why this exists\n\nI built it to keep up in AI. Everything changes every day and the Reddit and X nerds are always on top of it first. I needed better prompts, and the training data was always months behind what the community had already figured out.\n\nBut it turned into something bigger. Now I run it before a sales call to know the last 30 days truth about a business. Before a meeting to read someone's recent tweets and podcast transcripts. Before a Disney World trip to know which rides are closed and what the community says about Genie+. Before I build anything to know what problems people are actually hitting.\n\nIf you're meeting with a CEO, have you read all their tweets and YouTube transcripts from the last 30 days? I have.\n\n## Sources, scored by the people\n\n| Source | What the people tell you |\n|--------|--------------------------|\n| **Reddit** | The unfiltered take. Top comments with real upvote counts, free, no API key. The real opinions that Google buries. |\n| **X / Twitter** | The hot take, the expert thread, the breaking reaction. First to know, first to argue. |\n| **YouTube** | The 45-minute deep dive. Full transcripts searched for the 5 quotable sentences that matter. |\n| **TikTok** | The creator reaching 3.6M people with a take you'll never find on Google. |\n| **Instagram Reels** | The influencer perspective with spoken-word transcripts. The visual culture signal. |\n| **Hacker News** | The developer consensus. 825 points, 899 comments. Where technical people actually argue. |\n| **Polymarket** | Not opinions. Odds. Backed by real money. 96% confidence on album sales. 4% on an acquisition. |\n| **GitHub** | For people: PR velocity, top repos by stars, release notes. For topics: issues and discussions. |\n| **Digg** | Curated story clusters from Digg's AI 1000 leaderboard (~1000 high-signal AI accounts on X), with attributable inline quotes (no X auth required). Auto-enabled when `digg-pp-cli` is on PATH. |\n| **arXiv** | The papers behind the hype. New research in the window, free, no API key. Auto-enabled when `arxiv-pp-cli` is on PATH (first-run setup installs it). |\n| **Techmeme** | The tech-news editorial layer, date-windowed to your 30 days. Free, no API key. Auto-enabled when `techmeme-pp-cli` is on PATH (first-run setup installs it). |\n| **LinkedIn** | The professional signal. Posts and articles, with articles weighted as high signal. |\n| **StockTwits** | Trader sentiment. Auto-activates when your topic is a ticker or crypto. |\n| **Threads** | The post-Twitter text layer. Conversations from creators and brands. |\n| **Pinterest** | Visual discovery. Pins, saves, and comments on products and ideas. |\n| **Xiaohongshu (RED)** | Chinese lifestyle, product, and creator signals. Requested explicitly with `--search xhs` when a logged-in x-mcp browser plugin or `xiaohongshu-mcp` service is running locally. |\n| **Bluesky** | The decentralized social layer. AT Protocol posts from the post-Twitter migration. |\n| **Perplexity** | Controlled Agent API synthesis, OpenRouter Sonar fallback, raw Search API rows, and explicit Deep Research. |\n| **Web** | The editorial coverage, the blog comparisons. One signal of many, not the only one. |\n\nCommunity contributors keep adding more. Truth Social and other niche sources are in the engine with more on the way.\n\nA Reddit thread with 1,500 upvotes is a stronger signal than a blog post nobody read. A TikTok with 3.6M views tells you more about what's culturally relevant than a press release. Polymarket odds backed by $66K in volume are harder to argue with than a pundit's guess.\n\nThe synthesis ranks by what real people actually engaged with. Social relevancy, not SEO relevancy.\n\n## What people actually use it for\n\n**Before a meeting.** `/last30days Peter Steinberger` - joined OpenAI's Codex team, fighting Anthropic's ban on third-party agents, 23 PRs merged at 85% merge rate on GitHub, building LobsterOS for cross-device agent control. r/ClaudeCode: \"Ever since OpenClaw released, it was widely known that if you run it through anything other than the API, you were gonna get banned eventually\" (227 upvotes). That's not on LinkedIn.\n\n**To read hiring signals.** `/last30days Listen Labs --hiring-signals` - current jobs and careers pages become cited evidence for focus shifts: hiring into enterprise security, customer success, infrastructure, or product expansion. The report says what the hiring appears to signal, not what the roadmap will ship.\n\n**To find the topic before it peaks.** Ask `/last30days what's exploding in AI agents?` and the skill switches to discovery mode: the engine sweeps Reddit category listings, Hacker News front/best stories, Digg's AI 1000 feed, and X when authenticated; your agent judges the nominations (names, junk filtering, content-worthiness) and writes podcast / X-article angles; then you get 5-10 velocity-ranked topics. Every result includes cross-source numbers, a momentum label, and a ready-to-run `/last30days \"<topic>\"` follow-up.\n\n**When something drops.** `/last30days Kanye West` - UK blocked his visa, Wireless Festival canceled, sponsors fled. But BULLY debuted #2 on Billboard. Fantano came back from his \"Yay sabbatical\" to review it (653K views). SoFi Homecoming brought out Lauryn Hill and Travis Scott for 44 songs. Polymarket: \"Will Kanye tweet again?\" 86% Yes. 23 Reddit threads, 17 YouTube videos, 86K upvotes.\n\n**To compare tools.** `/last30days OpenClaw vs Hermes vs Paperclip` - \"These aren't competitors, they're layers.\" OpenClaw is the executor (351K GitHub stars, live), Hermes is the self-improving brain (31K stars), Paperclip is the org chart (49K stars). Star counts pulled live from the GitHub API, not stale blog posts. Side-by-side table with architecture, memory, security, best-for. Per @IMJustinBrooke: \"OpenClaw = Charmander, Hermes = Charizard.\"\n\n**To understand the world.** `/last30days Iran vs USA` - Day 38 of the war. Trump's Tuesday deadline for Iran to reopen the Strait of Hormuz. Two US warplanes downed. Oil at $126/barrel. The IEA called it \"the largest supply disruption in the history of the global oil market.\" Polymarket: ceasefire by Dec 31 at 74%. 27 X posts, 10 YouTube videos, 20 prediction markets.\n\n**Before a trip.** `/last30days Universal Epic Universe` - Expansion already under construction. \"Project 680\" permit filed. Fireworks show confirmed by infrastructure but unannounced. Wait times: Mine-Cart Madness averaging 148 minutes. No annual pass yet, and locals are frustrated. Stardust Racers down for refurbishment through April 5.\n\n**To learn something fast.** `/last30days Nano Banana Pro prompting` - JSON-structured prompts are replacing tag soup. @pictsbyai's nested format prevents \"concept bleeding.\" Edit-first workflow beats regeneration. Then it writes you a production prompt using exactly what the community said works.\n\n## What's new\n\nSince the v3.3 announcement in May, as of v3.11.1 (July 2026): 175 merged PRs - 122 of them from 52 community contributors - across 15 releases. This is what landed.\n\n### First-class on OpenAI Codex\n\n/last30days is now a native Codex plugin with guided setup - not a port, a first-class citizen. Renderer-aware citations mean Codex output reads like a brief instead of URL soup (#694), and the same engine runs on Claude Code, Cursor, Copilot, Gemini CLI, Claude Desktop, OpenClaw, and 50+ Agent Skills hosts. Codex plugin manifest by [@rfoust](https://github.com/rfoust) (#686), Codex auth fix by [@tmchow](https://github.com/tmchow) (#698).\n\n### arXiv, Techmeme, and Digg - free, no API keys\n\narXiv brings the papers behind the hype and Techmeme brings the editorial tech-news layer - free, zero keys, and first-run setup installs their CLIs so they activate automatically (#709). Digg's AI 1000 story clusters arrive without X auth the same way - setup installs the free Digg CLI for you (#590). Trustpilot ships opt-in for consumer-brand research.\n\n### Free Reddit grew real scores and top comments\n\nReddit's public .json API died; the free path came back stronger. Keyless RSS + shreddit scraping (#457), dedicated-subreddit discovery with real upvote counts via arctic-shift (#696), and a relevance floor so a viral off-topic post can't hijack your brief (#488, thanks [@rzachsmith](https://github.com/rzachsmith)). No API key. Real scores. Top comments included.\n\n### The best comments in every brief\n\nComments are now a default-on layer across sources: Instagram comments with rank-based diversity so five hot takes don't all come from one post (#751), YouTub"
+    },
+    "brief": {
+      "summary": "跨平台检索近30天信息并生成依据充分的摘要",
+      "problem": "信息分散在社交平台、视频和网页，难以集中判断趋势",
+      "highlights": [
+        "可以调研一个主题并汇总多平台讨论",
+        "可以在会前了解人物近期公开动态",
+        "可以比较社区热度、视频内容与网页报道"
+      ],
+      "target_users": [
+        "研究人员",
+        "产品与市场团队",
+        "技术决策者"
+      ],
+      "why_trending": "今日新增230 Star，本周首次收录，累计超6万 Star",
+      "caveat": "部分平台需自行配置 API 密钥或浏览器会话",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mvanhorn/last30days-skill",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "面向代理的跨平台调研技能",
+      "generated_by_ai": true,
+      "velocity_score": 72,
+      "freshness_score": 40,
+      "ranking_score": 63.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "punkpeye/awesome-mcp-servers",
+      "url": "https://github.com/punkpeye/awesome-mcp-servers",
+      "description": "A collection of MCP servers.",
+      "language": "",
+      "total_stars": 93454,
+      "forks": 15325,
+      "stars_today": 96,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 96
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "mcp"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-11-30T04:49:10Z",
+      "updated_at": "2026-08-31T05:47:54Z",
+      "pushed_at": "2026-08-29T22:03:27Z",
+      "open_issues": 3555,
+      "homepage": "https://glama.ai/mcp/servers",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![ไทย](https://img.shields.io/badge/Thai-Click-blue)](README-th.md)\n[![English](https://img.shields.io/badge/English-Click-yellow)](README.md)\n[![繁體中文](https://img.shields.io/badge/繁體中文-點擊查看-orange)](README-zh_TW.md)\n[![简体中文](https://img.shields.io/badge/简体中文-点击查看-orange)](README-zh.md)\n[![日本語](https://img.shields.io/badge/日本語-クリック-青)](README-ja.md)\n[![한국어](https://img.shields.io/badge/한국어-클릭-yellow)](README-ko.md)\n[![Português Brasileiro](https://img.shields.io/badge/Português_Brasileiro-Clique-green)](README-pt_BR.md)\n[![Discord](https://img.shields.io/discord/1312302100125843476?logo=discord&label=discord)](https://glama.ai/mcp/discord)\n[![Subreddit subscribers](https://img.shields.io/reddit/subreddit-subscribers/mcp?style=flat&logo=reddit&label=subreddit)](https://www.reddit.com/r/mcp/)\n\n> [!IMPORTANT]\n> [Awesome MCP Servers](https://glama.ai/mcp/servers) web directory.\n\nA curated list of awesome Model Context Protocol (MCP) servers.\n\n* [What is MCP?](#what-is-mcp)\n* [Clients](#clients)\n* [Tutorials](#tutorials)\n* [Community](#community)\n* [Legend](#legend)\n* [Server Implementations](#server-implementations) \n* [Frameworks](#frameworks)\n* [Tips & Tricks](#tips-and-tricks)\n\n## What is MCP?\n\n[MCP](https://modelcontextprotocol.io/) is an open protocol that enables AI models to securely interact with local and remote resources through standardized server implementations. This list focuses on production-ready and experimental MCP servers that extend AI capabilities through file access, database connections, API integrations, and other contextual services.\n\n## Clients\n\nCheckout [awesome-mcp-clients](https://github.com/punkpeye/awesome-mcp-clients/) and [glama.ai/mcp/clients](https://glama.ai/mcp/clients).\n\n## Tutorials\n\n* [Tool Definition Quality Score (TDQS)](https://github.com/glama-ai/tool-definition-quality-score)\n* [Model Context Protocol (MCP) Quickstart](https://glama.ai/blog/2024-11-25-model-context-protocol-quickstart)\n* [Setup Claude Desktop App to Use a SQLite Database](https://youtu.be/wxCCzo9dGj0)\n\n## Community\n\n* [r/mcp Reddit](https://www.reddit.com/r/mcp)\n* [Discord Server](https://glama.ai/mcp/discord)\n\n## Legend\n\n* 🎖️ – official implementation\n* programming language\n  * 🐍 – Python codebase\n  * 📇 – TypeScript (or JavaScript) codebase\n  * 🏎️ – Go codebase\n  * 🦀 – Rust codebase\n  * #️⃣ - C# Codebase\n  * ☕ - Java codebase\n  * 🌊 – C/C++ codebase\n  * 💎 - Ruby codebase\n\n* scope\n  * ☁️ - Cloud Service\n  * 🏠 - Local Service\n  * 📟 - Embedded Systems\n* operating system\n  * 🍎 – For macOS\n  * 🪟 – For Windows\n  * 🐧 - For Linux\n\n> [!NOTE]\n> Confused about Local 🏠 vs Cloud ☁️?\n> * Use local when MCP server is talking to a locally installed software, e.g. taking control over Chrome browser.\n> * Use cloud when MCP server is talking to remote APIs, e.g. weather API.\n\n## Server Implementations\n\n> [!NOTE]\n> We now have a [web-based directory](https://glama.ai/mcp/servers) that is synced with the repository.\n\n* 🔗 - [Aggregators](#aggregators)\n* 🤝 - [Agreements & Coordination](#agreements--coordination)\n* 🎨 - [Art & Culture](#art-and-culture)\n* 📐 - [Architecture & Design](#architecture-and-design)\n* 📂 - [Browser Automation](#browser-automation)\n* 🧬 - [Biology Medicine and Bioinformatics](#bio)\n* ☁️ - [Cloud Platforms](#cloud-platforms)\n* 👨‍💻 - [Code Execution](#code-execution)\n* 🤖 - [Coding Agents](#coding-agents)\n* 🖥️ - [Command Line](#command-line)\n* 💬 - [Communication](#communication)\n* 🗣️ - [Conversational AI](#conversational-ai)\n* 🔑 - [Cryptography](#cryptography)\n* 👤 - [Customer Data Platforms](#customer-data-platforms)\n* 🗄️ - [Databases](#databases)\n* 📊 - [Data Platforms](#data-platforms)\n* 🚚 - [Delivery](#delivery)\n* 🛠️ - [Developer Tools](#developer-tools)\n* 🧮 - [Data Science Tools](#data-science-tools)\n* 📊 - [Data Visualization](#data-visualization)\n* 📟 - [Embedded system](#embedded-system)\n* 🎓 - [Education](#education)\n* 🛒 - [E-Commerce](#e-commerce)\n* 🌳 - [Environment & Nature](#environment-and-nature)\n* 📂 - [File Systems](#file-systems)\n* 💰 - [Finance & Fintech](#finance--fintech)\n* 🎮 - [Gaming](#gaming)\n* 🏠 - [Home Automation](#home-automation)\n* 🏭 - [Industrial & IoT](#industrial--iot)\n* 🧠 - [Knowledge & Memory](#knowledge--memory)\n* ⚖️ - [Legal](#legal)\n* 🗺️ - [Location Services](#location-services)\n* 🎯 - [Marketing](#marketing)\n* 📊 - [Monitoring](#monitoring)\n* 🎥 - [Multimedia Process](#multimedia-process)\n* 🖥️ - [OS Automation](#os-automation)\n* 🎙️ - [Podcasts](#podcasts)\n* 📋 - [Product Management](#product-management)\n* 🏠 - [Real Estate](#real-estate)\n* 🔬 - [Research](#research)\n* 🔎 - [Search & Data Extraction](#search)\n* 🔒 - [Security](#security)\n* 🌐 - [Social Media](#social-media)\n* 🔮 - [Spirituality & Esoterica](#spirituality-and-esoterica)\n* 🏃 - [Sports](#sports)\n* 🎧 - [Support & Service Management](#support-and-service-management)\n* 🌎 - [Translation Services](#translation-services)\n* 🎧 - [Text-to-Speech](#text-to-speech)\n* 🎙️ - [Speech-to-Text](#speech-to-text)\n* 🚆 - [Travel & Transportation](#travel-and-transportation)\n* 🔄 - [Version Control](#version-control)\n* 🏢 - [Workplace & Productivity](#workplace-and-productivity)\n* 🛠️ - [Other Tools and Integrations](#other-tools-and-integrations)\n\n### 🔗 <a name=\"aggregators\"></a>Aggregators\n\nServers for accessing many apps and tools through a single MCP server.\n\n- [Correctover/mcp-server](https://github.com/Correctover/mcp-server) [![Correctover MCP server](https://glama.ai/mcp/servers/Correctover/mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/Correctover/mcp-server) 📇 ☁️ 🏠 🍎 🪟 🐧 - Contract validation and self-healing failover for LLM APIs. 6-dimension verification (structure, schema, latency, cost, identity, integrity) in 22μs P50. 87 self-healing rules with MAPE-K autonomic loop. BYOK direct connect to 9 providers (OpenAI, Anthropic, DeepSeek, Moonshot, Zhipu AI, Qwen, SiliconFlow, Groq, Together AI). L3 failover in 949ms E2E. Install: `npx -y correctover-mcp-server`.\n- [daedalusdevelopmentgroup/ddg-agent-payable-services](https://github.com/daedalusdevelopmentgroup/ddg-agent-payable-services) [![daedalusdevelopmentgroup/ddg-agent-payable-services MCP server](https://glama.ai/mcp/servers/daedalusdevelopmentgroup/ddg-agent-payable-services/badges/score.svg)](https://glama.ai/mcp/servers/daedalusdevelopmentgroup/ddg-agent-payable-services) 🐍 ☁️ - Pay-per-call x402 gateway: one MCP server for 90+ agent tools (utilities, DNS/WHOIS, blockchain RPC, market data, prediction markets, DEX data, security audits) plus an OpenAI-compatible LLM gateway. USDC on Base, free-trial calls per agent. `pip install ddg-agent-services-mcp` or remote `https://mcp.daedalusdevelopmentgroup.com/mcp`.\n- [forgemeshlabs/coinopai-mcp](https://github.com/forgemeshlabs/coinopai-mcp) [![forgemeshlabs/coinopai-mcp MCP server](https://glama.ai/mcp/servers/forgemeshlabs/coinopai-mcp/badges/score.svg)](https://glama.ai/mcp/servers/forgemeshlabs/coinopai-mcp) 📇 - Local stdio MCP server for x402-powered paid crypto intelligence: preflight checks, trade decisions with `decision_id`, later audit against real prices, risk state, signal history, and agent automation search over USDC micropayments on Base.\n- [forgemeshlabs/anomaly-mcp](https://github.com/forgemeshlabs/anomaly-mcp) [![forgemeshlabs/anomaly-mcp MCP server](https://glama.ai/mcp/servers/forgemeshlabs/anomaly-mcp/badges/score.svg)](https://glama.ai/mcp/servers/forgemeshlabs/anomaly-mcp) 📇 ☁️ - Real-time anomaly detection powered by NASA-derived sequence mining across blockchain, mempool, stablecoin depeg, aviation, and GitHub signals via x402 USDC micropayments on Base. `npx -y @forgemeshlabs/anomaly-mcp`\n- [1mcp/agent](https://github.com/1mcp-app/agent) 📇 ☁️ 🏠 🍎 🪟 🐧 - A unified Model Context Protocol server implementation that aggregates multiple MCP servers into one.\n- [2s-io/sdk](https://github.com/2s-io/sdk) [![2s-io/sdk MCP server](https://glama.ai/mcp/servers/2s-io/sdk/badges/score.svg)](https://glama.ai/mcp/servers/2s-io/sdk) 📇 ☁️ 🍎 🪟 🐧 - Unified API for AI agents — 180+ tools across geocoding, weather (NWS), climate stations (NOAA), earthquakes (USGS), tides (NOAA), points of interest (OpenStreetMap), patents (USPTO ODP), US case law (CourtListener / Free Law Project), Federal Register, Wikipedia, scientific papers (arXiv / PubMed / Semantic Scholar), AI summarize / translate / extract / screenshot / image-describe, image compression, DNS / WHOIS, crypto address-validate + EVM gas oracle, OFAC sanctions screening, US Census ACS demographics, airport / ZIP lookup. Sub-cent to a few cents per call in USDC on Base via x402 — no API keys, no signup. `npx -y @2sio/mcp`\n- [8randonpickart5/alderpost-mcp](https://github.com/8randonpickart5/alderpost-mcp) [![alderpost-mcp MCP server](https://glama.ai/mcp/servers/8randonpickart5/alderpost-mcp/badges/score.svg)](https://glama.ai/mcp/servers/8randonpickart5/alderpost-mcp) 📇 ☁️ - 8 bundled intelligence endpoints (security, company, threat, compliance, sales, sports, property, health) via x402 micropayments on Base.\n- [GTCC777/pulsenetwork-mcp](https://github.com/GTCC777/pulsenetwork-mcp) [![GTCC777/pulsenetwork-mcp MCP server](https://glama.ai/mcp/servers/GTCC777/pulsenetwork-mcp/badges/score.svg)](https://glama.ai/mcp/servers/GTCC777/pulsenetwork-mcp) 📇 - One MCP server exposing 66 specialized intelligence APIs (660+ endpoints) — finance, crypto, legal, immigration, healthcare cost, real estate, tax, climate, sports, science, and more — each an x402 pay-per-call tool in USDC on Base and Solana. Includes a `discover` meta-tool over the whole network and a cross-vertical referral graph. No API keys. `npx mcp-pulsenetwork`\n- [mcpqueen/mcpqueen](https://github.com/mcpqueen/mcpqueen) [![mcpqueen/mcpqueen MCP server](https://glama.ai/mcp/servers/mcpqueen/mcpqueen/badges/score.svg)](https://glama.ai/mcp/servers/mcpqueen/mcpqueen) 🎖️ 📇 ☁️ - The graded MCP registry: live-probes every remote server in the official registry (initialize, tools/list, schema quality, latency, provenance) and publishes evidence-backed grades — searchable by agents via its own MCP endpoint at [mcpqueen.com](https://mcpqueen.com).\n- [szp2005/llm-prices-cn](https://github.com/szp2005/llm-prices-cn) [![szp2005/llm-prices-cn MCP server](https://glama.ai/mcp/servers/szp2005/llm-prices-cn/badges/score.svg)](https://glama.ai/mcp/servers/szp2005/llm-prices-cn) 🐍 ☁️ - Daily-verified LLM API pricing dataset (44+ models, CN & global) with a hosted MCP server for live price queries and token cost estimation.\n- [tadas-github/a2asearch-mcp](https://github.com/tadas-github/a2asearch-mcp) [![tadas-github/a2asearch-mcp MCP server](https://glama.ai/mcp/servers/tadas-github/a2asearch-mcp/badges/score.svg)](https://glama.ai/mcp/servers/tadas-github/a2asearch-mcp) 📇 ☁️ - MCP server to search 4,800+ MCP servers, AI agents, CLI tools and agent skills. Install: `npx -y a2asearch-mcp`. Ask Claude: \"Find MCP servers for database access\". Free, no auth required.\n- [Aganium/agenium](https://github.com/Aganium/agenium) 📇 ☁️ 🍎 🪟 🐧 - Bridge any MCP server to the agent:// network — DNS-like identity, discovery, and trust for AI agents. Makes your tools discoverable and callable by other agents via `agent://` URIs with mTLS, trust scores, and capability search.\n- [agentbodegastore/agentbodega](https://github.com/agentbodegastore/agentbodega) [![agentbodega MCP server](https://glama.ai/mcp/servers/agentbodegastore/agentbodega/badges/score.svg)](https://glama.ai/mcp/servers/agentbodegastore/agentbodega) 📇 ☁️ - AgentBodega MCP gives agents a live catalog of 65 x402-payable HTTP tools across search, public data, social media, status checks, media conversion, and agent-readiness checks. No API keys; install with `npx -y @agentbodega/mcp`.\n- [elisymlabs/elisym](https://github.com/elisymlabs/elisym) [![elisymlabs/elisym MCP server](https://glama.ai/mcp/servers/elisymlabs/elisym/badges/score.svg)](https://glama.ai/mcp/servers/elisymlabs/elisym) 📇 ☁️ 🍎 🪟 🐧 - AI agent discovery and marketplace on Nostr wi"
+    },
+    "brief": {
+      "summary": "汇总可扩展 AI 能力的 MCP 服务器资源",
+      "problem": "帮助开发者查找并接入适合的 MCP 服务器",
+      "highlights": [
+        "可以按类别查找文件、数据库和 API 工具",
+        "可以参考客户端、教程与社区资源",
+        "可以通过目录了解本地和云端实现"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "MCP 使用者",
+        "自动化开发者"
+      ],
+      "why_trending": "今日新增 96 Star，总 Star 超 9.3 万，近期仍有更新",
+      "caveat": "这是资源列表，不保证每个服务器都稳定可用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "punkpeye/awesome-mcp-servers",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "MCP服务器资源集合，范围较泛",
+      "generated_by_ai": true,
+      "velocity_score": 60,
+      "freshness_score": 20,
+      "ranking_score": 57.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "jub0t/Concat",
+      "url": "https://github.com/jub0t/Concat",
+      "description": "Free & Open-Source CapCut replacement.",
+      "language": "TypeScript",
+      "total_stars": 747,
+      "forks": 57,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audio-processor",
+        "auto-caption",
+        "automation",
+        "capcut",
+        "capcut-alternative",
+        "content-creation",
+        "cross-platform",
+        "desktop-app",
+        "ffmpeg",
+        "free-video-editor",
+        "non-linear-editor",
+        "offline-first",
+        "open-source-video-editor",
+        "rust-lang",
+        "tauri-app",
+        "video-editing",
+        "video-editing-software",
+        "video-processing-tool",
+        "whisper-cpp"
+      ],
+      "license_name": "MPL-2.0",
+      "created_at": "2026-08-25T18:34:47Z",
+      "updated_at": "2026-08-31T05:36:23Z",
+      "pushed_at": "2026-08-31T05:31:46Z",
+      "open_issues": 7,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"assets/concat_logo_dark_512.png\" alt=\"Concat\" width=\"140\" />\n\n# Concat\n\n**The free, open-source CapCut replacement.**\n\n<p align=\"center\">\n  <a href=\"https://github.com/jub0t/Concat/actions/workflows/build.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/jub0t/Concat/build.yml?style=flat&logo=githubactions&logoColor=F8F8F8&label=Build&labelColor=000000&color=161616\" alt=\"Build Status\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS%20%7C%20Windows%20%7C%20Linux-161616?style=flat&logo=desktop-download&logoColor=F8F8F8&labelColor=000000\" alt=\"Download Concat\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/releases\"><img src=\"https://img.shields.io/badge/Version-0.2.0-161616?style=flat&logo=semver&logoColor=F8F8F8&labelColor=000000\" alt=\"Concat Version 0.2.0\" /></a>\n  <a href=\"https://discord.gg/DVuPfpXfqP\"><img src=\"https://img.shields.io/badge/Discord-Join%20the%20server-161616?style=flat&logo=discord&logoColor=F8F8F8&labelColor=000000\" alt=\"Join Concat Discord\" /></a>\n</p>\n\n<img src=\"assets/preview-dark.png\" alt=\"Concat editor\" width=\"100%\" />\n\n</div>\n\n---\n\nConcat is everything you use CapCut for — without the watermarks, paywalls,\nor subscriptions. A native Rust engine does the heavy lifting, a clean React\ninterface does the editing, and it all runs on your machine: install it and\nstart cutting, no account, no extra downloads, no setup.\n\n## Highlights\n\n- Free and local Text-to-Speech features.\n- 🎬 Multi-track editing, with several timelines per project when one isn't enough\n- ✂️ The cutting toolkit you'd expect: split, trim, merge, transitions, speed control\n- 💬 Auto-captions that run entirely on your machine — your audio never leaves it\n- 🎙️ Voice filters for cleaning up or playing with your sound\n- 📝 Titles and styled text\n- 📦 Templates — build an edit once, reuse it for the next video\n- 🚫 No watermarks, no account, nothing behind a paywall\n- 🖥️ Works the same on macOS, Windows and Linux\n\n## Get started\n\nCurrently in Alpha (pre-release), Download from [Releases](https://github.com/jub0t/Concat/releases), Supports:\n- Windows (tested)\n- MacOs (tested) - unsigned binaries, use `xattr -dr com.apple.quarantine /Applications/Concat.app`\n- Linux\n\n### Nix (Linux)\n\nThe repository is a flake. `nix run github:jub0t/Concat` starts the editor\nwith ffmpeg and whisper wired in; `nix develop` opens a shell with everything\n`npm run app` needs.\n\n## Contribution\n\n> [!IMPORTANT]\n> The best way to contribute is to grab a build from the [Release](https://github.com/jub0t/Concat/releases) page and test the application to see where it breaks or how it can be improved.\n\nTo learn more about contributing to this project please refer to [this Discussion announcement](https://github.com/jub0t/Concat/discussions/3).\n\n## Roadmap (or ideas)\n\n🌟 = important or really desired.\n\n- [ ] Templates: Improve templates, create centralized registry of templates contributed by users (kinda like npm).\n- [ ] Hardware analysis: for device-tier detection, checking how good or potato someone's device is.\n- [ ] Effects: A scaleable way to embed or add hundreds of different Transition styles, Effects, etc to the Library.\n- [ ] Noise Cancelation/Removal.\n- [ ] Object/Face Tracking: Proposed (can do better): MOSSE/KCF/optical flow.\n- [ ] Auto Human Face Detection & Blurring features: YuNet + tracker, or look for better alternative tech.\n- [ ] Caption text highlighting: Achievable with Whisper.cpp for timestamps.\n- [ ] Profanity detection from Audio: Whisper + dictionary.\n- [ ] Audio Silence removal feature.\n- [ ] Auto Reframe: YuNet/person detector + tracker.\n"
+    },
+    "brief": {
+      "summary": "开源本地视频编辑器，可作为 CapCut 替代",
+      "problem": "为用户提供免费、无水印、无需账号的视频剪辑工具",
+      "highlights": [
+        "可以进行多轨剪辑、裁切和转场",
+        "可以在本机生成自动字幕",
+        "可以跨 macOS、Windows、Linux 剪视频"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "视频剪辑者",
+        "开源软件用户"
+      ],
+      "why_trending": "本周首次收录，累计747 Star且近期持续更新",
+      "caveat": "目前处于 Alpha，macOS 提供未签名二进制",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jub0t/Concat",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "开源跨平台非线性视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 60.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "0xsline/OpenChatCut",
+      "url": "https://github.com/0xsline/OpenChatCut",
+      "description": "Open-source, local-first conversational AI video editor with a professional multi-track timeline, Agent Skills, MCP integration, and Remotion rendering.",
+      "language": "TypeScript",
+      "total_stars": 1487,
+      "forks": 211,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "agentic-ai",
+        "ai-agent",
+        "ai-video-editor",
+        "capcut",
+        "chatcut",
+        "claude-code",
+        "codex",
+        "desktop-app",
+        "electron",
+        "ffmpeg",
+        "local-first",
+        "mcp",
+        "open-source",
+        "openchatcut",
+        "remotion",
+        "text-based-video-editing",
+        "timeline-editor",
+        "video-editing",
+        "video-editor"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-15T02:49:42Z",
+      "updated_at": "2026-08-31T05:43:52Z",
+      "pushed_at": "2026-08-31T05:43:52Z",
+      "open_issues": 29,
+      "homepage": "https://openchatcut.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/openchatcut-icon.png\" width=\"96\" alt=\"OpenChatCut\" />\n</p>\n\n<h1 align=\"center\">OpenChatCut</h1>\n\n<p align=\"center\">\n  <a href=\"README_ZH.md\">简体中文</a> · <strong>English</strong>\n</p>\n\n<p align=\"center\">\n  <strong>Open-source ChatCut alternative · agent-native · local-first AI video editor</strong>\n</p>\n\n<p align=\"center\">\n  Let Codex, Claude Code, and the built-in agent read, edit, and export real video projects that remain fully editable.\n  Website: <a href=\"https://openchatcut.com\">openchatcut.com</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#what-is-openchatcut\">Introduction</a> ·\n  <a href=\"#product-tour\">Product Tour</a> ·\n  <a href=\"#quick-start\">Quick Start</a> ·\n  <a href=\"#using-openchatcut-with-codex--claude-code\">Agent / MCP</a> ·\n  <a href=\"#community\">Community</a> ·\n  <a href=\"#sponsor\">Sponsor</a> ·\n  <a href=\"#changelog\">Changelog</a> ·\n  <a href=\"#star-growth\">Star Growth</a> ·\n  <a href=\"#contributing\">Contributing</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/0xsline/OpenChatCut\"><img alt=\"GitHub Repository\" src=\"https://img.shields.io/badge/GitHub-Repository-181717?style=flat&logo=github\" /></a>\n  <a href=\"https://discord.gg/bSGUAeWYkh\"><img alt=\"Discord Community\" src=\"https://img.shields.io/badge/Discord-Join_Community-5865F2?style=flat&logo=discord&logoColor=white\" /></a>\n  <img alt=\"Status\" src=\"https://img.shields.io/badge/status-active_development-FF8A3D?style=flat\" />\n  <img alt=\"Local First\" src=\"https://img.shields.io/badge/data-local_first-111827?style=flat\" />\n  <img alt=\"TypeScript\" src=\"https://img.shields.io/badge/TypeScript-6-3178C6?style=flat&logo=typescript&logoColor=white\" />\n  <img alt=\"React\" src=\"https://img.shields.io/badge/React-19-149ECA?style=flat&logo=react&logoColor=white\" />\n  <img alt=\"Remotion\" src=\"https://img.shields.io/badge/Remotion-4-0B84F3?style=flat\" />\n  <img alt=\"Electron\" src=\"https://img.shields.io/badge/Electron-43-47848F?style=flat&logo=electron&logoColor=white\" />\n  <img alt=\"MCP\" src=\"https://img.shields.io/badge/MCP-Agent_native-7C3AED?style=flat\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://linux.do\" alt=\"LINUX DO\"><img src=\"https://shorturl.at/ggSqS\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/openchatcut?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-openchatcut\" target=\"_blank\" rel=\"noopener noreferrer\"><img alt=\"OpenChatCut - Open-source AI agent video editor with a real timeline | Product Hunt\" width=\"250\" height=\"54\" src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1201995&amp;theme=light&amp;t=1784645557617\" /></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/readme-pic/01-editor-overview.png\" alt=\"OpenChatCut editor overview with the agent workspace, media pool, preview, and multitrack timeline\" />\n</p>\n\n<p align=\"center\">\n  <sub>From a single instruction to a real timeline: agents, media, previews, motion graphics, transitions, effects, and multitrack audio all work together in one project.</sub>\n</p>\n\n---\n\n## What is OpenChatCut?\n\nOpenChatCut is an **open-source ChatCut alternative**: a video editor that brings **conversational agents** and **professional timeline editing** into the same workspace. It is independent open source (AGPL), not affiliated with the commercial ChatCut product.\n\n**OpenChatCut = local video projects + multitrack timeline + AI agents + MCP + production-ready exports.**\n\nIt does not merely generate a video that can no longer be changed. Every edit is written to real tracks, clips, transitions, captions, effects, and media inside the project. You can continue editing manually, undo or redo changes, save versions, or hand the project to another agent.\n\nOpenChatCut is built for creators and developers who want AI to participate in the actual editing workflow without giving up professional control, rather than starting over from an empty chat box or an immutable generated result.\n\n- Website: [https://openchatcut.com](https://openchatcut.com)\n- Open-source ChatCut alternative guide: [https://openchatcut.com/blog/open-source-chatcut-alternative](https://openchatcut.com/blog/open-source-chatcut-alternative)\n- ChatCut vs OpenChatCut: [https://openchatcut.com/blog/chatcut-vs-openchatcut](https://openchatcut.com/blog/chatcut-vs-openchatcut)\n\n- 🤖 **Agent-native**: the built-in agent and external MCP agents share the same editing tools.\n- 🎞️ **Real timeline**: multiple video and audio tracks, transitions, effects, LUTs, zooms, and keyframes.\n- 📝 **Transcript-driven editing**: word-level transcription, text-based cuts, pause handling, speakers, and linked captions.\n- ✨ **Generation and media**: images, video, speech, music, sound effects, and online media search.\n- 🧩 **Motion Graphics and WebGL**: editable motion templates, custom shaders, visual effects, and transitions.\n- 👁️ **Visual geometry**: in-browser person segmentation and face-safe zones — captions avoid the speaker automatically, reframe follows the subject, and overlay graphics land in empty space.\n- 📦 **Production-ready exports**: MP4, audio, captions, FCPXML, and complete project data.\n- 🖥️ **Local-first**: projects and media stay on your machine by default, while API keys remain server-side.\n\n## Community\n\nJoin the OpenChatCut community to discuss workflows, share feedback, and follow development:\n\n- [Join Discord](https://discord.gg/bSGUAeWYkh)\n- Scan the QR code below with WeChat.\n\n<p align=\"center\">\n  <br />\n  <img src=\"assets/readme-pic/wechat-community.png\" width=\"220\" alt=\"OpenChatCut WeChat community QR code\" />\n</p>\n\n---\n\n## Sponsor\n\nIf OpenChatCut helps you, you can support its continued development on Ko-fi or Afdian.\n\n<p align=\"center\">\n  <a href=\"https://ko-fi.com/Y5N2241IP5\">\n    <img alt=\"Support me on Ko-fi\" src=\"https://img.shields.io/badge/Support_me_on-Ko--fi-72a4f2?logo=kofi&amp;logoColor=white\" />\n  </a>\n  <a href=\"https://www.ifdian.net/a/sline?utm_source=copylink&amp;utm_medium=link\">\n    <img alt=\"Support OpenChatCut on Afdian\" src=\"https://img.shields.io/badge/Support_on-Afdian-946CE6\" />\n  </a>\n</p>\n\n---\n\n## Product Tour\n\nThe following screenshots show real OpenChatCut projects and editor states, not static mockups.\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/02-project-dashboard.png\" alt=\"OpenChatCut local project dashboard\" /><br />\n      <sub><b>Local project management</b> — Create, import, duplicate, export, and continue editing multiple real projects.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/03-agent-transitions.png\" alt=\"An agent generating music and editing transitions on a multitrack timeline\" /><br />\n      <sub><b>Complete agent-driven editing</b> — Generate music, invoke tools, and write transitions, captions, and multitrack media directly to the timeline.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/04-motion-graphics.png\" alt=\"Agent tool execution history and the Motion Graphics library\" /><br />\n      <sub><b>Motion Graphics and agents</b> — Browse motion templates or let an agent generate and assemble editable MG clips.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/05-effects.png\" alt=\"OpenChatCut WebGL visual effects library\" /><br />\n      <sub><b>WebGL visual effects</b> — Apply pixelation, duotone, fisheye, kaleidoscope, softening, light leaks, and more directly to clips.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/06-zoom.png\" alt=\"OpenChatCut camera movement and zoom effects library\" /><br />\n      <sub><b>Camera movement and zoom</b> — Push, pull, slow zoom, fast zoom, and eased camera effects work directly with the timeline.</sub>\n    </td>\n    <td width=\"50%\" valign=\"top\" align=\"center\">\n      <img src=\"assets/readme-pic/07-lut.png\" alt=\"Comparing LUT color styles in OpenChatCut using a Tokyo Tower reference image\" /><br />\n      <sub><b>LUTs and color styles</b> — Compare camera transforms and film looks in real time against a consistent reference frame.</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n## Why OpenChatCut?\n\nTraditional editors excel at precise control. One-shot AI video generators excel at producing results quickly. OpenChatCut connects both approaches through one continuously editable project:\n\n| Capability | Traditional timeline editor | One-shot AI video generation | **OpenChatCut** |\n|---|:---:|:---:|:---:|\n| Track- and clip-level precision | ✅ | ❌ | **✅** |\n| Modify a project with natural language | ❌ | ✅ | **✅** |\n| Inspectable and undoable changes | ✅ | Usually unavailable | **✅** |\n| Linked transcript and visuals | Partial | ❌ | **✅** |\n| Direct control from Codex / Claude Code | ❌ | ❌ | **✅ MCP** |\n| Built-in and external agent collaboration | ❌ | ❌ | **✅ Shared tools** |\n| Local projects and BYOK | Product-dependent | Usually cloud-based | **✅** |\n\nThe core editing loop:\n\n```text\nDescribe the goal → Agent reads the project → Produces verifiable edits → Writes to the timeline\n                  → Preview / adjust / undo → Captions and mixing → Export\n```\n\n---\n\n## Core Capabilities\n\n| Area | Implemented capabilities |\n|---|---|\n| Timeline | Multitrack editing, move, trim, split, ripple edits, snapping, keyframes, markers, undo, and redo |\n| Visuals | WebGL effects, LUTs, chroma key, zoom, transitions, and custom shaders |\n| Audio | Multiple audio tracks, sound effects, background music, voice-over recording, loudness, auto-ducking, and vocal isolation |\n| Transcript | Transcription jobs, word-level editing, pause compression, search, speakers, and clip views |\n| Captions | Automatic captions, named styles, translation, timeline overlays, and SRT export |\n| Motion Graphics | Built-in templates, a secure sandbox, custom templates, and video rendering |\n| AI generation | Image, video, speech, music, and sound-effect jobs with progress tracking |\n| Media | Uploads, folders, online image/video/audio search, and Firecrawl visual-media fallback |\n| Export | MP4, audio, captions, FCPXML, project import/export, export history, hardware-aware H.264 acceleration, and resource-aware export queueing |\n| Agent | Built-in conversational agent, skills, proposal-based edits, and external Streamable HTTP MCP |\n\n---\n\n## Community Resources\n\nThe [OpenChatCut resource library](https://openchatcut.com/resources) is a shared catalog for reusable MG animations, sound effects, transitions, visual effects, zooms, and LUTs.\n\n<p align=\"center\">\n  <a href=\"https://openchatcut.com/resources\">\n    <img src=\"assets/readme-pic/08-community-resources.en.png\" alt=\"OpenChatCut community resource library\" />\n  </a>\n</p>\n\n### Discover and install\n\n- Hover visual cards to watch the complete result, or play audio resources before downloading.\n- Copy a resource's install URL into OpenChatCut's Extension Center, or download its original package.\n- Browse the website catalog inside the editor and manage installed extensions locally.\n\n### Contribute a resource\n\n1. Open [Contribute a resource](https://openchatcut.com/resources/submit) and choose its category.\n2. Upload the resource and the category-specific preview inputs; the site renders the published preview.\n3. Add the creator and license information, then submit it for review and publication.\n\nInstallable visual resources use the editor's `openchatcut-plugin@1` format and runtime validation. Official OpenChatCut resources use the MIT license; community contributors select a license during submission, and each published card identifies its creator and license.\n\n---\n\n## Use Cases\n\n- **Talking-head and interview editing**: transcribe audio or video, remove mistakes, pauses, and repetition through text, then generate captions automatically.\n- **Fast multiformat assembly**: import video, images, and audio, "
+    },
+    "brief": {
+      "summary": "开源本地优先的对话式多轨AI视频编辑器",
+      "problem": "让AI参与可持续编辑的真实视频项目，而非只生成不可修改的成片",
+      "highlights": [
+        "可以用对话代理编辑多轨视频和音频",
+        "可以按文字稿剪辑并同步字幕",
+        "可以导出MP4、音频、字幕和FCPXML"
+      ],
+      "target_users": [
+        "视频创作者",
+        "AI工具开发者",
+        "开源剪辑用户"
+      ],
+      "why_trending": "总Star达1487，本周首次收录且近期仍在活跃开发",
+      "caveat": "采用AGPL-3.0许可证，具体使用限制需自行确认",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "0xsline/OpenChatCut",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "本地AI对话式多轨视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "Agions/fablr",
+      "url": "https://github.com/Agions/fablr",
+      "description": "🎬 剧工 (Fablr) — 开源桌面级 AI 影视/短剧解说创作工坊 (Tauri 2 + Rust + React 18)。素材拆条 + 多 Agent 剧本研磨 + 剪映草稿导出 + 5 级消重合规矩阵分发，100% 本地优先处理。",
+      "language": "TypeScript",
+      "total_stars": 136,
+      "forks": 32,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-editing",
+        "automation",
+        "content-creation",
+        "desktop-application",
+        "ffmpeg",
+        "react",
+        "rust",
+        "short-video",
+        "social-media-tools",
+        "subtitle-generator",
+        "tauri",
+        "typescript",
+        "video-editing",
+        "whisper"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-03-23T15:10:51Z",
+      "updated_at": "2026-08-31T05:40:41Z",
+      "pushed_at": "2026-08-31T05:39:37Z",
+      "open_issues": 4,
+      "homepage": "https://github.com/Agions/fablr",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nSPDX-License-Identifier: MIT\n-->\n\n# 剧工 (Fablr) <img src=\"public/logo.svg\" width=\"64\" height=\"64\" align=\"right\" alt=\"剧工 Logo\" />\n\n> 🎬 **开源 AI 影视/短剧解说创作工坊 · 本地优先 · 结构化剧本骨架 · 以文剪片 · 剪映草稿协议互通 · 5 级防搬运消重 · 多平台矩阵分发**\n\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)\n[![Tauri 2](https://img.shields.io/badge/Tauri-2.x-FFC131?logo=tauri&logoColor=black)](https://tauri.app/)\n[![React 18](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)\n[![TypeScript 5](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)\n[![Rust 1.80+](https://img.shields.io/badge/Rust-1.80+-DEA584?logo=rust&logoColor=black)](https://www.rust-lang.org/)\n[![Version](https://img.shields.io/badge/version-2.2.0-brightgreen.svg)](CHANGELOG.md)\n\n---\n\n## 📖 项目简介\n\n**剧工 (Fablr)** 是一款专为**影视解说、微短剧二次创作、高光混剪**量身打造的开源桌面级全链路创作平台。\n\n平台基于 **Tauri 2 + Rust + React 18 + Vite 6** 现代技术栈构建，秉承 **100% 本地优先 (Local-First)** 架构哲学。围绕创作者真实心智模型，重构为标准的 **四大核心创作工坊**，打通从长片素材拆解到全网矩阵合规分发的极速闭环。\n\n---\n\n## 🏭 四大核心创作工坊工作流\n\n```\n┌─────────────────────────────────────────────────────────────────────────────┐\n│                       剧工 Fablr 全链路创作流水线                            │\n├───────────────────┬───────────────────┬───────────────────┬─────────────────┤\n│ 1. 素材拆条工坊    │ 2. 剧本研磨工坊    │ 3. 剪辑合成工作台  │ 4. 消重发布中心 │\n│   (Asset Hub)     │  (Script Studio)  │    (Workspace)    │  (Export Hub)   │\n│ · 场景/镜头拆解   │ · 🪝 黄金3秒 Hook  │ · 📝 剧本/以文剪片│ · 5级指纹消重   │\n│ · 台词/情感检索   │ · 📖 主线/反转卡片│ · 🎬 5轨多轨时间轴│ · 发布合规体检  │\n│ · AI高光热力图    │ · ⏱️ TTS时长估算   │ · 导出剪映标准草稿│ · 矩阵一键分发  │\n└───────────────────┴───────────────────┴───────────────────┴─────────────────┘\n```\n\n### 1. 🎞️ 素材拆条工坊 (Asset Hub)\n- **智能场景拆解**：基于 FFprobe 与自研镜头边界检测算法，秒级自动切分长视频场景；\n- **台词与高光检索**：输入“拔枪”或“真相只有一个”，直达对应时间戳切片；\n- **情感标签自动打标**：自动识别打斗🥊、悬疑🔍、反转🔄、高潮💥等镜头类型。\n\n### 2. 🎭 剧本研磨工坊 (Script Studio)\n- **结构化剧本骨架卡片**：提供 `黄金3秒 Hook`、`主线递进`、`高潮反转`、`互动结尾` 四段式创作卡片；\n- **配音时长实时估算**：按中文朗读速率实时计算每段台词与全片预估秒数，精确把控叙事节奏；\n- **多 Agent 协同**：解说编剧 Agent、黄金 Hook Agent、情绪节奏 Agent 协同润色与续写。\n\n### 3. 🎬 剪辑合成工作台 (Workspace)\n- **“以文剪片”双联视图**：支持 `剧本视图`（文本流 ↔ 监看窗口）与 `时间轴视图`（5轨视听剪辑）一键切换；\n- **画随音动联动**：剧本修改实时对齐音频与视频切片；\n- **剪映草稿协议导出**：直接生成剪映标准工程文件（`draft_content.json`），无缝导入剪映精修。\n\n### 4. 🛡️ 消重发布中心 (Export Hub)\n- **5 级智能指纹消重滤镜**：微距呼吸缩放 (1.02x-1.05x)、电影胶片微噪点、智能光影重构、动态画中画、镜头水平镜像；\n- **发布前合规体检**：智能评估版权相似度与敏感词风险并输出评级；\n- **矩阵多平台分发**：支持抖音、快手、微信视频号、B站、小红书多账号一键极速分发。\n\n---\n\n## 📚 官方文档体系\n\n查看完整的 [📖 剧工 Fablr 官方文档中心](docs/README.md)：\n\n- **系统架构**：[系统目标架构设计](docs/architecture/01-system-overview.md) | [Rust DDD 仓储层设计](docs/architecture/02-rust-backend-ddd.md)\n- **功能指南**：[素材拆条工坊](docs/features/01-asset-hub.md) | [剧本研磨工坊](docs/features/02-script-studio.md) | [剪辑合成工作台](docs/features/03-workspace-editing.md) | [消重发布中心](docs/features/04-export-dedup.md)\n- **使用教程**：[30秒快速上手](docs/guides/01-quick-start.md) | [博主标准创作 SOP](docs/guides/02-workflow-sop.md)\n- **开发者专区**：[搭建开发环境](docs/developer/01-getting-started.md) | [测试与质量验证](docs/developer/02-testing-and-verify.md) | [命名规范约定](docs/developer/03-naming-convention.md)\n\n---\n\n## 🚀 快速启动\n\n### 📦 前置环境 REQUIREMENTS\n\n- **Node.js**: `>= 20.x`\n- **Rust**: `>= 1.80`\n- **FFmpeg**: `>= 6.0`\n\n### 🔨 运行与构建\n\n```bash\n# 1. 安装前端依赖\nnpm install\n\n# 2. 启动桌面端开发模式 (Tauri 2)\nnpm run tauri dev\n\n# 3. 生产发布构建\nnpm run build\nnpm run tauri build\n```\n\n---\n\n## 🧪 自动化测试与工程验证\n\n```bash\n# 执行代码规范与一致性校验 (AntD 零泄露 / Kebab 命名 / 循环依赖检测 / Token 一致)\nnpm run verify:all\n\n# 执行前端 165 个测试文件 (2,562 个测试用例)\nnpm run test:run\n\n# 执行 Rust 后端单元与集成测试 (135 个测试用例)\ncd src-tauri && cargo test\n```\n\n---\n\n## 📄 开源许可证\n\n本项目采用 [MIT License](LICENSE) 开源许可证。\n"
+    },
+    "brief": {
+      "summary": "开源本地优先的影视短剧解说创作工坊",
+      "problem": "把素材拆解、剧本创作、剪辑和分发串成一条流程",
+      "highlights": [
+        "可以从长视频中拆分场景并检索台词",
+        "可以用多 Agent 打磨解说剧本",
+        "可以导出剪映草稿并进行多平台分发"
+      ],
+      "target_users": [
+        "影视解说创作者",
+        "短剧二创团队",
+        "短视频运营者"
+      ],
+      "why_trending": "本周首次收录，已有136个Star且近期持续更新",
+      "caveat": "需要Node.js、Rust和FFmpeg环境，资料未说明平台支持",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Agions/fablr",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "本地AI影视短剧创作与剪辑工作坊",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "wotakumoe/wotaku",
+      "url": "https://github.com/wotakumoe/wotaku",
+      "description": "An otaku index for everything! ⭐ Star the project if you like it!",
+      "language": "TypeScript",
+      "total_stars": 3025,
+      "forks": 145,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "acg",
+        "anime",
+        "doujin",
+        "glossary",
+        "guide",
+        "hentai",
+        "japan",
+        "japanese-language",
+        "japanese-study",
+        "language-learning",
+        "manga",
+        "mihon",
+        "music",
+        "novel",
+        "scanlation",
+        "tachiyomi",
+        "vtuber",
+        "weeb",
+        "wiki"
+      ],
+      "license_name": "",
+      "created_at": "2023-03-25T17:10:26Z",
+      "updated_at": "2026-08-31T05:47:10Z",
+      "pushed_at": "2026-08-31T05:45:07Z",
+      "open_issues": 0,
+      "homepage": "https://wotaku.wiki/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# <img src=\"/docs/public/asset/fav.svg\" width=\"30px\"> Wotaku\n\nAn otaku index for everything! Kindly consider giving the repository a ⭐ star as they motivate us to further refine the wiki. Also, don't hesitate to [suggest ideas](#submitting-a-link).\n\n![](/docs/public/banner.png)\n\n# Submitting a link\n\n<details>\n\n<summary> 🚨 Submission Rules 🚨 </summary>\n\n## ⛔️ Things we won't add in the wiki\n\n1. Websites that are only or primarily for generative AI (Chatbot, roleplaying bot, ai art generator\n   etc.)\n2. Sites that\n   - imitate other websites\n   - have very small libraries\n   - only feature MTL'd works\n   - are mostly paywalled\n   - sell unofficial merch\n   - exclusively sell sex toys\n3. Adult content sites similar to OnlyFans\n4. Software that's too general (for example Windows OS related or Tweaking for privacy)\n5. Sites focused on lolicon or furry stuff\n6. Sites scraping only a couple popular sources\n7. Sites scraping the servers of other scrapers\n8. Sites found in the Unsafe lists of [Privateersclub](https://privateers.wiki/unsafe) and/or [r/PiratedGames](https://rentry.org/pgames#untrusted-sites)\n\n## ⚠️ Things we will try to avoid\n\n1. Closed source software (with good FOSS alternatives)\n2. Sites that only use hosters such Katfile, Nitroflare, DDownload and Rapidgator\n3. Sites that aren't primarily for anime, but have it as a side product\n4. Things that are too niche and/or have a small userbase\n\n</details>\n\n## Discord (Recommended)\n\nYou can submit websites / feedback in our [discord server](https://discord.gg/vShRGx8ZBC). \n\n<p align=\"center\">\n  <a href=\"https://discord.gg/vShRGx8ZBC\">\n    <img src=\"https://invidget.switchblade.xyz/vShRGx8ZBC\" alt=\"Image Description\" style=\"width: 400px; display: block; margin: 0 auto;\">\n  </a>\n</p>\n\n<br/>\n\n## Wiki\n\nYou can click the **Feedback** button (in the header of every section) to send us your link or any suggestion. You don't have to make any account.\n\n## GitHub\n\nYou can also post an [issue](https://github.com/wotakumoe/Wotaku/issues/new) on the Github page.\n\n> [!CAUTION]\n> **Don't PR** without going through us from [Discord](#discord). It will be **closed** without giving any reason. We may choose not to add the submitted site if we don't feel like it.\n\n\n# Wotaku Star History\n\n![Stargazers over time](https://star.wotaku.wiki/star.svg)"
+    },
+    "brief": {
+      "summary": "面向宅文化用户的综合 ACG 资源索引",
+      "problem": "帮助用户查找动漫、漫画、音乐、语言学习等资源",
+      "highlights": [
+        "可以按主题查找动漫、漫画和同人资源",
+        "可以查阅日语学习、术语与指南",
+        "可以提交资源链接或反馈建议"
+      ],
+      "target_users": [
+        "ACG 资源 खोज索引用户",
+        "日语学习者",
+        "动漫爱好者"
+      ],
+      "why_trending": "本周首次收录，累计 3025 Star 且近期有更新",
+      "caveat": "部分收录内容的安全性和可用性需自行判断",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "wotakumoe/wotaku",
+      "score": 92,
+      "category": "ACG 资源 / Mod",
+      "reason": "覆盖动漫漫画音乐等御宅资源索引",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "AzurIce/ranim",
+      "url": "https://github.com/AzurIce/ranim",
+      "description": "An animation engine implemented in rust, inspired by manim and JAnim",
+      "language": "Rust",
+      "total_stars": 641,
+      "forks": 37,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 1
+    },
+    "details": {
+      "topics": [
+        "animation",
+        "manim",
+        "ranim",
+        "rust"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-11-13T07:23:29Z",
+      "updated_at": "2026-08-31T05:31:19Z",
+      "pushed_at": "2026-08-31T05:31:09Z",
+      "open_issues": 32,
+      "homepage": "https://azurice.github.io/ranim/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n<img alt=\"Ranim Logo\" src=\"./assets/ranim.png\" width=\"200\" height=\"200\" />\n\n# Ranim\n<div>\n    <img alt=\"license\" src=\"https://img.shields.io/github/license/AzurIce/ranim\" />\n    <img alt=\"crates.io\" src=\"https://img.shields.io/crates/v/ranim.svg\" />\n    <img alt=\"commit\" src=\"https://img.shields.io/github/commit-activity/m/AzurIce/ranim?color=%23ff69b4\">\n</div>\n<div>\n    <img alt=\"build check\" src=\"https://github.com/AzurIce/ranim/actions/workflows/build.yml/badge.svg\" />\n    <img alg=\"website check\" src=\"https://github.com/AzurIce/ranim/actions/workflows/website.yml/badge.svg\" />\n</div>\n<div>\n    <img alt=\"stars\" src=\"https://img.shields.io/github/stars/AzurIce/ranim?style=social\">\n</div>\n</div>\n\n<div style=\"display: flex;\">\n    <img alt=\"hello_ranim\" src=\"./assets/hello_ranim.gif\" width=\"48%\" />\n    <img alt=\"ranim_logo\" src=\"./assets/ranim_logo.gif\" width=\"48%\" />\n</div>\n\n> [examples/hello_ranim](./examples/hello_ranim)\n> \n> [examples/ranim_logo](./examples/ranim_logo)\n\nRanim is an animation engine crate implemented in pure rust, inspired heavily by [Manim](https://github.com/3b1b/manim/tree/master) and [jkjkil4/JAnim](https://github.com/jkjkil4/JAnim).\n\n> [!WARNING]\n> Ranim is now WIP. It only supports some basic *items* and *animations*, the apis are unstable and may change frequently, the documentation is also not complete.\n\nRelated:\n- [AzurIce/ranim-doc](https://github.com/AzurIce/ranim-doc): rustdoc for main\n- [AzurIce/ranim-book](https://github.com/AzurIce/ranim-book): ranim book\n- [AzurIce/ranim-one-shot](https://github.com/AzurIce/ranim-one-shot): one-shot attempts with ranim\n- [AzurIce/ranim-bench](https://github.com/AzurIce/ranim-bench): benchmarks for ranim\n\n## Dependencies\n\nRuntime dependencies:\n- ffmpeg: encode videos\n  Ranim will try to use ffmpeg from system's path environment variable first, if no ffmpeg is found, ranim will automatic download ffmpeg to the current working dir.\n\n## Installation\n\nCurrently, it is experimental on crates.io:\n\n```toml\n[dependencies]\nranim = \"0.2.1\"\n```\n\nYou can also use from git for the latest updates:\n\n```toml\n[dependencies]\nranim = { git = \"https://github.com/azurice/ranim\" }\n```\n\nFor the usage, check out the [examples](./examples) folder. You can run the examples with:\n\n```bash\ncargo run -p ranim-cli --release -- preview --example <example-name> # run a preview app for the example\ncargo run -p ranim-cli --release -- output --example <example-name> # render every declared output of the example\n```\n\nSee Ranim Cli for more.\n\n### Ranim Cli\n\nRanim cli is a command line tool to help you build the animation. It enables animation previewing with hot reload through dylib.\n\nPlease notice that you can use ranim without ranim-cli, the previewing and rendering process can be achieved by simply invoking apis provided by *ranim*, but it may enhance your experience.\n\nYou can install it with:\n\n```bash\ncargo install ranim-cli\n```\n\nOr install from git:\n\n```bash\ncargo install --git https://github.com/azurice/ranim ranim-cli --locked\n```\n\nOr you can create a bin, and run cli from `ranim_cli` directly (this can make sure the version of `ranim` matches `ranim_cli`):\n\n```rust\nfn main() {\n    ranim_cli::main();\n}\n```\n\nBasic Usage:\n- `ranim preview[ <scene_name>]`: Launch a preview app and invoke cargo to build your library automatically when the source code is changed, then reload it through *libloading* and show it in the preview app.\n- `ranim output[ <scene-name1> <scene_name2> ...]`: Render every `#[output(...)]` declared by the selected scenes, including capture marks. When no scene name is specified, render all scenes.\n- `ranim render <scene_name>`: Render one scene once with default output settings (`1920x1080`, 60 fps, mp4). This is the low-level/ad-hoc render command, ignores `#[output(...)]`, and does not process capture marks.\n- `ranim inspect scenes [--format text|json]`: List available scenes and their output summaries.\n- `ranim inspect tree [<scene_name>] [--format text|json]`: Build a scene and print its animation tree. The scene name can be omitted when there is only one scene.\n- `ranim inspect frame <scene_name> --at <sec> [--format text|json] [--verbose]`: Sample a scene at a time and print the evaluated frame items.\n\nYou can specify the package with `--package` and `--example` (just like cargo, note that your anim target should have crate-type of `dylib` or `cdylib`), and other aditional arguments you want to pass to `cargo build` can be passed after `--`.\n\nFor example:\n\n```bash\nranim output -p render scene_a scene_b -- --release\nranim render -p render scene_a -- --release\n```\n\n## Feature Flags\n\n- Default features\n\n  - `anims`: re-export `ranim-anims`, default on.\n\n  - `items`: re-export `ranim-items`, default on.\n\n- `render`: enable render api in cmd module\n  \n  use `render_scene` or `render_scene_output` to render scene to output\n\n- `preview`: enbale preview api in cmd module\n\n  use `preview_scene` api to launch an preview app on a scene\n  https://github.com/user-attachments/assets/5bf287e2-b06f-42f8-83b6-76f3775e298e\n- `profiling`: enable profiling with https://github.com/EmbarkStudios/puffin\n\n  CPU uses `127.0.0.1:8585` and GPU uses `127.0.0.1:8586`\n  \n  ![image](https://github.com/user-attachments/assets/36bf841c-e30f-45cc-adbc-bd4bfff9bc4c)\n   \n\n## Contributing\n\nSee [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.\n\n## Design\n\nOnce the design is stablized, I may write about it.\n\nFor now, you can check out the code.\n\n## Aknowledgements\n\n- [3b1b/manim](https://github.com/3b1b/manim)\n- [ManimCommunity/manim](https://github.com/ManimCommunity/manim/)\n- [jkjkil4/JAnim](https://github.com/jkjkil4/JAnim)\n\n## Star History\n\n[![Star History Chart](https://star-history.dera.page/svg?repos=AzurIce/ranim&type=Date)](https://star-history.dera.page/#AzurIce/ranim&Date)\n"
+    },
+    "brief": {
+      "summary": "用 Rust 编写的实验性动画引擎",
+      "problem": "为 Rust 开发者提供 Manim 风格的动画制作与渲染工具",
+      "highlights": [
+        "可以用 Rust 编写动画场景",
+        "可以实时预览并热加载修改",
+        "可以将场景渲染为视频文件"
+      ],
+      "target_users": [
+        "Rust 开发者",
+        "动画教程制作者",
+        "技术内容创作者"
+      ],
+      "why_trending": "本周首次收录，已有641个 Star，近期仍有提交活动",
+      "caveat": "项目仍在开发中，API 不稳定且文档不完整",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "AzurIce/ranim",
+      "score": 85,
+      "category": "动画",
+      "reason": "Rust动画引擎，面向程序化动画",
+      "generated_by_ai": true,
+      "velocity_score": 9,
+      "freshness_score": 20,
+      "ranking_score": 47.8
+    }
+  }
+]
