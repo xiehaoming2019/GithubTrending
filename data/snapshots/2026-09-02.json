@@ -1,0 +1,537 @@
+[
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "browser-use/video-use",
+      "url": "https://github.com/browser-use/video-use",
+      "description": "Edit videos with coding agents",
+      "language": "Python",
+      "total_stars": 23100,
+      "forks": 2823,
+      "stars_today": 472,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 472
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-04-12T01:34:42Z",
+      "updated_at": "2026-09-02T04:43:24Z",
+      "pushed_at": "2026-08-30T09:45:51Z",
+      "open_issues": 81,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"static/video-use-banner.png\" alt=\"video-use\" width=\"100%\">\n</p>\n\n# video-use\n\nIntroducing **video-use** — edit videos with Claude Code. 100% open source.\n\nDrop raw footage in a folder, chat with Claude Code, get `final.mp4` back. Works for any content — talking heads, montages, tutorials, travel, interviews — without presets or menus.\n\nTry video-use in [Browser Use Cloud](https://cloud.browser-use.com/v4?utm_campaign=video-use-use-in-cloud&utm_source=github).\n\n## What it does\n\n- **Cuts out filler words** (`umm`, `uh`, false starts) and dead space between takes\n- **Auto color grades** every segment (warm cinematic, neutral punch, or any custom ffmpeg chain)\n- **30ms audio fades** at every cut so you never hear a pop\n- **Burns subtitles** in your style — 2-word UPPERCASE chunks by default, fully customizable\n- **Generates animation overlays** via [HyperFrames](https://github.com/heygen-com/hyperframes), [Remotion](https://www.remotion.dev/), [Manim](https://www.manim.community/), or PIL — spawned in parallel sub-agents, one per animation\n- **Self-evaluates the rendered output** at every cut boundary before showing you anything\n- **Persists session memory** in `project.md` so next week's session picks up where you left off\n\n## Setup prompt\n\nPaste into Claude Code, Codex, Hermes, Openclaw, or any agent with shell access:\n\n```text\nSet up https://github.com/browser-use/video-use for me.\n\nRead install.md first to install this repo, wire up ffmpeg, register the skill with whichever agent you're running under, and set up the ElevenLabs API key — ask me to paste it when you need it. Then read SKILL.md for daily usage, and always read helpers/ because that's where the editing scripts live. After install, don't transcribe anything on your own — just tell me it's ready and wait for me to drop footage into a folder.\n```\n\nThe agent handles the clone, dependencies, skill registration, and prompts you once for your ElevenLabs API key (grab one at [elevenlabs.io/app/settings/api-keys](https://elevenlabs.io/app/settings/api-keys)).\n\nThen point your agent at a folder of raw takes:\n\n```bash\ncd /path/to/your/videos\nclaude    # or codex, hermes, etc.\n```\n\nFor always-on editing from your own VPS or Telegram, run the agent through [Browser Use Box](https://browser-use.com/bux). [Watch the 15-second demo](https://www.tiktok.com/@browser_use/video/7639824093721758989).\n\nAnd in the session:\n\n> edit these into a launch video\n\nIt inventories the sources, proposes a strategy, waits for your OK, then produces `edit/final.mp4` next to your sources. All outputs live in `<videos_dir>/edit/` — the skill directory stays clean.\n\n## Manual install\n\nIf you'd rather do it by hand:\n\n```bash\n# 1. Clone and symlink into your agent's skills directory\ngit clone https://github.com/browser-use/video-use ~/Developer/video-use\nln -sfn ~/Developer/video-use ~/.claude/skills/video-use        # Claude Code\n# ln -sfn ~/Developer/video-use ~/.codex/skills/video-use       # Codex\n\n# 2. Install deps\ncd ~/Developer/video-use\nuv sync                         # or: pip install -e .\nbrew install ffmpeg             # required\nbrew install yt-dlp             # optional, for downloading online sources\n\n# 3. Add your ElevenLabs API key\ncp .env.example .env\n$EDITOR .env                    # ELEVENLABS_API_KEY=...\n```\n\n## How it works\n\nThe LLM never watches the video. It **reads** it — through two layers that together give it everything it needs to cut with word-boundary precision.\n\n<p align=\"center\">\n  <img src=\"static/timeline-view.svg\" alt=\"timeline_view composite — filmstrip + speaker track + waveform + word labels + silence-gap cut candidates\" width=\"100%\">\n</p>\n\n**Layer 1 — Audio transcript (always loaded).** One ElevenLabs Scribe call per source gives word-level timestamps, speaker diarization, and audio events (`(laughter)`, `(applause)`, `(sigh)`). All takes pack into a single ~12KB `takes_packed.md` — the LLM's primary reading view.\n\n```\n## C0103  (duration: 43.0s, 8 phrases)\n  [002.52-005.36] S0 Ninety percent of what a web agent does is completely wasted.\n  [006.08-006.74] S0 We fixed this.\n```\n\n**Layer 2 — Visual composite (on demand).** `timeline_view` produces a filmstrip + waveform + word labels PNG for any time range. Called only at decision points — ambiguous pauses, retake comparisons, cut-point sanity checks.\n\n> Naive approach: 30,000 frames × 1,500 tokens = **45M tokens of noise**.\n> Video Use: **12KB text + a handful of PNGs**.\n\nSame idea as browser-use giving an LLM a structured DOM instead of a screenshot — but for video.\n\n## Pipeline\n\n```\nTranscribe ──> Pack ──> LLM Reasons ──> EDL ──> Render ──> Self-Eval\n                                                              │\n                                                              └─ issue? fix + re-render (max 3)\n```\n\nThe self-eval loop runs `timeline_view` on the _rendered output_ at every cut boundary — catches visual jumps, audio pops, hidden subtitles. You see the preview only after it passes.\n\n## Design principles\n\n1. **Text + on-demand visuals.** No frame-dumping. The transcript is the surface.\n2. **Audio is primary, visuals follow.** Cuts come from speech boundaries and silence gaps.\n3. **Ask → confirm → execute → self-eval → persist.** Never touch the cut without strategy approval.\n4. **Zero assumptions about content type.** Look, ask, then edit.\n5. **12 hard rules, artistic freedom elsewhere.** Production-correctness is non-negotiable. Taste isn't.\n\nSee [`SKILL.md`](./SKILL.md) for the full production rules and editing craft.\n"
+    },
+    "brief": {
+      "summary": "用编码代理对原始素材进行自动剪辑并输出成片",
+      "problem": "传统剪辑需要手动筛选、切段、加字幕和检查成片",
+      "highlights": [
+        "可以把多段口播素材剪成发布视频",
+        "可以自动去除口头禅、停顿并添加字幕",
+        "可以生成动画叠加并检查剪辑边界"
+      ],
+      "target_users": [
+        "视频创作者",
+        "内容团队",
+        "熟悉编码代理的开发者"
+      ],
+      "why_trending": "今日新增472 Star，本周首次收录，总 Star 达23100",
+      "caveat": "需要 ElevenLabs API 密钥，并依赖 ffmpeg",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "browser-use/video-use",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "用编码Agent自动完成视频剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 74.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "3b1b/manim",
+      "url": "https://github.com/3b1b/manim",
+      "description": "Animation engine for explanatory math videos",
+      "language": "Python",
+      "total_stars": 92651,
+      "forks": 7624,
+      "stars_today": 86,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 86
+    },
+    "details": {
+      "topics": [
+        "3b1b-videos",
+        "animation",
+        "explanatory-math-videos",
+        "python"
+      ],
+      "license_name": "MIT",
+      "created_at": "2015-03-22T18:50:58Z",
+      "updated_at": "2026-09-02T04:40:30Z",
+      "pushed_at": "2026-09-01T20:13:14Z",
+      "open_issues": 492,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n    <a href=\"https://github.com/3b1b/manim\">\n        <img src=\"https://raw.githubusercontent.com/3b1b/manim/master/logo/cropped.png\">\n    </a>\n</p>\n\n[![pypi version](https://img.shields.io/pypi/v/manimgl?logo=pypi)](https://pypi.org/project/manimgl/)\n[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://choosealicense.com/licenses/mit/)\n[![Manim Subreddit](https://img.shields.io/reddit/subreddit-subscribers/manim.svg?color=ff4301&label=reddit&logo=reddit)](https://www.reddit.com/r/manim/)\n[![Manim Discord](https://img.shields.io/discord/581738731934056449.svg?label=discord&logo=discord)](https://discord.com/invite/bYCyhM9Kz2)\n[![docs](https://github.com/3b1b/manim/workflows/docs/badge.svg)](https://3b1b.github.io/manim/)\n\nManim is an engine for precise programmatic animations, designed for creating explanatory math videos.\n\nNote, there are two versions of manim.  This repository began as a personal project by the author of [3Blue1Brown](https://www.3blue1brown.com/) for the purpose of animating those videos, with video-specific code available [here](https://github.com/3b1b/videos).  In 2020 a group of developers forked it into what is now the [community edition](https://github.com/ManimCommunity/manim/), with a goal of being more stable, better tested, quicker to respond to community contributions, and all around friendlier to get started with. See [this page](https://docs.manim.community/en/stable/faq/installation.html#different-versions) for more details.\n\n## Installation\n> [!Warning]\n> **WARNING:** These instructions are for ManimGL _only_. Trying to use these instructions to install [Manim Community/manim](https://github.com/ManimCommunity/manim) or instructions there to install this version will cause problems. You should first decide which version you wish to install, then only follow the instructions for your desired version.\n\n> [!Note]\n> **Note**: To install manim directly through pip, please pay attention to the name of the installed package. This repository is ManimGL of 3b1b. The package name is `manimgl` instead of `manim` or `manimlib`. Please use `pip install manimgl` to install the version in this repository.\n\nManim runs on Python 3.10 or higher.\n\nSystem requirements are [FFmpeg](https://ffmpeg.org/), [OpenGL](https://www.opengl.org/) and [LaTeX](https://www.latex-project.org) (optional, if you want to use LaTeX).\nFor Linux, [Pango](https://pango.org) along with its development headers are required. See instruction [here](https://github.com/ManimCommunity/ManimPango#building).\n\n\n### Directly\n\n```sh\n# Install manimgl\npip install manimgl\n\n# Try it out\nmanimgl\n```\n\nFor more options, take a look at the [Using manim](#using-manim) sections further below.\n\nIf you want to hack on manimlib itself, clone this repository and in that directory execute:\n\n```sh\n# Install manimgl\npip install -e .\n\n# Try it out\nmanimgl example_scenes.py OpeningManimExample\n# or\nmanim-render example_scenes.py OpeningManimExample\n```\n\n### Linux (Ubuntu/Debian)\n\n1. Install system dependencies.\n\n```sh\nsudo apt update\n\nsudo apt install ffmpeg\nsudo apt install python3-pip\nsudo apt install libpango1.0-dev\n```\n\n2. Install a lightweight LaTeX distribution (optional, for LaTeX rendering).\n\n```sh\nsudo apt install texlive-science texlive-fonts-extra texlive-latex-extra\n```\n\nThis lightweight setup is significantly smaller than installing `texlive-full`\nwhile still supporting most Manim projects.\n\n3. Clone and install ManimGL.\n\n```sh\ngit clone https://github.com/3b1b/manim.git\ncd manim\n\npython3 -m pip install -e .\n\nmanimgl example_scenes.py OpeningManimExample\n```\n\n<details>\n  <summary>💡 Optional: Using a virtual environment (venv)</summary>\n\nIt is recommended to use a virtual environment to avoid conflicts with system packages.\n\n```sh\nsudo apt install python3-venv\n\npython3 -m venv venv\nsource venv/bin/activate\n\npython3 -m pip install -e .\n```\n\nIf `python3-venv` is unavailable on your system, try installing the version-specific package instead:\n\n```sh\nsudo apt install python3.12-venv\n```\n\n</details>\n\n### Directly (Windows)\n\n1. [Install FFmpeg](https://www.wikihow.com/Install-FFmpeg-on-Windows).\n2. Install a LaTeX distribution. [MiKTeX](https://miktex.org/download) is recommended.\n3. Install the remaining Python packages.\n    ```sh\n    git clone https://github.com/3b1b/manim.git\n    cd manim\n    pip install -e .\n    manimgl example_scenes.py OpeningManimExample\n    ```\n\n### Mac OSX\n\n1. Install FFmpeg, LaTeX in terminal using homebrew.\n    ```sh\n    brew install ffmpeg mactex\n    ```\n    <details>\n      <summary>💡 An alternative to heavyweight MacTeX bundle.</summary>\n\n      > To avoid installing the full MacTeX bundle, which is ~6GB, you can alternatively install the\n      > lightweight [BasicTeX](https://formulae.brew.sh/cask/basictex) and then gradually add\n      > only the LaTeX packages you actually need. A list of packages sufficient to run examples can \n      > be found [here](https://github.com/3b1b/manim/issues/2133#issuecomment-2414547866).\n      > For an overview of the MacTeX installer bundles, see https://www.tug.org/mactex/.\n    </details>\n\n2. If you are using an ARM-based processor, install Cairo. \n    ```sh\n    arch -arm64 brew install pkg-config cairo\n    ```\n   \n3. Install latest version of manim using these command.\n    ```sh\n    git clone https://github.com/3b1b/manim.git\n    cd manim\n    pip install -e .\n    manimgl example_scenes.py OpeningManimExample\n    ```\n    If the last command is not found, make sure the directory pip installed `manimgl` into is on your `PATH`.\n\n## Anaconda Install\n\n1. Install LaTeX as above.\n2. Create a conda environment using `conda create -n manim python=3.10`.\n3. Activate the environment using `conda activate manim`.\n4. Install manimgl using `pip install -e .`.\n\n\n## Using manim\nTry running the following:\n```sh\nmanimgl example_scenes.py OpeningManimExample\n```\nThis should pop up a window playing a simple scene.\n\nLook through the [example scenes](https://3b1b.github.io/manim/getting_started/example_scenes.html) to see examples of the library's syntax, animation types and object types. In the [3b1b/videos](https://github.com/3b1b/videos) repo, you can see all the code for 3blue1brown videos, though code from older videos may not be compatible with the most recent version of manim. The readme of that repo also outlines some details for how to set up a more interactive workflow, as shown in [this manim demo video](https://www.youtube.com/watch?v=rbu7Zu5X1zI) for example.\n\nWhen running in the CLI, some useful flags include:\n* `-w` to write the scene to a file\n* `-o` to write the scene to a file and open the result\n* `-s` to skip to the end and just show the final frame.\n    * `-so` will save the final frame to an image and show it\n* `-n <number>` to skip ahead to the `n`'th animation of a scene.\n* `-f` to make the playback window fullscreen\n\nTake a look at custom_config.yml for further configuration.  To add your customization, you can either edit this file, or add another file by the same name \"custom_config.yml\" to whatever directory you are running manim from.  For example [this is the one](https://github.com/3b1b/videos/blob/master/custom_config.yml) for 3blue1brown videos.  There you can specify where videos should be output to, where manim should look for image files and sounds you want to read in, and other defaults regarding style and video quality.\n\n### Documentation\nDocumentation is in progress at [3b1b.github.io/manim](https://3b1b.github.io/manim/). And there is also a Chinese version maintained by [**@manim-kindergarten**](https://manim.org.cn): [docs.manim.org.cn](https://docs.manim.org.cn/) (in Chinese).\n\n[manim-kindergarten](https://github.com/manim-kindergarten/) wrote and collected some useful extra classes and some codes of videos in [manim_sandbox repo](https://github.com/manim-kindergarten/manim_sandbox).\n\n\n## Contributing\nIs always welcome.  As mentioned above, the [community edition](https://github.com/ManimCommunity/manim) has the most active ecosystem for contributions, with testing and continuous integration, but pull requests are welcome here too.  Please explain the motivation for a given change and examples of its effect.\n\n\n## License\nThis project falls under the MIT license.\n"
+    },
+    "brief": {
+      "summary": "用 Python 编写数学讲解动画的视频引擎",
+      "problem": "解决数学概念难以用动画直观表达的问题",
+      "highlights": [
+        "可以制作精确的数学讲解动画",
+        "可以将场景渲染为视频或单帧图像",
+        "可以用 LaTeX 呈现数学内容"
+      ],
+      "target_users": [
+        "数学教育创作者",
+        "Python 开发者",
+        "科普视频制作者"
+      ],
+      "why_trending": "总 Star 超9.2万，本周首次收录且今日新增86个",
+      "caveat": "这是 ManimGL，别与社区版安装包混用",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "3b1b/manim",
+      "score": 92,
+      "category": "动画",
+      "reason": "专门用于程序化制作动画视频",
+      "generated_by_ai": true,
+      "velocity_score": 59,
+      "freshness_score": 20,
+      "ranking_score": 63.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "Gitlawb/openclaude",
+      "url": "https://github.com/Gitlawb/openclaude",
+      "description": "runs anywhere. uses anything",
+      "language": "TypeScript",
+      "total_stars": 31466,
+      "forks": 8960,
+      "stars_today": 80,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 80
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-tools",
+        "cli",
+        "coding"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-01T03:15:49Z",
+      "updated_at": "2026-09-02T04:45:42Z",
+      "pushed_at": "2026-09-02T00:15:38Z",
+      "open_issues": 71,
+      "homepage": "https://openclaude.gitlawb.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/assets/openclaude-wordmark.png\" alt=\"OpenClaude — Open terminal for any LLM\" width=\"830\">\n\n  <p>\n    <a href=\"https://trendshift.io/repositories/25807?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-25807\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/25807/daily?language=TypeScript\" alt=\"Gitlawb%2Fopenclaude | Trendshift\" width=\"250\" height=\"55\"/></a>\n    <a href=\"https://trendshift.io/repositories/25807?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-25807\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/25807/monthly?language=TypeScript\" alt=\"Gitlawb%2Fopenclaude | Trendshift\" width=\"250\" height=\"55\"/></a>\n    <a href=\"https://trendshift.io/repositories/25807?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-25807\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/25807\" alt=\"Gitlawb%2Fopenclaude | Trendshift\" width=\"250\" height=\"55\"/></a>\n  </p>\n</div>\n\nOpenClaude is an open-source coding-agent CLI for cloud and local model providers.\n\nUse OpenAI-compatible APIs, Gemini, GitHub Models, Codex OAuth, Codex, Ollama, Atomic Chat, and other supported backends while keeping one terminal-first workflow: prompts, tools, agents, MCP, slash commands, and streaming output.\n\n[![PR Checks](https://github.com/Gitlawb/openclaude/actions/workflows/pr-checks.yml/badge.svg?branch=main)](https://github.com/Gitlawb/openclaude/actions/workflows/pr-checks.yml)\n[![Release](https://img.shields.io/github/v/tag/Gitlawb/openclaude?label=release&color=0ea5e9)](https://github.com/Gitlawb/openclaude/tags)\n[![npm downloads](https://img.shields.io/npm/dm/@gitlawb/openclaude)](https://www.npmjs.com/package/@gitlawb/openclaude)\n[![Discussions](https://img.shields.io/badge/discussions-open-7c3aed)](https://github.com/Gitlawb/openclaude/discussions)\n[![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/k68zFR6AcB)\n[![X](https://img.shields.io/badge/X-@gitlawb-000000?logo=x&logoColor=white)](https://x.com/gitlawb)\n[![Security Policy](https://img.shields.io/badge/security-policy-0f766e)](SECURITY.md)\n[![License](https://img.shields.io/badge/license-MIT-2563eb)](LICENSE)\n\nOpenClaude is also mirrored to GitLawb:\n[gitlawb.com/node/repos/z6MkqDnb/openclaude](https://gitlawb.com/node/repos/z6MkqDnb/openclaude)\n\n[Quick Start](#quick-start) | [Setup Guides](#setup-guides) | [Providers](#supported-providers) | [Development](#development) | [VS Code Extension](#vs-code-extension) | [Partners](#partners) | [Community](#community)\n\n## Partners\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://gitlawb.com\">\n        <img src=\"https://gitlawb.com/logo.png\" alt=\"GitLawb logo\" width=\"72\">\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://bankr.bot\">\n        <img src=\"https://bankr.bot/favicon.svg\" alt=\"Bankr.bot logo\" width=\"72\">\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://atomic.chat/\">\n        <img src=\"docs/assets/atomic-chat-logo.png\" alt=\"Atomic Chat logo\" width=\"72\">\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://mimo.mi.com\">\n        <img src=\"https://mimo.xiaomi.com/mimo-v2-pro/assets/logo.svg\" alt=\"Xiaomi MiMo logo\" width=\"136\">\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://www.atlascloud.ai/\">\n        <img src=\"docs/assets/atlas-cloud-banner.png\" alt=\"Atlas Cloud logo\" width=\"136\">\n      </a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\"><a href=\"https://gitlawb.com\"><strong>GitLawb</strong></a></td>\n    <td align=\"center\"><a href=\"https://bankr.bot\"><strong>Bankr.bot</strong></a></td>\n    <td align=\"center\"><a href=\"https://atomic.chat/\"><strong>Atomic Chat</strong></a></td>\n    <td align=\"center\"><a href=\"https://mimo.mi.com\"><strong>Xiaomi MiMo</strong></a></td>\n    <td align=\"center\"><a href=\"https://www.atlascloud.ai/\"><strong>Atlas Cloud</strong></a></td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://aimlapi.com/\">\n        <picture>\n          <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/aimlapi-logo-dark.svg\">\n          <img src=\"docs/assets/aimlapi-logo.svg\" alt=\"AI/ML API logo\" width=\"136\">\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://novita.ai/\">\n        <picture>\n          <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/novita-logo-dark.svg\">\n          <img src=\"docs/assets/novita-logo.svg\" alt=\"Novita AI logo\" width=\"136\">\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://www.apismart.ai\">\n        <picture>\n          <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/apismart-logo-dark.png\">\n          <img src=\"docs/assets/apismart-logo.png\" alt=\"ApiSmart logo\" width=\"120\">\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://concentrate.ai/\">\n        <picture>\n          <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/concentrate-logo-dark.svg\">\n          <img src=\"docs/assets/concentrate-logo.svg\" alt=\"Concentrate logo\" width=\"64\">\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\" width=\"150\" height=\"80\">\n      <a href=\"https://exa.ai/\">\n        <picture>\n          <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/exa-logo-dark.svg\">\n          <img src=\"docs/assets/exa-logo.svg\" alt=\"Exa logo\" width=\"110\">\n        </picture>\n      </a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\"><a href=\"https://aimlapi.com/\"><strong>AI/ML API</strong></a></td>\n    <td align=\"center\"><a href=\"https://novita.ai/\"><strong>Novita AI</strong></a></td>\n    <td align=\"center\"><a href=\"https://www.apismart.ai\"><strong>ApiSmart</strong></a></td>\n    <td align=\"center\"><a href=\"https://concentrate.ai/\"><strong>Concentrate</strong></a></td>\n    <td align=\"center\"><a href=\"https://exa.ai/\"><strong>Exa</strong></a></td>\n  </tr>\n</table>\n\n## Why OpenClaude\n\n- One CLI across cloud APIs and local model backends — no per-provider tooling\n- Guided provider setup and saved profiles with `/provider`\n- Coding-agent workflows in one place: bash, file tools, grep, glob, agents, tasks, MCP, and web tools\n- A bundled VS Code extension for launch integration and theme support\n- A pixel-art hero companion who fires an arrow every time you press Enter (really — see [Meet your buddy](#meet-your-buddy))\n\n## Quick Start\n\n### Install\n\nOpenClaude requires Node.js `>=22.0.0` for npm installs and runtime. Bun is\nonly needed for source builds and local development.\n\n```bash\nnpm install -g @gitlawb/openclaude@latest\n```\n\nIf you're on Arch Linux, you can install OpenClaude from the community-maintained [AUR package](https://aur.archlinux.org/packages/openclaude):\n```bash\nparu -S openclaude\n```\n\nIf the install later reports `ripgrep not found`, install ripgrep system-wide and confirm `rg --version` works in the same terminal before starting OpenClaude.\n\n**Verify / troubleshoot installed version:**\n\n```bash\nopenclaude --version\nnpm view @gitlawb/openclaude dist-tags\nnpm install -g @gitlawb/openclaude@latest\n```\n\n### Start\n\n```bash\nopenclaude\n```\n\nInside OpenClaude:\n\n- run `/provider` for guided provider setup and saved profiles\n- run `/onboard-github` for GitHub Models onboarding\n\n> **Note:** OpenClaude does not automatically load project `.env` files. We recommend using the `/provider` command for setup, which saves provider profiles and credentials in `.openclaude-profile.json`. If you prefer environment variables, export them explicitly or run `openclaude --provider-env-file .env` for provider/setup variables. Export runtime/debug knobs from your shell or launcher.\n\n### Resume or fork a conversation\n\nResume an existing conversation by session ID, or continue the most recent\nconversation in the current directory:\n\n```bash\nopenclaude --resume <session-id>\nopenclaude --continue\n```\n\nAdd `--fork-session` to branch the conversation history into a new session ID\ninstead of reusing the original transcript:\n\n```bash\nopenclaude --resume <session-id> --fork-session\nopenclaude --continue --fork-session\n```\n\nForking is conversation branching only. It does not create filesystem isolation,\ncopy your working tree, or create a git worktree branch.\n\n### Background sessions\n\nRun long non-interactive prompts detached from the current terminal:\n\n```bash\nopenclaude --bg \"fix failing tests\"\nopenclaude --bg --name auth-refactor \"refactor auth middleware\"\nopenclaude ps\nopenclaude logs auth-refactor\nopenclaude logs auth-refactor -f\nopenclaude kill auth-refactor\n```\n\nBackground sessions are local child processes. OpenClaude does not start a daemon\nor network service, and permission/provider/model/settings flags are passed to\nthe child process the same way they are for a foreground `--print` run. Session\nmetadata and logs are stored under the resolved OpenClaude config directory,\nusually `~/.openclaude/bg-sessions/`; `OPENCLAUDE_CONFIG_DIR` can point\nOpenClaude somewhere else. `CLAUDE_CONFIG_DIR` is ignored for OpenClaude\nbackground-session storage. Session names can be reused after older sessions\nreach a terminal state; use the session ID to inspect older logs with the same\nname. A naturally finished session is recorded as `exited` when its process\nreturns zero and `failed` when it returns nonzero or handles a termination\nsignal. `stale` remains the conservative result when the process disappears\nwithout an observed outcome; an explicit successful `openclaude kill` is\nrecorded as `killed`, and `killed` takes precedence over a natural `exited` or\n`failed` outcome for the same process. Terminal outcomes are stored separately\nunder `bg-sessions/terminal/`; deleting that directory makes finished sessions\nfall back to liveness-derived status. OpenClaude does not infer POSIX signal\nnames on Windows.\nUnobservable force termination, host crashes, and power loss remain `stale` on\nevery platform.\n\n`openclaude attach <id-or-name>` currently reports the matching session and\npoints to `openclaude logs <id> -f`; full terminal reattach is not implemented\nfor local background sessions yet.\n\n### OpenClaude config cutover\n\nOpenClaude stores its own config under `~/.openclaude` and `~/.openclaude.json`\nby default. It does not read `~/.claude`, project `.claude/` directories, or\n`CLAUDE_CONFIG_DIR`; new users can start with an empty OpenClaude config and do\nnot need Claude Code installed.\n\nIf you previously used OpenClaude with `.claude` paths, migrate intentionally:\ncopy only the settings, commands, agents, skills, scheduled tasks, or other files\nyou personally created for OpenClaude into the matching `.openclaude` location.\nDo not blanket-copy `.claude`, and do not copy Claude Code credentials or auth\nfiles. For provider authentication, prefer running OpenClaude's provider setup\nagain or exporting provider-specific environment variables.\n\n### Fastest OpenAI setup\n\nmacOS / Linux:\n\n```bash\nexport CLAUDE_CODE_USE_OPENAI=1\nexport OPENAI_API_KEY=sk-your-key-here\nexport OPENAI_MODEL=gpt-4o\n\nopenclaude\n```\n\nWindows PowerShell:\n\n```powershell\n$env:CLAUDE_CODE_USE_OPENAI=\"1\"\n$env:OPENAI_API_KEY=\"sk-your-key-here\"\n$env:OPENAI_MODEL=\"gpt-4o\"\n\nopenclaude\n```\n\n### Fastest local Ollama setup\n\nmacOS / Linux:\n\n```bash\nexport CLAUDE_CODE_USE_OPENAI=1\nexport OPENAI_BASE_URL=http://localhost:11434/v1\nexport OPENAI_MODEL=qwen2.5-coder:7b\n\nopenclaude\n```\n\nWindows PowerShell:\n\n```powershell\n$env:CLAUDE_CODE_USE_OPENAI=\"1\"\n$env:OPENAI_BASE_URL=\"http://localhost:11434/v1\"\n$env:OPENAI_MODEL=\"qwen2.5-coder:7b"
+    },
+    "brief": {
+      "summary": "面向多种模型提供商的开源编码代理命令行工具",
+      "problem": "开发者需要在云端和本地模型间切换编码工具",
+      "highlights": [
+        "可以在终端使用提示词和编码工具",
+        "可以连接云端及本地模型后端",
+        "可以通过VS Code扩展启动和集成"
+      ],
+      "target_users": [
+        "AI开发者",
+        "命令行用户",
+        "VS Code用户"
+      ],
+      "why_trending": "总Star超3万，今日新增80，本周首次收录且近期持续更新",
+      "caveat": "需要Node.js 22及以上，项目不会自动读取.env文件",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Gitlawb/openclaude",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供编码Agent、工具与MCP工作流",
+      "generated_by_ai": true,
+      "velocity_score": 58,
+      "freshness_score": 40,
+      "ranking_score": 63.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "leancoderkavy/premiere-pro-mcp",
+      "url": "https://github.com/leancoderkavy/premiere-pro-mcp",
+      "description": "Local-first Adobe Premiere Pro MCP: 285 AI video editing tools, opt-in project context, CEP bridge, and capability-aware UXP.",
+      "language": "TypeScript",
+      "total_stars": 230,
+      "forks": 38,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adobe",
+        "adobe-premiere-pro",
+        "ai",
+        "ai-video-editing",
+        "cep",
+        "claude",
+        "creative-cloud",
+        "cursor",
+        "extendscript",
+        "local-first",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "model-context-protocol",
+        "premiere-automation",
+        "premiere-pro",
+        "typescript",
+        "video-automation",
+        "video-editing",
+        "video-editing-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-27T06:31:32Z",
+      "updated_at": "2026-09-02T04:37:54Z",
+      "pushed_at": "2026-09-02T04:45:13Z",
+      "open_issues": 4,
+      "homepage": "https://premiere-pro-mcp.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# MCP for Adobe Premiere Pro\n\n<!-- mcp-name: io.github.leancoderkavy/premiere-pro -->\n\n[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fleancoderkavy%2Fpremiere-pro-mcp.svg)](https://mcptoplist.com/server/glama%2Fleancoderkavy%2Fpremiere-pro-mcp)\n\n**Give compatible AI assistants structured control over supported Adobe Premiere Pro workflows.**\n\n327 core tools across 37 modules, 4 resources, and 11 guided workflows. A connected UXP host adds 58 capability-gated tools.\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n[![Node.js](https://img.shields.io/badge/Node.js-20.19%2B-green.svg)](https://nodejs.org)\n[![MCP](https://img.shields.io/badge/MCP-2026--07--28-purple.svg)](https://modelcontextprotocol.io/specification/2026-07-28)\n[![npm](https://img.shields.io/npm/v/premiere-pro-mcp.svg)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![Fly.io](https://img.shields.io/badge/Fly.io-deployed-7C3AED.svg)](https://premiere-pro-mcp.fly.dev)\n[![Premiere Pro](https://img.shields.io/badge/Premiere%20Pro-2020--2026-9999FF.svg)](https://www.adobe.com/products/premiere.html)\n\n</div>\n\n---\n\n![MCP for Adobe Premiere Pro turns a structured AI request into an organized local editing workflow](landing/public/marketing/premiere-pro-mcp-campaign-hero-v1.png)\n\n## What is this?\n\nAn [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants like **Claude**, **Windsurf**, **Cursor**, **GitHub Copilot**, or any MCP-compatible client directly control Adobe Premiere Pro — importing media, editing timelines, applying effects, managing keyframes, exporting, and more.\n\n```text\n\"Add the B-roll clips to V2, apply a cross dissolve between each, color correct them to match the A-roll, and export a 1080p ProRes.\"\n```\n\nThe AI handles the entire workflow through 327 core tools spanning the supported ExtendScript, QE DOM, local media and interchange analysis, revisioned project-context retrieval, safe edit-planning, project-intake preview, review handoff, and connection-verification surfaces. A compatible, authenticated UXP panel adds 56 documented, capability-gated tools without replacing the production CEP bridge.\n\n### Latest release: 1.14.5\n\n- **Verified editing semantics:** QE razor operations use sequence timecode and\n  batch effect application preflights every target before reporting a verified\n  component readback.\n- **Honest playback state:** legacy playback tools report an accepted request,\n  not movement or stoppage, until a separate position readback confirms it.\n- **Fail-closed catalogs:** empty QE audio-transition catalogs are errors, and\n  effect fallback results are explicitly bounded and partial.\n- **Explicit boundary:** the hosted endpoint remains an operator-managed MCP\n  service; unauthenticated callers are rejected and it does not pair users to\n  local Premiere processes.\n\nSee the [v1.14.5 release notes](https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v1.14.5)\nfor complete details. Live installation in Premiere Pro still requires host verification.\n\n### Current MCP protocol support\n\nThe server uses the stable TypeScript SDK v2 and serves the `2026-07-28`\nstateless protocol over HTTP and stdio, while retaining legacy MCP compatibility\nthrough `2025-11-25`. Modern clients receive discovery, validated routing headers,\ncache hints, subscription-stream support, and the formal Premiere extension\ncapability. See the [complete MCP capability and boundary report](docs/mcp-2026-07-28-capabilities.md).\n\n---\n\n## For editors evaluating an AI workflow\n\nBefore an assistant changes an active project, use the\n[Premiere Pro AI workflow checklist](https://premiere-pro-mcp.com/blog/premiere-pro-ai-workflow-checklist/)\nto define the target and no-change boundaries, verify the local connection, request\na bounded plan, and inspect the returned result. It is a practical starting point for\nassistant editors and post leads testing a repeatable workflow on a duplicate project\nor small test sequence.\n\nFor product context, see the [Adobe Premiere AI Assistant and MCP comparison](https://premiere-pro-mcp.com/blog/adobe-premiere-ai-assistant-vs-mcp/)\nand the [Claude Desktop setup guide](https://premiere-pro-mcp.com/blog/claude-desktop-premiere-pro-mcp-setup/).\n\nIf you are deciding between a single local project, an Adobe Production on shared\nstorage, or a remote Team Project, use the [Premiere Pro collaboration workflow\nguide](https://premiere-pro-mcp.com/premiere-pro-collaboration-workflow/) before\nyou evaluate an MCP path. It links the relevant Adobe guidance, makes no project\ninspection request, and ends with the same read-only connection check.\n\nFor a concrete first Project Intake preview, choose one of the three\n[schema-checked, no-sensitive-data starter templates](https://premiere-pro-mcp.com/project-intake/#starter-template).\nThey are evaluation samples only: a human policy owner must review and replace\ntheir bins, media rules, and organization rules before a facility uses one.\n\n---\n\n## Quick Start\n\n### Easiest supported path: Claude Desktop\n\n1. Download the current [Claude Desktop bundle (`.mcpb`)](https://github.com/leancoderkavy/premiere-pro-mcp/releases/download/v1.14.5/premiere-pro-mcp-1.14.5.mcpb).\n2. In Claude Desktop, open **Settings > Extensions > Advanced settings > Install Extension**, select the downloaded bundle, and restart Claude Desktop.\n3. Download the separate [signed Premiere connector (`.zxp`)](https://github.com/leancoderkavy/premiere-pro-mcp/releases/download/v1.14.5/MCPBridgeCEP.zxp). Open it with your trusted ZXP installer. If your computer has no ZXP installer, use the npm connector installer in **Advanced setup** below.\n4. Restart Premiere, open a project, then open **Window > Extensions > MCP for Adobe Premiere Pro**.\n5. In Claude, enter: `Safely check my Premiere connection with verify_premiere_connection. Make no changes.`\n\nThe Claude bundle contains the local MCP server, so this route does not require Node.js. The Premiere connector is a separate required install. The first prompt is read-only and reports whether the server is installed, configured, connected, and live-verified.\n\n### First proof, before the first edit\n\n![Illustrated local Premiere MCP workflow](landing/public/premiere-pro-mcp-demo-poster.png)\n\n*This is an illustrated workflow, not a Premiere panel screenshot or licensed-host proof.*\n\n1. Open a copied test project and an active sequence in Premiere.\n2. Open **Window > Extensions > MCP for Adobe Premiere Pro**. “Running” means the local panel bridge is available; it does not show that an edit completed.\n3. Run `premiere-pro-mcp --doctor` to check only local package/configuration readiness.\n4. Ask the AI client: `Run verify_premiere_connection. Make no changes.` The returned check is read-only and avoids project names, paths, and media details.\n\nIf a bridge, project, or active sequence is missing, fix that setup state before allowing a mutation. For a concise, translatable version of this path, see [quick starts in English, Spanish, and Japanese](docs/quickstart/README.md). The translations are machine-assisted drafts and retain command names in English.\n\n### Other AI assistants\n\nCursor, VS Code/Copilot, Windsurf, and other MCP clients do not currently have a project-provided one-click installer. Use their MCP settings with the advanced npm route below. Keep the assistant, server, connector, and Premiere on the same computer.\n\n<details>\n<summary><strong>Advanced setup: npm or source</strong></summary>\n\n#### Before you begin\n\n- Node.js **20.19 or newer** on Windows or macOS.\n- Adobe Premiere Pro **2020–2026**. Keep Premiere, the CEP bridge, and your MCP client on the same computer for the recommended local setup.\n- Optional: [ffmpeg](https://ffmpeg.org/download.html) on `PATH` for `detect_silence`\n  (`brew install ffmpeg` on macOS or `winget install Gyan.FFmpeg` on Windows).\n  The production Docker image already includes it.\n\n#### 1. Install\n\n**Option A — npm:**\n\n```bash\nnpm install -g premiere-pro-mcp\n```\n\n**Option B — Clone from source:**\n\n```bash\ngit clone https://github.com/leancoderkavy/premiere-pro-mcp.git\ncd premiere-pro-mcp\nnpm install\nnpm run build\n```\n\n#### 2. Install the CEP plugin\n\n**If installed via npm:**\n\n```bash\npremiere-pro-mcp --install-cep\n```\n\n**If cloned from source:**\n\n```bash\nnpm run install-cep\n```\n\nThis installs the plugin into Premiere Pro's per-user extensions folder and enables debug mode.\n\n#### 3. Check the setup\n\n```bash\npremiere-pro-mcp --doctor\n```\n\nThen ask your MCP client to run `verify_premiere_connection`. The check is read-only.\n\n#### Update an existing installation\n\nNew **releases** update the local server and Premiere connector; a deployment of\nthe hosted MCP service does not replace software on your computer. Fully quit\nPremiere before updating the connector.\n\n**Installed globally from npm:**\n\n```bash\npremiere-pro-mcp --check-update\npremiere-pro-mcp --update\n```\n\n`--update` only changes a global npm installation. It installs the published\n`latest` package, refreshes the bundled CEP connector, and leaves your MCP\nclient configuration and projects untouched. Restart Premiere and your MCP\nclient afterward, then run `verify_premiere_connection` before editing.\n\n**Installed from a Git clone:**\n\n```bash\nnpm run check-update:source\nnpm run update:source\n```\n\nThe source updater refuses a checkout with uncommitted files or local commits,\nfast-forwards only to its configured upstream, runs `npm ci` and the production\nbuild, then refreshes the CEP connector. This avoids silently overwriting local\ncode. If you installed the Claude Desktop `.mcpb` bundle, download and install\nthe newer bundle from the GitHub release instead; Claude controls extension\nupdates.\n\n#### Remove the CEP connector\n\nFully quit Premiere, then remove only this connector:\n\n```bash\npremiere-pro-mcp --uninstall-cep\n```\n\nThe uninstaller intentionally leaves Adobe's shared `PlayerDebugMode` setting in place so it does not disrupt other CEP extensions. Remove the MCP server from your AI client's configuration and uninstall the npm package separately if you no longer use it. On macOS, `--uninstall-cep` removes the per-user npm/source install; the signed system-wide `.pkg` route has a separate privileged removal command in [distribution readiness](docs/distribution-readiness.md#connector-removal).\n\n</details>\n\n---\n\n## Publishing to npm\n\nThe easiest repeatable path is the token-free GitHub Actions workflow:\n\n1. In the npm package settings, configure GitHub Actions as the trusted publisher for\n   `leancoderkavy/premiere-pro-mcp` and workflow file `npm-publish.yml`.\n2. Allow the `npm publish` action.\n3. Open **Actions -> Publish npm -> Run workflow** and keep the default `latest` tag.\n\nThe workflow installs dependencies, builds, runs tests, verifies the packed files, refuses to\nrepublish an existing version, then publishes through short-lived OIDC credentials with automatic\nprovenance. No npm token or recurring OTP is required.\n\nFor local publishing, use the guided helper:\n\n```bash\nnpm run publish:npm\n```\n\nUseful local variants:\n\n```bash\nnpm run publish:npm:dry-run\nNPM_OTP=123456 npm run publish:npm\nNPM_TOKEN=npm_xxx npm run publish:npm\n```\n\n<details>\n<summary>Manual installation (macOS)</summary>\n\n```bash\nmkdir -p ~/Library/Application\\ Support/Adobe/CEP/extensions\nln -s \"$(pwd)/cep-plugin\" ~/Library/Application\\ Support/Adobe/CEP/extensions/MCPBridgeCEP\n\n# Enable unsigned extensions (CSXS 9–14)\nfor v in 9 10 11 12 13 14; do\n  defaults write com.adobe.CSXS.$v PlayerDebugMode 1\ndone\n```\n\n</details>\n\n<details>\n<summary>Manual installation (Windows)</summary>\n\n1. Copy the `cep-plugin` folder to `%APPDATA%\\Adobe\\CEP\\extensions\\MCPBridgeCEP`\n2. Open Registry Editor and set these **String (`REG_SZ`)** values to `1` (not DWORD):\n   - `HKEY_CURRENT_USER\\Software\\Adobe\\CSXS.12\\PlayerDebugMode`\n   - (repeat for CSXS.9 through CSXS.14)\n\n</details>\n\n### 3. Configure your MCP client\n\nIf yo"
+    },
+    "brief": {
+      "summary": "让AI助手通过MCP控制Premiere Pro完成视频剪辑流程",
+      "problem": "手动执行Premiere项目中的重复剪辑和导出操作耗时",
+      "highlights": [
+        "可以让AI导入素材并编辑时间线",
+        "可以批量应用效果、管理关键帧并导出",
+        "可以先验证连接，再在副本项目中测试流程"
+      ],
+      "target_users": [
+        "视频剪辑师",
+        "后期制作团队",
+        "AI工具开发者"
+      ],
+      "why_trending": "本周首次收录，已有230个Star，近期仍有代码更新",
+      "caveat": "需要本机安装Premiere和连接器，修改前应先验证",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "leancoderkavy/premiere-pro-mcp",
+      "score": 99,
+      "category": "视频剪辑",
+      "reason": "MCP提供Premiere专业剪辑自动化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 13884,
+      "forks": 2054,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-02T04:47:37Z",
+      "pushed_at": "2026-09-02T04:36:55Z",
+      "open_issues": 3,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"250\" height=\"55\" /></a>\n\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio logo\" width=\"120\" height=\"120\" />\n  <h1>VoiceStudio</h1>\n  <p><sub>Previously OmniVoice-Studio</sub></p>\n  <h3>Clone voices, dub video, dictate, and produce long-form audio on your own hardware.</h3>\n  <p>16 TTS engines · 11 ASR engines · 646-language catalogue · macOS, Windows, Linux, and Docker</p>\n  <p>No account, API key, subscription, or usage meter for the local workflow.</p>\n\n  <p>\n    <a href=\"#install\">Install</a> ·\n    <a href=\"#features\">Features</a> ·\n    <a href=\"#comparison\">Compare</a> ·\n    <a href=\"#requirements\">Requirements</a> ·\n    <a href=\"#engines\">Engines</a> ·\n    <a href=\"#architecture\">Architecture</a> ·\n    <a href=\"#api\">API</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"README_CN.md\"><strong>简体中文</strong></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/stargazers\"><img src=\"https://img.shields.io/github/stars/debpalash/VoiceStudio?style=flat-square&color=f59e0b\" alt=\"GitHub stars\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases\"><img src=\"https://img.shields.io/github/downloads/debpalash/VoiceStudio/total?style=flat-square&color=8b5cf6&label=downloads\" alt=\"Total downloads\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&color=10b981\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square\" alt=\"AGPL-3.0 license\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS_·_Windows_·_Linux-10b981?style=for-the-badge\" alt=\"Download VoiceStudio\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/media/0.5.0/quick-switch.gif\" alt=\"Switching TTS engines from the VoiceStudio status bar\" width=\"100%\" />\n</div>\n\n> [!WARNING]\n> **Active beta.** Use the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest) for stable work. `main` contains the newest fixes and may change between releases. Report problems through [GitHub Issues](https://github.com/debpalash/VoiceStudio/issues).\n\n## At a glance\n\n| | VoiceStudio |\n|---|---|\n| **Workflows** | Voice cloning and design, video dubbing, dictation, stories, audiobooks, batch generation |\n| **Language catalogue** | 646 TTS languages; actual coverage and quality depend on the selected engine |\n| **Engines** | 16 TTS · 11 ASR · switch in Model Catalogue or with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> |\n| **Platforms** | macOS 13.3+ on Apple Silicon · Windows 10/11 x64 · Linux x86_64 with glibc 2.39+ |\n| **Compute** | CUDA · Apple Silicon MPS/MLX · ROCm on Linux · CPU · optional remote workers |\n| **Interfaces** | Desktop app · local REST/SSE/WebSocket API · OpenAI-compatible audio API · MCP Server |\n| **Storage** | Voices, projects, settings, and outputs stay on the machine by default |\n| **License** | AGPL-3.0 application; downloaded models keep their upstream terms |\n\n<a id=\"install\"></a>\n\n## Install\n\nDownload a package from the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest), then follow the platform guide.\n\n| Platform | Package | Guide |\n|---|---|---|\n| macOS 13.3+ | Apple Silicon DMG | [Install on macOS](docs/install/macos.md) |\n| Windows 10/11 | x64 MSI; choose the current-user build when listed to install without admin access | [Install on Windows](docs/install/windows.md#install-pre-built-msi) |\n| Linux | AppImage, x86_64 with glibc 2.39+ | [Install on Linux](docs/install/linux.md) |\n| Docker | CUDA, ROCm, CPU, and worker-only GPU profiles | [Run with Docker](docs/install/docker.md) |\n\nFirst launch creates a managed Python environment and downloads the default model. Later launches reuse both.\n\n> [!NOTE]\n> On macOS, first launch needs a one-time right-click, then **Open** approval. Intel Macs cannot run the local Python backend; use a [remote backend](docs/install/macos.md) instead.\n\n### First voice\n\n1. Launch VoiceStudio and open **Voice Cloning**.\n2. Add a clean voice sample. Three seconds works; 5 to 15 seconds usually gives a better prompt.\n3. Enter text, choose a language, then select **Generate**.\n\n### Run from source\n\nInstall the [development prerequisites](.github/CONTRIBUTING.md#development-setup), then:\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run desktop\n```\n\nUse `bun run dev` for the browser UI. See [Contributing](.github/CONTRIBUTING.md) for services, tests, and platform packages.\n\n### If setup fails\n\n- Run **Settings → About → Run self-check** or `uv run python backend/main.py --diagnose --deep`.\n- Check [install troubleshooting](docs/install/troubleshooting.md).\n- Save a scrubbed diagnostic bundle from the app when opening an issue.\n- For slow generation, compare [measured benchmarks](docs/benchmarks.md) and [performance settings](docs/performance.md).\n\n<a id=\"features\"></a>\n\n## Features\n\n| Area | Included |\n|---|---|\n| **Voice Cloning** | Zero-shot synthesis from a short reference clip |\n| **Voice Design** | Create a voice from age, accent, pitch, style, and delivery instructions |\n| **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video |\n| **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |\n| **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |\n| **Vocal Isolation** | Demucs speech/background separation |\n| **Speaker Diarization** | Pyannote and WhisperX speaker assignment |\n| **Batch Queue** | Queue large sets of audio and video jobs with per-job progress |\n| **Model Catalogue** | Install, remove, select, and route TTS, ASR, and LLM models |\n| **Remote Model Downloads** | Install models on enrolled remote workers with live progress |\n| **GPU Auto-Detect** | CUDA, MPS, ROCm, and CPU routing with per-engine checks |\n| **AI Watermark** | AudioSeal embedding and detection |\n| **MCP Server** | Synthesis and transcription tools for MCP clients |\n| **Diagnostics** | Self-checks, error journal, logs, and scrubbed support bundles |\n| **Local-first** | Core creation stays local; network-backed features are explicit opt-ins |\n| **Extensible** | Registry-based TTS, ASR, and plugin interfaces |\n\n<table>\n<tr>\n  <td width=\"50%\"><img src=\"docs/media/0.5.0/catalogue.png\" alt=\"VoiceStudio Model Catalogue\" width=\"100%\" /></td>\n  <td width=\"50%\"><img src=\"docs/media/0.5.0/gallery-save.png\" alt=\"Saving a gallery voice as a local profile\" width=\"100%\" /></td>\n</tr>\n<tr>\n  <td align=\"center\"><sub>Model Catalogue: engine, device, and install state</sub></td>\n  <td align=\"center\"><sub>Gallery: save a shared voice as a local profile</sub></td>\n</tr>\n</table>\n\n<a id=\"comparison\"></a>\n\n## Comparison\n\nVoiceStudio trades managed cloud compute for local control. This is the practical difference:\n\n| | **VoiceStudio** | **Typical hosted voice service** |\n|---|---|---|\n| **Best fit** | Private, offline, self-hosted, or high-volume work | Fast setup without local model management |\n| **Data path** | Local by default; remote features are opt-in | Audio and text are processed by the provider |\n| **Cost model** | Free software; you supply the hardware | Subscription, credits, or metered API use |\n| **Setup** | Install the app and model weights | Create an account and use the web app or API |\n| **Performance** | Depends on your engine and hardware | Provider manages compute and scaling |\n| **Offline use** | Yes, after required models are installed | Usually requires a network connection |\n| **Customization** | Source, engines, models, API, and routing are open | Limited to provider options |\n| **Maintenance** | You manage updates, disk, and compute | Provider manages infrastructure |\n\n<a id=\"requirements\"></a>\n\n## Requirements\n\nRequirements vary by engine. These values cover the default local workflow.\n\n| | **Minimum** | **Recommended** |\n|---|---|---|\n| **OS** | Windows 10 x64 · macOS 13.3 Apple Silicon · Linux x86_64 with glibc 2.39+ | Current supported OS release |\n| **RAM** | 8 GB | 16 GB+ |\n| **Disk** | 10 GB free | 20 GB+ SSD |\n| **GPU** | Optional; CPU mode is supported | NVIDIA CUDA or Apple Silicon |\n| **VRAM** | 4 GB when using a GPU | 8 GB+; large optional engines need more |\n| **Python from source** | 3.11+ | 3.11 or 3.12 |\n\nROCm is Linux-only and opt-in. Windows AMD/Ryzen AI uses CPU. Systems with limited VRAM offload work to CPU when required. See [performance](docs/performance.md), [benchmarks](docs/benchmarks.md), and [engine disk usage](docs/engines/disk-usage.md).\n\n<a id=\"engines\"></a>\n\n## Engines\n\nEngine support is capability-specific. Check cloning, language, platform, memory, and license before choosing one. Full setup guides: [docs/engines](docs/engines/README.md).\n\n<a id=\"tts-engines\"></a>\n\n### Text to speech\n\n| Engine | Languages | Clone | Instruct | Linux | macOS ARM | Windows | License |\n|---|:---:|:---:|:---:|:---:|:---:|:---:|---|\n| **VoiceStudio** (default, powered by k2-fsa/OmniVoice) | 600+ | Yes | Yes | CUDA/CPU | MPS | CUDA/CPU | [AGPL-3.0](LICENSE) app · [Apache-2.0 code, CC-BY-NC weights](https://huggingface.co/k2-fsa/OmniVoice#license)³ |\n| **CosyVoice 3** | 9 + 18 dialects | Yes | Yes | CUDA/CPU | CPU | CUDA/CPU | Apache-2.0 |\n| **GPT-SoVITS** | 5 | Yes | No | CUDA/CPU | No | CUDA/CPU | MIT |\n| **VoxCPM2** | 30 | Yes | Yes | CUDA/CPU | MPS | CUDA/CPU | Apache-2.0 |\n| **MOSS-TTS-Nano** | 20 | Yes | No | CUDA/CPU | CPU | CUDA/CPU | Apache-2.0 |\n| **KittenTTS** | English | No | No | CPU | CPU | CPU | MIT |\n| **MLX-Audio** | Model-dependent | Varies | Varies | No | MLX | No | Varies |\n| **Sherpa-ONNX** | 20+ | No | No | CUDA/CPU | CPU | CUDA/CPU | Apache-2.0 |\n| **IndexTTS 2.5** ⚡ | ZH · EN · JA · ES · AR | Yes | No | CUDA/CPU | CPU | CUDA/CPU | Bilibili model license¹ |\n| **OmniVoice GGUF** ⚡ | 600+ | Yes | Yes | CUDA/CPU | MPS/CPU | CUDA/CPU | [AGPL-3.0](LICENSE) app · [review the derivative model terms](https://huggingface.co/Serveurperso/OmniVoice-GGUF#license)³ |\n| **OmniVoice (subprocess)** ⚡ | 600+ | Yes | Yes | CUDA/CPU | MPS | CUDA/CPU | [AGPL-3.0](LICENSE) app · [Apache-2.0 code, CC-BY-NC weights](https://huggingface.co/k2-fsa/OmniVoice#license)³ |\n| **PocketTTS** ⚡ | EN · FR · DE · PT · IT · ES | Yes | No | CPU | CPU | CPU | CC-BY-4.0, gated² |\n| **Supertonic 3** ⚡ | 31 | No | No | CPU | CPU | CPU | OpenRAIL-M |\n| **MOSS-TTS-v1.5** ⚡ | 31 | Yes | No | CUDA/CPU | CPU | CUDA/CPU | Apache-2.0 |\n| **dots.tts** ⚡ | 24 | Yes | No | CUDA/CPU | CPU | No | Apache-2.0 |\n| **Confucius4-TTS** ⚡ | 14 | Yes | No | CUDA/CPU | CPU | CUDA/CPU | Apache-2.0 |\n\n⚡ Installed or registered on demand.\n\n¹ IndexTTS 2.5 requires a separate written Bilibili license above 100 million monthly active users or RMB 1 billion annual revenue. Review the [model license](https://huggingface.co/IndexTeam/IndexTTS-2.5/blob/main/LICENSE).\n\n² PocketTTS shows its gated-access and CC-BY-4.0 terms before first use.\n\n³ The OmniVoice snapshot also includes an audio tokenizer under separate [Boson Higgs Audio 2 and Meta Llama community terms](https://huggingface.co/k2-fsa/OmniVoice/blob/main/audio_tokenizer/LICENSE). VoiceStudio's application license does not replace model or tokenizer terms.\n\nClone-less engines cannot preserve a reference speaker in dubbing or pinne"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆、配音与转写工具",
+      "problem": "减少对云端语音服务、账号和按量收费的依赖",
+      "highlights": [
+        "可以克隆声音并生成语音",
+        "可以为视频转写、翻译和配音",
+        "可以制作有声书并批量处理音频"
+      ],
+      "target_users": [
+        "配音与视频创作者",
+        "有声书制作人员",
+        "本地化与开发人员"
+      ],
+      "why_trending": "总 Star 近1.4万，近期仍有提交，本周首次收录",
+      "caveat": "项目处于活跃测试阶段，模型条款和硬件要求需核对",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 94,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与有声书制作",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "nirholas/three.ws",
+      "url": "https://github.com/nirholas/three.ws",
+      "description": "Open-source 3D AI agent framework — GLB/glTF avatars with LLM brains, memory, emotions, and autonomous payments. MCP server · x402 · Solana/EVM · Three.js. Embed anywhere as a web component. Character studio, animation gallery, OAuth 2.1. Browser-native.",
+      "language": "JavaScript",
+      "total_stars": 108,
+      "forks": 28,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "ai-agent",
+        "animation",
+        "avatar",
+        "blockchain",
+        "character-studio",
+        "claude",
+        "embedding",
+        "erc",
+        "gltf",
+        "javascript",
+        "llm",
+        "mcp",
+        "oauth",
+        "onchain",
+        "three-js",
+        "typescript",
+        "vercel",
+        "web-component",
+        "webgl"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-08T20:46:03Z",
+      "updated_at": "2026-09-02T04:31:40Z",
+      "pushed_at": "2026-09-02T04:30:18Z",
+      "open_issues": 8,
+      "homepage": "https://three.ws",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# three.ws          \n \n[**Website**](https://three.ws) · [**Docs**](https://three.ws/docs) · [**Changelog**](https://three.ws/changelog) · [**X / Twitter**](https://x.com/trythreews) · [**GitHub**](https://github.com/nirholas/three.ws) · [**$THREE on pump.fun**](https://pump.fun/FeMbDoX7R1Psc4GEcvJdsbNbZA3bfztcyDCatJVJpump)\n\n[![site](https://img.shields.io/website?url=https%3A%2F%2Fthree.ws&label=three.ws)](https://three.ws) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fsdk?label=%40three-ws%2Fsdk)](https://www.npmjs.com/package/@three-ws/sdk) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fmcp-server?label=%40three-ws%2Fmcp-server)](https://www.npmjs.com/package/@three-ws/mcp-server) [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.nirholas-blue)](https://registry.modelcontextprotocol.io/?q=io.github.nirholas) [![x402scan](https://img.shields.io/badge/x402scan-listed-green)](https://www.x402scan.com/server/17cbd874-52ac-4920-a020-b22ff2489a07) [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![good first issues](https://img.shields.io/github/issues/nirholas/three.ws/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/nirholas/three.ws/labels/good%20first%20issue)\n\nhttps://github.com/user-attachments/assets/d52515d1-cb04-4dd6-98bd-fef233312dc4\n\n**Give your AI a body.** three.ws is an open source (Apache-2.0), browser-native 3D AI agent platform. Type a prompt and [**Forge**](https://three.ws/forge) generates a textured 3D model, or drop a GLB you already have. Add an LLM brain, register on-chain, and embed anywhere: no plugins, no server uploads, no installs required.\n\n> **Try it in 60 seconds:** open [three.ws/forge](https://three.ws/forge), type *\"a brass steampunk owl, full body\"*, and download the GLB. Text→3D, image→3D, and sketch→3D — free draft tier, no account. [Jump to the Forge section ↓](#forge--text--image-to-3d)\n\n> **Want to build it with us?** [Your first contribution](docs/first-contribution.md) goes from clone to open pull request in about 15 minutes, with a full worked example. Every [`good first issue`](https://github.com/nirholas/three.ws/labels/good%20first%20issue) names the file to change and the command that proves it worked. Say hello in [Discussions](https://github.com/nirholas/three.ws/discussions) or [Telegram](https://t.me/three_ws_community).\n\n### Meet the avatar: a live 3D model, right here in markdown\n\nDrag to rotate. This is not an image or a video: it is an interactive 3D model rendered natively by GitHub. The avatar was generated from a one-line text prompt on [three.ws Forge](https://three.ws/forge) (free tier), decimated to 1,200 triangles, and embedded as ASCII STL with [readme-3d](packages/readme-3d), our open-source toolkit for putting 3D models in any GitHub README, issue, or discussion.\n\n```stl\nsolid threews_avatar\n facet normal -0.34 -0.93 0.11\n  outer loop\n   vertex 7.06 -3.99 23.19\n   vertex 9.13 -4.19 27.78\n   vertex 3.98 -2.59 25.51\n  endloop\n endfacet\n facet normal -0.94 -0.30 0.16\n  outer loop\n   vertex 17.94 3.99 37.76\n   vertex 18.01 2.79 35.88\n   vertex 18.27 2.91 37.66\n  endloop\n endfacet\n facet normal -0.90 0.43 0.10\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 18.01 2.79 35.88\n   vertex 17.73 2.15 36.16\n  endloop\n endfacet\n facet normal -0.92 0.36 0.15\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 17.73 2.15 36.16\n   vertex 17.95 2.20 37.37\n  endloop\n endfacet\n facet normal 0.94 0.34 0.00\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.47 1.83 38.79\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 -0.25 0.33\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 28.47 1.83 38.79\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal 0.99 -0.14 0.08\n  outer loop\n   vertex 28.47 1.83 38.79\n   vertex 28.01 -2.89 36.41\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.06 -0.40\n  outer loop\n   vertex 28.90 0.61 31.76\n   vertex 27.10 -0.47 27.53\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.83 -0.51 -0.22\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 27.10 -0.47 27.53\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.38 -0.16\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.90 0.61 31.76\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.89 0.45 0.09\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 28.47 1.83 38.79\n   vertex 27.20 5.38 33.47\n  endloop\n endfacet\n facet normal 0.90 -0.39 -0.20\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.22 -3.16 28.82\n   vertex 27.10 -0.47 27.53\n  endloop\n endfacet\n facet normal 0.82 -0.02 0.58\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 26.14 -2.49 41.92\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.80 0.40 0.44\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 23.27 4.13 46.24\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.70 -0.07 -0.71\n  outer loop\n   vertex 27.03 3.46 27.96\n   vertex 24.69 2.15 25.80\n   vertex 25.39 4.36 26.25\n  endloop\n endfacet\n facet normal 0.63 -0.73 0.27\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.14 -2.49 41.92\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal 0.56 -0.82 0.08\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.39 -5.14 38.78\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.64 -0.76 -0.12\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.40 -5.59 34.11\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.37 -0.89 -0.28\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 23.26 -5.15 31.23\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.42 -0.20 -0.89\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.15 0.41 25.94\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.34 -0.94 0.00\n  outer loop\n   vertex 26.22 -3.16 28.82\n   vertex 23.11 -4.26 27.61\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.40 -0.88 -0.23\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 23.11 -4.26 27.61\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal -0.24 0.97 -0.05\n  outer loop\n   vertex 24.58 4.14 25.81\n   vertex 25.39 4.36 26.25\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.64 -0.61 -0.46\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.14 -2.60 26.21\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.78 -0.11 -0.62\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 22.59 1.54 23.24\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.78 -0.12 -0.61\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 24.69 2.15 25.80\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.46 -0.87 -0.17\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 22.59 1.54 23.24\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.05 -0.66 -0.75\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 24.14 -2.60 26.21\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.32 -0.80 0.50\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 21.60 -3.52 43.21\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.37 -0.90 -0.21\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 21.41 -3.57 27.63\n   vertex 23.11 -4.26 27.61\n  endloop\n endfacet\n facet normal -0.23 -0.54 -0.81\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 21.41 -3.57 27.63\n   vertex 24.14 -2.60 26.21\n  endloop\n endfacet\n facet normal -0.01 -1.00 0.10\n  outer loop\n   vertex 24.39 -5.14 38.78\n   vertex 20.81 -5.34 36.22\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.52 -0.77 0.37\n  outer loop\n   vertex 20.28 -1.08 52.96\n   vertex 18.87 -2.53 51.93\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.95 0.26\n  outer loop\n   vertex 21.60 -3.52 43.21\n   vertex 20.81 -5.34 36.22\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.13 -0.99 -0.10\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 20.81 -5.34 36.22\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 0.03 -0.99 -0.15\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 19.99 1.49 22.99\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.91 0.14 0.38\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 20.84 0.68 53.36\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.99 -0.03\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.87 0.27 0.43\n  outer loop\n   vertex 20.33 2.84 53.04\n   vertex 20.84 0.68 53.36\n   vertex 23.27 4.13 46.24\n  endloop\n endfacet\n facet normal -0.48 -0.82 0.30\n  outer loop\n   vertex 22.34 1.45 26.31\n   vertex 18.93 2.50 23.81\n   vertex 22.82 1.11 26.12\n  endloop\n endfacet\n facet normal -0.49 -0.80 0.35\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 18.93 2.50 23.81\n   vertex 19.99 1.49 22.99\n  endloop\n endfacet\n facet normal 0.80 -0.36 0.47\n  outer loop\n   vertex 20.84 0.68 53.36\n   vertex 20.28 -1.08 52.96\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.62 -0.30 0.72\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 18.93 2.50 23.81\n   vertex 22.34 1.45 26.31\n  endloop\n endfacet\n facet normal -0.80 0.13 0.59\n  outer loop\n   vertex 21.74 -0.40 26.89\n   vertex 18.46 -1.70 22.74\n   vertex 21.76 -1.78 27.21\n  endloop\n endfacet\n facet normal -0.79 -0.21 0.58\n  outer loop\n   vertex 21.76 -1.78 27.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.75 -2.39 26.98\n  endloop\n endfacet\n facet normal -0.54 -0.84 -0.09\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 17.89 -1.75 31.72\n   vertex 21.41 -3.57 27.63\n  endloop\n endfacet\n facet normal 0.10 -0.26 -0.96\n  outer loop\n   vertex 22.59 1.54 23.24\n   vertex 19.99 1.49 22.99\n   vertex 20.26 3.48 22.48\n  endloop\n endfacet\n facet normal 0.96 0.24 0.12\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.84 0.68 53.36\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal -0.53 -0.80 -0.29\n  outer loop\n   vertex 20.81 -5.34 36.22\n   vertex 17.89 -1.75 31.72\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 1.00 0.05 0.05\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.89 8.80 78.04\n   vertex 19.60 7.11 85.93\n  endloop\n endfacet\n facet normal 1.00 0.04 0.04\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.78 0.25 88.57\n   vertex 19.89 8.80 78.04\n  endloop\n endfacet\n facet normal 0.96 0.26 0.13\n  outer loop\n   vertex 19.46 3.33 58.61\n   vertex 20.67 -0.54 57.28\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal 0.96 -0.29 -0.05\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.28 -1.08 52.96\n   vertex 20.84 0.68 53.36\n  endloop\n endfacet\n facet normal -0.11 -0.99 -0.07\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 21.75 -2.39 26.98\n   vertex 18.46 -1.70 22.74\n  endloop\n endfacet\n facet normal 1.00 -0.03 -0.02\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.78 0.25 88.57\n   vertex 19.45 -6.79 83.01\n  endloop\n endfacet\n facet normal 1.00 0.00 0.07\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.45 -6.79 83.01\n   vertex 20.12 -4.30 73.94\n  endloop\n endfacet\n facet normal 0.93 0.30 -0.21\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.93 5.01 72.90\n   vertex 19.58 8.54 76.35\n  endloop\n endfacet\n facet normal -0.70 -0.09 0.71\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 19.00 3.74 24.02\n   vertex 18.93 2.50 23.81\n  endloop\n endfacet\n facet normal 0.99 0.00 -0.17\n  outer loop\n   vertex 20.12 -4.30 73.94\n   vertex 19.78 1.87 71.95\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 1.00 0.02 -0.01\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 20.12 -4.30 73.94\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 0.79 -0.61 0.01\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 18.66 -3.15 57.91\n   vertex 20.28 -1.08 52.96\n  endloop\n endfacet\n facet normal 0.27 -0.95 0.19\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 18.87 -2.53 51.93\n   vertex 21.60 -3.52 43.21\n  endloop\n endfacet\n facet normal 0.99 0.13 0.11\n  outer loop\n  "
+    },
+    "brief": {
+      "summary": "可嵌入网页的浏览器原生3D AI角色框架",
+      "problem": "让AI具备可交互的3D形象、记忆和情绪",
+      "highlights": [
+        "可以把GLB角色嵌入网页组件",
+        "可以为3D角色接入LLM大脑",
+        "可以用Forge生成或导入3D模型"
+      ],
+      "target_users": [
+        "3D开发者",
+        "AI应用开发者",
+        "虚拟角色创作者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有108个Star",
+      "caveat": "链上支付等能力的使用细节，资料中未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "nirholas/three.ws",
+      "score": 91,
+      "category": "3D / VTuber",
+      "reason": "GLB角色具备表情记忆与Agent大脑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "blender/blender",
+      "url": "https://github.com/blender/blender",
+      "description": "Official mirror of Blender",
+      "language": "C++",
+      "total_stars": 19957,
+      "forks": 3179,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "animation",
+        "b3d",
+        "computer-graphics",
+        "modeling",
+        "rendering"
+      ],
+      "license_name": "",
+      "created_at": "2019-10-09T12:47:28Z",
+      "updated_at": "2026-09-02T04:30:39Z",
+      "pushed_at": "2026-09-02T04:19:50Z",
+      "open_issues": 0,
+      "homepage": "https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nKeep this document short & concise,\nlinking to external resources instead of including content in-line.\nSee 'release/text/readme.html' for the end user read-me.\n-->\n\n> [!IMPORTANT]\n> Cloning from this [GitHub mirror](https://github.com/blender/blender) may cause Git LFS errors. To avoid this, use `GIT_LFS_SKIP_SMUDGE=1` when doing your initial clone.  \n> See [the documentation](https://developer.blender.org/docs/handbook/contributing/using_git/#github-mirror) for full instructions.\n\nBlender\n=======\n\nBlender is the free and open source 3D creation suite.\nIt supports the entirety of the 3D pipeline—modeling, rigging, animation, simulation, rendering, compositing,\nmotion tracking and video editing.\n\n![Blender screenshot](https://code.blender.org/wp-content/uploads/2018/12/springrg.jpg \"Blender screenshot\")\n\nProject Pages\n-------------\n\n- [Main Website](http://www.blender.org)\n- [Reference Manual](https://docs.blender.org/manual/en/latest/index.html)\n- [User Community](https://www.blender.org/community/)\n\nDevelopment\n-----------\n\n- [Build Instructions](https://developer.blender.org/docs/handbook/building_blender/)\n- [Code Review & Bug Tracker](https://projects.blender.org)\n- [Developer Forum](https://devtalk.blender.org)\n- [Developer Documentation](https://developer.blender.org/docs/)\n\n\nLicense\n-------\n\nBlender as a whole is licensed under the GNU General Public License, Version 3.\nIndividual files may have a different but compatible license.\n\nSee [blender.org/about/license](https://www.blender.org/about/license) for details.\n"
+    },
+    "brief": {
+      "summary": "开源的完整3D创作套件",
+      "problem": "覆盖从建模到渲染、视频编辑的3D制作流程",
+      "highlights": [
+        "可以制作和编辑3D模型",
+        "可以制作动画并进行渲染",
+        "可以完成合成、跟踪和视频编辑"
+      ],
+      "target_users": [
+        "3D创作者",
+        "动画制作人员",
+        "游戏开发者"
+      ],
+      "why_trending": "总Star近2万，本周首次收录且近期持续更新",
+      "caveat": "GitHub镜像克隆可能遇到Git LFS错误",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "blender/blender",
+      "score": 96,
+      "category": "3D / VTuber",
+      "reason": "覆盖建模动画渲染的3D创作套件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "renpy/renpy",
+      "url": "https://github.com/renpy/renpy",
+      "description": "The Ren'Py Visual Novel Engine",
+      "language": "Ren'Py",
+      "total_stars": 6786,
+      "forks": 928,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "python",
+        "renpy",
+        "visual-novel",
+        "visual-novel-engine"
+      ],
+      "license_name": "",
+      "created_at": "2012-06-28T01:21:22Z",
+      "updated_at": "2026-09-02T04:30:00Z",
+      "pushed_at": "2026-09-02T04:29:51Z",
+      "open_issues": 294,
+      "homepage": "http://www.renpy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "==============================\nThe Ren'Py Visual Novel Engine\n==============================\n\nhttps://www.renpy.org\n\n\nBranches\n========\n\nThe following branches are the most interesting.\n\n``fix``\n    The fix branch is used for fixes to the current version of Ren'Py that do\n    not require dangerous changes. The fix branch is also the source of the\n    documentation on https://www.renpy.org/. This branch is automatically\n    merged into master on a regular basis.\n\n    Pull requests that contain fixes or documentation improvements should be\n    made to the fix branch. When a feature release is made (for example, going from 8.6.x to 8.7.0),\n    the master branch is copied to the fix branch. Fix releases are made from this branch.\n\n``master``\n    The master branch is where the main focus of development is. This branch\n    will eventually become the next release of Ren'Py.\n\n    Pull requests that contain new features, that require incompatible changes,\n    or major changes to Ren'Py's internals should be targeted at the master\n    branch.\n\n    Feature releases are made from this branch.\n\n``work/``\n    Work branches contain work that that is intended to be merged into master or fix - pull requests, or pull requests\n    to be. These branches should start with work/<username>/ , or work/shared/ for work shared equally between multiple\n    contributors.\n\n    A github rule enforces that new branches much start  with work/.\n\n``history/``\n    Branches beginning with history/ contain commits that for various reasons are not included in the github interface.\n\n\nGetting Started\n===============\n\nRen'Py depends on a number of Python modules written in Cython and C. For\nchanges to Ren'Py that only involve Python modules, you can use the modules\nfound in the latest nightly build. Otherwise, you'll have to compile the\nmodules yourself.\n\nThe development scripts assume a POSIX-like platform. The scripts should run\non Linux or macOS, and can be made to run on Windows using an environment\nlike MSYS.\n\nNightly Build\n-------------\n\nNightly builds can be downloaded from:\n\n   https://nightly.renpy.org\n\nNote that the latest nightly build is at the bottom of the list. Once you've\nunpacked the nightly, change into this repository, and run::\n\n    ./after_checkout.sh <path-to-nightly>\n\nOnce this script completes, you should be able to run Ren'Py using renpy.sh,\nrenpy.app, or renpy.exe, as appropriate for your platform.\n\nIf the current nightly build doesn't work, please wait 24 hours for a new\nbuild to occur. If that build still doesn't work, contact Tom (`pytom at bishoujo.us`,\nor @renpytom on Twitter/X) to find out what's wrong.\n\nThe ``doc`` symlink will dangle until documentation is built, as described\nbelow.\n\nCompiling the Modules\n----------------------\n\nBuilding the modules requires you have the many dependencies installed on\nyour system. On Ubuntu and Debian, these dependencies can be installed with\nthe command::\n\n    sudo apt install python3-dev libassimp-dev libavcodec-dev libavformat-dev \\\n        libswresample-dev libswscale-dev libharfbuzz-dev libfreetype6-dev libfribidi-dev libsdl2-dev \\\n        libsdl2-image-dev libsdl2-gfx-dev libsdl2-mixer-dev libsdl2-ttf-dev libjpeg-dev pkg-config\n\nRen'Py requires SDL_image 2.6 or greater. If your distribution doesn't include\nthat version, you'll need to download it from:\n\n    https://github.com/libsdl-org/SDL_image/tree/SDL2\n\nWe strongly suggest using a package manager to create virtual environment and\nmanage dependencies. We have tested with `uv <https://docs.astral.sh/uv/>`_ but\nother package managers should work as well. To create a virtual environment and\ninstall dependencies, open a new terminal and run::\n\n    uv sync\n\nAfter that, compile extension modules and run Ren'Py using the command::\n\n    ./run.sh\n\n\nOther Platforms\n---------------\n\nWhere supported, Ren'Py will attempt to find include directories and library paths\nusing pkg-config. If pkg-config is not present, include and library paths can be\nspecified using CFLAGS and LDFLAGS.\n\nIf RENPY_CFLAGS is present in the environment and CFLAGS is not, setup.py\nwill set CFLAGS to RENPY_CFLAGS. The same is true for RENPY_LDFLAGS,\nRENPY_CC, RENPY_CXX, and RENPY_LD.\n\nSetup.py does not support cross-compiling. See https://github.com/renpy/renpy-build\nfor software that cross-compiles Ren'Py for many platforms. The renpy-build system\nalso include some runtime components for Android, iOS, and web.\n\n\nDocumentation\n=============\n\nBuilding\n--------\n\nBuilding the documentation requires Ren'Py to work. You'll either need to\nlink in a nightly build, or compile the modules as described above. You'll\nalso need the `Sphinx <https://www.sphinx-doc.org>`_ documentation generator.\nIf you have pip working, install Sphinx using::\n\n    pip install -U sphinx sphinx_rtd_theme sphinx_rtd_dark_mode sphinx-tabs\n\nOnce Sphinx is installed, change into the ``sphinx`` directory inside the\nRen'Py checkout and run::\n\n    ./build.sh\n\nFormat\n------\n\nRen'Py's documentation consists of reStructuredText files found in sphinx/source, and\ngenerated documentation found in function docstrings scattered throughout the code. Do\nnot edit the files in the ``sphinx/source/inc`` folder directly, as they will be\noverwritten.\n\nDocstrings may include tags on the first few lines:\n\n\\:doc: `section` `kind`\n    Indicates that this function should be documented. `section` gives\n    the name of the include file the function will be documented in, while\n    `kind` indicates the kind of object to be documented (one of ``function``,\n    ``method`` or ``class``. If omitted, `kind` will be auto-detected.\n\\:name: `name`\n    The name of the function to be documented. Function names are usually\n    detected, so this is only necessary when a function has multiple aliases.\n\\:args: `args`\n    This overrides the detected argument list. It can be used if some arguments\n    to the function are deprecated.\n\nFor example::\n\n    def warp_speed(factor, transwarp=False):\n        \"\"\"\n        :doc: warp\n        :name: renpy.warp_speed\n        :args: (factor)\n\n        Exceeds the speed of light.\n\n        `factor`\n            The warp factor. See Sternbach (1991) for details.\n\n        `transwarp`\n            If True, use transwarp. This does not work on all platforms.\n        \"\"\"\n\n        renpy.engine.warp_drive.engage(factor)\n\n\nTranslating\n===========\n\nFor best practices when it comes to translating the launcher and template\ngame, please read:\n\nhttps://lemmasoft.renai.us/forums/viewtopic.php?p=321603#p321603\n\n\nContributing\n============\n\nFor bug fixes, documentation improvements, and simple changes, just make a pull request. For nontrivial changes,\nplease file an issue first so we can discuss the planned change.\n\n\nEfficiency Tools (including Language Models)\n============================================\n\nThe goal of Ren'Py is to provide tools that enable human creativity in the form of visual novels and similar styles\nof games. In service of this goal, developers may use tools that increase their efficiency, including tools that use\nlanguage models.\n\nEvery change to Ren'Py must be created by a human that understands both the change, the\nportions of Ren'Py affected by this change, and the copyright implications of the change. Examples of uses of\nefficiency tools that we consider appropriate include completion where the human only accepts suggestions that\nthey understand and that are correct, and prompts that cause changes that can be immediately\nreviewed by a human for correctness. Larger changes may be created by prompting for smaller changes with reviews\nat each step.\n\nWe do not accept changes where a human does not fully understand the change and how it affects Ren'Py. Large changes\nmade with minimal human review (\"vibe coding\") are not acceptable. If you'd like to make such a change, it's better to\njust bring the idea to us on GitHub and let us make the change. Changes made by agents without human review are not\nacceptable.\n\nOur use of AI is intended to not require disclosure in the\n`Steam Content Survey <https://partner.steamgames.com/doc/gettingstarted/contentsurvey#5>`_. Specifically, we\ndon't use diffusion models or other techniques to generate game content consumed by players, and we do not require\ncreators to use any AI tools, or provide any such tools for creators to use.\n\nAs a special case, we allow machine translation of system messages when there is no human translator for the language.\nWhen a human translator becomes available, their work takes precedence. This exception allows system messages to be\ntranslated to improve accessibility.\n\nLicense\n=======\n\nFor the complete licensing terms, please read:\n\nhttps://www.renpy.org/doc/html/license.html\n\nBy contributing to Ren'Py, you agree to license your contributions under the MIT license. When contributing, you may\nchoose to:\n\n* Retain copyright in your contribution. If you choose this, please \"Copyright (year) Your Name <your email>\" in the\n  copyright notice for any file you change.\n* Assign copyright in your contribution to Tom Rothamel <pytom@bishoujo.us>. This is assumed to be the default if\n  you don't specify otherwise.\n"
+    },
+    "brief": {
+      "summary": "Ren'Py 是用于制作视觉小说的开源引擎",
+      "problem": "降低视觉小说及类似叙事游戏的制作门槛",
+      "highlights": [
+        "可以制作视觉小说和类似叙事游戏",
+        "可以使用 Python 扩展和修改引擎",
+        "可以构建和维护项目文档"
+      ],
+      "target_users": [
+        "视觉小说开发者",
+        "独立游戏团队",
+        "引擎贡献者"
+      ],
+      "why_trending": "本周首次收录，累计 6786 个 Star，近期仍有提交",
+      "caveat": "编译模块需要较多系统依赖，跨平台配置较复杂",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "renpy/renpy",
+      "score": 96,
+      "category": "互动叙事",
+      "reason": "专用于视觉小说创作的引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.0
+    }
+  }
+]
