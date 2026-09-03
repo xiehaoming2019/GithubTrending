@@ -1,0 +1,570 @@
+[
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "pacifio/atlas",
+      "url": "https://github.com/pacifio/atlas",
+      "description": "Source control for agents. Use multiple coding agents, track their changes and query them in one place",
+      "language": "Rust",
+      "total_stars": 2985,
+      "forks": 193,
+      "stars_today": 888,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 888
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-coding-assistant",
+        "claude-code",
+        "codex",
+        "coding-agents",
+        "git",
+        "gitops",
+        "kilo-code",
+        "mcp",
+        "mcp-client",
+        "opencode",
+        "opencode-ai",
+        "opencode-skills",
+        "self-hosted",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-14T16:48:52Z",
+      "updated_at": "2026-09-03T04:32:32Z",
+      "pushed_at": "2026-09-02T18:49:24Z",
+      "open_issues": 26,
+      "homepage": "https://www.tryatlas.cc/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![Atlas](landing/banner.svg)](https://www.tryatlas.cc/)\n\n<div align=\"center\">\n\n[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/GmnFggaPfP)\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)\n[![Latest release](https://img.shields.io/github/v/release/pacifio/atlas?include_prereleases&label=Release&style=for-the-badge)](https://github.com/pacifio/atlas/releases)\n[![Contributors](https://img.shields.io/github/contributors/pacifio/atlas?style=for-the-badge)](https://github.com/pacifio/atlas/graphs/contributors)\n\n**[Download](https://github.com/pacifio/atlas/releases)** · **[Discord](https://discord.gg/GmnFggaPfP)** · **[Docs](https://docs.tryatlas.cc/)** · **[Contributing](CONTRIBUTING.md)** · **[Issues](https://github.com/pacifio/atlas/issues)**\n\n<a href=\"https://github.com/pacifio/atlas\"><img src=\"https://img.shields.io/github/stars/pacifio/atlas?style=social\" alt=\"GitHub stars\"></a>\n<a href=\"https://github.com/pacifio/atlas\"><img alt=\"GitHub forks\" src=\"https://img.shields.io/github/forks/pacifio/atlas\"></a>\n\n<a href=\"https://trendshift.io/repositories/56020?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-56020\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/56020\" alt=\"pacifio%2Fatlas | Trendshift\" width=\"250\" height=\"55\"/></a>\n<a href=\"https://trendshift.io/repositories/56020?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-56020\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/56020/daily?language=Rust\" alt=\"pacifio%2Fatlas | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n</div>\n\n# Atlas\n\nAtlas is source control for coding agents. Every agent run produces checkpoints: commits are linked back to the session that made it alongside the prompts, tool calls, and reasoning. You see which agent did exactly what and why.\n\nRun Claude Code, Codex, Atlas's own agent, or anything from the ACP registry side by side against the same codebase, with shared memory so switching agents mid-task doesn't mean starting over.\n\n- **Every commit, explained.** A checkpoint links a commit back to the session that produced it: prompts, tool calls, and file changes kept together, queryable months later.\n- **Run any agent, side by side.** Claude Code, Codex, Atlas's own agent, and the wider ACP registry, all in the same window, against the same codebase. Switching agents mid-task doesn't mean starting over.\n- **One memory, every agent.** A decision Claude Code made shows up in Codex's next prompt. Plans, file changes, failures, and architecture notes are shared automatically, matched on-device against what you're asking about.\n- **Your notes are agent context.** Markdown in `.atlas/knowledge/`, plus the `CLAUDE.md` and `AGENTS.md` you already wrote, feed every agent in the project.\n- **`@` anything into a prompt.** Files, folders, symbols, branches, commits, notes, papers, and past sessions resolve locally before the prompt is sent.\n- **Local by default.** Code, notes, and sessions stay on your machine. Sign in and create an organisation when you want to sync across a team.\n\n**[Join the Discord](https://discord.gg/GmnFggaPfP)** · `#general` chat · `#dev` build questions · `#feature-requests` ideas · `#bugs` report breakage\n\nStart with [CONTRIBUTING.md](CONTRIBUTING.md) to send a change, or [open an issue](https://github.com/pacifio/atlas/issues) for anything you hit.\n\n---\n\n## Table of contents\n\n- [Why Atlas](#why-atlas)\n- [How it works](#how-it-works)\n- [Checkpoints](#checkpoints)\n- [Features](#features)\n- [Download](#download)\n- [Build from source](#build-from-source)\n- [Contributing](#contributing)\n- [Local by default](#local-by-default)\n- [Links](#links)\n\n## Why Atlas\n\nAgents now write a large share of the code and keep none of the reasoning behind it. Atlas records both, and makes them queryable: what changed, by whose agent, at what point in time.\n\n- **Agents start from zero every session.** Atlas keeps a persistent on-device memory of decisions, plans, and changes, and pushes the relevant parts into every turn.\n- **Switching agents loses the thread.** The first message of a new session carries a curated fact pack and the tail of your last one, even when that session ran on a different agent.\n- **You can't review what you can't see.** Every session is stored and searchable, next to a real commit graph and file-level diffs of what actually landed.\n- **Context lives in ten places.** The knowledge base, `CLAUDE.md`, `AGENTS.md`, Claude Code's memory files, and Codex's history fold into one index every agent reads from.\n- **Nothing is locked in.** Notes are markdown, canvases are JSON, sessions are JSONL, and the editor is a file on disk. Close Atlas and pick up in vim. The one exception is the checkpoint record (which agent session produced which commit), which is SQLite in the project's gitignored `.atlas/`, because it is queried, not read.\n- **Built for agents from the ground up.** The agent runtime, shared memory, and session history are the foundation the rest of the app is built on.\n\n## How it works\n\nAtlas runs your agents as they are, and enriches what they see.\n\nClaude Code and Codex run as external subprocesses over [ACP](https://github.com/zed-industries/agent-client-protocol), the most-used, most-tested path. The Atlas agent runs in-process on [Cersei](https://docs.tryatlas.cc/), our Rust agent framework.\n\nBeyond those, Atlas can spawn any agent in the ACP registry (Cursor, OpenCode, Kilo Code, and more), pulling in each one's official binary automatically. All of them go through the same send path, so everything below applies whichever one you pick.\n\n> [!NOTE]\n> QA on the long tail of registry agents is ongoing.\n\nBefore your message reaches the agent, Atlas assembles context around it:\n\n| Injected | Where it comes from | When |\n|---|---|---|\n| **`@` mentions** | Resolved locally in Rust before the prompt is sent. Notes, skills, papers, and past sessions are inlined; files and folders resolve to a path | Every turn |\n| **Shared agent memory** | Active plan, decisions, file changes, failures, and architecture notes, written by any agent | Every turn |\n| **Semantic matches** | Your message is embedded on-device and matched against the project's memory index | Every turn |\n| **Session handoff** | A curated fact pack plus the tail of your last session in this project, including one from a different agent | First message |\n| **What you already wrote** | Knowledge notes, `CLAUDE.md`, `AGENTS.md`, Claude Code's memory files, and Codex's history, folded into one index | Continuously |\n\n- **One path, no per-agent special-casing.** Run your existing Claude Code or Codex subscription through Atlas and the session gets more context, with no change to how you work.\n- **Claude Code's memory is visible to Codex, and the reverse.** Neither agent can read the other's history on its own.\n- **Folders resolve to a pointer, not a paste.** `@`-ing a 5000-line file sends a path the agent reads on demand, so one mention doesn't occupy the context window for the rest of the session.\n- **Embedding runs on your machine.** Retrieval never leaves the device.\n\n## Checkpoints\n\nA checkpoint is what a commit doesn't tell you on its own: which session produced it, what the agent was asked, the tool calls it made, and the reasoning behind the change, kept together instead of lost the moment the terminal scrolls.\n\nAtlas records every agent session locally in `.atlas/sessions.db`, with secrets scrubbed before anything touches disk. When you commit (from any tool, even with Atlas closed), the commit is linked back to the session that produced it as a checkpoint, and links survive rebases and amends.\n\nYou don't have to read the raw transcript to get the context back: select a checkpoint and chat with it directly, and it answers from what actually happened in that session. Local mode works fully offline with no account.\n\n---\n\n## Features\n\n### Agents\n\n| Capability | Description | Link |\n|---|---|---|\n| Multi-agent sessions | Claude Code, Codex, and Atlas's native agent, selectable per session and running in parallel across tabs. Sessions are independent of tabs, so switching never drops a run in flight | [Chat & Sessions](https://docs.tryatlas.cc/docs/product/chat) |\n| Shared agent memory | On-device semantic index (local embeddings, HNSW search) that every agent reads from and writes to | [Memory](https://docs.tryatlas.cc/docs/context/memory) |\n| @ mentions | Local resolution of files, folders, symbols, branches, commits, notes, skills, papers, and past sessions | [Chat & Sessions](https://docs.tryatlas.cc/docs/product/chat) |\n| Skills | SKILL.md files scoped globally or per project, enabled per agent by symlinking into that agent's own skills directory | [Skills](https://docs.tryatlas.cc/docs/context/skills) |\n| Packs | Install a GitHub repo of skills, subagents, commands, hooks, rules, and scripts, discovered through the skills.sh index | [Skills](https://docs.tryatlas.cc/docs/context/skills) |\n| Model chat | Talk to a model directly in its own tab, with no agent loop around it | [Chat & Sessions](https://docs.tryatlas.cc/docs/product/chat) |\n| Organisations | Sign in, create an organisation, and sync across devices and teammates | [Organisations](https://docs.tryatlas.cc/docs/organisation/organisations) |\n\n### Agent history\n\n| Capability | Description |\n|---|---|\n| **Session capture** | Every session recorded to `.atlas/sessions.db`: prompts, messages, tool calls, the files each one touched, and the patches it applied |\n| **Checkpoints** | Each session linked to the commits it produced. Commits are observed rather than intercepted, so one made from a terminal, from another editor, or while Atlas was closed still finds its session |\n| **Survives history rewrites** | Links re-point through amend and rebase by patch-id reconciliation. When a squash makes the link genuinely ambiguous, it orphans instead of guessing |\n| **Transcript import** | Backfills your existing Claude Code history, so the record starts before you installed Atlas |\n| **Secrets scrubbed on write** | Redaction runs before anything is persisted, so the local store is never itself a disclosure risk |\n| **Capture health** | One signal per workspace, OK, Degraded, or Stopped, each with a reason and the next step |\n| **Mission control** | Dashboard for agent activity: usage over time, consumption breakdown, timelines, and a filterable log table |\n\nWorks with no account and no network.\n\n### The workspace\n\n| Capability | Description | Link |\n|---|---|---|\n| **Editor** | CodeMirror editing surface, with per-project editor state restored across restarts | [Editor](https://docs.tryatlas.cc/docs/product/editor) |\n| **Git** | Real commit graph with lane assignment, stage/unstage/commit, branch operations, and file-level diffs | [Git & Diff](https://docs.tryatlas.cc/docs/source-control/git) |\n| **Terminal** | Block terminal where each command carries its own output, exit code, and duration, plus a full interactive surface for `vim`, `htop`, and friends | [Terminal](https://docs.tryatlas.cc/docs/product/terminal) |\n| **Knowledge base** | Plain markdown notes in `.atlas/knowledge/`, versioned next to the code, with backlinks, a link graph, and export to HTML or a standalone server binary | [Knowledge base](https://docs.tryatlas.cc/docs/context/knowledge-base) |\n| **Research** | Search arXiv and Semantic Scholar, pull papers in, read them in-app, and `@`-mention them into a prompt | [Research](https://docs.tryatlas.cc/docs/context/research) |\n| **Browser** | Native WebKit webview in a tab, with real logins, cookies, and a reader mode | [Explorer](https://docs.tryatlas.cc/docs/product/explorer) |\n| **Spaces** | Spatial board for notes and their connections, pers"
+    },
+    "brief": {
+      "summary": "Atlas 为编程代理提供可追踪的源代码管理",
+      "problem": "解决多代理协作时上下文丢失、改动难追溯的问题",
+      "highlights": [
+        "可以并行运行 Claude Code、Codex 等代理",
+        "可以把提交关联到会话、提示和文件改动",
+        "可以共享代理记忆并搜索项目历史"
+      ],
+      "target_users": [
+        "AI 编程用户",
+        "多代理开发团队",
+        "代码维护者"
+      ],
+      "why_trending": "今日新增 888 个 Star，本周首次收录",
+      "caveat": "长尾代理的质量验证仍在进行中",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "pacifio/atlas",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "管理多编码Agent及其技能",
+      "generated_by_ai": true,
+      "velocity_score": 89,
+      "freshness_score": 40,
+      "ranking_score": 72.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "NousResearch/hermes-agent",
+      "url": "https://github.com/NousResearch/hermes-agent",
+      "description": "The agent that grows with you",
+      "language": "Python",
+      "total_stars": 240244,
+      "forks": 49173,
+      "stars_today": 533,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 533
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-agents",
+        "anthropic",
+        "chatgpt",
+        "claude",
+        "claude-code",
+        "codex",
+        "hermes",
+        "hermes-agent",
+        "llm",
+        "nous-research",
+        "openai"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-07-22T22:22:28Z",
+      "updated_at": "2026-09-03T04:42:37Z",
+      "pushed_at": "2026-09-03T04:27:51Z",
+      "open_issues": 38663,
+      "homepage": "https://hermes-agent.nousresearch.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/banner.png\" alt=\"Hermes Agent\" width=\"100%\">\n</p>\n\n# Hermes Agent ☤\n<p align=\"center\">\n  <a href=\"https://hermes-agent.nousresearch.com/\">Hermes Agent</a> | <a href=\"https://hermes-agent.nousresearch.com/\">Hermes Desktop</a>\n</p>\n<p align=\"center\">\n  <a href=\"https://hermes-agent.nousresearch.com/docs/\"><img src=\"https://img.shields.io/badge/Docs-hermes--agent.nousresearch.com-FFD700?style=for-the-badge\" alt=\"Documentation\"></a>\n  <a href=\"https://discord.gg/NousResearch\"><img src=\"https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Discord\"></a>\n  <a href=\"https://github.com/NousResearch/hermes-agent/blob/main/LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-green?style=for-the-badge\" alt=\"License: MIT\"></a>\n  <a href=\"https://nousresearch.com\"><img src=\"https://img.shields.io/badge/Built%20by-Nous%20Research-blueviolet?style=for-the-badge\" alt=\"Built by Nous Research\"></a>\n  <a href=\"README.zh-CN.md\"><img src=\"https://img.shields.io/badge/Lang-中文-red?style=for-the-badge\" alt=\"中文\"></a>\n  <a href=\"README.ur-pk.md\"><img src=\"https://img.shields.io/badge/Lang-اردو-green?style=for-the-badge\" alt=\"اردو\"></a>\n  <a href=\"README.es.md\"><img src=\"https://img.shields.io/badge/Lang-Español-orange?style=for-the-badge\" alt=\"Español\"></a>\n</p>\n\n**The self-improving AI agent built by [Nous Research](https://nousresearch.com).** It's the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS, a GPU cluster, or serverless infrastructure that costs nearly nothing when idle. It's not tied to your laptop — talk to it from Telegram while it works on a cloud VM.\n\nUse any model you want — [Nous Portal](https://portal.nousresearch.com), OpenRouter, OpenAI, your own endpoint, and [many others](https://hermes-agent.nousresearch.com/docs/integrations/providers). Switch with `hermes model` — no code changes, no lock-in.\n\n<table>\n<tr><td><b>A real terminal interface</b></td><td>Full TUI with multiline editing, slash-command autocomplete, conversation history, interrupt-and-redirect, and streaming tool output.</td></tr>\n<tr><td><b>Lives where you do</b></td><td>Telegram, Discord, Slack, WhatsApp, Signal, and CLI — all from a single gateway process. Voice memo transcription, cross-platform conversation continuity.</td></tr>\n<tr><td><b>A closed learning loop</b></td><td>Agent-curated memory with periodic nudges. Autonomous skill creation after complex tasks. Skills self-improve during use. FTS5 session search with LLM summarization for cross-session recall. <a href=\"https://github.com/plastic-labs/honcho\">Honcho</a> dialectic user modeling. Compatible with the <a href=\"https://agentskills.io\">agentskills.io</a> open standard.</td></tr>\n<tr><td><b>Scheduled automations</b></td><td>Built-in cron scheduler with delivery to any platform. Daily reports, nightly backups, weekly audits — all in natural language, running unattended.</td></tr>\n<tr><td><b>Delegates and parallelizes</b></td><td>Spawn isolated subagents for parallel workstreams. Write Python scripts that call tools via RPC, collapsing multi-step pipelines into zero-context-cost turns.</td></tr>\n<tr><td><b>Runs anywhere, not just your laptop</b></td><td>Seven terminal backends — local, Docker, SSH, Singularity, Modal, Daytona, and Vercel Sandbox. Daytona and Modal offer serverless persistence — your agent's environment hibernates when idle and wakes on demand, costing nearly nothing between sessions. Run it on a $5 VPS or a GPU cluster.</td></tr>\n<tr><td><b>Research-ready</b></td><td>Batch trajectory generation, trajectory compression for training the next generation of tool-calling models.</td></tr>\n</table>\n\n---\n\n## Quick Install\n\n### Linux, macOS, WSL2, Termux\n\n```bash\ncurl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash\n```\n\n### Windows (native, PowerShell)\n\n> **Heads up:** Native Windows runs Hermes without WSL — CLI, gateway, TUI, and tools all work natively. If you'd rather use WSL2, the Linux/macOS one-liner above works there too. Found a bug? Please [file issues](https://github.com/NousResearch/hermes-agent/issues).\n\nRun this in PowerShell:\n\n```powershell\niex (irm https://hermes-agent.nousresearch.com/install.ps1)\n```\n\nThe installer handles everything: uv, Python 3.11, Node.js, ripgrep, ffmpeg, **and a portable Git Bash** (MinGit, unpacked to `%LOCALAPPDATA%\\hermes\\git` — no admin required, completely isolated from any system Git install). Hermes uses this bundled Git Bash to run shell commands.\n\nIf you already have Git installed, the installer detects it and uses that instead. Otherwise a ~45MB MinGit download is all you need — it won't touch or interfere with any system Git.\n\n> **Android / Termux:** The tested manual path is documented in the [Termux guide](https://hermes-agent.nousresearch.com/docs/getting-started/termux). On Termux, Hermes installs a curated `.[termux]` extra because the full `.[all]` extra currently pulls Android-incompatible voice dependencies.\n>\n> **Windows:** Native Windows is fully supported — the PowerShell one-liner above installs everything. If you'd rather use WSL2, the Linux command works there too. Native Windows install lives under `%LOCALAPPDATA%\\hermes`; WSL2 installs under `~/.hermes` as on Linux.\n\nAfter installation:\n\n```bash\nsource ~/.bashrc    # reload shell (or: source ~/.zshrc)\nhermes              # start chatting!\n```\n\n### Troubleshooting\n\n#### Windows Defender or antivirus flags `uv.exe` as malware\n\nIf your antivirus (Bitdefender, Windows Defender, etc.) quarantines `uv.exe` from the Hermes `bin` folder (`%LOCALAPPDATA%\\hermes\\bin\\uv.exe`), this is a **false positive**. The file is Astral's `uv` — the Rust Python package manager Hermes bundles to manage its Python environment. ML-based antivirus engines commonly flag unsigned Rust binaries that download and install packages.\n\n**To verify your copy is authentic:**\n\n```powershell\n# Install GitHub CLI if needed\nwinget install --id GitHub.cli\n\n# Login to GitHub\ngh auth login\n\n# Run verification\n$uv = \"$env:LOCALAPPDATA\\hermes\\bin\\uv.exe\"\n$ver = (& $uv --version).Split(' ')[1]\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\n$zip = \"$env:TEMP\\uv.zip\"\nInvoke-WebRequest \"https://github.com/astral-sh/uv/releases/download/$ver/uv-x86_64-pc-windows-msvc.zip\" -OutFile $zip -UseBasicParsing\ngh attestation verify $zip --repo astral-sh/uv\nExpand-Archive $zip \"$env:TEMP\\uv_x\" -Force\n(Get-FileHash \"$env:TEMP\\uv_x\\uv.exe\").Hash -eq (Get-FileHash $uv).Hash\n```\n\nIf attestation says \"Verification succeeded\" and the last line prints `True`, you're good.\n\n**To whitelist Hermes:**\n- **Windows Defender:** Run PowerShell as Admin → `Add-MpPreference -ExclusionPath \"$env:LOCALAPPDATA\\hermes\\bin\"`\n- **Bitdefender:** Add an exception in the Bitdefender console (Protection > Antivirus > Settings > Manage Exceptions)\n- Whitelist the **folder**, not the file hash — Hermes updates `uv` and the hash changes every version\n\nFor more context, see the upstream Astral reports: [astral-sh/uv#13553](https://github.com/astral-sh/uv/issues/13553), [astral-sh/uv#15011](https://github.com/astral-sh/uv/issues/15011), [astral-sh/uv#10079](https://github.com/astral-sh/uv/issues/10079).\n\n---\n\n## Getting Started\n\n```bash\nhermes              # Interactive CLI — start a conversation\nhermes model        # Choose your LLM provider and model\nhermes tools        # Configure which tools are enabled\nhermes config set   # Set individual config values\nhermes config get   # Print individual config values\nhermes gateway      # Start the messaging gateway (Telegram, Discord, etc.)\nhermes setup        # Run the full setup wizard (configures everything at once)\nhermes claw migrate # Migrate from OpenClaw (if coming from OpenClaw)\nhermes update       # Update to the latest version\nhermes doctor       # Diagnose any issues\n```\n\n📖 **[Full documentation →](https://hermes-agent.nousresearch.com/docs/)**\n\n---\n\n## Skip the API-key collection — Nous Portal\n\nHermes works with whatever provider you want — that's not changing. But if you'd rather not collect five separate API keys for the model, web search, image generation, TTS, and a cloud browser, **[Nous Portal](https://portal.nousresearch.com)** covers all of them under one subscription:\n\n- **300+ models** — pick any of them with `/model <name>`\n- **Tool Gateway** — web search (Firecrawl), image generation (FAL), text-to-speech (OpenAI), cloud browser (Browser Use), all routed through your sub. No extra accounts.\n\nOne command from a fresh install:\n\n```bash\nhermes setup --portal\n```\n\nThat logs you in via OAuth, sets Nous as your provider, and turns on the Tool Gateway. Check what's wired up any time with `hermes portal info`. Full details on the [Tool Gateway docs page](https://hermes-agent.nousresearch.com/docs/user-guide/features/tool-gateway).\n\nYou can still bring your own keys per-tool whenever you want — the gateway is per-backend, not all-or-nothing.\n\n---\n\n## CLI vs Messaging Quick Reference\n\nHermes has two entry points: start the terminal UI with `hermes`, or run the gateway and talk to it from Telegram, Discord, Slack, WhatsApp, Signal, or Email. Once you're in a conversation, many slash commands are shared across both interfaces.\n\n| Action                         | CLI                                           | Messaging platforms                                                              |\n| ------------------------------ | --------------------------------------------- | -------------------------------------------------------------------------------- |\n| Start chatting                 | `hermes`                                      | Run `hermes gateway setup` + `hermes gateway start`, then send the bot a message |\n| Start fresh conversation       | `/new` or `/reset`                            | `/new` or `/reset`                                                               |\n| Change model                   | `/model [provider:model]`                     | `/model [provider:model]`                                                        |\n| Set a personality              | `/personality [name]`                         | `/personality [name]`                                                            |\n| Retry or undo the last turn    | `/retry`, `/undo`                             | `/retry`, `/undo`                                                                |\n| Compress context / check usage | `/compress`, `/usage`, `/insights [--days N]` | `/compress`, `/usage`, `/insights [days]`                                        |\n| Browse skills                  | `/skills` or `/<skill-name>`                  | `/<skill-name>`                                                                  |\n| Interrupt current work         | `Ctrl+C` or send a new message                | `/stop` or send a new message                                                    |\n| Platform-specific status       | `/platforms`                                  | `/status`, `/sethome`                                                            |\n\nFor the full command lists, see the [CLI guide](https://hermes-agent.nousresearch.com/docs/user-guide/cli) and the [Messaging Gateway guide](https://hermes-agent.nousresearch.com/docs/user-guide/messaging).\n\n---\n\n## Documentation\n\nAll documentation lives at **[hermes-agent.nousresearch.com/docs](https://hermes-agent.nousresearch.com/docs/)**:\n\n| Section                                                                                             | What's Covered                                             |\n| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |\n| [Quickstart](https://hermes-agent"
+    },
+    "brief": {
+      "summary": "Hermes Agent 是可持续学习的开源 AI Agent",
+      "problem": "解决 Agent 难以记忆、跨平台运行和持续改进的问题",
+      "highlights": [
+        "可以通过命令行或聊天平台使用 Agent",
+        "可以让 Agent 定时执行报告和备份任务",
+        "可以创建技能并搜索历史会话"
+      ],
+      "target_users": [
+        "AI 开发者",
+        "自动化运维人员",
+        "研究人员"
+      ],
+      "why_trending": "今日新增 533 个 Star，本周首次收录",
+      "caveat": "资料显示项目有 38663 个未关闭 Issue",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "NousResearch/hermes-agent",
+      "score": 92,
+      "category": "AI Agent / Skills",
+      "reason": "具备学习循环的通用Agent",
+      "generated_by_ai": true,
+      "velocity_score": 83,
+      "freshness_score": 20,
+      "ranking_score": 69.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "Imbad0202/academic-research-skills",
+      "url": "https://github.com/Imbad0202/academic-research-skills",
+      "description": "Academic Research Skills for Claude Code: research → write → review → revise → finalize",
+      "language": "Python",
+      "total_stars": 45651,
+      "forks": 3587,
+      "stars_today": 799,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 799
+    },
+    "details": {
+      "topics": [
+        "academic-pipeline",
+        "academic-writing",
+        "ai-research",
+        "claude",
+        "claude-code",
+        "literature-review",
+        "peer-review",
+        "prompt-engineering"
+      ],
+      "license_name": "",
+      "created_at": "2026-02-26T06:31:01Z",
+      "updated_at": "2026-09-03T04:34:01Z",
+      "pushed_at": "2026-09-01T17:57:41Z",
+      "open_issues": 18,
+      "homepage": "https://buymeacoffee.com/crucify020v",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Academic Research Skills for Claude Code\n\n[![Version](https://img.shields.io/badge/version-v3.21.1-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.21.1)\n[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)\n[![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)\n[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)\n\n[简体中文版](README.zh-CN.md) | [繁體中文版](README.zh-TW.md) | [日本語版](README.ja-JP.md) | [한국어](README.ko-KR.md)\n\nA comprehensive suite of Claude Code skills for academic research, covering the full pipeline from research to publication.\n\n**Install in 30 seconds** (Claude Code CLI / VS Code / JetBrains, v3.7.0+):\n\n```text\n/plugin marketplace add Imbad0202/academic-research-skills\n/plugin install academic-research-skills\n```\n\nThen try `/ars-plan` to walk through your paper structure via Socratic dialogue, or jump to [Quick install](#quick-install) for prerequisites and the traditional symlink flow.\n\n> **AI is your copilot, not the pilot.** This tool won't write your paper for you. It handles the grunt work — hunting down references, formatting citations, verifying data, checking logical consistency — so you can focus on the parts that actually require your brain: defining the question, choosing the method, interpreting what the data means, and writing the sentence after \"I argue that.\"\n>\n> Unlike a humanizer, this tool doesn't help you hide the fact that you used AI. It helps you write better. Style Calibration learns your voice from past work. Writing Quality Check catches the patterns that make prose feel machine-generated. The goal is quality, not cheating.\n\n### Why human-in-the-loop, not full automation?\n\nLu et al. (2026, *Nature* 651:914-919) built **The AI Scientist** — the first fully autonomous AI research system to publish a paper through blind peer review at a top-tier ML venue (ICLR 2025 workshop, score 6.33/10 vs workshop average 4.87). Their Limitations section enumerates the failure modes that any fully-autonomous AI research pipeline inherits: implementation bugs, hallucinated results, shortcut reliance, bug-as-insight reframing, methodology fabrication, frame-lock, citation hallucinations.\n\nARS is built on the premise that **a human researcher augmented by AI avoids these failure modes better than either alone**. Stage 2.5 and Stage 4.5 integrity gates run a 7-mode blocking checklist (see [`academic-pipeline/references/ai_research_failure_modes.md`](academic-pipeline/references/ai_research_failure_modes.md)); the reviewer offers an opt-in calibration mode that measures its own FNR/FPR against a user-supplied gold set.\n\n[**Zhao et al.**](https://arxiv.org/abs/2605.07723) (2026-05) audited 111M references across 2.5M papers on arXiv, bioRxiv, SSRN, and PMC. Their conservative estimate is 146,932 hallucinated citations for 2025 alone, with an observed mid-2024 inflection; for the bioRxiv-to-PMC pairing they report 85.3% preprint-to-published persistence. The paper describes \"real citations deployed to support claims the cited references do not actually make\" as an open challenge. ARS v3.7.1 added trust-chain frontmatter for source provenance; v3.7.3 added locator infrastructure (three-layer citation anchors) for future claim-level audits and surfaces advisory risk signals at cite time (ARS labels the claim-faithfulness gap internally as \"L3\"; this is ARS terminology, not the paper's). v3.7.x is motivated by Zhao et al.'s corpus-scale findings; corpus-scale evaluation of ARS itself remains future work.\n\nv3.8 closes the second half of the L3 gap. v3.7.3 made every citation carry a locator anchor; v3.8 adds an opt-in audit pass (`ARS_CLAIM_AUDIT=1`) that fetches the cited source against each anchor and judges whether the claim is actually supported. Five new HIGH-WARN classes (claim-not-supported, negative-constraint-violation, fabricated-reference, anchorless, constraint-violation-uncited) gate-refuse output through the formatter terminal hard gate. Calibration is shipped as a 20-tuple gold set with FNR<0.15 + FPR<0.10 acceptance thresholds; ramp-on plan is deferred to post-calibration evidence per v3.8 spec §5.\n\n[**Ren et al.**](https://arxiv.org/abs/2607.13104) (2026, *Self-Improvements in Modern Agentic Systems: A Survey*) supplies a third, survey-level anchor. Its scientific-discovery synthesis (§7.4) concludes that discovery agents cannot easily verify novelty, correctness, or reproducibility on their own and may exploit weak proxies instead, must manage evidence across heterogeneous tools and literature, and raise governance issues — \"scientific writing can also amplify misinformation when the evidence is weak.\" Its generation-loop chapters (§5.1–§5.2) list human auditing and retained human anchors among the practical safeguards for self-generated evaluation loops, and its historical chapter (§2.2) records the oldest form of the same lesson: the practical success of Lenat's EURISKO depended heavily on the user serving as the external evaluation signal, pruning unproductive heuristic drift — a limitation the survey notes persists in modern agentic systems. ARS cites the survey as design rationale for its human-in-the-loop stance, not as empirical proof that human-in-the-loop pipelines outperform autonomous ones; the survey's actionable deltas for ARS are tracked in #539–#541 and #547–#550.\n\nv3.3 was inspired by [**PaperOrchestra**](https://arxiv.org/abs/2604.05018) (Song, Song, Pfister & Yoon, 2026, Google): Semantic Scholar API verification, anti-leakage protocol, VLM figure verification, and revision-trajectory tracking. ARS now implements that last idea through categorical, evidence-anchored criterion trajectories rather than score deltas.\n\n---\n\n## Architecture & pipeline\n\n**👉 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — the full pipeline view: flow diagram, stage-by-stage matrix, data-access flow, skill dependency graph, quality gates, and mode list.\n\nThe architecture doc supersedes the sprawling pipeline description that used to live here. Everything about *what runs in which stage* now lives in one place.\n\n## Quick install\n\n**Prerequisites**\n\n- [Claude Code](https://docs.claude.com/en/docs/claude-code/setup) (latest; plugin packaging requires recent versions)\n- `ANTHROPIC_API_KEY` exported, or set on first `claude` run\n- *Optional:* Pandoc for DOCX, tectonic + Source Han Serif TC for APA 7.0 PDF (Markdown output works without either)\n- *Optional (real Python):* The core skills (research / write / review) need no Python — they are prompt-driven. A **real Python interpreter** is needed only for: the `PreToolUse` write-scope guard (optional subagent hardening — if no real Python is found it cleanly no-ops and the guard is simply inactive; core skills are unaffected), plus a few opt-in features that shell out to Python (revision-patch mode, the submission-package verifier, and the `/ars-cache-invalidate` / `/ars-mark-read` / `/ars-unmark-read` commands). On Windows, note that `python3` is often a non-functional Microsoft Store placeholder rather than real Python; install Python from python.org (or via `winget`) so the launcher can find a real interpreter. The guard launcher is a POSIX shell script and `hooks.json` invokes it through `bash`, so on Windows it needs **Git Bash** (bundled with Git for Windows). With Git Bash present, a missing real Python degrades cleanly (the guard no-ops, silently). Without Git Bash, Claude Code falls back to PowerShell, which cannot run the `.sh` launcher at all: the guard is inactive and the `PreToolUse` hook will log an error per call rather than no-op quietly (accepted degradation — the guard is optional and never blocks your writes, but the hook noise is the trade-off until Git Bash is installed).\n\n> **Which controls are active in *your* install channel?** Availability varies by install channel. See the per-channel map: [docs/CONTROL_AVAILABILITY.md](docs/CONTROL_AVAILABILITY.md).\n\n**Plugin install (v3.7.0+, recommended):**\n\n```text\n/plugin marketplace add Imbad0202/academic-research-skills\n/plugin install academic-research-skills\n```\n\n**Verify it works:** run `/ars-plan` and describe a paper you're working on — ARS will start a Socratic dialogue to map out chapter structure. For a single-shot test instead, try `/ars-lit-review \"your topic\"`.\n\n**👉 [docs/SETUP.md](docs/SETUP.md)** — full guide: install Claude Code, set up API keys, optional Pandoc/tectonic for DOCX/PDF, cross-model verification (`ARS_CROSS_MODEL`), and six installation methods (Plugin, project skills, global skills, claude.ai Project, repo-cloned, Claude Science import).\n\n**👉 [docs/DATA_FLOWS.md](docs/DATA_FLOWS.md)** — what leaves your machine (bibliographic resolvers, optional consent-gated cross-model calls, the plugin update check), what is cached locally, for how long, and how to turn each path off.\n\n**👉 [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)** — the standing risks the suite knows about, which existing controls address each one, the evidence status behind those controls, and what remains open.\n\n**Using Claude Science?** The four skills import directly: **Skills → Import from GitHub**, paste `https://github.com/Imbad0202/academic-research-skills`, **Preview**, then **Import 4 skills** (requires v3.14.0+ of this repo — the importer reads the explicit skill paths in the marketplace manifest). Imports are point-in-time snapshots: re-import after ARS updates. Imported skills carry the ARS methodology (research / writing / review protocols); Claude Code-specific machinery — slash commands, hooks, subagent orchestration — does not transfer. See [docs/SETUP.md](docs/SETUP.md) Method 5 for details.\n\n**Using Pi?** Install the in-tree, community-maintained wrapper with `pi install git:github.com/Imbad0202/academic-research-skills`. It keeps the original ARS content authoritative and documents Pi-specific orchestration and hook limitations. See [`pi/README.md`](pi/README.md).\n\n**Using Codex CLI?** Install the sibling distribution instead: [`Imbad0202/academic-research-skills-codex`](https://github.com/Imbad0202/academic-research-skills-codex) — same workflow content, Codex-native packaging as a single `$academic-research-suite` skill with `ars-*` aliases.\n\n**Third-party platforms and integrations** that wrap or host ARS are listed in [THIRD_PARTY.md](THIRD_PARTY.md) — community-submitted and not reviewed or endorsed by the maintainer.\n\n**Governance:** who decides, what cross-model review does and does not provide, and the project's end-of-life posture are stated in [GOVERNANCE.md](GOVERNANCE.md); security reporting and triage in [SECURITY.md](SECURITY.md).\n\n## Performance & cost\n\n**👉 [docs/PERFORMANCE.md](docs/PERFORMANCE.md)** — per-mode token budgets, full-pipeline estimate (~$4–6 for a 15k-word paper), and recommended Claude Code settings (Auto mode; Agent Team optional).\n\n## Guides & articles\n\n- [Academic Writing Shouldn't Be a Solo Act](https://open.substack.com/pub/edwardwu223235/p/academic-writing-shouldnt-be-a-solo?r=4dczl&utm_medium=ios) — full pipeline walkthrough (English)\n- [學術寫作不該是一個人的事：一套開源 AI 協作工具如何改變研究者的工作流](https://open.substack.com/pub/edwardwu223235/p/ai?r=4dczl&utm_medium=ios) — 完整使用指南（繁體中文）\n\n---\n\n## Features at a glance\n\n- **Deep Research** — 13-agent research team with Socratic guided mode, PRISMA systematic review, intent detection, dialogue health monitoring, optional cross-model DA, Semantic Scholar API verification.\n- **Academic Paper** — 12-agent paper writing with Style Calibration, Writing Quality Check, LaTeX hardening, visualization, revision coaching, citation conversion, anti-leakage protocol, and VLM figure verification.\n- **Academic Paper Reviewer** — 7-agent multi-perspective peer review with criterion-bound, evidence-anchored narrative judgements (Jo"
+    },
+    "brief": {
+      "summary": "面向 Claude Code 的学术研究全流程技能套件",
+      "problem": "减少文献检索、引用核查和论文修改中的重复工作",
+      "highlights": [
+        "可以规划论文结构并推进研究流程",
+        "可以核查参考文献、引用和论证一致性",
+        "可以检查写作质量并辅助多轮修改"
+      ],
+      "target_users": [
+        "科研人员",
+        "研究生",
+        "学术写作者"
+      ],
+      "why_trending": "今日新增799 Star，本周首次收录，累计Star超4.5万",
+      "caveat": "需人工把关，且采用 CC BY-NC 4.0 许可",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Imbad0202/academic-research-skills",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Code学术研究技能工作流",
+      "generated_by_ai": true,
+      "velocity_score": 88,
+      "freshness_score": 40,
+      "ranking_score": 62.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "jub0t/Concat",
+      "url": "https://github.com/jub0t/Concat",
+      "description": "Free & Open-Source CapCut replacement.",
+      "language": "Rust",
+      "total_stars": 1167,
+      "forks": 104,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 420
+    },
+    "details": {
+      "topics": [
+        "audio-processor",
+        "auto-caption",
+        "automation",
+        "capcut",
+        "capcut-alternative",
+        "content-creation",
+        "cross-platform",
+        "desktop-app",
+        "ffmpeg",
+        "free-video-editor",
+        "non-linear-editor",
+        "offline-first",
+        "open-source-video-editor",
+        "rust-lang",
+        "tauri-app",
+        "video-editing",
+        "video-editing-software",
+        "video-processing-tool",
+        "whisper-cpp"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-08-25T18:34:47Z",
+      "updated_at": "2026-09-03T04:40:38Z",
+      "pushed_at": "2026-09-03T04:11:52Z",
+      "open_issues": 15,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"assets/concat_logo_512.png\" alt=\"Concat\" width=\"140\" />\n\n# Concat\n\n**The free, open-source CapCut replacement.**\n\n<p align=\"center\">\n  <a href=\"https://github.com/jub0t/Concat/actions/workflows/build.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/jub0t/Concat/build.yml?style=flat&logo=githubactions&logoColor=F8F8F8&label=Build&labelColor=000000&color=c6f432\" alt=\"Build Status\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS%20%7C%20Windows%20%7C%20Linux-c6f432?style=flat&logo=desktop-download&logoColor=F8F8F8&labelColor=000000\" alt=\"Download Concat\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/releases\"><img src=\"https://img.shields.io/badge/Version-0.2.0-c6f432?style=flat&logo=semver&logoColor=F8F8F8&labelColor=000000\" alt=\"Concat Version 0.2.0\" /></a>\n  <a href=\"https://discord.gg/DVuPfpXfqP\"><img src=\"https://img.shields.io/badge/Discord-Join%20the%20server-c6f432?style=flat&logo=discord&logoColor=F8F8F8&labelColor=000000\" alt=\"Join Concat Discord\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL%20v3-c6f432?style=flat&logo=gnu&logoColor=F8F8F8&labelColor=000000\" alt=\"License: AGPL-3.0-or-later\" /></a>\n</p>\n\n<img src=\"assets/preview-dark.png\" alt=\"Concat editor\" width=\"100%\" />\n\n</div>\n\n---\n\n<a href=\"https://trendshift.io/repositories/191379?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-191379\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/191379/daily?language=TypeScript\" alt=\"jub0t%2FConcat | Trendshift\" width=\"250\" height=\"55\"/></a>\n\nConcat is everything you use CapCut for — without the watermarks, paywalls,\nor subscriptions. A native Rust engine does the heavy lifting, a native\ninterface does the editing, and it all runs on your machine: install it and\nstart cutting, no account, no extra downloads, no setup.\n\n> [!NOTE]\n> The interface is moving from Tauri + React (`desktop/`) to Slint, as the\n> `concat` crate in `engine/`. Releases still ship the Tauri app while the\n> Slint window catches up; see [`engine/README.md`](./engine/README.md).\n\n## Highlights\n\n- Free and local Text-to-Speech features.\n- 🎬 Multi-track editing, with several timelines per project when one isn't enough\n- ✂️ The cutting toolkit you'd expect: split, trim, merge, transitions, speed control\n- 💬 Auto-captions that run entirely on your machine — your audio never leaves it\n- 🎙️ Voice filters for cleaning up or playing with your sound\n- 📝 Titles and styled text\n- 📦 Templates — build an edit once, reuse it for the next video\n- 🚫 No watermarks, no account, nothing behind a paywall\n- 🖥️ Works the same on macOS, Windows and Linux\n\n## Get started\n\nConcat is currently in **Alpha (pre-release)**. Download the latest build from [Releases](https://github.com/jub0t/Concat/releases).\n\n**Platform support:**\n\n- ✅ **Windows** — tested\n- ✅ **macOS** — unsigned binaries; run:\n  `xattr -dr com.apple.quarantine /Applications/Concat.app`\n- ✅ **Linux**\n  - 🧪 ARM\n  - 🧪 x86_64\n- 🚧 **Android**\n  - Phones\n  - Tablets\n- 🚧 **iOS / iPadOS**\n  - iPhone\n  - iPad\n- 🧪 **Raspberry Pi 5**\n\n**Status:** ✅ Supported · 🚧 Work in progress · 🧪 To be tested\n\n### Nix (Linux)\n\nThe repository is a flake. `nix run github:jub0t/Concat` starts the editor\nwith ffmpeg and whisper wired in; `nix develop` opens a shell with everything\n`npm run app` needs.\n\n## Contribution\n\n> [!IMPORTANT]\n> The best way to contribute is to grab a build from the [Release](https://github.com/jub0t/Concat/releases) page and test the application to see where it breaks or how it can be improved.\n\nReady to write code? [CONTRIBUTING.md](./CONTRIBUTING.md) covers setup, layout, the checks to run, and how contributions are licensed. There is also [this Discussion announcement](https://github.com/jub0t/Concat/discussions/3).\n\n## Roadmap\n\nRead [ROADMAP.MD](./ROADMAP.MD).\n\n## License\n\nConcat is free software under the [GNU Affero General Public License v3.0 or\nlater](./LICENSE).\n\n**If you just want to edit videos, none of this affects you.** Download a build\nand use it for anything, including commercial work. There is nothing to accept,\nregister or pay, and no obligation attaches to you as a user.\n\n**If you fork it, you are welcome here.** Modify it, ship it, sell it, host it.\nThe one condition is reciprocity: those who receive your version get the source\ntoo, under the same license. That includes users who reach it over a network —\nthat is the \"Affero\" part, and it is why a hosted Concat cannot be closed.\n\nTwo things sit alongside the AGPL:\n\n- **Plugins keep their own license.** The [plugin\n  exception](./LICENSE-EXCEPTIONS.md) means anything built on the Concat API is\n  yours to license as you like. The copyleft covers Concat, not what talks to it.\n- **The name is not part of the grant.** The code is free; *Concat* and the logo\n  identify builds from this project. Forks are encouraged — please ship them\n  under your own name. See [TRADEMARK.md](./TRADEMARK.md).\n\nContributions are made under the [CLA](./CLA.md); you keep copyright in your\nwork. Distributed builds also include GPL-licensed FFmpeg and espeak-ng — see\n[THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).\n\nNeed terms without the AGPL's obligations? A commercial license is available:\n**jub0trd@gmail.com**.\n"
+    },
+    "brief": {
+      "summary": "开源本地视频编辑器，可替代 CapCut",
+      "problem": "解决视频剪辑中的订阅、广告水印和云端依赖",
+      "highlights": [
+        "可以进行多轨剪辑、分割、合并和变速",
+        "可以在本机生成自动字幕",
+        "可以制作模板并批量复用剪辑流程"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "开源软件用户",
+        "需要离线剪辑的团队"
+      ],
+      "why_trending": "总 Star 超千且近期持续活跃，项目热度再升",
+      "caveat": "目前仍处于 Alpha 阶段，部分平台支持待测试",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jub0t/Concat",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "开源CapCut替代剪辑器",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 100,
+      "ranking_score": 79.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 43741,
+      "forks": 4202,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 294
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-03T04:43:47Z",
+      "pushed_at": "2026-09-03T04:41:34Z",
+      "open_issues": 239,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas a non-interactive `skills add` without `--skill` installs all 20.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local file or paste-ready block + ledger record, generate via TTS/music/image models when the catalog misses, transcribe, caption, remove backgrounds"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和媒体生成可控的 MP4 视频",
+      "problem": "降低程序化视频制作与代理操作的门槛",
+      "highlights": [
+        "可以用 AI 代理生成产品介绍视频",
+        "可以制作字幕、幻灯片和动态图形",
+        "可以本地预览、检查并渲染 MP4"
+      ],
+      "target_users": [
+        "AI 开发者",
+        "视频创作者",
+        "前端工程师"
+      ],
+      "why_trending": "总 Star 达 43741，近期仍有代码更新，热度再升",
+      "caveat": "需要 Node.js 22 及以上，问题数较多",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 84,
+      "category": "AI 视频",
+      "reason": "面向Agent的HTML视频渲染",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 40,
+      "ranking_score": 66.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "thrixel/build-world",
+      "url": "https://github.com/thrixel/build-world",
+      "description": "Build interactive 3D worlds with high-quality assets from Thrixel and your AI agent of choice.",
+      "language": "JavaScript",
+      "total_stars": 71,
+      "forks": 24,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-assets",
+        "ai-agents",
+        "claude-code",
+        "claude-skills",
+        "game-prototyping",
+        "gamedev",
+        "mcp",
+        "model-context-protocol",
+        "text-to-3d",
+        "threejs",
+        "thrixel",
+        "unity"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-08-03T16:14:49Z",
+      "updated_at": "2026-09-03T04:33:59Z",
+      "pushed_at": "2026-09-03T04:33:36Z",
+      "open_issues": 1,
+      "homepage": "https://thrixel.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Build World\n\nBuild interactive 3D worlds with high-quality assets from [Thrixel](https://thrixel.com/) and your AI agent of choice.\n\nClaude Code (or your preferred agent) handles the logic, interactions, and scene setup. Thrixel generates, organizes, and manages the 3D assets. Save your coding agent tokens and time by using Thrixel to generate 3D assets faster and at higher quality than Claude Code.\n\nBuild World currently supports **Three.js**, **Unity**, and **Roblox**. This page covers **Claude Code**, but the workflow works with other coding agents as well.\n\n> Build World was previously called Goal to Game. The name changed because the skill goes beyond games: it can build interactive experiences, simulations, educational experiences, virtual tourism and historical recreations, AR/VR experiences, and more.\n\n## Thrixel inside the Gauntlet Loop\n\nBuild World uses a Gauntlet-style iterative workflow for creating interactive 3D worlds. The agent calls Thrixel to generate and refine 3D assets inside the loop. The agent continuously builds, evaluates, and improves the world itself, including its gameplay, interactions, and assets. With Build World, you can vibe out a game or other interactive 3D experience from a single prompt, then keep refining it with follow-up prompts.\n\n<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/ThatCharlieK/READMEAssets/main/Thrixel-1prompt-to-game-readme.gif\" width=\"600\"/>\n</p>\n\n\n\n## Quick start\n\nSteps 1 and 2 are once per machine. After that, a new game is just step 3.\n\n> Using [Codex](https://thrixel.com/docs/build-world#codex) or\n> [Gemini CLI](https://thrixel.com/docs/build-world#gemini-cli) instead? Each one\n> installs Thrixel its own way - the\n> [installation page](https://thrixel.com/docs/build-world) has the steps for both.\n\n### 1. Install Claude Code and uv\n\n```bash\nclaude --version\nuv --version\n```\n\n**Both print a version? Skip to step 2.**\n\n<details>\n<summary><b>Not installed? Install commands here</b></summary>\n\n**macOS, Linux, WSL**\n```bash\ncurl -fsSL https://claude.ai/install.sh | bash    # the agent that writes your game\ncurl -LsSf https://astral.sh/uv/install.sh | sh   # runs the Thrixel connector\n```\n\n**Windows PowerShell**\n```powershell\nirm https://claude.ai/install.ps1 | iex\nirm https://astral.sh/uv/install.ps1 | iex\n```\n\n⚠️ **NOW OPEN A NEW TERMINAL**, then re-run the check above. Skipping this is the number one cause\nof `command not found`.\n\n</details>\n\n### 2. Connect Thrixel with [Claude Code Plugins](https://code.claude.com/docs/en/plugins)\n\nSame on every platform:\n\n```bash\n# 1. Sign up and log in. Opens a page with a code, click Approve. The only manual step here.\nuvx thrixel-mcp@latest login\n\n# 2. One plugin carries both the skill and the Thrixel connector, for every project.\nclaude plugin marketplace add thrixel/build-world\nclaude plugin install thrixel@thrixel\n```\n\nConfirm both pieces landed:\n\n```bash\nclaude plugin list     # thrixel@thrixel -> enabled\nclaude mcp list        # plugin:thrixel:thrixel -> Connected\n```\n\n**Both lines look right? You are done. Go to step 3.**\n\n**Turn on updates (once).** Updates are off by default. In Claude Code:\n\n1. Type `/plugin`\n2. **Marketplaces** > **thrixel**\n3. **Enable auto-update**\n\n(Or update manually anytime: `/plugin update thrixel@thrixel`. Skipped this? No problem, the\nagent tells you when a newer version is out.)\n\n<details>\n<summary><b>Installed manually before? Remove the old copies</b></summary>\n\nThe plugin includes both pieces, so your old install is now a duplicate. Remove it once.\n\n<details open>\n<summary><b>macOS, Linux, WSL</b></summary>\n\n```bash\nclaude mcp remove thrixel\nrm -rf ~/.claude/skills/build-world ~/.claude/skills/goal-to-game ~/.claude/skills/thrixel\n```\n\n</details>\n\n<details>\n<summary><b>Windows PowerShell</b></summary>\n\n```powershell\nclaude mcp remove thrixel\nRemove-Item -Recurse -Force \"$HOME\\.claude\\skills\\build-world\",\"$HOME\\.claude\\skills\\goal-to-game\",\"$HOME\\.claude\\skills\\thrixel\"\n```\n\n</details>\n\n</details>\n\n### 3. Ask for a game\n\n```bash\n# Run this wherever you keep projects. Claude makes the project folder itself.\nclaude --permission-mode auto\n```\n\n**Into Claude Code** (not the terminal), start the line with **`/thrixel:build-world`**, then\ndescribe the game and name the engine (three.js, Unity, or Roblox):\n\n```text\n/thrixel:build-world build a submarine exploration game in three.js set in a bright, vibrant tropical sea with coral and fish\n```\n\n> [!TIP]\n> Type `/thr` and Claude completes **`/thrixel:build-world`** for you, so you never type it in\n> full. If the completion does not appear, the skill is not installed - go back to step 2.\n\n> We recommend setting /model to Opus 5 or a more capable model, with effort set to high or above.\n\nClaude checks your Thrixel account and starts building. Keep talking to it in plain English to\nchange things.\n\n<details>\n<summary><b>No plugin? Install the <a href=\"https://code.claude.com/docs/en/skills\">skill</a> and the <a href=\"https://modelcontextprotocol.io\">MCP connector</a> separately</b></summary>\n\nReplaces steps 2 and 3 above. Same start command either way: `/thrixel:build-world`.\n\n**2. Connect Thrixel**\n\n<details open>\n<summary><b>macOS, Linux, WSL</b></summary>\n\n```bash\n# 1. Sign up and log in. Opens a page with a code, click Approve. The only manual step here.\nuvx thrixel-mcp@latest login\n\n# 2. Install the Thrixel connector. --scope user covers EVERY project, not just this folder.\nclaude mcp add --scope user thrixel -- uvx thrixel-mcp@latest\n\n# 3. Install the skill. Clone, not download, so it can update itself later.\ngit clone https://github.com/thrixel/build-world ~/.claude/skills/thrixel\n```\n\n</details>\n\n<details>\n<summary><b>Windows PowerShell</b></summary>\n\nSame three commands. Only the path differs: `~` is not reliably expanded when PowerShell passes it\nto git, and a skill that lands anywhere else is invisible to Claude.\n\n```powershell\nuvx thrixel-mcp@latest login\n\nclaude mcp add --scope user thrixel -- uvx thrixel-mcp@latest\n\ngit clone https://github.com/thrixel/build-world \"$HOME\\.claude\\skills\\thrixel\"\n```\n\n</details>\n\nConfirm both landed:\n\n```bash\nclaude mcp list        # thrixel -> Connected\nls ~/.claude/skills/   # thrixel listed\n```\n\nIf either is missing, Claude will build the game without Thrixel and never mention it.\n\n**Cloned before the rename?** `github.com/thrixel/goal-to-game` still redirects here, so an older\nclone keeps working and keeps updating itself. All it leaves behind is the old name, in your folder\nand in `git remote -v`. Point it at the current URL once:\n\n```bash\ngit -C ~/.claude/skills/thrixel remote set-url origin https://github.com/thrixel/build-world\n```\n\n**3. Ask for a game**\n\nIdentical to step 3 above, same command and all:\n\n```text\n/thrixel:build-world build a submarine exploration game in three.js set in a bright, vibrant tropical sea with coral and fish\n```\n\n</details>\n\n<details>\n<summary>Something went wrong</summary>\n\n**\"command not found\"** - **open a new terminal.** Fixes it almost every time. If a fresh terminal\nstill fails, run `export PATH=\"$HOME/.local/bin:$PATH\"` (PowerShell:\n`$env:Path = \"$HOME\\.local\\bin;$env:Path\"`).\n\n**Claude has no Thrixel tools** - check `claude mcp list` for `thrixel`. If missing, re-run the\n`claude mcp add` line, then restart Claude.\n\n**Claude says you need to sign in** - re-run `uvx thrixel-mcp@latest login` and click Approve. No\nrestart needed, just tell Claude to continue.\n\n**\"Out of cubes\"** - cubes are Thrixel's generation credits. Claude shows you what is built, marks\nmissing assets as labelled blocks, and asks how you want to continue.\n\n</details>\n\n## Working with Thrixel API\n\nEvery asset generated through the Thrixel API is saved to your Thrixel workspace.\n\n**Manage and Edit**: Visit [Thrixel Web App](https://thrixel.com/create) to view, manage, and edit your assets. If you make changes in the web app, ask your coding agent to pull the updated versions back into your game.\n\n**Engine Agnostic**: Because your assets are managed in Thrixel rather than tied to one codebase, you can also reuse them across projects and engines. For example, you can prototype in Three.js and later ask your agent to rebuild the game in Unity or Roblox using the same asset library.\n\n**Parallel Processing**: Thrixel can manage and process jobs in parallel. Your coding agent can farm out parallel jobs to Thrixel while building out the logic of the game. Each [plan](https://thrixel.com/create/#upgrade) has a different concurrency limit.\n\n## Usage and credits\nYou can test this workflow using the free Thrixel Cubes included with your Starter account. However, building a full-scale game generally requires a wider variety of assets and rapid iteration that usually exceeds Starter limits. Upgrading to a [Paid Plan](https://thrixel.com/create/#upgrade) unlocks higher parallel job processing capacity and higher generation limits, allowing you to bring your most ambitious ideas to life. You can keep track of your remaining Cubes anytime in [Account Settings](https://thrixel.com/create/#settings/billing).\n\n## About Thrixel\nLearn more about Thrixel at [thrixel.com](https://thrixel.com/).\n"
+    },
+    "brief": {
+      "summary": "用 AI 代理快速搭建可互动的 3D 世界",
+      "problem": "减少 3D 资产制作与场景搭建的时间和代码消耗",
+      "highlights": [
+        "可以用自然语言生成游戏原型",
+        "可以搭建 Three.js、Unity 或 Roblox 项目",
+        "可以持续修改互动逻辑和 3D 资产"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "AI 编程用户",
+        "3D 原型设计者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获 71 个 Star",
+      "caveat": "需要 Thrixel 账户及生成额度，资料未说明费用",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "thrixel/build-world",
+      "score": 90,
+      "category": "3D / VTuber",
+      "reason": "用Agent构建互动3D世界",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "0xShug0/audio.cpp",
+      "url": "https://github.com/0xShug0/audio.cpp",
+      "description": "An all-in-one, pure C++ inference engine for audio models, powered by ggml. Supports TTS, STT, VAD, voice conversion, music generation, and more, with highly optimized performance. No Python dependency.",
+      "language": "C++",
+      "total_stars": 2223,
+      "forks": 270,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "amd-gpu",
+        "apple-silicon",
+        "asr",
+        "audio",
+        "audio-analysis",
+        "cpp",
+        "edge-ai",
+        "ggml",
+        "minimax-music3",
+        "music-generation",
+        "speech-analysis",
+        "speech-to-speech",
+        "speech-to-text",
+        "text-to-speech",
+        "tts",
+        "voice-cloning",
+        "voice-conversion",
+        "vulkan"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-23T15:40:46Z",
+      "updated_at": "2026-09-03T03:46:09Z",
+      "pushed_at": "2026-09-03T03:46:04Z",
+      "open_issues": 15,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# audio.cpp\n\n[![0xShug0/audio.cpp | Trendshift](https://trendshift.io/api/badge/trendshift/repositories/64983/daily?language=C%2B%2B)](https://trendshift.io/repositories/64983?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-64983)\n\n`audio.cpp` is a high-performance C++ audio inference framework built on top of `ggml`, designed to make modern local audio models practical, portable, and fast.\n\nTired of juggling a dozen Conda environments, hundreds of Python packages, and dependency conflicts just to try a few audio models? audio.cpp gives those paths a shared native runtime instead. Runs on Windows, Linux, and macOS, with support for NVIDIA, AMD, Apple Silicon, and CPU-only machines.\n\n> [!IMPORTANT]\n>\n> **2026-08-28 - Dev testing:** Fun-CozyVoice3 and BreezeTTS 2 are available for testing on the `dev` branch.\n>\n> **2026-08-26 - Arena UI:** The new Arena tab makes it easier to compare local models side by side for TTS, voice conversion, and ASR. Use one shared input, queue multiple models or GGUF variants, then review outputs with metrics!\n>\n> **CUDA performance headline:** multiple TTS paths already run **1.8x to up to 8x faster than their Python reference paths** while cutting end-to-end latency by **45%-85%**.\n>\n> **GGUF performance:** all released model families support GGUF loading, and tested Q8 packages can run up to **1.53x faster** while reducing peak VRAM by up to about **37%** on routes such as Higgs Audio, Fish Audio, and Voxtral. See the [GGUF guide](docs/gguf.md) for support status and the [Q8 performance report](docs/reports/gguf_q8_performance.md) for 16-bit vs Q8 measurements.\n>\n> **Production deployment example:** Try Fun-ASR-Nano with audio.cpp on the FunASR platform https://www.funasr.com/en/deploy/audio-cpp.html!\n>\n> **VibeVoice 1.5B:** generates a **93.9-minute podcast in 18.2 minutes** with **10 diffusion steps** and without quantization, running about **5.15x faster than real time**.\n>\n> **Supertonic 3:** generates about **10 hours of audio in 3 minutes** on RTX5090. Up to 200x+ real-time on CUDA, 6x+ real-time on CPU, and 47 ms TTFT in CUDA streaming mode.\n> [Demo: 10 hours of audio generated in 3 minutes](https://www.reddit.com/r/LocalLLaMA/comments/1uwpvt9/audiocpp_10_hours_of_audio_generated_in_3_minutes/).\n>\n> **Real-world ASR win:** In [TranscrIA benchmark](https://github.com/Martossien/transcria/blob/main/docs/STT_BENCHMARK_REAL_MEETINGS.md) on messy French meeting audio, audio.cpp’s Nemotron 3.5 ASR matched the same WER as other implementations while using about **1/4 of the wall time**. \n\nIt is built for real end-to-end execution rather than one-off model demos: the same runtime powers TTS, voice cloning, voice conversion, ASR, diarization, VAD, source separation, alignment, codec-style models, and higher-level workflows through a common framework surface.\n\nHighlights:\n\n- **Parity.** Strong parity tooling against Python reference paths.\n- **Performance.** Performance-focused execution, reusable sessions, and batch-style offline inference. **Optimized for CUDA**.\n- **Portability.** A portable native stack centered on `ggml`, with CUDA, HIP/ROCm, Vulkan, Metal, and CPU backends behind shared CLI and server entry points instead of Python-only deployment paths.\n- **Pipelines.** Experimental JSON pipeline support for higher-level multi-step workflows.\n- **Audio Utilities.** Built-in denoise, enhancement, resampling, and STFT/ISTFT utilities for real production-style task paths.\n\n<p><strong><span style=\"font-size:1.1em;\">The goal of the framework is to provide highly optimized, reusable building blocks for audio-related models, so new model integrations can be brought up faster, shared components can be improved once and benefit many families, and real end-to-end inference paths can stay efficient, maintainable, and portable.</span></strong></p>\n\naudio.cpp would not be moving this quickly without generous contributors bringing in real fixes, new capabilities, and careful polish. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute and for a shout-out to the people already helping shape the project.\n\n> [!TIP]\n> **Contribution focus:** the most helpful contributions right now are improvements to the UI, API server, and pipeline/workflow subsystems. These areas make the existing model surface easier to use, serve, compose, and validate. See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.\n>\n> **New model PRs:** before starting a new model port, **please check the supported model table because several families are already implemented or under testing**. New ports should start under the [community models](docs/community_models/models.md) surface, where review is lighter than core models but still needs reproducible validation. Please follow the measurement style in [PR #19](https://github.com/0xShug0/audio.cpp/pull/19) and [PR #63](https://github.com/0xShug0/audio.cpp/pull/63): exact build/run commands, model paths or package ids, generated outputs, parity or path-test results, and relevant performance or memory notes.\n\n## News\n\n> [!IMPORTANT]\n> **2026-08-26 - Release 0.7:** This release adds MiniMax Music 3, MagpieTTS, PersonaPlex, MeanVC2, AudioSR, ControlFoley, FireRedTTS3, FireRedAudio, MiDashengLM-Gen, F5-TTS/Habibi, Granite Speech 5.0 TurboCTC, MMS Forced Aligner, and MOSS-VoiceGenerator, plus DotTTS Edit and ACE-Step 1.5 XL variants, bringing audio.cpp to **62** total model families and **85+** model variants! It also introduces the new Arena UI for side-by-side TTS, voice-conversion, and ASR comparison with shared inputs, queued runs, metrics, and result sorting.\n>\n> **2026-08-13 - Release 0.6:** This release adds **5** new model families - DotTTS, NeuTTS, MuScriptor, MiniMax-H3, and SenseVoice - bringing audio.cpp to **49** total model families and **70+** model variants, alongside the new native WebUI from [@mirek190](https://github.com/mirek190), expanded GGUF packaging, and more shared framework runtime pieces.\n>\n> **2026-07-31 - Release 0.5:** audio.cpp reaches **44 model families** with 9 new additions, early HIP/ROCm support for AMD GPUs, Nix ROCm/HIP build support, Metal optimizations with tested VoxCPM2 runs up to **2.56x faster** on Apple Silicon, and a major GGUF-first WebUI/package-spec usability pass.\n>\n> **2026-07-23 - Release 0.4:** audio.cpp expanded to **35 model families**, adding Higgs Audio v3 TTS 4B, Fish Audio S2 Pro, Voxtral Realtime ASR, community OuteTTS and VieNeu-TTS, broader GGUF/package-spec support, reusable framework improvements, and the integrated WebUI thanks to [@kigner](https://github.com/kigner) and [@patrickjchen](https://github.com/patrickjchen).\n>\n> **2026-07-14 - Release 0.3:** This release added IndexTTS2, Irodori-TTS, MOSS-TTS-Nano, MOSS-TTS-Local, Supertonic 3, Chatterbox voice conversion, and the first broad GGUF loading/conversion wave. Thanks to [@justinjohn0306](https://github.com/justinjohn0306) for MOSS-TTS-Local and [@mirek190](https://github.com/mirek190) for driving GGUF forward.\n\n**2026-06-25 to 2026-07-08:** audio.cpp grew from the first released model wave into broad TTS, ASR, music generation, source separation, VAD, diarization, codec, and voice-conversion coverage, with VibeVoice 1.5B/7B, LoRA adapter loading, initial streaming support, and major CUDA Conv1DTransp speedups.\n\n## Supported Models\n\nTask tags: `TTS` text to speech, `Clone` voice cloning, `VC` voice conversion, `S2S` speech-to-speech, `ASR` speech recognition, `Align` forced alignment, `VAD` voice activity detection, `Diar` speaker diarization, `Codec` audio codec, `Sep` source separation, `MIDI` audio-to-symbolic MIDI/events, `Music` music/song generation, `SFX` sound effects, `Video` video generation, `Edit` audio/music editing, `Design` voice design, `Dialogue` multi-speaker dialogue TTS, `Ctrl` TTS/clone voice control such as emotion, style, instruction, caption, or non-verbal tag control.\n\nRuntime tags summarize the supported loading paths. GGUF package precision varies by model and release; check the [audio.cpp GGUF repo](https://huggingface.co/audio-cpp/audio.cpp-gguf) or [docs/gguf.md](docs/gguf.md) for the exact package list. `Bundled` means the tiny runtime asset ships under `assets/framework/models` and needs no separate model download. `Stream` means the family exposes a streaming server/session path.\n\n### Speech Generation And Conversation\n\n| Family | Task | Lang | Variants | Runtime |\n|---|---|---|---|---|\n| **chatterbox** | TTS, Clone, VC| ar, da, de, el, en, es, fi, fr, hi, it, ko, ms, nl, no, pl, pt, sv, sw, tr | Chatterbox with 0.5B backbone | GGUF 16/Q8 |\n| **confucius4_tts** | Clone | zh, en, ja, ko, de, fr, es, id, it, th, pt, ru, ms, vi | Confucius4-TTS multilingual voice cloning | GGUF F32, Stream |\n| **dots_tts** | TTS, Clone, Edit, Ctrl | multilingual | DotTTS SOAR, MeanFlow, and Edit | GGUF 16/Q8, Stream |\n| **dramabox** | TTS, Clone | en | DramaBox expressive TTS and voice cloning | GGUF Q8 |\n| **fish_audio** | TTS, Clone, Ctrl | auto, en, zh | Fish Audio S2 Pro | GGUF 16/Q8 |\n| **firered_audio** | ASR, TTS, Clone, Design, Ctrl | zh, en | FireRedAudio multimodal speech/audio model with ASR, understanding, cloning, design, and edit paths | GGUF original/Q8 |\n| **fireredtts3** | TTS, Clone, Design, Ctrl | 24 langs + 21 zh dialects | FireRedTTS3 Base and Instruct packages for voice cloning, design, semantic edit, and acoustic edit | GGUF original/Q8 |\n| **higgs_audio_tts** | TTS, Clone, Ctrl | auto | Higgs Audio v3 TTS 4B | GGUF 16/Q8 |\n| **index_tts2** | TTS, Clone, Ctrl | zh, en, ja, es, ar | IndexTTS-2, IndexTTS-2.5 (variant) | GGUF 16/Q8 |\n| **irodori_tts** | TTS, Clone, Design, Ctrl | ja | Irodori-TTS-v4-Small, Irodori-TTS-500M-v3, Irodori-TTS-600M-v3-VoiceDesign | GGUF 16/Q8 |\n| **magpie_tts** | TTS | ar-AE, ar-MSA, ar-SA, de, en, es, fr, hi, it, ko, pt-BR, vi, zh | NVIDIA MagpieTTS Multilingual 357M (v2607) with baked speaker prompts and NanoCodec decode | GGUF original/Q8 |\n| **miotts** | TTS, Clone | en, ja | MioTTS-1.7B | GGUF 16/Q8 |\n| **moss_tts_local** | TTS, Clone, Ctrl | auto, optional language hint | MOSS-TTS-Local-Transformer-v1.5 | GGUF 16/Q8 |\n| **moss_tts_nano** | TTS, Clone | auto | MOSS-TTS-Nano-100M | GGUF 16/Q8 |\n| **neutts** | TTS, Ctrl | en | NeuTTS 2E with built-in speaker prompts and emotion control | GGUF original precision, Stream |\n| **omnivoice** | TTS, Clone, Design, Ctrl | 646+ langs | OmniVoice, Qwen3-0.6B based | GGUF 16/Q8, Stream |\n| **personaplex** | Dialogue, S2S | en | PersonaPlex 7B v1 speech-to-speech conversational model with packaged voice/persona prompts | GGUF Q4/Q8, Stream |\n| **pocket_tts** | TTS, Clone | en, de, it, pt, es | PocketTTS-100M | GGUF 16/Q8 |\n| **qwen3_tts** | TTS, Clone, Design, Ctrl | zh, en, fr, de, it, ja, ko, pt, ru, es | Qwen3-TTS-12Hz-0.6B-Base, Qwen3-TTS-12Hz-1.7B-Base, Qwen3-TTS-12Hz-1.7B-CustomVoice, Qwen3-TTS-12Hz-1.7B-VoiceDesign | GGUF 16/Q8 |\n| **supertonic** | TTS | en, ko, ja, ar, bg, cs, da, de, el, es, et, fi, fr, hi, hr, hu, id, it, lt, lv, nl, pl, pt, ro, ru, sk, sl, sv, tr, uk, vi, na | Supertonic 3 | GGUF F32, Stream |\n| **vibevoice** | TTS, Dialogue | en, zh | VibeVoice-1.5B, VibeVoice-7B | GGUF 16/Q8 |\n| **voxcpm2** | TTS, Clone, Design, Ctrl | ar, da, de, el, en, es, fi, fr, he, hi, id, it, ja, km, ko, lo, ms, my, nl, no, pl, pt, ru, sv, sw, th, tl, tr, vi, zh | VoxCPM2-2B, 48 kHz | GGUF 16/Q8, Stream |\n\n### Speech Recognition And Analysis\n\n| Family | Task | Lang | Variants | Runtime |\n|---|---|---|---|---|\n| **citrinet_asr** | ASR | en | Citrinet-256 | GGUF Q8 |\n| **fun_asr_nano** | ASR | auto, zh, en, ja | Fun-ASR-Nano-2512 | GGUF 16/Q8 |\n| **higgs_audio_stt** | ASR | en | Higgs Audio v3 STT | GGUF 16/Q8, Stream |\n| **hviske_asr** | ASR | da | Hviske v5.3 | GGUF Q8 |\n| **marblenet_vad** | VAD | lang agnostic | MarbleNet VAD | Bundled |\n| **nemotron_asr** | ASR | 100+ ASR prompt codes incl. auto | Nemotron 3.5 ASR Streaming 0.6B | GGUF 16/Q8, Stream |\n| **qwen3_asr** | ASR | "
+    },
+    "brief": {
+      "summary": "基于 C++ 和 ggml 的本地音频模型推理引擎",
+      "problem": "减少 Python 依赖，让多类音频模型更易本地部署",
+      "highlights": [
+        "可以进行语音合成、识别和声音克隆",
+        "可以做变声、语音分离和人声检测",
+        "可以生成音乐、音效并运行音频处理流程"
+      ],
+      "target_users": [
+        "本地 AI 开发者",
+        "语音应用开发者",
+        "音频创作者"
+      ],
+      "why_trending": "总 Star 达2223且近期持续更新，本周首次收录",
+      "caveat": "部分新模型仍在 dev 分支测试",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "0xShug0/audio.cpp",
+      "score": 89,
+      "category": "语音 / 配音",
+      "reason": "支持TTS、变声与音乐生成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "sgl-project/sglang-omni",
+      "url": "https://github.com/sgl-project/sglang-omni",
+      "description": "SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.",
+      "language": "Python",
+      "total_stars": 1073,
+      "forks": 421,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 26
+    },
+    "details": {
+      "topics": [
+        "asr",
+        "audio-generation",
+        "cuda",
+        "distributed-inference",
+        "inference",
+        "model-serving",
+        "multimodal",
+        "music-generation",
+        "openai-api",
+        "pytorch",
+        "sglang",
+        "speech-recognition",
+        "streaming",
+        "text-to-speech",
+        "tts"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-07T06:58:29Z",
+      "updated_at": "2026-09-03T04:04:09Z",
+      "pushed_at": "2026-09-03T03:59:44Z",
+      "open_issues": 590,
+      "homepage": "https://sgl-project.github.io/sglang-omni/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n<img src=\"https://raw.githubusercontent.com/sgl-project/sglang-omni/main/docs/_static/image/sgl-omni-logo.svg\" alt=\"logo\" width=\"400\"></img>\n\n<p>\n<a href=\"https://pypi.org/project/sglang-omni/\"><img src=\"https://img.shields.io/pypi/v/sglang-omni?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI\" alt=\"PyPI\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/stargazers\"><img src=\"https://img.shields.io/github/stars/sgl-project/sglang-omni?style=for-the-badge&logo=github&label=stars\" alt=\"GitHub stars\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/sgl-project/sglang-omni?style=for-the-badge\" alt=\"license\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-closed-raw/sgl-project/sglang-omni?style=for-the-badge&label=closed%20issues\" alt=\"closed issues\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-raw/sgl-project/sglang-omni?style=for-the-badge&label=open%20issues\" alt=\"open issues\"></a>\n<a href=\"https://deepwiki.com/sgl-project/sglang-omni\"><img src=\"https://img.shields.io/badge/Ask-DeepWiki-087fca?style=for-the-badge\" alt=\"Ask DeepWiki\"></a>\n</p>\n\n</div>\n\n--------------------------------------------------------------------------------\n\n<p align=\"center\">\n<a href=\"https://lmsys.org/blog/\"><b>Blog</b></a> |\n<a href=\"https://sgl-project.github.io/sglang-omni/\"><b>Documentation</b></a> |\n<a href=\"#quick-start\"><b>Quick Start</b></a> |\n<a href=\"./docs/cookbook/\"><b>Cookbook</b></a> |\n<a href=\"https://github.com/sgl-project/sglang\"><b>SGLang</b></a> |\n<a href=\"https://slack.sglang.io\"><b>Join Slack</b></a>\n</p>\n\n<p align=\"center\">\n⭐ <b><a href=\"https://github.com/sgl-project/sglang-omni/stargazers\">Star SGLang-Omni</a> to help more builders discover open infrastructure for multimodal and speech serving!</b>\n</p>\n\n## News\n\n- [2026/09] 🚀 SGLang-Omni **v0.1.4** is on [PyPI](https://pypi.org/project/sglang-omni/). Install with `uv pip install --prerelease=allow \"sglang-omni==0.1.4\"`. \\[[Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\\]\n- [2026/08] 🎵 Day-0 support for [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3): lyrics + caption → 32 kHz stereo song on `/v1/audio/speech`. \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html)\\]\n- [2026/08] 🚀 TTS architecture refactor: shared pipeline state, engine construction, reference encoding, capability metadata, and vocoder scheduling. \\[[Roadmap](https://github.com/sgl-project/sglang-omni/issues/985)\\] \\[[Blog](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/sglang-omni/tts-refactor.md)\\]\n- [2026/06] 🔥 MOSS-TTS Local Transformer v1.5 on SGLang-Omni with native-streaming 48 kHz speech. \\[[Blog](https://lmsys.org/blog/2026-06-17-moss-tts-local-v15/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html)\\]\n- [2026/06] 🔥 Higgs Audio v3 TTS for real-time, controllable speech. \\[[Blog](https://lmsys.org/blog/2026-06-04-higgs-audio-v3-tts/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html)\\]\n\n## About\n\nSGLang-Omni is a multi-stage serving runtime for omni, speech, and TTS models. Its design target is multi-stage decoding: generation split across heterogeneous stages with different compute patterns, dependency structures, and resource needs. SGLang-Omni owns the pipeline topology, stage lifecycle, inter-stage transport, model-family integration layer, and OpenAI-compatible serving surface, while composing with [SGLang](https://github.com/sgl-project/sglang) for high-performance autoregressive scheduling and model execution where applicable.\n\n- **Multi-stage runtime**: SGLang-Omni models generation as coordinated stages: preprocessing, encoders, autoregressive engines, talkers, decoders, vocoders, and aggregators.\n- **Stage-specialized scheduling**: Each stage runs behind a scheduler matched to its workload, from SGLang-backed autoregressive scheduling to lightweight preprocessing and streaming vocoder loops.\n- **Transport-aware execution**: A control plane coordinates requests while the relay data plane moves tensor payloads across shared-memory, NCCL, NIXL, and Mooncake backends.\n- **API surface**: OpenAI-compatible endpoints expose multimodal chat, speech generation, batch speech, streaming speech, uploaded voices, and transcription.\n\n## What SGLang-Omni Serves\n\n- **Omni chat and speech**: [Qwen3-Omni](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_omni.html), [Ming-Omni](https://sgl-project.github.io/sglang-omni/cookbook/ming_omni.html) — multimodal in, text/audio out.\n- **Music generation**: [MiniMax Music 3](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html) — lyrics + caption → 32 kHz stereo song.\n- **Speech generation**: [Higgs Audio v3](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html), [MOSS-TTS](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts.html), [MOSS-TTS Local](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html), [Fish Speech S2-Pro](https://sgl-project.github.io/sglang-omni/cookbook/fishaudio_s2_pro.html), [Qwen3-TTS](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_tts.html), [Voxtral TTS](https://sgl-project.github.io/sglang-omni/cookbook/voxtral_tts.html), [Ming-Omni-TTS](https://sgl-project.github.io/sglang-omni/cookbook/ming_tts.html), [dots.tts](https://sgl-project.github.io/sglang-omni/cookbook/dots_tts.html), [ZONOS2](https://sgl-project.github.io/sglang-omni/cookbook/zonos2.html) — `/v1/audio/speech`, batch, streaming, uploaded voices.\n- **Audio transcription and diarization**: [Qwen3-ASR](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html), [Fun-ASR](https://sgl-project.github.io/sglang-omni/cookbook/fun_asr.html), [ARK-ASR](https://sgl-project.github.io/sglang-omni/cookbook/arkasr.html), [MOSS-Transcribe-Diarize](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html) via `/v1/audio/transcriptions`. MOSS-TD supports speaker labels and timestamps (`response_format=verbose_json`).\n- **SGLang-Omni Router**: Multi-worker OpenAI-compatible front door — health, readiness, lifecycle, capability discovery. [Router guide](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html).\n\n## Hardware Support\n\n| Backend | Status | Notes |\n|---------|--------|-------|\n| **NVIDIA CUDA** | Supported | Default backend with full model coverage. |\n| **Apple Silicon** | Experimental | Qwen3-ASR runs through native MLX or Torch MPS on macOS arm64. Install with [`install.sh`](./install.sh) and follow the [Qwen3-ASR guide](./docs/cookbook/qwen3_asr.md#apple-silicon-mlx). |\n| **Intel GPU (XPU)** | Experimental | Intel Arc GPUs via PyTorch XPU. **Qwen3-ASR, Qwen3-TTS, and Qwen3-Omni serve end-to-end** (Omni thinker via multi-XPU tensor parallelism). Install per [Intel XPU guide](./docs/get_started/installation_xpu.md); the backend is auto-detected. |\n\nAdditional model guides, including experimental and research-oriented paths, are available in the [Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/).\n\n## Quick Start\n\n- **macOS Apple Silicon:** from a checkout, run [`./install.sh`](./install.sh) for a one-command Homebrew + uv setup. See [installation](./docs/get_started/installation.md#macos-apple-silicon).\n- [Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\n- [TTS usage](https://sgl-project.github.io/sglang-omni/basic_usage/tts.html)\n- [Qwen3-Omni usage](https://sgl-project.github.io/sglang-omni/basic_usage/qwen3_omni.html)\n- [Qwen3-ASR cookbook](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html)\n- [MOSS-Transcribe-Diarize cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html)\n- [Omni router](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html)\n- [Developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html)\n\n## Community & Support\n\nSGLang-Omni welcomes contributors working on inference systems, kernels, scheduling, inter-stage communication, model runners and cache efficiency, model integration, benchmarking, production deployment. Join the [SGLang Slack](https://slack.sglang.io) or read the [developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html).\n\nOrganizations interested in supporting SGLang-Omni, TTS, or omni model serving can contact Chenyang Zhao at [zhaochenyang@lmsys.org](mailto:zhaochenyang@lmsys.org).\n\n## Acknowledgments\n\nSGLang-Omni builds on the SGLang ecosystem and on open model work from the TTS, speech, and omni-model communities. We thank the model teams, systems contributors, and partner organizations helping make open multimodal serving faster, more reliable, and easier to extend.\n"
+    },
+    "brief": {
+      "summary": "面向语音与多模态模型的高性能服务框架",
+      "problem": "统一部署和调用TTS、ASR及多模态模型",
+      "highlights": [
+        "可以提供流式语音合成和批量语音接口",
+        "可以进行音频转写、说话人标注与时间戳输出",
+        "可以部署音乐生成和多模态对话模型"
+      ],
+      "target_users": [
+        "语音应用开发者",
+        "模型服务工程师",
+        "多模态研究者"
+      ],
+      "why_trending": "本周首次收录，已有1073个Star且近期持续更新",
+      "caveat": "CUDA支持最完整，Apple Silicon和Intel GPU仍属实验性",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "sgl-project/sglang-omni",
+      "score": 74,
+      "category": "语音 / 配音",
+      "reason": "服务TTS、ASR等音频模型",
+      "generated_by_ai": true,
+      "velocity_score": 43,
+      "freshness_score": 40,
+      "ranking_score": 53.8
+    }
+  }
+]
