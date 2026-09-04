@@ -1,0 +1,548 @@
+[
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 16499,
+      "forks": 2224,
+      "stars_today": 1672,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 2615
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-04T04:45:16Z",
+      "pushed_at": "2026-09-03T21:56:54Z",
+      "open_issues": 13,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <p><img src=\"docs/logo.png\" alt=\"VoiceStudio logo\" width=\"120\" height=\"120\" /></p>\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><sub>Previously OmniVoice-Studio</sub></p>\n  <h3>Clone voices, dub video, dictate, and produce long-form audio on your own hardware.</h3>\n  <p>16 TTS engines · 11 ASR engines · 646-language catalogue · macOS, Windows, Linux, and Docker</p>\n  <p>No account, API key, subscription, or usage meter for the local workflow.</p>\n\n  <p>\n    <a href=\"#install\">Install</a> ·\n    <a href=\"#features\">Features</a> ·\n    <a href=\"#comparison\">Compare</a> ·\n    <a href=\"#requirements\">Requirements</a> ·\n    <a href=\"#hardware-recommendations\">Hardware</a> ·\n    <a href=\"#engines\">Engines</a> ·\n    <a href=\"#architecture\">Architecture</a> ·\n    <a href=\"#api\">API</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"#faq\">FAQ</a> ·\n    <a href=\"README_CN.md\"><strong>简体中文</strong></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&style=flat-square&label=CI\" alt=\"CI status\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/stargazers\"><img src=\"https://img.shields.io/github/stars/debpalash/VoiceStudio?style=flat-square&color=f59e0b\" alt=\"GitHub stars\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases\"><img src=\"https://img.shields.io/github/downloads/debpalash/VoiceStudio/total?style=flat-square&color=8b5cf6&label=downloads\" alt=\"Total downloads\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&color=10b981\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square\" alt=\"AGPL-3.0 license\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS_·_Windows_·_Linux-10b981?style=for-the-badge\" alt=\"Download VoiceStudio\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/media/0.5.0/quick-switch.gif\" alt=\"Switching TTS engines from the VoiceStudio status bar\" width=\"100%\" />\n</div>\n\n> [!WARNING]\n> **Active beta.** Use the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest) for stable work. `main` contains the newest fixes and may change between releases. Report problems through [GitHub Issues](https://github.com/debpalash/VoiceStudio/issues).\n\n## At a glance\n\n| | VoiceStudio |\n|---|---|\n| **Workflows** | Voice cloning and design, video dubbing, dictation, stories, audiobooks, batch generation |\n| **Language catalogue** | 646 TTS languages; actual coverage and quality depend on the selected engine |\n| **Engines** | 16 TTS · 11 ASR · switch in Model Catalogue or with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> |\n| **Platforms** | macOS 13.3+ on Apple Silicon · Windows 10/11 x64 · Linux x86_64 with glibc 2.39+ |\n| **Compute** | CUDA · Apple Silicon MPS/MLX · ROCm on Linux · CPU · optional remote workers |\n| **Interfaces** | Desktop app · local REST/SSE/WebSocket API · OpenAI-compatible audio API · MCP Server |\n| **Storage** | Voices, projects, settings, and outputs stay on the machine by default |\n| **License** | AGPL-3.0 application; downloaded models keep their upstream terms |\n\n<a id=\"install\"></a>\n\n## Install\n\nDownload a package from the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest), then follow the platform guide.\n\n| Platform | Package | Guide |\n|---|---|---|\n| macOS 13.3+ | Apple Silicon DMG | [Install on macOS](docs/install/macos.md) |\n| Windows 10/11 | x64 MSI; choose the current-user build when listed to install without admin access | [Install on Windows](docs/install/windows.md#install-pre-built-msi) |\n| Linux | AppImage, x86_64 with glibc 2.39+ | [Install on Linux](docs/install/linux.md) |\n| Docker | CUDA, ROCm, CPU, and worker-only GPU profiles | [Run with Docker](docs/install/docker.md) |\n\nFirst launch creates a managed Python environment and downloads the default model. Later launches reuse both.\n\n> [!NOTE]\n> On macOS, first launch needs a one-time right-click, then **Open** approval. Intel Macs cannot run the local Python backend; use a [remote backend](docs/install/macos.md) instead.\n\n### Quick Docker run\n\n```bash\ndocker run -d -p 127.0.0.1:3900:3900 -v omnivoice-data:/app/omnivoice_data --name voicestudio palashdeb/omnivoice-studio:stable\n```\n\n### First voice\n\n1. Launch VoiceStudio and open **Voice Cloning**.\n2. Add a clean voice sample. Three seconds works; 5 to 15 seconds usually gives a better prompt.\n3. Enter text, choose a language, then select **Generate**.\n\n> [!TIP]\n> **Try without installing:** Run VoiceStudio in the cloud via the [Google Colab notebook](https://colab.research.google.com/github/debpalash/VoiceStudio/blob/main/notebooks/OmniVoice_Studio_Colab.ipynb). Explore audio quality comparisons in [benchmarks](docs/benchmarks.md) and prompt design tips in [expressive speech](docs/expressive-speech.md).\n\n### Audio samples\n\nListen to sample outputs produced locally with VoiceStudio:\n\n| Workflow | Prompt / Reference Audio | Generated Audio |\n|---|---|---|\n| **Voice Cloning** | [demo_voice.wav](backend/assets/samples/demo_voice.wav) | [demo_clone_output.wav](backend/assets/samples/demo_clone_output.wav) |\n| **Voice Design** (US News Anchor) | *\"Clear, authoritative American broadcast tone\"* | [demo_voice_design_us_news_anchor.wav](backend/assets/samples/voice_design/demo_voice_design_us_news_anchor.wav) |\n| **Voice Design** (UK Audiobook) | *\"Warm, expressive British storytelling voice\"* | [demo_voice_design_audiobook_uk_narrator.wav](backend/assets/samples/voice_design/demo_voice_design_audiobook_uk_narrator.wav) |\n| **Video Dubbing** (Multilingual) | [source.src.wav](backend/assets/samples/demo/dubbing/source.src.wav) | [Spanish](backend/assets/samples/demo/dubbing/dubbed_es.src.wav) · [French](backend/assets/samples/demo/dubbing/dubbed_fr.src.wav) · [Japanese](backend/assets/samples/demo/dubbing/dubbed_ja.src.wav) · [Chinese](backend/assets/samples/demo/dubbing/dubbed_zh.src.wav) |\n\n### Run from source\n\nInstall the [development prerequisites](.github/CONTRIBUTING.md#development-setup) (Node 20+/Bun and Python 3.11+), then:\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run desktop\n```\n\nThe desktop launcher configures Python dependencies on first run via `uv` automatically. Use `bun run dev` for the browser UI. See [Contributing](.github/CONTRIBUTING.md) for services, tests, and platform packages.\n\n### If setup fails\n\n- Run **Settings → About → Run self-check** or `uv run python backend/main.py --diagnose --deep`.\n- Check [install troubleshooting](docs/install/troubleshooting.md).\n- Save a scrubbed diagnostic bundle from the app when opening an issue.\n- For slow generation, compare [measured benchmarks](docs/benchmarks.md) and [performance settings](docs/performance.md).\n\n<a id=\"features\"></a>\n\n## Features\n\n| Area | Included |\n|---|---|\n| **Voice Cloning** | Zero-shot synthesis from a short reference clip ([guide](docs/engines/README.md)) |\n| **Voice Design** | Create a voice from age, accent, pitch, style, and delivery instructions ([expressive speech](docs/expressive-speech.md)) |\n| **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video ([export guide](docs/dubbing/export.md)) |\n| **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |\n| **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |\n| **Vocal Isolation** | Demucs speech/background separation |\n| **Speaker Diarization** | Pyannote and WhisperX speaker assignment ([guide](docs/features/diarization.md)) |\n| **Batch Queue** | Queue large sets of audio and video jobs with per-job progress, or watch a local folder for new videos |\n| **Model Catalogue** | Install, remove, select, and route TTS, ASR, and LLM models ([catalogue](docs/engines/README.md)) |\n| **Remote Model Downloads** | Install models on enrolled remote workers with live progress ([guide](docs/downloading-models.md)) |\n| **GPU Auto-Detect** | CUDA, MPS, ROCm, and CPU routing with per-engine checks ([performance](docs/performance.md)) |\n| **AI Watermark** | AudioSeal embedding and detection |\n| **MCP Server** | Synthesis and transcription tools for MCP clients ([guide](docs/mcp.md)) |\n| **Diagnostics** | Self-checks, error journal, logs, and scrubbed support bundles ([troubleshooting](docs/install/troubleshooting.md)) |\n| **Local-first** | Core creation stays local; network-backed features are explicit opt-ins |\n| **Extensible** | Registry-based TTS, ASR, and plugin interfaces ([acceptance](docs/engine-acceptance.md)) |\n\n<table>\n<tr>\n  <td width=\"50%\"><img src=\"docs/media/0.5.0/catalogue.png\" alt=\"VoiceStudio Model Catalogue\" width=\"100%\" /></td>\n  <td width=\"50%\"><img src=\"docs/media/0.5.0/gallery-save.png\" alt=\"Saving a gallery voice as a local profile\" width=\"100%\" /></td>\n</tr>\n<tr>\n  <td align=\"center\"><sub>Model Catalogue: engine, device, and install state</sub></td>\n  <td align=\"center\"><sub>Gallery: save a shared voice as a local profile</sub></td>\n</tr>\n</table>\n\n<a id=\"comparison\"></a>\n\n## Comparison\n\nVoiceStudio trades managed cloud compute for local control. This is the practical difference:\n\n| | **VoiceStudio** | **Typical hosted voice service** |\n|---|---|---|\n| **Best fit** | Private, offline, self-hosted, or high-volume work | Fast setup without local model management |\n| **Data path** | Local by default; remote features are opt-in | Audio and text are processed by the provider |\n| **Cost model** | Free software; you supply the hardware | Subscription, credits, or metered API use |\n| **Setup** | Install the app and model weights | Create an account and use the web app or API |\n| **Performance** | Depends on your engine and hardware | Provider manages compute and scaling |\n| **Offline use** | Yes, after required models are installed | Usually requires a network connection |\n| **Customization** | Source, engines, models, API, and routing are open | Limited to provider options |\n| **Maintenance** | You manage updates, disk, and compute | Provider manages infrastructure |\n\n<a id=\"requirements\"></a>\n\n## Requirements\n\nRequirements vary by engine. These values cover the default local workflow.\n\n| | **Minimum** | **Recommended** |\n|---|---|---|\n| **OS** | Windows 10 x64 · macOS 13.3 Apple Silicon · Linux x86_64 with glibc 2.39+ | Current supported OS release |\n| **RAM** | 8 GB | 16 GB+ |\n| **Disk** | 10 GB free | 20 GB+ SSD |\n| **GPU** | Optional; CPU mode is supported | NVIDIA CUDA or Apple Silicon |\n| **VRAM** | 4 GB when using a GPU | 8 GB+; large optional engines need more |\n| **Python from source** | 3.11+ | 3.11 or 3.12 |\n\nROCm is Linux-only and opt-in. Windows AMD/Ryzen AI uses CPU. Systems with limited VRAM offload work to CPU when required. See [performance](docs/performance.md), [benchmarks](docs/benchmarks.md), and [engine disk usage](docs/engines/disk-usage.md).\n\n<a id=\"hardware-recommendations\"></a>\n\n### Recommended stack by hardware\n\n| Hardware | Recommended TTS | Recommended ASR | Why |\n|---|---|---|---|\n| **Apple Silicon (M1–M4)** | [MLX-Audio](docs/engines/mlx-audio.md)"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆、配音与音频制作工具",
+      "problem": "减少对云端语音服务、账号和按量计费的依赖",
+      "highlights": [
+        "可以克隆声音并生成语音",
+        "可以为视频制作多语言配音",
+        "可以制作听书、转写和批量音频"
+      ],
+      "target_users": [
+        "配音创作者",
+        "视频制作团队",
+        "有本地部署需求的开发者"
+      ],
+      "why_trending": "今日新增1672 Star，总数16499，且近期持续活跃",
+      "caveat": "项目仍处于活跃测试阶段，模型效果因引擎而异",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 94,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与转录工作站",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 123724,
+      "forks": 6684,
+      "stars_today": 2128,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2128
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-09-04T04:43:27Z",
+      "pushed_at": "2026-08-07T21:44:01Z",
+      "open_issues": 204,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <strong>~54% less code (up to 94%) &middot; ~20% cheaper &middot; ~27% faster &middot; 100% safe</strong><br>\n  <sub>Measured on real Claude Code sessions editing a real open-source repo (FastAPI + React), against the same agent with no skill. ~54% is the mean across 12 feature tasks (Haiku 4.5, n=4); it reaches 94% where an agent over-builds (a date picker) and is near zero where the code is already minimal. ponytail keeps every safety guard while a bare \"write one-liners\" prompt drops one. (The earlier single-shot benchmark reported 80-94% as a flat figure; against a fair agentic baseline that is the per-task ceiling, not the average.) <a href=\"benchmarks/results/2026-06-18-agentic.md\">Full writeup</a> &middot; <a href=\"benchmarks/\">reproduce it</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"README.es.md\">Español</a> &middot; <a href=\"README.ko.md\">한국어</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Before / after\n\nYou ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones.\n\nWith ponytail:\n\n```html\n<!-- ponytail: browser has one -->\n<input type=\"date\">\n```\n\nMore survivors in [examples/](examples/).\n\n## Numbers\n\nThe honest measurement is a real agent doing real work: a headless Claude Code session editing [tiangolo's full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (a real FastAPI + React repo), scored on the `git diff` it leaves behind. Twelve feature tickets, the same agent with and without the skill, n=4, Haiku 4.5.\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-agentic.svg\" width=\"860\" alt=\"Each arm as a percent of the no-skill baseline across LOC, tokens, cost and time (Haiku 4.5). ponytail is lowest on every metric (LOC 46%, tokens 78%, cost 80%, time 73%); caveman rises above 100% on tokens, cost and time; yagni-oneliner LOC 67%. Safety, separate adversarial tier: baseline, caveman and ponytail 100%, yagni-oneliner 95%.\">\n</p>\n\n| vs no-skill baseline | LOC | tokens | cost | time | safe |\n|---|--:|--:|--:|--:|--:|\n| **ponytail** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |\n| caveman (terse-prose control) | -20% | +7% | +3% | +2% | 100% |\n| \"YAGNI + one-liners\" prompt | -33% | -14% | -21% | -30% | 95% |\n\nponytail is the only arm that cuts every metric, and the only one that stays fully safe while doing it. The cut is biggest where there is a real over-build trap (date picker 404 to 23 lines, color picker 287 to 23, because it reaches for a native `<input>` instead of a component) and near zero on code that is already minimal. Full method, per-task tables, and limitations: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).\n\n<details>\n<summary><strong>Older single-shot numbers (isolated generation)</strong></summary>\n\nFive everyday tasks, three models, three arms (no skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), ten runs, median reported. One prompt, one completion, counting lines of the answer:\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-3model.svg\" width=\"860\" alt=\"Median lines of code per arm across Haiku, Sonnet and Opus\">\n</p>\n\nThis showed **80-94% less code**. [#126](https://github.com/DietrichGebert/ponytail/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.\n\n</details>\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect on the models that follow the ladder; a terse reasoning model that spends thinking tokens deliberating the rungs can go the other way (on GPT-5.5 it does).\n\n## How it works\n\nBefore writing code, the agent stops at the first rung that holds:\n\n```\n1. Does this need to exist?   → no: skip it (YAGNI)\n2. Already in this codebase?  → reuse it, don't rewrite\n3. Stdlib does it?            → use it\n4. Native platform feature?   → use it\n5. Installed dependency?      → use it\n6. One line?                  → one line\n7. Only then: the minimum that works\n```\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\n## Install\n\nThe most effort ponytail will ever ask of you:\n\nThe Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.\n\n### Claude Code\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n(You have to send two separate prompts for the install to work) \n\nSame steps in the Claude Code Desktop app's Code tab: type the two `/plugin` commands above into the prompt box, or click the **+** button next to it, choose **Plugins** → **Add plugin** to browse your configured marketplaces, and manage marketplaces from **Customize** in the sidebar.\n\n### Codex\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nRun `codex` and open `/hooks`, review and trust its two lifecycle hooks, and start a new thread.\n\nThis same install also covers the Codex desktop app: restart the app after installing and it picks up the plugin.\n\n### GitHub Copilot CLI\n\n```bash\ncopilot plugin marketplace add DietrichGebert/ponytail\ncopilot plugin install ponytail@ponytail\n```\n\nIn an interactive Copilot CLI session, use the slash equivalents:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\n```\n\nCopilot CLI namespaces plugin commands by plugin name. For example:\n\n```text\n/ponytail:ponytail ultra\n/ponytail:ponytail-review\n```\n\n### Pi agent harness\n\n```\npi install git:github.com/DietrichGebert/ponytail\n```\n\n### OpenCode\n\nAdd to `opencode.json`:\n\n```json\n{ \"plugin\": [\"@dietrichgebert/ponytail\"] }\n```\n\nRun from a checkout instead (the plugin reuses `hooks/` and `skills/`):\n\n```json\n{ \"plugin\": [\"./.opencode/plugins/ponytail.mjs\"] }\n```\n\nInjects the ruleset every turn at the active level; adds the `/ponytail` commands (see [Commands](#commands)). OpenCode also auto-loads this repo's `AGENTS.md`, so the rules hold even without the plugin. The plugin adds the `lite/full/ultra/off` levels.\n\nThe `./` path resolves against your project's `opencode.json`; to share one checkout across projects, point it at the absolute path of the `.mjs` instead (it finds its `hooks/` and `skills/` relative to its own file).\n\n### Gemini CLI\n\n```bash\ngemini extensions install https://github.com/DietrichGebert/ponytail\n```\n\nLoads the ruleset as always-on context every session and registers the `/ponytail` commands; the `skills/` ship too, activated when a task needs them.\nThe Gemini adapter intentionally does not ship a root `hooks/hooks.json`: Gemini auto-loads that path, while Ponytail's lifecycle hooks use Claude/Codex event names.\n\n### Qoder\n\nQoder auto-loads `AGENTS.md` from the repo root as always-on context, so running ponytail from a checkout works with zero setup. For per-project rules, copy [`.qoder/rules/ponytail.md`](.qoder/rules/ponytail.md) into your project's `.qoder/rules/`. The six ponytail skills (`/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-gain`, `/ponytail-help`) are available via Qoder's Skill system; the plugin manifest at [`.qoder-plugin/plugin.json`](.qoder-plugin/plugin.json) points at the `skills/` directory.\n\nFor full plugin-tier support (automatic mode activation + ruleset injection on every prompt), add the hooks from [`hooks/qoder-hooks.json`](hooks/qoder-hooks.json) to your `.qoder/settings.json`. Replace `PONYTAIL_DIR` with the path to your ponytail checkout. Qoder's `UserPromptSubmit` hook activates the default mode on first prompt and injects the ruleset every turn; `PreToolUse` with `task|Task` matcher injects the ruleset into subagents. Level switches (`/ponytail lite|full|ultra|off`) work automatically.\n\n### Antigravity CLI\n\nGoogle is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:\n\n```bash\nagy plugin install https://github.com/DietrichGebert/ponytail\n```\n\nIt reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/ponytail` commands into skills, so you type them into the chat (e.g. `/ponytail-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.\n\n### Hermes Agent\n\n```bash\nhermes plugins install DietrichGebert/ponytail --enable\n```\n\nRestart Hermes after installing. The plugin injects the active Ponytail mode before each LLM turn, registers the bundled skills as `ponytail:<skill>`, and adds `/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-gain`, and `/ponytail-help`. In shared gateways, restrict `/ponytail` to trusted users with Hermes slash-command access controls; runtime mode is process-local.\n\n### CodeWhale\n\nReads `AGENTS.md` from the project root, zero setup. Copy [`AGENTS.md`](AGENTS.md) to your project, or run `codewhale` from a checkout of this repo. That's it.\n\n### Swival\n\nStage the collection in your library first, then add the skills you want:\n\n```bash\nswival skills add --global https://github.com/DietrichGebert/ponytail  # stage into ~/.config/swival/library\nswival skills add ponytail                                         "
+    },
+    "brief": {
+      "summary": "让 AI 编程代理优先复用现有能力，少写不必要代码。",
+      "problem": "AI 代理容易过度设计，增加代码量、成本和维护负担。",
+      "highlights": [
+        "可以让代理优先使用原生功能和现有依赖",
+        "可以在 Claude Code 等代理中安装使用",
+        "可以用 YAGNI 思路减少无必要实现"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "软件开发者",
+        "代码维护者"
+      ],
+      "why_trending": "今日新增 2128 个 Star，总 Star 超过 12 万。",
+      "caveat": "基准测试范围有限，实际效果取决于模型和任务。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "面向多智能体的编程技能插件",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 70,
+      "ranking_score": 75.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 247848,
+      "forks": 21009,
+      "stars_today": 1601,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2379
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-09-04T04:45:54Z",
+      "pushed_at": "2026-09-03T15:03:25Z",
+      "open_issues": 461,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向编码代理的可组合工程实践技能集",
+      "problem": "帮助编码代理减少需求误解、代码缺陷和调试失控",
+      "highlights": [
+        "可以用提问流程先明确开发需求",
+        "可以用文档建立项目共享术语",
+        "可以用TDD和调试流程改进代码反馈"
+      ],
+      "target_users": [
+        "软件工程师",
+        "AI 编程用户",
+        "开发团队"
+      ],
+      "why_trending": "今日新增1601 Star，总Star约24.8万，本周首次收录",
+      "caveat": "Claude Code插件与可编辑文件安装方式不同，勿重复安装",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的智能体工程技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "description": "Public repository for Agent Skills",
+      "language": "Python",
+      "total_stars": 173745,
+      "forks": 20609,
+      "stars_today": 281,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 281
+    },
+    "details": {
+      "topics": [
+        "agent-skills"
+      ],
+      "license_name": "",
+      "created_at": "2025-09-22T15:53:31Z",
+      "updated_at": "2026-09-04T04:39:04Z",
+      "pushed_at": "2026-09-03T16:37:14Z",
+      "open_issues": 1211,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "> **Note:** This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see [agentskills.io](http://agentskills.io).\n\n[![skills.sh](https://skills.sh/b/anthropics/skills)](https://skills.sh/anthropics/skills)\n\n# Skills\nSkills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that's creating documents with your company's brand guidelines, analyzing data using your organization's specific workflows, or automating personal tasks.\n\nFor more information, check out:\n- [What are skills?](https://support.claude.com/en/articles/12512176-what-are-skills)\n- [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude)\n- [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills)\n- [Equipping agents for the real world with Agent Skills](https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)\n\n# About This Repository\n\nThis repository contains skills that demonstrate what's possible with Claude's skills system. These skills range from creative applications (art, music, design) to technical tasks (testing web apps, MCP server generation) to enterprise workflows (communications, branding, etc.).\n\nEach skill is self-contained in its own folder with a `SKILL.md` file containing the instructions and metadata that Claude uses. Browse through these skills to get inspiration for your own skills or to understand different patterns and approaches.\n\nMany skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power [Claude's document capabilities](https://www.anthropic.com/news/create-files) under the hood in the [`skills/docx`](./skills/docx), [`skills/pdf`](./skills/pdf), [`skills/pptx`](./skills/pptx), and [`skills/xlsx`](./skills/xlsx) subfolders. These are source-available, not open source, but we wanted to share these with developers as a reference for more complex skills that are actively used in a production AI application.\n\n## Disclaimer\n\n**These skills are provided for demonstration and educational purposes only.** While some of these capabilities may be available in Claude, the implementations and behaviors you receive from Claude may differ from what is shown in these skills. These skills are meant to illustrate patterns and possibilities. Always test skills thoroughly in your own environment before relying on them for critical tasks.\n\n# Skill Sets\n- [./skills](./skills): Skill examples for Creative & Design, Development & Technical, Enterprise & Communication, and Document Skills\n- [./spec](./spec): The Agent Skills specification\n- [./template](./template): Skill template\n\n# Try in Claude Code, Claude.ai, and the API\n\n## Claude Code\nYou can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:\n```\n/plugin marketplace add anthropics/skills\n```\n\nThen, to install a specific set of skills:\n1. Select `Browse and install plugins`\n2. Select `anthropic-agent-skills`\n3. Select `document-skills` or `example-skills`\n4. Select `Install now`\n\nAlternatively, directly install either Plugin via:\n```\n/plugin install document-skills@anthropic-agent-skills\n/plugin install example-skills@anthropic-agent-skills\n```\n\nAfter installing the plugin, you can use the skill by just mentioning it. For instance, if you install the `document-skills` plugin from the marketplace, you can ask Claude Code to do something like: \"Use the PDF skill to extract the form fields from `path/to/some-file.pdf`\"\n\n## Claude.ai\n\nThese example skills are all already available to paid plans in Claude.ai. \n\nTo use any skill from this repository or upload custom skills, follow the instructions in [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude#h_a4222fa77b).\n\n## Claude API\n\nYou can use Anthropic's pre-built skills, and upload custom skills, via the Claude API. See the [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) for more.\n\n# Creating a Basic Skill\n\nSkills are simple to create - just a folder with a `SKILL.md` file containing YAML frontmatter and instructions. You can use the **template-skill** in this repository as a starting point:\n\n```markdown\n---\nname: my-skill-name\ndescription: A clear description of what this skill does and when to use it\n---\n\n# My Skill Name\n\n[Add your instructions here that Claude will follow when this skill is active]\n\n## Examples\n- Example usage 1\n- Example usage 2\n\n## Guidelines\n- Guideline 1\n- Guideline 2\n```\n\nThe frontmatter requires only two fields:\n- `name` - A unique identifier for your skill (lowercase, hyphens for spaces)\n- `description` - A complete description of what the skill does and when to use it\n\nThe markdown content below contains the instructions, examples, and guidelines that Claude will follow. For more details, see [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills).\n\n# Partner Skills\n\nSkills are a great way to teach Claude how to get better at using specific pieces of software. As we see awesome example skills from partners, we may highlight some of them here:\n\n- **Notion** - [Notion Skills for Claude](https://www.notion.so/notiondevs/Notion-Skills-for-Claude-28da4445d27180c7af1df7d8615723d0)\n"
+    },
+    "brief": {
+      "summary": "Anthropic 为 Claude 提供的可复用 Agent Skills 示例库",
+      "problem": "让 Claude 按固定流程完成专业任务，减少重复指导",
+      "highlights": [
+        "可以安装文档处理等现成技能",
+        "可以参考模板创建自定义技能",
+        "可以探索创意、开发和企业流程案例"
+      ],
+      "target_users": [
+        "Claude 开发者",
+        "自动化工作流设计者",
+        "企业技术团队"
+      ],
+      "why_trending": "今日新增 281 Star，总 Star 达 17.3 万，本周首次收录",
+      "caveat": "项目称技能主要用于演示和教育，需自行充分测试",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "anthropics/skills",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "官方Agent Skills集合，含创作技能",
+      "generated_by_ai": true,
+      "velocity_score": 74,
+      "freshness_score": 40,
+      "ranking_score": 68.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "ayutaz/sanoTTS-jp",
+      "url": "https://github.com/ayutaz/sanoTTS-jp",
+      "description": "559 K パラメータの日本語 TTS を ESP32-S3 で実時間合成。漢字かな交じり文の形態素解析・アクセント推定まで端末内で走る（M5Stack CoreS3 実機で確認）。推論は依存ゼロの C99、ブラウザ demo あり。arXiv:2608.21378 sanoTTS の日本語 clean-room 再実装",
+      "language": "Python",
+      "total_stars": 45,
+      "forks": 2,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "edge-ai",
+        "embedded",
+        "esp32",
+        "esp32-s3",
+        "g2p",
+        "japanese",
+        "japanese-tts",
+        "knowledge-distillation",
+        "m5stack",
+        "microcontroller",
+        "openjtalk",
+        "piper",
+        "quantization",
+        "speech-synthesis",
+        "stack-chan",
+        "text-to-speech",
+        "tinyml",
+        "tts",
+        "vits",
+        "webassembly"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-08-27T13:50:56Z",
+      "updated_at": "2026-09-04T04:40:42Z",
+      "pushed_at": "2026-09-04T04:36:39Z",
+      "open_issues": 0,
+      "homepage": "https://ayutaz.github.io/sanoTTS-jp/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# sanoTTS-jp\n\n***日本語** · [English](README.en.md)*\n\n[![CI](https://github.com/ayutaz/sanoTTS-jp/actions/workflows/ci.yml/badge.svg)](https://github.com/ayutaz/sanoTTS-jp/actions/workflows/ci.yml)\n[![Demo](https://img.shields.io/badge/demo-ブラウザで試す-brightgreen.svg)](https://ayutaz.github.io/sanoTTS-jp/)\n[![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)\n[![Model license](https://img.shields.io/badge/model-not%20MIT-orange.svg)](LICENSE-MODEL.md)\n\n**559 K パラメータの日本語 TTS を、$3 のマイコン（ESP32-S3）で動かす試み。**\n\n### 🔊 ブラウザで試す → **<https://ayutaz.github.io/sanoTTS-jp/>**\n\nインストール不要。**漢字かな交じり文をそのまま打つと喋る**。\n⚠️ **マイコンに載っているのと同じ C99 コード**を WebAssembly にしたもので（arena も同じ 180,224 B）、\npiper-plus の WASM の置き換えではなく**実機のコードを触れる形にした入口**（[D-050](docs/decisions.md#d-050)）。\n⚠️ **初回に辞書 5.5 MB を落とす**（gzip）。速度は Chrome で **0.008〜0.019 ×RT**（[M-95](docs/measurements.md#m-95)）。音は**両レーンとも聴いてもらって「問題なかった」/ 途切れ無し**（[M-96](docs/measurements.md#m-96)。⚠️ **1 名・対照なし・盲検なし**）。⚠️ **モバイルと Safari は未測定**。\n\n[arXiv:2608.21378](https://arxiv.org/abs/2608.21378) \"sanoTTS\" の蒸留レシピを日本語に適用し、\n[piper-plus](https://github.com/ayutaz/piper-plus)（MB-iSTFT-VITS2）を教師として、\nDuration / Acoustic / iSTFT Decoder の 3 つの小さな生徒に蒸留する。\n**推論は依存ゼロの C99**（libm のみ・`malloc` を呼ばない）。\n\nM5Stack CoreS3（スタックチャン）にファームを 1 本焼くと、シリアルに\n**`今日は良い天気ですね。` と打つだけで喋る**。形態素解析もアクセント推定も端末の中で走る。\n\n```\nかな> 今日は良い天気ですね。\nsaanotts: 経路: 辞書\nsaanotts: 漢字 G2P: 33 B -> 形態素 7 個 / ids 53 個 / 25.69 ms\nsaanotts: init 21.56 ms / 53 ids / 106 frames / 27136 sample / 音声 1.231 s\nsaanotts: プリロール 4 チャンク完了（初回 pull 244.66 ms / 鳴らし始めまで 384 ms）\n  ...\nsaanotts: 定常 xRT = 0.446（満チャンク pull の中央値 / 92.88 ms）\nsaanotts: アンダーラン 0 / 14 チャンク\nsaanotts: 出力 PCM: 27136 sample / FNV-1a 0xa69a7ebbb5ccb05f\n```\n\n*（実機の生ログ [`reports/m90_cores3/device_m5_kanji.log`](reports/m90_cores3/device_m5_kanji.log) から、\nタイムスタンプと注記を省いて抜粋。`...` は 14 回の pull）*\n\n| | |\n|---|---:|\n| モデル | **559 K params** / int8 で **654,032 B**（flash） |\n| 実行時 RAM | **157 KB**（ESP32-S3 の SRAM 512 KB の 34%） |\n| 速度 | **xRT 0.446**（満チャンク 1 pull。⚠️ 発話全体では 0.54〜0.71） |\n| 品質 | 教師の **64%**（SCOREQ 比 0.644）。⚠️ **予測器のスコアで、人の耳ではない** |\n| 端末の G2P | 漢字あり **13.7 MB 辞書** / かなだけなら **877 B のテーブル** |\n\n⚠️ **これは検証 (PoC) であって製品ではない。** いちばん足りていないのは\n**人が聴いた評価**で、いまのところ 1 名・対照なし・盲検なしが 1 回あるだけ。\n\n## なぜ日本語版が別に要るのか\n\n**英語版のレシピをそのまま移すと G2P で詰まる。** 漢字を読むには辞書が要り、\nNAIST-JDIC は実測 **102 MB** でマイコンに載らない。そこで辞書を小さくするのではなく\n**問題の切り分け方を変えた** — 端末は「ひらがな + アクセント記号」だけを受け取り、\n**877 B のテーブル**で音素に変換する。**論文にも公式実装にも対応物が無い**、\nこのリポジトリの中心的な設計判断。\n\n⚠️ **後にこの前提を測り直したら崩れた。** 辞書を TTS 専用の形式にすると\n1 エントリ 130 B → **28 B** になり、16 MB ボードに **438,750 entries** が載る。\nいまは**端末だけで漢字も読める**が、かな中間表現は**両方の経路の共通の中間形式**として\n残っている（同じ文をどちらで書いても PCM が bit 一致する）。\n\nピッチアクセント（箸／橋／端）と無声化母音（「です」「した」の `i` `u`）も英語版には\n無い問題で、どちらも**集約スコアでは検出できない**ため専用の評価を用意した\n（→ [`MODEL_CARD.md`](MODEL_CARD.md)）。\n\n## はじめかた\n\n**入口は 5 つ。A / B / D / E は piper-plus も教師モデルも要らない**（新規 clone で実測）。\n\n| | やりたいこと | 要るもの | 所要 |\n|---|---|---|---|\n| **A** | **音を聴く** | [Releases](https://github.com/ayutaz/sanoTTS-jp/releases/latest) の `saanotts-jp-v3-samples.zip` だけ | 1 分 |\n| **B** | **好きな文を合成する** | + 最小セットアップ + `saanotts-jp-v3-stage4.pt` | 10 分 |\n| **C** | **ESP32-S3 で喋らせる** | ボード（DAC は任意）。**焼くだけなら ESP-IDF は不要** | 15〜30 分 |\n| **D** | **コードのゲートを回す** | 最小セットアップだけ | 5 分 |\n| **E** | **ブラウザで試す** | ブラウザだけ。**インストール不要** | 1 分 |\n\n### 最小セットアップ（B / D）\n\n⚠️ **`uv sync` は使わない。** `pyproject.toml` の `[tool.uv.sources]` が\npiper-plus への**絶対パス**を指しているので、持っていない人は\n`error: Distribution not found at: file://...` で止まる（実測）。\n生徒の推論に要るのは **torch / numpy / soundfile の 3 つだけ**なので、\nプロジェクトを経由しない venv を作る:\n\n```bash\ngit clone https://github.com/ayutaz/sanoTTS-jp.git && cd sanoTTS-jp\nuv venv && uv pip install \"torch>=2.11\" \"numpy<2.5\" \"soundfile>=0.14\"\n```\n\n### B. 好きな文を合成する\n\n[Releases](https://github.com/ayutaz/sanoTTS-jp/releases/latest) から\n`saanotts-jp-v3-stage4.pt`（2.7 MB）を落として、**かな中間表現**を渡す。\n\n```bash\nuv run --no-project python scripts/synthesize_student.py \\\n    --ckpt saanotts-jp-v3-stage4.pt \\\n    --intermediate \"きょ][おわよ][いて][んきです°ね\" --out out/\n#   → out/cli_000.wav（22.05 kHz / 1.2 秒）「今日は良い天気ですね。」\n```\n\n```\n[ アクセント上昇 / ] 下降核 / # 句境界 / ° 無声化\n```\n\n**漢字文をそのまま渡すこともできる**（下のフルセットアップが要る。OpenJTalk で\n漢字→かなを行うため）:\n\n```bash\nuv run python scripts/synthesize_student.py --ckpt saanotts-jp-v3-stage4.pt \\\n    --text \"今日は良い天気ですね。\" --out out/\n```\n\n⚠️ **どちらの経路でも WAV はバイト単位で一致する**（M-92 で実測。held-out 300 文で\n生徒インデックスも 300/300 一致）。違いは**漢字→かなに OpenJTalk が要るかどうかだけ**。\n\n| 書きかた | 要るもの |\n|---|---|\n| `--intermediate \"きょ][おわよ…\"` | **最小セットアップだけ**（torch / numpy / soundfile） |\n| `--text \"今日は良い天気ですね。\"` | + **フルセットアップ**（piper-plus = OpenJTalk） |\n\n⚠️ **端末（`-DSAAN_KANJI=1`）はこの制約を受けない。** 辞書を載せた板は漢字文を\nそのまま受ける。ホストで OpenJTalk が要るのは、**端末より広いフル辞書**を使うため\n（端末の枝刈り辞書とは音素の 0.32% が違う）。\n\n⚠️ **モデルの重みは MIT ではない。** 使う前に [`LICENSE-MODEL.md`](LICENSE-MODEL.md) を読むこと。\n\n### C. ESP32-S3 で喋らせる\n\n手順は [`esp32/TESTING.md`](esp32/TESTING.md)。焼いたあとシリアルで:\n\n```\nかな> きょ][おわよ][いて][んきです°ね        ← かな中間表現\nかな> 今日は良い天気ですね。                  ← 漢字版のビルドなら、そのまま打つ\n```\n\n**入力に印を付ける必要はない。** 端末が行を見て**かな / 辞書 / 拒否の 3 値**を決める\n（`saan_g2p_classify()`）: 凍結テーブルのトークナイザが行末まで通れば**かな経路**、\n通らず中間表現の記号（`[ ] # ° _ ^ $`）が無ければ**辞書経路**、通らないのに記号が\n混じっていれば**拒否して喋らない**（「中間表現 + `。`」がそれらしい音で通るのを防ぐため）。\n判定はホスト側 `scripts/kana_g2p.py` と同じ規則で、一致は `make -C csrc kb-parity` が\n**596/596** で検査する。\n\n**ファームは 3 通り。** コンソールが **UART0 の版と USB Serial/JTAG の版**があり、\nCoreS3 / AtomS3 のような **native USB だけの板は `-usbjtag` の方**を焼く。\n\n| | 焼くもの | 受け付ける入力 | flash |\n|---|---|---|---|\n| かな | `esp32s3-firmware-w8a8-pie.bin` / `…-usbjtag.bin` | かな中間表現のみ | 8 MB 以上 |\n| **漢字** | `esp32s3-firmware-kanji-16mb.bin` / `…-usbjtag.bin` | **漢字かな交じり文**も | **16 MB 必須** |\n| **M5 CoreS3** | `m5-cores3-firmware-kanji-16mb.bin` | 同上。**内蔵スピーカーで鳴る** | **16 MB 必須** |\n\n⚠️ **v0.2.0 以前のイメージは `!` の前置が要り、入力が UART0**。必ず入れ替えること。\n\n**音の出口は 2 通り。**\n\n| 板 | どう焼くか | 音の出口 |\n|---|---|---|\n| ESP32-S3 DevKit / AtomS3 + I2S DAC | 上のイメージを焼く | 外付け DAC（配線が要る。⚠️ `saan_i2s` は**実機未検証**） |\n| **M5Stack CoreS3 / Core2 / Basic**（スタックチャンの中身） | 配布イメージ、または[ソースから](esp32/boards/m5unified/README.md) | 内蔵スピーカー。画面に文が出て、タッチで再生 |\n\n### D. コードのゲートを回す\n\n```bash\nmake -C csrc line                                       # 端末の行編集（陽性対照つき）\nmake -C csrc fft                                        # 逆 FFT（naive DFT の 1,435 倍）\nmake -C csrc g2p PYTHON=\"uv run --no-project python\"    # オンデバイス G2P（2,819 ベクタ）\nmake -C csrc erf                                        # GELU の erf 近似 vs libm（陽性対照つき）\nmake -C csrc range                                      # 出力範囲つきカーネルが全域版と bit 一致\nuv run --no-project python scripts/test_blob_to_header.py   # blob → .rodata（fp32 拒否の陽性対照）\nuv run --no-project python scripts/test_losses.py\nuv run --no-project python scripts/test_labelpack.py\n```\n\n⚠️ **`PYTHON=...` を省くと `uv run python` になり、piper-plus を要求する。**\n⚠️ **`make -C csrc all-test` は通らない** — golden との突き合わせに `csrc/*.bin`\n（重みの書き出し）が要る。落とした `.pt` から `scripts/export_c_weights.py` で書き出せば通る。\n\n### E. ブラウザで試す\n\n**<https://ayutaz.github.io/sanoTTS-jp/>** — この C99 コアをそのまま WebAssembly にしたデモ。\n配っているのは [`pages.yml`](.github/workflows/pages.yml)（`main` への push で走り、\n重みと辞書は**リリース v0.3.0 からタグ固定で落として SHA-256 を照合**している）。\n\n**インストールも設定も要らず**、入力欄に\n`今日は良い天気ですね。` と打つだけで鳴る。**漢字・カタカナ・ひらがな**をそのまま受ける\n（`!` のような印は要らない。経路は C 側の `saan_g2p_classify()` が決める）。\n\n- **ESP32 と同じコードが動く。** `csrc/` の C99 と `esp32/main/saan_kanji.c` を書き換えずに\n  wasm にしただけで、**arena も実機と同じ 180,224 B**（→ [D-050](docs/decisions.md#d-050)）\n- 初回は**辞書 13,702,320 B（gzip -9 で 5,476,122 B）**を落とす。⚠️ 回線が細いと待たされる\n- ⚠️ **ブラウザでは 1 種類も速度を測っていない**（測ったのは node だけ。[M-94](docs/measurements.md#m-94)）\n- 音は **W8A32 / W8A8 の両方を聴いてもらい「問題なかった」/ 途切れ無し**（[M-96](docs/measurements.md#m-96)）。⚠️ **1 名・対照なし・盲検なし**。\n  ⚠️ かつてここに書いていた「`AudioContext` のリサンプルが挟まる」は、**要求どおり 22,050 Hz が返る**ことが分かった（M-95 §3）ので前提が変わった。ただし\n  **鳴っている音は checksum と一致しない**\n- ⚠️ **成果物は今も ESP32。** Web は入口であって、このプロジェクトの目的ではない（[D-007](docs/decisions.md#d-007)）\n\n手元で動かすなら（emcc が要る）。⚠️ **`index.html` と同じ階層に全部を平らに並べる**\n（`.github/workflows/pages.yml` が CI でやっているのと同じ形）:\n\n```bash\nbash web/build.sh                                   # → web/dist/*.wasm と *.mjs\nmkdir -p /tmp/saan-site\ncp web/index.html web/main.js web/dist/*.mjs web/dist/*.wasm /tmp/saan-site/\ncp csrc/student_i8.bin /tmp/saan-site/              # = リリースの saanotts-jp-v3-int8.bin\ngzip -9 -c csrc/k1_dict.bin > /tmp/saan-site/k1_dict.bin.gz   # = k1-dict-438750.bin\n\n# ⚠️ **ここまでで止めると footer の 4 本が全部 404 になる**（実測。音は鳴るので、\n#    リンクを踏むまで気づかない）: NOTICE.txt / NOTICE-openjtalk.txt /\n#    NOTICE-dictionary.txt / LICENSE-MODEL.md\ncp LICENSE-MODEL.md /tmp/saan-site/                 # リポジトリのものでよい\n#   （リリース資産 LICENSE-MODEL.md と SHA-256 が一致する。実測で確認済み）\n# ⚠️ NOTICE*.txt 3 本は**リポジトリにその名前では無い**ので、リリースから落とす。\n#    ⚠️ **ネットワークが要る**（CI の pages.yml も同じ 3 本を落としている）\ngh release download v0.3.0 -R ayutaz/sanoTTS-jp -D /tmp/saan-site --clobber \\\n    -p 'NOTICE.txt' -p 'NOTICE-openjtalk.txt' -p 'NOTICE-dictionary.txt'\n\nuv run --no-project python -m http.server -d /tmp/saan-site 8000\n#   ⚠️ `python3 -m http.server` は hook が止める（D-012）\n```\n\n### フルセットアップ（漢字→かな変換 / 学習 / ラベル生成）\n\n```bash\ngit clone https://github.com/ayutaz/piper-plus.git ~/piper-plus       # MIT\ncd sanoTTS-jp\npython3 deploy/retarget_sources.py --root ~/piper-plus                # ⚠️ uv sync の前\nuv sync\n```\n\n⚠️ **教師 checkpoint（private）はこれでも入らない。** 要るのは\n**ラベル生成と学習をやり直すときだけ**で、漢字→かな変換は piper-plus のソースだけで動く。\n\n## ダウンロード\n\n**最新の [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) に全部入っている。**\n⚠️ **モデルの重みは v0.1.0 以降すべて bit 同一**（再学習していない）。\n\n| 資産 | どこ | 中身 |\n|---|---|---|\n| `saanotts-jp-v3-samples.zip` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | 合成音の WAV |\n| `saanotts-jp-v3-stage4.pt` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | PyTorch の重み（2,744,874 B） |\n| `saanotts-jp-v3-int8.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | C99 コア用の int8 blob（**654,032 B / 形式 v2**）。⚠️ v0.2.0 の v1 は現行コアが拒む |\n| `saanotts-jp-v3-fp32.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | 参照・デバッグ用の fp32 blob |\n| `golden-v3-int8.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | `make -C csrc int8-golden` 用の参照出力 |\n| `golden-v3-fp32.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | `make -C csrc test` 用の参照出力 |\n| `m5-cores3-firmware-kanji-16mb.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | **M5Stack CoreS3 / スタックチャン**（16 MB 必須） |\n| `esp32s3-firmware-kanji-16mb.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | **漢字入力**・UART0（16 MB 必須） |\n| `esp32s3-firmware-kanji-16mb-usbjtag.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | 同・**USB Serial/JTAG**（native USB の板はこちら） |\n| `esp32s3-firmware-w8a8-pie.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | **かな入力**・UART0（8 MB 以上） |\n| `esp32s3-firmware-w8a8-pie-usbjtag.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | 同・**USB Serial/JTAG** |\n| `esp32s3-firmware-w8a32.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | かな入力・最適化なし（**PIE の比較対照**） |\n| `k1-dict-438750.bin` | [v0.3.0](https://github.com/ayutaz/sanoTTS-jp/releases/tag/v0.3.0) | 辞書 blob 単体（13,702,320 B） |\n\n## しくみ\n\n```\n漢字かな交じり文\n   │  ホスト側・オフライン（OpenJTalk）  ┊  端末側・辞書 13.7 MB（-DSAAN_KANJI=1）\n   ▼                                     ┊  438,750 entries を flash に mmap\nかな中間表現   きょ][おわよ][いて][んきです°ね     [ 上昇 / ] 下降核 / # 句境界 / ° 無声化\n   │  端末側・877 B のテーブルのみ        ┊  どちらの経路かは saan_g2p_classify() が決める\n   ▼                                     ┊  （かな / 辞書 / 拒否。両経路とも同じ音素IDに合流）\n音素ID ──▶ Duration Dα ──▶ Acoustic Aβ ──▶ iSTFT Decoder Gγ ──▶ 22.05 kHz PCM\n            33 K params      195 K            331 K\n                        └─ 40 次元の潜在インターフェース（c-line）で接続\n```\n\n**3 つの生徒を明示的な潜在インターフェースで繋ぐのが要点。** これを省いて\nテキスト→波形を 1 本のネットで学ぶと、論文の対照実験では訓練文を丸暗記して\n未知の文が読めなくなる。\n\n- **C99 推論コア**（`csrc/`）— 依存は libm のみ。`malloc` を呼ばず arena を使う。\n  ストリーミング版は一括版と **bit 完全一致**（27,136 sample）\n- **オンデバイス G2P**（`csrc/g2p.c`）— テーブル **877 B** / コード "
+    },
+    "brief": {
+      "summary": "可在ESP32-S3端侧实时合成日语语音的轻量TTS",
+      "problem": "让资源有限的微控制器处理日语文本、读音和语音合成",
+      "highlights": [
+        "可以在M5Stack CoreS3上输入日语并播放",
+        "可以在浏览器直接试用日语文本合成",
+        "可以用无依赖C99核心部署到嵌入式设备"
+      ],
+      "target_users": [
+        "嵌入式开发者",
+        "日语语音应用开发者",
+        "创客与硬件爱好者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获45个Star",
+      "caveat": "项目仍是PoC，语音人工评测不足，模型许可需另查",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "ayutaz/sanoTTS-jp",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "端侧实时日语语音合成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "NguyenSiTrung/VieNeuTTSApp",
+      "url": "https://github.com/NguyenSiTrung/VieNeuTTSApp",
+      "description": "Cross-platform, fully-offline Vietnamese/English text-to-speech desktop workstation powered by VieNeu-TTS v3 Turbo (ONNX/CUDA, Voice Cloning, EPUB Audiobooks, PySide6/QML)",
+      "language": "Python",
+      "total_stars": 34,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audiobook-generator",
+        "cross-platform",
+        "desktop-app",
+        "offline-tts",
+        "onnx",
+        "onnxruntime",
+        "pyside6",
+        "qml",
+        "speech-synthesis",
+        "text-to-speech",
+        "tts",
+        "vieneu-tts",
+        "vietnamese-tts",
+        "voice-cloning"
+      ],
+      "license_name": "",
+      "created_at": "2026-08-26T11:03:46Z",
+      "updated_at": "2026-09-04T04:34:16Z",
+      "pushed_at": "2026-09-04T04:34:09Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"src/vienetts_app/ui/assets/icons/icon_128x128.png\" width=\"96\" alt=\"VieNeuTTS logo\" />\n</p>\n\n# VieNeuTTS\n\n**Cross-platform, fully-offline Vietnamese/English text-to-speech workstation.**\n\nPowered by [VieNeu-TTS v3 Turbo](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo)\nthrough the `vieneu` Python SDK. On-device ONNX inference on CPU (int8 by\ndefault) with optional NVIDIA CUDA — no cloud, no telemetry: text and audio\nnever leave the machine.\n\n<p align=\"center\">\n  <img alt=\"Platforms\" src=\"https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"Python\" src=\"https://img.shields.io/badge/python-3.10%E2%80%933.13-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"UI\" src=\"https://img.shields.io/badge/UI-PySide6%20%2B%20QML-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"License\" src=\"https://img.shields.io/badge/license-Apache--2.0-2dd4bf?labelColor=0f1117\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/text-studio.png?v=2\" width=\"880\"\n       alt=\"VieNeuTTS text studio: mixed Vietnamese/English synthesis with an emotion tag and a replaying waveform\" />\n</p>\n\n*The text studio, mid-replay: mixed Vietnamese/English input with an inline\n`[cười]` emotion tag, one of ~20 preset voices, and the finished-audio\nwaveform.*\n\n## Features\n\n### 🎙 Text studio — free-text synthesis\n\n- Vietnamese/English **code-switching** in a single request\n- ~20 preset voices grouped **Bắc / Trung / Nam** (North/Central/South), with\n  **one-click audition** from the redesigned voice picker — regional pills,\n  gender/style badges, search, and cached pre-listen samples that never touch\n  your editor text\n- Inline emotion tags: `[cười] [thở dài] [hắng giọng]` (the three cues the\n  v3 Turbo emotion checkpoint was trained on)\n- **Streaming playback** — first chunk observed at about 100 ms in a\n  direct-engine measurement on one Apple M4; end-to-end numbers are tracked\n  in [docs/performance](docs/performance/README.md)\n- 48 kHz WAV export\n- **Foreground job state** — the status line under the action bar follows\n  your text action (`queued` → `generating`) with its own cancel button.\n  Background audiobook renders never flip it, and cancelling a text action\n  never drops queued audiobook work.\n- **Live preview & silent generation** — the \"Phát trực tiếp\" toggle is **OFF**\n  by default: synthesis generates a clean, validated WAV file directly on disk\n  and automatically replays it from the start upon completion. This eliminates\n  audio buffer underruns when synthesizing on CPU.\n\n### 📄 Long documents\n\nImport `.txt`, `.md`, `.docx`, `.pdf`, or `.srt` into the paragraph studio and\nsynthesize long-form text with the same voice controls. Subtitle files import as\nclean spoken text by default, with an option to keep the original timecodes.\nFor texts longer than ~2,000 words or 10,000 characters, synthesize through the\n**Audiobook (EPUB) studio** (which splits and caches chapter by chapter) rather\nthan submitting one giant block to the Text studio. This avoids ONNX Runtime CPU\nmemory arena growth (~2.5 GB committed memory) and ensures stable processing.\nBoth studios surface an inline advisory once the input passes 2,000 characters,\npointing at the same guidance.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/paragraph-studio.png?v=2\" width=\"880\"\n       alt=\"Paragraph studio with an imported Vietnamese document\" />\n</p>\n\n### 🧬 Instant voice cloning\n\nClone any voice from a 3–8 s reference clip — optional denoise, instant\npreview, and the cloned voice becomes selectable in every studio.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/voice-cloning.png?v=2\" width=\"880\"\n       alt=\"Voice cloning tab with a reference clip and a cloned voice entry\" />\n</p>\n\n### 📚 EPUB audiobook studio\n\nChapter-aware playback, per-chapter WAV cache, resume, ordered export,\nkaraoke transcript sync with click-to-seek, render ETA, and render-all\nprogress.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/audiobook-studio.png?v=2\" width=\"880\"\n       alt=\"Audiobook studio with a rendered chapter and the player dock paused mid-chapter\" />\n</p>\n\n### ⚙️ Engine auto-detection, speech tuning & bilingual UI\n\nAutomatic CPU/ONNX vs NVIDIA/CUDA detection with manual override. In Settings,\na **reading-speed slider (0.5×–2.0×)** and a **sentence-pause control (0–2 s)**\ntime-stretch the output with a pure-NumPy WSOLA implementation — pitch is\npreserved without the phase-vocoder rumble — on both the batch and streaming\npaths. The UI switches between **Tiếng Việt** and English instantly — no\nrestart.\n\n**Updates:** the app checks GitHub Releases once at startup (silent when\noffline or current) and the Settings → Cập nhật card shows the running\nversion with a **Kiểm tra** button. When a newer release exists, the card\nsuggests the file for the running platform (Windows / Linux / macOS) with\nan expander for the other platforms' files — downloads open in the browser\nand install by re-extracting over the old folder (Linux: re-run\n`share/linux/install.sh`).\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/settings.png?v=2\" width=\"880\"\n       alt=\"Settings (English UI): reading speed and sentence-pause sliders, live-preview toggle, and the Appearance section\" />\n</p>\n\n## Status\n\nCore features are implemented and tested (846 tests collected at time of\nwriting). Releases v0.1.0 through v0.1.6 are published through the\ntag-triggered pipeline below — every packaged binary is smoke-verified with\nreal synthesis before it ships. Remaining before a 1.0: macOS notarization\n(builds are ad-hoc signed today — see the Gatekeeper notes under Releases)\nand the Phase 6 hardening backlog — see [PROJECT_PLAN.md](PROJECT_PLAN.md)\nand [conductor/tracks.md](conductor/tracks.md).\n\n## Requirements\n\n- Python 3.10–3.13 (3.13 recommended — the SDK does not support 3.14 yet)\n- `uv` for environment management\n- A display server for the GUI (the headless smoke CLI works without one)\n- Model files cached or bundled (first synthesis needs a one-time download —\n  see [Models](#models))\n\nOptional GPU: NVIDIA CUDA >= 12.8.\n\n## Setup\n\n```bash\nuv venv --python 3.13 .venv\nuv pip install -p .venv/bin/python -e \".[dev]\"\n```\n\nCUDA build (instead of CPU ONNX):\n\n```bash\nuv pip install -p .venv/bin/python -e \".[dev,gpu]\"\n```\n\n## Models\n\nThe packaged app is offline after one-time model setup, not immediately after\napplication download. On first launch the setup card checks the managed\nofficial CPU baseline, then offers Download, Cancel, Retry, and offline-pack\nguidance — no terminal or repository required.\n\n- **Official baseline:** approximately 327 MB download (verified sizes and\n  SHA-256 in `src/vienetts_app/core/official_model_manifest.py`). The\n  installer preflights free space (download plus 512 MB headroom) before\n  starting, downloads to a staging directory, validates every file, then\n  atomically promotes the install. An interrupted or invalid staging\n  directory is never used.\n- **Cancellation/resume:** cancelling stops before the next file or before\n  promotion. Already-verified staging files are kept so retry resumes instead\n  of re-downloading.\n- **Offline after setup:** restart the app with network access disabled and\n  synthesize — inference and user content stay on-device and the official\n  path never contacts Hugging Face during synthesis.\n- **Custom model source (advanced):** the Settings tab “Nguồn mô hình” field\n  stays empty for the official baseline. Pasting another `owner/repo` id\n  switches to that custom source and disables the official download flow with\n  an explicit explanation.\n- **Developer-only:** `scripts/fetch_models.py` shares the same committed\n  manifest and revision pins for local bundles (`--out models`, `--verify`).\n  Packaged users never need it. Use `--precision fp32` for fp32 graphs\n  (~455 MB extra) or `--backbone owner/repo` only for explicit custom-repo\n  development; custom bundles record `\"format\": \"custom\"`.\n\n## Run\n\n```bash\n.venv/bin/vienetts-app                # GUI (or: .venv/bin/python -m vienetts_app)\n```\n\nHeadless smoke test — synthesizes end-to-end and exits 0 only on a valid WAV:\n\n```bash\n.venv/bin/vienetts-app --smoke \"Xin chào, đây là thử nghiệm\"\n.venv/bin/vienetts-app --smoke \"Hello world\" --voice \"Trúc Ly\" --stream -o /tmp/out.wav\n```\n\nOptions:\n\n| Flag | Description |\n| --- | --- |\n| `--smoke TEXT` | Synthesize TEXT end-to-end and exit (omit to open the GUI) |\n| `--voice ID`   | Preset voice id (default: `Adam`) |\n| `--stream`     | Use the streaming synthesis path |\n| `-o, --output` | Output WAV path (default: `out.wav`) |\n\nThe smoke run prints the detected engine, then `output: <path> (<N>s)` on\nsuccess. It exercises real synthesis through the threaded worker — useful as\na full-stack check without the UI.\n\n## UI language\n\nThe interface is bilingual: **Tiếng Việt** (the source language) and\n**English**. Switch it in *Settings → Appearance → Ngôn ngữ* — the change\napplies instantly (no restart) and persists; `system` follows the OS locale,\ndefaulting to Vietnamese. Strings already shown in an error banner or a\ntransient toast when you switch keep the old language until the next event.\n\nWhen adding or changing user-facing strings, regenerate the English catalog\nwith:\n\n```bash\nscripts/update_i18n.sh        # lupdate merge → translate new entries → recompile .qm\n```\n\nThe unit suite fails on unfinished catalog entries, so untranslated strings\nblock the quality gates.\n\n## Development\n\n### Quality gates\n\n```bash\n.venv/bin/ruff check .\n.venv/bin/ruff format --check .\n.venv/bin/pytest\n```\n\n### Regenerate the README screenshots\n\nThe screenshots in this README are real captures of the running app (real\nsynthesis included). After UI changes, refresh them with:\n\n```bash\n.venv/bin/python scripts/generate_screenshots.py\n```\n\nIt drives the app through the same seams as the smoke tests, plays two short\naudio blips (the hero waveform is grabbed mid-replay), isolates the audiobook\nlibrary to a throwaway data dir, and removes the demo voice/book from your\nreal data afterwards.\n\n### Project layout\n\n```\nsrc/vienetts_app/\n  core/     engine, models, settings, detectors, importers, EPUB\n  workers/  inference worker (QThread owning the SDK instance)\n  ui/       PySide6 controllers + QML surface\n  app.py    GUI bootstrap (QGuiApplication + QQmlApplicationEngine)\n  __main__.py  entry point: GUI + --smoke CLI\nscripts/     model fetch/verify, icon generation, README screenshots\ntests/       unit, integration, smoke, fixtures\nconductor/   context-driven dev tracks (product, tech-stack, patterns)\n```\n\n### Releases\n\nEvery push and pull request runs CI (ruff + full test suite, offscreen Qt) on\nUbuntu and Windows — the two platforms nobody develops on. Releases are built\nby the tag-triggered Release workflow: pushing a `v*` tag runs the full\npipeline on Windows, macOS and Ubuntu; `gh workflow run Release` does a dry\nrun of everything except publishing.\n\n```bash\ngit tag v0.1.0 && git push origin v0.1.0   # tests → build → verify → Release\n```\n\nEach platform job runs the whole test suite (offscreen Qt), freezes the app\nwith PyInstaller (`packaging/vienetts-app.spec`), then **runs real synthesis\nthrough the packaged binary** and validates the output WAV is audible speech\n(`scripts/check_smoke_wav.py`). The GitHub Release gets:\n\n| Platform | Artifact | Notes |\n|---|---|---|\n| Windows x64 | `VieNeuTTS-<ver>-windows-x64.zip` | unzip, run `VieNeuTTS/VieNeuTTS.exe` |\n| macOS Apple Silicon | `VieNeuTTS-<ver>-macos-arm64.dmg` | arm64-only; unsigned (see below) |\n| Linux x64 | `VieNeuTTS-<ver>-linux-x64.zip` | built on Ubuntu 22.04 (glibc 2.35); run `share/linux/install.sh` for a menu entry |\n\nModel weights (~750 MB, CPU int8) are **not** in the artifacts — the app\ndownloads them to the Hugging Face cache on first synthesis, so the first\nvoice generation needs an internet connection.\n\n**macOS Gatekeeper:** the `.dmg` is ad-hoc signed (no Apple Developer ID, so no\nnotarization), and the first launch is blocked "
+    },
+    "brief": {
+      "summary": "离线生成越南语和英语语音的桌面工作站",
+      "problem": "解决双语文本转语音、长文有声书和声音克隆需求",
+      "highlights": [
+        "可以把越南语和英语混合文本转成语音",
+        "可以导入 EPUB、PDF 等制作有声书",
+        "可以用 3至8 秒音频克隆声音"
+      ],
+      "target_users": [
+        "越南语内容创作者",
+        "有声书制作人员",
+        "重视隐私的用户"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，适合关注离线双语语音工具的人",
+      "caveat": "首次使用需联网下载模型；macOS 尚未公证",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "NguyenSiTrung/VieNeuTTSApp",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "离线越南语配音与声音克隆",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "Volumetenrectify/ae-motion-compiler",
+      "url": "https://github.com/Volumetenrectify/ae-motion-compiler",
+      "description": "Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.",
+      "language": "HTML",
+      "total_stars": 105,
+      "forks": 49,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "abobe",
+        "ae",
+        "after",
+        "after-effects",
+        "animation",
+        "effects",
+        "motion-graphics",
+        "video-editing"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-09T19:22:00Z",
+      "updated_at": "2026-09-04T03:38:33Z",
+      "pushed_at": "2026-09-04T03:38:26Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎬 ae-motion-compiler\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 🚀 Motion Graphics Automation Framework for After Effects\n\nae-motion-compiler is an advanced scripting framework that automates repetitive animation tasks in After Effects. Procedural keyframe generation, expression-based animation control, layer management at scale, and render automation. Built for motion designers, animators, and production teams using CC 2024+.\n\nAccelerate motion graphics production through intelligent automation.\n\n## 📦 Latest\n\n**Version**: 2.4.2 (CC 2024+)\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 📖 Index\n- [Details](#🎯-details)\n- [System](#💻-system)\n- [Setup](#📦-setup)\n- [Config](#⚙️-config)\n- [Animation](#🎨-animation)\n- [Tools](#✨-tools)\n- [Support](#🔌-support)\n- [Plans](#🗺️-plans)\n- [Contribute](#🤝-contribute)\n- [Security](#🛡️-security)\n- [Help](#🔧-help)\n- [Legal](#📄-legal)\n- [Info](#⚠️-info)\n\n## 🎯 Details\n\nae-motion-compiler streamlines motion graphics workflows through procedural animation. Define animation patterns once, apply across hundreds of layers. Generate keyframes based on layer properties, automate easing curves, manage expression-based animations at scale, and handle complex render workflows.\n\nIncludes keyframe generators, expression builders, layer organizers, and batch automation tools.\n\n```mermaid\ngraph TD\n    A[Animation Template] --> B[Expression Engine]\n    B --> C[Pattern Recognition]\n    C --> D[Keyframe Generation]\n    D --> E[Layer Application]\n    E --> F[Easing Control]\n    F --> G[Preview]\n    G --> H[Batch Render]\n    H --> I[Output]\n    \n    style A fill:#fff3e0\n    style B fill:#e3f2fd\n    style D fill:#f3e5f5\n    style H fill:#e8f5e9\n    style I fill:#fce4ec\n```\n\n## 💻 System\n\n| Component | Min | Recommended |\n|-----------|-----|-------------|\n| **OS** | ![Windows](https://img.shields.io/badge/Windows-10-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-10.15-000000?style=flat) | ![Windows](https://img.shields.io/badge/Windows-11-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-12-000000?style=flat) |\n| **After Effects** | CC 2024 | CC 2026 current |\n| **Memory** | 8 GB | 16 GB+ |\n| **Storage** | 800 MB | 2.5 GB SSD |\n| **CPU** | 4-core | 8-core+ |\n\n## 📦 Setup\n\nInstalls:\n1. Compatibility check\n2. Script deployment\n3. Expression templates\n4. Configuration\n\n### Manual\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run build\nnpm run install:ae\n```\n\n### First Use\n\n1. Open After Effects\n2. **File → Scripts → ae-motion-compiler**\n3. Main panel opens\n4. Load project template\n\n## ⚙️ Config\n\n### Preferences\n\nSet in script settings:\n\n```yaml\ncore:\n  version: \"2.4\"\n  auto_update: true\n  undo_groups: true\n\nkeyframes:\n  default_easing: \"ease-in-out\"\n  keyframe_spacing: \"uniform\"\n  auto_bezier: true\n  preserve_velocity: true\n\nexpressions:\n  validation: true\n  error_reporting: true\n  performance_mode: \"balanced\"\n  syntax_highlight: true\n\nlayers:\n  batch_limit: 500\n  hierarchy_preserve: true\n  naming_convention: \"kebab-case\"\n  auto_organize: true\n\nrender:\n  queue_management: true\n  output_format: \"mp4\"\n  render_settings: \"high-quality\"\n  monitor_progress: true\n\nexport:\n  include_metadata: true\n  preserve_structure: true\n  backup_source: true\n```\n\n### Templates\n\n- **slide** — Sliding text animations\n- **scale** — Growth/shrink sequences\n- **rotate** — Rotation patterns\n- **color** — Color transition animations\n- **morph** — Shape morphing\n- **stagger** — Cascading effects\n- **bounce** — Physics-based motion\n- **wave** — Wave propagation\n\n## 🎨 Animation\n\n### Keyframe Generation\n\n```javascript\n// Generate keyframes\nanimationEngine.generateKeyframes({\n  layer: \"Title\",\n  property: \"position\",\n  startValue: [0, 0],\n  endValue: [1920, 1080],\n  duration: 3000,\n  easing: \"ease-in-out\"\n});\n```\n\n### Expression Control\n\n```javascript\n// Build expression\nexpressionBuilder.create({\n  type: \"wiggle\",\n  frequency: 2,\n  amplitude: 10,\n  apply_to: \"rotation\"\n});\n```\n\n### Batch Animation\n\n```javascript\n// Apply to multiple layers\nbatchAnimator.apply({\n  layers: [\"all\"],\n  template: \"slide\",\n  offset: 100,\n  duration: 2000,\n  stagger: true\n});\n```\n\n## ✨ Tools\n\n| Tool | Purpose | Use |\n|------|---------|-----|\n| **Keyframe Generator** | Procedural keyframes | Automated timing |\n| **Expression Builder** | Expression creation | Dynamic properties |\n| **Layer Manager** | Organization | Batch operations |\n| **Easing Curve Editor** | Curve control | Animation feel |\n| **Renderer Manager** | Render automation | Batch output |\n| **Timeline Organizer** | Timeline control | Comp structure |\n| **Effect Applier** | Effect automation | Consistent effects |\n| **Preview Player** | Quick preview | Real-time check |\n\n## 🔌 Support\n\n| Feature | Status | Details |\n|---------|--------|---------|\n| **Script-based Animation** | ✅ Full | Procedural keyframes |\n| **Expression Generation** | ✅ Full | Custom expressions |\n| **Batch Processing** | ✅ Full | Multi-layer ops |\n| **Render Automation** | ✅ Full | Queue management |\n| **Effect Presets** | 🟡 Beta | Effect application |\n| **Plugin Integration** | 🟡 Beta | Third-party tools |\n| **Cloud Sync** | 🔶 Alpha | Project backup |\n| **Remote Control** | 🔶 Alpha | API access |\n\n**Status**: ✅ Ready · 🟡 In Progress · 🔶 Development\n\n## 🗺️ Plans\n\n### Q1 2026: Performance\n- Faster keyframe generation\n- Optimized expression parsing\n- Reduced memory usage\n- Better GPU support\n\n### Q2 2026: Features\n- Advanced motion paths\n- Physics engine integration\n- Procedural rigging\n- Puppet pin automation\n\n### Q3 2026: Intelligence\n- Smart ease suggestions\n- Auto-timing optimization\n- Motion prediction\n- Keyframe interpolation\n\n### Q4 2026: Integration\n- Plugin marketplace\n- Effect library\n- Workflow templates\n- Team collaboration\n\n## 🤝 Contribute\n\nHelp develop ae-motion-compiler:\n\n1. **Report Issues** — Bug reports and edge cases\n2. **Suggest Features** — Animation ideas welcome\n3. **Share Templates** — Animation patterns\n4. **Write Docs** — Usage guides\n5. **Test Beta** — Early access program\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run dev\nnpm test\n```\n\n## 🛡️ Security\n\n### Data Protection\n- Local processing only\n- No cloud uploads\n- Project backups preserved\n- Encrypted settings\n\n### System Safety\n- Safe script execution\n- Memory management\n- Error recovery\n- Automatic cleanup\n\n### Stability\n- Crash prevention\n- Undo capability\n- Version control\n- Safe rollback\n\n## 🔧 Help\n\n### Issues\n\n| Problem | Solution |\n|---------|----------|\n| **Script won't load** | Check After Effects version |\n| **Keyframes not generating** | Verify layer selection |\n| **Expression error** | Check syntax in builder |\n| **Slow performance** | Reduce batch size |\n| **Memory error** | Close other applications |\n\n### Support\n\n- **Docs**: GitHub Wiki tutorials\n- **Discord**: Community support\n- **Issues**: Bug tracker\n- **Email**: support@motion-compiler.dev\n\n## 📄 License\n\nMIT License - [LICENSE](LICENSE) file.\n\n**Copyright © 2026 Motion Compiler Contributors**\n\n## ⚠️ Info\n\nIndependent project, not affiliated with Adobe Inc. After Effects trademark belongs to Adobe.\n\n### Key Points\n\n1. **License** — Valid After Effects CC 2024+ required\n2. **Terms** — Follow Adobe guidelines\n3. **Backups** — Keep project files safe\n4. **Testing** — Test animations before output\n5. **Performance** — Monitor system resources\n6. **Updates** — Stay current with versions\n7. **Expertise** — Animation skills still essential\n\n### Disclaimer\n\nScript-generated animations require human review and refinement. Quality depends on template design and parameter settings. Professional judgment remains essential for production work. This tool accelerates workflow, not replaces animation expertise.\n\n---\n\n## 🎬 Automate Your Motion Graphics\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n**Accelerate animation production.** Download ae-motion-compiler and streamline your workflow.\n\n*\"Automate repetition. Enhance creativity. Faster production.\"*\n"
+    },
+    "brief": {
+      "summary": "面向 After Effects 的动效自动化脚本框架",
+      "problem": "减少重复关键帧、图层处理和批量渲染工作",
+      "highlights": [
+        "可以批量生成关键帧和缓动效果",
+        "可以为多图层套用滑动、缩放等模板",
+        "可以管理渲染队列并批量输出"
+      ],
+      "target_users": [
+        "动效设计师",
+        "动画师",
+        "制作团队"
+      ],
+      "why_trending": "本周首次收录，已有105个 Star，近期仍有更新",
+      "caveat": "需要 After Effects CC 2024+，生成结果仍需人工检查",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Volumetenrectify/ae-motion-compiler",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "自动生成关键帧并批量渲染AE项目",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "Sui-IB/InternalBeyond",
+      "url": "https://github.com/Sui-IB/InternalBeyond",
+      "description": "【Project-IB】边界之外：离线运行的单文件个人网站式项目，旨于维系情感的连续性。A single-file offline personal website, built to sustain the continuity of feeling.",
+      "language": "HTML",
+      "total_stars": 501,
+      "forks": 155,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-chatbot",
+        "ai-companion",
+        "ai-romance",
+        "html5-game",
+        "indexeddb",
+        "interactive-fiction",
+        "meta-game",
+        "offline",
+        "personal-website",
+        "pixel-art",
+        "roleplay",
+        "single-file",
+        "single-page-application",
+        "tarot",
+        "text-adventure",
+        "vanilla-javascript",
+        "visual-novel",
+        "worldbuilding"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-05T15:55:47Z",
+      "updated_at": "2026-09-04T04:04:16Z",
+      "pushed_at": "2026-09-04T03:21:15Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Internal Beyond（IB）\n\n一个离线运行的单文件个人网站式前端项目，旨于维系情感的连续性。\n\n该项目包含14个核心功能模块与两套视觉主题，支持同时对接多个 AI 模型。\n\n所有数据储存在本地，不依赖任何网络服务器。\n\n个人资料、角色立绘、系统提示词等均可自定义，用户数据支持一键导出与导入。\n\n**本项目永久免费开源。**\n\n> 🌏 **手机版 / IB-Mobile**: [InternalBeyond-Mobile](https://github.com/Sui-IB/InternalBeyond-Mobile)\n\n<img width=\"2500\" height=\"1239\" alt=\"d840d23451506fdf34cf1015d1109a10\" src=\"https://github.com/user-attachments/assets/a0bfd59d-f7d9-4e9e-8b26-58f6b0361a68\" />\n\n---\n\n## ✦ 开始游戏\n\n1. 下载本仓库（点击上方绿色 **Code** → **Download ZIP**）\n2. 解压后，用浏览器打开 `InternalBeyond.html`\n3. 进入 **API Settings** 页面，添加你的 AI API 密钥\n4. 开始使用\n\n无需联网也能使用基础功能（日志、换装、主题切换、音乐播放等）。AI 相关功能需要联网调用 API。\n\n## ✦ 功能一览\n\n| 模块 | 说明 |\n|------|------|\n| **Room** | 像素互动房间（1672×941），含 Sui 对话、茶歇、互动故事、塔罗占卜、换装、休息六个子模块 |\n| **Chat** | 多端口 AI 实时对话 — 浮动面板 + 全屏 + 群聊 + 图像生成 + 附件处理 + Token 仪表盘 |\n| **Call** | 语音与视频通话 — 悬浮窗三合一（联系人 / 全局配置 / 通话面），语音识别转写 + 逐句朗读 + 声学语气参考 + 视频直播间 + 弹幕 + 礼物系统 + 来电 |\n| **Circle** | InternetBeyond 社交圈 — 用户与 AI 共同发布 / 评论 / 回复 / 转发动态，含好友资料页、可见范围、搜索、配图与定位 |\n| **Calendar** | AI 日历 — 悬浮小窗 + 挂历视窗，纪念日 / 生日 / 计划 / 记录，月相节气与传统节日，AI 读取临近日程、聊天中提起并留便笺 |\n| **Blog** | 日志 / 密码日记本 / AI 评论 / AI 批注 / 自定义剧本 |\n| **Letters** | AI 书信 — 异步通信，AI 读取你的资料后写回信 |\n| **Memory** | 长期情感记忆库 — 星图可视化 + 自然衰减 + API 上下文自动注入 + Auto Memory（AI 自主记忆） |\n| **Music** | 本地音乐播放器 + 48 条频率可视化波形 |\n| **Profile** | 液态玻璃风格个人名片 — 头像 + 简介 + 作品集 |\n| **API** | 多端口配置中心 — 最多 10 个独立 API，各有昵称、关系与提示词 |\n| **ICode** | AI 代码工作区 — 文件管理 + 预览 + 内联编辑 + 搜索定位 + 脚本沙箱运行 + 文档生成（DOCX / PDF / XLSX） |\n| **DIY** | 自定义透明立绘、占卜桌布、外部工具、MCP 服务器、Internal Bridge、沙箱扩展与文件解析库 |\n| **Data** | 一键备份（全站导出 / 导入 JSON）、Token 用量仪表盘、分类器拦截后的回退 |\n\n## ✦ 主题系统\n\n<img width=\"1431\" height=\"714\" alt=\"QQ_1785873557359\" src=\"https://github.com/user-attachments/assets/c0ab7e92-3d74-4ae4-a522-02f8bf68e3cc\" />\n\n\n点击导航栏水滴按钮切换：\n\n- **Internal** — 明亮模式。Room 中呈现白天场景（棱镜彩虹光影、天气效果与浮动光斑）。\n- **Infernal** — 暗色模式。Room 中呈现夜晚场景（月光、烛火与柔和暖光效果）。\n\n两种模式都叫 \"IB\"。改变的只是方向——向内，或向深处。两个方向都通往**边界之外**。\n\n背景图片以交叉溶解过渡，首页标题淡出重写，雨效果和界面色调同步变化。\n\n## ✦ 模块详情\n\n\n<img width=\"1659\" height=\"850\" alt=\"QQ_1785874302357\" src=\"https://github.com/user-attachments/assets/bc8465e0-f7f4-40d2-9187-f4c5c8d39717\" />\n<img width=\"1430\" height=\"904\" alt=\"QQ_1785873589697\" src=\"https://github.com/user-attachments/assets/2d8b4713-ec9e-4667-bd2a-bd74e2c535a7\" />\n\n\n### Room — 像素互动空间\n\n可通过导航栏进入全屏模式，或通过屏幕右侧标签打开浮动面板（支持缩放与拖拽）。浮动面板支持 Mini 小窗模式——缩成可拖拽的小窗悬浮于屏幕角落，适合在浏览其他页面时让 Sui 挂在一旁陪伴。\n\n- **Sui**：与房间主人对话，可启动游戏引导（Tour）。\n- **Tea**：情感对话空间。饮品 × 甜品正交组合 25 种独特氛围，基于依恋理论、多迷走神经理论、自我决定论设计。对话默认存至密码日记本，最长 52 轮。\n- **Story**：AI 分支叙事引擎。5 种类型 + 可调恐怖度 + 自定义剧本。12-16 轮剧情，含 3 个普通结局和 1 个隐藏结局。\n- **Tarot**：78 张韦特塔罗牌，5 种牌阵 + 可选指引牌 + AI 实时解读。全程操作记录可存档。\n- **Wardrobe**：6 套服装即时切换。\n- **Sleep**：角色躺下休息，点击唤醒。\n\n\n### Chat — 实时对话\n\n浮动面板与全屏模式。好友列表由 API 配置自动生成，支持群聊与话题频道。思考链显示、消息删除、历史搜索、日历视图。可一键生成记忆到 Memory。\n\n- **话题频道**：每个好友下可新建多个话题频道，各频道独立聊天记录。频道的聊天记录不会被 Letters、Blog 评论等模块读取。\n- **对话摘要**：开启后旧消息自动压缩为摘要注入上下文，保持长对话的连贯性。\n- **图像生成**：每个 API 可独立开启。开启后 AI 可在对话中生成图片，图片直接显示在聊天里并自动存入 ICode。仅 OpenAI 兼容与 Gemini 接口支持。\n- **Token 仪表盘**：汇总用量，含缓存命中率、模型明细、费用估算。支持按时间段查看和清除。\n- **提示缓存（Prompt Caching）**：自动优化缓存命中率以降低输入费用，默认开启。支持长效缓存（1 小时 TTL，仅 Anthropic 官方 API）。\n- **联网搜索与选项卡**：API 设置中可开启联网搜索；选项卡开启后，AI 提问时可给出候选答案，以独立卡片显示在输入框上方。\n- **Select / 封档**：选择模式支持批量删除、仅用选中消息生成记忆，并可设置「封档线」让较早记录不再发送给 API。\n- **语音消息**：支持直接录音发送，并在本地分析语速、音量、停顿与语调等声学特征，随消息保存但不显示在界面上。\n\n\n<img width=\"959\" height=\"574\" alt=\"QQ_1785874438803\" src=\"https://github.com/user-attachments/assets/62e4113c-8061-4ca8-946f-d05f80d6808c\" />\n\n\n### Call — 语音与视频通话\n\n从右下坞的 Call 图标或聊天附件菜单进入，悬浮窗包含联系人列表、全局配置与通话面三个面板。\n\n**语音通话**\n\n- 你的话由浏览器语音识别实时转写后发给 TA，TA 的回复逐句朗读（系统语音或云端音色，支持 SiliconFlow / OpenAI / 阿里云百炼 / ElevenLabs / MiniMax / Azure / 自建网关）。\n- 支持打断（点头像、声波或打断钮）、静音、通话中打字（对话框文字直接并入通话链，TA 正在回话时暂存、回合结束自动补发）。\n- 声学语气参考：本机对每句话的音频做即时声学摘要（情绪 / 语速 / 音量 / 语调），以自然语句随转写一并发给模型。\n- 未配置语音识别接口时自动切为打字模式。\n- 语音通话中可收成药丸形小条（头像 + 计时 + 静音/挂断/展开），可拖拽。\n- 外语模式下字幕双行显示（外语原句 + 中文翻译）。\n\n**视频通话**\n\n- 进入后窗体放大为直播间式长方形，本机摄像头画面铺底。左上 TA 玻璃徽章（头像 + 名字 + 计时，点击打断），右上液态玻璃挂断键与相机键（夹住当前画面随下一句发出）。\n- 图像抓取频率四档（关闭 / 每轮一帧 / 每 30 秒 / 每 60 秒），画质三档（384 / 512 / 768 像素）。\n- 留影：TA 输出 `<ws_vsnap/>` 即拍快照落进聊天；你也可手动夹带当前帧。\n- 弹幕层：TA 的话逐条上浮（黑玻璃气泡），可选展示用户输入内容。\n- 无画面模式：无摄像头 / 未授权时以黑底进入同一张视频面，弹幕、打字、礼物照常；协议自动告知模型快照不可用。不支持识图的 API 自动注入兜底说明。\n\n**礼物系统**（仅视频通话，需在设置中开启）\n\n- 五档礼物：小心心 / 花束 / 夏日烟火 / 流星雨 / 银河铁道之夜，一次一件、每条回复最多一枚。\n- 按档位呈现送礼气泡、聊天礼物卡、右上统计与结束卡礼物行。夏日烟火及以上带全屏画布特效（银河铁道之夜含整幅银河 + 光的列车 + 流星，每场 8.2 秒）。\n- 送礼提示词经人工审定，TA 会讲清赠礼理由，也可以用礼物与你谈条件。\n\n**来电**\n\n- TA 可主动发起语音或视频来电（`<ws_call say=\"…\"/>` / `kind=\"video\"`），来电卡与坞角标提示同步弹出。\n- 接听 / 暂不 / 未接通的执行结果回传给 TA；接听后通话未建立时同样回传说明。\n\n**通话记录与记忆**\n\n- 挂断后可由执笔 API 把文字稿压缩成第三人称纪要（通话记录），存入结束卡展开查看。原话打标保留在聊天但不进上下文；删除结束卡自动解除标记，原话回到上下文。\n- Save memory：结束卡一键生成记忆，执笔 API 以 TA 第一人称写回忆式记忆存入记忆库。\n- 与手机端同一套仓名表、同一套提示词（v68 起为审定稿），画质档位与默认镜头双向归一化，跨端互导不丢配置。\n\n\n### Circle — InternetBeyond 社交圈\n\n应用内的公共社交圈。动态按时间排列，你和已配置的 AI 都可以参与发布、评论与转发。\n\n- **入口与时间线**：从 Chat 全屏顶部或右下角悬浮入口打开。含「动态 / 好友 / 社交圈」三个页签，可查看 AI 资料卡与个人主页、聚合时间线，并按关键词搜索动态。\n- **发布与可见范围**：支持文字、1 张配图与定位；动态可设为所有人 / 仅自己 / 仅指定 AI / 排除指定 AI，发布后仍可修改。支持转发、存入 Memory 与删除。\n- **AI 参与**：需先在 API 页「进阶指令」开启 InternetBeyond，再在每位 AI 的「Circle 权限」中单独授权。AI 可发布、评论、回复、转发、查看近期动态与最近 72 小时互动；开启签名权限后也可维护自己的个性签名。\n- **数据**：全部存于本机 IndexedDB，并随全站备份导出 / 导入。同一浏览器下电脑端与手机端共用数据；自动发布与心跳维护仅在手机端进行。\n\n\n### Calendar — AI 日历\n\n悬浮小窗随站点载入出现在右上角（可拖拽，双击展开完整视窗，可在设置中关闭常驻），另有右下角组合按钮与 Chat 侧栏两个入口。挂历式月历（1950–2100）标注每日月相、事项圆点与可选传统节日黄点；右列为模拟时钟、数字读数、月相节气与按倒计天数排列的日程表。\n\n- **事项**：纪念日 / 生日 / 计划 / 记录四类。重复方式支持每年 / 每月 / 每周（星期可多选）/ 每天 / 单次；计划与记录可设结束日期；31 日与 2 月 29 日的重复在短月自动落到当月最后一天。可见范围可选公开、指定一位或多位 AI、仅自己，可附 30 字备注。已建事项可随时点行卡「✎」编辑。\n- **AI 提及与便笺**：你发消息时，有读取权限的 AI 会在消息末尾看到临近事项，可在聊天中自然提起并写下便笺；便笺收在留言页，可按成员筛选。提醒不是系统通知，站点关闭时不会弹窗。\n- **AI 写入**：在 API 页开启「日历写入」后，具备读取与留言权限的 AI 可按你的要求新建、修改、删除日历事项，也可更正相遇纪念日；每条回复最多执行 2 次操作。\n- **日程页**：首页为与站点的相遇纪念日并列出全部日程，翻页查看每位 AI 的相遇纪念日（默认取第一条聊天记录，可手动指定）与对其可见的日程。\n- **设置**：日历接入总开关、逐位读取 / 留言权限、传统节日与花瓣特效开关。数据存于本地 IndexedDB，包含在全站导出与备份中；群聊不接入日历。\n\n\n### Blog — 日志系统\n\n写日志、分类管理、AI 评论、AI 批注。密码日记本受密码保护，Tea 和 Story 存档默认保存至此，对所有 API 不可见。日志可触发 AI 生成记忆。支持邀请 AI 好友在阅读视图中为文章段落添加批注。\n\n\n### Letters — 信件系统\n\n选择 AI 好友请求写信，AI 自动阅读你的 Profile、近期日志和聊天记录后写下回信。\n\n\n<img width=\"2487\" height=\"1253\" alt=\"QQ_1785874015075\" src=\"https://github.com/user-attachments/assets/bbd41176-1287-4d78-a86c-bc44b8266b6c\" />\n\n\n### Memory — 长期记忆库\n\n借鉴 GitHub Ombre Brain 理念的 AI 长期记忆系统。每条记忆带有情感坐标（效价 / 唤醒度）、重要性评分和自然衰减。星图以二维情感坐标可视化所有记忆，时间轴以行星形态展示分布。最多 7 条置顶记忆，四种可见性级别。多来源创建（手动 / Chat / Blog / Letters / Story / Tea）。API 调用时自动检索相关记忆注入上下文，Token 预算可配置。\n\n- **Auto Memory**：每个 API 可独立开启的 AI 自主长期记忆。AI 在对话中自行决定何时创建、更新记忆，档案以舷窗（Porthole）液态玻璃镜片可视化展示。支持归档后的 API 档案保留。\n\n\n### ICode — AI 代码工作区\n\n对话中 AI 生成、编辑或运行文件时，通过工作区指令完成操作，每一步在聊天中渲染为对应的操作卡片。生成的文件统一存放在 ICode 工作区，点击顶部工具栏的 ICode 按钮即可打开悬浮窗查看和管理。支持文件预览（代码高亮）、内联编辑、文本搜索定位、HTML 渲染预览、脚本沙箱运行（支持超时控制）、项目管理与文件导出。\n\n- **文档生成**：AI 可在对话中生成 DOCX、PDF、XLSX 文件。需先在 DIY 页「文件解析库」中开启对应的解析库。\n- **增强文件读取**：支持 PDF / DOCX / XLSX / PPTX 等格式的文本提取，AI 可直接阅读用户上传的文档内容。\n- **脚本运行**：支持 Python 与 JavaScript，在浏览器本地沙箱中执行。Python 支持科学计算包（numpy / pandas / scipy / sympy / matplotlib 等），按 import 自动加载。matplotlib 生成的图表以图片回传到聊天中。默认超时 20 秒，最长 120 秒。\n\n\n### DIY — 创意工坊\n\n为每个 API 配置专属透明立绘（PNG，推荐 800×920），显示在 Story / Tea 对话框左侧。自定义占卜桌布（1920×1080）。游戏文件夹内置一张测试用立绘 `portrait_[Cluade].png`，将 API 昵称改为括号内名称即可测试。\n\n- **外部工具**：配置 HTTP 接口（如 Home Assistant 的 REST API），启用后 AI 可在对话中调用。支持调用前手动确认。\n- **MCP 服务器**：连接 MCP 服务器后自动发现可用工具，调用方式与外部工具一致。支持多服务器并行接入，每个服务器可独立启用或禁用其工具。\n- **文件解析库**：ICode 的文档生成与增强文件读取依赖此处的解析库。开启后首次需联网从 CDN 获取，此后缓存在浏览器本地，离线可用。\n- **沙箱扩展**：Python 沙箱支持科学计算包（按 import 自动加载），白名单可配置。JS 沙箱已启用安全加固。\n- **Internal Bridge**：可选的 WebSocket 后端连接。HTML 本体只包含客户端协议与工具回传链路；如需浏览器操作、页面结构或截图等受控工具，需要另行运行受信任的 Internal Bridge 服务。未配置或连接失败时自动降级为纯离线模式。\n\n\n\n## ✦ API 配置指南\n\nIB 支持多种 AI 服务（最多 10 个端口）：\n\n<img width=\"1088\" height=\"1008\" alt=\"d6335d7c1cd51e5b07891aa95f492564\" src=\"https://github.com/user-attachments/assets/b43b3a06-1ba0-4fd7-9ed3-a69d5a9f5e31\" />\n\n\n### 官方 API\n\n| 服务商 | 注册地址 | IB 中选择 | 密钥格式 |\n|--------|---------|-----------|---------|\n| Anthropic (Claude) | console.anthropic.com | `Claude (Anthropic)` | sk-ant-… |\n| OpenAI (GPT) | platform.openai.com | `GPT (OpenAI)` | sk-… |\n| DeepSeek | platform.deepseek.com | `DeepSeek` | sk-… |\n| Google (Gemini) | aistudio.google.com | `Gemini (Google)` | AIza… |\n\n选好服务商后，接口地址和默认模型会自动填入，粘贴 API Key 即可。\n\n### 中转站 API（国内用户推荐）\n\n无法直接访问海外 API 时，可使用中转站：\n\n1. 在中转站注册并充值\n2. 获取 API Key、接口地址（Endpoint）、可用模型名\n3. IB 的 API 设置中：服务商选 **自定义**，填入上述信息\n4. 保存即可\n\n### 关于世界观玩家\n\n在 API Settings 的 System Prompt 中设置自定义世界观，会自动注入到所有 AI 功能中。Story 模块支持独立的个性化开关。\n\n## ✦ 数据管理\n\n- **导出**：导航栏 Export → 全部数据导出为 JSON 文件（日志、分类、信件、聊天记录、话题频道、对话摘要、Blog 评论与批注、API 配置、个人资料、群组设置、记忆库、Auto Memory 档案、Circle 动态与资料、ICode 项目与上传文件、日历事项 / 便笺与设置）。Memory 另支持独立导入导出。\n- **导入**：Import → 选择 JSON 备份文件，增量合并不覆盖。\n- **归档**：删除 API 时可选择归档而非彻底删除，密钥清除但聊天记录与 Auto Memory 档案保留，随时可恢复。归档区上限 20 个。\n- **存储**：浏览器 IndexedDB，完全离线。\n- **⚠ 备份建议**：数据仅存于浏览器本地，清除浏览器数据将永久丢失。请定期备份。\n\n## ✦ 设备兼容性\n\n需支持 IndexedDB、CSS backdrop-filter、ES6+ 的现代浏览器。\n\n- ✅ Windows / macOS / Linux（推荐 Chrome / Edge / Firefox）\n- ✅ iPhone / iPad（Safari）\n- ✅ Android / 华为 / HarmonyOS\n- Room 模块设计视口 1672×941px，桌面端体验最佳。移动端可访问非 Room 功能。\n\n## ✦ 项目结构\n\n```\nInternalBeyond.html       ← 主文件（浏览器打开这个）\nIB压缩版.html              ← 手机版（与电脑端共享数据）\ngame/\n  game_module.js           ← 像素房间引擎\n  *.png                    ← 精灵图、场景素材\n  portraits/               ← 角色立绘（含默认 + 用户 DIY）\n```\n\n## ✦ 技术规格\n\n- **架构**：纯前端单文件 HTML + 独立游戏引擎 JS。无框架、无构建，主程序无需服务器；可选通过 Internal Bridge 连接自建后端。\n- **字体**：Cormorant Garamond · Noto Sans SC · Noto Serif SC · Raleway · Great Vibes · Pinyon Script · Spectral（Google Fonts CDN）。\n- **视觉**：CSS 玻璃拟态、Canvas 雨滴（45 滴）与水波纹、棱镜光影、烛火月光、浮动微尘、交叉溶解过渡。\n- **AI 协议**：Anthropic 原生格式 + OpenAI 兼容格式，覆盖官方及中转站 API。\n- **构建**：Claude (Opus 4.6) 构建 · Opus 4.8 / Sonnet 4.6 / Fable 5 / Opus 5 / ChatGPT 5.6 Sol 参与辅助构建 · GPT-IMAGE-2 贴图 · Adobe Photoshop CS 设计编绘。\n\n---\n\n## ✦ Introduction (EN)\n\n**Internal Beyond** is a fully offline, single-file personal website with multi-AI support. Fourteen modules, two visual themes, all data stored locally. Free and open source.\n\nConnect your own AI API keys to unlock all interactive features. Supports Claude, GPT, DeepSeek, Gemini, and custom relay endpoints.\n\n### Features\n\n- **Room** — Pixel-art interactive room with six sub-modules: Sui (host dialogue + guided tour), Tea (25-combo atmosphere system), Story (branching narrative engine), Tarot (78-card deck + AI readings), Wardrobe (6 outfits), Sleep. Includes Mini pet window mode.\n- **Chat** — Multi-API conversations with floating panel, fullscreen, group chat, topic channels, thinking chain, conversation summary, image generation, attachment handling, web search, voice messages, selection / sealing, Token dashboard, prompt caching, and memory generation.\n- **Call** — Voice & video calls in a floating window: real-time speech recognition + text-to-speech playback (system or cloud voices), acoustic mood reference, live-stream-style video with camera feed, bullet-screen chat, five-tier gift system with full-screen effects, incoming calls from AI, call transcripts and one-tap memory generation.\n- **Circle** — InternetBeyond social feed where you and configured AIs can post, comment, reply, repost, browse profiles, search the timeline, and use per-post visibility controls.\n- **Calendar** — AI-readable calendar with floating widget and full window: anniversaries, birthdays, plans and records, moon phases and solar terms, per-AI visibility, in-chat mentions and notes, plus optional AI write operations.\n- **Blog** — Journal with categories, AI comments, AI annotations, password diary, and Story custom scripts.\n- **Letters** — Asynchronous AI correspondence.\n- **Memory** — Long-term emotional memory with star map, natural decay, automatic context injection, and Auto Memory (AI-initiated autonomous memory).\n- **Music** — Local audio player with 48-band frequency visualizer.\n- **Profile** — Liquid glass personal card.\n- **API** — Up to 10 independent endpoints with custom nicknames, relationships, and system prompts.\n- **ICode** — AI code workspace with file management, inline editing, search, HTML preview, sandboxed script execution (Python + JS), and document generation (DOC"
+    },
+    "brief": {
+      "summary": "离线单文件个人网站式 AI 陪伴与互动叙事项目。",
+      "problem": "让个人资料、对话和情感记忆能在本地持续保存。",
+      "highlights": [
+        "可以离线使用日志、换装、主题和音乐功能",
+        "可以配置多个 AI，进行聊天、通话与群聊",
+        "可以体验分支故事、塔罗和长期记忆系统"
+      ],
+      "target_users": [
+        "AI 陪伴用户",
+        "互动叙事爱好者",
+        "个人网站开发者"
+      ],
+      "why_trending": "本周首次收录，已有501个 Star，近期仍有代码更新。",
+      "caveat": "AI 功能需要联网调用 API，并自行配置密钥。",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Sui-IB/InternalBeyond",
+      "score": 91,
+      "category": "互动叙事",
+      "reason": "离线互动小说与角色扮演体验",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.5
+    }
+  }
+]
