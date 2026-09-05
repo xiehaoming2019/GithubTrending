@@ -1,0 +1,513 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 250668,
+      "forks": 21179,
+      "stars_today": 2758,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2820
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-09-05T04:39:53Z",
+      "pushed_at": "2026-09-04T08:45:43Z",
+      "open_issues": 465,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向真实工程开发的可组合 AI Agent 技能集合",
+      "problem": "帮助 AI Agent 减少需求误解、代码错误和调试失控",
+      "highlights": [
+        "可以用提问流程澄清需求并建立共享术语",
+        "可以用 TDD 技能推动测试驱动开发",
+        "可以用调试技能分阶段定位软件问题"
+      ],
+      "target_users": [
+        "AI 辅助开发者",
+        "软件工程团队",
+        "Claude Code 用户"
+      ],
+      "why_trending": "今日新增 2758 Star，项目连续上榜且近期持续更新",
+      "caveat": "不同安装方式的更新和编辑权限不同，需按需选择",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供可组合的Agent技能集合",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 126393,
+      "forks": 6774,
+      "stars_today": 1679,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2669
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-09-05T04:40:19Z",
+      "pushed_at": "2026-09-04T12:35:29Z",
+      "open_issues": 210,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/50668\" alt=\"DietrichGebert%2Fponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/monthly?language=JavaScript\" alt=\"DietrichGebert%2Fponytail | Trendshift monthly ranking\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <strong>~54% less code (up to 94%) &middot; ~20% cheaper &middot; ~27% faster &middot; 100% safe</strong><br>\n  <sub>Measured on real Claude Code sessions editing a real open-source repo (FastAPI + React), against the same agent with no skill. ~54% is the mean across 12 feature tasks (Haiku 4.5, n=4); it reaches 94% where an agent over-builds (a date picker) and is near zero where the code is already minimal. ponytail keeps every safety guard while a bare \"write one-liners\" prompt drops one. (The earlier single-shot benchmark reported 80-94% as a flat figure; against a fair agentic baseline that is the per-task ceiling, not the average.) <a href=\"benchmarks/results/2026-06-18-agentic.md\">Full writeup</a> &middot; <a href=\"benchmarks/\">reproduce it</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"README.es.md\">Español</a> &middot; <a href=\"README.ko.md\">한국어</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Before / after\n\nYou ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones.\n\nWith ponytail:\n\n```html\n<!-- ponytail: browser has one -->\n<input type=\"date\">\n```\n\nMore survivors in [examples/](examples/).\n\n## Numbers\n\nThe honest measurement is a real agent doing real work: a headless Claude Code session editing [tiangolo's full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (a real FastAPI + React repo), scored on the `git diff` it leaves behind. Twelve feature tickets, the same agent with and without the skill, n=4, Haiku 4.5.\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-agentic.svg\" width=\"860\" alt=\"Each arm as a percent of the no-skill baseline across LOC, tokens, cost and time (Haiku 4.5). ponytail is lowest on every metric (LOC 46%, tokens 78%, cost 80%, time 73%); caveman rises above 100% on tokens, cost and time; yagni-oneliner LOC 67%. Safety, separate adversarial tier: baseline, caveman and ponytail 100%, yagni-oneliner 95%.\">\n</p>\n\n| vs no-skill baseline | LOC | tokens | cost | time | safe |\n|---|--:|--:|--:|--:|--:|\n| **ponytail** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |\n| caveman (terse-prose control) | -20% | +7% | +3% | +2% | 100% |\n| \"YAGNI + one-liners\" prompt | -33% | -14% | -21% | -30% | 95% |\n\nponytail is the only arm that cuts every metric, and the only one that stays fully safe while doing it. The cut is biggest where there is a real over-build trap (date picker 404 to 23 lines, color picker 287 to 23, because it reaches for a native `<input>` instead of a component) and near zero on code that is already minimal. Full method, per-task tables, and limitations: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).\n\n<details>\n<summary><strong>Older single-shot numbers (isolated generation)</strong></summary>\n\nFive everyday tasks, three models, three arms (no skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), ten runs, median reported. One prompt, one completion, counting lines of the answer:\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-3model.svg\" width=\"860\" alt=\"Median lines of code per arm across Haiku, Sonnet and Opus\">\n</p>\n\nThis showed **80-94% less code**. [#126](https://github.com/DietrichGebert/ponytail/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.\n\n</details>\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect on the models that follow the ladder; a terse reasoning model that spends thinking tokens deliberating the rungs can go the other way (on GPT-5.5 it does).\n\n## How it works\n\nBefore writing code, the agent stops at the first rung that holds:\n\n```\n1. Does this need to exist?   → no: skip it (YAGNI)\n2. Already in this codebase?  → reuse it, don't rewrite\n3. Stdlib does it?            → use it\n4. Native platform feature?   → use it\n5. Installed dependency?      → use it\n6. One line?                  → one line\n7. Only then: the minimum that works\n```\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\n## Install\n\nThe most effort ponytail will ever ask of you:\n\nThe Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.\n\n### Claude Code\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n(You have to send two separate prompts for the install to work) \n\nSame steps in the Claude Code Desktop app's Code tab: type the two `/plugin` commands above into the prompt box, or click the **+** button next to it, choose **Plugins** → **Add plugin** to browse your configured marketplaces, and manage marketplaces from **Customize** in the sidebar.\n\n### Codex\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nRun `codex` and open `/hooks`, review and trust its two lifecycle hooks, and start a new thread.\n\nThis same install also covers the Codex desktop app: restart the app after installing and it picks up the plugin.\n\n### GitHub Copilot CLI\n\n```bash\ncopilot plugin marketplace add DietrichGebert/ponytail\ncopilot plugin install ponytail@ponytail\n```\n\nIn an interactive Copilot CLI session, use the slash equivalents:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\n```\n\nCopilot CLI namespaces plugin commands by plugin name. For example:\n\n```text\n/ponytail:ponytail ultra\n/ponytail:ponytail-review\n```\n\n### Pi agent harness\n\n```\npi install git:github.com/DietrichGebert/ponytail\n```\n\n### OpenCode\n\nAdd to `opencode.json`:\n\n```json\n{ \"plugin\": [\"@dietrichgebert/ponytail\"] }\n```\n\nRun from a checkout instead (the plugin reuses `hooks/` and `skills/`):\n\n```json\n{ \"plugin\": [\"./.opencode/plugins/ponytail.mjs\"] }\n```\n\nInjects the ruleset every turn at the active level; adds the `/ponytail` commands (see [Commands](#commands)). OpenCode also auto-loads this repo's `AGENTS.md`, so the rules hold even without the plugin. The plugin adds the `lite/full/ultra/off` levels.\n\nThe `./` path resolves against your project's `opencode.json`; to share one checkout across projects, point it at the absolute path of the `.mjs` instead (it finds its `hooks/` and `skills/` relative to its own file).\n\n### Gemini CLI\n\n```bash\ngemini extensions install https://github.com/DietrichGebert/ponytail\n```\n\nLoads the ruleset as always-on context every session and registers the `/ponytail` commands; the `skills/` ship too, activated when a task needs them.\nThe Gemini adapter intentionally does not ship a root `hooks/hooks.json`: Gemini auto-loads that path, while Ponytail's lifecycle hooks use Claude/Codex event names.\n\n### Qoder\n\nQoder auto-loads `AGENTS.md` from the repo root as always-on context, so running ponytail from a checkout works with zero setup. For per-project rules, copy [`.qoder/rules/ponytail.md`](.qoder/rules/ponytail.md) into your project's `.qoder/rules/`. The six ponytail skills (`/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-gain`, `/ponytail-help`) are available via Qoder's Skill system; the plugin manifest at [`.qoder-plugin/plugin.json`](.qoder-plugin/plugin.json) points at the `skills/` directory.\n\nFor full plugin-tier support (automatic mode activation + ruleset injection on every prompt), add the hooks from [`hooks/qoder-hooks.json`](hooks/qoder-hooks.json) to your `.qoder/settings.json`. Replace `PONYTAIL_DIR` with the path to your ponytail checkout. Qoder's `UserPromptSubmit` hook activates the default mode on first prompt and injects the ruleset every turn; `PreToolUse` with `task|Task` matcher injects the ruleset into subagents. Level switches (`/ponytail lite|full|ultra|off`) work automatically.\n\n### Antigravity CLI\n\nGoogle is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:\n\n```bash\nagy plugin install https://github.com/DietrichGebert/ponytail\n```\n\nIt reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/ponytail` commands into skills, so you type them into the chat (e.g. `/ponytail-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.\n\n### Hermes Agent\n\n```bash\nhermes plugins install DietrichGebert/ponytail --enable\n```\n\nRestart Hermes after installing. The plugin injects the active Ponytail mode before each LLM turn, registers the bundled skills "
+    },
+    "brief": {
+      "summary": "让 AI 编程代理优先复用现有能力，少写不必要代码。",
+      "problem": "解决 AI 代理过度设计、重复实现和代码膨胀问题。",
+      "highlights": [
+        "可以让代理优先使用原生控件和标准库",
+        "可以让代理复用项目已有代码与依赖",
+        "可以在保留安全检查下减少实现规模"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端开发者",
+        "团队技术负责人"
+      ],
+      "why_trending": "今日新增 1679 Star，项目连续上榜，总 Star 超 12 万。",
+      "caveat": "效果来自特定 Claude Code 基准，其他模型表现可能不同。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "面向多种编码Agent的技能插件",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 70,
+      "ranking_score": 73.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "clshortfuse/renodx",
+      "url": "https://github.com/clshortfuse/renodx",
+      "description": "Renovation Engine for DirectX Games",
+      "language": "HLSL",
+      "total_stars": 3559,
+      "forks": 140,
+      "stars_today": 261,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 261
+    },
+    "details": {
+      "topics": [
+        "directx",
+        "games",
+        "hdr",
+        "mod"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-02-05T15:39:11Z",
+      "updated_at": "2026-09-05T04:38:55Z",
+      "pushed_at": "2026-09-05T01:41:13Z",
+      "open_issues": 84,
+      "homepage": "https://renodx.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![Clang](https://github.com/clshortfuse/renodx/actions/workflows/clang-x64.yml/badge.svg)](https://github.com/clshortfuse/renodx/actions/workflows/clang-x64.yml) [![Ninja](https://github.com/clshortfuse/renodx/actions/workflows/ninja-x64.yml/badge.svg)](https://github.com/clshortfuse/renodx/actions/workflows/ninja-x64.yml) [![Visual Studio](https://github.com/clshortfuse/renodx/actions/workflows/visual-studio-x64.yml/badge.svg)](https://github.com/clshortfuse/renodx/actions/workflows/visual-studio-x64.yml) \n\n[![Discord](https://img.shields.io/discord/1408098019194310818?logo=discord&logoColor=%23fff&label=Discord&labelColor=%235865F2)](https://discord.gg/F6AUTeWJHM)\n\n# renodx\nRenoDX, short for \"Renovation Engine for DirectX Games\", is a toolset to mod games. Currently it can replace shaders, inject buffers, add overlays, upgrade swapchains, upgrade texture resources, and write user settings to disk. Because RenoDX uses Reshade's add-on system, compatibility is expected to be pretty wide. Using Reshade simplifies all the hooks necessary to tap into DirectX without worrying about patching version-specific exe files.\n\n\n# Contributing\n\n* See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)\n* For the live devkit and MCP workflow, see [DEVKIT_MCP.md](./docs/DEVKIT_MCP.md)\n\n# Mods\n\n* See [Mods page](https://github.com/clshortfuse/renodx/wiki/Mods)\n\n# Utilities\n\n* [renodx-fpslimiter.addon64](https://clshortfuse.github.io/renodx/renodx-fpslimiter.addon64) &ndash; FPS Limiter\n* [renodx-devkit.addon64](https://clshortfuse.github.io/renodx/renodx-devkit.addon64) &ndash; Developer kit to help build addons\n* [decomp.exe](https://clshortfuse.github.io/renodx/decomp.exe) &ndash; Shader Model 6.0+ Decompiler\n\n"
+    },
+    "brief": {
+      "summary": "面向 DirectX 游戏的着色器与画面改造工具集",
+      "problem": "为 DirectX 游戏提供无需修改版本专属 exe 的改造入口",
+      "highlights": [
+        "可以替换着色器并注入缓冲区",
+        "可以添加叠加层并升级交换链",
+        "可以升级纹理资源并保存用户设置"
+      ],
+      "target_users": [
+        "DirectX 游戏玩家",
+        "游戏 Mod 制作者",
+        "图形开发者"
+      ],
+      "why_trending": "今日新增 261 Star，本周首次收录；总 Star 3559",
+      "caveat": "资料中未说明具体支持哪些游戏",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "clshortfuse/renodx",
+      "score": 90,
+      "category": "ACG 资源 / Mod",
+      "reason": "直接用于DirectX游戏Mod制作",
+      "generated_by_ai": true,
+      "velocity_score": 73,
+      "freshness_score": 20,
+      "ranking_score": 66.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "anomalyco/opencode",
+      "url": "https://github.com/anomalyco/opencode",
+      "description": "The open source coding agent.",
+      "language": "TypeScript",
+      "total_stars": 204220,
+      "forks": 26641,
+      "stars_today": 345,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 345
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2025-04-30T20:08:00Z",
+      "updated_at": "2026-09-05T04:39:29Z",
+      "pushed_at": "2026-09-05T04:36:39Z",
+      "open_issues": 5689,
+      "homepage": "https://opencode.ai",
+      "archived": false,
+      "default_branch": "dev",
+      "readme": "<p align=\"center\">\n  <a href=\"https://opencode.ai\">\n    <picture>\n      <source srcset=\"packages/console/app/src/asset/logo-ornate-dark.svg\" media=\"(prefers-color-scheme: dark)\">\n      <source srcset=\"packages/console/app/src/asset/logo-ornate-light.svg\" media=\"(prefers-color-scheme: light)\">\n      <img src=\"packages/console/app/src/asset/logo-ornate-light.svg\" alt=\"OpenCode logo\">\n    </picture>\n  </a>\n</p>\n<p align=\"center\">The open source AI coding agent.</p>\n<p align=\"center\">\n  <a href=\"https://opencode.ai/discord\"><img alt=\"Discord\" src=\"https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord\" /></a>\n  <a href=\"https://www.npmjs.com/package/opencode-ai\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/opencode-ai?style=flat-square\" /></a>\n  <a href=\"https://github.com/anomalyco/opencode/actions/workflows/publish.yml\"><img alt=\"Build status\" src=\"https://img.shields.io/github/actions/workflow/status/anomalyco/opencode/publish.yml?style=flat-square&branch=dev\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"README.md\">English</a> |\n  <a href=\"README.zh.md\">简体中文</a> |\n  <a href=\"README.zht.md\">繁體中文</a> |\n  <a href=\"README.ko.md\">한국어</a> |\n  <a href=\"README.de.md\">Deutsch</a> |\n  <a href=\"README.es.md\">Español</a> |\n  <a href=\"README.fr.md\">Français</a> |\n  <a href=\"README.it.md\">Italiano</a> |\n  <a href=\"README.da.md\">Dansk</a> |\n  <a href=\"README.ja.md\">日本語</a> |\n  <a href=\"README.pl.md\">Polski</a> |\n  <a href=\"README.ru.md\">Русский</a> |\n  <a href=\"README.bs.md\">Bosanski</a> |\n  <a href=\"README.ar.md\">العربية</a> |\n  <a href=\"README.no.md\">Norsk</a> |\n  <a href=\"README.br.md\">Português (Brasil)</a> |\n  <a href=\"README.th.md\">ไทย</a> |\n  <a href=\"README.tr.md\">Türkçe</a> |\n  <a href=\"README.uk.md\">Українська</a> |\n  <a href=\"README.bn.md\">বাংলা</a> |\n  <a href=\"README.gr.md\">Ελληνικά</a> |\n  <a href=\"README.vi.md\">Tiếng Việt</a>\n</p>\n\n[![OpenCode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://opencode.ai)\n\n---\n\n### Installation\n\n```bash\n# YOLO\ncurl -fsSL https://opencode.ai/install | bash\n\n# Package managers\nnpm i -g opencode-ai@latest        # or bun/pnpm/yarn\nscoop install opencode             # Windows\nchoco install opencode             # Windows\nbrew install anomalyco/tap/opencode # macOS and Linux (recommended, always up to date)\nbrew install opencode              # macOS and Linux (official brew formula, updated less)\nsudo pacman -S opencode            # Arch Linux (Stable)\nparu -S opencode-bin               # Arch Linux (Latest from AUR)\nmise use -g opencode               # Any OS\nnix run nixpkgs#opencode           # or github:anomalyco/opencode for latest dev branch\n```\n\n> [!TIP]\n> Remove versions older than 0.1.x before installing.\n\n### Desktop App (BETA)\n\nOpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).\n\n| Platform              | Download                           |\n| --------------------- | ---------------------------------- |\n| macOS (Apple Silicon) | `opencode-desktop-mac-arm64.dmg`   |\n| macOS (Intel)         | `opencode-desktop-mac-x64.dmg`     |\n| Windows               | `opencode-desktop-windows-x64.exe` |\n| Linux                 | `.deb`, `.rpm`, or `.AppImage`     |\n\n```bash\n# macOS (Homebrew)\nbrew install --cask opencode-desktop\n# Windows (Scoop)\nscoop bucket add extras; scoop install extras/opencode-desktop\n```\n\n#### Installation Directory\n\nThe install script respects the following priority order for the installation path:\n\n1. `$OPENCODE_INSTALL_DIR` - Custom installation directory\n2. `$XDG_BIN_DIR` - XDG Base Directory Specification compliant path\n3. `$HOME/bin` - Standard user binary directory (if it exists or can be created)\n4. `$HOME/.opencode/bin` - Default fallback\n\n```bash\n# Examples\nOPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash\nXDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash\n```\n\n### Agents\n\nOpenCode includes two built-in agents you can switch between with the `Tab` key.\n\n- **build** - Default, full-access agent for development work\n- **plan** - Read-only agent for analysis and code exploration\n  - Denies file edits by default\n  - Asks permission before running bash commands\n  - Ideal for exploring unfamiliar codebases or planning changes\n\nAlso included is a **general** subagent for complex searches and multistep tasks.\nThis is used internally and can be invoked using `@general` in messages.\n\nLearn more about [agents](https://opencode.ai/docs/agents).\n\n### Documentation\n\nFor more info on how to configure OpenCode, [**head over to our docs**](https://opencode.ai/docs).\n\n### Contributing\n\nIf you're interested in contributing to OpenCode, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.\n\n### Building on OpenCode\n\nIf you are working on a project that's related to OpenCode and is using \"opencode\" as part of its name, for example \"opencode-dashboard\" or \"opencode-mobile\", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.\n\n---\n\n**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)\n"
+    },
+    "brief": {
+      "summary": "开源的 AI 编程代理，支持终端和桌面应用",
+      "problem": "帮助开发者分析代码库并执行开发任务",
+      "highlights": [
+        "可以用 build 代理进行开发工作",
+        "可以用 plan 代理只读分析代码",
+        "可以通过终端或桌面应用使用"
+      ],
+      "target_users": [
+        "软件开发者",
+        "代码库维护者",
+        "技术团队"
+      ],
+      "why_trending": "总 Star 超20万，今日新增345，本周首次收录",
+      "caveat": "桌面应用目前仍标注为测试版（BETA）",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "anomalyco/opencode",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "开源编码Agent核心工具",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 20,
+      "ranking_score": 62.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "Kirakun0328/text-to-vrma",
+      "url": "https://github.com/Kirakun0328/text-to-vrma",
+      "description": "Text-To-VRMA — VRM特化型Text-To-Motionツール",
+      "language": "JavaScript",
+      "total_stars": 153,
+      "forks": 16,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "openai",
+        "text-to-motion",
+        "threejs",
+        "vrm",
+        "vrma",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-14T17:31:23Z",
+      "updated_at": "2026-09-05T04:24:32Z",
+      "pushed_at": "2026-09-05T04:24:29Z",
+      "open_issues": 4,
+      "homepage": "https://x.com/Kiratchi0328",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# Text-To-VRMA — VRM特化型Text-To-Motionツール\n\n[![GitHub Sponsors](https://img.shields.io/badge/♥_Sponsor-支援する-ea4aaa?logo=githubsponsors)](https://github.com/sponsors/Kirakun0328)\n\n![デモ: テキストからモーション生成](video/demo.gif)\n\nテキストを入力すると AI がモーションを生成し、\n**VRMA (VRM Animation / `.vrma`)** ファイルをブラウザ内で生成して、\nその場で VRM キャラクターを動かす Web アプリです。\n生成した `.vrma` はファイルとして保存でき、VRMA 対応アプリでそのまま利用できます。\n\n例:「その場で歩く」「喜んでジャンプする」「手を振る」「悲しそうにうつむく」\n\n## ✨ 主な機能\n\n- 📝 **テキストからモーション生成** (日本語OK) — LLMキーフレーム / NVIDIA ARDY の2エンジン\n- 🚀 **GPT-6 Astra 対応** — 生成・自己修正・ARDYの動作計画に `gpt-6-astra` を利用できます\n- 💳 **Codexサブスクリプション対応** — デスクトップ版に加え、ローカルWeb版からも利用枠で呼べます\n- 🎬 生成したモーションを **GIF / 動画 (1080p)** で書き出し — SNSにそのまま共有できます\n- 🎨 **背景色の自由指定** — グリーンバック等のクロマキー合成用の単色背景にできます\n- ⏱ **モーションの長さを秒数で指定** (空欄で自動判定・「自動補正」オプションあり)\n- ▶ **再生シークバー** — 現在秒数の表示、任意の地点へスクラブ、一時停止\n- 📍 **経由地モード** — 3Dビューの床をクリックして移動経路を指定 (ARDY)\n- 🎭 **感情を身体で表現** — 表情だけでなく姿勢・腕・重心・動きの緩急にも反映\n- 🔍 **AIで動きを見直す** — 生成後にAIが必要性を判定し、必要なときだけ補正\n- 🎯 **指示追従チェック** — 移動・ジャンプ・しゃがみ・手上げをアバター上で計測\n- 🎲 **3候補の生成と比較** — 別seedで生成して見比べ、良いものを採用\n- ✨ **全身のなめらか補正** — 急な角度変化をやわらげ、接地付近は保護\n- 🔁 **ループ再生** — 頭と末尾をつないで途切れなく再生\n- 😊 **表情の自動生成** + 4言語UI (日本語 / English / 中文 / 한국어)\n- 🔌 **OpenAI互換プロバイダ対応** — OpenRouter / DeepSeek / Ollama 等も使えます\n- 🟣 **Claude API対応** — Anthropic の Claude (claude-opus-5 等) でもモーション生成できます\n\n生成エンジンは2種類から選べます:\n\n| エンジン | 特徴 | 必要なもの |\n| --- | --- | --- |\n| **LLMキーフレーム** (OpenAI API / Claude API / Codex / 互換API) | 正確なポーズ・手指・表情の指定が得意。セットアップ不要でどのPCでも動く。OpenAI互換API (OpenRouter/DeepSeek/Ollama等) や Anthropic の Claude API も指定可 | APIキー または Codexプラン |\n| **ARDYローカルエンジン** (v1.1〜) | NVIDIAのモーション生成AI [ARDY](https://github.com/nv-tlabs/ardy) をローカル実行。歩行・ダンス・ジャンプ等の全身運動が**モーションキャプチャ品質**。生成無制限・オフライン動作 | 追加セットアップ (下記) |\n\nARDYモードでは、選択したAIが指示の解釈と動作計画を担当し、ARDYが身体のモーションを生成します。\n\n| 動作を考えるAI | 必要なもの | 備考 |\n| --- | --- | --- |\n| **ARDY単体** (初期表示) | なし | ARDY内蔵の翻訳で生成します |\n| **Codexサブスクリプション** | ChatGPT/Codexプラン | 利用枠の使用率・残り・リセット時刻を設定欄に表示 |\n| **OpenAI API** | APIキー | `gpt-6-astra` も選択できます |\n| **Claude API** | APIキー | — |\n\n- 計画に失敗した場合は **ARDY内蔵翻訳で続行**します。有料APIへ自動では切り替えません\n- 生成後のレビュー・品質設定は [モーション品質の仕組み](#モーション品質の仕組み) を参照してください\n\nモーションと同時に**表情** (笑顔・悲しみ・驚き・まばたき等) も生成されます。\n`.vrma` 保存時に「表情を含める / 含めない (ボーンモーションのみ)」を選択できます。\n\nUIは **日本語 / English / 中文 / 한국어** の4言語に対応 (画面右上のセレクタで即時切替。\n初回はブラウザの言語設定から自動判定) 。\n*The UI is available in Japanese, English, Chinese and Korean — switch instantly from the selector at the top.*\n\n## セットアップ & 起動\n\n> 🎁 **ビルド不要で使いたい方 (Windows):**\n> [Releases から最新版のzipをダウンロード](https://github.com/Kirakun0328/text-to-vrma/releases/latest)\n> — 解凍してexeをダブルクリックするだけ (インストール不要、ARDYエンジンのセットアップ一式も同梱)。\n> 以下のセットアップは全て不要です。\n\nソースから動かす場合は2通りあります。迷ったら **A. ブラウザ版** が最短です。\n\n| | 起動コマンド | 向いている人 |\n| --- | --- | --- |\n| **A. ブラウザ版** | `npm run dev` | まず試したい人 (全OS・最短3コマンド) |\n| **B. デスクトップ版 (Electron)** | `npm run build` → `npm run app:dev` | Codexサブスク認証や、ARDYエンジンのアプリ内セットアップ・自動起動を使いたい人 |\n\n**事前に必要なもの:**\n\n| 何をするか | 必要なもの |\n| --- | --- |\n| 共通 | Node.js 20+、git |\n| モーション生成 (LLMキーフレーム) | OpenAI APIキー ([platform.openai.com](https://platform.openai.com/) で取得) または Claude APIキー ([console.anthropic.com](https://console.anthropic.com/) で取得)。ローカルWeb版・デスクトップ版は代わりにCodexとChatGPT/Codexプランでも可 |\n| ARDYローカルエンジン (任意) | [下記セクション](#ardyローカルエンジン-オプション)参照 (Python 3.10+ / git、約20GBダウンロード)。**こちらはAPIキーなしでも動きます** |\n\nVRMモデルは [VRoid 公式サンプルモデル (AvatarSample)](https://hub.vroid.com/characters/2843975675147313744/models/5644550979324015604)\nの VRM1.0 版・VRM0.0 版を同梱しており、起動時に VRM1.0 版が読み込まれます。手持ちの `.vrm` への\n差し替えも可能で、**0.x / 1.0 の両形式に対応**しています (three-vrm が自動判別し、向きも正規化)。\n\n### A. ブラウザ版\n\n```sh\ngit clone https://github.com/Kirakun0328/text-to-vrma.git\ncd text-to-vrma\nnpm install\nnpm run dev\n# → http://localhost:5173 をブラウザで開く\n```\n\n### B. デスクトップ版 (Electron)\n\n```sh\ngit clone https://github.com/Kirakun0328/text-to-vrma.git\ncd text-to-vrma\nnpm install\nnpm run build\nnpm run app:dev\n```\n\n- Electron 版は Vite のビルド結果 `dist/index.html` を読み込みます。初回とソースコード変更後は\n  **必ず `npm run build` を実行してから** `npm run app:dev` で起動してください\n  (ビルド済みのまま再起動するだけなら `npm run app:dev` のみでOK)\n- Codexサブスクリプション認証はデスクトップ版と `npm run dev` / `npm run preview` のローカルWeb版で利用できます。\n  使う場合は事前に Codex CLI のインストール・認証・PATH設定を済ませてください\n  (Codex CLI はアプリに同梱されません)\n  ローカルWeb版は同一オリジンのNodeサーバーから `codex app-server` に接続します。\n  静的ファイルのみの配信では利用できません。モデル一覧はログインしたアカウントから取得し、\n  GPT-6 Astraが一覧にない場合はサブスク側でまだ選択できません。\n  ソース版の `npm install` は動作確認済みのCodex CLI 0.153.3も導入します。\n  プロジェクト内のCLIを優先し、存在しない場合のみPATHのCLIを使います。\n  古いCLIでは利用可能なAstraが一覧に出ない場合があります（0.144.1と0.153.3で確認）。\n\n> [!NOTE]\n> 現在の `npm run app:build` (exe作成) は Windows Portable 版専用です。macOS 向けの `.app` や `.dmg` は生成しません。\n\n## 使い方\n\n1. 起動するとサンプルモデル (AvatarSample VRM1.0版) が読み込まれます。\n   「VRMファイルを開く」または 3D ビューへのドラッグ&ドロップで手持ちの VRM に差し替え可能\n2. 生成エンジンを選択\n   - **OpenAI APIキー**: キーを入力し、モデルを選択します。キーはブラウザの\n     localStorage にのみ保存され、OpenAI 以外には送信されません。\n     「🔌 OpenAI互換プロバイダを使う」からベースURL・モデル名を指定すれば、\n     OpenRouter / DeepSeek / Ollama 等の互換APIも使えます\n     モデル一覧から **GPT-6 Astra** (`gpt-6-astra`) も選択できます。\n     生成・自己修正・ARDYの動作計画に利用でき、既定モデルは `gpt-5.6-sol` です。\n     [OpenAI公式モデル情報](https://developers.openai.com/api/docs/models/gpt-6-astra)では\n     段階提供中のため、利用するAPIプロジェクトにアクセス権が必要です。\n     ローカルHTTP APIではリクエストの `model` に `gpt-6-astra`、\n     または環境変数 `OPENAI_MODEL=gpt-6-astra` を指定できます。\n   - **Claude API**: Anthropic の Claude APIキー (sk-ant-...) を入力し、モデル\n     (claude-opus-5 / claude-sonnet-5 / claude-haiku-4-5) を選択します。\n     キーはブラウザの localStorage にのみ保存され、Anthropic 以外には送信されません。\n     Claude API対応は [@AUDOSt0ck1ng](https://github.com/AUDOSt0ck1ng) さん\n     ([#9](https://github.com/Kirakun0328/text-to-vrma/pull/9)) のコントリビュートによるもので、\n     **コントリビューターがブラウザ版・デスクトップ版で動作確認していますが、作者環境では未確認です**。\n     不具合報告・動作報告を歓迎します\n   - **Codexサブスクリプション（デスクトップ版・ローカルWeb版）**: 「ChatGPTでログイン」を押して\n     既定ブラウザで認証します。既にCodex CLIでログイン済みなら、その認証を再利用します\n   - **ARDYローカルエンジン**: ローカルで動くモーション生成AI (下記セクション参照)\n3. テキストで動きを指示して「▶ モーション生成 & 再生」 (Ctrl+Enter でも可)\n   - 「⏱ 長さ (秒)」で生成するモーションの長さを指定できます (空欄なら自動判定)。\n     「長さを自動補正」ONにすると、動作数に見合った自然な長さへ自動調整します\n   - 「ループ再生」で 自動 / 常にループ / 1回だけ を選択できます\n   - 「🔍 自己修正」(LLMモード) では生成後にもう1パスかけて品質を上げます\n   - **演技設計＋画像レビュー**: Codex（サブスク利用枠）または公式GPT-6 Astra APIで利用できます。\n     演技の段取り・支持脚・重心・視線・手足の到達位置を計画し、読み込んだVRMの実寸を使って生成。\n     正面・側面のコマ送り画像と実測位置をモデルに返し、1回修正します（合計3回の生成）。\n     APIモードは従量課金、CodexモードはChatGPTログインを必須としAPIキーへ自動切替しません。\n     1〜15秒対応。「通常の自己修正」の代わりに実行します。\n     完了後の比較パネルで修正前・修正後を再生し、演技設計・測定値・送信画像を確認できます。\n     数値が大きく悪化した候補は自動採用せず、比較用に残します。測定値は物理品質の保証ではありません。\n     「速度優先」は推論量とキー数を抑え、「品質優先」は詳しく考えます。\n     修正完了前に初稿を先に再生します。比較パネルに初稿までの時間と全体の時間を表示します。\n4. 生成された動きは3Dビューで再生されます\n   - 下部の**再生バー**で現在秒数の確認・任意地点へのスクラブ・一時停止ができます\n   - 右上の**カメラリセット / フルスクリーン**、下部の**背景切替**でプレビューを調整\n5. 「4. 書き出し・共有」から出力\n   - **⬇ .vrma 保存** — VRMA対応アプリ (VRoid Hub / cluster 等) で使えるファイル\n   - **🎞 GIF書き出し / 🎬 動画書き出し** — 1080pで書き出してSNSにそのまま共有\n   - 生成履歴の各項目からも再生・保存・GIF/動画書き出しができます\n\n## モーション品質の仕組み\n\n生成したモーションをそのまま出すのではなく、複数の段階で品質を上げています。\nいずれも**幾何学的な計測に基づく補助であり、品質の保証ではありません**。\n\n### 生成品質\n\n「標準」「速度優先」「品質優先」から選べます (既定は標準)。\n計画時の推論量とレビュー回数が変わります。速度優先は推論量を抑え、\n品質優先は詳しく考えたうえで再評価を最大2回まで行います。\n\n### AIで動きを見直す\n\n生成後、AIが**まず修正が必要かを判定**します。不要なら元の動きをそのまま採用し、\nその理由をプレビューの「修正前後を比較」に表示します。\n\n- **標準・品質優先** — 元のモーションの関節に補正を直接適用し、別の判定で再評価します\n- **速度優先** — ARDYへの指示を見直して再生成します\n- **画像も使う** — アプリが生成モーションを正面・側面から自動撮影し、選んだAIへ送ります\n  (参照画像をユーザーが用意する必要はありません)\n\n自動修正は起動時OFFです。生成後に「この動きを修正」から手動で実行できます。\n物理指標が悪化した場合や、指示された動作が消えた場合は自動採用しません。\nARDYの終了姿勢は保持し、足を滑らせる強制的な直立補間は行いません。\n\n| | |\n| --- | --- |\n| 対応する長さ | 1〜15秒 (Web版・デスクトップ版の機能) |\n| AIへ渡す情報 | 足滑り・関節の角速度・手足の速度と加速度 |\n| 足滑りの測り方 | 足の高さと上下速度から接地を近似。**物理シミュレーションや全身衝突判定ではありません** |\n\n### 指示追従チェック\n\n移動・両足ジャンプ・腰を落とす・手を顔付近まで上げる、の4種について、\nアバター上の関節位置を最大20Hzで計測して検出します。\n\nこれは**幾何学的な代理指標**です。厳密な歩数・移動方向・動作順・表情・自然さ・\n衝突・物理安定性を保証するものではありません。\n\n### 3候補の生成と比較\n\n比較したい場合、別のseedで3候補を生成して見比べられます (通常は1候補)。\n比較可能なチェックが揃う場合は検出数を優先し、足滑り・沈み込みも確認します。\n追加のAI計画呼び出しはありませんが、ARDYの生成時間は増えます。\n\n### 全身のなめらか補正\n\n急な角度変化をやわらげます (標準ON、「動きの詳細設定」内)。\n腕・上半身に加えて脚・足首・腰・指も対象です。\n\n足首の高さから接地を推定し、**足が低い区間では補正を抑えて移動経路を保ちます**。\n足首高による推定であり、実アバターの足裏接触を測るIK固定ではありません。\n階段・段差や特殊姿勢での接地判定、足滑りの完全防止は保証しません。\n\n### ループ再生\n\n有限回数や終了動作がある場合は自動ループせず、最後のポーズを保持します。\n明示的にループさせる場合は頭と末尾を重ねてつなぎます。\n移動を伴うループでは位置・向きを累積し、周期ごとに原点へ戻る問題を抑えます。\n\n> この継ぎ目処理は**ビューアでの再生用**です。書き出した `.vrma` に同じ処理は入りません。\n\n## ARDYローカルエンジン (オプション)\n\nNVIDIA Research の text-to-motion モデル\n[ARDY](https://research.nvidia.com/labs/sil/projects/ardy/) (SIGGRAPH 2026) を\nローカルで動かし、モーションキャプチャ品質の全身モーションを生成するモードです。\n\n**できること:**\n\n- 歩く・走る・踊る・ジャンプ・格闘などの全身運動を、実際の人間のモーション\n  キャプチャデータで学習したAIが生成 (重心移動・勢い・足の接地が本物らしい)\n- **日本語プロンプトOK** — ローカル翻訳 (FuguMT) で自動英訳。\n  OpenAI APIキーが保存済みなら GPT が英訳+連続動作の分割まで行い、精度が上がります\n- **📍 経由地モード** — 3Dビューの床をクリックして経由地を置くと、\n  キャラクターがその順番に通るモーションを生成 (右クリックで1つ取り消し)\n- **「歩いて走ってジャンプして転んで」** のような連続動作も、GPTが動作を分割・\n  検証して最大12動作まで繋げて生成します (APIキー保存時)\n- モーションの長さは秒数で指定 (0.1秒〜) または内容から自動判断。表情・ループ可否も自動\n- 生成回数無制限・完全ローカル (セットアップ後はオフラインで動作)\n\n**動作要件と速度:**\n\n| | 最低 | 推奨 |\n| --- | --- | --- |\n| OS | Windows 10/11 64bit、macOS、Linux | 同左 |\n| RAM | 16GB | 32GB+ |\n| ディスク | 35GB | 同左 |\n| GPU | VRAM 4GB〜 (無くてもCPUで1回数十秒) | NVIDIA GPU 6GB+ (1回数秒) |\n\n> 💡 **ARDY公式のデモはVRAM 20〜24GBを要求しますが、本アプリはモーションモデル本体の\n> GPU使用を実測で約1.2GBまで削減しています** (VRAMの大半を占めるテキスト理解部の\n> 8B LLM をCPU側で動かす構成のため)。生成中もVRAMはほぼ増えません (実測 +約12MiB)。\n> モーションモデル本体・拡散ステップ数は公式そのままなので **生成品質は一切落ちていません**。\n> ※ 数値は nvidia-smi による実測 (プロセス停止/起動時のVRAM差分)。\n> モデル使用は約1.2GBで生成しても増えないため、デスクトップ表示分を足しても\n> **VRAM 4GB のGPUで十分動く見込み**です (動作確認は12GBで実施。4〜6GBは未検証のため推奨6GB以上)。\n> GPUがなくてもCPUで動作します (生成が数倍遅くなります)。\n\n**品質を支える3層構成** — 役割分担は「GPTが頭、ARDYが体」:\n\n| 層 | 役割 |\n| --- | --- |\n| GPT (任意・APIキー保存時) | 日本語の意図理解、連続動作の分割、ARDYが得意な英語表現への言い換え |\n| Llama-3-8B (ローカル・CPU) | 英文をARDY専用のベクトルに変換 (LLM2Vec) |\n| ARDY (ローカル・GPU) | 実際のモーションキャプチャデータで学習したAIが動きを生成 |\n\nAPIキーなしでもローカル翻訳 (FuguMT) で完結しますが、キーがあると\n「走ってからジャンプして、最後にお辞儀」のような複雑な指示の再現度が上がります。\n\n**セットアップ** (Python 3.10+ と git が必要。約20GBダウンロードします):\n\nWindows:\n\n```powershell\npowershell -ExecutionPolicy Bypass -File tools\\ardy-engine\\install.ps1\n```\n\nmacOS:\n\n```bash\nbash tools/ardy-engine/install_mac.sh\n```\n\nLinux:\n\n```bash\nbash tools/ardy-engine/install_linux.sh\n```\n\nLinux版は apt / dnf / yum / pacman / zypper に対応し、Python 3.10+・git・C++ビルドツール\n(gcc/g++・cmake) を必要に応じて自動導入します (パッケージ導入には sudo を使います)。\nNVIDIA GPU があれば CUDA 版 PyTorch を自動選択します (`nvidia-smi` で判定)。\nブラウザ版から使う場合は、セットアップ完了時に表示される `server.py` 起動コマンドで\nエンジンを手動起動してください。\n\nmacOSでHomebrewが未導入の場合は、セットアップ中に自動でインストールされます。\nmacOS対応は [@emadurandal](https://github.com/emadurandal) さん ([#2](https://github.com/Kirakun0328/text-to-vrma/pull/2))、\nLinux対応は [@mouseos](https://github.com/mouseos) さん ([#7](https://github.com/Kirakun0328/text-to-vrma/pull/7)) の\nコントリビュートによるものです。\n**開発者 (作者) が動作確認しているのはWindowsのみで、macOS / Linux は作者環境では未確認です**\n(macOS はコントリビューターが、Linux はコントリビューターが実機で動作確認しています)。\nこれらの環境の不具合報告・動作報告・修正PRを歓迎します。\n\n完了後、エンジンを起動してからアプリの「ARDYローカルエンジン」モードを選択します。\n詳細・手動起動・APIは [tools/ardy-engine/README.md](tools/ardy-engine/README.md) を参照してください。\n\n本機能は Meta Llama 3 をテキストエンコーダとして利用しています。**Built with Meta Llama 3**\n\n## アーキテクチャ\n\n```text\n[LLMキーフレームモード]\nテキスト ── OpenAI API / Codex CLI ──▶ モーション spec (ボーン別オイラー角キーフレーム JSON)\n\n[ARDYモード]\nテキスト ── 選択したAI (演技計画・動作分割) ──▶ ARDYエンジンサーバー (localhost:2337)\n              │  Codex / OpenAI / Claude        │ 拡散モデルで20fpsモーション生成\n              └ AIなしならARDY内蔵翻訳          │ → 足滑り補正 → VRMリターゲット\n                                                ▼\n                                    モーション spec ──▶ なめらか補正 ──▶ AIレビュー (任意)\n```\n\nspec 以降は両モード共通:\n\n```text\n                          モーション spec\n                                   │\n                                   ▼\n              vrmaBuilder.js ── glTF + VRMC_vrm_animation 拡張 → GLB (.vrma)\n                                   │\n                                   ▼\n              viewer.js ── three.js + @pixiv/three-vrm-animation で VRM に再生\n```\n\n| ファイル | 役割 |\n| --- | --- |\n| `src/llm.js` | OpenAI API へのプロンプト (ボーン規約・お手本モーション5種) / 2パス自己修正 / spec 検証・角度クランプ |\n| `src/vrmaBuilder.js` | モーション spec から VRMA (GLB) をバイナリ生成。VRM1 規約の T ポーズ骨格を埋め込み、`VRMC_vrm_animation` 拡張でヒューマノイドボーンをマッピング |\n| `src/viewer.js` | three.js シーン / VRM ロード / VRMA 再生 |\n| `src/idleMotion.js` | 待機モーション (呼吸) |\n| `src/main.js` | UI 結線 |\n| `src/autoExpressions.js` "
+    },
+    "brief": {
+      "summary": "用文字为VRM角色生成并导出动作文件",
+      "problem": "手动制作VRM角色动作耗时，缺少便捷的文字驱动工具",
+      "highlights": [
+        "可以用文字生成VRM角色动作",
+        "可以预览并导出.vrma文件",
+        "可以导出GIF和1080p视频"
+      ],
+      "target_users": [
+        "VTuber创作者",
+        "VRM应用开发者",
+        "动画制作人员"
+      ],
+      "why_trending": "本周首次收录，已有153个Star且近期持续更新",
+      "caveat": "部分引擎需API密钥或约20GB本地环境",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Kirakun0328/text-to-vrma",
+      "score": 90,
+      "category": "3D / VTuber",
+      "reason": "专为VRM生成文本动作",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "hhoao/huji",
+      "url": "https://github.com/hhoao/huji",
+      "description": "弧迹是一个跨平台的AI运动视频自动剪辑软件，它用于自动检测乒乓球、羽毛球比赛中的精彩回合，去除捡球等冗余片段，输出精简的比赛集锦。",
+      "language": "C++",
+      "total_stars": 37,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "android",
+        "app",
+        "autoclip",
+        "badminton",
+        "flutter",
+        "macos",
+        "pingpong",
+        "table-tennis",
+        "video-clip",
+        "video-editing",
+        "video-processing",
+        "windows"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-01-23T06:04:26Z",
+      "updated_at": "2026-09-05T04:30:37Z",
+      "pushed_at": "2026-09-05T04:41:16Z",
+      "open_issues": 1,
+      "homepage": "https://restcut.com/home",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 弧迹 (Huji)\n\n<p align=\"center\">\n  <img src=\"assets/logo_splash.png\" alt=\"弧迹\" width=\"300\"/>\n</p>\n\n\n<p align=\"center\">\n  <strong>智能视频剪辑：自动识别乒乓球、羽毛球比赛并剪辑精彩片段</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"README.en.md\">English</a> •\n  <a href=\"#概述\">概述</a> •\n  <a href=\"#安装\">安装</a> •\n  <a href=\"#主要功能\">主要功能</a> •\n  <a href=\"#项目结构\">项目结构</a> •\n  <a href=\"#快速开始\">快速开始</a> •\n  <a href=\"#社区\">社区</a> •\n  <a href=\"#license\">License</a>\n</p>\n<div align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://restcut.com\"><img src=\"https://img.shields.io/badge/官网-restcut.com-00C1D4?logo=safari&logoColor=white\" alt=\"Huji Website\"></a>\n  <a href=\"https://github.com/hhoao/huji/releases\"><img src=\"https://img.shields.io/github/v/release/hhoao/huji?logo=github&label=Release\" alt=\"Huji Release\"></a>\n  <a href=\"https://github.com/hhoao/huji/stargazers\"><img src=\"https://img.shields.io/github/stars/hhoao/huji?logo=github&label=Stars\" alt=\"Huji Stars\"></a>\n  <a href=\"https://github.com/hhoao/huji/actions/workflows/ci-verify.yml\"><img src=\"https://github.com/hhoao/huji/actions/workflows/ci-verify.yml/badge.svg\" alt=\"Huji CI\"></a>\n  <br>\n  <a href=\"https://restcut.com/app/index\"><img src=\"https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=black\" alt=\"Android\"></a>\n  <a href=\"https://github.com/hhoao/huji/releases\"><img src=\"https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black\" alt=\"Linux\"></a>\n  <a href=\"https://github.com/hhoao/huji/releases\"><img src=\"https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white\" alt=\"Windows\"></a>\n  <a href=\"https://qm.qq.com/q/U5U0zLyyA2\"><img src=\"https://img.shields.io/badge/QQ%20群-112856301-0099FF?logo=tencentqq&logoColor=white\" alt=\"Huji QQ Group\"></a>\n  <a href=\"https://discord.com/channels/1518551459053178960/1518551461242474558\"><img src=\"https://img.shields.io/badge/Discord-加入群组-5865F2?logo=discord&logoColor=white\" alt=\"Huji Discord\"></a>\n</div>\n## 概述\n\n<p align=\"center\">\n  <img src=\"assets/cover.png\" alt=\"弧迹\"/>\n</p>\n\n弧迹是一个智能视频剪辑 Android 应用，它用于自动检测乒乓球、羽毛球比赛中的精彩回合，去除捡球等冗余片段，输出精简的比赛集锦。。\n\n## 安装\n\n- **移动端（Android）**：<https://restcut.com/app/index>\n- **桌面端**：<https://github.com/hhoao/huji/releases>\n\n## 主要功能\n\n- [x] **比赛视频剪辑**：已有视频剪辑 / 边拍边剪辑\n- [x] **自动剪辑配置与执行**：云端或本地检测、上传、流式剪辑进度\n- [x] **边拍边剪辑**：录制同时实时检测回合并生成剪辑\n- [x] **回合剪辑编辑**：多片段预览、拖拽排序、增删改回合、导出清晰度与保存\n- [x] **回合选择弹窗**：从检测结果中勾选要保留的回合\n- [x] **剪辑后编辑**：对生成视频片段做基础编辑（简单的剪映功能）\n- [x] **视频列表**：Feed/列表切换、筛选、入口到个人与设置\n- [x] **任务与记录**：本地剪辑任务 Tab、视频记录 Tab、任务进度弹窗、跳转回合编辑\n- [x] **视频剪辑进度**：单任务进度展示与覆盖层\n- [x] **视频记录详情**：单条记录详情\n\n### 已经支持的视频类型\n\n- [x] **乒乓球比赛视频**\n- [x] **羽毛球比赛视频**\n\n### 剪辑速度\n\nPC(4050):\n\n- 算法侧：16分钟视频剪辑耗时：69.53s\n\nAndroid(未统计):\n\n## 项目结构\n\n| 子项目 | 技术栈 | 说明 |\n| ----- | ------ | ---- |\n| `huji-app` | Flutter | 弧迹客户端，提供视频选择、智能剪辑、片段编辑、任务管理等功能 |\n| `huji-algorithm` | Python | 算法服务（Git 子模块），负责乒乓球/羽毛球比赛检测与自动剪辑 |\n\n`huji-algorithm` 以 Git 子模块方式引入，仓库地址：[hhoao/huji-algorithm](https://github.com/hhoao/huji-algorithm)。\n\n## 快速开始\n\n### 克隆仓库\n\n首次克隆需同时拉取子模块：\n\n```bash\ngit clone --recurse-submodules https://github.com/hhoao/huji.git\n```\n\n若已克隆主仓库，可初始化子模块：\n\n```bash\ngit submodule update --init --recursive\n```\n\n### 桌面 Linux 依赖\n\n```bash\nsudo apt-get install -y libasound2-dev libmpv-dev mpv\n```\n\n### huji-app（客户端）\n\n```bash\ncd huji-app\nflutter pub get\nflutter run\n```\n\n### huji-algorithm（Python 端）\n\n进入子模块目录：`cd huji-algorithm`\n\n#### 本地快速剪辑（推荐）\n\n**Linux / macOS**\n\n```bash\n./setup.sh\nsource .venv/bin/activate\n\npython main.py --video-path videos/demo.mp4 --sport ping_pong\npython main.py -v src/resources/video/examples/test.mp4 --sport badminton --match-type doubles\n```\n\n**Windows（PowerShell）**\n\n```powershell\n.\\setup.ps1\n.venv\\Scripts\\activate\n\npython main.py --video-path videos\\demo.mp4 --sport ping_pong\n```\n\n需预先安装 [FFmpeg](https://ffmpeg.org/) 并加入 PATH。更多 Windows 说明见 [huji-algorithm/README.md](huji-algorithm/README.md)。\n\n常用 CLI 参数：\n\n| 参数 | 说明 |\n|------|------|\n| `--video-path` / `-v` | 本地视频文件路径 |\n| `--sport` | `ping_pong` 或 `badminton` |\n| `--match-type` | 羽毛球：`singles`（默认）/ `doubles` |\n| `--output-dir` / `-o` | 输出目录（覆盖配置） |\n| `--cleanup` / `--no-cleanup` | 剪辑后是否清理临时输出（覆盖 cleanup 配置） |\n| `--train` | 训练模型 |\n\n剪辑过程中的中间文件会按 `cleanup` 配置在任务结束后自动清理，详见 [huji-algorithm/README.md](huji-algorithm/README.md) 的「输出目录与自动清理」。\n\n更多说明见 [huji-algorithm/README.md](huji-algorithm/README.md)。\n\n## 社区\n\n- **QQ 群**：[112856301](https://qm.qq.com/q/U5U0zLyyA2)（点击加入，或扫描下方二维码）\n- **Discord**：[加入群组](https://discord.com/channels/1518551459053178960/1518551461242474558)\n\n<p align=\"left\">\n  <img src=\"assets/qq-group-qrcode.png\" alt=\"QQ 群二维码\" width=\"220\"/>\n</p>\n\n## License\n\n[GNU Affero General Public License v3.0](LICENSE)\n"
+    },
+    "brief": {
+      "summary": "弧迹自动识别乒乓球和羽毛球精彩回合并剪辑成集锦",
+      "problem": "手动筛选比赛回合耗时，捡球等冗余片段难以去除",
+      "highlights": [
+        "可以自动剪辑已有比赛视频",
+        "可以边拍边检测并生成片段",
+        "可以选择、排序和编辑比赛回合"
+      ],
+      "target_users": [
+        "乒乓球爱好者",
+        "羽毛球爱好者",
+        "赛事视频制作者"
+      ],
+      "why_trending": "本周首次收录，近期有提交，值得关注",
+      "caveat": "依赖算法子模块和FFmpeg，采用AGPL-3.0许可证",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hhoao/huji",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "AI自动识别并剪辑比赛集锦",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 48789,
+      "forks": 4829,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-09-05T04:39:18Z",
+      "pushed_at": "2026-09-05T04:21:57Z",
+      "open_issues": 207,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven "
+    },
+    "brief": {
+      "summary": "AIRI 是可自托管的 AI 虚拟陪伴项目",
+      "problem": "让用户拥有可互动、能玩游戏的虚拟角色",
+      "highlights": [
+        "可以进行实时语音聊天",
+        "可以让虚拟角色玩 Minecraft",
+        "可以让虚拟角色玩 Factorio"
+      ],
+      "target_users": [
+        "AI 伴侣爱好者",
+        "VTuber 创作者",
+        "开源开发者"
+      ],
+      "why_trending": "总 Star 近4.9万，近期仍有代码更新",
+      "caveat": "项目仍处于 beta，且有207个未关闭 issue",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "自托管实时语音AI虚拟伴侣",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "wormholeportal/Makone",
+      "url": "https://github.com/wormholeportal/Makone",
+      "description": "Make Worlds with Code — your coding agent writes procedural three.js scenes, games and objects, screenshots them, and fixes what it sees.",
+      "language": "HTML",
+      "total_stars": 21,
+      "forks": 2,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "agents",
+        "ai",
+        "code",
+        "computer-graphics",
+        "creative-coding",
+        "game",
+        "game-development",
+        "generative-art",
+        "harness",
+        "procedural-generation",
+        "skills",
+        "threejs",
+        "webgl"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-06T07:49:31Z",
+      "updated_at": "2026-09-05T04:28:14Z",
+      "pushed_at": "2026-09-05T03:21:50Z",
+      "open_issues": 0,
+      "homepage": "https://makone.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"assets/logo.svg\" width=\"76\" alt=\"\" />\n\n### Makone\n\n**Make Worlds with Code**\n\n**An open-source kit for building 3D worlds in code.**\nObjects, scenes and games — no model files, no texture packs, and it runs\ninside the coding agent you already use.\n\n[![makone.dev](https://img.shields.io/badge/makone.dev-16191d?style=flat-square)](https://makone.dev)\n[![License: MIT](https://img.shields.io/badge/license-MIT-D4A800?style=flat-square)](LICENSE)\n[![Node](https://img.shields.io/badge/node-%E2%89%A520-D4A800?style=flat-square)](package.json)\n[![three.js](https://img.shields.io/badge/three.js-r183-D4A800?style=flat-square)](https://threejs.org)\n[![PRs welcome](https://img.shields.io/badge/PRs-welcome-D4A800?style=flat-square)](CONTRIBUTING.md)\n\n[**makone.dev**](https://makone.dev) · [How it works](#how-it-works) · [Quick start](#quick-start) · [Skills](#what-the-agent-reads) · [Gallery](#gallery) · [Docs](#documentation)\n\n<img src=\"assets/build.gif\" width=\"100%\" alt=\"Two windows side by side. On the left, worlds/bicycle/main.js typing itself out — the imports, then bike.add(buildFrame(), buildDrivetrain(), buildCockpit(), buildCables()). On the right, the bike assembling in the same order, with a counter climbing towards 62 parts.\">\n\n<sub>The file on the left is <code>worlds/bicycle/main.js</code>. The bike on the right is that file, rendered live, with its meshes brought back in the order the code creates them — 62 parts, and the last of them is a spoke.</sub>\n\n</div>\n\n### How it works\n\nAn agent writing 3D code cannot see what it made. It writes a thousand lines of geometry,\nreports success, and has no idea the canvas is black.\n\nMakone closes that loop. No server, no API key, nothing to configure — **the agent is the\ncoding agent you already use.** This repository gives it the three things it lacks:\n\n<img src=\"assets/stack.svg\" alt=\"The agent reads skills and writes worlds built on the runtime; the harness renders them and returns frames and facts to the agent.\" width=\"100%\">\n\n*Figure 1: The three layers a coding agent does not bring with it. The dashed edge is the one that matters — without it the agent is writing 3D code blind.*\n\nThe delta is **eyes**. Everything else an agent loop needs — context, edits, a shell —\nalready exists in the CLI you are running; rebuilding it here would be a worse copy.\n`capture` takes the screenshot, `verify` takes the measurement, and the agent has to look\nat both before it may claim the work is done.\n\n<img src=\"assets/loop.svg\" alt=\"A declared brief governs the loop: write, then capture and verify, then look and judge against the brief; if it is not closer, fix the weakest frame and repeat.\" width=\"100%\">\n\n*Figure 2: One pass. The brief is declared once, before any code, and every pass is scored against it.*\n\n```bash\nnpm run create  -- <world> --type scene --brief \"...\"     # scaffold + register\nnpm run capture -- <world> --shots 4                      # frames to look at\nnpm run verify  -- <world>                                # errors, contract, budget, motion\nnpm run export  -- <world>                                # one self-contained .html\nnpm run smoke                                             # end-to-end self-check\n```\n\n`verify` reports facts, not claims: whether anything visibly **moved** over six simulated\nseconds, whether `seekTo(0)` and `seekTo(1)` actually differ, triangles and draw calls\nagainst the budget you declared. A world that says it is alive and renders a still image\nfails.\n\nYou do not run any of this by hand — the agent does, and shows you the frames.\n\n### Quick start\n\n**1 · Look at what is already here.**\n\n```bash\ngit clone https://github.com/wormholeportal/Makone && cd Makone\nnpm install\nnpm run serve            # http://localhost:5180 — the gallery\n```\n\n`npm run serve` puts the gallery on **http://localhost:5180** — every world, filterable by\ntype, each card animating on hover:\n\n<img src=\"assets/gallery.png\" alt=\"The local gallery at localhost:5180: filter tabs for all, games, objects and scenes, then a grid of world cards, each with its cover and its brief.\" width=\"100%\">\n\nClick a card to open it in the player (`play.html?world=<world>`) — drag to orbit, scroll to\nzoom, and for a game the keys are printed at the bottom of the frame.\n\nPrefer not to run anything? Every world also ships as a single self-contained `.html`.\n`worlds/<world>/<world>.html` opens straight from disk by double-clicking it — no server, no\ninstall, everything inlined down to the WASM.\n\n**2 · Give the agent its eyes.** One-time, and only needed for creating:\n\n```bash\nnpx playwright install chromium\n```\n\n**3 · Make something.** Open the repo in your agent CLI — Claude Code, Codex, Cursor,\nwhichever you use — and ask in plain language:\n\n> make a fishing harbour at 4am, wet light, someone already at work\n\nThat sentence is the **brief**. It is the one thing you declare before any code, it is\nstored in `world.json`, and it is what every later pass is scored against — *is this frame\ncloser to that, or not?* Write it concrete enough to smell; a brief nobody can fail is\nnot one.\n\n[`AGENTS.md`](AGENTS.md) is the entry point the agent reads. It routes to the right skill,\nthen holds the agent to the loop: build it, screenshot it, look, fix the weakest frame,\nrepeat.\n\n> **Browsing only?** `npm install --omit=dev` skips Playwright and its browser download.\n\n### What the agent reads\n\n`skills/` is the half of this repository you could take on its own: pages of craft written\nto be pulled one at a time by an agent mid-build, not read front to back by a human.\n\n| dir | what is in it | when it loads |\n|---|---|---|\n| [`world/`](skills/world) | the six-step workflow, brief to finished world — one path, all three types | every \"make me a …\" request |\n| [`craft/`](skills/craft) | form, light, colour, contrast, actors, motion, particles, sound, performance | while building, one page at a time |\n| [`game/`](skills/game) | axioms, feel, mechanics, onboarding, narrative, audio, and a playbook per genre | only when the thing is playable |\n| [`object/`](skills/object) | cutting a thing into parts, and reviewing one part alone | only when it is one thing you could hold |\n| [`three/`](skills/three) | Three.js reference and engine engineering — lookup, not design | at a \"how do I do X in three.js\" wall |\n\nA page is one problem and the answer to it, argued in its own title:\n\n- [`craft/procedural-materials.md`](skills/craft/procedural-materials.md) — *everything looks\n  like coloured plastic?* A sky light probe plus noise into albedo, roughness and normal. Do\n  this before you touch a light.\n- [`craft/hairlines.md`](skills/craft/hairlines.md) — geometry thinner than a pixel: spokes,\n  wires, rigging.\n- [`craft/narrative-light.md`](skills/craft/narrative-light.md) — light tells the story, it\n  doesn't just expose the scene.\n- [`craft/sound.md`](skills/craft/sound.md) — synthesised from the same model as the form,\n  never sampled.\n- [`game/axioms/meaningful-choice.md`](skills/game/axioms/meaningful-choice.md) — a game is a\n  series of interesting decisions.\n- [`three/instancing-traps.md`](skills/three/instancing-traps.md) — `InstancedMesh`, and the\n  four ways it silently stops drawing.\n\n[`skills/SKILL.md`](skills/SKILL.md) is the index the agent reads first, to work out which\npage it actually needs. Nothing in here is mandatory: the worst case for skipping a page is\na weaker world.\n\n### Three kinds of world\n\nOne directory, one contract, three intents. `type` is the only thing you declare; the\nharness works out the rest by probing what your module actually implements.\n\n| | **scene** | **game** | **object** |\n|---|---|---|---|\n| **What it is** | a place that exists and keeps living | a place with a verb and a loss condition | one thing, built to be turned over |\n| **You judge it by** | does a still frame hold up | is there a decision every few seconds | does the form read from every angle |\n| **Typical build** | procedural geometry, staged light, actors | ECS-ish state, input, physics where it earns it | CSG solids assembled from named parameters |\n| **Extra contract** | — | `getState` · `act` · `observe`, so a bot can drive it | `params.js` + `parts/`, each part reviewable alone |\n| **Skills** | `world/` + `craft/` | `+ game/` | `+ object/` |\n\n```bash\nnpm run capture -- cafe --shots 4 --after 6        # orbit a scene after 6 simulated seconds\nnpm run verify  -- dontstarve                      # contract, console, budget, motion\nnpm run inspect -- gramophone --part horn          # contact sheet + facts for one part\n```\n\n### How a world is built\n\n```js\n// worlds/<world>/main.js\nexport default function createWorld(container) {\n  // ... build the scene ...\n  return { getScene, getCamera, getRenderer, getCanvas, resize, dispose, renderFrame };\n}\n```\n\n```jsonc\n// worlds/<world>/world.json\n{\n  \"name\": \"<world>\",\n  \"title\": \"Cold Harbour\",\n  \"type\": \"scene\",\n  \"brief\": \"4am at the fishing harbour, wet light, someone already at work\",\n  \"budget\": { \"tris\": 300000, \"drawCalls\": 300 }\n}\n```\n\n`renderFrame(dt)` **is** the loop — the page owns `requestAnimationFrame`. That single\nrule is what lets a script step a world deterministically, screenshot it headlessly, and\nget the same frames twice. Full contract: [`docs/contract.md`](docs/contract.md).\n\n`brief` is not a comment. It is the thing every self-review is measured against:\n*does this frame get closer to that?*\n\n#### Where the output lands\n\n| Where | What lands there |\n|---|---|\n| `worlds/<world>/shots/` | the frames `capture` and `inspect` just wrote — **this is what you open and look at**. Review artifacts: read them, do not commit them |\n| stdout | `verify` prints one JSON object — pass/fail, measured motion, luma, triangles, draw calls |\n| **http://localhost:5180** | the gallery, once `catalog` has picked the world up. The card is live: hover to see it move, click to play it |\n| `worlds/<world>/<world>.html` | after `export` — one file, double-click it, works with no server |\n\nA new world shows up in the gallery only after `npm run catalog` regenerates\n`worlds/index.json`; `npm run create` already does that for you, and `npm run check` fails\nif the catalog has gone stale.\n\n### Gallery\n\nReference implementations, not the product. Each one is a directory you can read, run and\ntake pieces out of — the same contract and the same skills your own worlds will use.\n\n<img src=\"assets/hero.gif\" width=\"100%\" alt=\"Twelve worlds from the gallery, all moving at once: a corner café, a 35mm SLR turning on its axis, a drift racer on a candy-coloured circuit, a violin, a gramophone, a fun park, a portable typewriter, a bear in the wilderness, a road bike, a city plaza, a camera quadcopter and an assembly floor.\">\n\n<sub>Every polygon above is procedural source. No imported meshes, no texture packs, no binary assets.</sub>\n\nHover a card in the local gallery to see it move; click through for the source that made it.\n\n<!-- gallery:start -->\n### Scenes · 6\n\nA place that exists and keeps living. Judged by whether a still frame holds up — and whether anything moves when nobody touches it.\n\n<table>\n<tr>\n<td width=\"50%\"><a href=\"worlds/cafe\"><img src=\"worlds/cafe/cover.gif\" width=\"360\" alt=\"Corner Café\"></a></td>\n<td width=\"50%\"><a href=\"worlds/factory\"><img src=\"worlds/factory/cover.gif\" width=\"360\" alt=\"Assembly Floor\"></a></td>\n</tr>\n<tr>\n<td><strong><a href=\"worlds/cafe\">Corner Café</a></strong> — A waiter runs trays, patrons sip, the barista works the machine</td>\n<td><strong><a href=\"worlds/factory\">Assembly Floor</a></strong> — Workers threading between robot arms and AGVs</td>\n</tr>\n<tr>\n<td width=\"50%\"><a href=\"worlds/farm\"><img src=\"worlds/farm/cover.gif\" width=\"360\" alt=\"Farm\"></a></td>\n<td width=\"50%\"><a href=\"worlds/funpark\"><img src=\"worlds/funpark/cover.gif\" width=\"360\" alt=\"Fun Park\"></a></td>\n</tr>\n<tr>\n<td><strong><a href=\"worlds/farm\">Farm</a></strong> — Livestock, a tractor, a day of chores</td>\n<td><strong><"
+    },
+    "brief": {
+      "summary": "让编程代理用代码生成并检查 Three.js 3D 世界。",
+      "problem": "代理生成 3D 场景后难以查看画面和验证运行状态。",
+      "highlights": [
+        "可以让代理生成可交互的 3D 场景",
+        "可以制作程序化物体和小游戏",
+        "可以截图验证并导出单文件 HTML"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "Three.js 开发者",
+        "独立游戏创作者"
+      ],
+      "why_trending": "本周首次收录，近期有提交；总 Star 21，今日新增为 0。",
+      "caveat": "创建流程需要安装 Playwright Chromium。",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "wormholeportal/Makone",
+      "score": 85,
+      "category": "3D / VTuber",
+      "reason": "Agent生成并修正Three.js场景",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 48.5
+    }
+  }
+]
