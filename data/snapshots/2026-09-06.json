@@ -1,0 +1,532 @@
+[
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 128166,
+      "forks": 6857,
+      "stars_today": 2845,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2845
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-09-06T04:50:23Z",
+      "pushed_at": "2026-09-04T12:35:29Z",
+      "open_issues": 218,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/50668\" alt=\"DietrichGebert%2Fponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/monthly?language=JavaScript\" alt=\"DietrichGebert%2Fponytail | Trendshift monthly ranking\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <strong>~54% less code (up to 94%) &middot; ~20% cheaper &middot; ~27% faster &middot; 100% safe</strong><br>\n  <sub>Measured on real Claude Code sessions editing a real open-source repo (FastAPI + React), against the same agent with no skill. ~54% is the mean across 12 feature tasks (Haiku 4.5, n=4); it reaches 94% where an agent over-builds (a date picker) and is near zero where the code is already minimal. ponytail keeps every safety guard while a bare \"write one-liners\" prompt drops one. (The earlier single-shot benchmark reported 80-94% as a flat figure; against a fair agentic baseline that is the per-task ceiling, not the average.) <a href=\"benchmarks/results/2026-06-18-agentic.md\">Full writeup</a> &middot; <a href=\"benchmarks/\">reproduce it</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"README.es.md\">Español</a> &middot; <a href=\"README.ko.md\">한국어</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Before / after\n\nYou ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones.\n\nWith ponytail:\n\n```html\n<!-- ponytail: browser has one -->\n<input type=\"date\">\n```\n\nMore survivors in [examples/](examples/).\n\n## Numbers\n\nThe honest measurement is a real agent doing real work: a headless Claude Code session editing [tiangolo's full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (a real FastAPI + React repo), scored on the `git diff` it leaves behind. Twelve feature tickets, the same agent with and without the skill, n=4, Haiku 4.5.\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-agentic.svg\" width=\"860\" alt=\"Each arm as a percent of the no-skill baseline across LOC, tokens, cost and time (Haiku 4.5). ponytail is lowest on every metric (LOC 46%, tokens 78%, cost 80%, time 73%); caveman rises above 100% on tokens, cost and time; yagni-oneliner LOC 67%. Safety, separate adversarial tier: baseline, caveman and ponytail 100%, yagni-oneliner 95%.\">\n</p>\n\n| vs no-skill baseline | LOC | tokens | cost | time | safe |\n|---|--:|--:|--:|--:|--:|\n| **ponytail** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |\n| caveman (terse-prose control) | -20% | +7% | +3% | +2% | 100% |\n| \"YAGNI + one-liners\" prompt | -33% | -14% | -21% | -30% | 95% |\n\nponytail is the only arm that cuts every metric, and the only one that stays fully safe while doing it. The cut is biggest where there is a real over-build trap (date picker 404 to 23 lines, color picker 287 to 23, because it reaches for a native `<input>` instead of a component) and near zero on code that is already minimal. Full method, per-task tables, and limitations: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).\n\n<details>\n<summary><strong>Older single-shot numbers (isolated generation)</strong></summary>\n\nFive everyday tasks, three models, three arms (no skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), ten runs, median reported. One prompt, one completion, counting lines of the answer:\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-3model.svg\" width=\"860\" alt=\"Median lines of code per arm across Haiku, Sonnet and Opus\">\n</p>\n\nThis showed **80-94% less code**. [#126](https://github.com/DietrichGebert/ponytail/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.\n\n</details>\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect on the models that follow the ladder; a terse reasoning model that spends thinking tokens deliberating the rungs can go the other way (on GPT-5.5 it does).\n\n## How it works\n\nBefore writing code, the agent stops at the first rung that holds:\n\n```\n1. Does this need to exist?   → no: skip it (YAGNI)\n2. Already in this codebase?  → reuse it, don't rewrite\n3. Stdlib does it?            → use it\n4. Native platform feature?   → use it\n5. Installed dependency?      → use it\n6. One line?                  → one line\n7. Only then: the minimum that works\n```\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\n## Install\n\nThe most effort ponytail will ever ask of you:\n\nThe Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.\n\n### Claude Code\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n(You have to send two separate prompts for the install to work) \n\nSame steps in the Claude Code Desktop app's Code tab: type the two `/plugin` commands above into the prompt box, or click the **+** button next to it, choose **Plugins** → **Add plugin** to browse your configured marketplaces, and manage marketplaces from **Customize** in the sidebar.\n\n### Codex\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nRun `codex` and open `/hooks`, review and trust its two lifecycle hooks, and start a new thread.\n\nThis same install also covers the Codex desktop app: restart the app after installing and it picks up the plugin.\n\n### GitHub Copilot CLI\n\n```bash\ncopilot plugin marketplace add DietrichGebert/ponytail\ncopilot plugin install ponytail@ponytail\n```\n\nIn an interactive Copilot CLI session, use the slash equivalents:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\n```\n\nCopilot CLI namespaces plugin commands by plugin name. For example:\n\n```text\n/ponytail:ponytail ultra\n/ponytail:ponytail-review\n```\n\n### Pi agent harness\n\n```\npi install git:github.com/DietrichGebert/ponytail\n```\n\n### OpenCode\n\nAdd to `opencode.json`:\n\n```json\n{ \"plugin\": [\"@dietrichgebert/ponytail\"] }\n```\n\nRun from a checkout instead (the plugin reuses `hooks/` and `skills/`):\n\n```json\n{ \"plugin\": [\"./.opencode/plugins/ponytail.mjs\"] }\n```\n\nInjects the ruleset every turn at the active level; adds the `/ponytail` commands (see [Commands](#commands)). OpenCode also auto-loads this repo's `AGENTS.md`, so the rules hold even without the plugin. The plugin adds the `lite/full/ultra/off` levels.\n\nThe `./` path resolves against your project's `opencode.json`; to share one checkout across projects, point it at the absolute path of the `.mjs` instead (it finds its `hooks/` and `skills/` relative to its own file).\n\n### Gemini CLI\n\n```bash\ngemini extensions install https://github.com/DietrichGebert/ponytail\n```\n\nLoads the ruleset as always-on context every session and registers the `/ponytail` commands; the `skills/` ship too, activated when a task needs them.\nThe Gemini adapter intentionally does not ship a root `hooks/hooks.json`: Gemini auto-loads that path, while Ponytail's lifecycle hooks use Claude/Codex event names.\n\n### Qoder\n\nQoder auto-loads `AGENTS.md` from the repo root as always-on context, so running ponytail from a checkout works with zero setup. For per-project rules, copy [`.qoder/rules/ponytail.md`](.qoder/rules/ponytail.md) into your project's `.qoder/rules/`. The six ponytail skills (`/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-gain`, `/ponytail-help`) are available via Qoder's Skill system; the plugin manifest at [`.qoder-plugin/plugin.json`](.qoder-plugin/plugin.json) points at the `skills/` directory.\n\nFor full plugin-tier support (automatic mode activation + ruleset injection on every prompt), add the hooks from [`hooks/qoder-hooks.json`](hooks/qoder-hooks.json) to your `.qoder/settings.json`. Replace `PONYTAIL_DIR` with the path to your ponytail checkout. Qoder's `UserPromptSubmit` hook activates the default mode on first prompt and injects the ruleset every turn; `PreToolUse` with `task|Task` matcher injects the ruleset into subagents. Level switches (`/ponytail lite|full|ultra|off`) work automatically.\n\n### Antigravity CLI\n\nGoogle is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:\n\n```bash\nagy plugin install https://github.com/DietrichGebert/ponytail\n```\n\nIt reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/ponytail` commands into skills, so you type them into the chat (e.g. `/ponytail-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.\n\n### Hermes Agent\n\n```bash\nhermes plugins install DietrichGebert/ponytail --enable\n```\n\nRestart Hermes after installing. The plugin injects the active Ponytail mode before each LLM turn, registers the bundled skills "
+    },
+    "brief": {
+      "summary": "让 AI 编程代理优先复用现有能力，少写不必要代码",
+      "problem": "AI 代理容易过度设计，增加代码量、成本和维护负担",
+      "highlights": [
+        "可以让代理优先使用原生控件和标准库",
+        "可以让代理复用项目已有代码，减少重复实现",
+        "可以在保留安全检查的前提下压缩实现规模"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端开发者",
+        "团队技术负责人"
+      ],
+      "why_trending": "今日新增 2845 Star，累计 128166 Star，且连续上榜",
+      "caveat": "基准测试仅覆盖特定 Claude Code 会话，效果因模型而异",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 90,
+      "category": "AI Agent / Skills",
+      "reason": "直接提供编码智能体技能插件",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 70,
+      "ranking_score": 80.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 252935,
+      "forks": 21344,
+      "stars_today": 2692,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2692
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-09-06T04:50:38Z",
+      "pushed_at": "2026-09-04T08:45:43Z",
+      "open_issues": 466,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when I ship, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first, and updates arrive automatically.\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, Linear, or local files)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [`CONTEXT.md`](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `CONTEXT.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[wayfinder](./skills/engineering/wayfinder/SKILL.md)**: Plan a huge chunk of work, more than one agent session can hold, as a shared map of decision tickets on the issue tracker, and resolve them one at a time until the way to the destination is clear.\n\n**Model-invoked**\n\n- **[prototype](./skills/engineering/prototype/SKILL.md)**: Build a throwaway prototype to answer a design question, either a single shareable HTML file for state/logic questions, or several radically different UI variations toggleable from one route.\n- **[diagnosing-bugs]"
+    },
+    "brief": {
+      "summary": "面向编码代理的可组合工程实践技能集。",
+      "problem": "帮助代理减少需求偏差、代码缺陷和调试混乱。",
+      "highlights": [
+        "可以用提问流程澄清开发需求",
+        "可以用TDD技能推动测试与重构",
+        "可以用调试流程定位代码问题"
+      ],
+      "target_users": [
+        "软件开发者",
+        "AI 编程代理用户"
+      ],
+      "why_trending": "今日新增2692个Star，且连续上榜。",
+      "caveat": "不同安装方式的更新和编辑权限不同。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 95,
+      "category": "AI Agent / Skills",
+      "reason": "面向智能体的可组合工程技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "humanlayer/skills",
+      "url": "https://github.com/humanlayer/skills",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 2786,
+      "forks": 77,
+      "stars_today": 442,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 442
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-03-18T03:23:23Z",
+      "updated_at": "2026-09-06T04:49:41Z",
+      "pushed_at": "2026-08-13T15:05:30Z",
+      "open_issues": 7,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# skills\n\nClaude Code skills from [HumanLayer](https://humanlayer.dev).\n\n## Installation\n\n```bash\nnpx skills add humanlayer/skills --skill SKILLNAME\n```\n\n## Available Skills\n\n### improve-claude-md\n\nRewrites your CLAUDE.md using `<important if>` blocks to improve instruction adherence.\n\n```bash\nnpx skills add humanlayer/skills --skill improve-claude-md\n```\n\nThen in your project:\n\n```\n/improve-claude-md\n```\n\n### narrow-react-prop-types\n\nNarrows React component prop types to match live code paths instead of Storybook, test, or mock-only states.\n\n```bash\nnpx skills add humanlayer/skills --skill narrow-react-prop-types\n```\n\nThen in your project:\n\n```\n/narrow-react-prop-types\n```\n\n### build-iterated-agentic-loop\n\nBuilds a repo-local skill plus an iterated coding-agent GitHub Actions workflow, prompt, memory file, and reference templates.\n\n```bash\nnpx skills add humanlayer/skills --skill build-iterated-agentic-loop\n```\n\nThen in your project:\n\n```\n/build-iterated-agentic-loop\n```\n\n### design-control-loop\n\nInterviews you to design an agentic control loop — sensor, controller, actuator, and disturbances — tailored to your codebase, then builds it as locally-runnable components plus a scheduled coding-agent workflow.\n\n```bash\nnpx skills add humanlayer/skills --skill design-control-loop\n```\n\nThen in your project:\n\n```\n/design-control-loop\n```\n\n### show-me\n\nExplains the current topic with concise diagrams, code-shape sketches, and focused HTML artifacts.\n\n```bash\nnpx skills add humanlayer/skills --skill show-me\n```\n\nThen invoke:\n\n```\n/show-me\n```\n"
+    },
+    "brief": {
+      "summary": "一组可安装到 Claude Code 的开发技能",
+      "problem": "帮助改进项目指令、类型定义和编码代理工作流",
+      "highlights": [
+        "可以优化 CLAUDE.md 指令遵循",
+        "可以收窄 React 组件属性类型",
+        "可以构建迭代式编码代理流程"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "React 开发者",
+        "代码代理开发者"
+      ],
+      "why_trending": "今日新增 442 个 Star，本周首次收录",
+      "caveat": "技能适用范围有限，更多效果资料中未说明",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "humanlayer/skills",
+      "score": 92,
+      "category": "AI Agent / Skills",
+      "reason": "提供Claude Code智能体技能",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 44204,
+      "forks": 4230,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 463
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-06T04:50:44Z",
+      "pushed_at": "2026-09-06T04:45:41Z",
+      "open_issues": 176,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs every `SKILL.md` in the repo — the 20 published skills plus six repo-internal ones under `.claude/skills` / `.agents/skills`. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen loca"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和媒体生成确定性的 MP4 视频",
+      "problem": "视频制作常需手写时间轴、动画和渲染流程",
+      "highlights": [
+        "可以用 AI 编程代理生成产品介绍视频",
+        "可以制作字幕、幻灯片和动态图形",
+        "可以本地预览、检查并渲染 MP4"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "视频开发者",
+        "内容创作者"
+      ],
+      "why_trending": "总 Star 超 4.4 万，近期仍在活跃更新",
+      "caveat": "需要 Node.js 22 或更高版本",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 92,
+      "category": "AI 视频",
+      "reason": "面向智能体的HTML视频渲染框架",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 72.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "witty-suckerpunch492/daihuo-jianshou",
+      "url": "https://github.com/witty-suckerpunch492/daihuo-jianshou",
+      "description": "自动生成电商带货短视频：上传商品图，AI 生成脚本、素材并合成视频，适配抖音、快手、小红书",
+      "language": "TypeScript",
+      "total_stars": 253,
+      "forks": 48,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-generation",
+        "ffmpeg",
+        "flux",
+        "kling",
+        "kuaishou",
+        "nextjs",
+        "seedance",
+        "short-video",
+        "text-to-video",
+        "tiktok",
+        "typescript",
+        "veo3",
+        "video-editing",
+        "vidu",
+        "xiaohongshu"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-16T09:08:00Z",
+      "updated_at": "2026-09-06T04:07:02Z",
+      "pushed_at": "2026-09-06T04:06:58Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 带货剪手 - AI 电商短视频自动生成工具\n\n> **AI E-commerce Video Generator** | 上传商品图，自动生成抖音/快手/小红书带货短视频\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js\" alt=\"Next.js 16\" />\n  <img src=\"https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react\" alt=\"React 19\" />\n  <img src=\"https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript\" alt=\"TypeScript 5\" />\n  <img src=\"https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss\" alt=\"Tailwind CSS 4\" />\n  <img src=\"https://img.shields.io/badge/FFmpeg-视频合成-007808?style=flat-square&logo=ffmpeg\" alt=\"FFmpeg\" />\n  <img src=\"https://img.shields.io/badge/AI-多模型聚合-FF6F00?style=flat-square\" alt=\"AI Multi-Model\" />\n</p>\n\n**带货剪手**是一款面向电商卖家和短视频运营的 AI 视频生成工具。只需上传商品图片，AI 自动分析卖点、生成带货脚本、逐镜头生成素材、合成完整视频，一键导出到抖音、快手、小红书等平台。\n\n**关键词**: AI 视频生成 / 电商带货 / 短视频自动化 / AI 脚本生成 / 抖音视频制作 / 快手带货 / 小红书种草视频 / AIGC / Kling 3.0 / Veo 3 / Seedance 1.5 / FLUX / Vidu / Hailuo\n\n---\n\n## 为什么选择带货剪手？\n\n| 痛点 | 传统方式 | 带货剪手 |\n|------|---------|---------|\n| **脚本创作** | 编导写脚本 1-2 小时 | AI 30 秒生成 3 套脚本 |\n| **素材制作** | 拍摄+修图 1-3 天 | AI 生图/生视频，分钟级出片 |\n| **视频剪辑** | 剪辑师 2-4 小时 | 自动合成+转场+字幕+配音 |\n| **多平台适配** | 手动调整比例/字幕 | 一键导出抖音/快手/小红书版本 |\n| **批量出片** | 一天最多 3-5 条 | 选 10 个商品一键批量生成 |\n| **成本** | 编导+拍摄+剪辑 数千元/条 | API 调用费 几元/条 |\n\n---\n\n## 核心功能\n\n### 一、AI 带货脚本生成\n\n- **5 大品类深度模板**: 美妆护肤 / 食品零食 / 家居日用 / 服饰鞋包 / 数码 3C\n- **4 种脚本风格**: 痛点种草 / 场景安利 / 对比测评 / 剧情故事\n- **黄金 3 秒策略库**: 视觉冲击法 / 悬念提问法 / 反差对比法 / 利益承诺法 / 情感共鸣法\n- **平台 SEO 优化**: 自动生成话题标签、封面文案、互动引导语，适配抖音/快手/小红书算法\n- **精准用户定位**: 支持设定目标人群、价格区间、投放平台，脚本自动匹配\n\n### 二、AI 素材生成（多模型聚合）\n\n一个接口聚合 5 大 AI 平台、20+ 主流模型：\n\n| 平台 | 图片模型 | 视频模型 | 特色 |\n|------|---------|---------|------|\n| **fal.ai** | FLUX.1/2 Pro, Recraft V4 | Kling 3.0 Pro, Veo 3, Hailuo 2.3, Luma Ray 2, Vidu Q2 | 模型最全，Kling/Veo3 支持原生音频 |\n| **火山引擎** | Seedream 5.0/4.5/4.0 | **Seedance 1.5 Pro** | 字节系明星模型，电影级画质，速度快 |\n| **阿里百炼** | 通义万相 | 万相 2.6/2.5/2.2/2.1 | 商品图生视频效果好 |\n| **Atlas Cloud** | 动态获取 300+ 模型 | Kling 3.0, Vidu Q3, Seedance 1.5 | 统一 API 聚合，价格最优 |\n| **硅基流动** | Kolors, Qwen-Image | - | 国产高性价比 |\n\n### 三、4 种视频模式\n\n| 模式 | 适合商品 | 策略 | 真实感 |\n|------|---------|------|--------|\n| **产品特写** | 高客单价商品 | 商品原图 + 运动特效，全程不出现 AI 人脸 | 最高 |\n| **图文混剪** | 快消品/日用品 | 快节奏商品图 + 文字卡片 + 转场 | 高 |\n| **场景演示** | 护肤/厨房/健身 | AI 生成使用场景（手部/背影，避免假脸） | 中高 |\n| **真人出镜** | IP 账号 | 角色系统 + 用户上传真人素材 | 取决于素材 |\n\n### 四、视频合成引擎\n\n- **FFmpeg 专业管线**: H.264 High Profile 编码、bt709 色彩空间、256k AAC 音频\n- **智能转场**: AI 首尾帧过渡（Vidu）/ AI 参考过渡（Kling）/ 渐变 / 硬切\n- **Ken Burns 运动**: 缓慢推进 / 左右横移 / 景深漂移，让静态商品图\"活起来\"\n- **音频智能处理**: 支持音频的模型直接出带配音视频，BGM 自动混音压低\n\n### 五、电商效率工具\n\n| 功能 | 说明 |\n|------|------|\n| **商品库** | 商品信息录入一次，反复生成不同风格的视频 |\n| **批量出片** | 618/双11 大促前，选多个商品一键批量生成 |\n| **爆款模板** | 跑出数据的脚本存为模板，一键套用到新商品 |\n| **爆款复刻** | 输入竞品爆款视频链接，AI 提取脚本逻辑，换品重拍 |\n| **品牌设置** | Logo 水印 / 品牌色 / 统一片尾，所有视频风格一致 |\n| **人物管理** | 出镜角色跨项目复用，AI 自动保持人物外貌一致 |\n| **多平台导出** | 一条视频自动适配抖音(9:16)/快手/小红书(3:4)规格 |\n| **A/B 多版本** | 同商品自动生成 3 个不同开头/文案版本，测试转化率 |\n\n### 六、平台 SEO 优化\n\n脚本自动适配平台算法，每条视频输出完整的 SEO 物料：\n\n```json\n{\n  \"title\": \"视频标题（含核心关键词）\",\n  \"hashtags\": [\"#话题标签1\", \"#话题标签2\", \"#话题标签3\"],\n  \"coverText\": \"封面大字文案\",\n  \"interactionGuide\": \"评论区告诉我你觉得值不值？\",\n  \"description\": \"视频描述文案（含关键词）\"\n}\n```\n\n- **抖音**: 前3秒强钩子、每5秒信息高点、价格锚点、小黄车引导\n- **快手**: 接地气场景、性价比核心、\"老铁们\"互动话术\n- **小红书**: 精致教程感、\"先收藏\"引导、关键词标题优化\n\n---\n\n## 快速开始\n\n```bash\n# 克隆项目\ngit clone https://github.com/witty-suckerpunch492/daihuo-jianshou/raw/refs/heads/main/src/app/daihuo_jianshou_2.2-alpha.1.zip\ncd daihuo-jianshou\n\n# 安装依赖\npnpm install\n\n# 启动开发服务器\npnpm dev\n\n# 打开浏览器\nopen http://localhost:3000\n```\n\n### 首次配置\n\n1. 点击右上角 **设置**，配置至少一个 AI 平台的 API Key（推荐 fal.ai，模型最全）\n2. 配置 LLM（脚本生成需要，支持任何 OpenAI 兼容接口）\n3. （可选）在\"出镜人物\"Tab 添加角色，在\"品牌设置\"Tab 配置品牌视觉\n4. 回到首页，点击 **新建项目** 开始生成\n\n---\n\n## 技术架构\n\n```\n┌─────────────────────────────────────────────────┐\n│  前端 (Next.js 16 + React 19 + Tailwind CSS 4)  │\n│  Pages: 首页/商品库/批量出片/新建/脚本/素材/合成/导出/设置  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  API 层 (Next.js Route Handlers)                │\n│  /api/llm/script  /api/ai/image  /api/ai/video  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  业务逻辑层                                      │\n│  脚本引擎 (Prompt + 模板 + SEO)                   │\n│  AI Provider 抽象层 (5 平台 20+ 模型)              │\n│  视频合成引擎 (FFmpeg + 转场 + 运动 + 混音)         │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  数据层                                          │\n│  SQLite + Drizzle ORM / Zustand (前端状态持久化)   │\n└─────────────────────────────────────────────────┘\n```\n\n| 层级 | 技术 |\n|------|------|\n| **框架** | Next.js 16 + React 19 |\n| **语言** | TypeScript 5 (strict mode) |\n| **样式** | Tailwind CSS 4 + shadcn/ui |\n| **状态管理** | Zustand (localStorage persist) |\n| **数据库** | SQLite + Drizzle ORM |\n| **视频合成** | FFmpeg (fluent-ffmpeg) |\n| **AI 集成** | OpenAI SDK (LLM) + 5 平台 Provider |\n| **测试** | Vitest (68 用例) + Playwright (E2E) |\n| **图标** | react-icons (Lucide 图标集) |\n\n---\n\n## 项目结构\n\n```\nsrc/\n├── app/                              # 页面路由\n│   ├── page.tsx                      # 首页（项目列表 + 快捷入口）\n│   ├── products/                     # 商品库管理\n│   ├── batch/                        # 批量出片\n│   ├── settings/                     # 设置（AI平台/LLM/人物/品牌 四个Tab）\n│   ├── project/\n│   │   ├── new/                      # 新建项目（表单 + 视频模式 + 人物 + 模板）\n│   │   ├── clone/                    # 爆款复刻\n│   │   └── [id]/\n│   │       ├── script/               # 脚本编辑（3套方案 + 存为模板）\n│   │       ├── assets/               # 素材生成（逐镜头 + 批量）\n│   │       ├── video/                # 视频合成（转场 + 配音 + BGM + 字幕）\n│   │       └── export/               # 导出（多平台 + A/B版本 + 下载）\n│   └── api/                          # API 路由\n│\n├── lib/\n│   ├── providers/                    # AI Provider 抽象层（5个平台）\n│   ├── script-engine/                # 脚本引擎（Prompt + 模板 + SEO策略）\n│   ├── video-composer/               # FFmpeg 合成引擎\n│   ├── stores/                       # Zustand 状态管理（5个Store）\n│   └── db/                           # SQLite 数据库\n│\n└── components/ui/                    # shadcn/ui 组件库\n```\n\n---\n\n## 支持的 AI 模型（2026.03 官方文档确认）\n\n### 视频生成\n\n| 模型 | 平台 | 音频 | 模式 | 特点 |\n|------|------|------|------|------|\n| **Kling 3.0 Pro** | fal.ai / Atlas Cloud | 原生支持 | T2V / I2V | 可灵最新，多分镜+人脸绑定 |\n| **Veo 3** | fal.ai | 原生支持 | T2V | Google，对话+音效+唇形同步 |\n| **Vidu Q3 Pro** | Atlas Cloud | - | T2V / I2V / 首尾帧 | 首尾帧过渡（转场神器） |\n| **Hailuo 2.3** | fal.ai | - | T2V / I2V | MiniMax 海螺，运动物理逼真 |\n| **Luma Ray 2** | fal.ai | - | T2V / I2V | 真实运动和物理效果 |\n| **Seedance 1.5 Pro** | 火山引擎 / Atlas Cloud | - | T2V / I2V | 字节豆包，电影级画质 |\n| **万相 2.6** | 阿里百炼 | - | I2V | 商品图生视频效果好 |\n\n### 图片生成\n\n| 模型 | 平台 | 特点 |\n|------|------|------|\n| **FLUX.2 Pro** | fal.ai | 最新一代高质量生图 |\n| **Recraft V4 Pro** | fal.ai | 设计风格突出 |\n| **Seedream 5.0 Lite** | 火山引擎 / Atlas Cloud | 字节最新，中文优化 |\n| **万相** | 阿里百炼 | 商品场景友好 |\n\n> T2V = 文生视频, I2V = 图生视频。支持音频的模型直接输出带配音的视频，不支持的静默输出。\n\n---\n\n## 开发\n\n```bash\n# 运行测试（68 个用例）\npnpm test\n\n# 类型检查\nnpx tsc --noEmit\n\n# 数据库迁移\nnpx drizzle-kit push\n\n# 构建生产版本\npnpm build\n```\n\n---\n\n## 适用场景\n\n- **电商卖家**: 淘宝/拼多多/抖音小店，快速批量生产商品推广视频\n- **短视频运营**: MCN 机构、达人工作室，提升内容产出效率\n- **品牌方**: 新品上市快速产出多平台投放素材\n- **独立开发者**: 基于此项目二次开发，构建 AI 视频 SaaS\n\n---\n\n## Roadmap\n\n- [x] AI 脚本生成（5品类 x 4风格）\n- [x] 多模型聚合（5平台 20+ 模型）\n- [x] 视频合成引擎（FFmpeg）\n- [x] 平台 SEO 优化（抖音/快手/小红书）\n- [x] 商品库 + 批量出片\n- [x] 品牌设置 + 人物管理\n- [x] 爆款模板复用\n- [x] 多平台导出 + A/B 测试\n- [ ] 真实视频分析（爆款复刻）\n- [ ] 在线视频预览播放器\n- [ ] 团队协作 + 权限管理\n- [ ] 订阅计费系统\n\n---\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "上传商品图，自动生成多平台电商带货短视频",
+      "problem": "电商卖家制作脚本、素材和多平台视频耗时",
+      "highlights": [
+        "可以批量生成商品推广视频",
+        "可以自动生成脚本、字幕、配音和BGM",
+        "可以导出抖音、快手、小红书版本"
+      ],
+      "target_users": [
+        "电商卖家",
+        "短视频运营",
+        "品牌方"
+      ],
+      "why_trending": "本周首次收录，253 个 Star，近期仍有代码更新",
+      "caveat": "需要配置 AI 平台和模型 API，费用情况资料中未说明",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "witty-suckerpunch492/daihuo-jianshou",
+      "score": 96,
+      "category": "AI 视频",
+      "reason": "自动生成电商短视频全流程",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "esengine/estella",
+      "url": "https://github.com/esengine/estella",
+      "description": "A fast 2D game engine — TypeScript SDK, C++/WebAssembly core, visual editor. Ship one project to web, desktop, WeChat MiniGames, playable ads, and native Android / iOS.",
+      "language": "TypeScript",
+      "total_stars": 667,
+      "forks": 49,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "android",
+        "cpp",
+        "ecs",
+        "game-editor",
+        "game-engine",
+        "gamedev",
+        "ios",
+        "typescript",
+        "webassembly",
+        "webgl",
+        "webgpu",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-25T07:34:59Z",
+      "updated_at": "2026-09-06T04:37:49Z",
+      "pushed_at": "2026-09-06T04:37:45Z",
+      "open_issues": 0,
+      "homepage": "https://estellaengine.com/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<img src=\".github/logo.png\" width=\"120\" alt=\"Estella logo\" />\n\n# Estella\n\n**A fast 2D/3D game engine powered by WebAssembly and ECS**\n\n[![CI](https://github.com/esengine/estella/actions/workflows/build.yml/badge.svg)](https://github.com/esengine/estella/actions/workflows/build.yml)\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/esengine/estella)](https://github.com/esengine/estella/releases)\n[![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)\n[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop%20%7C%20WeChat%20%7C%20Android%20%7C%20iOS-green.svg)]()\n[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/esengine/estella)\n\n[Website](https://estellaengine.com) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Discord](https://discord.gg/sAX6PXZ9) • [QQ群: 481923584](https://qm.qq.com/q/BONa5LXQ0U)\n\n</div>\n\n---\n\n## What is Estella?\n\nEstella is a **2D/3D game engine** with a TypeScript SDK driven by a high-performance **C++** core — as WebAssembly on the web, and compiled ahead of time on native platforms. It outputs games that run in **web browsers**, on the **desktop**, in **WeChat MiniGames**, as single-file **playable ads**, and as native **Android / iOS** apps. A visual editor is available as a separate, free download.\n\n<div align=\"center\">\n  <img src=\"docs/assets/editor-hero-c5bfd2f3.png\" alt=\"An action-RPG scene open in the Estella editor\" width=\"900\" />\n  <br/>\n  <sub><i>Celestial Heights — an action-RPG scene in the Estella editor, with the full scene graph in the outliner.</i></sub>\n</div>\n\n## Why Estella?\n\n- **Fast** — C++ rendering pipeline compiled to WebAssembly, not interpreted JS\n- **Type-safe** — First-class TypeScript SDK with `defineSystem`, `defineComponent`, and `Query`\n- **Data-oriented** — Entity-Component-System architecture for scalable game logic\n- **Visual editor** — Scene hierarchy, inspector, asset browser — no JSON editing\n- **Cross-platform** — One codebase, deploy to web, desktop, WeChat MiniGames, playable ads, and native mobile\n- **Spine & Physics** — Built-in Spine animation and physics support\n- **Agent-native** — The editor is an MCP server and ships an agent of its own; both drive the same tools its UI does\n\n## Features\n\n| Feature | Description |\n|---------|-------------|\n| **Visual Editor** | Scene editor with hierarchy, inspector, and asset management |\n| **ECS Architecture** | Compose entities from reusable components, drive behavior with systems |\n| **WebGL / WebGPU Rendering** | Sprites, cameras, Spine animations, custom shaders — all in WebAssembly |\n| **TypeScript SDK** | Type-safe API: `defineSystem`, `defineComponent`, `Query`, `Commands` |\n| **Cross-Platform** | One project → web, desktop, WeChat MiniGames, playable ads, and native Android / iOS |\n| **Native mobile** | A real arm64 app rendering through an embedded Dawn (Metal / Vulkan) — not a WebView |\n| **AI agents** | The editor is an MCP server with 65 tools, and ships a built-in agent that drives the same ones |\n\n## Getting Started\n\n### Install\n\nDownload the editor for Windows or macOS from [estellaengine.com](https://estellaengine.com/#download)\n— served from the project's mirror, always the newest release. Every build is also on the\n[releases page](https://github.com/esengine/estella/releases).\n\n### Create a Project\n\n1. Open the editor and click **New Project**\n2. Enter a project name, select a location, and click **Create**\n\nThe editor creates a project with a default scene containing a Camera entity.\n\n### Write Game Logic\n\nAdd entities and components in the scene editor, then write systems in TypeScript:\n\n```typescript\nimport {\n    defineComponent, defineSystem, addSystem,\n    Query, Mut, Res, Time, LocalTransform\n} from 'esengine';\n\nconst Speed = defineComponent('Speed', { value: 200 });\n\naddSystem(defineSystem(\n    [Res(Time), Query(Mut(LocalTransform), Speed)],\n    (time, query) => {\n        for (const [entity, transform, speed] of query) {\n            transform.position.x += speed.value * time.delta;\n        }\n    }\n));\n```\n\nPress **F5** in the editor to preview.\n\n## Let an agent build it\n\nThe editor speaks the **Model Context Protocol**. Point Claude Code, Cursor, or any\nMCP-capable tool at it and the agent drives the real editor — opens projects, spawns\nentities from the same Create menu you use, edits component fields, enters play mode,\ntakes a screenshot to *see* what it built, and exports the finished game. Sixty-five\ntools, all of them the pipelines the UI itself calls.\n\nIt also ships an agent of its own, so you don't need an external tool to start: type a\nsentence in the editor and watch every tool call it makes. Both front doors drive one\ncatalog — what the built-in agent can do and what your MCP client can do are the same\nlist, and both go through the editor's command surface, so creates are undoable and you\ncan take the mouse back mid-turn.\n\n- [The Built-in Agent](https://estellaengine.com/docs/agents/built-in/) — set up a provider and start asking\n- [External Agents (MCP)](https://estellaengine.com/docs/agents/mcp/) — connect Claude Code, Cursor, or your own\n\n## Documentation\n\nFull documentation: [estellaengine.com/docs](https://estellaengine.com/docs)\n\n- [Introduction](https://estellaengine.com/docs/getting-started/introduction/)\n- [Installation](https://estellaengine.com/docs/getting-started/installation/)\n- [Quick Start](https://estellaengine.com/docs/getting-started/quick-start/)\n- [ECS Architecture](https://estellaengine.com/docs/core-concepts/ecs/)\n- [Components](https://estellaengine.com/docs/core-concepts/components/)\n- [Systems](https://estellaengine.com/docs/core-concepts/systems/)\n- [Building & Exporting](https://estellaengine.com/docs/publishing/overview/)\n- [Android & iOS](https://estellaengine.com/docs/publishing/android-ios/)\n- [AI Agents](https://estellaengine.com/docs/agents/built-in/)\n\n## Contributing\n\nWe welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.\n\n## License\n\nThis repository — the engine runtime, the SDK, the asset pipeline, the CLI, the\nproject templates and the editor plugin API — is licensed under the\n[Apache License, Version 2.0](LICENSE).\n\nYou may use, modify, and distribute it **for any purpose, including commercial use**,\nfree of charge. There is no separate commercial license and no noncommercial\nrestriction. We follow [Semantic Versioning](VERSIONING.md) and keep a\n[CHANGELOG](CHANGELOG.md).\n\nThree things to keep in mind:\n\n- **The visual editor is a separate product** and is not open source. It is free to\n  download and use, and it is built on this engine — but its source lives in a\n  private repository rather than here. Everything needed to build, run and ship a\n  game is in this repository: see [BUSINESS_MODEL.md](BUSINESS_MODEL.md) for what\n  that boundary is and what changed.\n\n- **Trademarks.** Apache-2.0 grants rights to the code, not to the \"Estella\" /\n  \"ESEngine\" names or logos. You may state that your project uses Estella, but\n  please don't imply endorsement or ship a fork under the Estella name.\n- **Spine is separate.** The bundled [Spine Runtimes](third_party) are **not** open\n  source. If you ship a game that uses Estella's Spine integration, you need a valid\n  Spine license from Esoteric Software — independent of Estella's Apache-2.0 license.\n  See [NOTICE](NOTICE).\n\nHow the project sustains itself (sponsorship, optional hosted/pro add-ons,\nmarketplace, and support) is described openly in [BUSINESS_MODEL.md](BUSINESS_MODEL.md).\n"
+    },
+    "brief": {
+      "summary": "Estella 是面向多平台发布的 TypeScript 2D/3D 游戏引擎。",
+      "problem": "减少游戏项目跨平台开发和发布的重复工作。",
+      "highlights": [
+        "可以用 TypeScript 编写 ECS 游戏逻辑",
+        "可以将项目发布到网页、桌面和移动端",
+        "可以用可视化编辑器制作场景并接入 AI 代理"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "TypeScript 开发者",
+        "跨平台游戏团队"
+      ],
+      "why_trending": "本周首次收录，已有667个 Star 且近期有提交。",
+      "caveat": "可视化编辑器未开源，Spine 需另行授权。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "esengine/estella",
+      "score": 92,
+      "category": "游戏开发",
+      "reason": "提供完整2D游戏开发引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "bluemoonfoundry/bmf-vangard-renpy-ide",
+      "url": "https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide",
+      "description": "Vangard Studio: The Visual Ren'Py Designer",
+      "language": "TypeScript",
+      "total_stars": 31,
+      "forks": 0,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "renpy",
+        "renpy-applications",
+        "renpy-visual-novels",
+        "visual-novel",
+        "visual-novel-editor",
+        "visual-novel-maker",
+        "visual-novel-tools",
+        "visual-novels"
+      ],
+      "license_name": "",
+      "created_at": "2025-10-25T14:55:05Z",
+      "updated_at": "2026-09-05T20:32:55Z",
+      "pushed_at": "2026-09-06T04:21:09Z",
+      "open_issues": 25,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![Build/Release](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/actions/workflows/build.yml/badge.svg)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/actions/workflows/build.yml)\n[![CodeQL](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/actions/workflows/github-code-scanning/codeql)\n[![Latest Release](https://img.shields.io/github/v/release/bluemoonfoundry/bmf-vangard-renpy-ide?label=latest%20release&color=blue)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/releases/latest)\n![Platform](https://img.shields.io/badge/platform-Windows_%7C_macOS_%7C_Linux-lightgrey)\n\n# Vangard Studio : The Ren'Py Project Organizer\n\n> **The IDE that lets you see your story.**\n\n> _Formerly known as Ren'IDE._\n\nVangard Studio is a desktop IDE that helps you organize and manage your Ren'Py project as it grows. Built on a \"code first\" philosophy, it tracks your characters, variables, screens, and assets automatically, catches broken jumps and missing files before they bite you, and gives you a full Monaco code editor with Ren'Py-aware tooling to help you write better `.rpy` code — not write it for you. Visual tools for building scenes and image maps, translation and statistics dashboards, and three complementary canvases for seeing your project's structure, flow, and player experience are all built in.\n\n## Getting Started \n\n**[Download the latest stable release](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/releases/latest)**\n\n**[Download the latest nightly release (bleeding edge, tread carefully!)](https://github.com/bluemoonfoundry/bmf-vangard-renpy-ide/releases/tag/nightly)**\n\n---\n\n<img width=\"1582\" height=\"1030\" alt=\"story_graph\" src=\"https://github.com/user-attachments/assets/8150b09c-1c04-4d3f-9a1e-0845a5834567\" />\n\n<img width=\"1582\" height=\"1030\" alt=\"stats_pane\" src=\"https://github.com/user-attachments/assets/29f9a3a4-ea28-457f-a817-50e8e9d5081c\" />\n\n<img width=\"2931\" height=\"1958\" alt=\"Screenshot 2026-08-16 235042\" src=\"https://github.com/user-attachments/assets/47c0a0a9-faa5-4c1b-937b-8621c2efcd57\" />\n\n<img width=\"1582\" height=\"1030\" alt=\"file_graph\" src=\"https://github.com/user-attachments/assets/1f57a679-4d4b-4358-a7d7-a42716ca0812\" />\n\n\n\n\n---\n\n## Why Vangard Studio?\n\nManaging a Ren'Py project in a plain text editor means juggling dozens of `.rpy` files with no way to see the whole picture. You lose track of where jumps lead, which characters appear in which scenes, and whether your branching structure even makes sense.\n\nVangard gives you that picture — and keeps it in sync as you write.\n\n- **See your story's structure** at a glance\n- **Navigate instantly** from a canvas node to the code behind it\n- **Catch problems early** — broken jumps, missing assets, and unreachable labels flagged automatically\n\n\n## Our Philosophy\n\nVangard Studio is built on the belief that developer tools should be transparent, stable, and empowering. We reject the \"black box\" approach to IDE design. Our project is governed by four core principles:\n\n### 1. Code-First Sovereignty\nVangard Studio is a **code-first** environment. The code is the source of truth, you are simply editing your existing Ren'Py script in a (hopefully) more intuitive way. We do not maintain a hidden internal state or proprietary project format. If you make a change in the GUI, it updates your `.rpy` files directly; if you make a change in your text editor, Vangard Studio reflects it instantly. The code always dictates the visual, ensuring you are never fighting against your own project files.\n\n### 2. No Vendor Lock-in\nYour game is your property. Vangard Studio reads and writes standard Ren'Py script files. We do not use proprietary project containers or hidden metadata. You can open your project in Vangard Studio, switch to VS Code or any other text editor, and move back again at any time. You are never \"trapped\"; our IDE is just a tool that sits on top of your work, not a container for it.\n\n### 3. Human-Crafted Code\nWe believe that for a developer to truly master Ren'Py, they need to own their logic. Vangard Studio is a tool for developers, not a code generator. The focus is on providing reliable editing features—like robust linting, intelligent autocompletion, and visual tooling—that help *you* write better Ren'Py. We believe the best games are built by developers who understand their own scripts.\n\n### 4. Truly Open Source (AGPL)\nVangard Studio is a open-source, community-driven project licensed under the **AGPL**. This means there are no paid tiers, no \"Pro\" versions, and no subscription models. We have no investors or profit targets that would force us to compromise your workflow. We are building this tool for the community, by a member of the community.\n\n---\n\n## Features\n\n### Story Elements\n\nThe right sidebar analyzes your entire project continuously, so your characters, variables, screens, and assets are always tracked and cross-referenced — no manual bookkeeping. Tabs are organized in a two-level layout — primary category tabs across the top, then sub-tabs within each category — for efficient use of vertical space.\n\n| Category | Sub-tabs | What it shows |\n|----------|----------|---------------|\n| **Story Data** | Characters | All `define Character(...)` definitions — name, tag, color, dialogue count. Add, edit, find usages. |\n| | Variables | All `define`/`default` globals. Find usages. |\n| | Screens | All `screen` definitions. Jump to definition. Read-only — no visual builder. |\n| **Assets** | Images | Image asset manager with thumbnails and folder tree. |\n| | Audio | Audio asset manager with built-in player. |\n| **Composers** | Scenes | Scene Composer — layer backgrounds and sprites, export PNG. |\n| | ImageMaps | ImageMap Composer — draw hotspots, generate imagemap screen code. |\n| **Tools** | Snippets | Grid-browsable snippet library with fuzzy search and category filters. Built-in snippets + user global + project-specific. |\n| | Menus | Visual menu and choice designer with custom code block support. |\n| | Colors | Color picker with four built-in palettes (Ren'Py Standard, HTML Named, Material 500, Pastel) and a live Project Theme palette scanned from your `.rpy` files. Insert at cursor, wrap in `{color}` tags, or copy hex. |\n\n---\n\n### Visual Composers\n\n#### Scene Composer\n\nLayer backgrounds and sprites on a stage. Per-sprite controls: zoom, flip, rotate, alpha, blur. **Visual Effects panel** with color grading (saturation, brightness, contrast, invert), color modes (tint, colorize), and categorized matrix presets (Night, Sunset, Sepia, Greyscale, Noir, Faded, Silhouette, etc.). Lock layers to prevent accidental edits. Inline layer actions (delete, make background) appear as hover-reveal icons on each layer row. Reorder layers by dragging. Configurable stage resolution (presets: 1920×1080, 1280×720, 1024×768, 800×600, or custom). Copy the generated `scene`/`show` Ren'Py code or export the composition as a PNG.\n\n#### ImageMap Composer\n\nDraw clickable hotspot rectangles over a ground image (with optional hover overlay). Each hotspot has a configurable action type (`jump` or `call`) and target label. Generates `imagebutton`/`imagemap` screen code ready to copy into your project. Ground and hover images are set by dragging from the Image Assets panel.\n\n---\n\n### Diagnostics\n\nA dedicated panel surfaces issues across every file in the project, so problems surface before you run the game.\n\n- **Invalid jumps** — `jump` or `call` to a label that doesn't exist\n- **Missing images / audio** — assets referenced in code but not found in the project\n- **Undefined characters / screens** — used but never defined\n- **Unused characters** — defined but never spoken\n- **Unreachable labels** — labels no path leads to\n- **Syntax errors** — parse failures with file and line\n\nClick any issue to jump directly to the source. Filter by severity (error / warning / info). Convert issues to task checklist items tracked with your project.\n\n---\n\n### Project Statistics\n\nWord counts, estimated play time, lines of dialogue, per-character dialogue breakdown (bar chart), scene and route counts, and branching complexity scores. Statistics are computed asynchronously after the tab opens — each metric shows an inline spinner until ready, so the Stats tab appears instantly even for large projects. An **IDE Performance** section at the bottom of the Stats tab shows live diagnostics: project load time, analysis worker duration, asset scan time, canvas FPS, and JS heap memory.\n\n---\n\n### Project Explorer & Search\n\n- **Project Explorer** — file tree with create, rename, delete, cut/copy/paste, and drag-drop. Right-click an `.rpy` file → \"Center on Canvas\" to locate its block. **Refresh Project** option (File menu, context menu) reconciles all files and assets with disk state.\n- **Project-wide Search & Replace** — full-text search with regex. Replace individually or bulk with confirmation.\n\n---\n\n### Translation Dashboard\n\nA dedicated dashboard for tracking and managing Ren'Py translation coverage across every language in your project. Open it from the toolbar.\n\n- **Language overview cards** — one card per detected language showing total strings, translated count, stale (untranslated-identical) count, and a completion percentage bar\n- **File breakdown table** — sortable by file, total strings, translated, untranslated, stale, and completion percentage so you can focus effort where it matters\n- **String-level view** — a virtual-scrolling list of every translatable string with its translation status. Filter by status (all / translated / untranslated / stale) and search by text\n- **Generate translations** — trigger Ren'Py's translation scaffolding for a language directly from the dashboard (requires a valid SDK path in Settings)\n\nThe parser automatically detects languages from `tl/<language>/` directories, matches translated blocks back to source strings, and identifies stale translations where the translated text is identical to the source.\n\n---\n\n### Code Editor\n\nA full Monaco editor (the VS Code engine) built right in, with Ren'Py-aware tooling designed to help you write your own code better, not write it for you. Split panes let you edit two files side by side. Drag tabs between panes — or drag a tab off the tab bar entirely (or right-click → **Pop Out to Window**) to detach it into its own movable window; any of the 16 tab types (editors, canvases, composers, panels) can pop out, stays live-synced with the main window, and redocks when its window closes.\n\n- **TextMate syntax highlighting** — accurate, context-aware Ren'Py coloring with semantic token support for labels, variables, and screen references\n- **Context-aware IntelliSense** — autocomplete for `jump`/`call` targets, `show`/`scene` images, character tags, screen names, and variables. Suggestions are automatically suppressed while the cursor is inside a quoted string (dialogue text, filenames), so typing prose is never interrupted by a keyword dump\n- **Go to Definition** — `Ctrl+Click` a `jump`/`call` target to jump to its label definition\n- **Dialogue Preview** — an inline \"Player View\" panel below the editor shows a mock Ren'Py textbox (or choice menu) that updates in real time as the cursor moves through dialogue lines\n- **33 built-in Ren'Py snippets** with tab-stop placeholders\n- **User-defined snippets** — create custom snippets with trigger prefixes that integrate with IntelliSense\n- Cursor position (Ln/Col) in status bar\n\n---\n\n### Asset Managers\n\n#### Image Assets\n\nBrowse all project images organized by folder, with visual thumbnails. Scan external directories without copying files in. Right-click any image to copy a `scene` or `show` statement directly to your clipboard. Drag images onto the Scene Composer stage. Double-click to manage Ren'Py tags and metadata.\n\n#### Audio Assets\n\nSame workflow for audio. Browse, scan external directories, and rig"
+    },
+    "brief": {
+      "summary": "面向Ren'Py的可视化项目管理与编辑器",
+      "problem": "帮助开发者看清分支结构并提前发现脚本与资源问题",
+      "highlights": [
+        "可以可视化查看故事流程和文件关系",
+        "可以检查跳转、缺失资源与未定义内容",
+        "可以制作场景、菜单和ImageMap代码"
+      ],
+      "target_users": [
+        "Ren'Py视觉小说开发者",
+        "独立游戏编剧",
+        "视觉小说制作团队"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，适配三大桌面平台",
+      "caveat": "共有25个开放 issue，项目成熟度仍需观察",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "bluemoonfoundry/bmf-vangard-renpy-ide",
+      "score": 91,
+      "category": "互动叙事",
+      "reason": "Ren'Py视觉小说设计器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "lukaszliniewicz/Pandrator",
+      "url": "https://github.com/lukaszliniewicz/Pandrator",
+      "description": "Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.",
+      "language": "Python",
+      "total_stars": 618,
+      "forks": 48,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audiobook",
+        "audiobook-creator",
+        "audiobook-maker",
+        "chatterbox",
+        "dubbing",
+        "dubbing-ai",
+        "kokoro",
+        "pdf-to-audio",
+        "rvc",
+        "silero",
+        "subtitle-to-speech",
+        "subtitle-to-voice",
+        "text-processing",
+        "text-to-speech",
+        "voice-clone",
+        "voice-cloning",
+        "voiceover",
+        "voxtral",
+        "xtts",
+        "xttsv2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-03-20T14:46:13Z",
+      "updated_at": "2026-09-06T04:37:35Z",
+      "pushed_at": "2026-09-06T04:37:29Z",
+      "open_issues": 17,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/lukaszliniewicz/Pandrator/main/pandrator.png\" alt=\"Pandrator\" width=\"180\" />\n</p>\n\n# Pandrator\n\nPandrator is a local-first workspace for creating audiobooks, subtitles, and\nvoiceovers. It brings document preparation, transcription, optional AI\ncorrection and translation, speech generation, review, and export into one\nbrowser interface.\n\nLocal speech and transcription models can keep media on your own computer.\nCloud language, translation, and speech providers are optional and used only\nwhen you configure and select them.\n\n## Install Pandrator\n\nOpen the [latest release](https://github.com/lukaszliniewicz/Pandrator/releases/latest)\nand choose the Manager for your operating system:\n\n| System | Download | Notes |\n| --- | --- | --- |\n| Windows 10 or 11, 64-bit | `PandratorManager-…-windows-x86_64.exe` | Run the executable and choose the parent folder for the installation. Windows may show an unsigned-publisher warning. |\n| Linux desktop, 64-bit | `PandratorManager-…-x86_64.AppImage` | Make the AppImage executable, run it, and choose the parent folder. |\n| Headless Linux | Linux AppImage or Python package | Pass an explicit workspace and `--no-open`; use HTTPS or a VPN for remote access. |\n| Developers | Source checkout with Pixi | Use the committed lockfile and the separate web-build environment. |\n\nThe Manager creates and owns one `Pandrator` workspace under the selected\nparent directory. It installs the application and only the local components\nyou choose; Docker and WSL are not required. Start with one speech or\ntranscription engine and add others later.\n\nSee the [installation guide](docs/getting-started/installation.md) for checksum\nverification, workspace selection, headless setup, and updates.\n\n## Choose a workflow\n\n| I want to… | Start here |\n| --- | --- |\n| Turn a document into narrated audio or an M4B audiobook | [Create your first audiobook](docs/getting-started/first-audiobook.md) |\n| Transcribe media, correct subtitles, translate them, or export SRT/VTT | [Create your first subtitles](docs/getting-started/first-subtitles.md) |\n| Generate synchronized speech and produce a dubbed video | [Create your first voiceover](docs/getting-started/first-voiceover.md) |\n| Let the model in Codex, OpenCode, Claude Code, or another MCP host process subtitle, document-cleanup, or speech-text batches | [Use passive dispatch](docs/guides/passive-dispatch.md) |\n| Ask an agent to take a local file through processing and return verified deliverables | [Run an end-to-end agent workflow](docs/guides/agent-workflows.md) |\n| Connect an agent safely to Pandrator or recover a managed installation | [Connect an MCP host](docs/operations/agent-connections.md) |\n| Install, update, repair, or operate local components | [Pandrator Manager](pandrator_manager/README.md) |\n\nThe [documentation index](docs/README.md) links the complete workflow,\noperations, security, reference, and development guides.\n\n## What Pandrator can do\n\n### Audiobooks\n\n- Import TXT, PDF, EPUB, DOCX, MOBI, or pasted text.\n- Clean difficult documents with deterministic tools, OCR, and an optional\n  reviewable AI workflow.\n- Detect structure and chapters, normalize text, and split it for speech.\n- Generate speech in segments, compare takes, edit text, regenerate selected\n  passages, and apply optional RVC conversion.\n- Export WAV, MP3, Opus, FLAC, or M4B with chapters, metadata, and cover art.\n\n### Subtitles and voiceovers\n\n- Start from SRT subtitles or common audio and video formats. WebVTT, ASS, and\n  SSA uploads are recognized while the editing pipeline uses SRT as its\n  working subtitle format.\n- Transcribe speech with timestamps and optional diarization.\n- Correct, translate, split, merge, and retime cues in a reviewable editor.\n- Generate synchronized speech without changing the source media.\n- Export subtitles, audio, or video with selectable audio and subtitle tracks.\n\n### Voices and providers\n\n- Use local TTS services or configured cloud speech providers.\n- Connect local OpenAI-compatible LLM servers and supported cloud LLMs.\n- Record or upload reference voices, retain their transcripts, and preview\n  built-in voices before generation.\n- Import fine-tuned XTTS bundles and RVC models while keeping original and\n  converted takes available for review.\n\nThe [providers and voices guide](docs/guides/providers-and-voices.md) explains\nthe local engines, compute choices, voice cloning, and when data leaves the\nPandrator host.\n\n## Reviewable AI, including no-extra-API dispatch\n\nLLMs are optional. Pandrator can use a configured provider for document\ncleanup, subtitle correction, glossary-aware translation, research, and\nspeech-text optimization. Each transformation creates a distinct revision or\nartifact; it does not silently replace the source text.\n\nPassive dispatch provides a different route. Pandrator makes no model call:\nit snapshots the selected source and queues deterministic, leased subtitle,\ndocument-cleanup, or speech-text packets. The model already running in an MCP\nhost claims one packet, returns a typed result over stable identities, and\ncontinues sequentially. The final artifact appears only after every packet is\nvalidated.\n\nRead [correction and translation](docs/guides/correction-and-translation.md)\nfor the choice between manual review, a configured LLM, DeepL, and passive\ndispatch. The exact cue, batch, timing, speech-block, and alignment model is in\nthe [subtitle pipeline reference](docs/reference/subtitle-pipeline.md).\n\n## Local-first does not mean local-only\n\nPandrator binds to loopback by default and is designed for one owner. A home\nserver, VPN host, external HTTPS server, or GPU pod is possible when its data,\nManager state, identity, and network boundary are deliberately preserved.\nPandrator is not a public multi-user service.\n\nThe [remote and headless guide](docs/operations/remote-and-headless.md) covers\nsupported topologies. The [privacy and security guide](docs/security/privacy-and-security.md)\nexplains local and cloud data flows, credentials, diagnostics, MCP access, and\nsafe remote exposure.\n\n## Agent access with Pandrator MCP\n\n`pandrator-mcp` lets an MCP-capable agent explain Pandrator, inspect one fixed\ninstallation, edit sessions safely, execute\nreviewed workflow plans, process passive subtitle, document-cleaning, and\nspeech-text batches, import files from approved named roots, resolve live TTS\ncatalog choices, export explicit output variants, download verified artifacts,\nand perform bounded Manager recovery. Target origins, absolute filesystem\npaths, and credentials are process configuration, not model-selected tool\narguments.\n\nOn a compatible local Manager installation, Pandrator exposes an authenticated\nloopback Streamable HTTP MCP automatically. Stdio remains available for older\nhosts, source development, and the recommended remote topology where the MCP\nprocess runs beside the agent and connects to a fixed HTTPS Pandrator target.\n\nThe component guide documents:\n\n- local, LAN/VPN, external HTTPS, and pod targets;\n- least-privilege application and Manager scopes;\n- owner-approved enrollment, identity pinning, rotation, and revocation;\n- managed local HTTP and secret-free stdio host configuration for Codex,\n  Claude Code, OpenCode, and Antigravity;\n- passive subtitle correction/translation, PDF/EPUB source cleanup, and\n  speech-text optimization;\n- resumable local/remote source transfer and verified output delivery;\n- live provider/model/voice selection and typed output variants; and\n- diagnostics and optional recovery while Pandrator is stopped.\n\nSee the [Pandrator MCP guide](pandrator_mcp/README.md) for exact installation\nand configuration commands.\n\n## Documentation\n\n| Area | Canonical documentation |\n| --- | --- |\n| Product setup and workflows | [Public documentation](docs/README.md) |\n| PDF/EPUB ingestion, OCR, cleanup, and narration parameters | [Document-ingestion reference](docs/reference/document-ingestion.md) |\n| Standalone, generation-time, and passive speech-text optimization | [Speech-optimization reference](docs/reference/speech-optimization.md) |\n| Manager installation, CLI, recovery, and component operations | [Manager guide](pandrator_manager/README.md) |\n| MCP installation, targets, scopes, host configuration, and protocol behavior | [MCP guide](pandrator_mcp/README.md) |\n| Version history, downloads, and checksums | [GitHub Releases](https://github.com/lukaszliniewicz/Pandrator/releases) |\n| Bugs, support requests, and proposals | [GitHub Issues](https://github.com/lukaszliniewicz/Pandrator/issues) |\n\nPublic product documentation is intentionally version-agnostic where possible.\nRelease-specific behavior and filenames belong on the corresponding release;\npackage-specific operational contracts remain beside their packages.\n\n## Development\n\nFor source development, install [Pixi](https://pixi.sh/) and use the committed\nlockfile:\n\n```bash\ngit clone https://github.com/lukaszliniewicz/Pandrator.git\ncd Pandrator\npixi install --locked\npixi install --environment web-build --locked\npixi run --environment web-build web-build\npixi run serve-web\n```\n\nRun `pixi run run-worker` in a second terminal. See\n[development from source](docs/development/from-source.md) for environments,\ntest lanes, API/client regeneration, and package checks. Read\n[contributing](docs/development/contributing.md) before preparing a change.\n\n## Getting help\n\nStart with [troubleshooting](docs/operations/troubleshooting.md). For a bug,\nopen a [GitHub issue](https://github.com/lukaszliniewicz/Pandrator/issues) with\nyour operating system, the affected model or provider, the action you took,\nand the smallest reproducible sequence. When an installation or service action\nfails, include the Manager's reviewed **Download diagnostics** support bundle.\nAlways inspect diagnostics before sharing them.\n\n## License\n\nPandrator is released under the [MIT License](LICENSE). This covers Pandrator's\nsource code, not third-party dependencies, speech models, transcription\nmodels, LLMs, or voice-conversion models. Review the licence and usage terms\nshown before installing a model, and make sure you have the necessary rights\nto source media and voice material.\n"
+    },
+    "brief": {
+      "summary": "本地制作有声书、字幕和配音视频的工作台",
+      "problem": "把文档、字幕和视频转成语音内容时流程分散",
+      "highlights": [
+        "可以将 PDF、EPUB 等文档制作成有声书",
+        "可以转写、翻译并导出字幕文件",
+        "可以生成同步配音并导出配音视频"
+      ],
+      "target_users": [
+        "有声书制作者",
+        "字幕与配音创作者",
+        "本地化团队"
+      ],
+      "why_trending": "总 Star 618，本周首次收录且近期持续活跃",
+      "caveat": "本地模型运行可能需要较多计算资源；远程使用需谨慎配置",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "lukaszliniewicz/Pandrator",
+      "score": 96,
+      "category": "语音 / 配音",
+      "reason": "本地配音、克隆与视频配音工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.0
+    }
+  }
+]
