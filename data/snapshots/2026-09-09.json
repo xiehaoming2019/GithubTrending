@@ -1,0 +1,552 @@
+[
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 47927,
+      "forks": 4402,
+      "stars_today": 2627,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 3723
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-09T04:50:39Z",
+      "pushed_at": "2026-09-09T04:48:30Z",
+      "open_issues": 88,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs every `SKILL.md` in the repo — the 20 published skills plus six repo-internal ones under `.claude/skills` / `.agents/skills`. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen loca"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和动画生成确定性的 MP4 视频",
+      "problem": "降低用代码制作、预览和渲染短视频的门槛",
+      "highlights": [
+        "可以把网页视觉转成 MP4 视频",
+        "可以让 AI Agent 按工作流制作动效视频",
+        "可以为视频加入字幕、图表和背景音乐"
+      ],
+      "target_users": [
+        "前端开发者",
+        "视频创作者",
+        "AI Agent 用户"
+      ],
+      "why_trending": "今日新增 2627 个 Star，累计 47927 个 Star，近期持续更新",
+      "caveat": "需要 Node.js 22 及以上，渲染细节资料中未说明",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 94,
+      "category": "AI 视频",
+      "reason": "为代理生成和渲染视频",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "ayghri/i-have-adhd",
+      "url": "https://github.com/ayghri/i-have-adhd",
+      "description": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+      "language": "Python",
+      "total_stars": 31201,
+      "forks": 1884,
+      "stars_today": 656,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 656
+    },
+    "details": {
+      "topics": [
+        "adhd",
+        "claude-",
+        "claude-code-plugin",
+        "claude-skills",
+        "developer-tools",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-13T20:42:06Z",
+      "updated_at": "2026-09-09T04:54:20Z",
+      "pushed_at": "2026-09-08T17:08:54Z",
+      "open_issues": 33,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"./logo.png\" alt=\"i-have-adhd\" width=\"140\" />\n</p>\n<p align=\"center\">\n  <strong align=\"center\">ADHD-friendly outputs. No ADHD diagnosis needed!</strong>\n</p>\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/github/license/ayghri/i-have-adhd?style=flat\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\">\n  <strong title=\"English\" aria-label=\"English\">🇬🇧</strong> ·\n  <a href=\".github/readme/README.zh-CN.md\" title=\"简体中文\" aria-label=\"简体中文\">🇨🇳</a> ·\n  <a href=\".github/readme/README.pt-BR.md\" title=\"Português (Brasil)\" aria-label=\"Português (Brasil)\">🇧🇷</a> ·\n  <a href=\".github/readme/README.ja.md\" title=\"日本語\" aria-label=\"日本語\">🇯🇵</a> ·\n  <a href=\".github/readme/README.vi.md\" title=\"Tiếng Việt\" aria-label=\"Tiếng Việt\">🇻🇳</a> ·\n  <a href=\".github/readme/README.ko.md\" title=\"한국어\" aria-label=\"한국어\">🇰🇷</a> ·\n  <a href=\".github/readme/README.th.md\" title=\"ภาษาไทย\" aria-label=\"ภาษาไทย\">🇹🇭</a>\n</p>\n\n\n## Install\n\nCopy/paste into your CLI prompt:\n\n```text\nInstall the i-have-adhd skill/plugin from https://github.com/ayghri/i-have-adhd, refer to the repo's AGENTS.md for instructions.\n```\n\nOr 🔗 [check the installation instructions](INSTALL.md).\n\n## What it does\n\nA skill for your coding assistant that stops it from burying the answer. Action first. Steps numbered. No \"Hope this helps!\"\n\n\n## What changes\n\n\n<table>\n<tr>\n<td width=\"50%\">\n\n## Before\n\n> Great question! Let me think about this. Your auth flow has a few moving pieces: the middleware, the token verification, and the cookie handling. Looking at `src/auth.ts`, the `verifyToken` function (around lines 42-58) seems to be using an older `jsonwebtoken` API. One approach would be to update the package and rewrite that function. After making the change, you'd want to run the auth tests to confirm nothing breaks. By the way, you might also want to look at your dependency versions overall. Hope this helps! Let me know if you want to dig deeper.\n\n</td>\n\n<td width=\"50%\">\n\n## After\n\n> Run `npm install jsonwebtoken@latest`, then edit `src/auth.ts:42`.\n>\n> 1. Open `src/auth.ts`\n> 2. Replace `verifyToken` (lines 42–58) with the snippet below\n> 3. Run `npm test -- auth.spec.ts`\n>\n> Next: paste the first failing line if any test fails.\n\n</td>\n</tr>\n</table>\n\n\n## The rules\n\n10 rules. Full text in [SKILL.md](./skills/i-have-adhd/SKILL.md).\n\n1. Lead with the next action.\n2. Number multi-step tasks.\n3. End with one concrete next step.\n4. Suppress tangents.\n5. Restate state every turn.\n6. Specific time estimates (minutes, not \"a bit\").\n7. Make wins visible.\n8. Matter-of-fact errors.\n9. Cap lists at 5 items.\n10. No preamble. No recap. No closers.\n\n## Tune it\n\nFork, edit `skills/i-have-adhd/SKILL.md`, then swap your copy in:\n\n```bash\nclaude plugin uninstall i-have-adhd            # drop the upstream copy first:\nclaude plugin marketplace remove i-have-adhd   # fork and upstream share both names\nclaude plugin marketplace add <your-username>/i-have-adhd\nclaude plugin install i-have-adhd@i-have-adhd\n```\n\nRestart Claude Code, then re-invoke `/i-have-adhd`.\n\n## Credits\n\nLoosely based on *The Adult ADHD Tool Kit* by J. Russell Ramsay and Anthony L. Rostain. Adapted for how an LLM should respond, not how a human should organize their day.\n\n## License\n\nMIT.\n\nStar ⭐ if it saved you one scroll past one \"Great question!\"\n"
+    },
+    "brief": {
+      "summary": "让编程助手用更直接、易执行的方式回答",
+      "problem": "编程助手回答冗长，关键信息容易被埋没",
+      "highlights": [
+        "可以让回答先给出下一步操作",
+        "可以将多步任务编号呈现",
+        "可以限制列表长度并减少跑题"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "软件开发者"
+      ],
+      "why_trending": "今日新增656个 Star，本周首次收录",
+      "caveat": "资料中未说明对其他编程助手的兼容性",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "ayghri/i-have-adhd",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码代理的实用技能插件",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 68.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "language": "Shell",
+      "total_stars": 283470,
+      "forks": 25377,
+      "stars_today": 452,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 452
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-09T19:45:18Z",
+      "updated_at": "2026-09-09T04:53:14Z",
+      "pushed_at": "2026-09-08T21:39:23Z",
+      "open_issues": 342,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Superpowers\n\nSuperpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.\n\n## Table of Contents\n\n- [How it works](#how-it-works)\n- [Commercial Services](#commercial-services)\n- [Getting Started](#installation)\n  - [Claude Code](#claude-code)\n  - [Antigravity](#antigravity)\n  - [Codex App](#codex-app)\n  - [Codex CLI](#codex-cli)\n  - [Cursor](#cursor)\n  - [Devin CLI](#devin-cli)\n  - [Factory Droid](#factory-droid)\n  - [Gemini CLI](#gemini-cli)\n  - [GitHub Copilot CLI](#github-copilot-cli)\n  - [Grok Build CLI](#grok-build-cli)\n  - [Kimi Code](#kimi-code)\n  - [OpenCode](#opencode)\n  - [Pi](#pi)\n  - [Hermes Agent](#hermes-agent)\n- [The Basic Workflow](#the-basic-workflow)\n- [Community](#community)\n- [What's Inside](#whats-inside)\n- [Philosophy](#philosophy)\n- [Contributing](#contributing)\n- [Updating](#updating)\n- [License](#license)\n- [Visual companion telemetry](#visual-companion-telemetry)\n\n## How it works\n\nIt starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. \n\nOnce it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. \n\nAfter you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. \n\nNext up, once you say \"go\", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.\n\nThere's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.\n\n## Commercial Services\n\nIf you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.\n\n## Installation\n\nInstallation differs by harness. If you use more than one, install Superpowers separately for each one.\n\n### Claude Code\n\nSuperpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)\n\n#### Official Marketplace\n\n- Install the plugin from Anthropic's official marketplace:\n\n  ```bash\n  /plugin install superpowers@claude-plugins-official\n  ```\n\n#### Superpowers Marketplace\n\nThe Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.\n\n- Register the marketplace:\n\n  ```bash\n  /plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin from this marketplace:\n\n  ```bash\n  /plugin install superpowers@superpowers-marketplace\n  ```\n\n### Antigravity\n\nInstall Superpowers as a plugin from this repository:\n\n```bash\nagy plugin install https://github.com/obra/superpowers\n```\n\nAntigravity runs the plugin's session-start hook, so Superpowers is active from\nthe first message. Reinstall with the same command to update.\n\n### Codex App\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- In the Codex app, click on Plugins in the sidebar.\n- You should see `Superpowers` in the Coding section.\n- Click the `+` next to Superpowers and follow the prompts.\n\n### Codex CLI\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- Open the plugin search interface:\n\n  ```bash\n  /plugins\n  ```\n\n- Search for Superpowers:\n\n  ```bash\n  superpowers\n  ```\n\n- Select `Install Plugin`.\n\n### Cursor\n\n- In Cursor Agent chat, install from marketplace:\n\n  ```text\n  /add-plugin superpowers\n  ```\n\n- Or search for \"superpowers\" in the plugin marketplace.\n\n### Devin CLI\n\n- Install the plugin from this repository:\n\n  ```bash\n  devin plugins install obra/superpowers\n  ```\n\n- Update to the latest version with:\n\n  ```bash\n  devin plugins update superpowers\n  ```\n\n### Factory Droid\n\n- Register the marketplace:\n\n  ```bash\n  droid plugin marketplace add https://github.com/obra/superpowers\n  ```\n\n- Install the plugin:\n\n  ```bash\n  droid plugin install superpowers@superpowers\n  ```\n\n### Gemini CLI\n\n- Install the extension:\n\n  ```bash\n  gemini extensions install https://github.com/obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  gemini extensions update superpowers\n  ```\n\n### GitHub Copilot CLI\n\n- Register the marketplace:\n\n  ```bash\n  copilot plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin:\n\n  ```bash\n  copilot plugin install superpowers@superpowers-marketplace\n  ```\n\n### Grok Build CLI\n\nSuperpowers is available via the [official Grok plugin marketplace](https://github.com/xai-org/plugin-marketplace).\n\n- Install the plugin from xAI's official marketplace:\n\n  ```bash\n  grok plugin install superpowers@xai-official --trust\n  ```\n\n- Or open the marketplace in the TUI, search for Superpowers, and install it:\n\n  ```text\n  /marketplace\n  ```\n\n### Kimi Code\n\nSuperpowers is available in Kimi Code's plugin marketplace.\n\n- Open Kimi Code's plugin manager:\n\n  ```text\n  /plugins\n  ```\n\n- Go to `Marketplace` > `Superpowers` and install it.\n\n- Or install directly from this repository:\n\n  ```text\n  /plugins install https://github.com/obra/superpowers\n  ```\n\n- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)\n\n### OpenCode\n\nOpenCode uses its own plugin install; install Superpowers separately even if you\nalready use it in another harness.\n\n- Tell OpenCode:\n\n  ```\n  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md\n  ```\n\n- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)\n\n### Pi\n\nInstall Superpowers as a Pi package from this repository:\n\n```bash\npi install git:github.com/obra/superpowers\n```\n\nFor local development, run Pi with this checkout loaded as a temporary package:\n\n```bash\npi -e /path/to/superpowers\n```\n\nThe Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.\n\n### Hermes Agent\n\nInstall Superpowers as a Hermes plugin from this repository:\n\n```bash\nhermes plugins install obra/superpowers --enable\n```\n\nRestart any active Hermes sessions after installing. Note: Hermes has no\npost-compaction hook, so a very long session that compacts over its first\nturn loses the bootstrap — start a fresh session if skills stop triggering.\n\n## The Basic Workflow\n\n1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.\n\n2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.\n\n3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.\n\n4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.\n\n5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.\n\n6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.\n\n7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.\n\n**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.\n\n## Community\n\nSuperpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).\n\n- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers\n- **Issues**: https://github.com/obra/superpowers/issues\n- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions\n\n## What's Inside\n\n### Skills Library\n\n**Testing**\n- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)\n\n**Debugging**\n- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)\n- **verification-before-completion** - Ensure it's actually fixed\n\n**Collaboration** \n- **brainstorming** - Socratic design refinement\n- **writing-plans** - Detailed implementation plans\n- **executing-plans** - Batch execution with checkpoints\n- **dispatching-parallel-agents** - Concurrent subagent workflows\n- **requesting-code-review** - Pre-review checklist\n- **receiving-code-review** - Responding to feedback\n- **using-git-worktrees** - Parallel development branches\n- **finishing-a-development-branch** - Merge/PR decision workflow\n- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)\n\n**Meta**\n- **writing-skills** - Create new skills following best practices (includes testing methodology)\n- **using-superpowers** - Introduction to the skills system\n\n## Philosophy\n\n- **Test-Driven Development** - Write tests first, always\n- **Systematic over ad-hoc** - Process over guessing\n- **Complexity reduction** - Simplicity as primary goal\n- **Evidence over claims** - Verify before declaring success\n\nRead [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).\n\n## Contributing\n\nThe general contribution process for Superpowers is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.\n\n1. Fork the repository\n2. Switch to the 'dev' branch\n3. Create a branch for your work\n4. Follow the `writing-skills` skill for creating and testing new and modified skills\n5. Submit a PR, being sure to fill in the pull request template.\n\nSkill-behavior tests use the drill eval harness from [superpowers-evals](https://github.com/prime-radiant-inc/superpowers-evals/), cloned into `evals/` — see `evals/README.md` for setup. Plugin-infrastructure tests live at `tests/` and run via the relevant `run-*.sh` or `npm test`.\n\nSee `skills/writing-skills/SKILL.md` for the complete guide.\n\n## Updating\n\nSuperpowers updates are somewhat coding-agent dependent, but are often automatic.\n\n## License\n\nMIT License - see LICENSE file for details\n\n## Visual companion telemetry\n\nBecause skills and plugins don't provide any feedback to creators, we have no idea how many of you are using Superpowers. By default, the Prime Radiant logo on brainstorming's optional visual companion feature is loaded from our website. It includes the version of Superpowers in use. It does not include any details about your project, prompt, or coding agent. We don't see your clicks or anything about what you're building. This helps us have a rough idea of how many folks are using Superpowers and which version of Superpowers they're using. It's 100% optional. To disable this, set the environment variable `SUPERPOWERS_DISABLE_TELEMETRY` t"
+    },
+    "brief": {
+      "summary": "面向编码智能体的软件开发流程与技能框架",
+      "problem": "让编码智能体先明确需求，再按计划开发、测试和审查",
+      "highlights": [
+        "可以通过提问整理需求并分段确认设计",
+        "可以生成细化计划，拆分为可执行开发任务",
+        "可以让子智能体分工实现并进行代码审查"
+      ],
+      "target_users": [
+        "AI 编程用户",
+        "软件开发团队",
+        "编码智能体研究者"
+      ],
+      "why_trending": "今日新增452 Star，总Star超28万，本周首次收录",
+      "caveat": "不同编码工具需分别安装，部分兼容细节资料中未说明",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "obra/superpowers",
+      "score": 84,
+      "category": "AI Agent / Skills",
+      "reason": "完整的编码代理技能框架",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 40,
+      "ranking_score": 68.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "multica-ai/andrej-karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
+      "language": "",
+      "total_stars": 211578,
+      "forks": 21476,
+      "stars_today": 333,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 333
+    },
+    "details": {
+      "topics": [],
+      "license_name": "",
+      "created_at": "2026-01-27T03:53:13Z",
+      "updated_at": "2026-09-09T04:50:57Z",
+      "pushed_at": "2026-04-20T10:05:04Z",
+      "open_issues": 129,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Karpathy-Inspired Claude Code Guidelines\n\n> Check out my new project [Multica](https://github.com/multica-ai/multica) — an open-source platform for running and managing coding agents with reusable skills.\n>\n> Follow me on X: [https://x.com/jiayuan_jy](https://x.com/jiayuan_jy)\n\nA single `CLAUDE.md` file to improve Claude Code behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.\n\nEnglish | [简体中文](./README.zh.md)\n\n## The Problems\n\nFrom Andrej's post:\n\n> \"The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should.\"\n\n> \"They really like to overcomplicate code and APIs, bloat abstractions, don't clean up dead code... implement a bloated construction over 1000 lines when 100 would do.\"\n\n> \"They still sometimes change/remove comments and code they don't sufficiently understand as side effects, even if orthogonal to the task.\"\n\n## The Solution\n\nFour principles in one file that directly address these issues:\n\n| Principle | Addresses |\n|-----------|-----------|\n| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |\n| **Simplicity First** | Overcomplication, bloated abstractions |\n| **Surgical Changes** | Orthogonal edits, touching code you shouldn't |\n| **Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |\n\n## The Four Principles in Detail\n\n### 1. Think Before Coding\n\n**Don't assume. Don't hide confusion. Surface tradeoffs.**\n\nLLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:\n\n- **State assumptions explicitly** — If uncertain, ask rather than guess\n- **Present multiple interpretations** — Don't pick silently when ambiguity exists\n- **Push back when warranted** — If a simpler approach exists, say so\n- **Stop when confused** — Name what's unclear and ask for clarification\n\n### 2. Simplicity First\n\n**Minimum code that solves the problem. Nothing speculative.**\n\nCombat the tendency toward overengineering:\n\n- No features beyond what was asked\n- No abstractions for single-use code\n- No \"flexibility\" or \"configurability\" that wasn't requested\n- No error handling for impossible scenarios\n- If 200 lines could be 50, rewrite it\n\n**The test:** Would a senior engineer say this is overcomplicated? If yes, simplify.\n\n### 3. Surgical Changes\n\n**Touch only what you must. Clean up only your own mess.**\n\nWhen editing existing code:\n\n- Don't \"improve\" adjacent code, comments, or formatting\n- Don't refactor things that aren't broken\n- Match existing style, even if you'd do it differently\n- If you notice unrelated dead code, mention it — don't delete it\n\nWhen your changes create orphans:\n\n- Remove imports/variables/functions that YOUR changes made unused\n- Don't remove pre-existing dead code unless asked\n\n**The test:** Every changed line should trace directly to the user's request.\n\n### 4. Goal-Driven Execution\n\n**Define success criteria. Loop until verified.**\n\nTransform imperative tasks into verifiable goals:\n\n| Instead of... | Transform to... |\n|--------------|-----------------|\n| \"Add validation\" | \"Write tests for invalid inputs, then make them pass\" |\n| \"Fix the bug\" | \"Write a test that reproduces it, then make it pass\" |\n| \"Refactor X\" | \"Ensure tests pass before and after\" |\n\nFor multi-step tasks, state a brief plan:\n\n```\n1. [Step] → verify: [check]\n2. [Step] → verify: [check]\n3. [Step] → verify: [check]\n```\n\nStrong success criteria let the LLM loop independently. Weak criteria (\"make it work\") require constant clarification.\n\n## Install\n\n**Option A: Claude Code Plugin (recommended)**\n\nFrom within Claude Code, first add the marketplace:\n```\n/plugin marketplace add forrestchang/andrej-karpathy-skills\n```\n\nThen install the plugin:\n```\n/plugin install andrej-karpathy-skills@karpathy-skills\n```\n\nThis installs the guidelines as a Claude Code plugin, making the skill available across all your projects.\n\n**Option B: CLAUDE.md (per-project)**\n\nNew project:\n```bash\ncurl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md\n```\n\nExisting project (append):\n```bash\necho \"\" >> CLAUDE.md\ncurl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md\n```\n\n## Using with Cursor\n\nThis repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.\n\n## Key Insight\n\nFrom Andrej:\n\n> \"LLMs are exceptionally good at looping until they meet specific goals... Don't tell it what to do, give it success criteria and watch it go.\"\n\nThe \"Goal-Driven Execution\" principle captures this: transform imperative instructions into declarative goals with verification loops.\n\n## How to Know It's Working\n\nThese guidelines are working if you see:\n\n- **Fewer unnecessary changes in diffs** — Only requested changes appear\n- **Fewer rewrites due to overcomplication** — Code is simple the first time\n- **Clarifying questions come before implementation** — Not after mistakes\n- **Clean, minimal PRs** — No drive-by refactoring or \"improvements\"\n\n## Customization\n\nThese guidelines are designed to be merged with project-specific instructions. Add them to your existing `CLAUDE.md` or create a new one.\n\nFor project-specific rules, add sections like:\n\n```markdown\n## Project-Specific Guidelines\n\n- Use TypeScript strict mode\n- All API endpoints must have tests\n- Follow the existing error handling patterns in `src/utils/errors.ts`\n```\n\n## Tradeoff Note\n\nThese guidelines bias toward **caution over speed**. For trivial tasks (simple typo fixes, obvious one-liners), use judgment — not every change needs the full rigor.\n\nThe goal is reducing costly mistakes on non-trivial work, not slowing down simple tasks.\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "用一份规则文件改善 Claude Code 的编码行为",
+      "problem": "减少 AI 编程中的误解、过度设计和无关改动",
+      "highlights": [
+        "可以让 Claude Code 先澄清假设再编码",
+        "可以约束 AI 只做必要的代码修改",
+        "可以用测试和目标检查验证任务完成情况"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "AI 编程团队",
+        "Cursor 用户"
+      ],
+      "why_trending": "总 Star 超21万，今日新增333，本周首次收录",
+      "caveat": "规则偏谨慎，简单任务可能增加沟通成本",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "multica-ai/andrej-karpathy-skills",
+      "score": 81,
+      "category": "AI Agent / Skills",
+      "reason": "改善编码代理行为的技能规则",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 65.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "NomaDamas/CozyClay",
+      "url": "https://github.com/NomaDamas/CozyClay",
+      "description": "Open source previs software in the browser: block a scene, pose characters, author camera moves and cuts, then take the same shots to an AI video model.",
+      "language": "JavaScript",
+      "total_stars": 622,
+      "forks": 71,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "3d-animation",
+        "ai",
+        "ai-video",
+        "animation",
+        "blender",
+        "camera-control",
+        "llm-agent",
+        "motion-generation",
+        "previs",
+        "previsualization",
+        "previz",
+        "python",
+        "react-three-fiber",
+        "storyboard",
+        "threejs",
+        "typescript",
+        "virtual-production",
+        "webgl"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-28T19:57:47Z",
+      "updated_at": "2026-09-09T03:55:43Z",
+      "pushed_at": "2026-09-09T04:44:02Z",
+      "open_issues": 6,
+      "homepage": "https://cozyclay.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/images/cozyclay-logo.png\" alt=\"CozyClay\" width=\"340\">\n</p>\n\n<p align=\"center\">\n  <em>Block a scene, pose the cast, cut the camera — in a browser tab.</em>\n</p>\n\n<p align=\"center\">\n  Created and maintained by <a href=\"https://github.com/HaD0Yun\">Doyun</a> at <a href=\"https://github.com/NomaDamas\">NomaDamas</a>.\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img alt=\"License: AGPL-3.0\" src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\"></a>\n  <a href=\"https://www.npmjs.com/package/cozyclay\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/cozyclay\"></a>\n  <img alt=\"Node 22.13+\" src=\"https://img.shields.io/badge/node-22.13%2B-brightgreen\">\n  <a href=\"https://github.com/NomaDamas/CozyClay/stargazers\"><img alt=\"Stars\" src=\"https://img.shields.io/github/stars/NomaDamas/CozyClay?style=flat\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://cozyclay.org/\">Demo reel</a> ·\n  <a href=\"#quick-start\">Quick start</a> ·\n  <a href=\"#what-you-can-do\">Features</a> ·\n  <a href=\"#ai-control-mcp\">AI control</a> ·\n  <a href=\"#controls\">Controls</a> ·\n  <a href=\"https://github.com/NomaDamas/CozyClay/issues\">Issues</a>\n</p>\n\n---\n\nCozyClay is a browser-based 3D staging studio built with Three.js and React Three Fiber. Block a scene, pose characters, sequence motion prompts on a timeline, and preview generated motion — all in one local workspace.\n\n```bash\nnpx cozyclay\n```\n\nThat is the whole install. **[cozyclay.org](https://cozyclay.org/)** has the demo reel and a walkthrough of what the studio does; to use it, run it on your own machine. It ships seeded with a pre-generated motion clip, so you can scrub the timeline, drive the cameras and draw a dolly rail straight away — generating *new* motion is optional and uses the Kimodo bridge when configured.\n\n## Demo\n\nhttps://github.com/user-attachments/assets/1d0113e5-6922-443d-affc-1bdabc666247\n\n## What you can do\n\n|  | |\n| --- | --- |\n| **Stage a scene** | Create primitives and set pieces, then move, rotate and scale them with a W/E/R gizmo. Grid snapping is a preference, not a law — hold `Ctrl` mid-drag to invert it. A bird's-eye plan view drives 2D root waypoints for character paths. The topbar's Auto Color toggle gives every object its own stable display color — Blender's random viewport color, so twenty grey blockout boxes stay tellable apart — without touching the colors you authored (captures include the display colors while it is on). |\n| **Fly the camera** | Right-drag flies (WASD walks, Q/E cranes), middle-drag pans, Alt+drag orbits the selection, click selects, `F` frames — the muscle memory you already have from a 3D editor. |\n| **Undo anything** | Every scene mutation goes through one history store: a drag, a scrub, an inspector edit is exactly one undo entry. `Esc` cancels an in-flight drag and restores the pre-drag transform. |\n| **Generate motion** | Pose characters and export poses, sequence multi-phase motion as Prompt Blocks on a resizable timeline, send them to Kimodo, then play the result back with sparse IK correction where the generated motion needs fixing. |\n| **Direct it with an AI** | Connect Claude — or any MCP client — and ask for a shot in plain language. It places the cast, frames “a low wide profile”, generates multi-phase motion, and the viewport moves in front of you. See [AI control](#ai-control-mcp). |\n\n## Requirements\n\n- Node.js 22.13 or newer\n- npm, or bun\n- A Chromium-based browser\n- An SSH-accessible NVIDIA machine running Kimodo, for motion generation — run `npm run kimodo:setup` once; the first setup downloads the Kimodo checkpoint and text-encoder stack.\n\n## Quick start\n\n```bash\nnpx cozyclay\n# or\nbunx cozyclay\n```\n\nThat downloads the built studio and opens it at `http://127.0.0.1:5180/app/`. Nothing to compile, no dependency tree to install. Useful flags: `--port 5200`, `--no-open`, `--no-motion`.\n\nA global install gives you `cclay`, the same command with less typing. Once a day the launcher checks npm for a newer release and prints a one-line notice after the studio is up; it stays quiet when you're current or offline. `cclay update` installs the latest release, and `--no-update-check` skips the check entirely.\n\nMotion generation uses Kimodo by default once you point it at an SSH-accessible NVIDIA machine:\n\n```bash\nCCLAY_KIMODO_HOST=user@your-gpu-box npx cozyclay\n```\n\nInstall the remote worker once:\n\n```bash\nCCLAY_KIMODO_HOST=user@your-gpu-box npm run kimodo:setup\n```\n\n## AI control (MCP)\n\nThe studio ships an [MCP](https://modelcontextprotocol.io) server, so an AI assistant can drive it — the same scene, the same viewport, live:\n\n> “Put a detective and a courier in an alley, give me a low wide profile shot,\n> then make her stand up from the chair, sprint, and trip.”\n\n```json\n{\n  \"mcpServers\": {\n    \"cozyclay\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"cozyclay\", \"mcp\"]\n    }\n  }\n}\n```\n\nDrop that into `claude_desktop_config.json` (or any MCP client config) and restart the client. The\nfirst run automatically installs the MCP SDK's 95-package tree; opening the studio never waits on\nit, so those dependencies are fetched only when you actually want the server.\n\n- **Editor open?** Tool calls move the visible viewport — camera, cast, set, generated motion, prompt blocks on the timeline.\n- **No editor?** Scene and project tools run headless: block scenes, derive film vocabulary\n  (“wide shot · right profile · knee level · 24mm”), render AI video prompts, and write\n  `.cclayproject` files. `capture_frame`, `set_prompt_blocks`, `generate_motion`, and\n  `apply_batch` require the live editor.\n\nTools, transports and the live-control protocol are documented in [`mcp/README.md`](mcp/README.md).\n\n### From a clone\n\n```bash\ngit clone https://github.com/NomaDamas/CozyClay.git\ncd CozyClay\nnpm install\nnpm run dev\n```\n\nOpen `http://127.0.0.1:5180/` for the Studio. The Workflow canvas remains available at `http://127.0.0.1:5180/workflow/` when you need its node editor. `npm run dev` starts the studio together with its local Kimodo bridge once `CCLAY_KIMODO_HOST` points at a GPU box; without that variable it starts the studio alone and says so, and Block Generation stays unavailable until you set it. `npm run dev:ui` starts the browser UI alone in every case. The bridge listens on loopback only; Kimodo host variables are documented in [`tools/kimodo/setup-on-box.sh`](tools/kimodo/setup-on-box.sh).\n\n### Workflow canvas\n\nThe Vibe-Workflow canvas is available at `http://127.0.0.1:5180/workflow/`. It keeps the original node-style flow and adds a **CozyClay Scene** node with an interactive 3D viewport, frame/camera controls, and an Open Studio handoff. Start it with the normal dev server, or run `npm run dev:ui` by itself for local-only editing. Workflow graphs are saved in the browser and execute locally; no remote workflow service or API key is required.\n\n## Hosted demo\n\nInstalling a GPU motion backend is the hard part, so `cozyclay.org` also runs a queued demo: a visitor writes one prompt, gets a ticket link, and a GPU box owned by the maintainer generates the motion and uploads it. The visitor never installs anything and never leaves the site — the result opens in the studio itself.\n\nThe pieces live in this repository, under `AGPL-3.0-or-later` like everything else:\n\n| Path | Role |\n| --- | --- |\n| `demo/`, `d/` | Static composer and ticket/result pages, built into `dist/` by the same `npm run build` |\n| `workers/api/` | Cloudflare Worker queue API (D1 for state, R2 for results), with its own pinned toolchain |\n| `tools/demo-worker/` | The GPU-box poller. Outbound fetch only — it never opens a listening socket |\n\n**Queue policy.** Jobs run in a single FIFO queue. All of these values live in `workers/api/src/policy.js`; nothing else carries a copy.\n\n| Rule | Value |\n| --- | --- |\n| Active jobs per account | 1 |\n| Daily cap | 2 per account |\n| Global waiting cap | 200, then submissions are refused |\n| Lease / heartbeat / hard timeout | 15 min lease, renewed every 60 s, 20 min hard stop |\n| Attempts | 2 (one automatic retry); a failed job refunds the daily cap |\n| Result retention | 30 days, then the R2 object is deleted |\n| Prompt limit | shared with the studio via `tools/ardy/prompt-limits.mjs` |\n\n**Secrets.** Never committed. Configure each with `wrangler secret put` against `workers/api/wrangler.toml`:\n`GOOGLE_CLIENT_SECRET`, `CC_WORKER_SECRET`, `SESSION_SIGNING_KEY`, `TURNSTILE_SECRET_KEY`. The non-secret `GOOGLE_CLIENT_ID` and `TURNSTILE_SITE_KEY` vars in `wrangler.toml` must also be replaced before a real deployment.\n\n**Running the API locally.**\n\n```bash\nnpm run demo:api:install   # npm --prefix workers/api ci\nnpm --prefix workers/api exec -- wrangler d1 migrations apply cozyclay-demo --local\nnpm run demo:api           # wrangler dev on 127.0.0.1:8787\n```\n\n**Running the GPU-box worker.** The hosted queue worker has its own isolated runtime and reaches the API outbound only. It is independent from the local Studio's Kimodo backend.\n\n```bash\nCC_DEMO_API_BASE=https://api.cozyclay.org \\\nCC_WORKER_ID=box1 \\\nCC_WORKER_SECRET=... \\\n  npm run demo:worker\n```\n\nSee [`workers/api/README.md`](workers/api/README.md) for the deployment, migration and rollback runbook, and [`tools/demo-worker/README.md`](tools/demo-worker/README.md) for service units, environment-file permissions and the listening-socket check.\n\n## Controls\n\n| Input | Action |\n| --- | --- |\n| Right-drag | Look around (fly) |\n| RMB + WASD | Walk while flying |\n| RMB + Q/E | Crane down / up |\n| RMB + Shift | Boost fly speed 2.6× |\n| Middle-drag | Pan |\n| Alt + drag | Orbit the selection |\n| Scroll | Dolly; while flying, sets the fly speed instead |\n| Click | Select; empty space clears |\n| W / E / R | Move / rotate / scale tool |\n| Ctrl/Cmd (during drag) | Invert grid snapping |\n| Ctrl/Cmd+Z, Ctrl/Cmd+Shift+Z | Undo / redo |\n| Esc | Cancel the in-flight drag |\n| End | Drop the selection to the surface |\n| Ctrl/Cmd+D | Duplicate the selection |\n| Delete / Backspace | Delete the selection |\n| F | Frame the selection |\n\n## Validate\n\n| Command | Covers |\n| --- | --- |\n| `npm run test:history` | Undo/redo store and transaction coordinator |\n| `npm run test:scene-objects` | Scene-object model |\n| `npm run test:hierarchy` | Hierarchy panel model |\n| `npm run test:objects` | Gizmo interaction in a real browser — needs `npm run dev:ui` in another shell |\n| `npm run test:theme` / `test:appearance` / `test:layout` | UI theme, appearance, layout |\n| `npm run test:lifecycle` | Dev-server process lifecycle |\n| `npm run test:ardy` | Motion conversion, playback, and IK pipeline |\n| `cd mcp && npm install && npm run verify` | MCP server over real stdio — all 420 framing combinations |\n| `cd mcp && npm run verify:live` | Live-control protocol against a fake editor (same `npm install` first) |\n| `npm run build` | Production build |\n\nAd-hoc browser QA, while a dev server is available (the browser opens the studio at `/app/`):\n\n```bash\nnpm run qa:browser -- node <qa-script>\n```\n\n## Contributing\n\nFound something broken, or want a feature? [Open an issue](https://github.com/NomaDamas/CozyClay/issues) — bug reports with a repro are the most useful thing you can send. Contributions are accepted under `AGPL-3.0-or-later`.\n\n**Repository hygiene.** Generated motion archives, QA output, build output, logs and local runtime artifacts are not source files and must not be committed. Keep `tools/ardy/out/`, `artifacts/`, `dist/`, `.gjc/` and `.npz` files local.\n\nAll runtime libraries intentionally live in `devDependencies` because the published npm package ships the prebuilt `dist/`, so `npx cozyclay` must not install the studio's dependency tree.\n\n## Analytics & privacy\n\nThe hosted site at [cozyclay.org](https://cozyclay.org/) collects anonymous usage analytics via [PostHog](https://posthog.com/) (US Cloud). There are no cookies and no session recording, and Do-Not-Track is respected. A random pseudonymous identifier is kept in your browser's localStorage so that "
+    },
+    "brief": {
+      "summary": "浏览器中的开源3D预演与AI视频分镜工具",
+      "problem": "把场景搭建、角色动作、镜头设计和AI视频准备集中到一起",
+      "highlights": [
+        "可以在浏览器搭建场景并摆放角色",
+        "可以设计镜头、剪辑和角色运动",
+        "可以用MCP让AI助手控制分镜制作"
+      ],
+      "target_users": [
+        "动画导演",
+        "虚拟制作团队",
+        "AI视频创作者"
+      ],
+      "why_trending": "本周首次收录，已有622个Star且近期仍在更新",
+      "caveat": "生成新动作需要Node.js、Chromium和远程NVIDIA机器",
+      "category": "XR / 虚拟制作",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "NomaDamas/CozyClay",
+      "score": 96,
+      "category": "XR / 虚拟制作",
+      "reason": "浏览器预演与AI视频虚拟制作",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "udinmoInc/WindEffects",
+      "url": "https://github.com/udinmoInc/WindEffects",
+      "description": "A modular, next-generation game engine built from scratch with C++23 and Vulkan. Powered by a data-oriented ECS architecture, a production-ready asset pipeline, and a custom-built retained-mode desktop editor for high-end game development.",
+      "language": "C++",
+      "total_stars": 75,
+      "forks": 27,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cross-platform",
+        "ecs",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "graphics-engine",
+        "graphics-programming",
+        "open-source",
+        "physics",
+        "real-time-rendering",
+        "renderer",
+        "shader",
+        "windeffects"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-26T07:09:16Z",
+      "updated_at": "2026-09-09T04:48:51Z",
+      "pushed_at": "2026-09-09T04:48:18Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# WindEffects Engine\n\n![C++23](https://img.shields.io/badge/C%2B%2B-23-blue?style=flat-square&logo=c%2B%2B)\n![Vulkan](https://img.shields.io/badge/Vulkan-1.3-5C2028?style=flat-square&logo=vulkan)\n![Platform](https://img.shields.io/badge/Platform-Windows-0078D7?style=flat-square&logo=windows)\n![Status](https://img.shields.io/badge/Status-In_Development-orange?style=flat-square)\n![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)\n\n> [!IMPORTANT]\n> **Under Active Development**: WindEffects Engine is currently in active development. There are no official or public releases available yet.\n\n**WindEffects Engine** is a next-generation game engine designed for professional game development, built from the ground up using modern C++23 and cutting-edge graphics technologies.\n\n## ✨ Why WindEffects?\n\n- **🚀 Modern C++23**: Leverages the latest C++ features for maximum performance and developer productivity\n- **🎮 Vulkan-Powered**: Built on Vulkan for cutting-edge graphics performance and modern GPU features\n- **🔧 Editor-First**: Comprehensive integrated editor with real-time preview and intuitive tools\n- **⚡ High Performance**: Data-oriented design, ECS architecture, and multi-threaded job system\n- **🧩 Modular Architecture**: Clean separation of concerns with independent, reusable modules\n- **🎨 PBR Rendering**: Physically-based rendering with HDR, deferred/forward+ paths, and more\n\n## 📸 Screenshots\n\n*[Add screenshots of the editor, rendering results, and key features]*\n\n## 🚀 Quick Start\n\nGet up and running in minutes:\n\n```powershell\n# Clone the repository\ngit clone https://github.com/udinmoInc/WindEffects.git\ncd WindEffects\n\n# Build the engine\ndotnet build Engine/Source/Programs/IgniteBT/Source/IgniteBT.csproj -c Debug\n.\\we.ps1 build --config Debug\n\n# Run the editor\n.\\we.ps1 run --target Editor --config Debug\n```\n\nFor detailed setup instructions, see the [Getting Started](#getting-started) section below.\n\n## Table of Contents\n\n- [Introduction](#introduction)\n- [Architecture Overview](#architecture-overview)\n- [Core Features](#core-features)\n- [Rendering System](#rendering-system)\n- [Editor Interface](#editor-interface)\n- [Getting Started](#getting-started)\n- [Building the Engine](#building-the-engine)\n- [Project Structure](#project-structure)\n- [Development Workflow](#development-workflow)\n- [Roadmap](#roadmap)\n- [Contributing](#contributing)\n- [License](#license)\n\n## Introduction\n\nWindEffects Engine represents a modern approach to game engine design, leveraging the latest advancements in C++23, Vulkan graphics API, and contemporary software architecture patterns. The engine is designed to be modular, performant, and extensible, making it suitable for a wide range of game development projects from indie titles to AAA productions.\n\nThe project began with the goal of creating a proprietary engine that could compete with established industry leaders while maintaining a clean, maintainable codebase. WindEffects focuses on providing developers with powerful tools through an integrated editor while keeping the underlying systems accessible and well-documented.\n\n### Design Philosophy\n\nThe engine follows several core design principles:\n\n- **Modularity**: Each system is designed as an independent module that can be developed, tested, and maintained in isolation\n- **Performance**: Critical paths are optimized for modern hardware architectures with multi-threading and GPU acceleration\n- **Modern C++**: Extensive use of C++23 features including concepts, modules, and improved standard library facilities\n- **Data-Oriented Design**: Memory layouts and data structures are optimized for cache efficiency and SIMD operations\n- **Editor-First**: The development experience centers around a powerful, intuitive editor interface\n\n## Architecture Overview\n\nWindEffects Engine is organized into several major subsystems, each responsible for specific aspects of game development. This modular architecture allows teams to work on different systems independently while maintaining clear interfaces between components.\n\n### Engine Core\n\nThe core system provides foundational services that all other subsystems depend on. This includes memory management, threading primitives, reflection systems, and the entity-component-system (ECS) architecture. The core is designed to be lightweight and efficient, with minimal overhead for the systems built on top of it.\n\nThe memory management system uses custom allocators optimized for different allocation patterns - small object allocations, large resource buffers, and GPU memory are each handled by specialized allocators that reduce fragmentation and improve allocation speed.\n\n### Build System\n\nWindEffects uses IgniteBT, a custom build system written in C#, as its primary build tool. IgniteBT provides a unified command-line interface through the `we` command, handling dependency resolution, compilation, linking, and packaging. The build system is designed to keep all generated artifacts outside the source tree, maintaining a clean separation between source and build outputs.\n\nThe `we` command serves as the primary interface for all build operations, from simple compilation to complex packaging and deployment scenarios. It automatically detects the development environment, manages dependencies, and provides helpful diagnostics through the `doctor` command.\n\n## Core Features\n\n### Entity Component System\n\nAt the heart of WindEffects lies a modern Entity Component System (ECS) architecture. Unlike traditional object-oriented game object hierarchies, ECS separates data from behavior, enabling efficient data-oriented processing and cache-friendly memory layouts.\n\nEntities serve as unique identifiers, components hold pure data, and systems operate on components matching specific queries. This architecture enables:\n- Efficient parallel processing of game logic\n- Cache-friendly data access patterns\n- Flexible composition of game objects\n- Easy serialization and networking\n\nThe ECS implementation supports archetype-based storage, where entities with the same component types are stored contiguously in memory, maximizing cache locality during system updates.\n\n### Job System\n\nThe job system provides a framework for parallelizing work across multiple CPU cores. It supports task dependencies, work stealing, and affinity scheduling to maximize hardware utilization. Developers can submit jobs either as individual tasks or as parallel-for loops that automatically partition work across available threads.\n\nThe job system integrates closely with the ECS, allowing systems to schedule parallel updates for entity queries. This enables massive entity counts to be processed efficiently by distributing the workload across all available CPU cores.\n\n### Asset Pipeline\n\nWindEffects includes a custom asset pipeline that handles importing, processing, and managing game assets. The pipeline supports various asset types including meshes, textures, materials, animations, and audio files. Assets are processed offline into optimized formats ready for runtime loading.\n\nThe asset system includes hot-reloading capabilities during development, allowing artists and designers to see changes immediately without restarting the editor. Asset references use stable GUIDs, enabling safe refactoring and asset management without breaking existing content.\n\n### Reflection System\n\nA comprehensive reflection system enables runtime type information, serialization, and editor integration. The reflection system is built at compile time using C++ attributes and code generation, providing zero runtime overhead while enabling powerful metaprogramming capabilities.\n\nThis system powers the property inspector, serialization, and scripting interfaces, allowing the editor to inspect and modify any reflected type without manual binding code.\n\n## Rendering System\n\nThe rendering system is built on Vulkan, providing low-level access to modern GPU capabilities while maintaining a higher-level abstraction for common rendering tasks. The renderer supports multiple rendering techniques and is designed to scale from integrated graphics to high-end GPUs.\n\n### Graphics Features\n\n- **Physically Based Rendering (PBR)**: Material system based on modern PBR workflows with support for metallic/roughness and specular/glossiness workflows\n- **Deferred and Forward+ Rendering**: Multiple rendering paths optimized for different scenarios - deferred for complex lighting, forward+ for transparency and performance\n- **HDR Rendering**: High dynamic range rendering with tone mapping and exposure control for realistic lighting\n- **Render Graph**: Frame graph system that automatically manages render pass dependencies and resource transitions\n- **GPU-Driven Rendering**: Compute-based culling and draw dispatch for handling massive scene complexity\n- **Bindless Resources**: Descriptor indexing for efficient resource access without descriptor set limits\n- **Ray Tracing**: Hardware-accelerated ray tracing for realistic reflections, shadows, and global illumination (planned)\n- **Path Tracing**: Full path tracing for cinematic-quality rendering (planned)\n\n### Shader Pipeline\n\nShaders are written in HLSL and compiled to SPIR-V for Vulkan consumption. The shader pipeline includes a unified shader format that can target different APIs, making future DirectX 12 support straightforward. The system supports automatic shader permutation generation for different quality settings and feature combinations.\n\n## Editor Interface\n\nThe WindEffects Editor provides a comprehensive development environment for game creation. Built on a custom retained-mode UI framework, the editor offers a responsive and intuitive interface that can be customized to fit individual workflows.\n\n### Main Components\n\n**Scene Viewport**: The central workspace for viewing and interacting with your game world. The viewport supports real-time rendering with multiple camera modes, including perspective, orthographic, and custom camera views. Gizmos and manipulation tools enable precise object placement and transformation.\n\n**World Outliner**: A hierarchical view of all entities in the current scene. The outliner supports filtering, searching, and organizing entities into groups for complex scene management. Entity selection in the outliner syncs with the viewport and property inspector.\n\n**Property Inspector**: Displays and allows editing of all components attached to the selected entity. The inspector uses the reflection system to automatically generate appropriate UI controls for each property, supporting custom editors for complex types.\n\n**Content Browser**: Asset management interface for browsing, importing, and organizing project assets. The browser supports previewing assets, filtering by type, and drag-and-drop operations for quick asset placement.\n\n**Console**: Integrated command console for executing engine commands, viewing log output, and debugging. The console supports command auto-completion and custom command registration.\n\n### Workspace Customization\n\nThe editor features a fully dockable workspace layout. Panels can be rearranged, docked, undocked, or tabbed together to create custom layouts. Multiple workspace configurations can be saved and switched between depending on the current task.\n\n## Getting Started\n\n### Prerequisites\n\nBefore building WindEffects Engine, ensure your development environment meets the following requirements:\n\n- **Operating System**: Windows 10 or Windows 11 (64-bit)\n- **Compiler**: Visual Studio 2022 with C++ workload and latest updates\n- **.NET SDK**: .NET 8.0 SDK for building the IgniteBT build system\n- **Vulkan SDK**: Latest Vulkan SDK from Vulkan SDK for graphics development\n- **Git**: For version control operations\n- **CMake**: (Optional) Some third-party dependencies may use CMake\n\n### Initial Setup\n\n1. Clone the repository to your local machine\n2. Ensure all prerequisites are installed and accessible from your command line\n3. Open a terminal in"
+    },
+    "brief": {
+      "summary": "基于C++23与Vulkan开发的模块化游戏引擎",
+      "problem": "为高性能游戏开发提供引擎、编辑器和资产流程",
+      "highlights": [
+        "可以用ECS组织游戏实体与逻辑",
+        "可以通过编辑器实时预览和制作内容",
+        "可以构建并运行Vulkan渲染项目"
+      ],
+      "target_users": [
+        "游戏程序员",
+        "引擎开发者",
+        "独立游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已有75个Star",
+      "caveat": "仍在开发中，暂无公开正式版本，许可证为专有",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "udinmoInc/WindEffects",
+      "score": 91,
+      "category": "游戏开发",
+      "reason": "完整的高性能游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 56.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "aqm857886159/Nomi",
+      "url": "https://github.com/aqm857886159/Nomi",
+      "description": "Open-source AI video workbench. Bring any model or your local ComfyUI, and let Claude Code / Codex / Cursor direct it over MCP — storyboard, references, generation, editable first cut on a real timeline. Local-first: projects, prompts, and keys stay on your machine. No account, no telemetry.",
+      "language": "TypeScript",
+      "total_stars": 503,
+      "forks": 104,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agent",
+        "ai-video",
+        "ai-video-generator",
+        "bring-your-own-key",
+        "comfyui",
+        "creative-tools",
+        "desktop-app",
+        "electron",
+        "image-generation",
+        "local-first",
+        "mcp",
+        "offline",
+        "react",
+        "storyboard",
+        "text-to-image",
+        "text-to-video",
+        "timeline-editor",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-05-04T13:38:29Z",
+      "updated_at": "2026-09-09T04:31:33Z",
+      "pushed_at": "2026-09-09T04:45:29Z",
+      "open_issues": 5,
+      "homepage": "https://nomiaqm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/nomi-logo.svg\" alt=\"Nomi\" width=\"80\" />\n</p>\n\n# Nomi\n\n**Bring the cost of AI video down.**\n\nNomi is an open-source, local-first desktop workbench for AI video. Use the models, membership credits, APIs, or local ComfyUI you already have to run the whole pipeline — script, storyboard, generation, and editing — with your footage, generated takes, and workflows all on your own machine. No account. No telemetry.\n\n[简体中文](README.zh-CN.md) · [Website](https://nomiaqm.com/en/) · [Download](#download) · [Video tutorial (Bilibili)](https://www.bilibili.com/video/BV1Lf8b6nEjf/) · [Let your AI connect it](docs/integrate-with-your-agent-en.md) · [Community](https://github.com/aqm857886159/Nomi/discussions) · [For Teams](https://nomiaqm.com/en/#teams) · [Watch the 60s film](https://nomiaqm.com/assets/video/launch-film-en.mp4) · [X/Twitter](https://x.com/sdf297417627618)\n\n[![Latest release](https://img.shields.io/github/v/release/aqm857886159/Nomi?label=release)](https://github.com/aqm857886159/Nomi/releases/latest)\n![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-1a1816)\n[![License](https://img.shields.io/badge/license-AGPL--3.0--only-1a1816)](LICENSE)\n\n## WeChat / 微信联系\n\n<p align=\"center\">\n  <a href=\"docs/media/nomi-canvas-group-wechat-2026-09-08.jpg\"><img src=\"docs/media/nomi-canvas-group-wechat-2026-09-08.jpg\" alt=\"Nomi user group WeChat QR\" width=\"220\" /></a>\n  &nbsp;&nbsp;\n  <a href=\"docs/media/qingyang-wechat.jpg\"><img src=\"docs/media/qingyang-wechat.jpg\" alt=\"Nomi maintainer WeChat QR\" width=\"180\" /></a>\n</p>\n\n<p align=\"center\">\n  <strong>Scan to join the Nomi user group</strong> (left) — feedback goes straight into iteration.<br />\n  If the group QR expires, or for AGPL-compliant custom development, deployment, and ongoing iteration, add the maintainer (right) at <strong>TZ857886159</strong>.\n</p>\n\n[![Nomi director workflow](marketing/assets/video/hero-poster.jpg)](https://nomiaqm.com/assets/video/launch-film-en.mp4)\n\n## Why Nomi\n\nPeople generating AI video at scale — and companies that want to put AI video to work — increasingly need an **open-source, local** canvas. Three reasons:\n\n**① Cost** — the real spend in AI video is generation. Nomi lets you **freely combine cheap generation sources**: relay wholesale prices, time-limited platform promotions, the free image credits bundled with your agent membership, free sources like ModelScope, and your own local ComfyUI — whichever is cheapest. Layer the \"draft → reference → finish\" workflow on top: use cheap / free models for storyboard sketches, pose frames, and reference videos (regenerate freely), then feed the good ones as references into a high-quality model, spending the expensive credits only on the final step. Per-unit cost drops sharply.\n\n**② Customization** — the code is open. Use your own Codex / Claude Code to bend it into what you want and add your own skills; a company can customize it into an internal AI-video platform, and the whole team's cost comes down with it.\n\n**③ Local** — your footage, generated takes, workflows, and provider setup all live on your machine. When you call an external model API, only the inputs required to complete the task are sent to the provider you configured.\n\nAnd a structural difference: **use Nomi as your agent's generation backend.** 25 MCP tools let Codex / Claude Code / Cursor drive Nomi over MCP for generation, orchestration, and editing, reusing the credits bundled with your agent membership. Online platforms make their money on compute, so structurally they can't offer this; an open-source local app is naturally happy to be driven by an agent.\n\n## Connecting your own stack\n\n\"Connecting my own stuff is a hassle\" is the one big pain point. Nomi gives you two paths:\n\n**① Works out of the box** — **APIMart** and **Kie.ai** are wired in as the two cores, alongside around ten more ready-to-use providers (ModelScope, Volcengine, Runway, fal, Replicate, MiniMax, ElevenLabs, and more); flagship models have a continuously growing integration-certification ledger (currently 66 certified entries). Any OpenAI-compatible, Anthropic, Responses, or relay endpoint can be added by pasting a URL and a key — no rebuild. A local ComfyUI is a provider like any other: Nomi converts the normal \"Save\" workflow format, so the workflows you download actually import, and it diffs the graph against `/object_info` to tell you which custom nodes and model files you are missing before you run it.\n\n**② Let your AI connect it for you** — you don't have to figure out integration yourself. Clone the repo, hand the **[Let your AI connect Nomi for you](docs/integrate-with-your-agent-en.md)** document to your Codex / Claude Code, and tell it what you want to connect (a relay, DeepSeek, a local ComfyUI…) — it will walk you through it step by step. The doc covers four paths: custom / relay providers, local ComfyUI, MCP driven by an agent, and skill import — each with its \"success signal\" and a recommended combo that drives cost to the floor.\n\n## Download\n\n| System | Build | Download |\n|---|---|---|\n| macOS | Apple Silicon | [Nomi-mac-arm64.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-arm64.dmg) |\n| macOS | Intel | [Nomi-mac-intel.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-intel.dmg) |\n| Windows | Windows 10 / 11 x64 | [Nomi-windows-setup.exe](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-windows-setup.exe) |\n\nSupported release targets are macOS arm64/x64 and Windows x64. Linux, Windows arm64, and macOS universal installers are not currently published.\n\n### First launch on macOS\n\nThe current macOS build is **not Apple Developer ID signed or notarized**, so macOS may block it on first launch. Only use the direct downloads in the table above or links from the official Nomi website and GitHub repository.\n\n1. Download the matching DMG and drag `Nomi.app` to Applications.\n2. In Finder, right-click `Nomi.app` in Applications, choose **Open**, then confirm **Open**.\n3. If it is still blocked, open **System Settings → Privacy & Security**, find the Nomi message, and click **Open Anyway**.\n\nOnly if macOS says Nomi is “damaged”, first confirm the installer came from an official Nomi link, then run:\n\n```bash\nxattr -dr com.apple.quarantine \"/Applications/Nomi.app\"\n```\n\nDo not disable Gatekeeper globally. Updates require downloading the matching DMG and replacing the app manually.\n\n### First launch on Windows\n\nThe installer has no Authenticode signature. In the SmartScreen prompt, choose **More info** → **Run anyway**.\n\n## Quick start\n\n1. **Connect a model.** Choose a curated provider and enter one API key, or add your own OpenAI-, Responses-, or Anthropic-compatible endpoint. Connecting your own stuff a hassle? Hand [Let your AI connect Nomi for you](docs/integrate-with-your-agent-en.md) to your Codex / Claude Code and let it do it.\n2. **Write the intent.** Start with a story or one shot. Ask Nomi—or a connected AI assistant over MCP—to build an editable storyboard and canvas plan.\n3. **Direct and export.** Review visual anchors, generate images or video with your configured models, choose the results, arrange the timeline, and export MP4.\n\n> **Disclosure:** one curated provider (APImart) is linked with a referral code. You always pay providers directly with your own key at their price — Nomi never proxies or resells inference, and every provider can be replaced by your own endpoint.\n\nRead [Let your AI connect Nomi](docs/integrate-with-your-agent-en.md), the [English model connection tutorial](docs/guide/model-connection-en.md), [urgent Codex / Claude Code provider-setup prompt](docs/guide/model-integration-prompt-en.md), [copy-paste Codex issue-fix prompt](docs/guide/codex-issue-fix-prompt-en.md), [user guide](docs/user-guide.md), [provider guide](docs/provider-integration.md), [conversational model integration guide](docs/guide/conversational-model-integration.md), or [CLI + MCP guide](docs/guide/capability-core-cli-mcp.md).\n\n## Feedback & building it together\n\nNomi is built by one person, and it moves fast — features land quickly, sometimes a little rough around the edges, but it's genuinely moving forward and the commits never stop.\n\n- **Hit a problem? Let your AI fix it first.** The code is open source — send the error along with the [Codex issue-fix prompt](docs/guide/codex-issue-fix-prompt-en.md) to your Codex / Claude Code, and it can patch many issues for you directly.\n- **Tell me the general ones and I'll iterate them away.** Say so in the [community](https://github.com/aqm857886159/Nomi/discussions) or open an [Issue](https://github.com/aqm857886159/Nomi/issues); anything everyone runs into, I fold into the mainline.\n- Bug reports, feature proposals, docs, and code are all welcome — see [Contributing](#contributing) below.\n\n## Community\n\nUse [GitHub Discussions](https://github.com/aqm857886159/Nomi/discussions) to ask questions, share workflows, and follow what is being built next, and [GitHub Issues](https://github.com/aqm857886159/Nomi/issues) to report bugs and request features. Follow the project on [X / Twitter](https://x.com/sdf297417627618) for release notes and short demos; workflow support is available at **2373272608@qq.com**. There is also a [getting-started walkthrough on YouTube](https://www.youtube.com/watch?v=NugvKQjN22A) (in Chinese). WeChat users can use the group and maintainer QR codes in the [Chinese README](README.zh-CN.md#微信联系).\n\n## For Teams\n\nNomi is open source for creators. We also provide **Custom builds**, **Integrations**, **AGPL-compliant deployment**, and **Ongoing iteration** for teams that need Nomi adapted to a real delivery workflow.\n\n[Discuss a project](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml). The form is public: share only a non-confidential summary and never post credentials, private contact details, budget details, or NDA-protected information.\n\n## Developers\n\nRequires Node.js 20+ and pnpm.\n\n```bash\ngit clone https://github.com/aqm857886159/Nomi.git\ncd Nomi\ncorepack enable\npnpm install\npnpm dev\n```\n\n```text\nelectron/    Electron main process, local runtime, storage, and model calls\nsrc/         React + Vite + Tailwind workbench\nskills/      Skill Pack v2; see docs/skill-pack-format.md\n```\n\nUseful checks:\n\n```bash\npnpm run test\npnpm run typecheck\npnpm run gates\n```\n\nResearch tooling: `scripts/research/tikhub-search.mjs` searches Chinese social platforms (Douyin / Xiaohongshu / Bilibili / X) for what creators are actually saying about a topic. It reads its credential **only** from the `TIKHUB_API_KEY` environment variable — set it in your shell profile (`export TIKHUB_API_KEY=\"...\"`, obtained from <https://www.tikhub.io>), never in a repo file or on the command line; without it the script says so and exits non-zero rather than returning empty results. See [`docs/research/tikhub-api-notes.md`](docs/research/tikhub-api-notes.md).\n\n## Contributing\n\nBug reports, feature proposals, documentation, and code contributions are welcome. Contributors do not need to sign a CLA; contributions are accepted under AGPL-3.0-only.\n\n- [Report a bug](https://github.com/aqm857886159/Nomi/issues/new?template=bug_report.yml)\n- [Request a feature](https://github.com/aqm857886159/Nomi/issues/new?template=feature_request.yml)\n- [Ask a question or share an idea](https://github.com/aqm857886159/Nomi/discussions)\n\n## License\n\nCurrent releases are licensed under AGPL-3.0-only; historical releases published under Apache-2.0 keep their original license.\n\nSee [LICENSE](LICENSE). Paid services can include AGPL-compliant custom development, integration, deployment, training, and ongoing iteration. Nomi does not offer a closed-source distribution that withholds the corresponding source code.\n"
+    },
+    "brief": {
+      "summary": "Nomi 是本地优先的开源 AI 视频工作台。",
+      "problem": "整合模型、生成素材和剪辑流程较复杂，成本与隐私难兼顾。",
+      "highlights": [
+        "可以用故事生成可编辑分镜",
+        "可以接入 ComfyUI 和多种模型",
+        "可以在时间线上整理并导出视频"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "短片制作团队",
+        "开发者"
+      ],
+      "why_trending": "总 Star 503，本周首次收录且近期持续活跃。",
+      "caveat": "目前仅发布 macOS 和 Windows 安装包，安装包未签名。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aqm857886159/Nomi",
+      "score": 97,
+      "category": "AI 视频",
+      "reason": "代理驱动的本地AI视频工作台",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "Kirilllive/tuesday-js",
+      "url": "https://github.com/Kirilllive/tuesday-js",
+      "description": "simple web-based, free and open-source visual novel editor that can be used in a web browser. It is written in JavaScript without using any third party libraries and thus does not require additional software installation. The engine uses standard HTML document elements such as div and img.",
+      "language": "HTML",
+      "total_stars": 686,
+      "forks": 83,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adventure-game-engine",
+        "creative-writing",
+        "edutainment",
+        "interactive-fiction",
+        "interactive-storytelling",
+        "literate-programming",
+        "long-read",
+        "nocode",
+        "screenplay",
+        "single-page-applications",
+        "storytelling",
+        "visual-novel",
+        "visual-novel-editor",
+        "visual-novel-engine",
+        "visual-novel-maker",
+        "visual-novels",
+        "web-based-application",
+        "web-based-game",
+        "web-editor"
+      ],
+      "license_name": "MIT",
+      "created_at": "2020-01-10T10:14:03Z",
+      "updated_at": "2026-09-09T03:52:54Z",
+      "pushed_at": "2026-09-09T03:52:44Z",
+      "open_issues": 7,
+      "homepage": "https://kirilllive.github.io/tuesday-js/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "![Tuesday js visual novels engine](https://repository-images.githubusercontent.com/233020914/1b3240ff-9db8-4163-92ba-f86e81d10967)\n\n# Tuesday JS visual novel engine\n\nis a simple web-based, free and open-source visual novel editor that can be used in a web browser. It is written in JavaScript without using any third party libraries and thus does not require additional software installation. The engine uses standard HTML5 document elements such as div and img. This allows the use of any media format supported by browsers including vector graphics svg, gif animations and css styles.\nThere is a version of the editor available as a standalone application for Android devices and desktops. All versions are fully compatible with each other and have the same interface.\n\n> Run in browser:\n> https://kirilllive.github.io/tuesday-js/translate/en_tuesday_visual.html\n\nは無駄を排した作りの、無償かつオープンソースのビジュアルノベル作成ソフトウェアです。ゲームの制作もプレイもウェブブラウザ上で可能です。JavaScriptで開発したソフトウェアですが、サードパーティ製ライブラリーを一切使用していないので、他のソフトウェアをインストールする手間は不要です。divやimgといった標準HTML5文章でお馴染みのタグや要素でゲームのスクリプトを記述し、svg形式のベクターイメージ、gif形式のアニメーション、CSSスタイルシートなど、ブラウザが扱えるファイルなら何でも使用可能です。\nアンドロイド機器並びにパソコン版WindowsとMac用の単体で動作するダウンロード版もあります。各々のバージョン間には完全な互換性があり、インターフェイスも共通しています。\n\n> ブラウザで実行: https://kirilllive.github.io/tuesday-js/translate/ja_tuesday_visual.html\n\nПростой и бесплатный веб-редактор визуальных новелл с открытым исходным кодом, который можно использовать в браузере. Он написан на JavaScript без использования каких-либо сторонних библиотек и не требует установки дополнительного программного обеспечения. Движок использует стандартные элементы HTML5 документа, такие как div и img. Это позволяет использовать любой медиаформат поддерживаемый браузерами включая векторную графику svg, gif-анимацию и стили css.\nЕсть версии редактора доступные для Android устройств и настольных компьютеров. Все версии полностью совместимы друг с другом и имеют одинаковый интерфейс.\n\n> Запустить в браузере: https://kirilllive.github.io/tuesday-js/translate/ru_tuesday_visual.html\n\n这是一款基于网络的简单、免费且开源的视觉小说编辑器，可在网络浏览器中使用。它是用 JavaScript 编写的，不使用任何第三方库，因此无需安装额外的软件。该引擎使用标准的 HTML5 文档元素，如 div 和 img。这使得它能够使用浏览器所支持的任何媒体格式，包括矢量图形 svg、gif 动画以及 css 样式。\n还有一个版本的编辑器可作为独立应用程序，适用于安卓设备和桌面端。所有版本之间完全兼容，并且拥有相同的界面。\n\n> 在浏览器中运行: https://kirilllive.github.io/tuesday-js/translate/zh_tuesday_visual.html\n\n\nTutorials\n-------------------------\n> EN - [A quick tutorial to create a visual novel ](https://kirilllive.github.io/tuesday-js/doc_editor.html#quick_tutorial)\n\n> JA - [Tuesday JSでビジュアルノベルを作ってみよう](https://kirilllive.github.io/tuesday-js/doc_editor.html#quick_tutorial_ja)\n\n> ES - [Una guía rápida para crear una novela visual](https://kirilllive.github.io/tuesday-js/doc_editor.html#quick_tutorial_es)\n\n> RU - [Краткое руководство по созданию визуальной новеллы](https://kirilllive.github.io/tuesday-js/doc_editor.html#quick_tutorial_ru)\n\n> PT - [Um guia rápido para criar uma visual novel](https://kirilllive.github.io/tuesday-js/doc_editor.html#quick_tutorial_pt)\n\n\nDownload builds for macOS, Windows, Android, Web\n-------------------------\n> GitHub: https://github.com/Kirilllive/tuesday-js/releases\n\n#### System requirements for desktop version\n\nCPU: ARM / x86_64\n\nRAM: 512 MB\n\nMinimum OS:\n- Windows 7\n- MacOS 10.13 (Apple Silicon / Intel)\n- Android 5.1\n- Linux (Glibc 2.17 or newer)\n    - Debian 11\n    - Ubuntu 20.04\n\n\n\nVisualization /ビジュアライゼーション\n-------------------------\nThe visual editor allows you to create graphics or kinetic novels without any programming knowledge. If is necessary, it is possible to expand the basic functionality using JavaScript and css.\n\n個々の選択肢や、選択の結果起こる結果などと併せてスクリプトの全体像を目で見て分かるように表示します。スクリプトの構造を簡単に把握でき、編集もしやすくなっています。\n\nРедактор отображает структуру сценария со всеми элементами, такими как параметры диалога и последствия выбора. Это облегчает навигацию и редактирование сценария.\n\n这款可视化编辑器让你无需任何编程知识就能创作图像小说或动态小说。如有必要，还可以使用 JavaScript 和 CSS 来扩展其基本功能。\n\n![Tuesday JS script structure](screenshots/script_structure.jpg)\n\n\nScene editor / シーンエディター\n-------------------------\nThe scene editor can arrange all the elements in their places. It also shows how the scene will change on different screens. \nIn the scene layout you can use standard HTML units in percentage pixels or centimeters to better adapt the scene to different screens.\n\n機能では、全種類の要素を分類して管理できます。加えて、制作環境と異なる画面環境でゲームを動作させたときの画面構成の変化を確認できます。\n標準HTML用のパーセント単位でもセンチメートル単位でもレイアウトを指定できるので、環境に合わせた適切な画面構成が作れます。\n\nПозволяет расположить все элементы по своим местам. Он также показывает, как будет выглядеть сцена на разных экранах. \nВ макете сцены вы можете использовать стандартные параметры HTML как проценты, пиксели или сантиметры, чтобы лучше адаптировать сцену к различным экранам.\t\n\n场景编辑器可以将所有元素放置在合适的位置。它还能展示该场景在不同屏幕上会如何变化。\n在场景布局中，你可以使用以百分比、像素或厘米为单位的标准 HTML 度量单位，以便让场景更好地适配不同的屏幕。\n\n![Tuesday JS scene editor](screenshots/scene_editor.jpg)\n\n\nTranslate tool / 内蔵翻訳支援ツール\n-------------------------\nThe built-in translation editing tool allows you to quickly add a new translation and edit all the texts in your project without leaving the editor. In addition, it displays the number of completed translations for each language.\n\nTuesday JSが内蔵する翻訳支援ツールなら、他の言語版用の翻訳文を、プロジェクトで使用している元のテキストを対訳表のように参照しながら追加していけるので、別のテキストエディターを起動する手間が省けます。また、翻訳の進捗率を言語ごとに確認できます。\n\nВстроенный инструмент редактирования перевода позволяет быстро добавлять новый перевод и отредактировать все тексты в вашем проекте, не выходя из редактора. Кроме того, он отображает количество выполненного переводова для каждого языка.\n\n内置的翻译编辑工具使你无需离开编辑器，就能快速添加新的翻译内容，并编辑项目中的所有文本。此外，它还会显示每种语言已完成的翻译数量。\n\n![Tuesday JS preview](screenshots/translate_tool.jpg)\n\n\nPreview / プレビュー\n-------------------------\nPreview allows you to start a project from a certain point in the script with the selected localization.\n\n各々の言語設定で、任意の時点から動作をテストできるプレビュー機能があります。\n\nПредварительный просмотр позволяет запустить проект с определенной точки в сценарии с выбранной локализацией.\n\n预览功能可让你从脚本中的某个特定点开始，并以所选的本地化设置来启动项目。 \n\n![Tuesday JS preview](screenshots/preview.jpg)\n\n\nJSON\n-------------------------\nA story script has all the elements stored in a JSON structure. Almost any programming language can work with this format. This allows you to port your script to another engine or platform.\nThe editor has a built-in tool to work with JSON. This will allow you to edit the entire contents of the script or just the selected element.\n\nゲームスクリプトは、全要素をJSON形式で保存します。JSONは、一部を除く全てのプログラム言語で扱えるので、他のゲームエンジンやコンピューターにTuesday JSで作成したスクリプトを移植できます。\nJSONを編集するツールを内蔵していおり、スクリプト全体をJSONとして編集することも、任意の箇所のみを編集することも可能です。\n    \nСценарий истории сохраняется в структуре JSON. Практически любой язык программирования может работать с этим форматом что позволяет вам перенести ваш сценарий на другой движок или платформу. \nРедактор имеет встроенный инструмент для работы с JSON это позволит вам отредактировать все содержимое истории или только выбранный элемент.\n\n一个故事脚本的所有元素都存储在一个JSON结构中。几乎任何编程语言都可以处理这种格式。这使得你能够将脚本移植到另一个引擎或平台上。\n该编辑器有一个内置的用于处理JSON的工具。这能让你编辑脚本的全部内容，或者仅仅编辑所选的元素。 \n\n![Tuesday JS json edit](screenshots/json_edit.jpg)\n\n\nASCII art / アスキーアート (AA)\n-------------------------\nThe engine is adapted to use ASCII graphics. With its help, you can diversify the texts with images and patterns made up of text characters.\n\nTuesday JSエンジンはアスキーアート(AA)を適切に表示できます。テキストで様々な絵や模様を作ることができます。\n\nДвижок адаптирован для использования ASCII-графики. С ее помощью вы сможете разнообразить тексты изображениями и узорами составленых из текстовых символов.\n\n该引擎适用于使用ASCII图形。借助它，你可以用由文本字符组成的图像和图案来丰富文本内容。 \n\n![Tuesday JS preview](screenshots/ascii_art.jpg)\n\n\nLocalization / ローカリゼーション\n-------------------------\nTuesday JS provides ample opportunities for adapting stories into other languages.\nYou can set the localized translation for almost any element of your project including text and graphics.\nThe preview function allows you to run the project in the selected language.\nAll language texts can also be exported to a table csv file for editing or adding localizations in another editor.\n\nTuesday JSには、翻訳版を制作するための機能も豊富です。\nゲームを構成するテキストやグラフィックといった要素一つ一つに翻訳版用ファイルを設定でき、プレビュー機能で用意した翻訳版の動作確認ができます。\nCSV形式のテーブルデータとして出力できるので、他のテキストエディターで翻訳文章を編集したり追加したりすることもできます。\n\nTuesday JS предоставляет обширные возможности для адаптации историй на другие языки. \nВы можете локализировать перевод практически любого элемента проекта, включая текст и графику. \nФункция предварительного просмотра позволяет запускать проект на выбранном языке. \nВсе тексты могут быть экспортированы в файл csv таблицы для редактирования или добавления локализаций в другом редакторе.\n\nTuesday JS也具备丰富的用于制作翻译版本的功能。\n可以为构成游戏的文本、图形等每一个元素设置翻译版本的文件，并且能够通过预览功能来确认所准备的翻译版本的运行情况。\n由于可以输出为CSV格式的表格数据，所以也能够在其他文本编辑器中编辑或添加翻译文本。 \n\n![Tuesday JS localization](screenshots/localization.jpg)\n\n\n\nWarning for Android version\n-------------------------\nIf you have problems with files on Android 10 and higher, then you need to specify 'Allow access to manage all files' in the application settings in 'Permissions' section.\n\n![Tuesday JS error access files on Android](tutorial_img/android_settings.png)\n\n\n\n![Tuesday JS visual novels engine Akihabara 秋葉原](screenshots/20201202_122259.jpg)\n\nThe goal of Tuesday JS is to make project development no more difficult than working in an office program to make presentations, and does not require special skills from the user.\n\n\n\n[Japanes translation and adaptation by Onigi](https://twitter.com/onigi123)\n\n[Russian translation and adaptation by LolerFox](https://twitter.com/LolerFox)\n\n[Spanish translation and adaptation by Suki Novels](https://twitter.com/Suki_Novels)\n\n[Portuguese translation and adaptation by Sarah Camargo](https://www.linkedin.com/in/sarah-carolina-camargo/)\n\n[China translation and adaptation by jymusic0663](https://github.com/jymusic0663/)\n\n\n"
+    },
+    "brief": {
+      "summary": "可在浏览器制作视觉小说的开源编辑器",
+      "problem": "降低视觉小说制作的编程和安装门槛",
+      "highlights": [
+        "可以用可视化方式编排故事分支",
+        "可以在浏览器中预览不同语言版本",
+        "可以用JSON编辑并移植故事脚本"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "互动叙事作者",
+        "独立游戏开发者"
+      ],
+      "why_trending": "本周首次收录，已有686个Star且近期仍有更新",
+      "caveat": "高级功能需使用JavaScript和CSS扩展",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Kirilllive/tuesday-js",
+      "score": 95,
+      "category": "互动叙事",
+      "reason": "可视化小说编辑与叙事引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  }
+]
