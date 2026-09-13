@@ -1,0 +1,542 @@
+[
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "multimodal-art-projection/YuE",
+      "url": "https://github.com/multimodal-art-projection/YuE",
+      "description": "YuE2: frontier music generation with symbolic planning, zero-shot covers, and agentic music editing.",
+      "language": "Python",
+      "total_stars": 7368,
+      "forks": 828,
+      "stars_today": 210,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 210
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audio-generation",
+        "deep-learning",
+        "foundation-models",
+        "gpt",
+        "huggingface",
+        "llama",
+        "llms",
+        "music-generation",
+        "style-transfers",
+        "voice-cloning"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-01-23T06:21:58Z",
+      "updated_at": "2026-09-13T04:58:22Z",
+      "pushed_at": "2026-09-11T17:37:59Z",
+      "open_issues": 11,
+      "homepage": "https://map-yue2.github.io/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "> Looking for the original YuE? Its code, documentation, and license are preserved on the **[YuE-v1 branch](https://github.com/multimodal-art-projection/YuE/tree/YuE-v1)**.\n\n<p align=\"center\">\n  <img src=\"assets/logo.png\" alt=\"YuE\" width=\"150\" />\n</p>\n\n<p align=\"center\">\n  <picture>\n    <source media=\"(max-width: 600px)\" srcset=\"assets/institutions-mobile.svg\" />\n    <img src=\"assets/institutions.svg\" alt=\"HKUST, M·A·P, Tokenwave.AI, NYU, Stanford, MBZUAI, NOIZ, and ACE Studio\" width=\"760\" />\n  </picture>\n</p>\n\n<h1 align=\"center\">YuE2: Unifying Symbolic and Audio Music Generation at Frontier Quality</h1>\n\n<p align=\"center\"><strong>Compose in symbols. Create in sound.</strong></p>\n\n<p align=\"center\">\n  <a href=\"https://map-yue2.github.io/\">🎧 Demos</a> ·\n  <a href=\"https://huggingface.co/m-a-p/YuE2-3B\">🤗 YuE2</a> ·\n  <a href=\"#quick-start\">🚀 Quick start</a> ·\n  <a href=\"#agent-skill\">🤖 Agent skill</a> ·\n  <a href=\"#benchmarks\">📊 Benchmarks</a> ·\n  <a href=\"https://huggingface.co/m-a-p/MERT-v2-FullSong\">🤗 MERT2</a> ·\n  <a href=\"https://huggingface.co/m-a-p/SheetSage2\">🤗 SheetSage2</a> ·\n  <a href=\"https://huggingface.co/datasets/m-a-p/WildSongBench\">🤗 WSB</a> ·\n  <a href=\"https://github.com/multimodal-art-projection/YuE/releases/tag/yue2-v0.1.6\">📦 Release</a> ·\n  <a href=\"https://discord.gg/ssAyWMnMzu\"><img alt=\"Join us on Discord\" src=\"https://img.shields.io/discord/842440537755353128?color=5865F2&amp;logo=discord&amp;logoColor=white&amp;label=Discord&amp;style=flat-square\" height=\"20\" /></a>\n</p>\n\n**YuE2 brings frontier song quality to music generation with an editable composition.** Give it lyrics and a style prompt: it writes a melody-and-chord plan, then realizes that plan as a complete song with vocals and accompaniment.\n\n- **Frontier quality.** YuE2 is competitive with Suno v5/v6 on WildSongBench. YuE2 (best-of-8) achieves **6.9632 SongBench Avg**, the highest observed mean among all evaluated settings.\n- **White-box music generation through symbolic planning.** Read, play, and change the composition before rendering it. Melody and chords become explicit controls that a person or an agent can inspect and edit.\n- **Zero-shot covers and agentic editing.** Reimagine a transcribed song in a new style, or refine a song through a conversation about its score, arrangement, and lyrics—all with the same generation checkpoint.\n\n[![YuE2 song quality and text alignment on WildSongBench](assets/frontier-teaser.png)](https://map-yue2.github.io/#model-overview)\n\n*192 WildSongBench prompts. Both YuE2 settings use symbolic planning. Bo8 = best-of-8. The axes are normalized comparison indices; bubble area represents AudioBox production quality. [Scores and evaluation protocol](docs/benchmarks.md). [Vector PDF](assets/frontier-teaser.pdf) · [SVG](assets/frontier-teaser.svg).*\n\n## Hear what you can make\n\n| Create | Cover | Edit with an agent |\n|---|---|---|\n| Lyrics + style → score → full song | Source recording → melody score → a new interpretation | Musical feedback → score, style, or lyric revisions → a new recording |\n| [Listen and inspect the score](https://map-yue2.github.io/#abc-cot-gen) | [Hear zero-shot covers](https://map-yue2.github.io/#cover) | [Follow an editing conversation](https://map-yue2.github.io/#agentic-music-editing) |\n\nThe agentic demo follows **The Last Train through 9 steps and 14 versions**, from Mandarin pop to English jazz with new harmony and a saxophone solo. Listen to each version and inspect its conversation, score, prompt, and lyrics.\n\n## How it works\n\n![YuE2 architecture: style and lyrics become an editable score, semantic music tokens, acoustic latents, and audio](assets/architecture.png)\n\nOne **AR–NAR Mixture-of-Transformers** backbone predicts the score and semantic tokens autoregressively, then generates acoustic latents with flow matching. A VAE decodes those latents into stereo audio. Creation, covering, and editing differ in where the score comes from: YuE2, a transcribed recording, or an edited composition.\n\nThe staged Python API exposes `plan()` → `generate_semantic()` → `synthesize()` → `decode()`. See the [generation guide](docs/generation.md) for exact-plan reuse and decoder selection.\n\n## Quick start\n\n**Linux · Python 3.12 · NVIDIA GPU with BF16 support and 24 GB VRAM.** YuE2 produces 48 kHz stereo audio without quantization. Model files download from Hugging Face on first use.\n\n```bash\ngit clone https://github.com/multimodal-art-projection/YuE.git\ncd YuE\npython3.12 -m venv .venv\nsource .venv/bin/activate\npython -m pip install --upgrade pip\npython -m pip install .\npython examples/generate.py --output outputs/first-song\n```\n\nOpen `outputs/first-song/audio.flac`. The output directory also retains the score, semantic tokens, acoustic latents, generation settings, and model identities.\n\nThe Python interface is equally short:\n\n```python\nimport json\nfrom pathlib import Path\nfrom yue2 import YuE2Pipeline\n\nrequest = json.loads(Path(\"examples/song.json\").read_text(encoding=\"utf-8\"))\nwith YuE2Pipeline.from_pretrained(\"m-a-p/YuE2-3B\", device=\"cuda\") as pipe:\n    song = pipe(**request)\n    song.save_artifacts(\"outputs/my-song\")\n    print(song.truncated)\n```\n\n| Setting | Behavior |\n|---|---|\n| `cot=\"full\"` | Generate an editable melody-and-chord plan; the default for new songs |\n| `cot=\"melody\"` | Use a melody plan with free accompaniment; recommended for covers |\n| `cot=\"off\"` | Generate directly from lyrics and style |\n| `abc=...` | Supply your own score in `full` or `melody` mode |\n\n[Generation guide](docs/generation.md) · [Original example inputs](examples/README.md) · [v0.1.6 wheel archive](https://github.com/multimodal-art-projection/YuE/releases/download/yue2-v0.1.6/yue2_infer-0.1.6-py3-none-any.whl)\n\n## Cover a song\n\nTranscribe a source recording with **[🤗 SheetSage2](https://huggingface.co/m-a-p/SheetSage2)**, review its melody ABC, and provide new lyrics or a target style. For covers, use **`cot=\"melody\"` and a score without chord symbols** so the accompaniment can adapt to the new style.\n\n```python\nfrom pathlib import Path\nfrom yue2 import YuE2Pipeline\n\nwith YuE2Pipeline.from_pretrained(\"m-a-p/YuE2-3B\", device=\"cuda\") as pipe:\n    cover = pipe(\n        style=\"English, jazz-funk, warm lead vocal, Rhodes, bass and drums\",\n        lyrics=Path(\"cover-lyrics.txt\").read_text(encoding=\"utf-8\"),\n        abc=Path(\"cover-score/score.abc\").read_text(encoding=\"utf-8\"),\n        cot=\"melody\",\n        seed=42,\n    )\n    cover.save_artifacts(\"outputs/cover\")\n```\n\nSheetSage2 runs in a separate environment and loads its MERT2 encoder automatically. The [cover guide](docs/covers.md) gives the complete transcription and generation commands. An included [original melody example](examples/melody.abc) also lets you try score-conditioned generation immediately.\n\n## Edit a composition\n\nExport a plan, revise the musical details, and render the edited score:\n\n```python\nimport json\nfrom pathlib import Path\nfrom yue2 import YuE2Pipeline\n\nrequest = json.loads(Path(\"examples/song.json\").read_text(encoding=\"utf-8\"))\nwith YuE2Pipeline.from_pretrained(\"m-a-p/YuE2-3B\", device=\"cuda\") as pipe:\n    plan = pipe.plan(**request)\n    plan.save(\"outputs/plan\")\n```\n\nCopy `outputs/plan/score.abc` to `edited.abc`, then ask an agent to change its harmony, melody, tempo, or form. Supply the edited file as a new score:\n\n```bash\npython examples/generate.py --request examples/song.json \\\n  --abc-file edited.abc --cot full --output outputs/edited\n```\n\nThe editable score is the white-box interface: you can inspect the intended composition and intervene on it. Editing generates a new complete recording; it does not preserve the original waveform outside an edit. [Editing guide and a reproducible harmony example](docs/editing.md).\n\n## Agent skill\n\nThe **[yue2-music skill](skills/yue2-music/SKILL.md)** teaches an agent how to generate songs, transcribe and cover recordings, edit ABC scores, check musical invariants, and organize listening comparisons. It includes portable helpers and references to the released model interfaces.\n\nUse **`skills/yue2-music/` from this repository** with an agent that supports `SKILL.md` packages. Install it using your agent's skill-directory or import mechanism; the Python runtime is installed separately with `pip install .`. The earlier [v0.1.6 skill ZIP](https://github.com/multimodal-art-projection/YuE/releases/download/yue2-v0.1.6/yue2-music.zip) remains available under its bundled license.\n\nTry a concrete request:\n\n> Use the yue2-music skill to create an English piano-pop song. Keep the original audio and score. Make a second version with jazz harmony, preserve the vocal melody and lyric order, and give me both versions to compare.\n\n## Benchmarks\n\n**WildSongBench: 192 prompts, automatic evaluation, September 12, 2026.**\n\n| System / setting | SongBench Avg ↑ | AudioBox PQ ↑ | MuLan ↑ | PER ↓ |\n|---|---:|---:|---:|---:|\n| **YuE2 (best-of-8)** † | **6.9632** | 8.2714 | 0.5051 | 9.79% |\n| Mureka 9 | 6.9377 | 8.0226 | 0.4394 | 11.69% |\n| Suno v5 | 6.8721 | 8.1698 | **0.5428** | 8.10% |\n| **YuE2** † | 6.7316 | 8.2598 | 0.5068 | 8.44% |\n| Suno v5.5 | 6.7150 | 8.1955 | 0.5089 | 5.96% |\n| Suno v4.5 | 6.6995 | 8.2541 | 0.5022 | **5.80%** |\n| Suno v6 | 6.5562 | 8.1296 | 0.4916 | 7.58% |\n| Suno v6 Wild | 6.4195 | 8.1785 | 0.4999 | 7.45% |\n| LeVo 2 † | 6.3247 | **8.3966** | 0.3542 | 26.12% |\n| MiniMax Music 2.6 | 6.3222 | 8.1711 | 0.4251 | 24.55% |\n| MiniMax Music 3 † | 6.2830 | 8.2825 | 0.3928 | 6.27% |\n| HeartMuLa † | 6.2483 | 8.2933 | 0.3823 | 10.71% |\n| Muse † | 6.0349 | 8.0517 | 0.3937 | 33.42% |\n| ACE-Step 1.5 † | 6.0118 | 8.0518 | 0.4372 | 7.46% |\n| DiffRhythm 2 † | 5.2428 | 7.9782 | 0.3782 | 18.41% |\n| YuE 1 † | 4.9165 | 7.8683 | 0.2623 | 36.38% |\n| SongBloom † | 4.2350 | 8.1539 | 0.2697 | 19.19% |\n\n† Publicly available model weights. All 17 evaluated settings are shown, sorted by SongBench Avg; bold values mark the best result in each column.\n\nBoth YuE2 settings use symbolic planning and the benchmark decoder, **YuE2-Vae-legacy**. Standard YuE2 selects from two candidates; best-of-8 selects from eight. Rankings vary by metric; the small gap between the highest means does not establish statistical significance. [Full results and selection protocols](docs/benchmarks.md).\n\n**Zero-shot covers.** On 948 works, full-score YuE2 reaches **0.647 CLEWS mAP**, compared with **0.006 without a score**, while using the general generator without cover-specific fine-tuning. Source-identity preservation and target-style quality are measured separately; melody-only covers offer more freedom to change the arrangement. [Cover evaluation](docs/benchmarks.md#zero-shot-cover-generation).\n\n### Reproduce the benchmarks\n\nTo reproduce the reported benchmark scores, follow the instructions on [🤗 WildSongBench (WSB)](https://huggingface.co/datasets/m-a-p/WildSongBench#reproduce-standard-yue2).\n\n## MERT2\n\n**State-of-the-art music understanding:** SOTA on **14 of 15 MARBLE metrics**, with **91.72% genre accuracy on GTZAN**.\n\n[Demo and results](https://map-yue2.github.io/#mert2) · [🤗 MERT2-30s](https://huggingface.co/m-a-p/MERT-v2-30s) · [🤗 MERT2-FS](https://huggingface.co/m-a-p/MERT-v2-FullSong)\n\n## SheetSage2\n\n**State-of-the-art audio-to-score transcription:** SOTA on **10 of 13 benchmark metrics**, with **82.51% vocal melody pitch-class F1 on RWC-Pop**.\n\n[Demo and results](https://map-yue2.github.io/#sheetsage2) · [🤗 Model and inference](https://huggingface.co/m-a-p/SheetSage2)\n\n## Models and resources\n\n| Resource | Purpose |\n|---|---|\n| [🤗 YuE2-3B](https://huggingface.co/m-a-p/YuE2-3B) | Song generation, symbolic planning, covering, and editing |\n| [🤗 YuE2-Vae](https://huggingface.co/m-a-p/YuE2-Vae) | Default generation and listening decoder |\n| [🤗 YuE2-Vae-legacy](https://huggingface.co/m-a-p/YuE2-Vae-legacy) | Decoder for the reported benchmark protocol |\n| [🤗 SheetSage2](https://huggingface.co/m-a-p/SheetSage2) | Audio-to-score transcription for covers and editing |\n| [🤗 MERT-v2-FullSong](h"
+    },
+    "brief": {
+      "summary": "YuE2用可编辑乐谱生成歌曲、翻唱和修改版本。",
+      "problem": "降低歌曲创作、翻唱与反复修改的门槛。",
+      "highlights": [
+        "可以根据歌词和风格生成完整歌曲",
+        "可以把录音转成旋律并制作新风格翻唱",
+        "可以修改乐谱、和声、旋律后重新生成"
+      ],
+      "target_users": [
+        "音乐创作者",
+        "AI 音乐开发者",
+        "研究人员"
+      ],
+      "why_trending": "今日新增210 Star，本周首次收录，近期持续更新。",
+      "caveat": "需要Linux、Python 3.12和24GB显存的英伟达GPU。",
+      "category": "音乐 / 音效",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "multimodal-art-projection/YuE",
+      "score": 95,
+      "category": "音乐 / 音效",
+      "reason": "直接生成音乐并支持编辑与翻唱",
+      "generated_by_ai": true,
+      "velocity_score": 70,
+      "freshness_score": 20,
+      "ranking_score": 68.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "Shubhamsaboo/awesome-llm-apps",
+      "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+      "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
+      "language": "Python",
+      "total_stars": 137702,
+      "forks": 20238,
+      "stars_today": 230,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 230
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "llms",
+        "python",
+        "rag"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2024-04-29T05:30:25Z",
+      "updated_at": "2026-09-13T05:00:10Z",
+      "pushed_at": "2026-09-13T03:46:11Z",
+      "open_issues": 12,
+      "homepage": "https://www.theunwindai.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"http://www.theunwindai.com\">\n    <img src=\"docs/banner/unwind_black.png\" width=\"900px\" alt=\"Unwind AI\">\n  </a>\n</p>\n\n<div align=\"center\">\n\n# Awesome LLM Apps\n\n**100+ open-source AI agents, agent skills, and RAG apps. Hand-built, tested end-to-end, Apache-2.0.**\n\nClone it, ship it, sell it - 100% free and open-source\n\nWorks with Claude, Gemini, GPT, DeepSeek, Llama, Qwen and other open-source models.\n\n**[Step-by-step tutorials on Unwind AI](https://www.theunwindai.com)** · **[Quick start](#-run-one-now)** · **[Browse all templates](#-browse-all-templates)**\n\n\n<a href=\"https://trendshift.io/repositories/9876\" target=\"_blank\">\n  <img src=\"https://trendshift.io/api/badge/repositories/9876\" width=\"220\" alt=\"Featured on Trendshift as the #1 repository of the day\">\n</a>\n\n<br>\n\n</div>\n\n<table>\n  <tr>\n    <td width=\"33.3%\" align=\"center\">\n      <a href=\"agent_skills/project-graveyard/\"><img src=\"docs/gallery/project-graveyard.png\" alt=\"Project Graveyard: an agent that autopsies your dead side projects\"></a>\n      <sub><b>Project Graveyard</b></sub>\n    </td>\n    <td width=\"33.3%\" align=\"center\">\n      <a href=\"voice_ai_agents/insurance_claim_live_agent_team/\"><img src=\"docs/gallery/insurance-claim-live-team.png\" alt=\"Insurance Claim Live Agent Team: voice claims settled in real time\"></a>\n      <sub><b>Insurance Claim Live Agent Team</b></sub>\n    </td>\n    <td width=\"33.3%\" align=\"center\">\n      <a href=\"advanced_ai_agents/single_agent_apps/ai_fraud_investigation_agent/\"><img src=\"docs/gallery/ai-fraud-investigation.png\" alt=\"AI Fraud Investigation Agent: public records, cross-examined\"></a>\n      <sub><b>AI Fraud Investigation Agent</b></sub>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\">\n      <a href=\"agent_skills/self-improving-agent-skills/\"><img src=\"docs/gallery/self-improving-agent-skills.png\" alt=\"Self-Improving Agent Skills: skills that rewrite themselves against evals\"></a>\n      <sub><b>Self-Improving Agent Skills</b></sub>\n    </td>\n    <td align=\"center\">\n      <a href=\"advanced_ai_agents/multi_agent_apps/ai_home_renovation_agent\"><img src=\"docs/gallery/ai-home-renovation.png\" alt=\"AI Home Renovation Agent: photo in, photoreal redesign out\"></a>\n      <sub><b>AI Home Renovation Agent</b></sub>\n    </td>\n    <td align=\"center\">\n      <a href=\"always_on_agents/always_on_hn_briefing_agent/\"><img src=\"docs/gallery/always-on-hn-briefing.png\" alt=\"Always-on HN Briefing Agent: it reads Hacker News while you sleep\"></a>\n      <sub><b>Always-on HN Briefing Agent</b></sub>\n    </td>\n  </tr>\n</table>\n\n## 🚀 Run one now\n\nGive your coding agent a new skill in 10 seconds:\n\n```bash\nnpx skills add https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/project-graveyard\n```\n\nThen ask it: *\"why do I never finish my side projects?\"*\n\nOr clone and run any agent in 30 seconds:\n\n```bash\ngit clone https://github.com/Shubhamsaboo/awesome-llm-apps.git\ncd awesome-llm-apps/starter_ai_agents/ai_travel_agent\npip install -r requirements.txt\nstreamlit run travel_agent.py\n```\n\n> 📬 New templates drop weekly. [Get them in your inbox on Unwind AI](https://www.theunwindai.com).\n\n## 📂 Browse all templates\n\n### 🧩 Agent Skills\n\n*Give your coding agent new abilities. One command to install, plain English to use. Every skill ships real code and passes a security + eval CI gate. Works with Claude Code, Codex, Cursor, and other coding agents. [Browse all skills →](agent_skills/)*\n\n*   [⚰️ Project Graveyard](agent_skills/project-graveyard/) - Finds every side project you abandoned, tells you why each one died, and helps you finish the one worth going back to\n*   [👁️ First Reader](agent_skills/first-reader/) - Simulates real readers going through your draft and reports where they lose interest, where they stop reading, and what they remember afterward, without rewriting a word\n*   [🔭 Scope Creep Detector](agent_skills/scope-creep-detector/) - Checks whether a diff grew beyond its stated intent and recommends what to keep, split, or justify\n*   [🏺 Commit Archaeologist](agent_skills/commit-archaeologist/) - Reconstructs why a file or code region exists from its introducing commit, later edits, co-changes, and intent clues\n*   [🩺 Dependency Doctor](agent_skills/dependency-doctor/) - Checks a dependency manifest for standard-library pins, obsolete backports, unpinned entries, duplicate constraints, and yanked releases\n*   [🧠 Advisor Orchestrator Worker](agent_skills/advisor-orchestrator-worker/) - Meta Loop with Claude Fable 5.1 as advisor, GPT-6 Astra as orchestrator, and Gemini 3.8 Flash as worker\n*   [♾️ Self-Improving Agent Skills](agent_skills/self-improving-agent-skills/) - Automatically optimize agent skills using Gemini and ADK\n\n### 🌱 Starter AI Agents\n\n*Single-file agents that run with just an API key - a great place to start.*\n\n*   [🎙️ AI Blog to Podcast Agent](starter_ai_agents/ai_blog_to_podcast_agent/) - Turn any blog URL into a narrated podcast episode\n*   [❤️‍🩹 AI Breakup Recovery Agent](starter_ai_agents/ai_breakup_recovery_agent/) - An agent team that talks you through the post-breakup spiral\n*   [📊 AI Data Analysis Agent](starter_ai_agents/ai_data_analysis_agent/) - Ask questions of any CSV or Excel file in plain English\n*   [🩻 AI Medical Imaging Agent](starter_ai_agents/ai_medical_imaging_agent/) - Diagnostic analysis of X-rays and scans with Gemini\n*   [😂 AI Meme Generator Agent (Browser)](starter_ai_agents/ai_meme_generator_agent_browseruse/) - Makes memes by driving a real browser, not an image API\n*   [🎵 AI Music Generator Agent](starter_ai_agents/ai_music_generator_agent/) - Prompt in, MP3 track out\n*   [🛫 AI Travel Agent (Local & Cloud)](starter_ai_agents/ai_travel_agent/) - Personalized day-by-day travel itineraries\n*   [💸 AI x402 Paying Agent](starter_ai_agents/ai_x402_paying_agent/) - An agent with a wallet that pays per-call for the data it needs — no API keys\n*   [✨ Gemini Multimodal Agent](starter_ai_agents/multimodal_ai_agent/) - Video analysis plus web search in one agent\n*   [🔄 Mixture of Agents](starter_ai_agents/mixture_of_agents/) - Multiple LLMs answer, one aggregates the best response\n*   [📊 xAI Finance Agent](starter_ai_agents/xai_finance_agent/) - Real-time stock analysis powered by Grok\n*   [🔍 OpenAI Research Agent](starter_ai_agents/openai_research_agent/) - Multi-agent topic research with the OpenAI Agents SDK\n*   [🕸️ Web Scraping AI Agent](starter_ai_agents/web_scraping_ai_agent/) - Describe what to extract and the agent scrapes it\n\n### 🚀 Advanced AI Agents\n\n*Production-style agents with tools, memory, and multi-step reasoning.*\n\n*   [🏚️ 🍌 AI Home Renovation Agent with Nano Banana Pro](advanced_ai_agents/multi_agent_apps/ai_home_renovation_agent) - Photos of your space in, renovation plan and photorealistic renders out\n*   [🧠 DevPulse AI - Multi-Agent Signal Intelligence](advanced_ai_agents/multi_agent_apps/devpulse_ai/) - Aggregates and scores technical signals into a daily intelligence digest\n*   [🔍 AI Deep Research Agent](advanced_ai_agents/single_agent_apps/ai_deep_research_agent/) - Comprehensive web research with the OpenAI Agents SDK and Firecrawl\n*   [📊 AI VC Due Diligence Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_vc_due_diligence_agent_team) - Multi-agent startup investment analysis with Gemini 3\n*   [🔬 AI Research Planner & Executor (Google Interactions API)](advanced_ai_agents/single_agent_apps/research_agent_gemini_interaction_api) - Multi-phase research with stateful conversations and auto-generated infographics\n*   [🤝 AI Consultant Agent](advanced_ai_agents/single_agent_apps/ai_consultant_agent) - Market analysis and strategy recommendations with live web research\n*   [🏗️ AI System Architect Agent](advanced_ai_agents/single_agent_apps/ai_system_architect_r1/) - Architecture reviews using DeepSeek R1 reasoning plus Claude\n*   [💰 AI Financial Coach Agent](advanced_ai_agents/multi_agent_apps/ai_financial_coach_agent/) - Personalized budget, debt, and savings analysis\n*   [🎬 AI Movie Production Agent](advanced_ai_agents/single_agent_apps/ai_movie_production_agent/) - Script drafts and casting ideas from a one-line movie concept\n*   [📈 AI Investment Agent](advanced_ai_agents/single_agent_apps/ai_investment_agent/) - Stock comparison reports built on Yahoo Finance data\n*   [📡 Earnings Call Analyst Agent](advanced_ai_agents/single_agent_apps/earnings_call_analyst_agent/) - Turns YouTube earnings calls into a playback-synced analyst workspace\n*   [🏋️‍♂️ AI Health & Fitness Agent](advanced_ai_agents/single_agent_apps/ai_health_fitness_agent/) - Tailored diet and workout plans from your goals\n*   [🚀 AI Product Launch Intelligence Agent](advanced_ai_agents/multi_agent_apps/product_launch_intelligence_agent) - Go-to-market intelligence on competitor launches\n*   [🔍 AI Fraud Investigation Agent](advanced_ai_agents/single_agent_apps/ai_fraud_investigation_agent/) - Cross-references public records to flag facilities that don't add up\n*   [🗞️ AI Journalist Agent](advanced_ai_agents/single_agent_apps/ai_journalist_agent/) - Researches, writes, and edits articles on any topic\n*   [🧠 AI Mental Wellbeing Agent](advanced_ai_agents/multi_agent_apps/ai_mental_wellbeing_agent/) - A coordinated agent team for mental health support plans\n*   [📑 AI Meeting Agent](advanced_ai_agents/single_agent_apps/ai_meeting_agent/) - Context, industry insights, and strategy briefs before you walk in\n*   [🧬 AI Self-Evolving Agent](advanced_ai_agents/multi_agent_apps/ai_self_evolving_agent/) - Agents that rewrite their own workflows with EvoAgentX\n*   [👨🏻‍💼 AI Sales Intelligence Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_sales_intelligence_agent_team) - Generates competitive sales battle cards in real time\n*   [🎧 AI Social Media News and Podcast Agent](advanced_ai_agents/multi_agent_apps/ai_news_and_podcast_agents/) - Curates your trusted sources into briefs and generated podcasts\n*   [🌐 Openwork - Open Browser Automation Agent](https://github.com/accomplish-ai/coworker) <sub>↗ external</sub> - Open-source agent that operates a real browser\n*   [🛡️ Trust-Gated Multi-Agent Research Team](advanced_ai_agents/multi_agent_apps/trust_gated_agent_team/) - Every agent verified, every action in a hash-chained audit trail\n\n### 🛰️ Always-on Agents\n\n*Background agents that run on schedules or events, monitor changing context, decide what needs attention, and proactively deliver updates, artifacts, or actions.*\n\n*   [📰 Always-on Hacker News Briefing Agent](always_on_agents/always_on_hn_briefing_agent/) - A scheduled scout that ships a ranked daily brief to Slack or email\n*   [📡 Release Radar Agent](always_on_agents/release_radar_agent/) - Watches dependency releases and briefs you on breaking, deprecated, security, and major-version changes\n\n### 🤝 Multi-agent Teams\n\n*Multiple agents collaborating to accomplish complex, cross-domain tasks.*\n\n*   [🧲 AI Competitor Intelligence Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_competitor_intelligence_agent_team/) - Structured competitor teardowns built from their own websites\n*   [💲 AI Finance Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_finance_agent_team/) - A financial analyst team in 20 lines of Python\n*   [🎨 AI Game Design Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_game_design_agent_team/) - Full game concepts from a swarm of design specialists\n*   [🧭 AG2 Adaptive Research Team](advanced_ai_agents/multi_agent_apps/agent_teams/ag2_adaptive_research_team/) - Agent teamwork with routing and fallback, built on AG2\n*   [👨‍⚖️ AI Legal Agent Team (Cloud & Local)](advanced_ai_agents/multi_agent_apps/agent_teams/ai_legal_agent_team/) - Research, contract analysis, and strategy from a full legal bench\n*   [💼 AI Recruitment Agent Team](advanced_ai_agents/multi_agent_apps/agent_teams/ai_recruitment_agent_team/) - Resume screening to interview scheduling, end to end\n*   [🏠 AI Real Estate Agent Team](advanced_ai_agents/multi_agent_app"
+    },
+    "brief": {
+      "summary": "汇集100多个开源AI Agent、技能与RAG应用模板",
+      "problem": "降低搭建和试用AI Agent、技能及RAG应用的门槛",
+      "highlights": [
+        "可以快速运行旅行、研究等入门Agent",
+        "可以安装项目技能辅助代码工作",
+        "可以参考多Agent和RAG应用实现"
+      ],
+      "target_users": [
+        "AI应用开发者",
+        "Python学习者",
+        "自动化实践者"
+      ],
+      "why_trending": "今日新增230个Star，本周首次收录，总Star超13.7万",
+      "caveat": "不同模板的模型、依赖和配置要求可能不同",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Shubhamsaboo/awesome-llm-apps",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "汇集大量Agent与Agent技能案例",
+      "generated_by_ai": true,
+      "velocity_score": 72,
+      "freshness_score": 20,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "nirholas/three.ws",
+      "url": "https://github.com/nirholas/three.ws",
+      "description": "Open-source 3D AI agent framework — GLB/glTF avatars with LLM brains, memory, emotions, and autonomous payments. MCP server · x402 · Solana/EVM · Three.js. Embed anywhere as a web component. Character studio, animation gallery, OAuth 2.1. Browser-native.",
+      "language": "JavaScript",
+      "total_stars": 115,
+      "forks": 30,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 1
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "ai-agent",
+        "animation",
+        "avatar",
+        "blockchain",
+        "character-studio",
+        "claude",
+        "embedding",
+        "erc",
+        "gltf",
+        "javascript",
+        "llm",
+        "mcp",
+        "oauth",
+        "onchain",
+        "three-js",
+        "typescript",
+        "vercel",
+        "web-component",
+        "webgl"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-08T20:46:03Z",
+      "updated_at": "2026-09-13T04:56:56Z",
+      "pushed_at": "2026-09-13T04:56:52Z",
+      "open_issues": 9,
+      "homepage": "https://three.ws",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# three.ws          \n \n[**Website**](https://three.ws) · [**Docs**](https://three.ws/docs) · [**Changelog**](https://three.ws/changelog) · [**X / Twitter**](https://x.com/trythreews) · [**GitHub**](https://github.com/nirholas/three.ws) · [**$THREE on pump.fun**](https://pump.fun/FeMbDoX7R1Psc4GEcvJdsbNbZA3bfztcyDCatJVJpump)\n\n[![site](https://img.shields.io/website?url=https%3A%2F%2Fthree.ws&label=three.ws)](https://three.ws) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fsdk?label=%40three-ws%2Fsdk)](https://www.npmjs.com/package/@three-ws/sdk) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fmcp-server?label=%40three-ws%2Fmcp-server)](https://www.npmjs.com/package/@three-ws/mcp-server) [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.nirholas-blue)](https://registry.modelcontextprotocol.io/?q=io.github.nirholas) [![x402scan](https://img.shields.io/badge/x402scan-listed-green)](https://www.x402scan.com/server/17cbd874-52ac-4920-a020-b22ff2489a07) [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![good first issues](https://img.shields.io/github/issues/nirholas/three.ws/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/nirholas/three.ws/labels/good%20first%20issue)\n\nhttps://github.com/user-attachments/assets/d52515d1-cb04-4dd6-98bd-fef233312dc4\n\n**Give your AI a body.** three.ws is an open source (Apache-2.0), browser-native 3D AI agent platform. Type a prompt and [**Forge**](https://three.ws/forge) generates a textured 3D model, or drop a GLB you already have. Add an LLM brain, register on-chain, and embed anywhere: no plugins, no server uploads, no installs required.\n\n> **Try it in 60 seconds:** open [three.ws/forge](https://three.ws/forge), type *\"a brass steampunk owl, full body\"*, and download the GLB. Text→3D, image→3D, and sketch→3D — free draft tier, no account. [Jump to the Forge section ↓](#forge--text--image-to-3d)\n\n> **Want to build it with us?** [Your first contribution](docs/first-contribution.md) goes from clone to open pull request in about 15 minutes, with a full worked example. Every [`good first issue`](https://github.com/nirholas/three.ws/labels/good%20first%20issue) names the file to change and the command that proves it worked. Say hello in [Discussions](https://github.com/nirholas/three.ws/discussions) or [Telegram](https://t.me/three_ws_community).\n\n### Meet the avatar: a live 3D model, right here in markdown\n\nDrag to rotate. This is not an image or a video: it is an interactive 3D model rendered natively by GitHub. The avatar was generated from a one-line text prompt on [three.ws Forge](https://three.ws/forge) (free tier), decimated to 1,200 triangles, and embedded as ASCII STL with [readme-3d](packages/readme-3d), our open-source toolkit for putting 3D models in any GitHub README, issue, or discussion.\n\n```stl\nsolid threews_avatar\n facet normal -0.34 -0.93 0.11\n  outer loop\n   vertex 7.06 -3.99 23.19\n   vertex 9.13 -4.19 27.78\n   vertex 3.98 -2.59 25.51\n  endloop\n endfacet\n facet normal -0.94 -0.30 0.16\n  outer loop\n   vertex 17.94 3.99 37.76\n   vertex 18.01 2.79 35.88\n   vertex 18.27 2.91 37.66\n  endloop\n endfacet\n facet normal -0.90 0.43 0.10\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 18.01 2.79 35.88\n   vertex 17.73 2.15 36.16\n  endloop\n endfacet\n facet normal -0.92 0.36 0.15\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 17.73 2.15 36.16\n   vertex 17.95 2.20 37.37\n  endloop\n endfacet\n facet normal 0.94 0.34 0.00\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.47 1.83 38.79\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 -0.25 0.33\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 28.47 1.83 38.79\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal 0.99 -0.14 0.08\n  outer loop\n   vertex 28.47 1.83 38.79\n   vertex 28.01 -2.89 36.41\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.06 -0.40\n  outer loop\n   vertex 28.90 0.61 31.76\n   vertex 27.10 -0.47 27.53\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.83 -0.51 -0.22\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 27.10 -0.47 27.53\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.38 -0.16\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.90 0.61 31.76\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.89 0.45 0.09\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 28.47 1.83 38.79\n   vertex 27.20 5.38 33.47\n  endloop\n endfacet\n facet normal 0.90 -0.39 -0.20\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.22 -3.16 28.82\n   vertex 27.10 -0.47 27.53\n  endloop\n endfacet\n facet normal 0.82 -0.02 0.58\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 26.14 -2.49 41.92\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.80 0.40 0.44\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 23.27 4.13 46.24\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.70 -0.07 -0.71\n  outer loop\n   vertex 27.03 3.46 27.96\n   vertex 24.69 2.15 25.80\n   vertex 25.39 4.36 26.25\n  endloop\n endfacet\n facet normal 0.63 -0.73 0.27\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.14 -2.49 41.92\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal 0.56 -0.82 0.08\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.39 -5.14 38.78\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.64 -0.76 -0.12\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.40 -5.59 34.11\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.37 -0.89 -0.28\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 23.26 -5.15 31.23\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.42 -0.20 -0.89\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.15 0.41 25.94\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.34 -0.94 0.00\n  outer loop\n   vertex 26.22 -3.16 28.82\n   vertex 23.11 -4.26 27.61\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.40 -0.88 -0.23\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 23.11 -4.26 27.61\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal -0.24 0.97 -0.05\n  outer loop\n   vertex 24.58 4.14 25.81\n   vertex 25.39 4.36 26.25\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.64 -0.61 -0.46\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.14 -2.60 26.21\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.78 -0.11 -0.62\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 22.59 1.54 23.24\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.78 -0.12 -0.61\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 24.69 2.15 25.80\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.46 -0.87 -0.17\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 22.59 1.54 23.24\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.05 -0.66 -0.75\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 24.14 -2.60 26.21\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.32 -0.80 0.50\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 21.60 -3.52 43.21\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.37 -0.90 -0.21\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 21.41 -3.57 27.63\n   vertex 23.11 -4.26 27.61\n  endloop\n endfacet\n facet normal -0.23 -0.54 -0.81\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 21.41 -3.57 27.63\n   vertex 24.14 -2.60 26.21\n  endloop\n endfacet\n facet normal -0.01 -1.00 0.10\n  outer loop\n   vertex 24.39 -5.14 38.78\n   vertex 20.81 -5.34 36.22\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.52 -0.77 0.37\n  outer loop\n   vertex 20.28 -1.08 52.96\n   vertex 18.87 -2.53 51.93\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.95 0.26\n  outer loop\n   vertex 21.60 -3.52 43.21\n   vertex 20.81 -5.34 36.22\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.13 -0.99 -0.10\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 20.81 -5.34 36.22\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 0.03 -0.99 -0.15\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 19.99 1.49 22.99\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.91 0.14 0.38\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 20.84 0.68 53.36\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.99 -0.03\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.87 0.27 0.43\n  outer loop\n   vertex 20.33 2.84 53.04\n   vertex 20.84 0.68 53.36\n   vertex 23.27 4.13 46.24\n  endloop\n endfacet\n facet normal -0.48 -0.82 0.30\n  outer loop\n   vertex 22.34 1.45 26.31\n   vertex 18.93 2.50 23.81\n   vertex 22.82 1.11 26.12\n  endloop\n endfacet\n facet normal -0.49 -0.80 0.35\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 18.93 2.50 23.81\n   vertex 19.99 1.49 22.99\n  endloop\n endfacet\n facet normal 0.80 -0.36 0.47\n  outer loop\n   vertex 20.84 0.68 53.36\n   vertex 20.28 -1.08 52.96\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.62 -0.30 0.72\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 18.93 2.50 23.81\n   vertex 22.34 1.45 26.31\n  endloop\n endfacet\n facet normal -0.80 0.13 0.59\n  outer loop\n   vertex 21.74 -0.40 26.89\n   vertex 18.46 -1.70 22.74\n   vertex 21.76 -1.78 27.21\n  endloop\n endfacet\n facet normal -0.79 -0.21 0.58\n  outer loop\n   vertex 21.76 -1.78 27.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.75 -2.39 26.98\n  endloop\n endfacet\n facet normal -0.54 -0.84 -0.09\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 17.89 -1.75 31.72\n   vertex 21.41 -3.57 27.63\n  endloop\n endfacet\n facet normal 0.10 -0.26 -0.96\n  outer loop\n   vertex 22.59 1.54 23.24\n   vertex 19.99 1.49 22.99\n   vertex 20.26 3.48 22.48\n  endloop\n endfacet\n facet normal 0.96 0.24 0.12\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.84 0.68 53.36\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal -0.53 -0.80 -0.29\n  outer loop\n   vertex 20.81 -5.34 36.22\n   vertex 17.89 -1.75 31.72\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 1.00 0.05 0.05\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.89 8.80 78.04\n   vertex 19.60 7.11 85.93\n  endloop\n endfacet\n facet normal 1.00 0.04 0.04\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.78 0.25 88.57\n   vertex 19.89 8.80 78.04\n  endloop\n endfacet\n facet normal 0.96 0.26 0.13\n  outer loop\n   vertex 19.46 3.33 58.61\n   vertex 20.67 -0.54 57.28\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal 0.96 -0.29 -0.05\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.28 -1.08 52.96\n   vertex 20.84 0.68 53.36\n  endloop\n endfacet\n facet normal -0.11 -0.99 -0.07\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 21.75 -2.39 26.98\n   vertex 18.46 -1.70 22.74\n  endloop\n endfacet\n facet normal 1.00 -0.03 -0.02\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.78 0.25 88.57\n   vertex 19.45 -6.79 83.01\n  endloop\n endfacet\n facet normal 1.00 0.00 0.07\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.45 -6.79 83.01\n   vertex 20.12 -4.30 73.94\n  endloop\n endfacet\n facet normal 0.93 0.30 -0.21\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.93 5.01 72.90\n   vertex 19.58 8.54 76.35\n  endloop\n endfacet\n facet normal -0.70 -0.09 0.71\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 19.00 3.74 24.02\n   vertex 18.93 2.50 23.81\n  endloop\n endfacet\n facet normal 0.99 0.00 -0.17\n  outer loop\n   vertex 20.12 -4.30 73.94\n   vertex 19.78 1.87 71.95\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 1.00 0.02 -0.01\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 20.12 -4.30 73.94\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 0.79 -0.61 0.01\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 18.66 -3.15 57.91\n   vertex 20.28 -1.08 52.96\n  endloop\n endfacet\n facet normal 0.27 -0.95 0.19\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 18.87 -2.53 51.93\n   vertex 21.60 -3.52 43.21\n  endloop\n endfacet\n facet normal 0.99 0.13 0.11\n  outer loop\n  "
+    },
+    "brief": {
+      "summary": "浏览器原生的 3D AI 角色与智能体框架",
+      "problem": "让 AI 智能体拥有可交互的 3D 角色形象",
+      "highlights": [
+        "可以用文本、图片或草图生成 3D 模型",
+        "可以把 GLB 角色嵌入网页或其他位置",
+        "可以为角色接入 LLM、记忆和情绪"
+      ],
+      "target_users": [
+        "3D 网页开发者",
+        "AI 智能体开发者",
+        "虚拟角色创作者"
+      ],
+      "why_trending": "本周首次收录，已有 115 个 Star，近期仍有代码更新",
+      "caveat": "链上支付和模型服务的实际使用成本未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "nirholas/three.ws",
+      "score": 90,
+      "category": "3D / VTuber",
+      "reason": "提供带记忆情绪的3D智能体化身",
+      "generated_by_ai": true,
+      "velocity_score": 9,
+      "freshness_score": 40,
+      "ranking_score": 53.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "HIllya51/LunaTranslator",
+      "url": "https://github.com/HIllya51/LunaTranslator",
+      "description": "视觉小说翻译器 / Visual Novel Translator",
+      "language": "C++",
+      "total_stars": 13150,
+      "forks": 1144,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "ocr",
+        "reverse-engineering",
+        "translator",
+        "visual-novel",
+        "win32"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2022-09-28T03:10:53Z",
+      "updated_at": "2026-09-13T04:58:43Z",
+      "pushed_at": "2026-09-13T04:46:29Z",
+      "open_issues": 65,
+      "homepage": "https://lunatranslator.org/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n### 简体中文  | [English](#lunatranslator) | [繁體中文](https://docs.lunatranslator.org/cht/) | [한국어](https://docs.lunatranslator.org/ko/) | [日本語](https://docs.lunatranslator.org/ja/) | [Tiếng Việt](https://docs.lunatranslator.org/vi/) | [Русский язык](https://docs.lunatranslator.org/ru/)\n\n---\n\n# LunaTranslator  <span style=\"float: right;\">[【软件下载 & 常见问题】](https://docs.lunatranslator.org/zh/README.html)</span>\n\n\n\n> **视觉小说翻译器**\n\n**如果使用中遇到困难，可以查阅[使用说明](https://docs.lunatranslator.org/zh)、观看[我的B站视频](https://space.bilibili.com/592120404/video)，也欢迎加入[QQ群](https://qm.qq.com/q/mPSu3sG5ri) <a href=\"https://qm.qq.com/q/mPSu3sG5ri\"><img src=\"https://img.shields.io/badge/1059137614-EB1923?style=for-the-badge&logo=qq&logoColor=white&label=QQ&color=5865F2\" alt=\"Discord\"></a>**\n\n\n\n\n## 功能支持\n\n- **[HOOK](https://docs.lunatranslator.org/zh/hooksettings.html)** 主要使用HOOK提取游戏文本，几乎适配了所有的常见和冷门的视觉小说\n\n- **[内嵌翻译](https://docs.lunatranslator.org/zh/embedtranslate.html)** 部分游戏还可以直接内嵌翻译到游戏中，以获取沉浸式体验\n\n- **[HOOK模拟器](https://docs.lunatranslator.org/zh/emugames.html)** 对NS/PSP/PSV/PS2上的大部分游戏，支持HOOK模拟器直接读取游戏文本\n\n- **[OCR](https://docs.lunatranslator.org/zh/useapis/ocrapi.html)** 内置较高精度的OCR模型，并支持许多其他在线&离线OCR引擎，以便灵活的读取任意文本\n\n- **[丰富的翻译接口](https://docs.lunatranslator.org/zh/guochandamoxing.html)** 支持几乎所有翻译引擎，包括大语言模型翻译、离线翻译等\n\n- **[语言学习](https://docs.lunatranslator.org/zh/qa1.html)** 支持日语分词及假名注音，支持AnkiConnect，支持Yomitan插件\n\n- **[语音合成](https://docs.lunatranslator.org/zh/ttsengines.html)** 支持大量在线&离线语音合成引擎\n\n- **[语音识别](https://docs.lunatranslator.org/zh/sr.html)** 在Windows 10和Windows 11上，可以使用Windows语音识别。\n\n## 开源许可\n\nLunaTranslator使用 [GPLv3](../LICENSE) 许可证。\n\n## 支持作者\n\n软件维护不易，如果您感觉该软件对你有帮助，欢迎通过[爱发电](https://afdian.com/a/HIllya51)，或微信扫码赞助，您的支持将成为软件长期维护的助力，谢谢~\n\n<a href=\"https://afdian.com/a/HIllya51\"><img width=\"200\" src=\"https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.png\" alt=\"\"></a>\n\n<img src='../src/files/static/zan.jpg' style=\"height: 300px !important;\">\n\n---\n\n# LunaTranslator  \n\n> **Visual Novel Translator**\n\n## Community\n\nIf you encounter any difficulties while using the software, you can check the [User Guide](https://docs.lunatranslator.org/en), or join our [Discord](https://discord.com/invite/ErtDwVeAbB).\n\n<a href=\"https://discord.gg/invite/ErtDwVeAbB\"><img src=\"https://img.shields.io/discord/1262692128031772733?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\"></a>\n\n## Features\n\n\n- **[HOOK](https://docs.lunatranslator.org/en/hooksettings.html)** Primarily uses HOOK to extract game text, compatible with almost all popular and niche visual novels.  \n\n- **[Embedded Translation](https://docs.lunatranslator.org/en/embedtranslate.html)** Some games also support directly embedding translations into the game for an immersive experience.\n\n- **[HOOK Emulator](https://docs.lunatranslator.org/en/emugames.html)** Supports HOOK emulators to directly extract text from most games on NS/PSP/PSV/PS2.\n\n- **[OCR](https://docs.lunatranslator.org/en/useapis/ocrapi.html)** Built-in high-precision OCR model, supporting many other online & offline OCR engines for flexible text extraction.  \n\n- **[Rich Translation APIs](https://docs.lunatranslator.org/en/guochandamoxing.html)** Supports almost all translation engines, including large language model translation, offline translation, and more.\n\n- **[Language Learning](https://docs.lunatranslator.org/en/qa1.html)** Supports Japanese word segmentation and kana annotation, supports AnkiConnect, supports Yomitan plugin\n\n- **[Text-to-Speech](https://docs.lunatranslator.org/en/ttsengines.html)** Supports a wide range of online & offline text-to-speech engines.  \n\n- **[Speech Recognition](https://docs.lunatranslator.org/en/sr.html)** On Windows 10 and Windows 11, you can use Windows Speech Recognition.\n\n## License\n\nLunaTranslator uses [GPLv3](../LICENSE) License\n\n\n## Sponsors\n\nSoftware maintenance is not easy. If you find this software helpful, feel free to support me via [Patreon](https://patreon.com/HIllya51). Your support will contribute to the long-term maintenance of the software. Thank you~\n\n<a href=\"https://patreon.com/HIllya51\" target='_blank'><img width=\"200\" src=\"../docs/become_a_patron_4x1_black_logo_white_text_on_coral.svg\"></a>\n\n\n| <img src=\"https://signpath.org/assets/favicon.png\" width=\"25\" height=\"25\" align=\"center\"> | Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/). |\n| :--- | :--- |\n\n"
+    },
+    "brief": {
+      "summary": "面向视觉小说的文本提取与翻译工具",
+      "problem": "解决视觉小说文本难以提取和跨语言阅读的问题",
+      "highlights": [
+        "可以提取多数视觉小说中的游戏文本",
+        "可以用OCR或多种翻译引擎翻译文本",
+        "可以为部分游戏嵌入译文并辅助语言学习"
+      ],
+      "target_users": [
+        "视觉小说玩家",
+        "日语学习者",
+        "翻译工具开发者"
+      ],
+      "why_trending": "总 Star 达13150，近期持续更新，本周首次收录",
+      "caveat": "主要面向Windows，使用GPL-3.0许可证",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "HIllya51/LunaTranslator",
+      "score": 95,
+      "category": "ACG 本地化",
+      "reason": "专为视觉小说提供OCR翻译",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "RouteVN/routevn-creator-client",
+      "url": "https://github.com/RouteVN/routevn-creator-client",
+      "description": "RouteVN Creator is a desktop application to create Visual Novels without any coding",
+      "language": "JavaScript",
+      "total_stars": 28,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame-engine",
+        "game-engine",
+        "interactive-fiction-engine",
+        "routevn",
+        "visual-novel",
+        "visual-novel-creator",
+        "visual-novel-editor",
+        "visual-novel-engine",
+        "visual-novel-framework",
+        "visual-novel-games",
+        "visual-novel-maker",
+        "visual-novel-tools"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-05-23T04:56:46Z",
+      "updated_at": "2026-09-13T04:44:02Z",
+      "pushed_at": "2026-09-13T04:49:17Z",
+      "open_issues": 2,
+      "homepage": "https://routevn.com/creator/about/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# RouteVN Creator Client\n\n[Official Website](https://routevn.com/creator/about/)\n\nRouteVN Creator Client is a frontend application for building Visual Novels with a drag & drop visual UI, without needing to write any code.\n\nThis is a complete **Single Page Application (SPA)** that operates **offline-first**.\n\nBrowser builds persist project data through IndexedDB-backed stores.\n\nDesktop builds persist project data through Tauri/SQLite-backed stores.\n\nAndroid builds run the web app inside a native WebView shell and persist app and\nproject data through native SQLite-backed stores. Tauri is not used for mobile.\n\n## Frameworks used\n\n- [@rettangoli/fe](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-fe) - Is used as the frontend framework\n- [@rettangoli/ui](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-ui) - Is used as the UI library\n- [Product](docs/product.md) - Product principles and UX contract\n- [Engineering](docs/engineering.md) - Code structure, stack, and engineering boundaries\n- [Platform Spec](docs/platform/README.md) - Current project model, command/event flow, and storage contracts\n- [Docs Index](docs/README.md) - Entry point for internal documentation\n\n## Project Structure\n\nEntrypoint defined in `static/index.html` with the `<rvn-app>` tag.\n\nSee [docs/README.md](docs/README.md) for the internal docs index, [docs/product.md](docs/product.md) for product principles, and [docs/engineering.md](docs/engineering.md) for the engineering guide.\n\n`src/pages/app/` - **Application entrypoint**\n\nFolder structure\n\n- `src/components/` - Reusable UI components\n- `src/pages/` - Global components with their own state\n- `src/deps/` - Infrastructure and service dependencies injected into pages/components\n- `src/setup.web.js` - Web-specific configuration\n- `src/setup.tauri.js` - Tauri desktop-specific configuration\n- `src/setup.android.js` - Android WebView-specific configuration\n- `android/routevn/` - Native Android WebView shell\n- `src/domain/` - Domain rules, command processing, and state projection\n- `src/collab/` - Collaboration runtime\n- `scripts/` - Build and utility scripts\n- `static/` - Static HTML files and assets\n- `_site/` - Build output directory\n\nThere is no shared `src/setup.common.js` entrypoint today. Shared runtime code lives behind service cores and adapters.\n\n## Adding Routes\n\nTo add a new route, you need to update 3 files:\n\n1. **Create HTML file in `static/`** - Add the static HTML file for the route\n2. **Update `src/pages/app/app.view.yaml`** - Add the route condition and component\n3. **Update `src/pages/app/app.store.js`** - Add the route pattern to the arrays\n\nExample for adding `/project/new-feature`:\n\n```yaml\n# In app.view.yaml\n$elif currentRoutePattern == \"/project/new-feature\":\n  - rvn-new-feature: []\n```\n\n```javascript\n// In app.store.js - add to both routePatterms and routesWithNavBar arrays\n\"/project/new-feature\",\n```\n\n## Development\n\nInstall `rtgl` cli\n\n```shell\nnpm i -g rtgl\n```\n\nInstall dependencies:\n\n```shell\nbun install\n```\n\n**Setup Git Hooks (Required for new developers):**\n\nAfter installing dependencies, Husky will automatically set up git hooks. The pre-push hook will run `bun run lint` to ensure code quality before pushing changes.\n\nIf you're setting up the project for the first time, make sure to run:\n\n```shell\nbun run prepare\n```\n\nThis ensures all git hooks are properly configured.\n\n**Note:** If you encounter errors when pushing due to linting issues, run:\n\n```shell\nbun run lint:fix\n```\n\nThis will automatically fix most linting errors. After fixing, you can commit the changes and push again.\n\n### Web Development\n\nThe project uses platform-specific entry points that are automatically configured during build:\n\nRun the project in watch mode:\n\n```shell\nbun run watch:web\n```\n\nOr build project and serve without watch mode:\n\n```shell\nbun run build:web\nbunx serve _site -p 3001\n```\n\nOpen: http://localhost:3001/project\n\n**Build Commands:**\n\n- `bun run build` or `bun run build:web` - Build for web platform\n- `bun run watch:web` - Watch mode for web development\n\n### Android Application\n\nBuild and install the debug app with packaged local JavaScript:\n\n```shell\nbun run android:install\n```\n\nFor explicit watch-mode development, start the Android JS dev server:\n\n```shell\nbun run watch:android\n```\n\nThe watch script prepares `_site`, configures\n`adb reverse tcp:3001 tcp:3001` when a device is connected, and serves\n`src/setup.android.js`. After it is ready, explicitly relaunch the debug app\nagainst the server:\n\n```shell\nadb shell am start -S -n com.routevn.creator/.MainActivity \\\n  --ez routevnUseDevServer true\n```\n\nNormal launches omit this extra and always use packaged local JavaScript.\n\n### Desktop Application (Tauri)\n\nRouteVN Creator also supports running as a native desktop application using [Tauri](https://tauri.app/), providing better performance and system integration.\n\n**Prerequisites:**\n\nInstall Rust and system dependencies:\n\n```shell\n# Install Rust\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n\n# Linux users need additional system dependencies\n# Ubuntu/Debian:\nsudo apt update\nsudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libayatana-appindicator3-dev librsvg2-dev\n\n# Arch Linux:\nsudo pacman -S --needed webkit2gtk-4.1 base-devel curl wget file openssl libayatana-appindicator librsvg gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly\n\n# Fedora/RHEL:\nsudo dnf install webkit2gtk4.1-devel openssl-devel curl wget file libappindicator-gtk3-devel librsvg2-devel\n\n# macOS and Windows: No additional system dependencies needed\n```\n\n**Development:**\n\nThe Tauri build automatically uses the desktop-specific configuration (`src/setup.tauri.js`):\n\nAdd `env.dev` to your env variables. It is required to set the private key for the updater\n\nStart dev server from:\n\n```shell\nbun run watch:tauri\n```\n\nRun the Tauri app in development mode:\n\n```shell\nbun run tauri:dev\n```\n\nFor cross-compilation to Windows from Linux/macOS:\n\n```shell\nbun run tauri:dev:win\n```\n\n**Production Build:**\n\nFor production we build installer using NSIS: https://v2.tauri.app/distribute/windows-installer/\n\nBuild the desktop application:\n\n```shell\nbun run tauri:build\n```\n\nBuild the Linux AppImage on the host:\n\n```shell\nbun run tauri:build:linux:appimage\n```\n\nBuild the Linux AppImage in an Ubuntu 22.04 Docker builder for a more\ncompatible release baseline:\n\n```shell\nbun run tauri:build:linux:appimage:docker\n```\n\nThe Docker-built x86_64 AppImage, signature, and checksum are copied to\n`src-tauri/target/release/bundle/appimage/linux-x86_64-<version>/`.\n\nLinux direct releases are AppImage-only. See\n`docs/runbooks/linux-release.md`.\n\nCross-compile for Windows:\n\n```shell\nbun run tauri:build:win\n```\n\nBuild and notarize the macOS DMG:\n\n```shell\nbun run tauri:build:mac\n```\n\nFor the Apple signing and notarization setup, see [docs/runbooks/macos-signing-and-notarization.md](docs/runbooks/macos-signing-and-notarization.md).\n\nThe built application will be available in `src-tauri/target/release/` with platform-specific installers in `src-tauri/target/release/bundle/`.\n\n**Build Commands:**\n\n- `bun run build:tauri` - Build frontend for Tauri platform\n- `bun run watch:tauri` - Watch mode for Tauri development\n- `bun run tauri:build` - Build complete desktop application\n\n**Platform Support:**\n\n- **Windows**: `.exe` installer and `.msi` package\n- **macOS**: `.app` bundle and `.dmg` installer\n- **Linux x86_64**: `.AppImage`\n\n**Features:**\n\n- Native file system access\n- Better performance than web version\n- Offline-first with local storage\n- Platform-specific optimizations via separate entry points\n- System tray integration (planned)\n- Auto-updates support (planned)\n\n### Android Application (WebView)\n\nThe Android app is a native WebView wrapper around the web build. It bypasses\nTauri entirely and loads packaged assets through AndroidX `WebViewAssetLoader`.\n\nSee [docs/android.md](docs/android.md) for the setup details and version pins.\n\n```shell\nbun run build:android\nbun run android:install\n```\n\n## Community\n\nJoin us on [Discord](https://discord.gg/8J9dyZSu9C) to ask questions, report bugs, and stay up to date.\n\n## License\n\n- This project is licensed under the [MIT License](LICENSE).\n- The name RouteVN, and its logo are the exclusive property of Yuusoft\n"
+    },
+    "brief": {
+      "summary": "无需编程即可制作视觉小说的桌面应用",
+      "problem": "降低视觉小说制作的编程门槛",
+      "highlights": [
+        "可以用拖放界面搭建视觉小说",
+        "可以离线保存和管理项目",
+        "可以在桌面、网页和安卓环境运行"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "独立游戏开发者",
+        "互动叙事爱好者"
+      ],
+      "why_trending": "本周首次收录，近期持续提交更新",
+      "caveat": "资料未说明作品导出的具体能力",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "RouteVN/routevn-creator-client",
+      "score": 95,
+      "category": "互动叙事",
+      "reason": "无代码制作视觉小说与互动剧情",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "harry0703/MoneyPrinterTurbo",
+      "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+      "description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+      "language": "Python",
+      "total_stars": 122915,
+      "forks": 19008,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-generator",
+        "content-creation",
+        "ffmpeg",
+        "instagram-reels",
+        "llm",
+        "python",
+        "short-video",
+        "subtitles",
+        "text-to-speech",
+        "tiktok",
+        "video-automation",
+        "video-workflow",
+        "workflow-automation",
+        "youtube-shorts"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-03-11T02:57:34Z",
+      "updated_at": "2026-09-13T04:57:02Z",
+      "pushed_at": "2026-09-13T04:31:29Z",
+      "open_issues": 26,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# MoneyPrinterTurbo 💸\n\n### 一站式 AI 短视频生成工具\n\n只需提供视频<b>主题</b>或<b>关键词</b>，即可自动生成视频脚本、匹配素材、生成字幕和背景音乐，并合成高清短视频。\n\n[![Version](https://img.shields.io/github/v/release/harry0703/MoneyPrinterTurbo?color=blue&label=version)](https://github.com/harry0703/MoneyPrinterTurbo/releases)\n[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/harry0703/MoneyPrinterTurbo/releases/latest)\n[![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)\n[![Downloads](https://img.shields.io/github/downloads/harry0703/MoneyPrinterTurbo/total)](https://github.com/harry0703/MoneyPrinterTurbo/releases/latest)\n\n<a href=\"https://trendshift.io/repositories/8731\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/8731\" alt=\"harry0703%2FMoneyPrinterTurbo | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n<a href=\"https://www.star-history.com/harry0703/moneyprinterturbo\"><img src=\"https://api.star-history.com/badge?repo=harry0703/MoneyPrinterTurbo\" alt=\"Star History Rank\" style=\"height: 55px;\" height=\"55\"/></a>\n\n简体中文 | [English](README-en.md) | [日本語](README-ja.md) | [版本发布](https://github.com/harry0703/MoneyPrinterTurbo/releases) | [问题反馈](https://github.com/harry0703/MoneyPrinterTurbo/issues)\n\n</div>\n\n## 界面预览 🖥️\n\n<h4 align=\"center\">WebUI</h4>\n\n![](docs/webui.jpg)\n\n<h4 align=\"center\">API</h4>\n\n![](docs/api.jpg)\n\n---\n\n## 特别感谢 ❤️\n\n<div align=\"center\">\n  <a href=\"https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo\" target=\"_blank\"><img src=\"https://gcdn.moonshot.cn/growth-cdn/sponsor/kimi-zh.png\" alt=\"Kimi 赞助 MoneyPrinterTurbo\" width=\"100%\"></a>\n</div>\n\n感谢 [Kimi](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo) 赞助本项目！[Kimi K3](https://www.kimi.com/blog/kimi-k3?aff=moneyprinterturbo) 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型，拥有原生视觉能力与 100 万 Token 上下文，在知识工作、推理和长周期任务中展现前沿性能。在 MoneyPrinterTurbo 中，K3 能直接驱动视频创作，不仅撰写视频文案，还会提炼素材搜索关键词、决定成片画面；对内容理解越准确，匹配到的素材就越贴题。\n\n**MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度，最高赠送 ¥1000。活动截至 2026 年 9 月 30 日。前往 Kimi 开放平台（[中文站](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo)｜[Global](https://platform.kimi.ai?track_id=track-f6b0a640d35c41deb03b247242a1058c&aff=moneyprinterturbo)）体验 API。**\n<br>\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\"><img src=\"docs/sponsors/volcengine-logo.svg\" alt=\"火山引擎\" height=\"32\"></a><br>\n      <a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\"><strong>火山引擎</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢字节火山引擎赞助本项目！火山方舟 Agent/Coding Plan 国模套餐<strong>首购 9.9</strong>，支持 GLM-5.3、Kimi-K3、DeepSeek、MiniMax、Doubao 等，注册免费领 <strong>2500w Token</strong>，统一 API，适配编码与智能体开发。<a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\">立即前往</a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.ccsub.net/register?ref=VCVDAWWY\"><img src=\"docs/sponsors/ccsub-logo.png\" alt=\"CCSub\" height=\"36\"></a><br>\n      <a href=\"https://www.ccsub.net/register?ref=VCVDAWWY\"><strong>CCSub</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://www.ccsub.net/register?ref=VCVDAWWY\">CCSub</a> 赞助本项目！<strong>CCSub 是稳定、实惠的 AI API 中转平台，是 Claude Code 官方订阅的超强平替。</strong>一个 API Key 即可调用 Claude Opus 4.8、Sonnet 4.6、Haiku 4.5、GPT-5、Gemini 等模型，价格约为官方直连的 1/3，全球直连无需梯子。兼容 Claude Code、Codex、Cursor、Cline、Continue、Windsurf 等所有主流 AI 编程工具。前往 <a href=\"https://www.ccsub.net/register?ref=VCVDAWWY\">www.ccsub.net</a> 注册即送 $5 体验额度。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://go.apimart.ai/gh-moneyprinterturbo\"><img src=\"docs/sponsors/apimart-logo.png\" alt=\"APIMart\" width=\"100\"></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://go.apimart.ai/gh-moneyprinterturbo\">APIMart</a> 赞助了本项目！APIMart 是专注 AI 图片/视频生成的低价 API 平台，<strong>GPT-Image-2 低至 &#36;0.006/张，1 美元可出图 160+ 张</strong>。<strong>图片、视频一套异步 API 通吃，换模型不改代码</strong>；提交任务拿 ID，通过轮询或回调获取结果，支持万张级批量生成。按量付费、无月费，通过<a href=\"https://go.apimart.ai/gh-moneyprinterturbo\">此注册链接</a>注册即可开用。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://metaso.cn/minimax-h3/?s=MPT\"><img src=\"docs/sponsors/metaso-logo.png\" alt=\"秘塔科技\" width=\"100\"></a><br>\n      <a href=\"https://metaso.cn/minimax-h3/?s=MPT\"><strong>秘塔科技</strong></a>\n    </td>\n    <td align=\"left\">\n      <strong>MiniMax H3 视频生成 API｜秘塔科技</strong><br>\n      秘塔科技提供高性价比的 MiniMax H3 视频生成服务：<strong>768P 仅 0.09 元/秒，2K 仅 0.15 元/秒</strong>。支持原生 2K、音画同步，API 兼容 <strong>OpenAI 协议</strong>，同时支持 <strong>ComfyUI</strong>，无需自行部署 GPU。<br>\n      🎁 通过 <a href=\"https://metaso.cn/minimax-h3/?s=MPT\">MoneyPrinterTurbo专属链接注册</a>，即可领取赠送额度及专属优惠。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\"><img src=\"docs/sponsors/ofox-logo.svg\" alt=\"OfoxAI\" width=\"120\"></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\">OfoxAI</a> 赞助本项目！MoneyPrinterTurbo 已集成 Ofox 多模型文生视频，配置 API Key 即可使用。Seedance、MiniMax H3、Wan 生成视频素材，GPT Image 2.5、Seedream 制作封面配图，GPT、Claude、Gemini、DeepSeek 打磨脚本、辅助开发。<strong>一个 Key，文本、图像、视频共用余额</strong>；提供 OpenAI 兼容接口及 Anthropic、Gemini 原生接口。<strong>按量付费、价格公开、官方渠道接入，稳定高速不限量</strong>，前往 <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\">OfoxAI 查看模型与价格</a>。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\"><img src=\"docs/sponsors/infistar-logo.svg\" alt=\"Infistar.ai 无限星河\" height=\"56\"></a><br>\n      <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\"><strong>Infistar.ai 无限星河</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\">Infistar.ai 无限星河</a> 赞助本项目！<br>\n      ⚡ 超低成本与稳定调度：价格低至官方 1 折，模型倍率与调用明细全程透明；多路供应动态调度，告别限流与断连困扰。<br>\n      🧠 全系大模型完美驱动脚本：全面覆盖 OpenAI、Claude、Google Gemini、DeepSeek、通义千问（Qwen）等主流 LLM，兼容 OpenAI 标准接口，为 MoneyPrinterTurbo 的文案生成与素材关键词提炼提供低延迟、高并发支持。<br>\n      🎨 前沿多模态生态：全面接入 FLUX、Midjourney、Seedance、可灵（Kling）、Sora、Luma 等顶级生图与视频模型，满足下一代 AI 视频生成需求。<br>\n      🎁 MoneyPrinterTurbo 用户专属福利：通过 <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\">专属推广链接</a> 注册即享 [专属赠送额度 / 首充特惠]，开箱即用！\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\"><img src=\"docs/sponsors/shengsuanyun-logo.jpg\" alt=\"胜算云\" height=\"56\"></a><br>\n      <a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\"><strong>胜算云</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢<a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\">胜算云</a>对本项目的赞助！胜算云是面向 AI 原生团队的模型 API 聚合平台，汇集 Claude、ChatGPT、Gemini 等海内外大语言模型及多媒体模型，支持统一接入与按量调用。<br>\n      平台坚持合规 API 服务，杜绝逆向工程和资源稀释。此外平台提供企业级定制网关，包括团队成本与权限管理、智能路由、安全防护及 BYOK 密钥托管，并提供发票服务。<br>\n      🎁新用户通过<a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\">此链接</a>注册，即可领取 10 元 Token 体验额度。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\"><img src=\"docs/sponsors/astraflow-logo.png\" alt=\"星图 AstraFlow\" height=\"56\"></a><br>\n      <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\"><strong>星图 AstraFlow</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\">星图 AstraFlow</a> 赞助本项目！<br>\n      🎬 <strong>视频模型一站式调用</strong>：聚合 MiniMax-H3，Seedance-2.5 等主流视频生成模型，文案生成 + 视频生成一个平台全搞定，无需多端注册、多处对接<br>\n      🚀 <strong>200+ 大模型一键调用，新模型当日上架</strong>：聚合 DeepSeek V4.1、Kimi K3、Qwen 3.8 Max、GLM 5.3 等 200+ 主流大模型，新模型上线当天即可接入<br>\n      💰 <strong>UCloud 上市公司出品，调用计费透明可控</strong>：按 Key 级别计费，调用明细全程可查<br>\n      🎁 <strong>MoneyPrinterTurbo 用户专属福利</strong>：通过<a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\">专属推广链接</a>注册，即享新用户赠送额度，开箱即用！<a href=\"https://f.howxm.com/xs/u/HVFW5X8EIYV1\">点击领取 50 元算力金</a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://reccloud.cn\"><img src=\"docs/sponsors/reccloud-logo.svg\" alt=\"录咖\" height=\"36\"></a><br>\n      <a href=\"https://reccloud.cn\"><strong>录咖 AI</strong></a>\n    </td>\n    <td align=\"left\">\n      由于该项目的 <strong>部署</strong> 和 <strong>使用</strong>，对于一些小白用户来说，还是 <strong>有一定的门槛</strong>，在此特别感谢 <a href=\"https://reccloud.cn\">录咖（AI智能 多媒体服务平台）</a> 网站基于该项目，提供的免费 <code>AI视频生成器</code> 服务，可以不用部署，直接在线使用，非常方便。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://picwish.cn\"><img src=\"docs/sponsors/picwish-logo.svg\" alt=\"佐糖\" height=\"36\"></a><br>\n      <a href=\"https://picwish.cn\"><strong>佐糖</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://picwish.cn\">佐糖</a> 对该项目的支持和赞助，使得该项目能够持续的更新和维护。佐糖专注于<strong>图像处理领域</strong>，提供丰富的<strong>图像处理工具</strong>，将复杂操作极致简化，真正实现让图像处理更简单。\n    </td>\n  </tr>\n</table>\n\n## 作者的另一个开源项目：MangoDisk ⭐\n\n<p align=\"center\">\n  <a href=\"https://mangodisk.app/zh\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.mangodisk.app/images/screenshots/zh/dark-01-deep-cleanup.jpg?ver=1.1.0\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.mangodisk.app/images/screenshots/zh/light-01-deep-cleanup.jpg?ver=1.1.0\">\n      <img src=\"https://assets.mangodisk.app/images/screenshots/zh/light-01-deep-cleanup.jpg?ver=1.1.0\" width=\"900\" alt=\"MangoDisk 深度清理界面\">\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>面向 macOS 和 Windows 的开源磁盘清理、空间分析与系统优化工具</strong><br>\n  一站式清理缓存、大文件、重复文件和应用残留，并提供磁盘空间分析、应用卸载、启动项管理、系统优化与维护\n</p>\n\n<p align=\"center\">\n  <a href=\"https://mangodisk.app/zh\">访问 MangoDisk 官网</a> · <a href=\"https://github.com/harry0703/MangoDisk\">查看 GitHub 开源项目</a>\n</p>\n\n---\n\n## 功能特性 🎯\n\n### 创作入口与工作流\n\n- [x] 提供 **AI Agent、WebUI、API 和 CLI** 四种使用方式，既能快速上手，也能接入自动化流程\n- [x] 从主题自动完成脚本、配音、素材、字幕、配乐和剪辑，也支持在每个环节使用自定义内容\n- [x] 支持 **批量生成多条成片**、任务历史记录，以及生成设置与 API Key 的导入、导出和恢复\n\n### 脚本与模型服务\n\n- [x] 支持 AI 自动生成或改写 **多语言视频脚本**，也可以直接使用自定义脚本\n- [x] 支持 [Kimi / Moonshot AI](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo)、[OpenAI](https://platform.openai.com/api-keys)、[Anthropic Claude](https://platform.claude.com/settings/keys)、[Google Gemini](https://aistudio.google.com/app/apikey)、[DeepSeek](https://platform.deepseek.com/api_keys)、[阿里云通义千问](https://dashscope.console.aliyun.com/apiKey)、[Microsoft Azure OpenAI](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI)、[火山引擎方舟](https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo)、[xAI Grok](https://console.x.ai/)、[MiniMax](https://platform.minimaxi.com/) 和 [小米 MiMo](https://platform.xiaomimimo.com/docs/zh-CN/quick-start/first-api-call) 等主流模型服务\n- [x] 兼容 [胜算云](https://www.shengsuanyun.com/?from=CH_XUQ4OTSK)、[APIMart](https://go.apimart.ai/gh-moneyprinterturbo)、[Cloudflare AI Gateway](https://dash.cloudflare.com/)、[魔搭 ModelScope](https://modelscope.cn/docs/model-service/API-Inference/intro)、[AIHubMix](https://aihubmix.com/)、[AIML API](https://aimlapi.com/app/keys)、[EvoLink](https://evolink.ai/dashboard/keys)、[OpenRouter](https://openrouter.ai/settings/keys)、[Ollama](https://ollama.com/)、[Claude Code 订阅](https://code.claude.com/docs)、[OneAPI](https://gith"
+    },
+    "brief": {
+      "summary": "根据主题或关键词自动生成高清短视频",
+      "problem": "短视频制作流程繁琐，脚本、素材、字幕和配乐难以整合",
+      "highlights": [
+        "可以从主题生成视频脚本",
+        "可以自动匹配素材并生成字幕",
+        "可以合成带背景音乐的短视频"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "内容运营人员",
+        "Python开发者"
+      ],
+      "why_trending": "总 Star 超12万，近期持续活跃，本周首次收录",
+      "caveat": "需要配置相关 AI 模型和服务，资料未说明具体成本",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "harry0703/MoneyPrinterTurbo",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "按主题自动生成短视频与配音",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "OpenShot/openshot-qt",
+      "url": "https://github.com/OpenShot/openshot-qt",
+      "description": "OpenShot Video Editor is an award-winning free and open-source video editor for Linux, Mac, and Windows, and is dedicated to delivering high quality video editing and animation solutions to the world.",
+      "language": "Python",
+      "total_stars": 6493,
+      "forks": 798,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "c-plus-plus",
+        "ffmpeg",
+        "gplv3",
+        "openshot",
+        "python",
+        "qt5",
+        "video",
+        "video-editing",
+        "video-production"
+      ],
+      "license_name": "",
+      "created_at": "2015-06-01T08:39:27Z",
+      "updated_at": "2026-09-13T04:32:26Z",
+      "pushed_at": "2026-09-13T04:06:12Z",
+      "open_issues": 423,
+      "homepage": "http://www.openshot.org",
+      "archived": false,
+      "default_branch": "develop",
+      "readme": "# OpenShot Video Editor\n\nOpenShot Video Editor is an award-winning free and open-source video editor \nfor Linux, Mac, and Windows, and is dedicated to delivering high quality \nvideo editing and animation solutions to the world.\n\n## Build Status\n\n[![openshot-qt CI Build](https://github.com/OpenShot/openshot-qt/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenShot/openshot-qt/actions/workflows/ci.yml) \n[![libopenshot CI Build](https://github.com/OpenShot/libopenshot/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenShot/libopenshot/actions/workflows/ci.yml) \n[![libopenshot-audio CI Build](https://github.com/OpenShot/libopenshot-audio/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenShot/libopenshot-audio/actions/workflows/ci.yml)\n![Discord](https://img.shields.io/discord/1143390791507644496?style=flat)\n\n## Features\n\n* Cross-platform (Linux, Mac, and Windows)\n* Support for many video, audio, and image formats (based on FFmpeg)\n* Powerful curve-based Key frame animations\n* Desktop integration (drag and drop support)\n* Unlimited tracks / layers\n* Clip resizing, scaling, trimming, snapping, rotation, and cutting\n* Video transitions with real-time previews\n* Compositing, image overlays, watermarks\n* Title templates, title creation, sub-titles\n* 2D animation support (image sequences)\n* 3D animated titles (and effects)\n* SVG friendly, to create and include vector titles and credits\n* Scrolling motion picture credits\n* Advanced Timeline (including Drag & drop, scrolling, panning, zooming, and snapping)\n* Frame accuracy (step through each frame of video)\n* Time-mapping and speed changes on clips (slow/fast, forward/backward, etc...)\n* Audio mixing and editing\n* Digital video effects, including brightness, gamma, hue, greyscale, chroma key, and many more!\n* Experimental hardware encoding and decoding (VA-API, NVDEC, D3D9, D3D11, VTB)\n* Import & Export widely supported formats (EDL, XML)\n* Render videos in many codecs and formats (based on FFmpeg)\n\n## Getting Started\n\nThe quickest way to get started using OpenShot is to download one of \nour pre-built installers. On our download page, click the **Daily Builds** \nbutton to view the latest, experimental builds, which are created for each \nnew commit to this repo.\n\nhttps://www.openshot.org/download/\n\n## Tutorial\n\nWatch the official [step-by-step video tutorial](https://www.youtube.com/watch?list=PLymupH2aoNQNezYzv2lhSwvoyZgLp1Q0T&v=1k-ISfd-YBE), or read the official [user-guide](https://www.openshot.org/user-guide/):\n\n## Developers\n\nAre you interested in becoming more involved in the development of \nOpenShot? Build exciting new features, fix bugs, make friends, and become a hero! \nPlease read the [step-by-step](https://github.com/OpenShot/openshot-qt/wiki/Become-a-Developer) \ninstructions for getting source code, configuring dependencies, and building OpenShot.\n\n## Documentation\n\nBeautiful HTML documentation can be generated using Sphinx.\n\n```sh\ncd doc\nmake html\n```\n\nThe documentation for the most recent release can be viewed online at [openshot.org/user-guide](https://www.openshot.org/user-guide/).\n\n## Report a bug\n\nPlease report bugs using the official [Report a Bug](https://www.openshot.org/issues/new/) \nfeature on our website. This walks you through the bug reporting process, and helps \nto create a high-quality bug report for the OpenShot community.\n\nOr you can report a new issue directly on GitHub:\n\nhttps://github.com/OpenShot/openshot-qt/issues\n\n## Translations\n\nTranslating OpenShot into other languages is very easy! Please read the [step-by-step](https://github.com/OpenShot/openshot-qt/wiki/Become-a-Translator) instructions or login to LaunchPad and get started.\nAll you need is a web browser.\n\n* Application Translations: https://translations.launchpad.net/openshot/2.0/+translations\n* Website Translations: https://translations.launchpad.net/openshot/website/+pots/django\n\n## Dependencies\n\nAlthough installers are much easier to use, if you must build from \nsource, here are some tips: \n\nOpenShot is programmed in Python (version 3+), and thus does not need\nto be compiled to run. However, be sure you have the following \ndependencies in order to run OpenShot successfully: \n\n*  Python 3.0+ (http://www.python.org)\n*  PyQt / PySide binding for Qt5 or Qt6 (https://www.riverbankcomputing.com/software/pyqt/ and https://pyside.org/)\n*  libopenshot: OpenShot Library (https://github.com/OpenShot/libopenshot)\n*  libopenshot-audio: OpenShot Audio Library (https://github.com/OpenShot/libopenshot-audio)\n*  FFmpeg or Libav (http://www.ffmpeg.org/ or http://libav.org/)\n*  GCC build tools (or MinGW on Windows)\n\nFor packagers and developers: use `OPENSHOT_QT_API=auto|pyqt6|pyside6|pyqt5`\nto select the Python Qt binding. If building `libopenshot`, its Qt major\nversion is selected separately with `-DUSE_QT6=AUTO|ON|OFF`.\n\n## Launch\n\nTo run OpenShot from the command line with an installed `libopenshot`,\nuse the following syntax:\n(be sure the change the path to match the install or repo location \nof openshot-qt)\n\n```sh\ncd [openshot-qt folder]\npython3 src/launch.py\n```\n    \nTo run with a version of `libopenshot` built from source but not installed,\nset `PYTHONPATH` to the location of the compiled Python bindings. e.g.:\n\n```sh\ncd [libopenshot folder]\ncmake -B build -S . [options]\ncmake --build build\n    \ncd [openshot-qt folder]\nPYTHONPATH=[libopenshot folder]/build/bindings/python \\\npython3 src/launch.py\n```\n\n## Websites\n\n- https://www.openshot.org/  (Official website and blog)\n- https://github.com/OpenShot/openshot-qt (source code and issue tracker)\n- https://github.com/OpenShot/libopenshot-audio (source code for audio library)\n- https://github.com/OpenShot/libopenshot (source code for video library)\n- https://launchpad.net/openshot/\n\n### Copyright & License\n\nCopyright (c) 2008-2022 OpenShot Studios, LLC. This file is part of\nOpenShot Video Editor (https://www.openshot.org), an open-source project\ndedicated to delivering high quality video editing and animation solutions\nto the world.\n\nOpenShot Video Editor is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nOpenShot Video Editor is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with OpenShot Library.  If not, see <http://www.gnu.org/licenses/>.\n"
+    },
+    "brief": {
+      "summary": "跨平台的免费开源视频剪辑与动画软件",
+      "problem": "帮助用户完成视频剪辑、合成、字幕和动画制作",
+      "highlights": [
+        "可以剪切、调整速度并混合音频",
+        "可以添加转场、字幕、水印和特效",
+        "可以制作2D动画与3D动态标题"
+      ],
+      "target_users": [
+        "视频创作者",
+        "动画制作初学者",
+        "开源软件用户"
+      ],
+      "why_trending": "总 Star 达6493，本周首次收录且近期持续提交代码",
+      "caveat": "当前有423个未关闭议题，稳定性资料中未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "OpenShot/openshot-qt",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "完整的跨平台开源视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "WyattBlue/auto-editor",
+      "url": "https://github.com/WyattBlue/auto-editor",
+      "description": "Effort free video editing!",
+      "language": "Nim",
+      "total_stars": 5198,
+      "forks": 638,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audio",
+        "audio-editing",
+        "audio-processing",
+        "automatic",
+        "nim",
+        "video",
+        "video-editing",
+        "video-processing"
+      ],
+      "license_name": "Unlicense",
+      "created_at": "2020-04-30T04:57:21Z",
+      "updated_at": "2026-09-13T04:43:20Z",
+      "pushed_at": "2026-09-13T04:43:15Z",
+      "open_issues": 0,
+      "homepage": "https://auto-editor.com",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\"><img src=\"https://auto-editor.com/img/auto-editor-banner.webp\" title=\"Auto-Editor\" width=\"700\"></p>\n\n**Auto-Editor** is a command line application for automatically **editing video and audio** by analyzing a variety of methods, most notably audio loudness.\n\n---\n\n[![Discord](https://img.shields.io/badge/Discord-Join%20server-5865F2?style=flat&logo=discord&logoColor=white)](https://basswood.io/discord)\n[![Nim](https://img.shields.io/badge/nim-%23FFE953.svg?style=flat&logo=nim&logoColor=black)](https://nim-lang.org)\n\nBefore doing the real editing, you first cut out the \"dead space\" which is typically silence. This is known as a \"first pass\". Cutting these is a boring task, especially if the video is very long.\n\n```\nauto-editor path/to/your/video.mp4\n```\n\n<h2 align=\"center\">Installing</h2>\n\nSee [Installing](https://auto-editor.com/installing) for more information.\n\n<h2 align=\"center\">Skills</h2>\n\n```\nnpx skills add WyattBlue/auto-editor\n```\n\n<h2 align=\"center\">Cutting</h2>\n\nChange the **pace** of the edited video by using `--margin`.\n\n`--margin` adds in some \"silent\" sections to make the editing feel nicer.\n\n```\n# Add 0.2 seconds of padding before and after to make the edit nicer.\n# `0.2s` is the default value for `--margin`\nauto-editor example.mp4 --margin 0.2sec\n\n# Add 0.3 seconds of padding before, 1.5 seconds after\nauto-editor example.mp4 --margin 0.3s,1.5sec\n```\n\n### Methods for Making Automatic Cuts\nThe `--edit` option is how auto-editor makes automated cuts.\n\nFor example, edit out motionlessness in a video by setting `--edit motion`.\n\n```\n# cut out sections where the total motion is less than 2%.\nauto-editor example.mp4 --edit motion:threshold=0.02\n\n# `--edit audio:threshold=0.04,stream=all` is used by defaut.\nauto-editor example.mp4\n\n# Different tracks can be set with different attribute.\nauto-editor multi-track.mov --edit \"(or audio:stream=0 audio:threshold=10%,stream=1)\"\n```\n\nDifferent editing methods can be used together.\n```\n# 'threshold' is always the first argument for edit-method objects\nauto-editor example.mp4 --edit \"(or audio:0.03 motion:0.06)\"\n```\n\nYou can also use `dB` unit, a volume unit familiar to video-editors (case-sensitive):\n```\nauto-editor example.mp4 --edit audio:-19dB\nauto-editor example.mp4 --edit audio:-7dB\nauto-editor example.mp4 --edit motion:-19dB\n```\n\n### Labels\nEvery moment gets an integer **label**: `0` is silent (cut by default), `1` is active (kept). `--edit` sets what's label `1`; `-w:0`/`-w:1` set each one's action. Add more classes with `--edit:N` and `--when:N` (`N` up to 255); where they overlap, the higher label wins.\n```\n# Cut silence, keep speech, and additionally speed up the loud parts\nauto-editor example.mp4 --edit:2 audio:-12dB --when:2 speed:1.5\n```\nAs a value (not a label), `--edit 1` keeps everything and `--edit 0` cuts everything. See the [actions docs](https://auto-editor.com/docs/actions) for more.\n\n### See What Auto-Editor Cuts Out\nTo export what auto-editor normally cuts out. Set `--when-active` to `cut` and `--when-inactive` to `nil` (leave as is). This is the reverse of the usual default values.\n\n```\nauto-editor example.mp4 --when-active cut --when-inactive nil\n```\n\n<h2 align=\"center\">Exporting to Editors</h2>\n\nCreate an XML file that can be imported to Adobe Premiere Pro using this command:\n\n```\nauto-editor example.mp4 --export premiere\n```\n\nAuto-Editor can also export to:\n- DaVinci Resolve with `--export resolve`\n- Final Cut Pro with `--export final-cut-pro`\n- ShotCut with `--export shotcut`\n- Kdenlive with `--export kdenlive`\n- Individual media clips with `--export clip-sequence`\n\n<h2 align=\"center\">More Options</h2>\n\nList all available options:\n\n```\nauto-editor --help\n```\n\n## Articles\n - [How to Install Auto-Editor](https://auto-editor.com/installing)\n - [All the Options (And What They Do)](https://auto-editor.com/ref/options)\n - [Docs](https://auto-editor.com/docs)\n - [Blog](https://basswood.io/blog/)\n\n## Run Online and as an Application\nYou can [run auto-editor online](https://app.auto-editor.com/online) or [download the application](https://app.auto-editor.com/download). They use assets from this repository (Unlicense); their own unique assets are under a separate proprietary license.\n\n## Copyright\nEverything in this repository is under the [Public Domain](https://github.com/WyattBlue/auto-editor/blob/master/LICENSE). Binary artifacts in the \"Releases\" section may be under various open source licenses.\n"
+    },
+    "brief": {
+      "summary": "按音量或画面运动自动剪辑视频和音频",
+      "problem": "减少长视频中的静音和无动作片段，降低手工剪辑成本",
+      "highlights": [
+        "可以自动剪掉视频中的静音片段",
+        "可以按画面运动检测并剪辑",
+        "可以导出到多种专业剪辑软件"
+      ],
+      "target_users": [
+        "视频创作者",
+        "播客制作人",
+        "后期剪辑人员"
+      ],
+      "why_trending": "总 Star 超过 5000，本周首次收录且近期仍有提交",
+      "caveat": "主要通过命令行使用，具体安装要求资料中未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "WyattBlue/auto-editor",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "自动分析并剪辑视频与音频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  }
+]
