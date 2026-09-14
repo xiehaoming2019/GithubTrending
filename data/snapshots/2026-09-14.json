@@ -1,0 +1,552 @@
+[
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 27334,
+      "forks": 3365,
+      "stars_today": 2632,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 5412
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-14T05:08:00Z",
+      "pushed_at": "2026-09-11T05:50:20Z",
+      "open_issues": 48,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n  <h3>NOTE: Electron Rewrite Ongoing: Please dont't create desktop app related issues and pr</h3>\n \n  <p><img src=\"docs/logo.png\" alt=\"VoiceStudio logo\" width=\"120\" height=\"120\" /></p>\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><sub>Previously OmniVoice-Studio</sub></p>\n  <h3>Clone voices, dub video, dictate, and produce long-form audio on your own hardware.</h3>\n  <p>16 TTS engines · 11 ASR engines · 646-language catalogue · macOS, Windows, Linux, and Docker</p>\n  <p>No account, API key, subscription, or usage meter for the local workflow.</p>\n\n  <p>\n    <a href=\"#install\">Install</a> ·\n    <a href=\"#features\">Features</a> ·\n    <a href=\"#comparison\">Compare</a> ·\n    <a href=\"#requirements\">Requirements</a> ·\n    <a href=\"#hardware-recommendations\">Hardware</a> ·\n    <a href=\"#engines\">Engines</a> ·\n    <a href=\"#architecture\">Architecture</a> ·\n    <a href=\"#api\">API</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"#faq\">FAQ</a> ·\n    <a href=\"README_CN.md\"><strong>简体中文</strong></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&style=flat-square&label=CI\" alt=\"CI status\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/stargazers\"><img src=\"https://img.shields.io/github/stars/debpalash/VoiceStudio?style=flat-square&color=f59e0b\" alt=\"GitHub stars\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases\"><img src=\"https://img.shields.io/github/downloads/debpalash/VoiceStudio/total?style=flat-square&color=8b5cf6&label=downloads\" alt=\"Total downloads\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&color=10b981\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square\" alt=\"AGPL-3.0 license\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS_·_Windows_·_Linux-10b981?style=for-the-badge\" alt=\"Download VoiceStudio\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/media/0.5.0/quick-switch.gif\" alt=\"Switching TTS engines from the VoiceStudio status bar\" width=\"100%\" />\n</div>\n\n> [!WARNING]\n> **Active beta.** Use the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest) for stable work. `main` contains the newest fixes and may change between releases. Report problems through [GitHub Issues](https://github.com/debpalash/VoiceStudio/issues).\n\n## At a glance\n\n| | VoiceStudio |\n|---|---|\n| **Workflows** | Voice cloning and design, video dubbing, dictation, stories, audiobooks, batch generation |\n| **Language catalogue** | 646 TTS languages; actual coverage and quality depend on the selected engine |\n| **Engines** | 16 TTS · 11 ASR · switch in Model Catalogue or with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> |\n| **Platforms** | macOS 13.3+ on Apple Silicon · Windows 10/11 x64 · Linux x86_64 with glibc 2.39+ |\n| **Compute** | CUDA · Apple Silicon MPS/MLX · ROCm on Linux · CPU · optional remote workers |\n| **Interfaces** | Desktop app · local REST/SSE/WebSocket API · OpenAI-compatible audio API · MCP Server |\n| **Storage** | Voices, projects, settings, and outputs stay on the machine by default |\n| **License** | AGPL-3.0 application; downloaded models keep their upstream terms |\n\nThe Voice workspace starts with three tabs: **From audio** for cloning, **By design** for creating a voice, and **Convert** for speech-to-speech conversion. Each tab displays its own workflow, with Synthesize Audio or Convert pinned below the scrolling form. The top-bar **Engines** panel combines engine selection, loaded models, and unload/flush controls; <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> opens it. The searchable language picker shares Dubbing’s flags and language list layout, selects one output language, and retains Auto and the full cloning catalogue. Language options flow into multiple columns when space allows. Expand **Workspaces** in the sidebar to reveal navigation labels; Escape collapses it.\n\nDubbing starts with file upload or URL import and nearby language choices. Its **Projects** panel lists previous dubs so they can be reopened by clicking anywhere on a card; action buttons operate independently. Advanced import options include captions and optional YouTube sign-in. Dubbing places playback controls over the video with background blur and combines the waveform and timed transcript in one compact editing surface. Drag the zoomed waveform left or right to pan; click to seek. Translation language and ISO-code controls stay synchronized; Auto clears any previous language code and dialect. Transcript items group editable text, timing and status, and voice controls into three readable rows that wrap with the panel width. Output Options stays compact with the active settings shown in its summary; expand it to change output, timing, or voice matching. Transcript, glossary, and paste controls share a toolbar above the segment editor. Project details, workflow steps, and Generate/Verify/Export actions use an unfilled header.\n\nThe Audiobook Script editor fills the available workspace beneath its markup toolbar; Voices and Book settings stay in their own tabs.\n\nOutput settings use aligned rows; review status appears before the collapsible transcript and glossary. Glossary terms have labelled entry fields and an explicit edit action. Launchpad arranges recent files and saved voices side by side when space allows, with responsive card grids and visible Open actions.\n\nThe casting board shows icon-based voice cards and searchable selectors for each speaker. Drag a card onto a speaker or choose a voice from that speaker’s menu.\n\n<a id=\"install\"></a>\n\n## Install\n\nDownload a package from the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest), then follow the platform guide.\n\n| Platform | Package | Guide |\n|---|---|---|\n| macOS 13.3+ | Apple Silicon DMG | [Install on macOS](docs/install/macos.md) |\n| Windows 10/11 | x64 MSI; choose the current-user build when listed to install without admin access | [Install on Windows](docs/install/windows.md#install-pre-built-msi) |\n| Linux | AppImage, x86_64 with glibc 2.39+ | [Install on Linux](docs/install/linux.md) |\n| Docker | Linux/AMD64 images; CUDA, ROCm, CPU, and worker-only GPU profiles | [Run with Docker](docs/install/docker.md) |\n\nFirst launch creates a managed Python environment and downloads the default model. Later launches reuse both.\n\n> [!NOTE]\n> On macOS, first launch needs a one-time right-click, then **Open** approval. Intel Macs cannot run the local Python backend; use a [remote backend](docs/install/macos.md) instead.\n\n### Quick Docker run\n\nThe published images are **`linux/amd64` only**. On Apple Silicon, use the\n[native macOS app](docs/install/macos.md) for GPU acceleration. ARM64 hosts\nshould read the [architecture requirements](docs/install/docker.md#architecture)\nbefore pulling an image.\n\n```bash\ndocker run -d -p 127.0.0.1:3900:3900 -v omnivoice-data:/app/omnivoice_data --name voicestudio palashdeb/omnivoice-studio:stable\n```\n\n### First voice\n\n1. Launch VoiceStudio and open **Voice Cloning**.\n2. Add a clean voice sample. Three seconds works; 5 to 15 seconds usually gives a better prompt.\n3. Enter text, choose a language, then select **Generate**.\n\n> [!TIP]\n> **Try without installing:** Run VoiceStudio in the cloud via the [Google Colab notebook](https://colab.research.google.com/github/debpalash/VoiceStudio/blob/main/notebooks/OmniVoice_Studio_Colab.ipynb). Explore audio quality comparisons in [benchmarks](docs/benchmarks.md) and prompt design tips in [expressive speech](docs/expressive-speech.md).\n\n### Audio samples\n\nListen to sample outputs produced locally with VoiceStudio:\n\n| Workflow | Prompt / Reference Audio | Generated Audio |\n|---|---|---|\n| **Voice Cloning** | [demo_voice.wav](backend/assets/samples/demo_voice.wav) | [demo_clone_output.wav](backend/assets/samples/demo_clone_output.wav) |\n| **Voice Design** (US News Anchor) | *\"Clear, authoritative American broadcast tone\"* | [demo_voice_design_us_news_anchor.wav](backend/assets/samples/voice_design/demo_voice_design_us_news_anchor.wav) |\n| **Voice Design** (UK Audiobook) | *\"Warm, expressive British storytelling voice\"* | [demo_voice_design_audiobook_uk_narrator.wav](backend/assets/samples/voice_design/demo_voice_design_audiobook_uk_narrator.wav) |\n| **Video Dubbing** (Multilingual) | [source.src.wav](backend/assets/samples/demo/dubbing/source.src.wav) | [Spanish](backend/assets/samples/demo/dubbing/dubbed_es.src.wav) · [French](backend/assets/samples/demo/dubbing/dubbed_fr.src.wav) · [Japanese](backend/assets/samples/demo/dubbing/dubbed_ja.src.wav) · [Chinese](backend/assets/samples/demo/dubbing/dubbed_zh.src.wav) |\n\n### Run from source\n\nInstall the [development prerequisites](.github/CONTRIBUTING.md#development-setup) (Node 20+/Bun and Python 3.11+), then:\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run desktop\n```\n\nThe desktop launcher configures Python dependencies on first run via `uv` automatically. Use `bun run dev` for the browser UI. See [Contributing](.github/CONTRIBUTING.md) for services, tests, and platform packages.\n\n### If setup fails\n\n- Run **Settings → About → Run self-check** or `uv run python backend/main.py --diagnose --deep`.\n- Check [install troubleshooting](docs/install/troubleshooting.md).\n- Save a scrubbed diagnostic bundle from the app when opening an issue.\n- For slow generation, compare [measured benchmarks](docs/benchmarks.md) and [performance settings](docs/performance.md).\n\n<a id=\"features\"></a>\n\n## Features\n\n| Area | Included |\n|---|---|\n| **Voice Cloning** | Zero-shot synthesis from a short reference clip ([guide](docs/engines/README.md)) |\n| **Voice Design** | Create a voice from age, accent, pitch, style, and delivery instructions ([expressive speech](docs/expressive-speech.md)) |\n| **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video; compact translation settings include track selection, and completed dubs flag timing issues for review ([export guide](docs/dubbing/export.md)) |\n| **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |\n| **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |\n| **Vocal Isolation** | Demucs speech/background separation |\n| **Speaker Diarization** | Pyannote and WhisperX speaker assignment ([guide](docs/features/diarization.md)) |\n| **Batch Queue** | Queue large sets of audio and video jobs with per-job progress, or watch a local folder for new videos |\n| **Model Catalogue** | Install, remove, select, and route TTS, ASR, and LLM models ([catalogue](docs/engines/README.md)) |\n| **Remote Model Downloads** | Install models on enrolled remote workers with live progress ([guide](docs/downloading-models.md)) |\n| **GPU Auto-Detect** | CUDA, MPS, ROCm, and CPU routing with per-engine checks ([performance](docs/performance.md)) |\n| **AI Watermark** | AudioSeal embedding and detection |\n| **MCP Server** | Synthesis and transcription tools for MCP clients ([guide](docs/mcp.md)) |\n| **Di"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆、配音与有声书制作工具。",
+      "problem": "减少对云端语音服务、账号和按量计费的依赖。",
+      "highlights": [
+        "可以克隆或设计声音并生成语音",
+        "可以为视频配音、翻译和编辑字幕",
+        "可以制作听写稿与长篇有声书"
+      ],
+      "target_users": [
+        "配音与视频创作者",
+        "有声书制作人员",
+        "本地部署爱好者"
+      ],
+      "why_trending": "今日新增2632 Star，总 Star 已达27334。",
+      "caveat": "项目处于活跃测试阶段，桌面端正在重写。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 98,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与字幕工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 80.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "calesthio/OpenMontage",
+      "url": "https://github.com/calesthio/OpenMontage",
+      "description": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
+      "language": "Python",
+      "total_stars": 58641,
+      "forks": 7372,
+      "stars_today": 380,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 380
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "ai",
+        "claude",
+        "copilot",
+        "cursor",
+        "elevenlabs",
+        "ffmpeg",
+        "flux",
+        "image-generation",
+        "open-source",
+        "openai",
+        "python",
+        "remotion",
+        "stable-diffusion",
+        "text-to-speech",
+        "text-to-video",
+        "video-generation",
+        "video-production"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-03-29T15:23:22Z",
+      "updated_at": "2026-09-14T05:08:14Z",
+      "pushed_at": "2026-09-06T05:02:34Z",
+      "open_issues": 320,
+      "homepage": "https://www.openmontage.video/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/monty-dark.svg\">\n    <img src=\"assets/monty-light.svg\" alt=\"Monty the Clapper — the official mascot of OpenMontage\" width=\"200\">\n  </picture>\n</p>\n\n<p align=\"center\"><sub><em>Monty the Clapper — the official mascot of OpenMontage</em></sub></p>\n\n<h1 align=\"center\">OpenMontage</h1>\n\n<p align=\"center\"><strong>The first open-source, agentic video production system.</strong></p>\n\n<p align=\"center\">\n  <a href=\"https://openmontage.video\"><img src=\"https://img.shields.io/badge/Website-openmontage.video-d14a28?style=for-the-badge\" alt=\"openmontage.video\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#start-from-a-video-you-already-love\">Paste A Video</a> &nbsp;·&nbsp;\n  <a href=\"#quick-start\">Quick Start</a> &nbsp;·&nbsp;\n  <a href=\"#try-these-prompts\">Try These Prompts</a> &nbsp;·&nbsp;\n  <a href=\"#pipelines\">Pipelines</a> &nbsp;·&nbsp;\n  <a href=\"#how-it-works\">How It Works</a> &nbsp;·&nbsp;\n  <a href=\"#sponsors\">Sponsors</a> &nbsp;·&nbsp;\n  <a href=\"docs/PROVIDERS.md\">Providers</a> &nbsp;·&nbsp;\n  <a href=\"docs/PR_REVIEW_GUIDE.md\">Review Guide</a> &nbsp;·&nbsp;\n  <a href=\"AGENT_GUIDE.md\">Agent Guide</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPLv3-blue.svg\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/trending\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\".github/assets/repo-of-the-day-dark.svg\">\n      <img alt=\"🏆 #1 Repository of the Day on GitHub Trending\" src=\".github/assets/repo-of-the-day-light.svg\" height=\"60\">\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\"><strong>Follow The Build</strong></p>\n\n<p align=\"center\">\n  <a href=\"https://www.youtube.com/@OpenMontage\"><img src=\"https://img.shields.io/badge/YouTube-%40OpenMontage-FF0000?style=for-the-badge&logo=youtube&logoColor=white\" alt=\"YouTube\"></a>\n  <a href=\"https://x.com/calesthioailabs\"><img src=\"https://img.shields.io/badge/X-%40calesthioailabs-111111?style=for-the-badge&logo=x&logoColor=white\" alt=\"X\"></a>\n  <a href=\"https://github.com/calesthio/OpenMontage/discussions\"><img src=\"https://img.shields.io/badge/Community-GitHub%20Discussions-0b1220?style=for-the-badge&logo=github&logoColor=white\" alt=\"GitHub Discussions\"></a>\n</p>\n\n## Sponsors\n\n> Want to support OpenMontage? [Sponsor the project](https://github.com/sponsors/calesthio).\n\n<details open>\n<summary>Click to collapse</summary>\n\n<table>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://bloome.im/app?ref=calesthio&utm_medium=github&utm_source=calesthio-OpenMontage-ivor-202607\"><img src=\"assets/sponsors/bloome.png\" alt=\"Bloome\" width=\"150\"></a></td>\n<td><strong>Bloome</strong> lets multiple AI agents (Claude, ChatGPT, DeepSeek, and more) collaborate in one conversation for agentic video pipelines. It has zero setup, runs in the cloud, works on web and mobile, and lets you share a configured agent with your whole team. <strong><a href=\"https://bloome.im/app?ref=calesthio&utm_medium=github&utm_source=calesthio-OpenMontage-ivor-202607\">Try Bloome</a></strong>.</td>\n</tr>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://www.atlascloud.ai/coding-plan\"><img src=\"assets/sponsors/atlas-cloud.png\" alt=\"Atlas Cloud\" width=\"150\"></a></td>\n<td><strong>Atlas Cloud</strong> is a full-modal AI inference platform that gives developers a single AI API for video generation, image generation, and LLM APIs. Instead of managing multiple vendor integrations, you connect once and get unified access to 300+ curated models across all modalities. Check out Atlas Cloud's new <a href=\"https://www.atlascloud.ai/coding-plan\">coding plan</a> promotion for more budget-friendly API access.</td>\n</tr>\n</table>\n\n</details>\n\n---\n\nTurn your AI coding assistant into a full video production studio. Describe what you want in plain language — your agent handles research, scripting, asset generation, editing, and final composition.\n\n**Important distinction:** OpenMontage can make image-based videos, but it can also make a real **video video** for free/open-source workflows: the agent builds a corpus from free stock footage and open archives, retrieves actual motion clips, edits them into a timeline, and renders a finished piece. That is not the usual \"animate a handful of stills and call it video\" trick.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/f77ce7a4-68b8-4f94-a287-e94bf50a32e1\" width=\"100%\" controls></video>\n</div>\n\n> **\"SIGNAL FROM TOMORROW\"** — a cinematic sci-fi trailer fully produced through OpenMontage: concept, script, scene plan, Veo-generated motion clips, soundtrack, and Remotion composition.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/8daca07f-cdf8-4bec-89c3-9dc2176363fa\" width=\"100%\" controls></video>\n</div>\n\n> **\"THE LAST BANANA\"** — a 60-second Pixar-style animated short about a lonely banana who finds friendship with a kiwi. 6 Kling v3-generated motion clips (via fal.ai), Google Chirp3-HD narration, royalty-free piano music, TikTok-style word-level captions, and Remotion composition. Total cost: **$1.33**.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/0a71333b-9b05-40b5-8800-a0a679e9b433\" width=\"100%\" controls></video>\n</div>\n\n> **\"OBJECTS IN OVERDRIVE\"** — a 54-second, music-driven 3D showcase featuring ten objects with distinct choreography: gravity-shifting furniture, frozen car drifts, cloth impacts, refractive lenses, moving gears, an acrobatic robot, and more. Custom Blender animation and physics, kinetic typography, and a phonk soundtrack. Rendered with Blender Eevee/Cycles and assembled with FFmpeg. No narration.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/88962725-97a0-4aac-a08e-34aaa9d8bb92\" width=\"100%\" controls></video>\n</div>\n\n> **\"Reimagine Your Universe\"** — a 50-second vertical transformation film in which one visual idea moves across objects, eras, materials, and scale. Five generated motion scenes, sparse Google Chirp narration, a Pixabay score, and a bespoke HyperFrames composition turn separate clips into one authored cinematic journey. Total cost: **about $4**.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/c947070c-95ee-4d73-8d76-0bd3dc4826eb\" width=\"100%\" controls></video>\n</div>\n\n> **\"Products Come to Life\"** — a 60-second product film built from approved hero stills. Five hard-surface products separate into their own engineering and reassemble, with each still pinned as the first and last frame so the model invents motion without losing product identity. Image-to-video generation, bespoke sound, narration, and a custom composition complete the film.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/6815c2d2-17a3-4057-b9a0-893fc9c05bef\" width=\"100%\" controls></video>\n</div>\n\n> **\"Imagine the Possibilities with OpenMontage\"** — seven generated worlds collected into one music-only showcase. Three image models supply campaign, fashion, and miniature-world artwork; four video models expand the journey through architecture, material transformation, a living greenhouse, and a creature encounter. OpenMontage animates the stills, edits the motion, unifies the soundtrack, and closes with Monty the Clapper. Source generation cost: **about $5**.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/a524f02a-2d18-42ca-a2c4-d3dc09503546\" width=\"100%\" controls></video>\n</div>\n\n> **\"How Salt Made History\"** — a 100-second cinematic documentary about the mineral that funded empires, shaped trade routes, sparked revolutions, and gave us the word “salary.” Real-world footage is woven together with original narration and hand-authored motion graphics for its etched title, etymology reveal, animated maps, historical timeline, and closing thesis.\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/61919fb8-9dd1-446c-b833-dca82f6a3af8\" width=\"100%\" controls></video>\n</div>\n\n> **\"One Prompt Built This Complete 3D World\"** — a continuous 60-second journey through one coherent, editable fantasy world. Distinct terrain regions, an inhabited village, waterways, ruins, dense vegetation, and a late hero-landmark reveal are assembled from textured 3D assets, then brought together with cinematic lighting, atmospheric music, and a planned camera path.\n\n<p align=\"center\">\n  <a href=\"https://www.youtube.com/@OpenMontage?sub_confirmation=1\"><strong>Subscribe to @OpenMontage on YouTube</strong></a> to see new videos as they ship — every video includes the full prompt, pipeline, tools used, and cost so you can reproduce it yourself.\n</p>\n\n---\n\n## Start From A Video You Already Love\n\nStarting from a reference video is often faster than starting from a blank prompt.\n\nOpenMontage can start from a **YouTube video, Short, Reel, TikTok, or local clip** and turn it into a grounded production plan:\n\n1. **Paste a reference video**\n2. **The agent analyzes transcript, pacing, scenes, keyframes, and style**\n3. **You get 2-3 differentiated concepts, an honest tool path, cost estimates, and a sample before full production**\n\n```text\n\"Here's a YouTube Short I love. Make me something like this, but about quantum computing.\"\n```\n\nWhat you get back is not \"best guess prompt spaghetti.\" You get:\n\n- **What it keeps** from the reference: pacing, hook style, structure, tone\n- **What it changes**: topic, visual treatment, angle, narration approach\n- **What it will cost** at your target duration, before asset generation starts\n- **What it will actually look like** with your currently available tools\n\nWorks with **Claude Code, Cursor, Copilot, Windsurf, Codex** — any AI coding assistant that can read files and run code.\n\n---\n\n## Watch It Happen — The Backlot Living Storyboard\n\nChat tells you what the agent *said*. **Backlot shows you what the production is actually doing** — a local board that fills itself in as the pipeline runs. Stages light up, the script lands as a screenplay page, scene cards shimmer while assets generate, and every provider decision and dollar spent is on the wall.\n\nWhen a production starts, the agent opens it for you automatically. No setup, no reporting — the board derives everything from the project files the pipeline already writes.\n\n<p align=\"center\"><img src=\"docs/images/backlot/board-live.png\" alt=\"Backlot live board — assets generating\" width=\"920\"></p>\n\n**The storyboard is now a real approval gate.** Asset generation pauses on a scene-by-scene contact sheet — takes, prompts, per-asset cost, quality scores — so you approve the visuals *before* the render, not after it's too late:\n\n<p align=\"center\"><img src=\"docs/images/backlot/storyboard.png\" alt=\"Backlot storyboard — filmstrip with takes and renders\" width=\"920\"></p>\n\nCreative gates hold until you answer. The board shows what's waiting and why; you reply in chat:\n\n<p align=\"center\"><img src=\"docs/images/backlot/script-gate.png\" alt=\"Backlot script gate — awaiting approval\" width=\"920\"></p>\n\nEvery production on your machine, live-first, in the library:\n\n<p align=\"center\"><img src=\"docs/images/backlot/library.png\" alt=\"Backlot library\" width=\"920\"></p>\n\n```bash\npython -m backlot open                  # the library — every project on disk\npython -m backlot open <project-id>     # one production's live board\npython scripts/backlot_simulate_run.py  # no production yet? watch a simulated one live\n```\n\nAnd when a run is done, hit **▶ REPLAY RUN** — the whole production replays from its timestamps, scrubbable end to end. See [`backlot/README.md`](backlot/README.md) for how it works.\n\n---\n\n## Quick Start\n\n### Prerequisites\n\n- **Python 3.10+** — [python.org](https://www.python.org/downloads/)\n- **FFmpeg** — `brew install ffmpeg` / `sudo apt install ffmpeg` / [ffmpeg.org](https://ffmpeg.org/download.html)\n- **Node.js 18+** — [nodejs.org](https://nodejs.org/)\n- **An AI coding assistant** — Claude "
+    },
+    "brief": {
+      "summary": "用 AI 编程助手驱动完整视频制作流程",
+      "problem": "视频制作涉及研究、脚本、素材、剪辑等多个环节，流程分散",
+      "highlights": [
+        "可以用自然语言完成研究、脚本和素材生成",
+        "可以检索真实视频片段并合成成片",
+        "可以制作动画短片、产品片或纪录片"
+      ],
+      "target_users": [
+        "视频创作者",
+        "内容制作团队",
+        "AI 编程助手用户"
+      ],
+      "why_trending": "今日新增380个 Star，本周首次收录，总 Star 58641",
+      "caveat": "采用 AGPL-3.0，使用前需确认许可证要求",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "calesthio/OpenMontage",
+      "score": 98,
+      "category": "视频剪辑",
+      "reason": "智能体驱动完整视频制作流程",
+      "generated_by_ai": true,
+      "velocity_score": 78,
+      "freshness_score": 40,
+      "ranking_score": 74.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "tonhowtf/omniget",
+      "url": "https://github.com/tonhowtf/omniget",
+      "description": "Download Udemy and Hotmart courses, YouTube videos, music and books — 1,800+ sites, no terminal. Free open-source desktop app for Windows, macOS and Linux, with a built-in course player, PDF/EPUB reader and music library. Powered by yt-dlp. Your files stay on your computer.",
+      "language": "Rust",
+      "total_stars": 11893,
+      "forks": 1037,
+      "stars_today": 507,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 507
+    },
+    "details": {
+      "topics": [
+        "bilibili-downloader",
+        "course-downloader",
+        "download-manager",
+        "downloader",
+        "epub-reader",
+        "hotmart-downloader",
+        "instagram-downloader",
+        "media-downloader",
+        "reddit-downloader",
+        "spaced-repetition",
+        "subtitle-downloader",
+        "telegram-downloader",
+        "tiktok-downloader",
+        "twitch-downloader",
+        "twitter-downloader",
+        "udemy-downloader",
+        "video-downloader",
+        "youtube-downloader",
+        "yt-dlp",
+        "yt-dlp-gui"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-02-11T22:44:56Z",
+      "updated_at": "2026-09-14T05:06:50Z",
+      "pushed_at": "2026-09-11T14:08:48Z",
+      "open_issues": 39,
+      "homepage": "https://tonho.wtf",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nSearch keywords (kept here so GitHub search, Google and AI assistants can find the project):\nOmniGet is a free open source downloader and media toolbox for Windows, macOS and Linux.\nudemy downloader, hotmart downloader, kiwify downloader, course downloader, youtube downloader,\nyt-dlp gui, instagram downloader, instagram story downloader, reels downloader, twitter downloader,\nx video downloader, pinterest downloader, pinterest board backup, tiktok downloader, reddit downloader,\ntwitch vod downloader, bilibili downloader, telegram downloader, torrent client, magnet downloader,\nsubtitle downloader, whisper transcription, text to speech, epub reader, pdf reader, anki flashcards,\nspaced repetition, music player, spicetify, media downloader, download manager, tauri, rust, svelte.\n\nGitHub allows 20 topics. The repository uses exactly these 20:\ndownloader, download-manager, media-downloader, video-downloader, youtube-downloader, yt-dlp,\nyt-dlp-gui, course-downloader, udemy-downloader, hotmart-downloader, bilibili-downloader,\ntiktok-downloader, instagram-downloader, twitter-downloader, reddit-downloader, telegram-downloader,\ntwitch-downloader, subtitle-downloader, epub-reader, spaced-repetition\n-->\n\n<p align=\"center\">\n  <img src=\"assets/readme/hero.svg\" alt=\"OmniGet: paste a link, get the file. Downloads, tools and a study library in one desktop app for Windows, macOS and Linux.\" width=\"100%\" />\n</p>\n\n<h1 align=\"center\">OmniGet</h1>\n\n<p align=\"center\">\n  <b>English</b>\n  · <a href=\"README_pt_br.md\">Português (BR)</a>\n  · <a href=\"README.ru.md\">Русский</a>\n  · <a href=\"README_zh_CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <b>Download Udemy and Hotmart courses, YouTube, Instagram, X, Pinterest, TikTok and 1,800+ other sites.<br/>Then transcribe, convert, read and study what you saved. One free desktop app, no terminal.</b>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/tonhowtf/omniget/releases/latest\"><img src=\"https://img.shields.io/github/v/release/tonhowtf/omniget?style=for-the-badge&label=release&color=F28500\" alt=\"Latest release\" /></a>\n  <a href=\"https://github.com/tonhowtf/omniget/releases\"><img src=\"https://img.shields.io/github/downloads/tonhowtf/omniget/total?style=for-the-badge&label=downloads&color=1E6FE8\" alt=\"Total downloads\" /></a>\n  <a href=\"https://github.com/tonhowtf/omniget/stargazers\"><img src=\"https://img.shields.io/github/stars/tonhowtf/omniget?style=for-the-badge&color=FFD426\" alt=\"GitHub stars\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-GPL--3.0-2AA845?style=for-the-badge\" alt=\"License GPL-3.0\" /></a>\n  <a href=\"https://discord.gg/jgdxyPy7Vn\"><img src=\"https://img.shields.io/badge/Discord-community-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  <a href=\"https://hosted.weblate.org/engage/omniget/\"><img src=\"https://hosted.weblate.org/widget/omniget/frontend-json/svg-badge.svg\" alt=\"Translation status\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#download-and-install\"><img src=\"https://img.shields.io/badge/Download_for_Windows,_macOS_or_Linux-→-F28500?style=for-the-badge\" alt=\"Download OmniGet\" height=\"40\" /></a>\n  &nbsp;\n  <a href=\"#the-tools-section-108-tools-in-16-categories\"><img src=\"https://img.shields.io/badge/See_the_108_tools-→-3D5BF0?style=for-the-badge\" alt=\"See the Tools section\" height=\"40\" /></a>\n</p>\n\n<p align=\"center\">\n  <sub>Free. Open source under GPL-3.0. No account, no ads, no telemetry on what you download. Your files stay on your computer.</sub><br/>\n  <sub>9,500+ GitHub stars. The most starred repository in the <a href=\"https://github.com/topics/udemy-downloader\">udemy-downloader</a>, <a href=\"https://github.com/topics/hotmart-downloader\">hotmart-downloader</a> and <a href=\"https://github.com/topics/course-downloader\">course-downloader</a> topics.</sub>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/readme/home.png\" alt=\"OmniGet home screen: paste a URL, magnet link or .torrent and the file lands in your folder\" width=\"900\" />\n</p>\n\n---\n\n## Contents\n\n- [Why OmniGet](#why-omniget)\n- [Download and install](#download-and-install)\n- [Your first download in one minute](#your-first-download-in-one-minute)\n- [What OmniGet downloads](#what-omniget-downloads)\n- [The browser extension, step by step](#the-browser-extension-step-by-step)\n- [The Tools section: 108 tools in 16 categories](#the-tools-section-108-tools-in-16-categories)\n- [Plugins: Courses, Study, Telegram, Convert](#plugins-courses-study-telegram-convert)\n- [Built-in chat, off by default](#built-in-chat-off-by-default)\n- [For League of Legends players](#for-league-of-legends-players)\n- [Everything else in the box](#everything-else-in-the-box)\n- [Privacy and what OmniGet refuses to do](#privacy-and-what-omniget-refuses-to-do)\n- [Frequently asked questions](#frequently-asked-questions)\n- [Command line](#command-line)\n- [Build from source](#build-from-source)\n- [Contributing and translations](#contributing-and-translations)\n\n---\n\n## Why OmniGet\n\nYou bought a course and want it on your disk before the platform pulls it. You keep a yt-dlp cheat sheet because the flags never stick. You have one site for Instagram stories, another for X videos, a Chrome extension for Pinterest, a Python script for subtitles, and none of them remember your login.\n\nOmniGet puts all of that behind one text box. Paste a link, see a preview with quality options, click download. The same window then plays the course, reads the PDF, transcribes the audio and backs up the Pinterest board. yt-dlp and FFmpeg install themselves and stay updated, so there is nothing to configure and no terminal to open.\n\n<p align=\"center\">\n  <img src=\"assets/readme/workflow.svg\" alt=\"How OmniGet works: paste a link or press the hotkey, OmniGet detects the site and fetches with yt-dlp or a native extractor, the file lands in your folder and opens in the built-in player, reader or tools.\" width=\"100%\" />\n</p>\n\n### How it compares\n\n| | OmniGet | yt-dlp alone | Single-site web downloaders | Paid course downloaders |\n|---|---|---|---|---|\n| Sites | Courses, Instagram, X, Pinterest, Bilibili, Telegram, torrents natively, plus 1,800+ through yt-dlp | 1,800+ | One | One or two platforms |\n| Setup | Download one file, open it | Python, PATH, FFmpeg, flags | None | Installer, license key |\n| Logged-in content | Cookies from your browser through the extension | Manual `--cookies` export | Rarely | Sometimes |\n| Queue | Resume, retry with backoff, rules, followed channels | One command at a time | No | Varies |\n| After the download | Player, reader, flashcards, notes, 108 tools | Files | Files, often re-encoded | Files |\n| Price and license | Free, GPL-3.0 | Free, Unlicense | Free with ads | Subscription |\n\nyt-dlp is the engine OmniGet runs on, and OmniGet would not exist without it. If you live in a terminal and only want files, yt-dlp alone is the right tool.\n\n---\n\n## Download and install\n\nPick your system. Every build is published on the [Releases page](https://github.com/tonhowtf/omniget/releases/latest). Updates arrive inside the app.\n\n<table>\n  <tr>\n    <th align=\"left\">System</th>\n    <th align=\"left\">What to download</th>\n    <th align=\"left\">Other ways</th>\n  </tr>\n  <tr>\n    <td><b>Windows 10 / 11</b></td>\n    <td><code>omniget_x.y.z_x64-setup.exe</code> (installer)<br/><code>omniget_x.y.z_x64-portable.exe</code> (no install, runs from anywhere)<br/><code>omniget_x.y.z_x64_en-US.msi</code> (for IT deployments)</td>\n    <td><code>winget install -e --id tonhowtf.OmniGet</code></td>\n  </tr>\n  <tr>\n    <td><b>macOS 10.15+</b></td>\n    <td><code>omniget_x.y.z_aarch64.dmg</code> for Apple Silicon (M1 and later)<br/><code>omniget_x.y.z_x64.dmg</code> for Intel Macs</td>\n    <td><code>brew install --cask tonhowtf/tap/omniget</code></td>\n  </tr>\n  <tr>\n    <td><b>Linux</b></td>\n    <td><code>.deb</code> for Debian and Ubuntu (amd64 and arm64)<br/><code>.rpm</code> for Fedora, openSUSE and RHEL family (x86_64 and aarch64)<br/><code>.AppImage</code> for everything else (amd64 and aarch64)</td>\n    <td>AppImage self-updates through the <code>.zsync</code> files</td>\n  </tr>\n</table>\n\n### The first launch warning, and how to clear it\n\nOmniGet is not signed with a paid certificate, so each system shows a warning the first time. This is normal for open source desktop apps and you handle it once.\n\n**Windows.** SmartScreen shows a blue box. Click **More info**, then **Run anyway**.\n\n**macOS.** Gatekeeper refuses to open the app and may say it is \"damaged\". After you drag OmniGet into Applications, open Terminal (Spotlight, type \"Terminal\") and paste these two lines:\n\n```bash\nxattr -cr /Applications/omniget.app\ncodesign --force --deep --sign - /Applications/omniget.app\n```\n\nThen open OmniGet from Launchpad as usual.\n\n**Linux, AppImage on Debian 12+ or Ubuntu 24.04+.** Those releases ship without FUSE 2, which AppImage needs. If the file fails with a libfuse error, run `sudo apt install libfuse2`, or launch it with `./omniget.AppImage --appimage-extract-and-run`. The `.deb` avoids this entirely.\n\n### Portable mode\n\nCreate an empty file named `portable.txt` (or `.portable`) next to the Windows `.exe` and relaunch. Settings, the database, cookies, plugins, caches, yt-dlp and FFmpeg all move to a `data` folder next to the executable. Nothing touches `AppData`, so the whole install fits on a USB stick.\n\n---\n\n## Your first download in one minute\n\n1. Open OmniGet. The setup screen asks for your language and theme, then installs yt-dlp and FFmpeg with one click. yt-dlp is checked against its SHA-256 before it runs.\n2. Copy any link: a YouTube video, an Instagram reel, an X post, a Pinterest board, a magnet, a direct file URL.\n3. Paste it in the box on the home screen. OmniGet detects the site and shows the title, thumbnail and available qualities. Pick one and press Enter.\n\nThe Downloads page shows speed, phase and ETA read straight from the downloader, so a stalled download looks stalled instead of frozen at \"3 seconds left\". Interrupted downloads resume where they stopped. Rate-limited sites get retried with backoff, and connections per site adapt on their own, so YouTube gets up to 16 parallel fragments while a site that answers 429 gets fewer. When a Python 3.10 or newer is present, yt-dlp runs as a zipapp on it and starts in under a second instead of unpacking the bundled binary on every launch.\n\n<p align=\"center\">\n  <img src=\"assets/readme/downloads.png\" alt=\"OmniGet Downloads page with an active 4K YouTube download showing phase, speed, ETA and the exact yt-dlp command, plus queued and finished items\" width=\"900\" />\n</p>\n\n### Skip the window entirely\n\nCopy a link anywhere on your system and press **Ctrl+Shift+D** (**Cmd+Shift+D** on macOS). OmniGet reads the clipboard and starts the download in the background. A second hotkey, **Ctrl+Shift+M**, grabs audio only, so a YouTube link becomes an MP3 without opening anything. It is off until you enable it, and both shortcuts can be rebound in **Settings → Downloads → Clipboard & hotkeys**.\n\n---\n\n## What OmniGet downloads\n\nOmniGet has native extractors for the platforms people use most, and hands everything else to [yt-dlp](https://github.com/yt-dlp/yt-dlp), which covers roughly 1,800 sites.\n\n| Category | Sites and formats |\n|---|---|\n| Online courses | Hotmart, Udemy, Kiwify, Rocketseat and Meta-Analysis Academy through the Courses plugin. Every lesson, section selection, attachments, resume where you stopped. |\n| Video and audio | YouTube (videos, playlists, channels, live from start, chapters, SponsorBlock), Instagram, TikTok, X/Twitter, Reddit, Twitch (VODs, clips, live), Vimeo, Bluesky, Threads, Pinterest, Douyin |\n| Bilibili, signed in | 4K, HDR, Dolby Vision, Hi-Res lossless and Dolby Atmos according to your subscription. Danmaku comments as XML, ASS or JSON, NFO files for Kodi and Jellyfin, custom naming templates, 11 URL types including bangumi, courses, favorites, watch later and history |\n| Image galleries | Whole galleri"
+    },
+    "brief": {
+      "summary": "跨平台桌面下载与媒体整理工具",
+      "problem": "不同网站下载工具分散，命令行配置复杂",
+      "highlights": [
+        "可以下载课程、视频、音乐和电子书",
+        "可以内置播放课程、阅读 PDF/EPUB",
+        "可以管理字幕、转录和学习资料"
+      ],
+      "target_users": [
+        "课程学习者",
+        "媒体资料整理者",
+        "跨平台下载用户"
+      ],
+      "why_trending": "今日新增507个 Star，本周首次收录",
+      "caveat": "下载内容需遵守平台规则和版权要求",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "tonhowtf/omniget",
+      "score": 65,
+      "category": "ACG 资源 / Mod",
+      "reason": "支持视频音乐字幕等资源下载",
+      "generated_by_ai": true,
+      "velocity_score": 82,
+      "freshness_score": 40,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "jiji262/douyin-downloader",
+      "url": "https://github.com/jiji262/douyin-downloader",
+      "description": "A practical Douyin downloader for both single-item and profile batch downloads, with progress display, retries, SQLite deduplication, and browser fallback support. 抖音批量下载工具，去水印，支持视频、图集、合集、音乐(原声)。",
+      "language": "Python",
+      "total_stars": 11509,
+      "forks": 1761,
+      "stars_today": 452,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 452
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2023-05-25T08:10:38Z",
+      "updated_at": "2026-09-14T05:08:13Z",
+      "pushed_at": "2026-09-10T07:35:13Z",
+      "open_issues": 40,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Douyin Downloader V2.0\n\n<p align=\"center\">\n  <img src=\"https://socialify.git.ci/jiji262/douyin-downloader/image?custom_description=Douyin+batch+download+tool%2C+remove+watermarks%2C+support+batch+download+of+videos%2C+gallery%2C+and+author+homepages.&description=1&font=Source+Code+Pro&forks=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Light\" alt=\"douyin-downloader\" width=\"820\" />\n</p>\n\n<p align=\"center\">\n    <a href=\"https://linux.do\" alt=\"LINUX DO\">\n        <img\n            src=\"https://img.shields.io/badge/LINUX-DO-FFB003.svg?logo=data:image/svg%2bxml;base64,DQo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiPjxwYXRoIGQ9Ik00Ni44Mi0uMDU1aDYuMjVxMjMuOTY5IDIuMDYyIDM4IDIxLjQyNmM1LjI1OCA3LjY3NiA4LjIxNSAxNi4xNTYgOC44NzUgMjUuNDV2Ni4yNXEtMi4wNjQgMjMuOTY4LTIxLjQzIDM4LTExLjUxMiA3Ljg4NS0yNS40NDUgOC44NzRoLTYuMjVxLTIzLjk3LTIuMDY0LTM4LjAwNC0yMS40M1EuOTcxIDY3LjA1Ni0uMDU0IDUzLjE4di02LjQ3M0MxLjM2MiAzMC43ODEgOC41MDMgMTguMTQ4IDIxLjM3IDguODE3IDI5LjA0NyAzLjU2MiAzNy41MjcuNjA0IDQ2LjgyMS0uMDU2IiBzdHlsZT0ic3Ryb2tlOm5vbmU7ZmlsbC1ydWxlOmV2ZW5vZGQ7ZmlsbDojZWNlY2VjO2ZpbGwtb3BhY2l0eToxIi8+PHBhdGggZD0iTTQ3LjI2NiAyLjk1N3EyMi41My0uNjUgMzcuNzc3IDE1LjczOGE0OS43IDQ5LjcgMCAwIDEgNi44NjcgMTAuMTU3cS00MS45NjQuMjIyLTgzLjkzIDAgOS43NS0xOC42MTYgMzAuMDI0LTI0LjM4N2E2MSA2MSAwIDAgMSA5LjI2Mi0xLjUwOCIgc3R5bGU9InN0cm9rZTpub25lO2ZpbGwtcnVsZTpldmVub2RkO2ZpbGw6IzE5MTkxOTtmaWxsLW9wYWNpdHk6MSIvPjxwYXRoIGQ9Ik03Ljk4IDcwLjkyNmMyNy45NzctLjAzNSA1NS45NTQgMCA4My45My4xMTNRODMuNDI2IDg3LjQ3MyA2Ni4xMyA5NC4wODZxLTE4LjgxIDYuNTQ0LTM2LjgzMi0xLjg5OC0xNC4yMDMtNy4wOS0yMS4zMTctMjEuMjYyIiBzdHlsZT0ic3Ryb2tlOm5vbmU7ZmlsbC1ydWxlOmV2ZW5vZGQ7ZmlsbDojZjlhZjAwO2ZpbGwtb3BhY2l0eToxIi8+PC9zdmc+\" /></a>\n</p>\n中文文档 (Chinese): [README.zh-CN.md](./README.zh-CN.md)\n\n\nA practical Douyin downloader supporting videos, image-notes, collections, music, favorites collections, and profile batch downloads, with progress display, retries, SQLite deduplication, download integrity checks, and browser fallback support.\n\n## Desktop App (Douzy)\n\nA desktop GUI built on the same backend, with dedicated workspaces for Douyin, TikTok, and YouTube. Paste a link to start, sync account content, follow every task, and manage downloaded works in a local archive.\n\n- **Three platforms:** Douyin videos, galleries, profiles, and collections; TikTok videos, photos, and profiles; YouTube videos, Shorts, channels, and playlists\n- **Account content:** sync Douyin following, favorites collections, collected series, and likes\n- **Visual workflow:** multi-link queue, task status and retry controls, local download archive, filters, and quick re-download\n\n> **Beta:** The desktop app is currently in closed beta. To try it, download the build from the [Releases](https://github.com/jiji262/douyin-downloader/releases) page.\n\n| **Douyin link download** | **TikTok download workspace** | **YouTube workbench** |\n|:---:|:---:|:---:|\n| ![Douzy Douyin link download workspace](img/desktop/001.png) | ![Douzy TikTok download workspace](img/desktop/002.png) | ![Douzy YouTube workbench](img/desktop/003.png) |\n| Paste a video, gallery, profile, or collection link and start in one click. | Download public videos, photo posts, and profiles without signing in. | Scan videos, Shorts, channels, and playlists, then configure video, MP3, or subtitle downloads. |\n| **Following management** | **Favorites and likes** | **Task Center** |\n| ![Douzy following management](img/desktop/004.png) | ![Douzy favorites and likes](img/desktop/005.png) | ![Douzy Task Center](img/desktop/006.png) |\n| Sync creators, filter new works, add notes, and download directly from the list. | Browse collected videos, series, and liked works from the current Douyin account. | Track job results, retry failures, and open output folders. |\n\n_Screenshots were captured from the current desktop `main` build. Demonstration data is used for privacy._\n\n## Feature Overview\n\n### Supported\n\n| Feature | Description |\n|---------|-------------|\n| Single video download | `/video/{aweme_id}` |\n| Single image-note download | `/note/{note_id}` and `/gallery/{note_id}` |\n| Single collection download | `/collection/{mix_id}` and `/mix/{mix_id}` |\n| Single music download | `/music/{music_id}` (prefers direct audio, fallback to first related aweme) |\n| Short link parsing | `https://v.douyin.com/...`, `v.iesdouyin.com`, bare hosts |\n| Profile batch download | `/user/{sec_uid}` + `mode: [post, like, mix, music]` |\n| Logged-in favorites collections | `/user/self?showTab=favorite_collection` + `mode: [collect, collectmix]` |\n| No-watermark preferred | Automatically selects watermark-free video source |\n| Highest-quality selection | Auto-picks highest bitrate from `video.bit_rate` ladder (video + live-photo) |\n| **Live stream recording** | `live.douyin.com/{room_id}` → FLV/HLS, preserves partial data on stream end |\n| **Comments collection** | Per-aweme comments (+ optional replies) saved as `*_comments.json` |\n| **Hot search + keyword search** | `--hot-board [N]` / `--search \"keyword\"` dumps to JSONL |\n| **REST API server mode** | `--serve --serve-port 8000` (optional `fastapi + uvicorn`) |\n| **Notification push** | Bark / Telegram / Webhook on download completion |\n| Extra assets | Cover, music, avatar, JSON metadata |\n| Video transcription | Optional, using OpenAI Transcriptions API |\n| Concurrent downloads | Configurable concurrency, default 5 |\n| Retry with backoff | Exponential backoff (1s, 2s, 5s) |\n| Rate limiting | Default 2 req/s |\n| SQLite history | Records download metadata; does not decide incremental skips |\n| Incremental downloads | Disk-based skip/redownload via `increase.post/like/mix/music` |\n| Time filters | `start_time` / `end_time` |\n| Browser fallback | Launches browser when pagination is blocked, manual CAPTCHA supported |\n| Download integrity check | Content-Length validation, auto-cleanup of incomplete files |\n| Progress display | Rich progress bars, supports `progress.quiet_logs` quiet mode |\n| Docker deployment | Dockerfile included |\n| CI/CD | GitHub Actions for testing and linting |\n\n### Current Limitations\n\n- Browser fallback is fully validated for `post`; `like/mix/music` currently relies on API pagination\n- `number.allmix` / `increase.allmix` are retained as compatibility aliases and normalized to `mix`\n- `collect` / `collectmix` currently work for the account represented by the logged-in cookies only\n- `collect` / `collectmix` must be used alone and cannot be combined with `post` / `like` / `mix` / `music`\n- `increase` currently applies to `post` / `like` / `mix` / `music`; favorites collection modes do not support incremental stop\n- Live stream recording saves FLV natively; HLS sources only save the playlist (use ffmpeg for playable output)\n- The webcast room endpoint is not verified against every live scenario — treat as experimental\n\n## Quick Start\n\n### 1) Requirements\n\n- Python 3.8+\n- macOS / Linux / Windows\n\n### 2) Install dependencies\n\n```bash\npip install -r requirements.txt\n```\n\nFor browser fallback and automatic cookie capture:\n\n```bash\npip install playwright\npython -m playwright install chromium\n```\n\n### 3) Copy config file\n\n```bash\ncp config.example.yml config.yml\n```\n\n### 4) Get cookies (recommended: automatic)\n\n```bash\npython -m tools.cookie_fetcher --config config.yml\n```\n\nAfter logging into Douyin, return to the terminal and press Enter. Cookies will be written to your config automatically.\n\n### 5) Docker deployment (optional)\n\n```bash\ndocker build -t douyin-downloader .\ndocker run -v $(pwd)/config.yml:/app/config.yml -v $(pwd)/Downloaded:/app/Downloaded douyin-downloader\n```\n\n## Minimal Working Config\n\n```yaml\nlink:\n  - https://www.douyin.com/user/MS4wLjABAAAAxxxx\n\npath: ./Downloaded/\nmode:\n  - post\n\nnumber:\n  post: 0\n  collect: 0\n  collectmix: 0\n\nthread: 5\nretry_times: 3\nproxy: \"\"\ndatabase: true\ndatabase_path: dy_downloader.db\n\nprogress:\n  quiet_logs: true\n\ncookies:\n  msToken: \"\"\n  ttwid: YOUR_TTWID\n  odin_tt: YOUR_ODIN_TT\n  passport_csrf_token: YOUR_CSRF_TOKEN\n  sid_guard: \"\"\n\nbrowser_fallback:\n  enabled: true\n  headless: false\n  max_scrolls: 240\n  idle_rounds: 8\n  wait_timeout_seconds: 600\n\ntranscript:\n  enabled: false\n  model: gpt-4o-mini-transcribe\n  output_dir: \"\"\n  response_formats: [\"txt\", \"json\"]\n  api_url: https://api.openai.com/v1/audio/transcriptions\n  api_key_env: OPENAI_API_KEY\n  api_key: \"\"\n```\n\n## Usage\n\n### Run with a config file\n\n```bash\npython run.py -c config.yml\n```\n\n### Append CLI arguments\n\n```bash\npython run.py -c config.yml \\\n  -u \"https://www.douyin.com/video/7604129988555574538\" \\\n  -t 8 \\\n  -p ./Downloaded\n```\n\n### Arguments\n\n| Argument | Description |\n|----------|-------------|\n| `-u, --url` | Append download link(s), can be repeated |\n| `-c, --config` | Specify config file (default: `config.yml`) |\n| `-p, --path` | Specify download directory |\n| `-t, --thread` | Specify concurrency |\n| `--show-warnings` | Show warning/error logs |\n| `-v, --verbose` | Show info/warning/error logs |\n| `--hot-board [N]` | Fetch Douyin hot search board and write JSONL; optional top-N |\n| `--search KEYWORD` | Search videos by keyword, write JSONL |\n| `--search-max N` | Max items for `--search` (default 50) |\n| `--serve` | Run as REST API server (requires `pip install fastapi uvicorn`) |\n| `--serve-host HOST` | REST server listen host (default 127.0.0.1) |\n| `--serve-port PORT` | REST server listen port (default 8000) |\n| `--version` | Show version number |\n\n## Typical Scenarios\n\n### Download one video\n\n```yaml\nlink:\n  - https://www.douyin.com/video/7604129988555574538\n```\n\n### Download one image-note\n\n```yaml\nlink:\n  - https://www.douyin.com/note/7341234567890123456\n```\n\n### Download a collection\n\n```yaml\nlink:\n  - https://www.douyin.com/collection/7341234567890123456\n```\n\n### Download a music track\n\n```yaml\nlink:\n  - https://www.douyin.com/music/7341234567890123456\n```\n\n### Batch download a creator's posts\n\n```yaml\nlink:\n  - https://www.douyin.com/user/MS4wLjABAAAAxxxx\nmode:\n  - post\nnumber:\n  post: 50\n```\n\n### Batch download a creator's liked posts\n\n```yaml\nlink:\n  - https://www.douyin.com/user/MS4wLjABAAAAxxxx\nmode:\n  - like\nnumber:\n  like: 0    # 0 means download all\n```\n\n### Download multiple modes at once\n\n```yaml\nlink:\n  - https://www.douyin.com/user/MS4wLjABAAAAxxxx\nmode:\n  - post\n  - like\n  - mix\n  - music\n```\n\nCross-mode deduplication: the same aweme_id won't be downloaded twice across different modes.\n\n### Download logged-in favorites collection items\n\n```yaml\nlink:\n  - https://www.douyin.com/user/self?showTab=favorite_collection\nmode:\n  - collect\nnumber:\n  collect: 0\n```\n\n### Download logged-in collected mixes\n\n```yaml\nlink:\n  - https://www.douyin.com/user/self?showTab=favorite_collection\nmode:\n  - collectmix\nnumber:\n  collectmix: 0\n```\n\n### Record a live stream (experimental)\n\n```yaml\nlink:\n  - https://live.douyin.com/123456789   # or /follow/live/{room_id}\nlive:\n  max_duration_seconds: 3600   # 0 = record until broadcaster ends\n  chunk_size: 65536\n  idle_timeout_seconds: 30\n```\n\nThe recorder saves an FLV file under `Downloaded/{author}/live/` plus a `*_room.json`\nmetadata snapshot. If the broadcaster ends the stream, network goes idle, or you\nCtrl+C, any already-recorded bytes are preserved (the `.tmp` file is promoted to\nthe final file).\n\n### Collect comments per aweme\n\n```yaml\ncomments:\n  enabled: true\n  include_replies: false   # true will fetch each comment's second-level replies (extra API calls)\n  max_comments: 500        # 0 = no cap\n  page_size: 20\n```\n\nGenerates a `{date}_{title}_{aweme_id}_comments.json` next to the media file.\n\n### Dump the hot search board\n\n```bash\npython run.py --hot-board 30 -p ./Downloaded\n# Output: ./Downloaded/hot_board/20260424_221530.jsonl\n```\n\n### Search by keyword\n\n```bash\npython run.py --search \"猫咪\" --search-max 100 -p ./Downloaded\n# Output: ./Downloaded/search/猫咪_20260424_221530.jsonl\n```\n\n### Run as REST API server\n\n```bash\npip install fastapi uvicorn       # one-time optional dep\npython run.py --serve --serve-port 8000\n"
+    },
+    "brief": {
+      "summary": "支持抖音视频、图集和主页批量下载的 Python 工具",
+      "problem": "解决抖音内容单个或批量保存、去重和失败重试问题",
+      "highlights": [
+        "可以批量下载主页、合集和收藏内容",
+        "可以保存视频、图集、音乐及附加信息",
+        "可以用进度、重试和 SQLite 管理下载任务"
+      ],
+      "target_users": [
+        "内容备份者",
+        "数据整理人员",
+        "Python 用户"
+      ],
+      "why_trending": "今日新增452 Star，总Star达11509，本周首次收录",
+      "caveat": "部分批量模式依赖登录Cookie，浏览器回退支持有限",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jiji262/douyin-downloader",
+      "score": 68,
+      "category": "ACG 资源 / Mod",
+      "reason": "批量下载视频图集与音乐资源",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 20,
+      "ranking_score": 57.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "tech-leads-club/agent-skills",
+      "url": "https://github.com/tech-leads-club/agent-skills",
+      "description": "The secure, validated skill registry for professional AI coding agents. Extend Antigravity, Claude Code, Cursor, Copilot and more with absolute confidence.",
+      "language": "TypeScript",
+      "total_stars": 5768,
+      "forks": 503,
+      "stars_today": 265,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 265
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai",
+        "antigravity",
+        "claude-code",
+        "copilot",
+        "cursor",
+        "skills"
+      ],
+      "license_name": "",
+      "created_at": "2026-01-19T13:21:32Z",
+      "updated_at": "2026-09-14T05:08:15Z",
+      "pushed_at": "2026-09-12T15:29:58Z",
+      "open_issues": 31,
+      "homepage": "https://agent-skills.techleads.club",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/assets/logo.png\" alt=\"Tech Leads Club\" width=\"400\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/npm/v/@tech-leads-club/agent-skills?style=flat-square&color=blue\" alt=\"npm version\" />\n  <img src=\"https://img.shields.io/npm/dt/@tech-leads-club/agent-skills?style=flat-square&color=blue\" alt=\"total downloads\" />\n  <img src=\"https://img.shields.io/npm/dm/@tech-leads-club/agent-skills?style=flat-square&color=blue\" alt=\"monthly downloads\" />\n  <img src=\"https://img.shields.io/github/license/tech-leads-club/agent-skills?style=flat-square\" alt=\"license\" />\n  <img src=\"https://img.shields.io/github/actions/workflow/status/tech-leads-club/agent-skills/release.yml?style=flat-square\" alt=\"build status\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen?style=flat-square&logo=node.js\" alt=\"node version\" />\n  <img src=\"https://img.shields.io/badge/TypeScript-100%25-blue?style=flat-square&logo=typescript\" alt=\"typescript\" />\n  <img src=\"https://img.shields.io/badge/Nx%20Cloud-Enabled-blue?style=flat-square&logo=nx\" alt=\"nx cloud\" />\n  <img src=\"https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square\" alt=\"semantic-release\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/tech-leads-club/agent-skills?style=flat-square&color=yellow\" alt=\"github stars\" />\n  <img src=\"https://img.shields.io/github/contributors/tech-leads-club/agent-skills?style=flat-square&color=orange\" alt=\"contributors\" />\n  <img src=\"https://img.shields.io/github/last-commit/tech-leads-club/agent-skills?style=flat-square\" alt=\"last commit\" />\n  <img src=\"https://img.shields.io/badge/AI-Powered%20Skills-purple?style=flat-square&logo=openai\" alt=\"ai powered\" />\n</p>\n\n<h1 align=\"center\">🧠 Agent Skills</h1>\n\n<p align=\"center\">\n  <strong>The secure, validated skill registry for professional AI coding agents</strong>\n</p>\n\n<p align=\"center\">\n  In an ecosystem where <a href=\"https://github.com/snyk/agent-scan/blob/main/.github/reports/skills-report.pdf\">over 13% of marketplace skills contain critical vulnerabilities</a>,\n  <b>Agent Skills</b> stands apart as a hardened library of <b>verified</b>, <b>tested</b>, and <b>safe</b> capabilities.\n  Extend <b>Antigravity</b>, <b>Claude Code</b>, <b>Cursor</b>, and more with absolute confidence.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://tech-leads-club.github.io/agent-skills/\" target=\"_blank\">https://tech-leads-club.github.io/agent-skills/</a>\n</p>\n\n## 📖 Table of Contents\n\n- [✨ What are Skills?](#-what-are-skills)\n- [🛡️ Security & Trust](#️-security--trust)\n- [🤖 Supported Agents](#-supported-agents)\n- [🌟 Featured Skills](#-featured-skills)\n- [🚀 Quick Start](#-quick-start)\n- [⚡ How It Works](#-how-it-works)\n- [🔌 MCP Server](#-mcp-server)\n- [🤝 Contributing](#-contributing)\n- [🛡️ Content & Authorship](#️-content--authorship)\n- [📄 License and Attribution](#-license-and-attribution)\n\n## ✨ What are Skills?\n\nSkills are packaged instructions and resources that extend AI agent capabilities. Think of them as **plugins for your AI assistant** — they teach your agent new workflows, patterns, and specialized knowledge.\n\n```\npackages/skills-catalog/skills/\n  (category-name)/\n    skill/\n      SKILL.md          ← Main instructions\n      templates/        ← File templates\n      references/       ← On-demand documentation\n```\n\n## 🛡️ Security & Trust\n\nYour environment's safety is our top priority. Unlike open marketplaces where **13.4% of skills contain critical issues**, `agent-skills` is a managed, hardened library: 100% open source (no binaries), static analysis in CI/CD, immutable integrity via lockfiles and content hashing, and human-curated prompts. The CLI uses defense-in-depth (sanitization, path isolation, symlink guards, atomic lockfile, audit trail); every skill is scanned with [Snyk Agent Scan](https://github.com/snyk/agent-scan) (formerly mcp-scan) before publishing.\n\n→ **Full threat model, implementation details, and vulnerability reporting:** [SECURITY.md](SECURITY.md)\n\n## 🤖 Supported Agents\n\nInstall skills to any of these AI coding agents:\n\n<div align=\"center\">\n<br />\n\n|                     Tier 1 (Popular)                      |                            Tier 2 (Rising)                             |                   Tier 3 (Enterprise)                   |\n| :-------------------------------------------------------: | :--------------------------------------------------------------------: | :-----------------------------------------------------: |\n|         **[Claude Code](https://claude.ai/code)**         |                    **[Aider](https://aider.chat)**                     |   **[Amazon Q](https://aws.amazon.com/q/developer/)**   |\n|        **[Cline](https://github.com/cline/cline)**        |               **[Antigravity](https://idx.google.com)**                |       **[Augment](https://www.augmentcode.com)**        |\n|             **[Cursor](https://cursor.com)**              | **[Gemini CLI](https://ai.google.dev/gemini-api/docs/code-execution)** |    **[Droid (Factory.ai)](https://www.factory.ai)**     |\n| **[GitHub Copilot](https://github.com/features/copilot)** |                  **[Kilo Code](https://kilocode.ai)**                  |           **[OpenCode](https://opencode.ai)**           |\n|       **[Windsurf](https://codeium.com/windsurf)**        |                     **[Kiro](https://kiro.dev/)**                      |  **[Sourcegraph Cody](https://sourcegraph.com/cody)**   |\n|                                                           |    **[OpenAI Codex](https://openai.com/index/introducing-codex/)**     |         **[Tabnine](https://www.tabnine.com)**          |\n|                                                           |                    **[Roo Code](https://roo.dev)**                     |                                                         |\n|                                                           |                    **[TRAE](https://docs.trae.ai)**                    |                                                         |\n\n</div>\n\n<p align=\"center\">\n  <sub>Missing your favorite agent? <a href=\"https://github.com/tech-leads-club/agent-skills/issues/new\"><strong>Open an issue</strong></a> and we'll add support!</sub>\n</p>\n\n## 🌟 Featured Skills\n\nA glimpse of what's available in our growing catalog:\n\n| Skill                                                                                              | Category    | Description                                                                                                                                                                        |\n| -------------------------------------------------------------------------------------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **[tlc-spec-driven](<packages/skills-catalog/skills/(development)/tlc-spec-driven>)**              | Development | Project and feature planning with 4 phases: Specify → Design → Tasks → Implement. Creates atomic tasks with verification criteria and maintains persistent memory across sessions. |\n| **[aws-advisor](<packages/skills-catalog/skills/(cloud)/aws-advisor>)**                            | Cloud       | Expert AWS Cloud Advisor for architecture design, security review, and implementation guidance. Leverages AWS MCP tools for documentation-backed answers.                          |\n| **[playwright-skill](<packages/skills-catalog/skills/(web-automation)/playwright-skill>)**         | Automation  | Complete browser automation with Playwright. Test pages, fill forms, take screenshots, validate UX, and automate any browser task.                                                 |\n| **[figma](<packages/skills-catalog/skills/(design)/figma>)**                                       | Design      | Fetch design context from Figma and translate nodes into production code. Design-to-code implementation with MCP integration.                                                      |\n| **[security-best-practices](<packages/skills-catalog/skills/(security)/security-best-practices>)** | Security    | Language and framework-specific security reviews. Detect vulnerabilities, generate reports, and suggest secure-by-default fixes.                                                   |\n\n<p align=\"center\">\n  <a href=\"#-quick-start\"><strong>→ Browse all skills</strong></a>\n</p>\n\n## 🚀 Quick Start\n\n### Install Skills in Your Project\n\n```bash\nnpx @tech-leads-club/agent-skills\n```\n\nThis launches an interactive wizard:\n\n1. **Choose Action** — \"Install skills\" or \"Update installed skills\"\n2. **Browse & Select** — Filter by category or search\n3. **Choose agents** — Pick target agents (Cursor, Claude Code, etc.)\n4. **Installation method** — Copy (recommended) or Symlink\n5. **Scope** — Global (user home) or Local (project only)\n\nEach step shows a **← Back** option to return and revise your choices.\n\n### CLI Options\n\n> **Note**: You can use either `npx @tech-leads-club/agent-skills` or install globally and use `agent-skills` directly.\n\n```bash\n# Interactive mode (default)\nnpx @tech-leads-club/agent-skills\n# or: agent-skills (if installed globally)\n\n# List available skills\nagent-skills list\nagent-skills ls        # Alias\n\n# Install one skill\nagent-skills install -s tlc-spec-driven\n\n# Install multiple skills at once\nagent-skills install -s aws-advisor coding-guidelines docs-writer\n\n# Install to specific agents\nagent-skills install -s my-skill -a cursor claude-code\n\n# Install multiple skills to multiple agents\nagent-skills install -s aws-advisor nx-workspace -a cursor windsurf cline\n\n# Install globally (to ~/.gemini, ~/.claude, etc.)\nagent-skills install -s my-skill -g\n\n# Use symlink instead of copy\nagent-skills install -s my-skill --symlink\n\n# Force re-download (bypass cache)\nagent-skills install -s my-skill --force\n\n# Update a specific skill\nagent-skills update -s my-skill\n\n# Update all installed skills\nagent-skills update\n\n# Remove one skill\nagent-skills remove -s my-skill\n\n# Remove multiple skills at once\nagent-skills remove -s skill1 skill2 skill3\nagent-skills rm -s my-skill    # Alias\n\n# Remove from specific agents\nagent-skills remove -s my-skill -a cursor windsurf\n\n# Force removal (bypass lockfile check)\nagent-skills remove -s my-skill --force\n\n# Manage cache\nagent-skills cache --clear           # Clear all cache\nagent-skills cache --clear-registry  # Clear only registry\nagent-skills cache --path            # Show cache location\n\n# View audit log\nagent-skills audit                   # Show recent operations\nagent-skills audit -n 20             # Show last 20 entries\nagent-skills audit --path            # Show audit log location\n\n# Show contributors and credits\nagent-skills credits\n\n# Show help\nagent-skills --help\n```\n\n### Global Installation (Optional)\n\n```bash\nnpm install -g @tech-leads-club/agent-skills\nagent-skills  # Use 'agent-skills' instead of 'npx @tech-leads-club/agent-skills'\n```\n\n## ⚡ How It Works\n\nThe CLI fetches skills **on-demand** from our CDN:\n\n1. **Browse** — The CLI fetches the skills catalog (~45KB)\n2. **Select** — You choose the skills you need\n3. **Download** — Selected skills are downloaded and cached locally\n4. **Install** — Skills are installed to your agent's configuration\n\n### Caching\n\nDownloaded skills are cached in `~/.cache/agent-skills/` for offline use.\n\n```bash\n# Clear the cache\nrm -rf ~/.cache/agent-skills\n```\n\n## 🔌 MCP Server\n\n`@tech-leads-club/agent-skills-mcp` is an MCP server that exposes the skills catalog directly to AI agents via **progressive disclosure** — search first, then fetch only what's needed.\n\n| Tool                | Purpose                              |\n| :------------------ | :----------------------------------- |\n| `list_skills`       | Browse all skills by category    "
+    },
+    "brief": {
+      "summary": "面向多种编程智能体的安全技能注册库",
+      "problem": "编程智能体技能来源分散，安全性和可信度难判断",
+      "highlights": [
+        "可以为多种编程智能体安装验证过的技能",
+        "可以用技能辅助项目规划和浏览器自动化",
+        "可以通过扫描和锁文件降低技能风险"
+      ],
+      "target_users": [
+        "AI 编程用户",
+        "开发团队",
+        "安全审查人员"
+      ],
+      "why_trending": "今日新增265 Star，本周首次收录，累计5768 Star",
+      "caveat": "需要 Node.js 22 或更高版本，许可证资料中未说明",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "tech-leads-club/agent-skills",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "提供代码智能体技能注册与校验",
+      "generated_by_ai": true,
+      "velocity_score": 73,
+      "freshness_score": 40,
+      "ranking_score": 56.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "blixvip/MotionClone",
+      "url": "https://github.com/blixvip/MotionClone",
+      "description": "Turn reference videos into editable motion graphics with Codex + ChatGPT. Compare, customize, and export MP4s or HyperFrames projects. Local Windows app + online studio.",
+      "language": "Python",
+      "total_stars": 152,
+      "forks": 10,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "ai-video",
+        "animation",
+        "chatgpt",
+        "codex",
+        "demo-videos",
+        "hyperframes",
+        "launch-videos",
+        "motion-graphics",
+        "python",
+        "svg",
+        "video",
+        "video-editing"
+      ],
+      "license_name": "",
+      "created_at": "2026-09-10T02:29:35Z",
+      "updated_at": "2026-09-14T05:04:13Z",
+      "pushed_at": "2026-09-14T05:04:09Z",
+      "open_issues": 0,
+      "homepage": "https://motionclone.lol",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/motionclone-wordmark-light.png\">\n    <img src=\"docs/images/motionclone-wordmark.png\" width=\"360\" alt=\"MotionClone\">\n  </picture>\n</p>\n\n<h1 align=\"center\">From reference video to editable motion.</h1>\n\n<p align=\"center\">\n  Rebuild text, shapes, and animation with Codex + ChatGPT.<br>\n  Compare the result. Export a video. Keep the project and make it yours.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://motionclone.lol\"><strong>Try the online studio ↗</strong></a> &nbsp; · &nbsp;\n  <a href=\"#run-locally\"><strong>Run&nbsp;on&nbsp;Windows</strong></a> &nbsp; · &nbsp;\n  <a href=\"docs/GETTING-STARTED.md\">Full&nbsp;walkthrough</a>\n</p>\n\n<p align=\"center\">\n  English · <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://motionclone.lol/#examples\">\n    <img src=\"docs/images/motionclone-in-action.gif\" width=\"960\" alt=\"Real MotionClone playback: original reference on the left, rebuilt animation on the right\">\n  </a>\n</p>\n\n<p align=\"center\">\n  <sub>Actual saved reconstruction. Visual differences remain.<br>\n  <a href=\"https://motionclone.lol/#examples\">Watch the examples with playback controls</a> · <a href=\"docs/images/hero-comparison.png\">View a still</a></sub>\n</p>\n\n## A reference is the starting point\n\nPaste a public video link or upload a clip. MotionClone reconstructs it as an **editable HyperFrames project**: text, shapes, artwork, and animation you can adjust for a product demo, title sequence, or launch video.\n\n| Bring a reference | Check the rebuild | Make it yours |\n| --- | --- | --- |\n| Import from X, YouTube, Vimeo, a direct video URL, or a local file. | Play both videos together, scrub, and slow down to inspect the match. | Download an MP4 or edit the project’s copy, assets, styling, and timing. |\n\nThe local app is free to download, with no MotionClone subscription. ChatGPT/Codex account costs and usage limits are separate. Reconstruction is approximate; small text, unfamiliar fonts, photography, and complex 3D may need manual work.\n\n## Run locally\n\n**Windows prerequisites:** Git, Python 3.11+, Node.js 22+ with npm, FFmpeg + ffprobe, Google Chrome, and the official Codex CLI with ChatGPT account access. Make `git`, `python`, `npm`, `ffmpeg`, `ffprobe`, and `codex` available on PATH.\n\n```powershell\ngit clone https://github.com/blixvip/MotionClone.git\ncd MotionClone\ncodex login\n.\\start.ps1\n```\n\nThe launcher installs locked dependencies and opens **http://127.0.0.1:4319**. First launch needs an internet connection. Next time, double-click **Start MotionClone.vbs**.\n\nNo API key required. MotionClone uses your Codex login. To choose another model available to your account, set `FRAMEFORGE_MODEL` before starting the app.\n\nPrefer the browser? The [online studio](https://motionclone.lol) is in early access and requires sign-in, a separate ChatGPT connection, and an available processing worker.\n\n## Inside the studio\n\n**01 / Add a reference → 02 / Rebuild → 03 / Compare & export**\n\nStart with a short clip. Choose whether to retain its soundtrack in **Audio settings**, then select **Rebuild video**. Completed scenes save as the job progresses. Local inputs support up to **120 seconds and 250 MB**.\n\n![MotionClone workspace showing a real completed reconstruction and download controls](docs/images/02-rebuilt-video.png)\n\n### Six styles. Three formats. Your arrangement.\n\nChoose **Studio**, **Editorial**, **Signal**, **Cobalt**, **Peach**, or **Monochrome**. Set the export format and arrangement independently.\n\n![The six recording styles: Studio, Editorial, Signal, Cobalt, Peach, and Monochrome](docs/images/04-style-picker.png)\n\n| Landscape | Portrait | Square |\n| --- | --- | --- |\n| 1920 × 1080 | 1080 × 1920 | 1080 × 1080 |\n\nPresent the original and rebuild side by side, stacked, or with the rebuild in the spotlight. Use **Saved videos** to reopen projects, mark favorites, or organize collections.\n\n[See the full visual walkthrough →](docs/GETTING-STARTED.md)\n\n## Take the result with you\n\n| Download | What you get |\n| --- | --- |\n| **Compare & export → Download MP4** | Both videos in the selected style, format, and arrangement, with retained original audio. |\n| **Export details → Rebuilt video only** | The reconstructed animation on its own. |\n| **Editable project** | HyperFrames code, assets, fonts, and audio for further editing. |\n\nExtract the editable ZIP, read its README, and run:\n\n```powershell\nnpm install\nnpm run preview\n```\n\nEdit the project, then run `npm run render`. A coding agent can help change the copy, colors, or timing; the [agent workflow](docs/AGENT-WORKFLOW.md) explains how. The editable ZIP excludes the original reference video and reference screenshots. See [recording and exports](docs/RECORDING.md) for details.\n\n## Guides & help\n\n| Start creating | Go deeper |\n| --- | --- |\n| [Your first project](docs/GETTING-STARTED.md) | [Edit with a coding agent](docs/AGENT-WORKFLOW.md) |\n| [Product demo workflow](https://motionclone.lol/ai-demo-videos) | [Recording and exports](docs/RECORDING.md) |\n| [Launch video workflow](https://motionclone.lol/ai-launch-videos) | [Development and verification](docs/DEVELOPMENT.md) |\n| [简体中文指南](README.zh-CN.md) | [Report a bug](https://github.com/blixvip/MotionClone/issues) |\n\n<details>\n<summary><strong>Troubleshooting</strong></summary>\n\n- **A command is missing:** install its prerequisite, add it to PATH, and reopen PowerShell.\n- **ChatGPT is disconnected:** run `codex login`, then refresh the connection in the app.\n- **A video link fails:** try uploading the file. Private or unavailable links may not download.\n- **The server will not start:** check `server-error.log` in the project folder.\n- **The result looks wrong:** inspect the comparison. Tiny text, missing fonts, photography, and complex motion can differ from the reference.\n\n</details>\n\n<details>\n<summary><strong>Local data, account usage & licensing</strong></summary>\n\nProjects and media live in `data/` on your computer. Selected reference frames are sent to ChatGPT for analysis, and video downloads contact the source service. The app is not offline-only. Hosted storage differs; check the online studio’s account and privacy information.\n\nUse footage you own or have permission to adapt. Example projects and reference media are not bundled with a fresh clone. Export completion confirms that a file was produced; use the comparison to judge visual similarity.\n\nNo project-wide open-source license has been assigned. Third-party components retain their own licenses; see [THIRD_PARTY.md](THIRD_PARTY.md) and [licenses/](licenses/).\n\n</details>\n\nFor development, run `.venv\\Scripts\\python.exe -m pytest -q` after setup. See the [development guide](docs/DEVELOPMENT.md) for browser checks.\n\n---\n\n<p align=\"center\">\n  Built by <a href=\"https://github.com/blixvip\">blix</a> · <a href=\"https://x.com/waselyyy\">Follow on X</a> · <a href=\"https://motionclone.lol\">motionclone.lol</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://buymeacoffee.com/blix\"><img src=\"web/assets/buymeacoffee-yellow.png\" width=\"170\" alt=\"Support MotionClone — buy blix a coffee\"></a>\n</p>\n"
+    },
+    "brief": {
+      "summary": "把参考视频重建为可编辑的动态图形项目",
+      "problem": "难以从参考视频快速复刻并继续修改动画",
+      "highlights": [
+        "可以上传视频并重建文字、图形和动画",
+        "可以对比原视频与重建结果并导出 MP4",
+        "可以下载 HyperFrames 项目继续编辑"
+      ],
+      "target_users": [
+        "视频创作者",
+        "产品宣传制作人员",
+        "动效设计师"
+      ],
+      "why_trending": "本周首次收录，已有152个 Star，近期仍有更新",
+      "caveat": "重建结果是近似的，复杂画面可能需手动调整",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "blixvip/MotionClone",
+      "score": 95,
+      "category": "动画",
+      "reason": "将参考视频转换为可编辑动态图形",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 62.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "A-kirami/webgal-craft",
+      "url": "https://github.com/A-kirami/webgal-craft",
+      "description": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
+      "language": "TypeScript",
+      "total_stars": 23,
+      "forks": 6,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame",
+        "game-development",
+        "visual-novel",
+        "visual-novel-editor",
+        "webgal"
+      ],
+      "license_name": "MPL-2.0",
+      "created_at": "2025-10-24T07:39:30Z",
+      "updated_at": "2026-09-14T04:13:02Z",
+      "pushed_at": "2026-09-14T04:12:59Z",
+      "open_issues": 0,
+      "homepage": "https://webgalcraft.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft\">\n    <br />\n    <img src=\"./public/webgal-craft-logo.svg\" alt=\"WebGAL Craft Logo\" width=\"160\" />\n    <br />\n    <h1 align=\"center\">WebGAL Craft</h1>\n  </a>\n</p>\n\n<p align=\"center\">\n  面向 WebGAL 创作者的跨平台视觉小说工作室\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"./LICENSE\">\n    <img src=\"https://img.shields.io/badge/license-MPL--2.0-blue\" alt=\"License MPL-2.0\" />\n  </a>\n  <img src=\"https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-6f42c1\" alt=\"Supported platforms: Windows, macOS, Linux, Android\" />\n  <br />\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img src=\"https://img.shields.io/github/v/release/A-kirami/webgal-craft?include_prereleases&&color=70aeff&style=social\" alt=\"Release Version\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/stargazers\" target=\"__blank\"\n    ><img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/A-kirami/webgal-craft?style=social\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img alt=\"GitHub downloads\" src=\"https://img.shields.io/github/downloads/A-kirami/webgal-craft/total?style=social\"\n  /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\">下载最新版</a>\n  ·\n  <a href=\"https://webgalcraft.com\">官方网站</a>\n  ·\n  <a href=\"https://github.com/A-kirami/webgal-craft/issues\">反馈问题</a>\n  ·\n  <a href=\"https://qm.qq.com/q/W2Dt9V2F66\">加入交流群</a>\n</p>\n\nWebGAL Craft 是一款为 [WebGAL](https://github.com/OpenWebGAL/WebGAL) 游戏创作者设计的创作工具。它把项目管理、脚本编辑、资源浏览、可视化语句编辑和实时预览放在同一个工作流里，让创作者可以更直接地组织素材、编写演出并检查游戏效果。\n\n## 特性\n\n**资源管理**\n\n集中管理立绘、背景、音效等项目素材，在创作过程中随取随用。\n\n**可视化编辑**\n\n在可视化界面中组织剧情、对白和演出参数，同时保留脚本编辑能力，兼顾上手效率与精细控制。\n\n**本地历史版本**\n\n自动记录场景保存历史，脚本变更可追溯、可回退，长篇项目也能更稳妥地维护。\n\n**快速预览**\n\n在编辑器中实时预览演出效果，边创作边验证，减少在编辑器和游戏窗口之间反复切换。\n\n**引擎与模板切换**\n\n按作品需要管理和切换 WebGAL 引擎与项目模板，便于适配不同版本和制作风格。\n\n**演出参数复用**\n\n保存常用语句默认值与语句组，减少重复配置和手写脚本，让创作流程更稳定。\n\n## 下载安装\n\n前往 [Releases](https://github.com/A-kirami/webgal-craft/releases) 下载适合你系统的最新版本。\n\n| 平台 | 构建 | 推荐下载 |\n| --- | --- | --- |\n| Windows | 64-bit | `.exe` |\n| macOS | Intel / Apple Silicon | `.dmg` |\n| Linux | x64 | `.AppImage` / `.deb` |\n| Android | arm64 | `.apk` |\n\n## 快速上手\n\n> [!IMPORTANT]\n> WebGAL Craft 需要 WebGAL `4.6.2` 或以上版本的引擎，可在 [WebGAL Releases](https://github.com/OpenWebGAL/WebGAL/releases) 获取\n\n1. 下载并安装适合你系统的 WebGAL Craft。\n2. 打开 WebGAL Craft，在主页安装游戏引擎。\n3. 创建新游戏，或导入已有 WebGAL 游戏目录。\n4. 进入编辑后，在文本/可视化编辑器、资源面板和预览面板之间完成创作。\n\n## 贡献\n\nWebGAL Craft 欢迎任何形式的贡献，详情请阅读[贡献指南](./.github/CONTRIBUTING.md)。\n\n## 许可证\n\nCode: [MPL-2.0](./LICENSE), 2026, Akirami\n\nLogo: CC-BY-NC-ND, Designs by Akirami\n\n## 鸣谢\n\n### 贡献者\n\n感谢以下贡献者对 WebGAL Craft 作出的贡献\n\n<a href=\"https://github.com/A-kirami/webgal-craft/graphs/contributors\">\n  <img src=\"https://contrib.rocks/image?repo=A-kirami/webgal-craft\" />\n</a>\n"
+    },
+    "brief": {
+      "summary": "面向WebGAL创作者的跨平台视觉小说工作室",
+      "problem": "分散的项目管理、脚本编写和预览流程不便于制作视觉小说",
+      "highlights": [
+        "可以集中管理立绘、背景和音效素材",
+        "可以用可视化或脚本方式编写剧情演出",
+        "可以实时预览并回退场景历史版本"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "WebGAL开发者",
+        "独立游戏团队"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新，已有23个Star",
+      "caveat": "需要WebGAL 4.6.2或更高版本引擎",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "A-kirami/webgal-craft",
+      "score": 94,
+      "category": "互动叙事",
+      "reason": "视觉小说创作与编辑工作室",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 49114,
+      "forks": 4866,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-09-14T05:09:13Z",
+      "pushed_at": "2026-09-14T05:09:07Z",
+      "open_issues": 221,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven "
+    },
+    "brief": {
+      "summary": "AIRI 是可自托管的虚拟角色陪伴项目",
+      "problem": "让虚拟角色能与用户实时交流并参与游戏",
+      "highlights": [
+        "可以进行实时语音聊天",
+        "可以让角色游玩 Minecraft、Factorio",
+        "可以在网页、macOS、Windows 使用"
+      ],
+      "target_users": [
+        "VTuber 开发者",
+        "虚拟角色爱好者",
+        "开源项目研究者"
+      ],
+      "why_trending": "本周首次收录，累计 Star 达 49114，近期仍在更新",
+      "caveat": "当前仍是 beta 版本，项目有 221 个未关闭议题",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 96,
+      "category": "3D / VTuber",
+      "reason": "自托管AI VTuber与实时语音互动",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 51.0
+    }
+  }
+]
