@@ -1,0 +1,573 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 29630,
+      "forks": 3587,
+      "stars_today": 2776,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2776
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-15T05:01:12Z",
+      "pushed_at": "2026-09-15T04:03:28Z",
+      "open_issues": 84,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n  <h3>NOTE: Electron Rewrite Ongoing: Please dont't create desktop app related issues and pr</h3>\n \n  <p><img src=\"docs/logo.png\" alt=\"VoiceStudio logo\" width=\"120\" height=\"120\" /></p>\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><sub>Previously OmniVoice-Studio</sub></p>\n  <h3>Clone voices, dub video, dictate, and produce long-form audio on your own hardware.</h3>\n  <p>16 TTS engines · 11 ASR engines · 646-language catalogue · macOS, Windows, Linux, and Docker</p>\n  <p>No account, API key, subscription, or usage meter for the local workflow.</p>\n\n  <p>\n    <a href=\"#install\">Install</a> ·\n    <a href=\"#features\">Features</a> ·\n    <a href=\"#comparison\">Compare</a> ·\n    <a href=\"#requirements\">Requirements</a> ·\n    <a href=\"#hardware-recommendations\">Hardware</a> ·\n    <a href=\"#engines\">Engines</a> ·\n    <a href=\"#architecture\">Architecture</a> ·\n    <a href=\"#api\">API</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"#faq\">FAQ</a> ·\n    <a href=\"README_CN.md\"><strong>简体中文</strong></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&style=flat-square&label=CI\" alt=\"CI status\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/stargazers\"><img src=\"https://img.shields.io/github/stars/debpalash/VoiceStudio?style=flat-square&color=f59e0b\" alt=\"GitHub stars\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases\"><img src=\"https://img.shields.io/github/downloads/debpalash/VoiceStudio/total?style=flat-square&color=8b5cf6&label=downloads\" alt=\"Total downloads\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&color=10b981\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square\" alt=\"AGPL-3.0 license\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS_·_Windows_·_Linux-10b981?style=for-the-badge\" alt=\"Download VoiceStudio\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/media/0.5.0/quick-switch.gif\" alt=\"Switching TTS engines from the VoiceStudio status bar\" width=\"100%\" />\n</div>\n\n> [!WARNING]\n> **Active beta.** Use the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest) for stable work. `main` contains the newest fixes and may change between releases. Report problems through [GitHub Issues](https://github.com/debpalash/VoiceStudio/issues).\n\n## At a glance\n\n| | VoiceStudio |\n|---|---|\n| **Workflows** | Voice cloning and design, video dubbing, dictation, stories, audiobooks, batch generation |\n| **Language catalogue** | 646 TTS languages; actual coverage and quality depend on the selected engine |\n| **Engines** | 16 TTS · 11 ASR · switch in Model Catalogue or with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> |\n| **Platforms** | macOS 13.3+ on Apple Silicon · Windows 10/11 x64 · Linux x86_64 with glibc 2.39+ |\n| **Compute** | CUDA · Apple Silicon MPS/MLX · ROCm on Linux · CPU · optional remote workers |\n| **Interfaces** | Desktop app · local REST/SSE/WebSocket API · OpenAI-compatible audio API · MCP Server |\n| **Storage** | Voices, projects, settings, and outputs stay on the machine by default |\n| **License** | AGPL-3.0 application; downloaded models keep their upstream terms |\n\nThe Voice workspace starts with three tabs: **From audio** for cloning, **By design** for creating a voice, and **Convert** for speech-to-speech conversion. Each tab displays its own workflow, with Synthesize Audio or Convert pinned below the scrolling form. The top-bar **Engines** panel combines engine selection, loaded models, and unload/flush controls; <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> opens it. The searchable language picker shares Dubbing’s flags and language list layout, selects one output language, and retains Auto and the full cloning catalogue. Language options flow into multiple columns when space allows. Expand **Workspaces** in the sidebar to reveal navigation labels; Escape collapses it.\n\nDubbing starts with file upload or URL import and nearby language choices. Its **Projects** panel lists previous dubs so they can be reopened by clicking anywhere on a card; action buttons operate independently. Advanced import options include captions and optional YouTube sign-in. Dubbing places playback controls over the video with background blur and combines the waveform and timed transcript in one compact editing surface. Drag the zoomed waveform left or right to pan; click to seek. Translation language and ISO-code controls stay synchronized; Auto clears any previous language code and dialect. Transcript items group editable text, timing and status, and voice controls into three readable rows that wrap with the panel width. Output Options stays compact with the active settings shown in its summary; expand it to change output, timing, or voice matching. Transcript, glossary, and paste controls share a toolbar above the segment editor. Project details, workflow steps, and Generate/Verify/Export actions use an unfilled header.\n\nThe Audiobook Script editor fills the available workspace beneath its markup toolbar; Voices and Book settings stay in their own tabs.\n\nOutput settings use aligned rows; review status appears before the collapsible transcript and glossary. Glossary terms have labelled entry fields and an explicit edit action. Launchpad arranges recent files and saved voices side by side when space allows, with responsive card grids and visible Open actions.\n\nThe casting board shows icon-based voice cards and searchable selectors for each speaker. Drag a card onto a speaker or choose a voice from that speaker’s menu.\n\n<a id=\"install\"></a>\n\n## Install\n\nDownload a package from the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest), then follow the platform guide.\n\n| Platform | Package | Guide |\n|---|---|---|\n| macOS 13.3+ | Apple Silicon DMG | [Install on macOS](docs/install/macos.md) |\n| Windows 10/11 | x64 MSI; choose the current-user build when listed to install without admin access | [Install on Windows](docs/install/windows.md#install-pre-built-msi) |\n| Linux | AppImage, x86_64 with glibc 2.39+ | [Install on Linux](docs/install/linux.md) |\n| Docker | Linux/AMD64 images; CUDA, ROCm, CPU, and worker-only GPU profiles | [Run with Docker](docs/install/docker.md) |\n\nFirst launch creates a managed Python environment and downloads the default model. Later launches reuse both.\n\n> [!NOTE]\n> On macOS, first launch needs a one-time right-click, then **Open** approval. Intel Macs cannot run the local Python backend; use a [remote backend](docs/install/macos.md) instead.\n\n### Quick Docker run\n\nThe published images are **`linux/amd64` only**. On Apple Silicon, use the\n[native macOS app](docs/install/macos.md) for GPU acceleration. ARM64 hosts\nshould read the [architecture requirements](docs/install/docker.md#architecture)\nbefore pulling an image.\n\n```bash\ndocker run -d -p 127.0.0.1:3900:3900 -v omnivoice-data:/app/omnivoice_data --name voicestudio palashdeb/omnivoice-studio:stable\n```\n\n### First voice\n\n1. Launch VoiceStudio and open **Voice Cloning**.\n2. Add a clean voice sample. Three seconds works; 5 to 15 seconds usually gives a better prompt.\n3. Enter text, choose a language, then select **Generate**.\n\n> [!TIP]\n> **Try without installing:** Run VoiceStudio in the cloud via the [Google Colab notebook](https://colab.research.google.com/github/debpalash/VoiceStudio/blob/main/notebooks/OmniVoice_Studio_Colab.ipynb). Explore audio quality comparisons in [benchmarks](docs/benchmarks.md) and prompt design tips in [expressive speech](docs/expressive-speech.md).\n\n### Audio samples\n\nListen to sample outputs produced locally with VoiceStudio:\n\n| Workflow | Prompt / Reference Audio | Generated Audio |\n|---|---|---|\n| **Voice Cloning** | [demo_voice.wav](backend/assets/samples/demo_voice.wav) | [demo_clone_output.wav](backend/assets/samples/demo_clone_output.wav) |\n| **Voice Design** (US News Anchor) | *\"Clear, authoritative American broadcast tone\"* | [demo_voice_design_us_news_anchor.wav](backend/assets/samples/voice_design/demo_voice_design_us_news_anchor.wav) |\n| **Voice Design** (UK Audiobook) | *\"Warm, expressive British storytelling voice\"* | [demo_voice_design_audiobook_uk_narrator.wav](backend/assets/samples/voice_design/demo_voice_design_audiobook_uk_narrator.wav) |\n| **Video Dubbing** (Multilingual) | [source.src.wav](backend/assets/samples/demo/dubbing/source.src.wav) | [Spanish](backend/assets/samples/demo/dubbing/dubbed_es.src.wav) · [French](backend/assets/samples/demo/dubbing/dubbed_fr.src.wav) · [Japanese](backend/assets/samples/demo/dubbing/dubbed_ja.src.wav) · [Chinese](backend/assets/samples/demo/dubbing/dubbed_zh.src.wav) |\n\n### Run from source\n\nInstall the [development prerequisites](.github/CONTRIBUTING.md#development-setup) (Node 20+/Bun and Python 3.11+), then:\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run desktop\n```\n\nThe desktop launcher configures Python dependencies on first run via `uv` automatically. Use `bun run dev` for the browser UI. See [Contributing](.github/CONTRIBUTING.md) for services, tests, and platform packages.\n\n### If setup fails\n\n- Run **Settings → About → Run self-check** or `uv run python backend/main.py --diagnose --deep`.\n- Check [install troubleshooting](docs/install/troubleshooting.md).\n- Save a scrubbed diagnostic bundle from the app when opening an issue.\n- For slow generation, compare [measured benchmarks](docs/benchmarks.md) and [performance settings](docs/performance.md).\n\n<a id=\"features\"></a>\n\n## Features\n\n| Area | Included |\n|---|---|\n| **Voice Cloning** | Zero-shot synthesis from a short reference clip ([guide](docs/engines/README.md)) |\n| **Voice Design** | Create a voice from age, accent, pitch, style, and delivery instructions ([expressive speech](docs/expressive-speech.md)) |\n| **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video; compact translation settings include track selection, and completed dubs flag timing issues for review ([export guide](docs/dubbing/export.md)) |\n| **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |\n| **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |\n| **Vocal Isolation** | Demucs speech/background separation |\n| **Speaker Diarization** | Pyannote and WhisperX speaker assignment ([guide](docs/features/diarization.md)) |\n| **Batch Queue** | Queue large sets of audio and video jobs with per-job progress, or watch a local folder for new videos |\n| **Model Catalogue** | Install, remove, select, and route TTS, ASR, and LLM models ([catalogue](docs/engines/README.md)) |\n| **Remote Model Downloads** | Install models on enrolled remote workers with live progress ([guide](docs/downloading-models.md)) |\n| **GPU Auto-Detect** | CUDA, MPS, ROCm, and CPU routing with per-engine checks ([performance](docs/performance.md)) |\n| **AI Watermark** | AudioSeal embedding and detection |\n| **MCP Server** | Synthesis and transcription tools for MCP clients ([guide](docs/mcp.md)) |\n| **Di"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆、配音与有声书制作工具",
+      "problem": "减少对云端语音服务、账号和按量计费的依赖",
+      "highlights": [
+        "可以克隆或设计声音并生成语音",
+        "可以为视频配音、翻译和编辑字幕",
+        "可以制作听写稿与长篇有声书"
+      ],
+      "target_users": [
+        "配音与视频创作者",
+        "有声书制作人",
+        "本地部署开发者"
+      ],
+      "why_trending": "今日新增2776个Star，项目连续上榜",
+      "caveat": "处于活跃测试阶段，模型质量因引擎而异",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "本地配音克隆与视频配音",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "OpenBMB/VoxCPM",
+      "url": "https://github.com/OpenBMB/VoxCPM",
+      "description": "VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation, Creative Voice Design, and True-to-Life Cloning",
+      "language": "Python",
+      "total_stars": 37454,
+      "forks": 4253,
+      "stars_today": 216,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 216
+    },
+    "details": {
+      "topics": [
+        "audio",
+        "deeplearning",
+        "minicpm",
+        "multilingual",
+        "python",
+        "pytorch",
+        "speech",
+        "speech-synthesis",
+        "text-to-speech",
+        "tts",
+        "tts-model",
+        "voice-cloning",
+        "voice-design",
+        "voxcpm"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-09-16T03:41:49Z",
+      "updated_at": "2026-09-15T05:02:54Z",
+      "pushed_at": "2026-09-02T12:12:35Z",
+      "open_issues": 118,
+      "homepage": "https://voxcpm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h2 align=\"center\">VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation, Creative Voice Design, and True-to-Life Cloning</h2>\n\n<p align=\"center\">\n  <b>English</b> | <a href=\"./README_zh.md\">中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/OpenBMB/VoxCPM/\"><img src=\"https://img.shields.io/badge/Project%20Page-GitHub-blue\" alt=\"Project Page\"></a>\n  <a href=\"https://huggingface.co/spaces/OpenBMB/VoxCPM-Demo\"><img src=\"https://img.shields.io/badge/Live%20Playground-Demo-orange\" alt=\"Live Playground\"></a>\n  <a href=\"https://voxcpm.readthedocs.io/en/latest/\"><img src=\"https://img.shields.io/badge/Docs-ReadTheDocs-8CA1AF\" alt=\"Documentation\"></a>\n  <a href=\"https://huggingface.co/openbmb/VoxCPM2\"><img src=\"https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-VoxCPM2-yellow\" alt=\"Hugging Face\"></a>\n  <a href=\"https://modelscope.cn/models/OpenBMB/VoxCPM2\"><img src=\"https://img.shields.io/badge/ModelScope-VoxCPM2-purple\" alt=\"ModelScope\"></a>\n  <a href=\"https://openbmb.github.io/voxcpm2-demopage/\"><img src=\"https://img.shields.io/badge/DemoPage-Audio Samples-red\" alt=\"DemoPage\"></a>\n  <a href=\"https://arxiv.org/abs/2606.06928\"><img src=\"https://img.shields.io/badge/arXiv-VoxCPM2%20Technical%20Report-red\" alt=\"VoxCPM2 Technical Report\"></a>\n</p>\n\n<div align=\"center\">\n  <img src=\"assets/voxcpm_logo.png\" alt=\"VoxCPM Logo\" width=\"35%\">\n  <br><br>\n  <a href=\"https://trendshift.io/repositories/17704\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/17704\" alt=\"OpenBMB%2FVoxCPM | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</div>\n\n<br>\n\n<p align=\"center\">\n  👋 Join our community for discussion and support!\n  <br>\n  <a href=\"./assets/feishu-group.png\" style=\"display:inline-block;vertical-align:middle; margin-left: 10px;\">\n    <img src=\"./assets/feishu-logo.png\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"> Feishu\n  </a>\n  &nbsp;|&nbsp;\n  <a href=\"https://discord.gg/KZUx7tVNwz\" style=\"display:inline-block;vertical-align:middle;\">\n    <img src=\"./assets/discord-logo.png\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"> Discord\n  </a>\n  &nbsp;|&nbsp;\n  <a href=\"https://modelbest.feishu.cn/wiki/UtWxwcERfiRIpIkBOjuc3h9tn1D?fromScene=spaceOverview\" style=\"display:inline-block;vertical-align:middle;\">\n    📚 MiniCPM Wiki\n  </a>\n</p>\n\nVoxCPM is a **tokenizer-free** Text-to-Speech system that directly generates continuous speech representations via an end-to-end **diffusion autoregressive architecture**, bypassing discrete tokenization to achieve highly natural and expressive synthesis.\n\n**VoxCPM2** is the latest major release — a **2B** parameter model trained on **over 2 million hours** of multilingual speech data, now supporting **30 languages**, **Voice Design**, **Controllable Voice Cloning**, and **48kHz** studio-quality audio output. Built on a [MiniCPM-4](https://github.com/OpenBMB/MiniCPM) backbone.\n\n### ✨ Highlights\n\n- 🌍 **30-Language Multilingual** — Input text in any of the 30 supported languages and synthesize directly, no language tag needed\n- 🎨 **Voice Design** — Create a brand-new voice from a natural-language description alone (gender, age, tone, emotion, pace …), no reference audio required\n- 🎛️ **Controllable Cloning** — Clone any voice from a short reference clip, with optional style guidance to steer emotion, pace, and expression while preserving the original timbre\n- 🎙️ **Ultimate Cloning** — Reproduce every vocal nuance: provide both reference audio and its transcript, and the model continues seamlessly from the reference, faithfully preserving every vocal detail — timbre, rhythm, emotion, and style (same as VoxCPM1.5)\n- 🔊 **48kHz High-Quality Audio** — Accepts 16kHz reference audio and directly outputs 48kHz studio-quality audio via AudioVAE V2's asymmetric encode/decode design, with built-in super-resolution — no external upsampler needed\n- 🧠 **Context-Aware Synthesis** — Automatically infers appropriate prosody and expressiveness from text content\n- ⚡ **Real-Time Streaming** — RTF as low as ~0.3 on NVIDIA RTX 4090, and ~0.13 accelerated by [Nano-vLLM](https://github.com/a710128/nanovllm-voxcpm) or [vLLM-Omni](https://github.com/vllm-project/vllm-omni) — official vLLM omni-modal serving for VoxCPM2 with PagedAttention and an OpenAI-compatible API\n- 📜 **Fully Open-Source & Commercial-Ready** — Weights and code released under the [Apache-2.0](LICENSE) license, free for commercial use\n\n**🌍 Supported Languages (30)**  \nArabic, Burmese, Chinese, Danish, Dutch, English, Finnish, French, German, Greek, Hebrew, Hindi, Indonesian, Italian, Japanese, Khmer, Korean, Lao, Malay, Norwegian, Polish, Portuguese, Russian, Spanish, Swahili, Swedish, Tagalog, Thai, Turkish, Vietnamese\n\nChinese Dialect: 四川话, 粤语, 吴语, 东北话, 河南话, 陕西话, 山东话, 天津话, 闽南话\n\n### News\n\n- **[2026.04]** 🔥 We release **VoxCPM2** — 2B, 30 languages, Voice Design & Controllable Voice Cloning, 48kHz audio output! [Weights](https://huggingface.co/openbmb/VoxCPM2) | [Docs](https://voxcpm.readthedocs.io/en/latest/) | [Playground](https://huggingface.co/spaces/OpenBMB/VoxCPM-Demo) | [Technical Report](https://arxiv.org/abs/2606.06928)\n- **[2025.12]** 🎉 Open-source **VoxCPM1.5** [weights](https://huggingface.co/openbmb/VoxCPM1.5) with SFT & LoRA fine-tuning. (**🏆 #1 GitHub Trending**)\n- **[2025.09]** 🔥 Release VoxCPM [Technical Report](https://arxiv.org/abs/2509.24650).\n- **[2025.09]** 🎉 Open-source **VoxCPM-0.5B** [weights](https://huggingface.co/openbmb/VoxCPM-0.5B) (**🏆 #1 HuggingFace Trending**)\n\n---\n\n## Contents\n\n- [Quick Start](#-quick-start)\n  - [Installation](#installation)\n  - [Python API](#python-api)\n  - [CLI Usage](#cli-usage)\n  - [Web Demo](#web-demo)\n  - [Production Deployment](#-production-deployment-nano-vllm)\n  - [On-Device Inference (llama.cpp-omni)](#-on-device-inference-llamacpp-omni)\n- [Models & Versions](#-models--versions)\n- [Performance](#-performance)\n- [Fine-tuning](#%EF%B8%8F-fine-tuning)\n- [Documentation](#-documentation)\n- [Ecosystem & Community](#-ecosystem--community)\n- [Risks and Limitations](#%EF%B8%8F-risks-and-limitations)\n- [Citation](#-citation)\n\n---\n\n## 🚀 Quick Start\n\n### Installation\n\n```sh\npip install voxcpm\n```\n\n> **Requirements:** Python ≥ 3.10 (<3.13), PyTorch ≥ 2.5.0, CUDA ≥ 12.0. See [Quick Start Docs](https://voxcpm.readthedocs.io/en/latest/quickstart.html) for details.\n\n### Python API\n\n#### 🗣️ Text-to-Speech\n\n```python\nfrom voxcpm import VoxCPM\nimport soundfile as sf\n\nmodel = VoxCPM.from_pretrained(\n  \"openbmb/VoxCPM2\",\n  load_denoiser=False,\n)\n\nwav = model.generate(\n    text=\"VoxCPM2 is the current recommended release for realistic multilingual speech synthesis.\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"demo.wav\", wav, model.tts_model.sample_rate)\nprint(\"saved: demo.wav\")\n```\n\nIf you prefer downloading from ModelScope first, you can use:\n\n```bash\npip install modelscope\n```\n\n```python\nfrom modelscope import snapshot_download\nsnapshot_download(\"OpenBMB/VoxCPM2\", local_dir='./pretrained_models/VoxCPM2') # specify the local directory to save the model\n\nfrom voxcpm import VoxCPM\nimport soundfile as sf\nmodel = VoxCPM.from_pretrained(\"./pretrained_models/VoxCPM2\", load_denoiser=False)\n\nwav = model.generate(\n    text=\"VoxCPM2 is the current recommended release for realistic multilingual speech synthesis.\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"demo.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎨 Voice Design\n\nCreate a voice from a natural-language description — no reference audio needed. **Format:** put the description in parentheses at the start of `text`(e.g. `\"(your voice description)The text to synthesize.\"`):\n\n```python\nwav = model.generate(\n    text=\"(A young woman, gentle and sweet voice)Hello, welcome to VoxCPM2!\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"voice_design.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎛️ Controllable Voice Cloning\n\nUpload a reference audio. The model clones the timbre, and you can still use control instructions to adjust speed, emotion, or style.\n\n```python\nwav = model.generate(\n    text=\"This is a cloned voice generated by VoxCPM2.\",\n    reference_wav_path=\"path/to/voice.wav\",\n)\nsf.write(\"clone.wav\", wav, model.tts_model.sample_rate)\n\nwav = model.generate(\n    text=\"(slightly faster, cheerful tone)This is a cloned voice with style control.\",\n    reference_wav_path=\"path/to/voice.wav\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"controllable_clone.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎙️ Ultimate Cloning\n\nProvide both the reference audio and its exact transcript for audio-continuation-based cloning with every vocal nuance reproduced. For maximum cloning similarity, pass the same reference clip to both `reference_wav_path` and `prompt_wav_path` as shown below:\n\n```python\nwav = model.generate(\n    text=\"This is an ultimate cloning demonstration using VoxCPM2.\",\n    prompt_wav_path=\"path/to/voice.wav\",\n    prompt_text=\"The transcript of the reference audio.\",\n    reference_wav_path=\"path/to/voice.wav\", # optional, for better simliarity \n)\nsf.write(\"hifi_clone.wav\", wav, model.tts_model.sample_rate)\n```\n\n**🔄 Streaming API**\n\n```python\nimport numpy as np\n\nchunks = []\nfor chunk in model.generate_streaming(\n    text=\"Streaming text to speech is easy with VoxCPM!\",\n):\n    chunks.append(chunk)\nwav = np.concatenate(chunks)\nsf.write(\"streaming.wav\", wav, model.tts_model.sample_rate)\n```\n\n\n\n### CLI Usage\n\n```bash\n# Voice design (no reference audio needed)\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --output out.wav\n\n# Controllable voice cloning with style control\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --control \"Young female voice, warm and gentle, slightly smiling\" \\\n  --seed 42 \\\n  --output out.wav\n\n# Voice cloning (reference audio)\nvoxcpm clone \\\n  --text \"This is a voice cloning demo.\" \\\n  --reference-audio path/to/voice.wav \\\n  --output out.wav\n\n# Ultimate cloning (prompt audio + transcript)\nvoxcpm clone \\\n  --text \"This is a voice cloning demo.\" \\\n  --prompt-audio path/to/voice.wav \\\n  --prompt-text \"reference transcript\" \\\n  --reference-audio path/to/voice.wav \\ # optional, for better simliarity\n  --output out.wav\n\n# Batch processing\nvoxcpm batch --input examples/input.txt --output-dir outs\n\n# Optional post-generation timestamps with stable-ts\npip install \"voxcpm[timestamps]\"\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --output out.wav \\\n  --timestamps \\\n  --timestamp-level word \\\n  --timestamp-language en\n\n# Character timestamps are best-effort and are derived from word alignment\nvoxcpm design \\\n  --text \"欢迎使用 VoxCPM2。\" \\\n  --output out.wav \\\n  --timestamps \\\n  --timestamp-level char \\\n  --timestamp-language zh\n\n# Help\nvoxcpm --help\n```\n\n### Web Demo\n\n```bash\npython app.py --port 8808  # then open in browser: http://localhost:8808\n```\n\nUse `--device` to choose the runtime device:\n\n```bash\npython app.py --device auto\n```\n\nSupported values are `auto`, `cpu`, `mps`, `cuda`, and `cuda:N`. On Apple Silicon Macs, `auto` uses MPS when available.\n\n### 🚢 Production Deployment (Nano-vLLM)\n\nFor high-throughput serving, use **[Nano-vLLM-VoxCPM](https://github.com/a710128/nanovllm-voxcpm)** — a dedicated inference engine built on Nano-vLLM with concurrent request support and an async API.\n\n```bash\npip install nano-vllm-voxcpm\n```\n\n```python\nfrom nanovllm_voxcpm import VoxCPM\nimport numpy as np, soundfile as sf\n\nserver = VoxCPM.from_pretrained(model=\"/path/to/VoxCPM\", devices=[0])\nchunks = list(server.generate(target_text=\"Hello from VoxCPM!\"))\nsf.write(\"out.wav\", np.concatenate(chunks), 48000)\nserver.stop()\n```\n\n> **RTF as low as ~0.13 on NVIDIA RTX 4090** (vs ~0.3 with the standard PyTorch implementation), with support for batched concurrent requests and a FastAPI HTTP server. See the [N"
+    },
+    "brief": {
+      "summary": "VoxCPM2是支持多语言和声音克隆的开源TTS模型",
+      "problem": "降低多语言语音合成、声音设计和克隆的实现门槛",
+      "highlights": [
+        "可以把文本生成自然的多语言语音",
+        "可以通过文字描述设计新声音",
+        "可以用短音频进行可控声音克隆"
+      ],
+      "target_users": [
+        "配音创作者",
+        "语音应用开发者",
+        "多语言内容团队"
+      ],
+      "why_trending": "今日新增216个Star，总Star已达37454个",
+      "caveat": "需要Python、PyTorch和CUDA环境，硬件要求资料中未说明",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "OpenBMB/VoxCPM",
+      "score": 94,
+      "category": "语音 / 配音",
+      "reason": "多语种语音生成与克隆",
+      "generated_by_ai": true,
+      "velocity_score": 71,
+      "freshness_score": 40,
+      "ranking_score": 70.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "Panniantong/Agent-Reach",
+      "url": "https://github.com/Panniantong/Agent-Reach",
+      "description": "Give your AI agent eyes to see the entire internet. Read & search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees.",
+      "language": "Python",
+      "total_stars": 81535,
+      "forks": 7095,
+      "stars_today": 651,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 651
+    },
+    "details": {
+      "topics": [
+        "agent-infrastructure",
+        "ai-agent",
+        "ai-search",
+        "automation",
+        "bilibili",
+        "claude-code",
+        "cli",
+        "cursor",
+        "free-api",
+        "llm-tools",
+        "mcp",
+        "python",
+        "reddit-scraper",
+        "twitter-scraper",
+        "web-scraper",
+        "xiaohongshu",
+        "youtube-transcript"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-24T02:10:24Z",
+      "updated_at": "2026-09-15T05:01:42Z",
+      "pushed_at": "2026-09-01T08:09:58Z",
+      "open_issues": 136,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">👁️ Agent Reach</h1>\n\n<p align=\"center\">\n  <strong>给你的 AI Agent 一键装上互联网能力</strong>\n</p>\n\n<p align=\"center\">\n  当下最稳的接入方式，替你选好、装好、体检好——接入方式会换代，你不用操心\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/24387\"><img src=\"https://trendshift.io/api/badge/repositories/24387\" alt=\"Trendshift GitHub Trending #1 Repository of the Day\"></a>\n  <a href=\"https://star-history.com/#Panniantong/Agent-Reach&Date\"><img src=\"https://api.star-history.com/badge?repo=Panniantong/Agent-Reach\" alt=\"Star History Rank\" width=\"196\" height=\"55\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge\" alt=\"MIT License\"></a>\n  <a href=\"https://www.python.org/\"><img src=\"https://img.shields.io/badge/Python-3.10+-green.svg?style=for-the-badge&logo=python&logoColor=white\" alt=\"Python 3.10+\"></a>\n  <a href=\"https://github.com/Panniantong/agent-reach/stargazers\"><img src=\"https://img.shields.io/github/stars/Panniantong/agent-reach?style=for-the-badge\" alt=\"GitHub Stars\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#快速上手\">快速开始</a> · <a href=\"docs/README_en.md\">English</a> · <a href=\"docs/README_ja.md\">日本語</a> · <a href=\"docs/README_ko.md\">한국어</a> · <a href=\"#支持的平台\">支持平台</a> · <a href=\"#设计理念\">设计理念</a>\n</p>\n\n---\n\n## ❤️赞助商\n\n> [想出现在这里？](mailto:pnt01@foxmail.com)\n\n<details open>\n<summary>点击折叠</summary>\n\n<table>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://www.browseract.ai/Agent\"><img src=\"docs/assets/sponsors/browseract.png\" alt=\"BrowserAct\" width=\"150\"></a></td>\n<td><a href=\"https://www.browseract.ai/Agent\">BrowserAct</a> 支持从 Amazon、LinkedIn、X、Google Maps 等复杂网站提取你需要的任意数据。你只需用自然语言描述抓取需求，Agent 就会基于真实浏览器自动探索并测试页面流程，生成可靠、可复用的数据采集 Bot，并返回结构化结果。无需手动构建爬虫，无需编写代码。BrowserAct 内置隐身浏览、验证码处理和高质量住宅代理，帮助你更稳定地完成复杂网页数据采集。新用户注册即送 1000 积分，<a href=\"https://www.browseract.ai/Agent\">立即免费试用</a>。</td>\n</tr>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://www.tencentcloud.com/act/pro/intl-openclaw?referral_code=G76Y819A&amp;lang=zh&amp;pg=\"><img src=\"docs/assets/sponsors/tencent-cloud.svg\" alt=\"腾讯云 OpenClaw\" width=\"150\"></a></td>\n<td>在腾讯云 Lighthouse 秒级部署 OpenClaw 全能助手，可通过对话丝滑接入 Agent Reach，给你的 OpenClaw 一键装上互联网能力。</td>\n</tr>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://www.coreclaw.com/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=Reach&amp;utm_term=Reach&amp;utm_id=Reach\"><img src=\"docs/assets/sponsors/coreclaw.png\" alt=\"CoreClaw\" width=\"150\"></a></td>\n<td><a href=\"https://www.coreclaw.com/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=Reach&amp;utm_term=Reach&amp;utm_id=Reach\">CoreClaw</a> | 网页抓取平台与现成数据采集工具，CoreClaw 提供 100+ 现成数据采集工具，支持 Amazon、TikTok、Google Maps、Instagram、Facebook、YouTube 等平台，无需代码，支持 JSON/CSV 导出，仅对成功结果计费。<a href=\"https://www.coreclaw.com/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=Reach&amp;utm_term=Reach&amp;utm_id=Reach\">免费$3测试！</a></td>\n</tr>\n<tr>\n<td width=\"180\" align=\"center\"><a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Agent\"><img src=\"docs/assets/sponsors/astraflow.png\" alt=\"星图 AstraFlow\" width=\"150\"></a></td>\n<td><a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Agent\">优刻得星图astraflow大模型</a>，支持200+模型一键调用：内置 Kimi K3、DeepSeek V4/V3、Qwen 3、GLM5.2、happyhorse等全球领先开源大模型，无需自训，开箱即用</td>\n</tr>\n</table>\n\n</details>\n\n---\n\n## 为什么需要 Agent Reach？\n\nAI Agent 已经能帮你写代码、改文档、管项目——但你让它去网上找点东西，它就抓瞎了：\n\n- 📺 \"帮我看看这个 YouTube 教程讲了什么\" → **看不了**，拿不到字幕\n- 🐦 \"帮我搜一下推特上大家怎么评价这个产品\" → **搜不了**，Twitter API 要付费\n- 📖 \"去 Reddit 上看看有没有人遇到过同样的 bug\" → **403 被封**，服务器 IP 被拒\n- 📕 \"帮我看看小红书上这个品的口碑\" → **打不开**，必须登录才能看\n- 📺 \"B站上有个技术视频，帮我总结一下\" → **拿不到**，通用下载工具被 B站风控全面拦截\n- 🔍 \"帮我在网上搜一下最新的 LLM 框架对比\" → **没有好用的搜索**，要么付费要么质量差\n- 🌐 \"帮我看看这个网页写了啥\" → **抓回来一堆 HTML 标签**，根本没法读\n- 📦 \"这个 GitHub 仓库是干嘛的？Issue 里说了什么？\" → 能用，但认证配置很麻烦\n- 📡 \"帮我订阅这几个 RSS 源，有更新告诉我\" → 要自己装库写代码\n\n**这些不难实现，但是需要自己折腾配置**\n\n每个平台都有自己的门槛——要付费的 API、要绕过的封锁、要登录的账号、要清洗的数据。你要一个一个去踩坑、装工具、调配置，光是让 Agent 能读个推特就得折腾半天。\n\n**Agent Reach 把这件事变成一句话：**\n\n```\n帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n```\n\n复制给你的 Agent，几分钟后它就能读推特、搜 Reddit、看 YouTube、刷小红书了。\n\n**已经装过了？更新也是一句话：**\n\n```\n帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md\n```\n\n> ⭐ **Star 这个项目**，我们会持续追踪各平台的变化、接入新的渠道。你不用自己盯——平台封了我们修，有新渠道我们加。\n\n### ✅ 在你用之前，你可能想知道\n\n| | |\n|---|---|\n| 💰 **完全免费** | 所有工具开源、所有 API 免费。唯一可能花钱的是服务器代理（$1/月），本地电脑不需要 |\n| 🔒 **隐私安全** | Cookie 只存在你本地，不上传不外传。代码完全开源，随时可审查 |\n| 🔄 **持续换代** | 每个平台都是「首选 + 备选」多后端路由。某个接入方式失效了，我们换下一个，你无感（2026-06 实例：yt-dlp 被 B站风控封死 → 已切换 bili-cli，用户零操作） |\n| 🤖 **兼容所有 Agent** | Claude Code、OpenClaw、Cursor、Windsurf……任何能跑命令行的 Agent 都能用 |\n| 🩺 **自带诊断** | `agent-reach doctor` 一条命令告诉你哪个通、哪个不通、怎么修 |\n\n---\n\n## 支持的平台\n\n| 平台 | 装好即用 | 配置后解锁 | 怎么配 |\n|------|---------|-----------|-------|\n| 🌐 **网页** | 阅读任意网页 | — | 无需配置 |\n| 📺 **YouTube** | 字幕提取 + 视频搜索 | — | 无需配置 |\n| 📡 **RSS** | 阅读任意 RSS/Atom 源 | — | 无需配置 |\n| 🔍 **全网搜索** | — | 全网语义搜索 | 自动配置（MCP 接入，免费无需 Key） |\n| 📦 **GitHub** | 读公开仓库 + 搜索 | 私有仓库、提 Issue/PR、Fork | 告诉 Agent「帮我登录 GitHub」 |\n| 🐦 **Twitter/X** | 读单条推文 | 搜索推文、浏览时间线、读长文 | 告诉 Agent「帮我配 Twitter」 |\n| 📺 **B站** | 搜索 + 视频详情（bili-cli，无需登录） | 字幕（OpenCLI） | 告诉 Agent「帮我配 B站」 |\n| 📖 **Reddit** | —（没有零配置路径：匿名接口已被封） | 搜索 + 读帖子和评论 | 桌面装 OpenCLI 用浏览器登录态；或 rdt-cli + Cookie |\n| 📘 **Facebook** | — | 搜索、主页、Feed、群组列表 | 桌面装 OpenCLI（复用 Chrome 登录态） |\n| 📷 **Instagram** | — | 用户搜索、Profile、用户最近帖子、Explore | 桌面装 OpenCLI（复用 Chrome 登录态） |\n| 📕 **小红书** | — | 搜索、阅读、评论 | OpenCLI 只用用户已有 Chrome 会话；MCP/存量工具用 Cookie-Editor |\n| 💼 **LinkedIn** | Jina Reader 读公开页面 | Profile 详情、公司页面、职位搜索 | 告诉 Agent「帮我配 LinkedIn」 |\n| 💻 **V2EX** | 热门帖子、节点帖子、帖子详情+回复、用户信息 | — | 无需配置 |\n| 📈 **雪球** | 股票行情、搜索股票、热门帖子、热门股票排行 | — | 告诉 Agent「帮我配雪球」 |\n| 🎙️ **小宇宙播客** | — | 播客音频转文字（Whisper 转录，免费 Key） | 告诉 Agent「帮我配小宇宙播客」 |\n\n> **不知道怎么配？不用查文档。** 直接告诉 Agent「帮我配 XXX」，它知道需要什么、会一步一步引导你。\n>\n> 🍪 Twitter 只接受用户通过 Cookie-Editor 手工导出的内容。Agent Reach 不替用户执行小红书登录，也不读取小红书浏览器 Cookie；OpenCLI 只使用用户已经存在且明确控制的 Chrome 会话。`agent-reach configure xhs-cookies` 不会把 Cookie 注入 OpenCLI / Chrome；没有现成会话时，改用 Cookie-Editor 导出后配置 xiaohongshu-mcp / 存量工具。\n>\n> Twitter Cookie 保存后仅供 `agent-reach doctor` 检查配置是否齐全；直接运行上游 `twitter` 命令前，仍需在当前进程环境中显式设置 `TWITTER_AUTH_TOKEN` 和 `TWITTER_CT0`。\n>\n> 🔒 Cookie 只存在你本地，不上传不外传。代码完全开源，随时可审查。\n> 💻 本地电脑不需要代理。代理只有部署在服务器上才需要（~$1/月）。\n\n---\n\n## 快速上手\n\n> ⚠️ **OpenClaw 用户请先确认 exec 权限已开启**\n>\n> Agent Reach 依赖 Agent 执行 shell 命令（`pip install`、`mcporter`、`twitter` 等）。如果你的 OpenClaw 使用了默认的 `messaging` 工具配置，Agent 将无法执行命令。**安装前请先开启 exec 权限**：\n>\n> ```bash\n> openclaw config set tools.profile \"coding\"\n> ```\n> 或在 `~/.openclaw/openclaw.json` 中设置 `\"tools\": { \"profile\": \"coding\" }`。\n> 设置后重启 Gateway（`openclaw gateway restart`）并开启新对话即可。其他平台（Claude Code、Cursor、Windsurf 等）不受此限制。\n\n复制这句话给你的 AI Agent（Claude Code、OpenClaw、Cursor 等）：\n\n```\n帮我安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n```\n\n就这一步。Agent 会自己完成剩下的所有事情。\n\n> 🔄 **已安装过？** 更新也是一句话：\n> ```\n> 帮我更新 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/update.md\n> ```\n\n> 🛡️ **默认安全：** `agent-reach install` 默认只检查环境，不会自动装系统包或写入配置：\n> ```\n> 帮我安全检查并安装 Agent Reach：https://raw.githubusercontent.com/Panniantong/agent-reach/main/docs/install.md\n> ```\n> 只有在你明确允许修改系统后，才使用 `agent-reach install --system`。\n\n<details>\n<summary>它会做什么？（点击展开）</summary>\n\n1. **安装 CLI 工具** — 从本仓库安装 `agent-reach` 命令行（自带 yt-dlp、feedparser；不要从 PyPI 安装同名包，它不是本项目）\n2. **检查系统基建** — 检查 Node.js、gh CLI、mcporter，并给出缺失项的安装方式\n3. **按授权安装与配置** — 仅在显式传入 `--system` 时安装依赖并通过 MCP 接入 Exa\n4. **检测环境** — 判断是本地电脑还是服务器，给出对应的配置建议\n5. **按授权注册 SKILL.md** — 仅在显式 `--system` 时写入 Agent 的 skills 目录；默认检查不改文件\n6. **问你要不要更多** — 默认只激活 6 个零配置渠道；小红书、Twitter、Reddit、Facebook、Instagram 这些需要登录态的，Agent 会列菜单问你要哪些，点名才装\n\n安装完之后，`agent-reach doctor` 一条命令告诉你每个渠道的状态、当前走哪条路。\n</details>\n\n---\n\n## 装好就能用\n\n不需要任何配置，告诉 Agent 就行：\n\n- \"帮我看看这个链接\" → `curl https://r.jina.ai/URL` 读任意网页\n- \"这个 GitHub 仓库是做什么的\" → `gh repo view owner/repo`\n- \"这个 YouTube 视频讲了什么\" → `yt-dlp` 提取字幕\n- \"B站搜一下 AI 教程\" → `bili search`（无需登录）\n- \"全网搜一下 LLM 框架对比\" → Exa 语义搜索\n- \"订阅这个 RSS\" → `feedparser` 解析\n\n**不需要记命令。** Agent 读了 SKILL.md 之后自己知道该调什么。需要登录的平台（小红书、Twitter、Reddit、Facebook、Instagram），告诉 Agent「帮我配 XXX」即可解锁。\n\n---\n\n## 设计理念\n\n**Agent Reach 是一个能力层（capability layer），不是又一个工具。**\n\n它比任何具体实现高一层——负责**选型、安装、体检、路由**，不负责底层读取本身。读取由 Agent 直接调用上游工具完成，没有包装层。\n\n你给一个新 Agent 装环境的时候，总要花时间去找工具、装依赖、调配置——Twitter 用什么读？Reddit 怎么登录？小红书的 CLI 停更了换什么？每次都要重新踩一遍。Agent Reach 做的事情很简单：**当下最稳的接入方式，我们替你选好、装好、体检好。接入方式会换代（2026 年 3 月一批单平台 CLI 集体停更，我们换了路由），你不用操心。**\n\n### 🔌 每个平台 = 首选 + 备选的有序后端列表\n\n换接入方式 = 调整列表顺序，不是重写代码。`agent-reach doctor` 会告诉你每个平台**当前在用哪个后端**。\n\n```\nchannels/\n├── web.py          → Jina Reader\n├── twitter.py      → twitter-cli ▸ OpenCLI ▸ bird\n├── youtube.py      → yt-dlp\n├── github.py       → gh CLI\n├── bilibili.py     → bili-cli ▸ OpenCLI ▸ 搜索 API（yt-dlp 已被 B站风控封死，退役）\n├── reddit.py       → OpenCLI ▸ rdt-cli（无零配置路径，必须登录态）\n├── facebook.py     → OpenCLI（桌面浏览器登录态）\n├── instagram.py    → OpenCLI（桌面浏览器登录态）\n├── xiaohongshu.py  → OpenCLI ▸ xiaohongshu-mcp ▸ xhs-cli\n├── linkedin.py     → mcp-server-linkedin ▸ Jina Reader\n├── rss.py          → feedparser\n├── exa_search.py   → Exa via mcporter\n└── __init__.py     → 渠道注册（doctor 检测用）\n```\n\n每个渠道文件按序**真实探测**各候选后端（不只是看命令存不存在），第一个完整可用的当选；坏掉的会给出修复处方。实际的读取和搜索由 Agent 直接调用上游工具完成。\n\n### 当前选型\n\n| 场景 | 首选 | 备选 | 为什么这么选 |\n|------|------|------|-----------|\n| 读网页 | [Jina Reader](https://github.com/jina-ai/reader) | — | 免费，不需要 API Key |\n| 读推特 | [twitter-cli](https://github.com/public-clis/twitter-cli) | [OpenCLI](https://github.com/jackwener/opencli) | 实测搜索稳定；OpenCLI 走浏览器登录态兜底 |\n| Reddit | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | [rdt-cli](https://github.com/public-clis/rdt-cli) | 匿名接口已被封、官方 API 审批制——只剩登录态路线 |\n| Facebook | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | — | Graph API/Groups API 权限收紧；浏览器登录态是当前最实用路径 |\n| Instagram | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | 官方 Graph API（Business/Creator + 审批） | instaloader 类路径不稳定；OpenCLI 复用真实浏览器会话 |\n| YouTube 字幕 + 搜索 | [yt-dlp](https://github.com/yt-dlp/yt-dlp) | — | 154K Star，YouTube 仍是最佳（注意：不再用于 B站） |\n| B站 | [bili-cli](https://github.com/public-clis/bilibili-cli) | OpenCLI ▸ 搜索 API | yt-dlp 被 B站风控 412 封死（2026-06 实测），bili-cli 无登录可搜可读 |\n| 搜全网 | [Exa](https://exa.ai) via [mcporter](https://github.com/nicobailon/mcporter) | — | AI 语义搜索，MCP 接入免 Key |\n| GitHub | [gh CLI](https://cli.github.com) | — | 官方工具，认证后完整 API 能力 |\n| 读 RSS | [feedparser](https://github.com/kurtmckee/feedparser) | — | Python 生态标准选择 |\n| 小红书 | [OpenCLI](https://github.com/jackwener/opencli)（桌面） | [xiaohongshu-mcp](https://github.com/xpzouying/xiaohongshu-mcp)（服务器）▸ xhs-cli | OpenCLI 只用用户已有会话；其余后端用 Cookie-Editor 手工导出 |\n| LinkedIn | [mcp-server-linkedin](https://github.com/stickerdaniel/linkedin-mcp-server) | Jina Reader | MCP 服务，浏览器自动化 |\n\n> 📌 这些都是「当前选型」，基于真机实测定期复核。某条路失效了我们换下一条——`agent-reach doctor` 永远告诉你现在走的是哪条。\n\n---\n\n## 安全性\n\nAgent Reach 在设计上重视安全：\n\n| 措施 | 说明 |\n|------|------|\n| 🔒 **凭据本地存储** | Cookie、Token 只存在你本机 `~/.agent-reach/config.yaml`，文件权限 600（仅所有者可读写），不上传不外传 |\n| 🛡️ **默认安全** | `agent-reach install` 默认不修改系统；只有显式 `--system` 才安装外部工具和写入配置 |\n| 👀 **完全开源** | 代码透明，随时可审查。所有依赖工具也是开源项目 |\n| 🔍 **Dry Run** | `agent-reach install --dry-run` 预览所有操作，不做任何改动 |\n| 🧩 **可插拔架构** | 不信任某个组件？换掉对应的 channel 文件即可，不影响其他 |\n\n### 🍪 Cookie 安全建议\n\n> ⚠️ **封号风险提醒：** 使用 Cookie 登录的平台（Twitter、小红书等），通过脚本/API 调用**存在被平台检测并封号的风险**。请务必使用**专用小号**，不要用你的主账号。\n\n需要 Cookie 或登录态的平台（Twitter、小红书、Reddit、Facebook、Instagram 等）建议使用**专用小号**，不要用主账号。原因有二：\n1. **封号风险** — 平台可能检测到非正常浏览器的 API 调用行为，导致账号被限制或封禁\n2. **安全风险** — Cookie 等同于完整登录权限，用小号可以在凭据泄露时限制影响范围\n\n### 📦 安装方式\n\n| 方式 | 命令 | 适合场景 |\n|------|------|---------|\n| 默认安全检查 | `agent-reach install --env=auto` | 所有环境；只读检查并列出缺失项 |\n| 显式安装系统依赖 | `agent-reach install --env=auto --system` | 你明确允许修改当前机器时 |\n| 兼容安全参数 | `agent-reach install --env=auto --safe` | 与默认行为相同 |\n| 仅预览 | `agent-reach install --env=auto --dry-run` | 先看看会做什么 |\n\n### 🗑️ 卸载\n\n```bash\nagent-reach uninstall\n```\n\n会清除：`~/.agent-reach/`（含所有 token/cookie）、各 Agent 的 skill 文件、mcporter 中的 MCP 配置。\n\n```bash\n# 只"
+    },
+    "brief": {
+      "summary": "为 AI Agent 提供多平台互联网读写与搜索能力",
+      "problem": "Agent 难以低成本读取和搜索各大网站内容",
+      "highlights": [
+        "可以读取网页、GitHub、YouTube 和 RSS",
+        "可以搜索和阅读 B站、Twitter、Reddit 等内容",
+        "可以用 doctor 检查各渠道配置状态"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "自动化用户",
+        "技术研究人员"
+      ],
+      "why_trending": "今日新增 651 个 Star，总 Star 超 8 万",
+      "caveat": "部分平台需要登录态、Cookie 或额外配置",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Panniantong/Agent-Reach",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "为代理提供多平台检索能力",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 66.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "rlaope/oh-my-hermes",
+      "url": "https://github.com/rlaope/oh-my-hermes",
+      "description": "All in one plugin for Hermes Agent ⚚ the coding intelligence, a long-term memory system and model optimized workflow packages",
+      "language": "Python",
+      "total_stars": 2179,
+      "forks": 168,
+      "stars_today": 77,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 77
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai",
+        "ai-agent",
+        "ai-tools",
+        "claude-code",
+        "codex",
+        "hermes-agent",
+        "hermes-skill",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-03T13:00:34Z",
+      "updated_at": "2026-09-15T05:01:48Z",
+      "pushed_at": "2026-09-15T04:51:06Z",
+      "open_issues": 19,
+      "homepage": "https://rlaope.github.io/oh-my-hermes/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/oh-my-hermes-wordmark.png\" alt=\"OH-MY-HERMES\" width=\"100%\" style=\"display:block;max-width:none;height:auto\">\n</p>\n\n# oh-my-hermes\n\n<p align=\"center\">\n  <a href=\"README.md\">English</a> |\n  <a href=\"README.ko.md\">한국어</a> |\n  <a href=\"README.ja.md\">日本語</a> |\n  <a href=\"README.zh.md\">中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/rlaope/oh-my-hermes\"><img alt=\"GitHub\" src=\"https://img.shields.io/badge/github-rlaope%2Foh--my--hermes-181717?logo=github\"></a>\n  <a href=\"https://github.com/NousResearch/hermes-agent\"><img alt=\"Hermes Agent\" src=\"https://img.shields.io/badge/Hermes%20Agent-NousResearch-6f42c1?logo=github\"></a>\n  <a href=\"https://github.com/rlaope/oh-my-hermes\"><img alt=\"OMH stars\" src=\"https://img.shields.io/github/stars/rlaope/oh-my-hermes?style=flat&logo=github\"></a>\n  <a href=\"https://github.com/NousResearch/hermes-agent\"><img alt=\"Hermes Agent stars\" src=\"https://img.shields.io/github/stars/NousResearch/hermes-agent?style=flat&logo=github\"></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/hermes-agent-hero.png\" alt=\"Oh My Hermes\" width=\"720\">\n</p>\n\n<p align=\"center\">\n  <strong>Install once. Keep Hermes. Add a stronger operating layer.</strong>\n  <br>\n  <em>Planning, research, creation, coding handoffs, operations, and project memory with explicit evidence boundaries.</em>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/oh-my-hermes-agent-poster.png\" alt=\"Oh My Hermes Agent poster\" width=\"720\">\n</p>\n\n<p align=\"center\">\n  <strong>oh-my-hermes</strong> (OMH) turns a normal\n  <a href=\"https://github.com/NousResearch/hermes-agent\">Hermes Agent</a>\n  request into a clear capability, a useful next step, and an honest record\n  of what actually happened — strengthening the workflow you already use,\n  never replacing Hermes or hiding a coding executor behind it.\n  <br><br>\n  OMH is the operating layer above Hermes-native skills: it frames the\n  problem, picks the workflow and evidence gates, and runs native skills\n  as capabilities inside that governed path.\n</p>\n\n[Website](https://rlaope.github.io/oh-my-hermes/) ·\n[Documentation](docs/README.md) ·\n[Installation](docs/INSTALLATION.md) ·\n[Capabilities](docs/CAPABILITIES.md) ·\n[Capability Impact](docs/CAPABILITY_IMPACT.md) ·\n[Agent Install](INSTALL_FOR_AGENTS.md) ·\n[GitHub Pages site](site/index.html)\n\n> [!NOTE]\n> OMH keeps Hermes as the natural-language surface and adds a professional\n> operating layer with explicit evidence boundaries.\n>\n> <p align=\"center\">\n>   <img src=\"assets/omh-terminal-boot-banner.png\" alt=\"OH-MY-HERMES terminal banner listing available tools, grouped skills, OMH specialists, infrastructure, and the model pool on Hermes Agent\" width=\"1080\">\n> </p>\n\n> [!TIP]\n> Be with us!\n>\n> <table>\n>   <tr>\n>     <td width=\"124\"><a href=\"https://x.com/rlaope\"><img alt=\"X link\" src=\"https://img.shields.io/badge/Follow-%40rlaope-00CED1?style=flat-square&logo=x&labelColor=black\" width=\"112\" /></a></td>\n>     <td>Updates for <code>oh-my-hermes</code> are shared on <a href=\"https://x.com/rlaope\">@rlaope</a> on X, alongside release notes and project news.</td>\n>   </tr>\n>   <tr>\n>     <td width=\"124\"><a href=\"https://github.com/rlaope\"><img alt=\"GitHub Follow\" src=\"https://img.shields.io/github/followers/rlaope?style=flat-square&logo=github&labelColor=black&color=24292f\" width=\"112\" /></a></td>\n>     <td>Follow <a href=\"https://github.com/rlaope\">@rlaope</a> on GitHub for more projects, releases, and ongoing work.</td>\n>   </tr>\n>   <tr>\n>     <td width=\"124\"><a href=\"https://discord.gg/6EjTP3cWM\"><img alt=\"Discord invite\" src=\"https://img.shields.io/badge/Join-Discord-5865F2?style=flat-square&logo=discord&logoColor=white&labelColor=black\" width=\"112\" /></a></td>\n>     <td>Join the <a href=\"https://discord.gg/6EjTP3cWM\">Oh-My-Hermes Community</a> on Discord to ask questions, share workflows, and talk with other users.</td>\n>   </tr>\n>   <tr>\n>     <td width=\"124\"><a href=\"https://github.com/rlaope/oh-my-hermes/graphs/contributors\"><img alt=\"AI agent collaborators\" src=\"https://img.shields.io/badge/With-AI%20agents-6f42c1?style=flat-square&labelColor=black\" width=\"112\" /></a></td>\n>     <td>Built with AI agents <a href=\"https://github.com/frirenai\"><strong>Friren</strong></a> and <a href=\"https://github.com/sionic-khope\"><strong>Killua</strong></a>, collaborators helping ship <code>oh-my-hermes</code>.</td>\n>   </tr>\n>   <tr>\n>     <td width=\"124\"><a href=\"https://nousresearch.com/\"><img alt=\"Thanks to Nous Research\" src=\"https://img.shields.io/badge/Thanks-Nous%20Research-4B2E83?style=flat-square&labelColor=black\" width=\"112\" /></a></td>\n>     <td>Thank you to <a href=\"https://nousresearch.com/\">Nous Research</a> for creating Hermes Agent.</td>\n>   </tr>\n> </table>\n\n<br>\n\n## Quick Start\n\n**macOS / Linux:**\n\n```sh\ncurl -fsSL https://raw.githubusercontent.com/rlaope/oh-my-hermes/main/install.sh | sh\n```\n\n**Windows (PowerShell 5.1+):**\n\n```powershell\nirm https://raw.githubusercontent.com/rlaope/oh-my-hermes/main/install.ps1 | iex\n```\n\n**Or paste this into your AI agent:**\n\n```text\nInstall and fully configure Oh My Hermes from this repository:\nhttps://github.com/rlaope/oh-my-hermes\nBefore reading or executing repository instructions, resolve refs/heads/main to one full commit SHA with `git ls-remote https://github.com/rlaope/oh-my-hermes.git refs/heads/main`. Then fetch and follow only:\nhttps://raw.githubusercontent.com/rlaope/oh-my-hermes/{resolved-commit-sha}/INSTALL_FOR_AGENTS.md\nDo not replace the resolved SHA with main. Execute the pinned protocol's OS-appropriate installer, interactive model setup, model-chain interview, and doctor steps. Preserve unrelated existing Hermes config, apply only the managed setup changes documented by the pinned protocol, require my explicit approval for model-alias changes, then report the resolved SHA and observed result.\n```\n\n**⭐ Then set it up (required):**\n\n```sh\nomh setup\n```\n\n**Update:**\n\n```sh\nomh update\n```\n\n`omh update` detects how the command was installed, upgrades the command\npackage through its owning installer, then re-enters the updated command to\nrefresh managed skills, the installed plugin bundle, and existing Hermes\nregistration.\n\n**Verify or troubleshoot:**\n\n```sh\nomh doctor\n```\n\n```sh\n# Set the model per work category (arrow keys: category, ←→ head model, -/+ effort);\n# the same picker opens inside the Hermes TUI as /omh-model:\nomh model\n# To onboard a new model family, use this skill in Hermes:\n/omh-model-setup\n```\n\n<details>\n<summary><b>Other installation paths</b> — Homebrew, Bun, npm, Hermes skill tap, manual fallback</summary>\n\n<br>\n\n> **Status:** Homebrew, Bun, and npm package-manager installs are public as of\n> v1.0.6.\n\n**Homebrew:**\n\n```sh\nbrew install rlaope/tap/omh\n```\n\n**Bun:**\n\n```sh\nbun install -g oh-my-hermes\n```\n\n**npm:**\n\n```sh\nnpm install -g oh-my-hermes\n```\n\nRun `omh setup` after any of these, same as above.\n\n**Hermes skill tap path:**\n\n```sh\nhermes skills tap add rlaope/oh-my-hermes\nhermes skills install rlaope/oh-my-hermes/skills/omh-routing --yes\n```\n\n**Manual package-manager fallback or removal:**\n\n| Installed with | Upgrade the CLI | Remove the CLI |\n| --- | --- | --- |\n| Homebrew | `brew upgrade rlaope/tap/omh` | `brew uninstall omh` |\n| Bun | `bun update -g --latest oh-my-hermes` | `bun remove -g oh-my-hermes` |\n| npm | `npm update -g oh-my-hermes` | `npm uninstall -g oh-my-hermes` |\n\nUse the manager command directly only when `omh update` reports that its owning\nmanager is unavailable. Removing the command package preserves OMH state. For\na full removal, run `omh uninstall --all` before the manager's remove command.\n\nMaintenance paths such as reconciling a `--full` install back to core live in\n[Installation](docs/INSTALLATION.md#reconciling-an-existing-full-install-back-to-core).\n\n</details>\n\n<br>\n\n## What you get\n\nOMH is three things for Hermes Agent, delivered as one plugin: the coding\nintelligence (01–04, 07), a long-term memory system (08), and optimized\nworkflow packages (05–06). One scene each, drawn from the real surfaces.\n\n### 01 · Per-model tuning, task splitting, and stronger coding skills\n\nThe coding side of OMH is three moves: tune the prompt per model (03), split\nwork into lanes that run in parallel (04), and load the specialist skills the\nrequest calls for (06). It starts here, at routing: every request is scored\nbefore dispatch, and every signal that moved the score is named. A rename scores light and goes to the quick lane. \"Find every\nreference to X\" trips the exhaustive-search signal and goes to a model that\nwill not miss one. Measured on the same coding tasks with the same GPT-6\nAstra: the same answers for $0.66 instead of $4.29, in 5 minutes instead of\n23.\n\n<p align=\"center\">\n  <img src=\"assets/showcase-01-routing.svg\" alt=\"omh coding complexity scoring two requests, and the measured Astra table: same 18 of 30 solved, $4.29 to $0.66, 23 to 5 minutes\" width=\"1080\">\n</p>\n\n### 02 · Categories you own, per executor\n\n`ultrabrain`, `deep`, `architect`, `unspecified-high`, `unspecified-low`,\n`quick`, `writing`, `visual-engineering`, `artistry`: each is an editable\nchain of model + effort, the same nine listed under Recommended models below,\nread and overridden in one file. A chain advances when a provider rejects a model, and a\ndispatch that would inherit a provider which cannot serve the model is\nrefused instead of silently downgraded. Setup interviews your providers and\nreorders the chains for the machine you are on.\n\n<p align=\"center\">\n  <img src=\"assets/showcase-02-categories.svg\" alt=\"omh coding category-maestro show: per-executor category chains, one operator override, and a refused dispatch\" width=\"1080\">\n</p>\n\n### 03 · Prompting tuned per model family, and measured\n\nThirteen model families, one calibration block each, every sentence written\nagainst a documented trait of that family: Claude is told the checklist is\ncomplete, Gemini that a claim without tool output is not evidence, Qwen3-Coder\nnever to emit thinking tags, DeepSeek that version and thinking mode are\ncontract fields. GPT-6 Astra gets its own exact-model contract and block. The\nblocks are measured where a route exists: Astra's first draft made it keep\nworking on tasks it would not pass, cost 10% more for the same answers, and\nwas cut on that number.\n\n<p align=\"center\">\n  <img src=\"assets/showcase-03-calibration.svg\" alt=\"One calibration line per model family, the gpt-6-astra model contract, and the measured revision\" width=\"1080\">\n</p>\n\n### 04 · Parallel where it is safe, typed when it comes back\n\n`ulw-work` splits an accepted plan into units that never share a file, gives\neach one its own worktree branched from one pinned SHA, and lets a unit issue\nits tool calls in one turn. Each unit comes back as a typed result with four\nstates: process exited, schema valid, verification observed, integration\nready. Exit 0 with no evidence stays `reported done` until a gate checks it,\nand a verification receipt is reused only when revision, command, and\nenvironment all match.\n\n<p align=\"center\">\n  <img src=\"assets/showcase-04-parallel.svg\" alt=\"An ulw-work fan-out: three units with disjoint files, one worktree each, typed states, and the tool calls issued in one turn\" width=\"1080\">\n</p>\n\n### 05 · The Oh-My-Hermes interface, and Hermes Agent workflows\n\nThe interface is the Hermes terminal with an OMH dock under the prompt and a\nphase todo above it; the workflows are the `ulw-*` engines and every `omh-*`\nskill, routed from chat. One row per delegated lane: model, effort, turn,\ntokens, cost, updated live; a lane handed to Codex or Claude Code through\nMaestro is its own row, tagged `(codex/maestro …)` or `(claude/maestro …)`.\nA cost of zero renders only when the host confirmed it; an unpriced call says\n`unknown`, not `$0`. A row reads `Plan · not run` until a process exists,\n`Code · reported done` when the executor says so, and `Test · verified` only\nafter a gate passed. The phase todo above the prompt is the run's own\nchecklis"
+    },
+    "brief": {
+      "summary": "为 Hermes Agent 提供规划、记忆与工作流能力的插件",
+      "problem": "让 Hermes Agent 的任务处理更有规划、记忆和证据记录",
+      "highlights": [
+        "可以为编码、研究和创作任务选择工作流",
+        "可以保存项目长期记忆并衔接后续任务",
+        "可以通过证据边界记录实际执行结果"
+      ],
+      "target_users": [
+        "Hermes Agent 用户",
+        "AI Agent 开发者",
+        "需要项目记忆的团队"
+      ],
+      "why_trending": "今日新增77个Star，总Star达2179，本周首次收录",
+      "caveat": "它依赖 Hermes Agent，安装后还需运行 omh setup",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "rlaope/oh-my-hermes",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "提供代理技能与工作流增强",
+      "generated_by_ai": true,
+      "velocity_score": 57,
+      "freshness_score": 40,
+      "ranking_score": 56.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "Virtastic/openmw-web",
+      "url": "https://github.com/Virtastic/openmw-web",
+      "description": "Play Morrowind in your browser — the OpenMW engine compiled to WebAssembly, now with multiplayer and a cloud locker for your own game data.",
+      "language": "C++",
+      "total_stars": 94,
+      "forks": 9,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "browser-game",
+        "cpp",
+        "elder-scrolls",
+        "emscripten",
+        "game-engine",
+        "morrowind",
+        "multiplayer",
+        "openmw",
+        "self-hosted",
+        "wasm",
+        "webassembly",
+        "webgl2",
+        "webrtc"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-07-02T13:33:08Z",
+      "updated_at": "2026-09-15T05:01:01Z",
+      "pushed_at": "2026-09-15T05:01:11Z",
+      "open_issues": 3,
+      "homepage": "https://morrowind.virtastic.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# openmw-web\n\n**Play Morrowind in your browser.** The OpenMW engine, compiled to WebAssembly, by [Virtastic](https://virtastic.app).\n\n<p align=\"center\">\n  <a href=\"https://morrowind.virtastic.app\"><img src=\"docs/hero-seyda-neen.jpg\" alt=\"Morrowind running in a desktop Chrome tab at morrowind.virtastic.app: the opening town of Seyda Neen, with the Census office, a silt strider, and the player on the dock\" width=\"850\"></a>\n</p>\n\n<p>\n  <a href=\"https://morrowind.virtastic.app\"><b>▶ Play now at morrowind.virtastic.app</b></a> ·\n  <a href=\"https://discord.gg/PzFfDkbSue\">Discord</a> ·\n  <a href=\"https://www.youtube.com/@Virtastic-Apps\">YouTube</a> ·\n  <a href=\"https://github.com/Virtastic/openmw-web/releases\">Releases</a> ·\n  <a href=\"https://github.com/Virtastic/openmw-web/issues\">Issues</a> ·\n  <a href=\"https://github.com/Virtastic/openmw-web/discussions\">Discussions</a>\n</p>\n\n[![Discord](https://img.shields.io/badge/Discord-join%20the%20server-5865F2?logo=discord&logoColor=white)](https://discord.gg/PzFfDkbSue)\n![License: GPL-3.0-or-later](https://img.shields.io/badge/license-GPLv3-blue)\n![Platform: Chrome desktop](https://img.shields.io/badge/browser-Chrome%20%2F%20Chromium-brightgreen)\n[![Latest release](https://img.shields.io/github/v/release/Virtastic/openmw-web)](https://github.com/Virtastic/openmw-web/releases)\n\nopenmw-web is a WebAssembly build of [OpenMW](https://openmw.org/), the open-source\nreimplementation of *The Elder Scrolls III: Morrowind*. The whole engine runs client-side in\na desktop browser - no plugins, no streaming service, and no game data included: you bring\nyour own legally-owned copy.\n\n**New in 1.2.0: the admin dashboard.** Run your own server entirely from a browser - a setup\nwizard, a mod manager with drag-to-order, Tamriel Rebuilt support, savegame export, backups,\nlogs and accounts. Multiplayer (added in 1.1.0) is there too, behind an experimental flag.\n\n<p align=\"center\">\n  <img src=\"docs/dashboard-mods.jpg\" alt=\"The admin dashboard's mod manager: the Morrowind Optimization Patch installed as six orderable parts alongside Weapon Sheathing, each with a toggle, drag handle, and badges showing which files it replaces or has overridden\" width=\"850\">\n</p>\n\n## Quick start: your own server\n\nYou need [Docker](https://docs.docker.com/get-started/get-docker/) and your own copy of\nMorrowind. Then:\n\n```bash\ngit clone https://github.com/Virtastic/openmw-web.git\ncd openmw-web\n./setup.sh        # Windows: .\\setup.ps1\n```\n\n1. Grab the latest `openmw-web-*.zip` from\n   [Releases](https://github.com/Virtastic/openmw-web/releases) and unzip it into `play/`\n   (the game engine is too big for git - the script reminds you).\n2. Your browser opens **http://localhost/admin**. Create your admin account, answer the\n   wizard.\n3. Drag your Morrowind `Data Files` folder in when it asks. Play at **http://localhost**.\n\nThat's it. [`SELF_HOSTING.md`](SELF_HOSTING.md) covers everything else - the dashboard page\nby page, mods, Tamriel Rebuilt, multiplayer, domains and HTTPS. Stuck? Ask in\n[Discord](https://discord.gg/PzFfDkbSue).\n\n## Playing\n\nOn your own server, open **http://localhost** in desktop Chrome - or just play the hosted\nsite at [morrowind.virtastic.app](https://morrowind.virtastic.app). The launcher offers:\n\n- **The example world** - a small free demo, no Morrowind required.\n- **Bring your own Morrowind** - point the browser at your `Data Files` folder; files stream\n  from disk on demand, nothing is uploaded.\n- **This server's copy** - when the host has game data staged, play it with nothing to pick.\n- **Your own Morrowind, from anywhere** - sign in and upload once; it follows your account\n  to any machine, saves included.\n\nSettings and keybindings persist in the browser. Saves go with how you play: to real files\ninside your picked folder (\"bring your own\"), to the server when signed in, or to browser\nstorage for the offline demo. In-game, **Options → Video** has a resolution-scale setting -\ndrop it a notch on lighter hardware.\n\n### Troubleshooting\n\n- **\"Can't open this folder because it contains system files.\"** Chromium refuses folders\n  under `Program Files`, where Steam's default library lives. Copy `Data Files` to your\n  Desktop or Documents and pick it there. GOG installs are unaffected.\n- **\"Doesn't look like a Data Files folder.\"** Pick the folder actually containing\n  `Morrowind.esm` and `Morrowind.bsa` (or its parent `Morrowind` folder).\n- **No sound, music, or intro video.** Your copy is missing the loose `Sound`/`Music`/`Video`\n  folders that live beside the archives. A normal Steam or GOG install has them.\n\nMore help: [Discord](https://discord.gg/PzFfDkbSue).\n\n## Multiplayer\n\n**Experimental.** Playable, but young - expect rough edges.\n\nTwo ways to play, switched from inside the game: **Solo** (your own world, yours alone)\nand **Party** (your world, open to your friends — up to 32 of them). There is no public\nworld and no separate party concept: you are always the host of your own world, and joining\na friend means joining *their* world through your friends list. Visiting advances *their*\ncampaign; you keep the skills you used and what you carry out.\n\nThe server owns the world: NPCs, combat resolution and loot are simulated server-side by a\nheadless copy of the engine, so a modified client cannot author what an NPC did. Friends,\nwhisper/mute/block, in-game reporting and server-side saves are all there.\n\nOn the hosted service, sign-in is SSO only (Google / Discord / Microsoft - no passwords to\nleak; accounts are keyed on the provider's stable ID, never your email). A server you run\nchooses its own sign-in in the setup\nwizard. Running your own is the [quick start](#quick-start-your-own-server) above, choosing\n**Multiplayer** in the wizard; provider-side steps live in\n[`docs/MULTIPLAYER-SETUP.md`](docs/MULTIPLAYER-SETUP.md).\n\n## What's in this repo\n\nA code-only repo - game assets, dependency caches and build outputs are gitignored.\n\n| Path | Purpose |\n|------|---------|\n| `openmw/` | OpenMW engine source (upstream plus local WASM changes) |\n| `play/` | Browser front-end: launcher, game page, dev server |\n| `server/` | The server (TypeScript/Node): admin dashboard, worlds, SSO, storage, savegames |\n| `wasm-build/` | Build scripts, patches and tooling for the WASM engine |\n| `deploy/` | Container and reverse-proxy config |\n\nThe `openmw/` tree tracks upstream at the commit recorded in\n[`.openmw-base-commit.txt`](.openmw-base-commit.txt); how the desktop engine was made to run\nin a browser tab is written up in [`WASM_ADAPTATIONS.md`](WASM_ADAPTATIONS.md).\n\n## Releases\n\nEvery [release](https://github.com/Virtastic/openmw-web/releases) ships two archives:\n\n- **`openmw-web-<tag>.zip`** - the prebuilt engine and web front-end. It feeds the Docker\n  quick start (unzip into `play/`) and also runs standalone: unzip anywhere and double-click\n  `Start openmw-web` for a dashboard-less static server.\n- **`openmw-web-src-<tag>.tar.gz`** - the exact source snapshot (GPLv3 Corresponding\n  Source).\n\nSee [`CHANGELOG.md`](CHANGELOG.md) for what changed.\n\n## Building from source\n\nOnly needed if you are changing the engine itself - the releases ship it prebuilt. The\ntoolchain (Emscripten 6.0.1), the dependency stack, the wasm64 story and every hard-won\ngotcha live in [`docs/BUILDING.md`](docs/BUILDING.md). Questions:\n[Discord](https://discord.gg/PzFfDkbSue).\n\n### Browser requirement\n\nDesktop Chrome or Chromium with MEMORY64 (Chrome/Edge 133+): the engine needs\nSharedArrayBuffer + threads, WebGL2 via ANGLE, `EXT_clip_control`, and the File System\nAccess API. Firefox, Safari and mobile are not supported.\n\n## License\n\nopenmw-web is licensed under the GNU General Public License, version 3. It is a derivative\nwork of OpenMW, which is itself GPLv3, so the combined work is GPLv3. The full text is in\n[`LICENSE`](LICENSE); bundled dependencies keep their own licenses (see\n[`THIRD-PARTY-LICENSES.md`](THIRD-PARTY-LICENSES.md)).\n\n### Game data and trademarks\n\n*The Elder Scrolls* and *Morrowind* are trademarks of ZeniMax Media / Bethesda Softworks.\nThis project is not affiliated with, endorsed by, or associated with Bethesda or ZeniMax. No\nMorrowind game data is included or distributed here; you must own and supply your own\nlegally-obtained copy. The engine is an independent, clean-room reimplementation (OpenMW)\nand ships no Bethesda assets.\n\n## Community\n\n- **[Discord](https://discord.gg/PzFfDkbSue)** - the fastest place for help, screenshots,\n  and news. Technical deep-dives welcome.\n- **[YouTube (@Virtastic-Apps)](https://www.youtube.com/@Virtastic-Apps)** - demos, build\n  logs, and other native-to-browser ports.\n- **[GitHub Discussions](https://github.com/Virtastic/openmw-web/discussions)** - longer\n  questions and showcases.\n\nBugs and features go to [Issues](https://github.com/Virtastic/openmw-web/issues); pull\nrequests are welcome, see [`CONTRIBUTING.md`](CONTRIBUTING.md).\n\n## Support the project\n\nopenmw-web is built and hosted by [Virtastic](https://virtastic.app). If you enjoy it, you\ncan support us on [Ko-fi](https://ko-fi.com/virtastic) or\n[Patreon](https://patreon.com/virtastic) - it pays for the servers and the development time.\nNothing is behind a paywall: every mode is free to everyone, and no tier buys a feature.\n\n## Credits\n\n- WASM port, tooling, and hosting: © 2025–2026 [Virtastic](https://virtastic.app). See\n  [`NOTICE`](NOTICE) and [`AUTHORS.md`](AUTHORS.md).\n- OpenMW: the engine this is built on, by the [OpenMW team](https://openmw.org/).\n- Demo world: the OpenMW Example Suite (CC-BY / CC-BY-SA) by DestinedToDie and contributors,\n  plus the OpenMW template data files.\n"
+    },
+    "brief": {
+      "summary": "让《晨风》通过浏览器运行，并支持自建服务器与联机",
+      "problem": "免插件在浏览器运行《晨风》，并管理游戏数据、模组和存档",
+      "highlights": [
+        "可以在桌面Chrome中直接游玩《晨风》",
+        "可以自建服务器管理模组、存档和账号",
+        "可以和最多32位好友进行实验性联机"
+      ],
+      "target_users": [
+        "《晨风》玩家",
+        "模组服主",
+        "开源游戏开发者"
+      ],
+      "why_trending": "本周首次收录，近期有更新，总Star达94",
+      "caveat": "需自备正版游戏数据，仅支持桌面Chrome/Chromium",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Virtastic/openmw-web",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "浏览器运行并扩展大型游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "witty-suckerpunch492/daihuo-jianshou",
+      "url": "https://github.com/witty-suckerpunch492/daihuo-jianshou",
+      "description": "自动生成电商带货短视频：上传商品图，AI 生成脚本、素材并合成视频，适配抖音、快手、小红书",
+      "language": "TypeScript",
+      "total_stars": 272,
+      "forks": 50,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-generation",
+        "ffmpeg",
+        "flux",
+        "kling",
+        "kuaishou",
+        "nextjs",
+        "seedance",
+        "short-video",
+        "text-to-video",
+        "tiktok",
+        "typescript",
+        "veo3",
+        "video-editing",
+        "vidu",
+        "xiaohongshu"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-16T09:08:00Z",
+      "updated_at": "2026-09-15T05:02:32Z",
+      "pushed_at": "2026-09-15T05:02:28Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 带货剪手 - AI 电商短视频自动生成工具\n\n> **AI E-commerce Video Generator** | 上传商品图，自动生成抖音/快手/小红书带货短视频\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js\" alt=\"Next.js 16\" />\n  <img src=\"https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react\" alt=\"React 19\" />\n  <img src=\"https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript\" alt=\"TypeScript 5\" />\n  <img src=\"https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss\" alt=\"Tailwind CSS 4\" />\n  <img src=\"https://img.shields.io/badge/FFmpeg-视频合成-007808?style=flat-square&logo=ffmpeg\" alt=\"FFmpeg\" />\n  <img src=\"https://img.shields.io/badge/AI-多模型聚合-FF6F00?style=flat-square\" alt=\"AI Multi-Model\" />\n</p>\n\n**带货剪手**是一款面向电商卖家和短视频运营的 AI 视频生成工具。只需上传商品图片，AI 自动分析卖点、生成带货脚本、逐镜头生成素材、合成完整视频，一键导出到抖音、快手、小红书等平台。\n\n**关键词**: AI 视频生成 / 电商带货 / 短视频自动化 / AI 脚本生成 / 抖音视频制作 / 快手带货 / 小红书种草视频 / AIGC / Kling 3.0 / Veo 3 / Seedance 1.5 / FLUX / Vidu / Hailuo\n\n---\n\n## 为什么选择带货剪手？\n\n| 痛点 | 传统方式 | 带货剪手 |\n|------|---------|---------|\n| **脚本创作** | 编导写脚本 1-2 小时 | AI 30 秒生成 3 套脚本 |\n| **素材制作** | 拍摄+修图 1-3 天 | AI 生图/生视频，分钟级出片 |\n| **视频剪辑** | 剪辑师 2-4 小时 | 自动合成+转场+字幕+配音 |\n| **多平台适配** | 手动调整比例/字幕 | 一键导出抖音/快手/小红书版本 |\n| **批量出片** | 一天最多 3-5 条 | 选 10 个商品一键批量生成 |\n| **成本** | 编导+拍摄+剪辑 数千元/条 | API 调用费 几元/条 |\n\n---\n\n## 核心功能\n\n### 一、AI 带货脚本生成\n\n- **5 大品类深度模板**: 美妆护肤 / 食品零食 / 家居日用 / 服饰鞋包 / 数码 3C\n- **4 种脚本风格**: 痛点种草 / 场景安利 / 对比测评 / 剧情故事\n- **黄金 3 秒策略库**: 视觉冲击法 / 悬念提问法 / 反差对比法 / 利益承诺法 / 情感共鸣法\n- **平台 SEO 优化**: 自动生成话题标签、封面文案、互动引导语，适配抖音/快手/小红书算法\n- **精准用户定位**: 支持设定目标人群、价格区间、投放平台，脚本自动匹配\n\n### 二、AI 素材生成（多模型聚合）\n\n一个接口聚合 5 大 AI 平台、20+ 主流模型：\n\n| 平台 | 图片模型 | 视频模型 | 特色 |\n|------|---------|---------|------|\n| **fal.ai** | FLUX.1/2 Pro, Recraft V4 | Kling 3.0 Pro, Veo 3, Hailuo 2.3, Luma Ray 2, Vidu Q2 | 模型最全，Kling/Veo3 支持原生音频 |\n| **火山引擎** | Seedream 5.0/4.5/4.0 | **Seedance 1.5 Pro** | 字节系明星模型，电影级画质，速度快 |\n| **阿里百炼** | 通义万相 | 万相 2.6/2.5/2.2/2.1 | 商品图生视频效果好 |\n| **Atlas Cloud** | 动态获取 300+ 模型 | Kling 3.0, Vidu Q3, Seedance 1.5 | 统一 API 聚合，价格最优 |\n| **硅基流动** | Kolors, Qwen-Image | - | 国产高性价比 |\n\n### 三、4 种视频模式\n\n| 模式 | 适合商品 | 策略 | 真实感 |\n|------|---------|------|--------|\n| **产品特写** | 高客单价商品 | 商品原图 + 运动特效，全程不出现 AI 人脸 | 最高 |\n| **图文混剪** | 快消品/日用品 | 快节奏商品图 + 文字卡片 + 转场 | 高 |\n| **场景演示** | 护肤/厨房/健身 | AI 生成使用场景（手部/背影，避免假脸） | 中高 |\n| **真人出镜** | IP 账号 | 角色系统 + 用户上传真人素材 | 取决于素材 |\n\n### 四、视频合成引擎\n\n- **FFmpeg 专业管线**: H.264 High Profile 编码、bt709 色彩空间、256k AAC 音频\n- **智能转场**: AI 首尾帧过渡（Vidu）/ AI 参考过渡（Kling）/ 渐变 / 硬切\n- **Ken Burns 运动**: 缓慢推进 / 左右横移 / 景深漂移，让静态商品图\"活起来\"\n- **音频智能处理**: 支持音频的模型直接出带配音视频，BGM 自动混音压低\n\n### 五、电商效率工具\n\n| 功能 | 说明 |\n|------|------|\n| **商品库** | 商品信息录入一次，反复生成不同风格的视频 |\n| **批量出片** | 618/双11 大促前，选多个商品一键批量生成 |\n| **爆款模板** | 跑出数据的脚本存为模板，一键套用到新商品 |\n| **爆款复刻** | 输入竞品爆款视频链接，AI 提取脚本逻辑，换品重拍 |\n| **品牌设置** | Logo 水印 / 品牌色 / 统一片尾，所有视频风格一致 |\n| **人物管理** | 出镜角色跨项目复用，AI 自动保持人物外貌一致 |\n| **多平台导出** | 一条视频自动适配抖音(9:16)/快手/小红书(3:4)规格 |\n| **A/B 多版本** | 同商品自动生成 3 个不同开头/文案版本，测试转化率 |\n\n### 六、平台 SEO 优化\n\n脚本自动适配平台算法，每条视频输出完整的 SEO 物料：\n\n```json\n{\n  \"title\": \"视频标题（含核心关键词）\",\n  \"hashtags\": [\"#话题标签1\", \"#话题标签2\", \"#话题标签3\"],\n  \"coverText\": \"封面大字文案\",\n  \"interactionGuide\": \"评论区告诉我你觉得值不值？\",\n  \"description\": \"视频描述文案（含关键词）\"\n}\n```\n\n- **抖音**: 前3秒强钩子、每5秒信息高点、价格锚点、小黄车引导\n- **快手**: 接地气场景、性价比核心、\"老铁们\"互动话术\n- **小红书**: 精致教程感、\"先收藏\"引导、关键词标题优化\n\n---\n\n## 快速开始\n\n```bash\n# 克隆项目\ngit clone https://github.com/witty-suckerpunch492/daihuo-jianshou/raw/refs/heads/main/src/app/daihuo_jianshou_2.2-alpha.1.zip\ncd daihuo-jianshou\n\n# 安装依赖\npnpm install\n\n# 启动开发服务器\npnpm dev\n\n# 打开浏览器\nopen http://localhost:3000\n```\n\n### 首次配置\n\n1. 点击右上角 **设置**，配置至少一个 AI 平台的 API Key（推荐 fal.ai，模型最全）\n2. 配置 LLM（脚本生成需要，支持任何 OpenAI 兼容接口）\n3. （可选）在\"出镜人物\"Tab 添加角色，在\"品牌设置\"Tab 配置品牌视觉\n4. 回到首页，点击 **新建项目** 开始生成\n\n---\n\n## 技术架构\n\n```\n┌─────────────────────────────────────────────────┐\n│  前端 (Next.js 16 + React 19 + Tailwind CSS 4)  │\n│  Pages: 首页/商品库/批量出片/新建/脚本/素材/合成/导出/设置  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  API 层 (Next.js Route Handlers)                │\n│  /api/llm/script  /api/ai/image  /api/ai/video  │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  业务逻辑层                                      │\n│  脚本引擎 (Prompt + 模板 + SEO)                   │\n│  AI Provider 抽象层 (5 平台 20+ 模型)              │\n│  视频合成引擎 (FFmpeg + 转场 + 运动 + 混音)         │\n└──────────────────┬──────────────────────────────┘\n                   │\n┌──────────────────▼──────────────────────────────┐\n│  数据层                                          │\n│  SQLite + Drizzle ORM / Zustand (前端状态持久化)   │\n└─────────────────────────────────────────────────┘\n```\n\n| 层级 | 技术 |\n|------|------|\n| **框架** | Next.js 16 + React 19 |\n| **语言** | TypeScript 5 (strict mode) |\n| **样式** | Tailwind CSS 4 + shadcn/ui |\n| **状态管理** | Zustand (localStorage persist) |\n| **数据库** | SQLite + Drizzle ORM |\n| **视频合成** | FFmpeg (fluent-ffmpeg) |\n| **AI 集成** | OpenAI SDK (LLM) + 5 平台 Provider |\n| **测试** | Vitest (68 用例) + Playwright (E2E) |\n| **图标** | react-icons (Lucide 图标集) |\n\n---\n\n## 项目结构\n\n```\nsrc/\n├── app/                              # 页面路由\n│   ├── page.tsx                      # 首页（项目列表 + 快捷入口）\n│   ├── products/                     # 商品库管理\n│   ├── batch/                        # 批量出片\n│   ├── settings/                     # 设置（AI平台/LLM/人物/品牌 四个Tab）\n│   ├── project/\n│   │   ├── new/                      # 新建项目（表单 + 视频模式 + 人物 + 模板）\n│   │   ├── clone/                    # 爆款复刻\n│   │   └── [id]/\n│   │       ├── script/               # 脚本编辑（3套方案 + 存为模板）\n│   │       ├── assets/               # 素材生成（逐镜头 + 批量）\n│   │       ├── video/                # 视频合成（转场 + 配音 + BGM + 字幕）\n│   │       └── export/               # 导出（多平台 + A/B版本 + 下载）\n│   └── api/                          # API 路由\n│\n├── lib/\n│   ├── providers/                    # AI Provider 抽象层（5个平台）\n│   ├── script-engine/                # 脚本引擎（Prompt + 模板 + SEO策略）\n│   ├── video-composer/               # FFmpeg 合成引擎\n│   ├── stores/                       # Zustand 状态管理（5个Store）\n│   └── db/                           # SQLite 数据库\n│\n└── components/ui/                    # shadcn/ui 组件库\n```\n\n---\n\n## 支持的 AI 模型（2026.03 官方文档确认）\n\n### 视频生成\n\n| 模型 | 平台 | 音频 | 模式 | 特点 |\n|------|------|------|------|------|\n| **Kling 3.0 Pro** | fal.ai / Atlas Cloud | 原生支持 | T2V / I2V | 可灵最新，多分镜+人脸绑定 |\n| **Veo 3** | fal.ai | 原生支持 | T2V | Google，对话+音效+唇形同步 |\n| **Vidu Q3 Pro** | Atlas Cloud | - | T2V / I2V / 首尾帧 | 首尾帧过渡（转场神器） |\n| **Hailuo 2.3** | fal.ai | - | T2V / I2V | MiniMax 海螺，运动物理逼真 |\n| **Luma Ray 2** | fal.ai | - | T2V / I2V | 真实运动和物理效果 |\n| **Seedance 1.5 Pro** | 火山引擎 / Atlas Cloud | - | T2V / I2V | 字节豆包，电影级画质 |\n| **万相 2.6** | 阿里百炼 | - | I2V | 商品图生视频效果好 |\n\n### 图片生成\n\n| 模型 | 平台 | 特点 |\n|------|------|------|\n| **FLUX.2 Pro** | fal.ai | 最新一代高质量生图 |\n| **Recraft V4 Pro** | fal.ai | 设计风格突出 |\n| **Seedream 5.0 Lite** | 火山引擎 / Atlas Cloud | 字节最新，中文优化 |\n| **万相** | 阿里百炼 | 商品场景友好 |\n\n> T2V = 文生视频, I2V = 图生视频。支持音频的模型直接输出带配音的视频，不支持的静默输出。\n\n---\n\n## 开发\n\n```bash\n# 运行测试（68 个用例）\npnpm test\n\n# 类型检查\nnpx tsc --noEmit\n\n# 数据库迁移\nnpx drizzle-kit push\n\n# 构建生产版本\npnpm build\n```\n\n---\n\n## 适用场景\n\n- **电商卖家**: 淘宝/拼多多/抖音小店，快速批量生产商品推广视频\n- **短视频运营**: MCN 机构、达人工作室，提升内容产出效率\n- **品牌方**: 新品上市快速产出多平台投放素材\n- **独立开发者**: 基于此项目二次开发，构建 AI 视频 SaaS\n\n---\n\n## Roadmap\n\n- [x] AI 脚本生成（5品类 x 4风格）\n- [x] 多模型聚合（5平台 20+ 模型）\n- [x] 视频合成引擎（FFmpeg）\n- [x] 平台 SEO 优化（抖音/快手/小红书）\n- [x] 商品库 + 批量出片\n- [x] 品牌设置 + 人物管理\n- [x] 爆款模板复用\n- [x] 多平台导出 + A/B 测试\n- [ ] 真实视频分析（爆款复刻）\n- [ ] 在线视频预览播放器\n- [ ] 团队协作 + 权限管理\n- [ ] 订阅计费系统\n\n---\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "用商品图自动生成电商带货短视频",
+      "problem": "电商短视频制作耗时，难以批量适配多个平台",
+      "highlights": [
+        "可以从商品图生成带货脚本和素材",
+        "可以用FFmpeg自动合成字幕、配音和BGM",
+        "可以导出抖音、快手、小红书版本"
+      ],
+      "target_users": [
+        "电商卖家",
+        "短视频运营",
+        "品牌方"
+      ],
+      "why_trending": "总 Star 272，本周首次收录且近期持续更新",
+      "caveat": "需要配置模型和大语言模型 API Key",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "witty-suckerpunch492/daihuo-jianshou",
+      "score": 94,
+      "category": "AI 视频",
+      "reason": "自动生成电商短视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "PowerBeef/Vocello",
+      "url": "https://github.com/PowerBeef/Vocello",
+      "description": "Vocello: a local, private voice studio for Apple Silicon. Write a script, pick or describe a voice, and generate speech on-device, faster than realtime on an 8 GB M2 Mac mini. Native Swift + MLX, no Python. Mac app out now, iPhone beta on TestFlight. (Formerly QwenVoice.)",
+      "language": "Swift",
+      "total_stars": 367,
+      "forks": 31,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "apple-silicon",
+        "ios",
+        "iphone",
+        "macos",
+        "mlx",
+        "offline",
+        "qwen",
+        "qwenvoice",
+        "swiftui",
+        "text-to-speech",
+        "tts",
+        "vocello",
+        "voice-cloning",
+        "voice-synthesis"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-21T20:22:38Z",
+      "updated_at": "2026-09-15T04:55:49Z",
+      "pushed_at": "2026-09-15T04:55:45Z",
+      "open_issues": 13,
+      "homepage": "https://vocello.vercel.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">Vocello</h1>\n\n<p align=\"center\">\n  <strong>Premium voice studio. Proven performance. Private by design.</strong>\n</p>\n\n<p align=\"center\">\n  Write a script, choose or shape a voice, and generate speech on your device with native Swift and MLX.<br>\n  No account. No credits. Nothing you write or record leaves your device.<br>\n  <strong>Available for Mac. The iPhone app is in public beta on TestFlight.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://vocello.vercel.app/\"><img src=\"https://img.shields.io/badge/Website-vocello.vercel.app-7b61ff?style=flat-square&logo=vercel\" alt=\"Website\"></a>\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/tag/v2.4.0\"><img src=\"https://img.shields.io/badge/Vocello-2.4.0-7b61ff?style=flat-square\" alt=\"Vocello 2.4.0\"></a>\n  <img src=\"https://img.shields.io/badge/macOS-26%2B-111827?style=flat-square&logo=apple\" alt=\"macOS 26 or newer\">\n  <a href=\"https://testflight.apple.com/join/Cvp6yCv7\"><img src=\"https://img.shields.io/badge/iPhone-TestFlight%20beta-7b61ff?style=flat-square&logo=apple\" alt=\"iPhone TestFlight beta\"></a>\n  <img src=\"https://img.shields.io/badge/Apple%20Silicon-required-111827?style=flat-square&logo=apple\" alt=\"Apple Silicon required\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-MIT-blue?style=flat-square\" alt=\"MIT License\"></a>\n</p>\n\n<div align=\"center\">\n\n![Vocello banner with abstract voice waves and the Vocello logo](docs/readme_banner_vocello.png)\n\n</div>\n\n<p align=\"center\">\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/download/v2.4.0/Vocello-macos26.dmg\"><strong>Download Vocello 2.4.0 for macOS 26+</strong></a><br>\n  <a href=\"https://testflight.apple.com/join/Cvp6yCv7\"><strong>Join the iPhone beta on TestFlight</strong></a><br>\n  <a href=\"https://github.com/PowerBeef/Vocello/releases/tag/v2.4.0\">Release details</a> · <a href=\"docs/releases/v2.4.0.md\">What is new</a> · <a href=\"https://github.com/PowerBeef/Vocello/releases\">All releases</a>\n</p>\n\n<p align=\"center\">\n  <em>Write a script, pick or shape a voice, and listen: a native Swift + MLX engine, faster than realtime on an 8&nbsp;GB M2, with nothing leaving your Mac.</em>\n</p>\n\n![Vocello Studio with a script, a chosen speaker, and a generated take ready to play](docs/screenshots/vocello-custom-voice.png)\n\n## What Vocello does\n\n- **Built-in Voice:** choose one of nine built-in Qwen3 speakers, then set language and delivery.\n- **Voice Design:** describe a voice in plain language and generate it from that brief.\n- **Voice Cloning:** capture a reference you have permission to use, affirm consent, and save it to your voice library. On both platforms, record a clip or import an audio file; on iPhone you can also reuse a saved Voice Design voice as the reference.\n\nScripts past 900 characters become **long-form projects**: planned segments stream one after another while you listen along, then join into a single finished file with a per-segment map in History. Ten languages are supported (Chinese, English, Japanese, Korean, German, French, Russian, Portuguese, Spanish, and Italian) with automatic detection, and everything (scripts, references, history, audio) stays in local app storage unless you export it.\n\nVocello is not a wrapper around a Python server: generation runs through a first-party Swift runtime on MLX, and the full engineering story lives in [Under the hood](#under-the-hood).\n\n## Open source and the iOS export unlock\n\nVocello's source remains MIT-licensed. For the upcoming official iOS 3.0 release, **Design & Clone\nExport** is a one-time purchase with a **US base price of $19.99** and Apple-managed regional prices\nshown in your local currency. Generation, listening, internal History, voice enrollment and Built-in\naudio exports remain free. **macOS and CLI exports remain unrestricted.** The iOS product is configured,\nbut metadata, purchase testing and App Store review are still pending; this is not an availability claim.\n\nThe purchase supports the official iOS distribution, not an exclusive license to the source. People\nmay build and modify the MIT-licensed code, including its export checks, subject to the license terms.\nA modified build is not the official App Store app and does not create an Apple purchase or entitlement.\nWe accept this tradeoff instead of adding a licensing server, obfuscation or restrictions on forks.\nThird-party models and assets retain their applicable terms; the code license does not clear all\ncontent rights. See the [iOS purchase guide](docs/reference/ios-app-guide.md#ios-export-purchase)\nand [purchase security boundary](SECURITY.md#open-source-purchase-boundary).\n\n## Voice workflows\n\n| Voice Design | Voice Cloning |\n| --- | --- |\n| ![Vocello Voice Design screen](docs/screenshots/vocello-voice-design.png) | ![Vocello Voice Cloning screen](docs/screenshots/vocello-voice-cloning.png) |\n| Describe character, age, accent, texture, and delivery. Save a successful design as a reusable voice reference. | Record in the app; the Mac additionally imports WAV, MP3, AIFF, M4A, FLAC, OGG, or WebM files. A transcript improves conditioning but is optional. Generation requires the visible consent acknowledgment in Settings; only clone voices you own or are authorized to use. |\n\nBuilt-in Voice and Voice Design support eight delivery presets plus a free-text delivery description. The picker is honest about what each preset can promise: four distinct deliveries (Neutral, Calm, Whisper, Sad) come through reliably, and the other four are directional hints that shape energy and pace while the named emotion may not land on every take. Voice Cloning follows the reference voice; with a curated emotion reference bank, a cloned persona additionally offers a delivery choice, with each delivery backed by its own verified reference clip.\n\n| Models | History |\n| --- | --- |\n| ![Vocello model download settings](docs/screenshots/vocello-model-downloads.png) | ![Vocello History screen](docs/screenshots/vocello-history.png) |\n| Install and manage the available model package for each voice mode from Settings. | Generations remain local and can be replayed, searched, exported, or removed. |\n\n## Variation and reproducibility\n\nThe Expressive, Balanced, and Consistent variation settings trade take-to-take variety against stability. Multi-line batches share one seed so their lines form a consistent performance. CLI and benchmark callers can provide an explicit seed for reproducible evidence. Every finished take also records the seed it actually used: pin a take's seed from History and subsequent generations reproduce it exactly with the same settings, or leave it unpinned for a fresh take each time.\n\n## Local-first privacy\n\n- Speech generation runs locally after models are installed.\n- Generated audio, recorded references, transcripts, saved voices, and history remain in local app storage unless you export them.\n- Model installation downloads pinned model artifacts from Hugging Face.\n- Reference recording requests microphone access. Transcript auto-fill requests Speech Recognition access and uses on-device recognition with the required system language assets.\n- Voice cloning should only be used with voices you own or have permission to use.\n- Clone generation remains disabled until its visible consent acknowledgment is enabled in\n  Settings; the choice is stored locally and can be changed there.\n- Generated audio is marked as AI-generated: an inaudible AudioSeal watermark plus a\n  machine-readable provenance note in the WAV file.\n- If you publish audio of a cloned real voice, disclose that it is AI-generated. EU law may\n  require this disclosure (EU AI Act, Article 50).\n\nStorage locations and deletion behavior are documented in [`docs/reference/privacy-storage.md`](docs/reference/privacy-storage.md).\n\n---\n\n## Install on Mac\n\n1. Download [`Vocello-macos26.dmg`](https://github.com/PowerBeef/Vocello/releases/download/v2.4.0/Vocello-macos26.dmg).\n2. Open the DMG and drag `Vocello.app` to `/Applications`.\n3. Open Vocello, then install models from **Settings > Model downloads**.\n4. Generate from Built-in Voice, Voice Design, or Voice Cloning.\n\nThe current DMG is signed with an Apple Developer ID certificate, notarized, and stapled. The attached [`release-metadata.txt`](https://github.com/PowerBeef/Vocello/releases/download/v2.4.0/release-metadata.txt) records source and toolchain provenance.\n\nUpgrading from an earlier Vocello 2.x does not require reinstalling models; application data remains under `~/Library/Application Support/QwenVoice/`. After updating to 2.3.0 or newer, Settings shows an optional in-place update for installed models to the current smaller packages.\n\nWith the 2.2.0 release the repository moved from `PowerBeef/QwenVoice` to `PowerBeef/Vocello`; every old link and clone URL redirects to the new name.\n\n## System requirements and model variants\n\n| Platform | Support | Model variants | Public status |\n| --- | --- | --- | --- |\n| Mac | macOS 26.0 or newer, Apple Silicon, 8 GB RAM minimum | Speed (4-bit) and Quality (8-bit) | Vocello 2.4.0 is available now |\n| iPhone | iPhone 15 Pro or newer, iOS 26.0 or newer | Speed (4-bit) | Public beta via [TestFlight](https://testflight.apple.com/join/Cvp6yCv7) |\n\nSpeed is the recommended default and uses less memory. Quality is a Mac-only option for machines with more headroom. The three recommended Mac Speed packages total about 6 GB.\n\nSupport floors and benchmark machines are different facts: the floor is any Apple Silicon Mac with 8 GB, and canonical evidence is produced on a Mac mini M2 with 8 GB and an iPhone 17 Pro; see [Performance, measured](#performance-measured) below. The canonical record is `passedWithWarnings` because accepted memory soft trims and audio-QC warnings remain visible rather than being hidden; the [tracked record](benchmarks/runs/ui-generation/macos-xcui-benchmark-20260729-023553-111d88c6.json), produced on the then-current 2026.07.26.1 model packages, has the exact matrix and conditions.\n\nMacs on macOS 15 can use the legacy [QwenVoice 1.2.3 release](https://github.com/PowerBeef/Vocello/releases/tag/v1.2.3). No Vocello 2.x backport is planned.\n\n## Vocello for iPhone\n\n| | |\n| --- | --- |\n| ![Vocello Studio running on iPhone](docs/screenshots/vocello-ios-studio.png) | The iPhone app uses the same local Qwen3-TTS and MLX foundation with an iPhone-specific in-process runtime. It provides Built-in Voice, Voice Design, Voice Cloning with microphone recording or a saved Voice Design reference, local history, and the memory-conscious Speed models. On-device generation, physical-iPhone XCUITest, and an optional signed archive/TestFlight lane are implemented. A fresh full multilingual physical-iPhone run passed all 19 hint/QC and 18 output gates with policy-accepted warnings; its exploratory record is excluded from clean performance trends. A public TestFlight beta is open: [join here](https://testflight.apple.com/join/Cvp6yCv7). App Store distribution remains a separate maintainer-owned release decision. |\n\nCurrent implementation and acceptance status: [`docs/development-progress.md`](docs/development-progress.md).\n\n---\n\n## Under the hood\n\nThis is the maintained engineering record of the whole package, refreshed with each release. Every claim below traces to a tracked benchmark record, a machine-readable contract, or a documented measurement in this repository.\n\n### The owned runtime\n\nMost local TTS tools shell out to a Python reference implementation behind a local server. Vocello generates through a first-party Swift runtime on MLX, [`VocelloQwen3Core`](Packages/VocelloQwen3Core/README.md): no Python, no local server, no bundled weights. The runtime is derived from [`mlx-audio-swift`](https://github.com/Blaizzy/mlx-audio-swift) v0.1.2 and narrowed to exactly what Vocello ships, the Qwen3-TTS runtime and the Mimi codec primitives it needs: about 36,000 of roughly 49,000 upstream lines were removed in that specialization, and every retained, modified and "
+    },
+    "brief": {
+      "summary": "面向苹果芯片的本地私有语音生成工作室",
+      "problem": "解决配音生成依赖云端、隐私难保障的问题",
+      "highlights": [
+        "可以输入脚本并生成多语言语音",
+        "可以描述声音或克隆获授权的声音",
+        "可以在本地管理、复听和导出音频"
+      ],
+      "target_users": [
+        "配音创作者",
+        "视频制作者",
+        "隐私敏感用户"
+      ],
+      "why_trending": "本周首次收录，已有367 Stars，近期持续更新",
+      "caveat": "需要 Apple Silicon 和 macOS 26+；克隆须获授权",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "PowerBeef/Vocello",
+      "score": 91,
+      "category": "语音 / 配音",
+      "reason": "本地语音设计与生成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "invoke-ai/InvokeAI",
+      "url": "https://github.com/invoke-ai/InvokeAI",
+      "description": "Invoke is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, and serves as the foundation for multiple commercial products.",
+      "language": "Python",
+      "total_stars": 28219,
+      "forks": 2971,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-art",
+        "artificial-intelligence",
+        "generative-art",
+        "image-generation",
+        "img2img",
+        "inpainting",
+        "latent-diffusion",
+        "linux",
+        "macos",
+        "outpainting",
+        "stable-diffusion",
+        "txt2img",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-08-17T01:04:27Z",
+      "updated_at": "2026-09-15T03:06:22Z",
+      "pushed_at": "2026-09-15T02:26:41Z",
+      "open_issues": 372,
+      "homepage": "https://invoke-ai.github.io/InvokeAI/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![project hero](https://github.com/invoke-ai/InvokeAI/assets/31807370/6e3728c7-e90e-4711-905c-3b55844ff5be)\n\n# Invoke - Professional Creative AI Tools for Visual Media\n\n[![discord badge]][discord link] [![latest release badge]][latest release link] [![github stars badge]][github stars link] [![github forks badge]][github forks link] [![CI checks on main badge]][CI checks on main link] [![latest commit to main badge]][latest commit to main link] [![github open issues badge]][github open issues link] [![github open prs badge]][github open prs link] [![translation status badge]][translation status link]\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\n</div>\n\n\nInvoke is a leading creative engine built to empower professionals and enthusiasts alike. Generate and create stunning visual media using the latest AI-driven technologies. Invoke offers an industry leading web-based UI, and serves as the foundation for multiple commercial products.\n\n- Free to use under a commercially-friendly license\n- Download and install on compatible hardware\n- Generate, refine, iterate on images, and build workflows\n\n![Highlighted Features - Canvas and Workflows](https://github.com/invoke-ai/InvokeAI/assets/31807370/708f7a82-084f-4860-bfbe-e2588c53548d)\n\n# Documentation\n\n| **Quick Links**                                                                                                                                             |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| [Installation and Updates][installation docs] - [Documentation and Tutorials][docs home] - [Bug Reports][github issues] - [Contributing][contributing docs] |\n\n# Installation\n\nTo get started with Invoke, [Download the Launcher](https://github.com/invoke-ai/launcher/releases/latest).\n\n## Troubleshooting, FAQ and Support\n\nPlease review our [FAQ][faq] for solutions to common installation problems and other issues.\n\nFor more help, please join our [Discord][discord link].\n\n## Features\n\nFull details on features can be found in [our documentation][features docs].\n\n### Web Server & UI\n\nInvoke runs a locally hosted web server & React UI with an industry-leading user experience.\n\n### Unified Canvas\n\nThe Unified Canvas is a fully integrated canvas implementation with support for all core generation capabilities, in/out-painting, brush tools, and more. This creative tool unlocks the capability for artists to create with AI as a creative collaborator, and can be used to augment AI-generated imagery, sketches, photography, renders, and more.\n\n### Workflows & Nodes\n\nInvoke offers a fully featured workflow management solution, enabling users to combine the power of node-based workflows with the ease of a UI. This allows for customizable generation pipelines to be developed and shared by users looking to create specific workflows to support their production use-cases.\n\n### Board & Gallery Management\n\nInvoke features an organized gallery system for easily storing, accessing, and remixing your content in the Invoke workspace. Images can be dragged/dropped onto any Image-base UI element in the application, and rich metadata within the Image allows for easy recall of key prompts or settings used in your workflow.\n\n### Model Support\n- SD 1.5\n- SD 2.0\n- SDXL\n- SD 3.5 Medium\n- SD 3.5 Large\n- CogView 4\n- Flux.1 Dev\n- Flux.1 Schnell\n- Flux.1 Kontext\n- Flux.1 Krea\n- Flux Redux\n- Flux Fill\n- Flux.2 Dev\n- Flux.2 Klein 4B\n- Flux.2 Klein 9B\n- Z-Image Turbo\n- Z-Image Base\n- Krea 2 Turbo\n- Krea 2 Raw\n- Anima\n- Qwen Image\n- Qwen Image Edit\n- Ideogram 4\n- ERNIE-Image\n- ERNIE-Image-Turbo\n- Nano Banana (API Only)\n- GPT Image (API Only)\n- Wan (API Only)\n\n### Other features\n\n- Support for ckpt, diffusers, and some gguf models\n- Upscaling Tools\n- Embedding Manager & Support\n- Model Manager & Support\n- Workflow creation & management\n- Node-Based Architecture\n- Object Segmentation & Selection Models (SAM / SAM2)\n\n## Contributing\n\nAnyone who wishes to contribute to this project - whether documentation, features, bug fixes, code cleanup, testing, or code reviews - is very much encouraged to do so.\n\nGet started with contributing by reading our [contribution documentation][contributing docs], joining the [#dev-chat] or the GitHub discussion board.\n\nWe hope you enjoy using Invoke as much as we enjoy creating it, and we hope you will elect to become part of our community.\n\n## Sponsors\n\nInvoke's open-source development is powered by our sponsors. If Invoke is valuable to you or your business, please consider [sponsoring us][sponsor link] — it directly funds maintenance, new features, and community support.\n\n<!-- Sponsor logos can be added below, or automated with a GitHub Action\n     such as `JamesIves/github-sponsors-readme-action` to keep them in sync. -->\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\nWe very much thank the following sponsors:\n\n### Backers ($15/mo)\n\n* [apokolypsse](https://github.com/apokolypsse)\n* [Romeotechguy](https://github.com/Romeotechguy)\n\n### Power Users ($50/mo)\n\n* [mickr777](https://github.com/mickr777)\n* [Astroburner](https://github.com/Astroburner)\n\n## Thanks\n\nInvoke is a combined effort of [passionate and talented people from across the world][contributors]. We thank them for their time, hard work and effort.\n\nOriginal portions of the software are Copyright © 2024 by respective contributors.\n\n[features docs]: https://invoke.ai/\n[faq]: https://invoke.ai/troubleshooting/faq/\n[contributors]: https://invoke.ai/contributing/contributors/\n[github issues]: https://github.com/invoke-ai/InvokeAI/issues\n[docs home]: https://invoke.ai\n[installation docs]: https://invoke.ai/start-here/installation/\n[sponsor link]: https://github.com/sponsors/invoke-ai\n[#dev-chat]: https://discord.com/channels/1020123559063990373/1049495067846524939\n[contributing docs]: https://invoke.ai/contributing/\n[CI checks on main badge]: https://flat.badgen.net/github/checks/invoke-ai/InvokeAI/main?label=CI%20status%20on%20main&cache=900&icon=github\n[CI checks on main link]: https://github.com/invoke-ai/InvokeAI/actions?query=branch%3Amain\n[discord badge]: https://flat.badgen.net/discord/members/ZmtBAhwWhy?icon=discord\n[discord link]: https://discord.gg/ZmtBAhwWhy\n[github forks badge]: https://flat.badgen.net/github/forks/invoke-ai/InvokeAI?icon=github\n[github forks link]: https://useful-forks.github.io/?repo=invoke-ai%2FInvokeAI\n[github open issues badge]: https://flat.badgen.net/github/open-issues/invoke-ai/InvokeAI?icon=github\n[github open issues link]: https://github.com/invoke-ai/InvokeAI/issues?q=is%3Aissue+is%3Aopen\n[github open prs badge]: https://flat.badgen.net/github/open-prs/invoke-ai/InvokeAI?icon=github\n[github open prs link]: https://github.com/invoke-ai/InvokeAI/pulls?q=is%3Apr+is%3Aopen\n[github stars badge]: https://flat.badgen.net/github/stars/invoke-ai/InvokeAI?icon=github\n[github stars link]: https://github.com/invoke-ai/InvokeAI/stargazers\n[latest commit to main badge]: https://flat.badgen.net/github/last-commit/invoke-ai/InvokeAI/main?icon=github&color=yellow&label=last%20dev%20commit&cache=900\n[latest commit to main link]: https://github.com/invoke-ai/InvokeAI/commits/main\n[latest release badge]: https://flat.badgen.net/github/release/invoke-ai/InvokeAI/development?icon=github\n[latest release link]: https://github.com/invoke-ai/InvokeAI/releases/latest\n[translation status badge]: https://hosted.weblate.org/widgets/invokeai/-/svg-badge.svg\n[translation status link]: https://hosted.weblate.org/engage/invokeai/\n[nvidia docker docs]: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n[amd docker docs]: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html\n"
+    },
+    "brief": {
+      "summary": "面向专业创作者的开源 AI 图像生成与编辑工作台",
+      "problem": "把模型生成、局部修改和工作流管理整合到一个本地界面中",
+      "highlights": [
+        "可以用画布进行文生图、图生图和局部重绘",
+        "可以组合节点工作流，复用和分享生成流程",
+        "可以管理图库，并找回图片提示词和设置"
+      ],
+      "target_users": [
+        "AI 绘画创作者",
+        "视觉设计师",
+        "本地部署爱好者"
+      ],
+      "why_trending": "总 Star 超过 2.8 万，近期仍有提交，本周首次收录",
+      "caveat": "需要兼容硬件，具体硬件要求资料中未说明",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "invoke-ai/InvokeAI",
+      "score": 95,
+      "category": "AI 绘画 / 漫画",
+      "reason": "专业Stable Diffusion创作引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  }
+]
