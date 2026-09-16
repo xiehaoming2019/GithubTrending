@@ -1,0 +1,550 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 31240,
+      "forks": 3715,
+      "stars_today": 2072,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2072
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-16T04:59:05Z",
+      "pushed_at": "2026-09-15T14:32:21Z",
+      "open_issues": 102,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n  <h3>NOTE: Electron Rewrite Ongoing: Please dont't create desktop app related issues and pr</h3>\n \n  <p><img src=\"docs/logo.png\" alt=\"VoiceStudio logo\" width=\"120\" height=\"120\" /></p>\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><sub>Previously OmniVoice-Studio</sub></p>\n  <h3>Clone voices, dub video, dictate, and produce long-form audio on your own hardware.</h3>\n  <p>16 TTS engines · 11 ASR engines · 646-language catalogue · macOS, Windows, Linux, and Docker</p>\n  <p>No account, API key, subscription, or usage meter for the local workflow.</p>\n\n  <p>\n    <a href=\"#install\">Install</a> ·\n    <a href=\"#features\">Features</a> ·\n    <a href=\"#comparison\">Compare</a> ·\n    <a href=\"#requirements\">Requirements</a> ·\n    <a href=\"#hardware-recommendations\">Hardware</a> ·\n    <a href=\"#engines\">Engines</a> ·\n    <a href=\"#architecture\">Architecture</a> ·\n    <a href=\"#api\">API</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"#faq\">FAQ</a> ·\n    <a href=\"README_CN.md\"><strong>简体中文</strong></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&style=flat-square&label=CI\" alt=\"CI status\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/stargazers\"><img src=\"https://img.shields.io/github/stars/debpalash/VoiceStudio?style=flat-square&color=f59e0b\" alt=\"GitHub stars\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases\"><img src=\"https://img.shields.io/github/downloads/debpalash/VoiceStudio/total?style=flat-square&color=8b5cf6&label=downloads\" alt=\"Total downloads\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&color=10b981\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square\" alt=\"AGPL-3.0 license\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord community\" /></a>\n  </p>\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-macOS_·_Windows_·_Linux-10b981?style=for-the-badge\" alt=\"Download VoiceStudio\" /></a>\n  </p>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/media/0.5.0/quick-switch.gif\" alt=\"Switching TTS engines from the VoiceStudio status bar\" width=\"100%\" />\n</div>\n\n> [!WARNING]\n> **Active beta.** Use the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest) for stable work. `main` contains the newest fixes and may change between releases. Report problems through [GitHub Issues](https://github.com/debpalash/VoiceStudio/issues).\n\n## At a glance\n\n| | VoiceStudio |\n|---|---|\n| **Workflows** | Voice cloning and design, video dubbing, dictation, stories, audiobooks, batch generation |\n| **Language catalogue** | 646 TTS languages; actual coverage and quality depend on the selected engine |\n| **Engines** | 16 TTS · 11 ASR · switch in Model Catalogue or with <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> |\n| **Platforms** | macOS 13.3+ on Apple Silicon · Windows 10/11 x64 · Linux x86_64 with glibc 2.39+ |\n| **Compute** | CUDA · Apple Silicon MPS/MLX · ROCm on Linux · CPU · optional remote workers |\n| **Interfaces** | Desktop app · local REST/SSE/WebSocket API · OpenAI-compatible audio API · MCP Server |\n| **Storage** | Voices, projects, settings, and outputs stay on the machine by default |\n| **License** | AGPL-3.0 application; downloaded models keep their upstream terms |\n\nThe Voice workspace starts with three tabs: **From audio** for cloning, **By design** for creating a voice, and **Convert** for speech-to-speech conversion. Each tab displays its own workflow, with Synthesize Audio or Convert pinned below the scrolling form. The top-bar **Engines** panel combines engine selection, loaded models, and unload/flush controls; <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>E</kbd> opens it. The searchable language picker shares Dubbing’s flags and language list layout, selects one output language, and retains Auto and the full cloning catalogue. Language options flow into multiple columns when space allows. Expand **Workspaces** in the sidebar to reveal navigation labels; Escape collapses it.\n\nDubbing starts with file upload or URL import and nearby language choices. Its **Projects** panel lists previous dubs so they can be reopened by clicking anywhere on a card; action buttons operate independently. Advanced import options include captions and optional YouTube sign-in. Dubbing places playback controls over the video with background blur and combines the waveform and timed transcript in one compact editing surface. Drag the zoomed waveform left or right to pan; click to seek. Translation language and ISO-code controls stay synchronized; Auto clears any previous language code and dialect. Transcript items group editable text, timing and status, and voice controls into three readable rows that wrap with the panel width. Output Options stays compact with the active settings shown in its summary; expand it to change output, timing, or voice matching. Transcript, glossary, and paste controls share a toolbar above the segment editor. Project details, workflow steps, and Generate/Verify/Export actions use an unfilled header.\n\nThe Audiobook Script editor fills the available workspace beneath its markup toolbar; Voices and Book settings stay in their own tabs.\n\nOutput settings use aligned rows; review status appears before the collapsible transcript and glossary. Glossary terms have labelled entry fields and an explicit edit action. Launchpad arranges recent files and saved voices side by side when space allows, with responsive card grids and visible Open actions.\n\nThe casting board shows icon-based voice cards and searchable selectors for each speaker. Drag a card onto a speaker or choose a voice from that speaker’s menu.\n\n<a id=\"install\"></a>\n\n## Install\n\nDownload a package from the [latest release](https://github.com/debpalash/VoiceStudio/releases/latest), then follow the platform guide.\n\n| Platform | Package | Guide |\n|---|---|---|\n| macOS 13.3+ | Apple Silicon DMG | [Install on macOS](docs/install/macos.md) |\n| Windows 10/11 | x64 MSI; choose the current-user build when listed to install without admin access | [Install on Windows](docs/install/windows.md#install-pre-built-msi) |\n| Linux | AppImage, x86_64 with glibc 2.39+ | [Install on Linux](docs/install/linux.md) |\n| Docker | Linux/AMD64 images; CUDA, ROCm, CPU, and worker-only GPU profiles | [Run with Docker](docs/install/docker.md) |\n\nFirst launch creates a managed Python environment and downloads the default model. Later launches reuse both.\n\n> [!NOTE]\n> On macOS, first launch needs a one-time right-click, then **Open** approval. Intel Macs cannot run the local Python backend; use a [remote backend](docs/install/macos.md) instead.\n\n### Quick Docker run\n\nThe published images are **`linux/amd64` only**. On Apple Silicon, use the\n[native macOS app](docs/install/macos.md) for GPU acceleration. ARM64 hosts\nshould read the [architecture requirements](docs/install/docker.md#architecture)\nbefore pulling an image.\n\n```bash\ndocker run -d -p 127.0.0.1:3900:3900 -v omnivoice-data:/app/omnivoice_data --name voicestudio palashdeb/omnivoice-studio:stable\n```\n\n### First voice\n\n1. Launch VoiceStudio and open **Voice Cloning**.\n2. Add a clean voice sample. Three seconds works; 5 to 15 seconds usually gives a better prompt.\n3. Enter text, choose a language, then select **Generate**.\n\n> [!TIP]\n> **Try without installing:** Run VoiceStudio in the cloud via the [Google Colab notebook](https://colab.research.google.com/github/debpalash/VoiceStudio/blob/main/notebooks/OmniVoice_Studio_Colab.ipynb). Explore audio quality comparisons in [benchmarks](docs/benchmarks.md) and prompt design tips in [expressive speech](docs/expressive-speech.md).\n\n### Audio samples\n\nListen to sample outputs produced locally with VoiceStudio:\n\n| Workflow | Prompt / Reference Audio | Generated Audio |\n|---|---|---|\n| **Voice Cloning** | [demo_voice.wav](backend/assets/samples/demo_voice.wav) | [demo_clone_output.wav](backend/assets/samples/demo_clone_output.wav) |\n| **Voice Design** (US News Anchor) | *\"Clear, authoritative American broadcast tone\"* | [demo_voice_design_us_news_anchor.wav](backend/assets/samples/voice_design/demo_voice_design_us_news_anchor.wav) |\n| **Voice Design** (UK Audiobook) | *\"Warm, expressive British storytelling voice\"* | [demo_voice_design_audiobook_uk_narrator.wav](backend/assets/samples/voice_design/demo_voice_design_audiobook_uk_narrator.wav) |\n| **Video Dubbing** (Multilingual) | [source.src.wav](backend/assets/samples/demo/dubbing/source.src.wav) | [Spanish](backend/assets/samples/demo/dubbing/dubbed_es.src.wav) · [French](backend/assets/samples/demo/dubbing/dubbed_fr.src.wav) · [Japanese](backend/assets/samples/demo/dubbing/dubbed_ja.src.wav) · [Chinese](backend/assets/samples/demo/dubbing/dubbed_zh.src.wav) |\n\n### Run from source\n\nInstall the [development prerequisites](.github/CONTRIBUTING.md#development-setup) (Node 20+/Bun and Python 3.11+), then:\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run desktop\n```\n\nThe desktop launcher configures Python dependencies on first run via `uv` automatically. Use `bun run dev` for the browser UI. See [Contributing](.github/CONTRIBUTING.md) for services, tests, and platform packages.\n\n### If setup fails\n\n- Run **Settings → About → Run self-check** or `uv run python backend/main.py --diagnose --deep`.\n- Check [install troubleshooting](docs/install/troubleshooting.md).\n- Save a scrubbed diagnostic bundle from the app when opening an issue.\n- For slow generation, compare [measured benchmarks](docs/benchmarks.md) and [performance settings](docs/performance.md).\n\n<a id=\"features\"></a>\n\n## Features\n\n| Area | Included |\n|---|---|\n| **Voice Cloning** | Zero-shot synthesis from a short reference clip ([guide](docs/engines/README.md)) |\n| **Voice Design** | Create a voice from age, accent, pitch, style, and delivery instructions ([expressive speech](docs/expressive-speech.md)) |\n| **Video Dubbing** | Transcribe, translate, preserve speakers, synthesize, and export video; compact translation settings include track selection, and completed dubs flag timing issues for review ([export guide](docs/dubbing/export.md)) |\n| **Stories and audiobooks** | Multi-voice scripts · EPUB/PDF import · chapter rendering · `.m4b` export |\n| **[Dictation Widget](docs/features/dictation.md)** | System-wide shortcut, live transcription, optional local-LLM cleanup |\n| **Vocal Isolation** | Demucs speech/background separation |\n| **Speaker Diarization** | Pyannote and WhisperX speaker assignment ([guide](docs/features/diarization.md)) |\n| **Batch Queue** | Queue large sets of audio and video jobs with per-job progress, or watch a local folder for new videos |\n| **Model Catalogue** | Install, remove, select, and route TTS, ASR, and LLM models ([catalogue](docs/engines/README.md)) |\n| **Remote Model Downloads** | Install models on enrolled remote workers with live progress ([guide](docs/downloading-models.md)) |\n| **GPU Auto-Detect** | CUDA, MPS, ROCm, and CPU routing with per-engine checks ([performance](docs/performance.md)) |\n| **AI Watermark** | AudioSeal embedding and detection |\n| **MCP Server** | Synthesis and transcription tools for MCP clients ([guide](docs/mcp.md)) |\n| **Di"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆、配音与音频制作工具。",
+      "problem": "减少对云端语音服务、账号和用量计费的依赖。",
+      "highlights": [
+        "可以克隆或设计声音并生成语音",
+        "可以为视频配音并编辑字幕文本",
+        "可以制作听写稿、转录和有声书"
+      ],
+      "target_users": [
+        "配音与视频创作者",
+        "有声书制作者",
+        "本地部署开发者"
+      ],
+      "why_trending": "今日新增2072个Star，累计超3.1万且持续上榜。",
+      "caveat": "项目处于活跃测试阶段，桌面端正在重写。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "本地配音克隆与视频配音",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "alibaba/open-code-review",
+      "url": "https://github.com/alibaba/open-code-review",
+      "description": "Fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+      "language": "Go",
+      "total_stars": 29141,
+      "forks": 2072,
+      "stars_today": 2756,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2905
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agent-skills",
+        "code-review",
+        "code-review-assistant",
+        "harness",
+        "repository-level-context"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-18T02:16:36Z",
+      "updated_at": "2026-09-16T04:57:12Z",
+      "pushed_at": "2026-09-16T03:27:16Z",
+      "open_issues": 162,
+      "homepage": "https://open-codereview.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <a href=\"https://open-codereview.ai\">\n    <img src=\"imgs/logo-core.svg\" alt=\"OpenCodeReview logo\" width=\"180\" />\n  </a>\n  <h1>OpenCodeReview</h1>\n</div>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/41087?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-41087\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <img src=\"https://trendshift.io/api/badge/repositories/41087\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n</p>\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/41087\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/trendshift/repositories/41087/weekly?language=Go\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n  <a href=\"https://trendshift.io/repositories/41087\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/trendshift/repositories/41087/monthly?language=Go\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n</p>\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/@alibaba-group/open-code-review\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/@alibaba-group/open-code-review?style=flat-square\" /></a>\n  <a href=\"https://github.com/alibaba/open-code-review/actions/workflows/release.yml\"><img alt=\"Build status\" src=\"https://img.shields.io/github/actions/workflow/status/alibaba/open-code-review/release.yml?style=flat-square\" /></a>\n  <a href=\"https://github.com/alibaba/open-code-review/blob/main/LICENSE\"><img alt=\"License\" src=\"https://img.shields.io/github/license/alibaba/open-code-review?style=flat-square\" /></a>\n  <a href=\"https://deepwiki.com/alibaba/open-code-review\"><img alt=\"Ask DeepWiki\" src=\"https://deepwiki.com/badge.svg\" /></a>\n  <a href=\"https://www.bestpractices.dev/projects/13328\"><img alt=\"OpenSSF Best Practices\" src=\"https://img.shields.io/badge/OpenSSF-Gold-D4AF37?style=flat-square\" /></a>\n</p>\n<p align=\"center\">\n  <a href=\"#supported-platforms\"><img alt=\"Windows\" src=\"https://img.shields.io/badge/Windows-supported-blue.svg\" /></a>\n  <a href=\"#supported-platforms\"><img alt=\"macOS\" src=\"https://img.shields.io/badge/macOS-supported-blue.svg\" /></a>\n  <a href=\"#supported-platforms\"><img alt=\"Linux\" src=\"https://img.shields.io/badge/Linux-supported-blue.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Claude Code\" src=\"https://img.shields.io/badge/Claude_Code-supported-blueviolet.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Codex\" src=\"https://img.shields.io/badge/Codex-supported-blueviolet.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Cursor\" src=\"https://img.shields.io/badge/Cursor-supported-blueviolet.svg\" /></a>\n</p>\n<p align=\"center\">\n  English | <a href=\"docs/i18n/README.zh-CN.md\">简体中文</a> | <a href=\"docs/i18n/README.ja-JP.md\">日本語</a> | <a href=\"docs/i18n/README.ko-KR.md\">한국어</a> | <a href=\"docs/i18n/README.ru-RU.md\">Русский</a>\n</p>\n\n---\n\n## What is Open Code Review?\n\nOpen Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply configure a model endpoint to get started.\n\nIt reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — not just surface-level diff feedback. Beyond diff review, `ocr scan` reviews entire files for auditing unfamiliar codebases or directories that have no meaningful diff.\n\nVisit the [official website](https://open-codereview.ai) for more details.\n\n![Highlights](imgs/highlights-en.png)\n\n## Benchmark\n\n> Compared to general-purpose agents (Claude Code), Open Code Review achieves significantly higher **Precision** and **F1** with the same underlying model, while consuming only **~1/9 of the tokens** and completing reviews faster. Note that its Recall is lower than general-purpose agents — a deliberate trade-off favoring precision over noise.\n\nA real-world code review benchmark built from **50** popular open-source repositories, **200** real Pull Requests, and **10** programming languages — cross-validated by 80+ senior engineers (**1,505** annotated ground-truth issues).\n\n<a href=\"https://huggingface.co/datasets/Alibaba-Aone/aacr-bench\"><img src=\"https://huggingface.co/favicon.ico\" alt=\"Hugging Face\" width=\"20\" height=\"20\" /> Explore the AACR-Bench dataset on Hugging Face</a>.\n\n| Metric | What it measures | Why it matters |\n|--------|-----------------|----------------|\n| **F1** | Harmonic mean of precision and recall | Best single number for overall review quality |\n| **Precision** | Proportion of reported issues that are real defects | Higher = fewer false alarms to triage |\n| **Recall** | Proportion of real defects that are found | Higher = fewer issues slip through review |\n| **Avg Time** | Wall-clock time per review | Matters for CI pipeline latency |\n| **Avg Token** | Total tokens consumed per review | Directly impacts API cost |\n\n![Benchmark](imgs/benchmark-en.png)\n\n## Why Open Code Review?\n\n### The Problem with General-Purpose Agents\n\nIf you've used general-purpose agents like Claude Code with Skills for code review, you've likely encountered these pain points:\n\n- **Incomplete coverage** — On larger changesets, agents tend to \"cut corners,\" selectively reviewing only some files and missing others.\n- **Position drift** — Reported issues frequently don't match the actual code location, with line numbers or file references drifting off target.\n- **Unstable quality** — Natural-language-driven Skills are hard to debug, and review quality fluctuates significantly with minor prompt variations.\n\nThe root cause: a purely language-driven architecture lacks hard constraints on the review process.\n\n### Core Design: Deterministic Engineering × Agent Hybrid\n\nOpen Code Review's core philosophy is to combine deterministic engineering with an agent, each handling what it does best.\n\n**Deterministic Engineering — Hard Constraints**\n\nFor review steps that *must not go wrong*, engineering logic — not the language model — guarantees correctness:\n\n- **Precise file selection** — Determines exactly which files need review and which should be filtered, ensuring no important change is missed.\n- **Smart file bundling** — Groups related files into a single review unit (e.g., `message_en.properties` and `message_zh.properties` are bundled together). Each bundle runs as a sub-agent with isolated context — a divide-and-conquer strategy that stays stable on very large changesets and naturally supports concurrent review.\n- **Fine-grained rule matching** — Matches review rules to each file's characteristics, keeping the model's attention sharply focused and eliminating information noise at the source. Compared to purely language-driven rule guidance, template-engine-based rule matching is more stable and predictable.\n- **External positioning and reflection modules** — Independent comment-positioning and comment-reflection modules systematically improve both the location accuracy and content accuracy of AI feedback.\n\n**Agent — Dynamic Decision-Making**\n\nThe agent's strengths are concentrated where they matter most — dynamic decisions and dynamic context retrieval:\n\n- **Scenario-tuned prompts** — Prompt templates deeply optimized for code review, improving effectiveness while reducing token consumption.\n- **Scenario-tuned toolset** — Distilled from deep analysis of tool-call traces in large-scale production data — including call frequency distributions, per-tool repetition rates, and the impact of new tools on the overall call chain — resulting in a purpose-built toolset that is more stable and predictable for code review than a generic agent toolkit.\n\n## How to Use\n\n### Prerequisites\n\n- **Git >= 2.41** — Open Code Review relies on Git for diff generation, code search, and repository operations.\n\n### CLI\n\n#### Install\n\n```bash\nnpm install -g @alibaba-group/open-code-review\n```\n\nAfter installation, the `ocr` command is available globally.\n\nFor other installation methods (install script, GitHub Release binary, from source), see [Installation](https://open-codereview.ai/docs/installation).\n\n#### Quick Start\n\n**1. Configure LLM**\n\nYou must configure an LLM before reviewing code, unless you use [Delegation Mode](https://open-codereview.ai/docs/delegate).\n\n```bash\nocr config provider          # Select a built-in provider or add a custom one\nocr config model             # Pick a model for the active provider\n```\n\n![Provider setup](imgs/providers.jpg)\n\nThe interactive UI guides you through provider selection, API key entry, and model configuration, then automatically tests connectivity.\n\nFor CLI setup, environment variables, custom providers, and other advanced configuration, see [Configuration](https://open-codereview.ai/docs/configuration).\n\n**2. Review**\n\n```bash\ncd your-project\n\n# Workspace mode — review all staged, unstaged, and untracked changes\nocr review\n\n# Branch range — reviews feature-branch's changes since it diverged from main (merge-base mode)\nocr review --from main --to feature-branch\n\n# Single commit\nocr review --commit abc123\n\n# Resume an interrupted range or commit review\nocr session list\nocr review --from main --to feature-branch --resume <session-id>\n\n# Full-file scan — review whole files instead of a diff (no git history needed)\nocr scan                          # scan the entire repository\nocr scan --path internal/agent    # scan a directory or specific files\nocr scan --resume <session-id>   # resume an interrupted full-file scan\n\n# Save results to a file (recommended for AI host agents)\nocr review --format json --output result.json\n\n# Delegation mode — let your AI coding agent perform the review itself\n# OCR handles file selection and rule resolution; no LLM configuration needed\nocr delegate preview\nocr delegate rule src/main.go src/handler.go\n```\n\n## Documentation\n\nFull documentation lives at **[open-codereview.ai/docs](https://open-codereview.ai/docs)**:\n\n- [Quickstart](https://open-codereview.ai/docs/quickstart) — install and run your first review\n- [Installation](https://open-codereview.ai/docs/installation) — all platforms and package managers\n- [CLI Reference](https://open-codereview.ai/docs/cli-reference) — every command and flag\n- [Review Rules](https://open-codereview.ai/docs/review-rules) — customize review rules with path filtering and targeting\n- [Configuration](https://open-codereview.ai/docs/configuration) — config keys and environment variables\n- [MCP Server](https://open-codereview.ai/docs/mcp) — extend the review agent with external tools\n- Coding Agent Integrations — choose the platform you use\n  - [Claude Code](plugins/open-code-review/README.md#claude-code) — install a plugin with review slash commands\n  - [Codex](plugins/open-code-review/README.md#codex) — install a plugin with callable review skills\n  - [Cursor](plugins/open-code-review/README.md#cursor) — install a plugin with portable review skills\n  - [OpenCode](plugins/open-code-review/opencode/README.md) — install native review tools and slash commands\n  - [QCA Forward](plugins/open-code-review/qca/README.md) — run delegation mode with the QCA host model and a ready-to-publish template\n  - [Skill-compatible agents](https://open-codereview.ai/docs/agent-skill) — install the portable agent skill\n- Review Execution Modes — after integration, choose which LLM performs the review\n  - [Default (OCR-managed)](https://open-codereview.ai/docs/configuration) — OCR runs the review using its configured LLM"
+    },
+    "brief": {
+      "summary": "面向代码仓库的智能代码审查命令行工具",
+      "problem": "减少代码审查中的漏检、误报和定位偏差",
+      "highlights": [
+        "可以审查 Git Diff 并生成逐行评论",
+        "可以扫描完整文件和陌生代码目录",
+        "可以接入 OpenAI 与 Anthropic 兼容接口"
+      ],
+      "target_users": [
+        "软件开发者",
+        "代码审查团队",
+        "CI/CD维护者"
+      ],
+      "why_trending": "今日新增2756个Star，本周首次收录",
+      "caveat": "资料显示其召回率低于通用智能代理",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "alibaba/open-code-review",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "代码审查型Agent工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 63.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "description": "Production-grade engineering skills for AI coding agents.",
+      "language": "JavaScript",
+      "total_stars": 94924,
+      "forks": 10069,
+      "stars_today": 307,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 307
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "antigravity",
+        "claude-code",
+        "codex",
+        "cursor",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-15T20:20:26Z",
+      "updated_at": "2026-09-16T04:59:02Z",
+      "pushed_at": "2026-09-12T03:14:59Z",
+      "open_issues": 128,
+      "homepage": "https://skills.addy.ie",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Agent Skills\n\n**Production-grade engineering skills for AI coding agents.**\n\nSkills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development.\n\n<a href=\"https://trendshift.io/repositories/25200\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/25200\" alt=\"addyosmani%2Fagent-skills | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n\n![Addy's Agent Skills](https://addyosmani.com/assets/images/addys-agent-skills.jpg)\n\n```\n  DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP\n ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐\n │ Idea │ ───▶ │ Spec │ ───▶ │ Code │ ───▶ │ Test │ ───▶ │  QA  │ ───▶ │  Go  │\n │Refine│      │  PRD │      │ Impl │      │Debug │      │ Gate │      │ Live │\n └──────┘      └──────┘      └──────┘      └──────┘      └──────┘      └──────┘\n  /spec          /plan          /build        /test         /review       /ship\n```\n\n---\n\n## Commands\n\n9 slash commands that map to the development lifecycle. Each one activates the right skills automatically.\n\n| What you're doing | Command | Key principle |\n|-------------------|---------|---------------|\n| Define what to build | `/spec` | Spec before code |\n| Plan how to build it | `/plan` | Small, atomic tasks |\n| Build incrementally | `/build` | One slice at a time |\n| Prove it works | `/test` | Tests are proof |\n| Set the quality bar | `/constraints` | Decide it once, enforce it everywhere |\n| Review before merge | `/review` | Improve code health |\n| Audit web performance | `/webperf` | Measure before you optimize |\n| Simplify the code | `/code-simplify` | Clarity over cleverness |\n| Ship to production | `/ship` | Faster is safer |\n\nWant fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: every task is still test-driven and committed individually, and it pauses on failures or risky steps.\n\nSkills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.\n\n---\n\n## Quick Start\n\n**Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):\n\n```bash\nnpx skills add addyosmani/agent-skills            # install all 25 skills\nnpx skills add addyosmani/agent-skills --list     # browse before installing\n```\n\nOr grab individual skills:\n\n```bash\nnpx skills add addyosmani/agent-skills --skill code-review-and-quality   # five-axis review before merge\nnpx skills add addyosmani/agent-skills --skill interview-me              # requirements interrogation, one question at a time\nnpx skills add addyosmani/agent-skills --skill test-driven-development   # red-green-refactor, enforced\n```\n\n> **Installing one skill?** A per-skill `npx` install copies only\n> `skills/<name>/`, not the repo-level `references/` directory. The skill still\n> works, but paths to supplementary shared checklists are unavailable. Use a\n> whole-repo integration, clone the repository, or copy the needed checklist into\n> a `references/` directory inside the installed skill. This portability gap is\n> tracked in [#361](https://github.com/addyosmani/agent-skills/issues/361).\n\nPrefer a native integration? Pick your tool below.\n\n<details>\n<summary><b>Claude Code (recommended)</b></summary>\n\n**Marketplace install:**\n\n```\n/plugin marketplace add addyosmani/agent-skills\n/plugin install agent-skills@addy-agent-skills\n```\n\n> **SSH errors?** The marketplace clones repos via SSH. If you don't have SSH keys set up on GitHub, either [add your SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) or use the full HTTPS URL to force HTTPS cloning during the marketplace-add step:\n> ```bash\n> /plugin marketplace add https://github.com/addyosmani/agent-skills.git\n> /plugin install agent-skills@addy-agent-skills\n> ```\n>\n> If `/plugin install` still fails with `git@github.com: Permission denied (publickey)` on Windows or macOS, the recommended workaround is to configure Git once to rewrite GitHub SSH URLs to HTTPS for subprocess clones:\n> ```bash\n> git config --global url.\"https://github.com/\".insteadOf git@github.com:\n> ```\n\n**Local / development:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nclaude --plugin-dir /path/to/agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Cursor</b></summary>\n\nPut workflow skills under `.cursor/skills/` (sync from `agent-skills/skills/`) and short policies in `.cursor/rules/*.mdc` — do not paste full skills into rules. See [docs/cursor-setup.md](docs/cursor-setup.md).\n\n</details>\n\n<details>\n<summary><b>Antigravity CLI</b></summary>\n\nInstall as a native plugin for skills and subagents. In affected Antigravity CLI releases, legacy command TOMLs are reported as converted but their wrapper commands are not discoverable; invoke the underlying namespaced skills directly. See [docs/antigravity-setup.md](docs/antigravity-setup.md#lifecycle-workflows-and-command-compatibility).\n\n**Install from the repo:**\n\n```bash\nagy plugin install https://github.com/addyosmani/agent-skills.git\n```\n\n**Install from a local clone:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nagy plugin install ./agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Gemini CLI</b></summary>\n\nInstall as native skills for auto-discovery, or add to `GEMINI.md` for persistent context. See [docs/gemini-cli-setup.md](docs/gemini-cli-setup.md).\n\n**Install from the repo:**\n\n```bash\ngemini skills install https://github.com/addyosmani/agent-skills.git --path skills\n```\n\n**Install from a local clone:**\n\n```bash\ngemini skills install ./agent-skills/skills/\n```\n\n</details>\n\n<details>\n<summary><b>Windsurf</b></summary>\n\nAdd skill contents to your Windsurf rules configuration. See [docs/windsurf-setup.md](docs/windsurf-setup.md).\n\n</details>\n\n<details>\n<summary><b>OpenCode</b></summary>\n\nCopy skills to `.opencode/skills/` (or `~/.config/opencode/skills/`), add a project-local `AGENTS.md`, and use the built-in `skill` tool for agent-driven execution. Optional slash commands can be added under `.opencode/commands/`.\n\nSee [docs/opencode-setup.md](docs/opencode-setup.md).\n\n</details>\n\n<details>\n<summary><b>GitHub Copilot</b></summary>\n\nUse agent definitions from `agents/` as Copilot personas and skill content in `.github/copilot-instructions.md`. See [docs/copilot-setup.md](docs/copilot-setup.md).\n\nUsing the standalone `copilot` CLI? Install it as a plugin — see [docs/copilot-cli-setup.md](docs/copilot-cli-setup.md).\n\n</details>\n\n<details>\n  <summary><b>Kiro IDE & CLI </b></summary>\n  Skills for Kiro reside under \".kiro/skills/\" and can be stored under Project or Global level. Kiro also supports Agents.md. See Kiro docs at https://kiro.dev/docs/skills/\n</details>\n\n<details>\n<summary><b>Codex</b></summary>\n\nInstall as a native Codex plugin (Codex CLI v0.122+):\n\n```bash\ncodex plugin marketplace add addyosmani/agent-skills\ncodex plugin add agent-skills@agent-skills\n```\n\nThe first command registers the marketplace; the second installs the plugin. Codex reads the root `skills/` directory directly through `.codex-plugin/plugin.json`. Once installed, invoke skills in chat using `@` (e.g., `@spec-driven-development`). See [docs/codex-setup.md](docs/codex-setup.md) for local installation and troubleshooting.\n\n</details>\n\n<details>\n<summary><b>Command Code</b></summary>\n\nInstall natively with the built-in `cmd skills` command. Command Code clones the repo, discovers every `SKILL.md`, and installs into `.commandcode/skills/`:\n\n```bash\ncmd skills add addyosmani/agent-skills            # pick skills to install (project)\ncmd skills add addyosmani/agent-skills --global   # install for all projects (~/.commandcode/skills/)\ncmd skills add addyosmani/agent-skills -s spec-driven-development  # install a specific skill\n```\n\nInstalled skills show up in the TUI slash menu, e.g. `/spec-driven-development`. See [docs/commandcode-setup.md](docs/commandcode-setup.md).\n\n</details>\n\n<details>\n<summary><b>Other Agents</b></summary>\n\nSkills are plain Markdown - they work with any agent that accepts system prompts or instruction files. See [docs/getting-started.md](docs/getting-started.md).\n\n</details>\n\n\n\n---\n\n## Adoption\n\nAlready installed? How you roll the pack out depends on your codebase. The **[Adoption Guide](docs/adoption-guide.md)** covers two paths: the full lifecycle from day one for a greenfield project, or an incremental, verification-first rollout for an established codebase.\n\n---\n\n## All 24 Skills\n\nThe commands above are entry points. The pack includes 25 skills total — 24 lifecycle skills plus the `using-agent-skills` meta-skill. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.\n\n### Meta - Discover which skill applies\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |\n\n### Define - Clarify what to build\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes \"interview me\" / \"grill me\" |\n| [idea-refine](skills/idea-refine/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |\n| [spec-driven-development](skills/spec-driven-development/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |\n| [constraint-driven-development](skills/constraint-driven-development/SKILL.md) | Interviews you for a quality bar with sane default thresholds, writes CONSTRAINTS.md, places each check by cost, and catches agents silencing checks or skipping tests to get green | No standards are written down, or an agent is producing more than anyone reads |\n\n### Plan - Break it down\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [planning-and-task-breakdown](skills/planning-and-task-breakdown/SKILL.md) | Decompose specs into small, verifiable tasks with acceptance criteria and dependency ordering | You have a spec and need implementable units |\n\n### Build - Write the code\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [incremental-implementation](skills/incremental-implementation/SKILL.md) | Thin vertical slices - implement, test, verify, commit. Feature flags, safe defaults, rollback-friendly changes | Any change touching more than one file |\n| [test-driven-development](skills/test-driven-development/SKILL.md) | Red-Green-Refactor, test pyramid (80/15/5), test sizes, DAMP over DRY, Beyonce Rule, browser testing | Implementing logic, fixing bugs, or changing behavior |\n| [context-engineering](skills/context-engineering/SKILL.md) | Feed agents the right information at the right time - rules files, context packing, MCP integrations | Starting a session, switching tasks, or when output quality drops |\n| [source-driven-development](skills/source-driven-development/SKILL.md) | Ground every framework decision in official documentation - verify, cite s"
+    },
+    "brief": {
+      "summary": "为 AI 编码代理提供完整工程流程技能",
+      "problem": "让编码代理更稳定地执行规划、开发、测试和审查",
+      "highlights": [
+        "可以用斜杠命令推进开发全流程",
+        "可以为代理加入测试驱动和代码审查技能",
+        "可以安装到 Claude Code、Cursor、Codex 等工具"
+      ],
+      "target_users": [
+        "AI 编程用户",
+        "软件开发团队",
+        "代理工具维护者"
+      ],
+      "why_trending": "总 Star 近9.5万，今日新增307，本周首次收录",
+      "caveat": "单独安装技能可能缺少共享参考文件",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "addyosmani/agent-skills",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码Agent的技能集合",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 40,
+      "ranking_score": 62.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "earendil-works/pi",
+      "url": "https://github.com/earendil-works/pi",
+      "description": "AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI",
+      "language": "TypeScript",
+      "total_stars": 105879,
+      "forks": 13307,
+      "stars_today": 458,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 458
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2025-08-09T14:03:50Z",
+      "updated_at": "2026-09-16T04:55:03Z",
+      "pushed_at": "2026-09-15T23:30:09Z",
+      "open_issues": 235,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://pi.dev\">\n    <img alt=\"pi logo\" src=\"https://pi.dev/logo-auto.svg\" width=\"128\">\n  </a>\n</p>\n<p align=\"center\">\n  <a href=\"https://discord.com/invite/3cU7Bz4UPx\"><img alt=\"Discord\" src=\"https://img.shields.io/badge/discord-community-5865F2?style=flat-square&logo=discord&logoColor=white\" /></a>\n  <a href=\"https://www.npmjs.com/package/@earendil-works/pi-coding-agent\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/@earendil-works/pi-coding-agent?style=flat-square\" /></a>\n</p>\n\n> New issues and PRs from new contributors are auto-closed by default. Maintainers review auto-closed issues daily. See [CONTRIBUTING.md](CONTRIBUTING.md).\n\n# Pi Agent Harness\n\nThis is the home of the Pi agent harness project including our self extensible coding agent.\n\n* **[@earendil-works/pi-coding-agent](packages/coding-agent)**: Interactive coding agent CLI\n* **[@earendil-works/pi-agent-core](packages/agent)**: Agent runtime with tool calling and state management\n* **[@earendil-works/pi-ai](packages/ai)**: Unified multi-provider LLM API (OpenAI, Anthropic, Google, …)\n\nTo learn more about Pi:\n\n* [Visit pi.dev](https://pi.dev), the project website with demos\n* [Read the documentation](https://pi.dev/docs/latest), but you can also ask the agent to explain itself\n\n## All Packages\n\n| Package | Description |\n|---------|-------------|\n| **[@earendil-works/chord](packages/chord)** | Standalone application-composition runtime for services, replicated state, RPC, and plugins |\n| **[@earendil-works/pi-telemetry](packages/telemetry)** | Vendor-neutral telemetry contracts, reference adapter, conformance tests, and typed schemas |\n| **[@earendil-works/pi-ai](packages/ai)** | Unified multi-provider LLM API (OpenAI, Anthropic, Google, etc.) |\n| **[@earendil-works/pi-agent-core](packages/agent)** | Agent runtime with tool calling and state management |\n| **[@earendil-works/pi-coding-agent](packages/coding-agent)** | Interactive coding agent CLI |\n| **[@earendil-works/pi-tui](packages/tui)** | Terminal UI library with differential rendering |\n\nFor Slack/chat automation and workflows see [earendil-works/pi-chat](https://github.com/earendil-works/pi-chat).\n\n## Permissions & Containerization\n\nPi does not include a built-in permission system for restricting filesystem, process, network, or credential access. By default, it runs with the permissions of the user and process that launched it.\n\nIf you need stronger boundaries, containerize or sandbox Pi. See [packages/coding-agent/docs/containerization.md](packages/coding-agent/docs/containerization.md) for three patterns:\n\n- **Gondolin extension**: keep `pi` and provider auth on the host while routing built-in tools and `!` commands into a local Linux micro-VM.\n- **Plain Docker**: run the whole `pi` process in a local container for simple isolation.\n- **OpenShell**: run the whole `pi` process in a policy-controlled sandbox.\n\n## Contributing\n\nSee [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines and [AGENTS.md](AGENTS.md) for project-specific rules (for both humans and agents).  Longer term plans for Pi can also be found in [RFCs](https://rfc.earendil.com/keyword/pi/).\n\n## Development\n\n```bash\nnpm install --ignore-scripts  # Install all dependencies without running lifecycle scripts\nnpm run build         # Refresh model data, then build all packages\nnpm run build:offline # Rebuild using existing model data without network access\nnpm run check         # Lint, format, and type check\n./test.sh            # Run tests (skips LLM-dependent tests without API keys)\n./pi-test.sh         # Run pi from sources (can be run from any directory)\n```\n\n## Building standalone binaries from release source\n\nGitHub releases include a versioned source archive covered by the release's `SHA256SUMS` file. Extract it and run the same build script used for the official standalone binaries:\n\n```bash\nVERSION=\"<release-version>\"\ntar -xzf \"pi-${VERSION}-source.tar.gz\"\ncd \"pi-${VERSION}\"\n./scripts/build-binaries.sh --offline-model-data --platform linux-x64 --out \"$PWD/out\"\n```\n\nThe archive includes release model data and native prebuilds. `--offline-model-data` uses that model data without refreshing provider catalogs. The script installs dependencies and builds the executable with its runtime assets; pass `--skip-install` if dependencies are already provided.\n\n## Supply-chain hardening\n\nWe treat npm dependency changes as reviewed code changes.\n\n- Direct external dependencies are pinned to exact versions. Internal workspace packages remain version-ranged.\n- `.npmrc` sets `save-exact=true` and `min-release-age=2` to avoid same-day dependency releases during npm resolution.\n- `package-lock.json` is the dependency ground truth. Pre-commit blocks accidental lockfile commits unless `PI_ALLOW_LOCKFILE_CHANGE=1` is set.\n- `npm run check` verifies pinned direct deps, native TypeScript import compatibility, and the generated coding-agent shrinkwrap.\n- The published CLI package includes `packages/coding-agent/npm-shrinkwrap.json`, generated from the root lockfile, to pin transitive deps for npm users.\n- Release smoke tests use `npm run release:local` to build, pack, and create isolated npm and Bun installs outside the repo before tagging a release.\n- Local release installs, documented npm installs, and `pi update --self` use `--ignore-scripts` where supported.\n- CI installs with `npm ci --ignore-scripts`, and a scheduled GitHub workflow runs `npm audit --omit=dev` plus `npm audit signatures --omit=dev`.\n- Shrinkwrap generation has an explicit allowlist for dependency lifecycle scripts; new lifecycle-script deps fail checks until reviewed.\n\n## Share your OSS coding agent sessions\n\nIf you use Pi or other coding agents for open source work, please share your sessions.\n\nPublic OSS session data helps improve coding agents with real-world tasks, tool use, failures, and fixes instead of toy benchmarks.\n\nFor the full explanation, see [this post on X](https://x.com/badlogicgames/status/2037811643774652911).\n\nTo publish sessions, use [`badlogic/pi-share-hf`](https://github.com/badlogic/pi-share-hf). Read its README.md for setup instructions. All you need is a Hugging Face account, the Hugging Face CLI, and `pi-share-hf`.\n\nYou can also watch [this video](https://x.com/badlogicgames/status/2041151967695634619), where I show how I publish my `pi-mono` sessions.\n\nI regularly publish my own `pi-mono` work sessions here:\n\n- [badlogicgames/pi-mono on Hugging Face](https://huggingface.co/datasets/badlogicgames/pi-mono)\n\n## License\n\nMIT\n\n<p align=\"center\">\n  <a href=\"https://pi.dev\">pi.dev</a> domain graciously donated by\n  <br /><br />\n  <a href=\"https://exe.dev\"><img src=\"packages/coding-agent/docs/images/exy.png\" alt=\"Exy mascot\" width=\"48\" /><br />exe.dev</a>\n</p>\n"
+    },
+    "brief": {
+      "summary": "面向编程任务的可扩展 AI Agent 工具包",
+      "problem": "解决多模型调用、代理运行和代码操作缺少统一工具的问题",
+      "highlights": [
+        "可以用交互式 CLI 辅助编程",
+        "可以接入 OpenAI、Anthropic、Google 等模型",
+        "可以用工具调用和状态管理构建 Agent"
+      ],
+      "target_users": [
+        "开发者",
+        "AI Agent 开发者",
+        "开源项目维护者"
+      ],
+      "why_trending": "本周首次收录，今日新增458 Star，总Star超10万",
+      "caveat": "默认没有权限限制，建议在容器或沙箱中运行",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "earendil-works/pi",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "可扩展编码Agent运行时",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 20,
+      "ranking_score": 58.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 50466,
+      "forks": 4605,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 1640
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-16T04:42:20Z",
+      "pushed_at": "2026-09-16T04:47:21Z",
+      "open_issues": 154,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 20 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local fil"
+    },
+    "brief": {
+      "summary": "用HTML和动画生成确定性的MP4视频",
+      "problem": "视频制作流程繁琐，难以交给代码代理自动执行",
+      "highlights": [
+        "可以用HTML、CSS和媒体制作短视频",
+        "可以让AI代理规划、预览并渲染视频",
+        "可以通过技能制作产品介绍和动效视频"
+      ],
+      "target_users": [
+        "AI代理开发者",
+        "视频创作者",
+        "前端开发者"
+      ],
+      "why_trending": "总Star超5万，近期仍有代码更新，热度持续上升",
+      "caveat": "需要Node.js 22或更高版本",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "面向Agent的HTML视频渲染",
+      "generated_by_ai": true,
+      "velocity_score": 97,
+      "freshness_score": 40,
+      "ranking_score": 74.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "Tencent-Hunyuan/AuK",
+      "url": "https://github.com/Tencent-Hunyuan/AuK",
+      "description": "AuK: An Open-Source Foundational Model for Speech Generation and Editing",
+      "language": "Python",
+      "total_stars": 966,
+      "forks": 72,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "deep-learning",
+        "foundation-models",
+        "python",
+        "pytorch",
+        "separation",
+        "speaker-extraction",
+        "speech",
+        "speech-editing",
+        "speech-enhancement",
+        "text-to-speech",
+        "zero-shot-tts"
+      ],
+      "license_name": "",
+      "created_at": "2026-08-19T01:39:24Z",
+      "updated_at": "2026-09-16T04:37:12Z",
+      "pushed_at": "2026-09-16T04:37:08Z",
+      "open_issues": 6,
+      "homepage": "https://auk-project.github.io/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# AuK: An Open-Source Foundational Model for Speech Generation and Editing\n\n</div>\n\n<div align=\"center\">\n  <a href=https://auk-project.github.io/ target=\"_blank\"><img src=https://img.shields.io/badge/%F0%9F%8C%90%20Website-AuK-1a73e8.svg height=22px></a>\n  <a href=https://arxiv.org/abs/2609.08936 target=\"_blank\"><img src=https://img.shields.io/badge/Report-b5212f.svg?logo=arxiv height=22px></a>\n  <a href=https://huggingface.co/spaces/tencent/AuK target=\"_blank\"><img src=https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-Demo%20Space-ffbd45.svg height=22px></a>\n  <a href=https://modelscope.cn/studios/Tencent-Hunyuan/AuK target=\"_blank\"><img src=https://img.shields.io/badge/%F0%9F%A4%96%20ModelScope-Demo%20Space-624aff.svg height=22px></a>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge-link?eval=29442\" target=\"_blank\"><img src=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge.svg?eval=29442&amp;live=1\" height=\"22px\"></a>\n  <a href=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge-link?eval=29438\" target=\"_blank\"><img src=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge.svg?eval=29438&amp;live=1\" height=\"22px\"></a>\n  <a href=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge-link?eval=29440\" target=\"_blank\"><img src=\"https://paperswithcode.co/api/v1/papers/2609.08936/leaderboard-badge.svg?eval=29440&amp;live=1\" height=\"22px\"></a>\n</div>\n\n<p align=\"center\">\n💻 Try our model on the <a href=\"https://huggingface.co/spaces/tencent/AuK\">HuggingFace Space</a> · <a href=\"https://modelscope.cn/studios/Tencent-Hunyuan/AuK\">ModelScope Space</a>!\n</p>\n\n## News\n\n- **[2026/09/16]** 💻 Reduced encoder memory by **~7.5 GiB**, making local inference more accessible on **consumer GPUs**. See [PR #19](https://github.com/Tencent-Hunyuan/AuK/pull/19).\n- **[2026/09/13]** 🍎🖥️ **AuK** now officially supports **MLX inference on Apple Silicon** (available on the [feat/mlx-apple-silicon](https://github.com/Tencent-Hunyuan/AuK/tree/feat/mlx-apple-silicon) branch) and **CPU offload for CUDA inference**.\n- **[2026/09/13]** 🏆 **AuK** serves as the end-to-end baseline for the **Single Model Track** of the [ICASSP 2027 Audio Editing Challenge](https://audio-editing-challenge.github.io/).\n- **[2026/09/09]** 🙌 Thanks to **SGLang-Omni** for Day 0 support for **AuK** and **AuK-Flash**! Check out the [SGLang-Omni cookbook](https://sgl-project.github.io/sglang-omni/cookbook/auk.html) to get started.\n- **[2026/09/09]** 🎉 We open-source **AuK**. Code and model weights are publicly available. Try it on the [🤗 Demo Space](https://huggingface.co/spaces/tencent/AuK) or the [🤖 ModelScope Space](https://modelscope.cn/studios/Tencent-Hunyuan/AuK)!\n\n### Demo\n\n<details open>\n<summary>English</summary>\n\nhttps://github.com/user-attachments/assets/d07332fc-5f69-4f16-9d00-a7443cc19e6a\n\n</details>\n\n<details>\n<summary>中文</summary>\n\nhttps://github.com/user-attachments/assets/c532bbdb-e6ce-4434-a9a5-16f29a8d4135\n\n</details>\n\n## Contents\n\n- [News](#news)\n- [Introduction](#introduction)\n- [Performance](#performance)\n- [Model Architecture](#model-architecture)\n- [Supported Tasks](#supported-tasks)\n- [Quick Start](#quick-start)\n  - [Installation](#installation)\n    - [uv](#uv)\n    - [Conda](#conda)\n  - [Download the weights](#download-the-weights)\n  - [Command-line inference](#command-line-inference)\n    - [Prompt Enhancer](#prompt-enhancer)\n    - [CLI Examples](#cli-examples)\n  - [Interactive Gradio demo](#interactive-gradio-demo)\n  - [ComfyUI](#comfyui)\n  - [Python API](#python-api)\n- [Fine-tuning](#fine-tuning)\n- [Contributing](#contributing)\n- [Acknowledgements](#acknowledgements)\n- [Citation](#citation)\n- [License](#license)\n\n## Introduction\n\n**AuK** is a 1.5B foundation model for speech generation and editing. Trained on millions of hours of diverse audio data, AuK supports zero-shot and\ninstruction-based TTS, content and acoustic editing, paralinguistic editing,\nspeech enhancement, and source separation through a unified natural-language\ninstruction interface. AuK has two variants:\n\n| Model | Description | Weight |\n| --- | --- | --- |\n| AuK | Base model for high-quality generation | 🤗 [Hugging Face](https://huggingface.co/tencent/AuK) · 🤖 [ModelScope](https://modelscope.cn/models/Tencent-Hunyuan/AuK) |\n| AuK-Flash | Distilled model for fast 4-step inference | 🤗 [Hugging Face](https://huggingface.co/tencent/AuK-Flash) · 🤖 [ModelScope](https://modelscope.cn/models/Tencent-Hunyuan/AuK-Flash) |\n\n## Performance\n\n![AuK performance across speech generation, editing, enhancement, and separation benchmarks](assets/performance.png)\n\n## Model Architecture\n\n![Model Architecture](assets/arch.png)\n\n## Supported Tasks\n\nAuK exposes every task through the same natural-language instruction interface. The table below groups the supported tasks by category, with a short description and a link to its section in the [Cookbook](docs/COOKBOOK.md), where you'll find instruction templates plus CLI and Python examples.\n\n<table>\n  <thead>\n    <tr>\n      <th>Category</th>\n      <th>Task</th>\n      <th>Description</th>\n      <th>Cookbook</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td rowspan=\"2\">Speech Generation</td>\n      <td>Zero-shot TTS</td>\n      <td>Speak the target text in the voice of the reference audio.</td>\n      <td><a href=\"docs/COOKBOOK.md#11-zero-shot-tts\">Zero-shot TTS</a></td>\n    </tr>\n    <tr>\n      <td>Instruct TTS</td>\n      <td>Generate speech from a voice description alone — no reference audio.</td>\n      <td><a href=\"docs/COOKBOOK.md#12-instruct-tts\">Instruct TTS</a></td>\n    </tr>\n    <tr>\n      <td rowspan=\"2\">Content Editing</td>\n      <td>Speech Content Editing</td>\n      <td>Rewrite <em>what is said</em> — replace, insert, or remove text.</td>\n      <td><a href=\"docs/COOKBOOK.md#21-speech-content-editing\">Speech Content Editing</a></td>\n    </tr>\n    <tr>\n      <td>Lyric Editing</td>\n      <td>Rewrite lyrics in a singing recording while preserving the melody and voice.</td>\n      <td><a href=\"docs/COOKBOOK.md#22-lyric-editing\">Lyric Editing</a></td>\n    </tr>\n    <tr>\n      <td rowspan=\"3\">Acoustic Editing</td>\n      <td>Pitch Editing</td>\n      <td>Raise or lower the pitch by semitones.</td>\n      <td><a href=\"docs/COOKBOOK.md#31-pitch-editing\">Pitch Editing</a></td>\n    </tr>\n    <tr>\n      <td>Speed Editing</td>\n      <td>Adjust the speaking rate; output length scales with the speed factor.</td>\n      <td><a href=\"docs/COOKBOOK.md#32-speed-editing\">Speed Editing</a></td>\n    </tr>\n    <tr>\n      <td>Volume Editing</td>\n      <td>Raise or lower the volume by decibels.</td>\n      <td><a href=\"docs/COOKBOOK.md#33-volume-editing\">Volume Editing</a></td>\n    </tr>\n    <tr>\n      <td rowspan=\"5\">Paralinguistic Editing</td>\n      <td>Emotion</td>\n      <td>Change the emotion while preserving content and voice.</td>\n      <td><a href=\"docs/COOKBOOK.md#41-emotion\">Emotion</a></td>\n    </tr>\n    <tr>\n      <td>Timbre</td>\n      <td>Change the timbre to a description while keeping the content unchanged.</td>\n      <td><a href=\"docs/COOKBOOK.md#42-timbre\">Timbre</a></td>\n    </tr>\n    <tr>\n      <td>De-accent</td>\n      <td>Remove a regional accent while preserving the speaker's voice and content.</td>\n      <td><a href=\"docs/COOKBOOK.md#43-de-accent\">De-accent</a></td>\n    </tr>\n    <tr>\n      <td>Nonverbal Editing</td>\n      <td>Remove or add nonverbal sounds such as breaths, laughs, or coughs.</td>\n      <td><a href=\"docs/COOKBOOK.md#44-nonverbal-editing\">Nonverbal Editing</a></td>\n    </tr>\n    <tr>\n      <td>Whisper Conversion</td>\n      <td>Convert between normal speech and whisper while preserving speaker and content.</td>\n      <td><a href=\"docs/COOKBOOK.md#45-whisper-conversion\">Whisper Conversion</a></td>\n    </tr>\n    <tr>\n      <td rowspan=\"4\">Enhancement &amp; Separation</td>\n      <td>Speech Enhancement</td>\n      <td>Denoise, dereverberate, or restore natural, clear speech.</td>\n      <td><a href=\"docs/COOKBOOK.md#51-speech-enhancement\">Speech Enhancement</a></td>\n    </tr>\n    <tr>\n      <td>Speech Separation</td>\n      <td>Keep one speaker by talking order and remove the others.</td>\n      <td><a href=\"docs/COOKBOOK.md#52-speech-separation\">Speech Separation</a></td>\n    </tr>\n    <tr>\n      <td>Music Separation</td>\n      <td>Extract the singing voice from a mix, or keep all human voices.</td>\n      <td><a href=\"docs/COOKBOOK.md#53-music-separation\">Music Separation</a></td>\n    </tr>\n    <tr>\n      <td>Target Speaker Extraction</td>\n      <td>Keep the target speaker identified by <em>what they say</em>.</td>\n      <td><a href=\"docs/COOKBOOK.md#54-target-speaker-extraction\">Target Speaker Extraction</a></td>\n    </tr>\n  </tbody>\n</table>\n\n## Quick Start\n\n### Installation\n\nClone the repository, then choose either **uv** or **Conda** to create an\nisolated Python 3.10 environment.\n\n```bash\ngit clone https://github.com/Tencent-Hunyuan/AuK\ncd AuK\n```\n\n#### uv\n\n```bash\n# Create and activate a project-local environment.\nuv venv --python 3.10\nsource .venv/bin/activate\n\n# Choose one installation target:\n# Core inference and CLI only\nuv pip install -e .\n\n# Core inference + Gradio + Prompt Enhancer + ASR\nuv pip install -e \".[gradio]\"\n\n# Core inference + ComfyUI nodes + Prompt Enhancer + ASR\nuv pip install -e \".[comfyui]\"\n\n# Core inference + fine-tuning\nuv pip install -e \".[train]\"\n\n# Everything\nuv pip install -e \".[gradio,train]\"\n```\n\n#### Conda\n\n```bash\nconda create -n auk python=3.10 -y\nconda activate auk\n\n# Choose one installation target:\n# Core inference and CLI only\npip install -e .\n\n# Core inference + Gradio + Prompt Enhancer + ASR\npip install -e \".[gradio]\"\n\n# Core inference + ComfyUI nodes + Prompt Enhancer + ASR\npip install -e \".[comfyui]\"\n\n# Core inference + fine-tuning\npip install -e \".[train]\"\n\n# Everything\npip install -e \".[gradio,train]\"\n```\n\nThe default installation includes PyTorch, TorchAudio, and TorchVision. If your\nplatform requires a specific CPU or CUDA build, install a matching PyTorch stack\nfor your platform first, then install AuK with either command above.\n\n### Download the weights\n**🤗 HuggingFace**\n\n```bash\npip install -U \"huggingface_hub[cli]\"\n\n# AuK-Base\nhf download tencent/AuK --local-dir ./ckpts/AuK\n\n# AuK-Flash (4-step distilled) \nhf download tencent/AuK-Flash --local-dir ./ckpts/AuK-Flash\n\n# MLLM Encoder\nhf download Qwen/Qwen2.5-Omni-3B  --local-dir ./ckpts/Qwen2.5-Omni-3B\n```\n\n**🤖 ModelScope**\n\n```bash\npip install -U modelscope\n\n# AuK-Base\nmodelscope download --model Tencent-Hunyuan/AuK --local_dir ./ckpts/AuK\n\n# AuK-Flash (4-step distilled)\nmodelscope download --model Tencent-Hunyuan/AuK-Flash  --local_dir ./ckpts/AuK-Flash\n\n# MLLM Encoder\nmodelscope download --model Qwen/Qwen2.5-Omni-3B --local_dir ./ckpts/Qwen2.5-Omni-3B\n```\n\nThe expected directory structure is:\n\n```text\nckpts/\n├── AuK/\n├── AuK-Flash/          # optional\n└── Qwen2.5-Omni-3B/\n```\n\nThe model checkpoint contains the diffusion transformer and layer-fusion weights. The MLLM encoder and VAE are loaded from separate files at runtime, so missing `text_encoder.*` keys during checkpoint loading are expected.\n\n\n### Command-line inference\n\n> [!TIP]\n> When starting from a free-form request, we recommend using\n> [Prompt Enhancer](#prompt-enhancer). It prepares the model instruction, target\n> duration, and any required audio preprocessing, then prints a ready-to-run\n> one-line `auk-infer` command.\n\n#### Prompt Enhancer\n\nPE uses the same OpenAI-compatible LLM environment variables described above.\nLoad them from `.env`, then run:\n\n```bash\nset -a\nsource ./.env\nset +a\n\npython src/auk/infer/pe.py \\\n  --audio assets/demo-input-audio/whisper/wh-w2n-zh-input.wav \\\n  --instruction \"Convert this whisper into normal speech while preserving the speaker and content.\" \\\n  --asr auto\n```\n\nPE prints the generated command:\n\n```bash\nauk-infer \\\n  --audio assets/after_pe/wh-w2n-zh-input"
+    },
+    "brief": {
+      "summary": "AuK是支持语音生成与编辑的开源基础模型",
+      "problem": "统一处理语音生成、内容修改和音频增强任务",
+      "highlights": [
+        "可以按文字描述生成指定风格语音",
+        "可以替换语音内容并保留说话者声音",
+        "可以调整音高、语速、音量和情绪"
+      ],
+      "target_users": [
+        "配音开发者",
+        "音频研究者",
+        "内容创作者"
+      ],
+      "why_trending": "本周首次收录，已获966个Star且近期持续更新",
+      "caveat": "许可证信息未说明，使用前需确认授权范围",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Tencent-Hunyuan/AuK",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "语音生成与编辑基础模型",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 56.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "saihhold-zhao/polox_ai",
+      "url": "https://github.com/saihhold-zhao/polox_ai",
+      "description": "An open-source, agent-native platform for multimodal AI generation, built on DeepSeek Harness. Every interaction lives in agent conversations and an infinite canvas, unifying creation, generation, and editing.",
+      "language": "TypeScript",
+      "total_stars": 50,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "creative-tools",
+        "deeepseek-harness-plugins",
+        "deepseek",
+        "generative-ai",
+        "image-editing",
+        "image-generation",
+        "image-to-image-translation",
+        "image-to-video",
+        "infinite-canvas",
+        "multimodal",
+        "nuxt",
+        "openrouter",
+        "text-to-image",
+        "text-to-video",
+        "typescript",
+        "video-editing",
+        "video-generation",
+        "vue"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-09T01:16:40Z",
+      "updated_at": "2026-09-16T04:55:08Z",
+      "pushed_at": "2026-09-16T04:55:09Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"public/brand/polox-logo.png\" alt=\"PoloX AI logo\" width=\"140\" />\n</p>\n\n<h1 align=\"center\">PoloX AI — Multimodal AI Agent</h1>\n\n<p align=\"center\">\n  An open-source multimodal AI agent platform, built on DeepSeek Harness.\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\">MIT License</a>\n</p>\n\n<p align=\"center\">\n  <strong>English</strong> | <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  💬 WeChat: SaihholdZhao<br />\n  📪 Email: <a href=\"mailto:saihhold.chiu@gmail.com\">saihhold.chiu@gmail.com</a>\n</p>\n\n<p align=\"center\">\n  If you run into a problem you cannot resolve, contact me on <a href=\"https://discord.gg/FwN6s664Dh\">Discord</a>.\n</p>\n\n\n<div style=\"overflow-x: auto; white-space: nowrap; max-width: 100%; margin: 1rem 0 1.5rem; padding-bottom: 0.5rem;\">\n  <img src=\"docs/images/polox-readme-01-hero.jpeg\" alt=\"PoloX AI — The agent-native creative platform\" height=\"280\" style=\"display: inline-block; margin-right: 8px; border-radius: 8px;\" />\n  <img src=\"docs/images/polox-readme-02-unified-space.jpeg\" alt=\"PoloX AI — One unified space for agent chat and infinite canvas\" height=\"280\" style=\"display: inline-block; margin-right: 8px; border-radius: 8px;\" />\n  <img src=\"docs/images/polox-readme-03-skills.jpeg\" alt=\"PoloX AI skills — Product Hunt, App Store Graphics, Sketch to Image, Annotated Image Edit, and more\" height=\"280\" style=\"display: inline-block; margin-right: 8px; border-radius: 8px;\" />\n  <img src=\"docs/images/polox-readme-04-models.jpeg\" alt=\"PoloX AI — Latest AI image and video models in one workspace\" height=\"280\" style=\"display: inline-block; margin-right: 8px; border-radius: 8px;\" />\n  <img src=\"docs/images/polox-readme-05-utilities.jpeg\" alt=\"PoloX AI — Everyday utilities for images and videos\" height=\"280\" style=\"display: inline-block; border-radius: 8px;\" />\n</div>\n\n## Introduction\n\nThis is the open-source edition of [PoloX AI](https://polox.ai), a creative platform in the same space as [Lovart](https://lovart.ai) and [Crepal](https://crepal.ai). PoloX takes an **agent-native** approach: agent conversations and an infinite canvas bring creation, generation, and editing into one continuous workflow. Describe what you want, work with the agent, and refine the results on the canvas.\n\nPoloX runs locally with Nuxt, Vue, and SQLite. Bring your own [WaveSpeed](https://wavespeed.ai) API key; no PoloX account or subscription is required. Projects, conversations, generation history, and media are stored on your machine. AI inference uses external providers, so relevant inputs are sent to those services and their API charges apply. WaveSpeed supports checkout with credit cards, WeChat Pay, and Alipay.\n\n## Updates\n\n### September 16, 2026 — v1.2.0\n\n- Added **Annotated Image Edit** and **App Store Graphics** skills\n- Chat supports drag-and-drop attachments; clicking an attachment opens the media lightbox\n- Default image-to-image path uses **GPT Image 2.5 Sunburst**\n- Long Thinking / choice / confirmation text can collapse and expand\n- Result evaluation asks before regenerating on a suspected mismatch (no silent auto-retry)\n- Long-form video can use **reference audio** for more consistent character voices\n- README Skills section aligned with the `/` skill picker\n- **Fix:** Agent chat history no longer drops confirmation cards, ask-user prompts, or media while the agent is thinking or waiting for confirmation.\n- Miscellaneous small fixes\n\n### September 13, 2026 — v1.1.0\n\n- Added GPT Image 2.5 Flare and Sunburst models\n- Added Product Hunt and Sketch to Image skills\n- Switched the API provider to [WaveSpeed.ai](https://wavespeed.ai) for easier checkout with credit cards, WeChat Pay, and Alipay\n- Improved agent prompts and skill structure; removed redundant content\n- Fixed other known bugs\n\n## How to update\n\nTell Codex:\n\n```text\nPull the latest code from https://github.com/saihhold-zhao/polox_ai and install dependencies.\n```\n\n⚠️ If you have already modified the local code, you may hit merge conflicts. Ask Codex to help resolve them.\n\n## Install with Codex\n\nCreate a new task in Codex and send this prompt:\n\n```text\nHelp me install PoloX AI locally:\n1. Check that Node.js 22.20 or newer and pnpm are installed. Install any missing prerequisites.\n2. Install FFmpeg, including ffprobe, for video concatenation and verify that both commands are available.\n3. Clone https://github.com/saihhold-zhao/polox_ai and open the project directory.\n4. Run pnpm i to install dependencies.\n```\n\n## Run locally with Codex\n\nWhenever you want to use PoloX, open the project in Codex and send:\n\n```text\nRun pnpm dev in this project and open the local page in the browser. Keep the server running while I use the app.\n```\n\nThe default address is [http://localhost:3001](http://localhost:3001). **You do not need to run `pnpm build` for everyday local use.**\n\n## Run manually\n\nYou need **Node.js 22.20 or newer** and **pnpm**. For the first run:\n\n```sh\ngit clone https://github.com/saihhold-zhao/polox_ai.git\ncd polox_ai\npnpm i\npnpm browser:install\npnpm dev\n```\n\nFor subsequent runs, open a terminal in the project directory and run:\n\n```sh\npnpm dev\n```\n\nOpen [http://localhost:3001](http://localhost:3001) and keep the terminal running. Press `Ctrl+C` to stop the server.\n\nThe home page **Skills** catalog currently includes Product Hunt gallery, App Store Graphics, Sketch to Image, Image Text Editor, Annotated Image Edit, Image Layer Splitter, and Long-form video. Select a card or type `/` in the agent composer to pick a skill. Starting a sketch from home creates a new agent in your project. Product Hunt website inspection uses Playwright Chromium; on Linux, install its system dependencies with `pnpm browser:install:linux`.\n\n### FFmpeg for video concatenation\n\nInstall **FFmpeg and ffprobe** to stitch generated clips into longer videos. Uploads and AI generation do not require them, and `pnpm i` does not install them.\n\nmacOS with Homebrew:\n\n```sh\nbrew install ffmpeg\n```\n\nUbuntu / Debian:\n\n```sh\nsudo apt update\nsudo apt install ffmpeg\n```\n\nOn Windows, install an FFmpeg build that includes both tools and add its `bin` directory to your `PATH`. Verify the installation in the terminal used to run PoloX:\n\n```sh\nffmpeg -version\nffprobe -version\n```\n\nRestart the development server after installing these tools.\n\n## Connect WaveSpeed\n\n1. Start PoloX and click the red **API key not configured** indicator in the top-right corner.\n2. In the **Service connection** dialog, use the **Get API key** link to obtain your [WaveSpeed key](https://wavespeed.ai/accesskey).\n3. Paste the key and click **Test connection**.\n4. Once the test passes, the indicator turns green and reads **Services connected**. You are ready to create.\n\nThe agent LLM is locked to `moonshotai/kimi-k3`; you do not need to choose a model in the dialog. Connection testing sends a short model request and may incur a small API charge.\n\nThis project needs a **vision-capable** model for image understanding. Among the options tested so far, Kimi has been the most stable fit. If you know a stronger or more cost-effective alternative, please open an [Issue](https://github.com/saihhold-zhao/polox_ai/issues) with your suggestion.\n\n## Available AI models\n\nThe **Frontier AI models** section on the homepage lists the integrated models. To ask the agent to use a particular model, select it with **@** in your message.\n\n## Skills\n\nPick a skill from the home page, or type `/` in the agent composer. Skills are guided workflows the agent runs for you.\n\n| Skill | What you can do |\n| --- | --- |\n| **Product Hunt gallery** | Build a consistent Product Hunt launch gallery from a website or product brief. |\n| **App Store Graphics** | Turn app screenshots into a matched set of App Store–style frames with shared visual direction. |\n| **Sketch to Image** | Draw lines and text in chat (`/sketch-to-image`), save the sketch, optionally add references, then generate with GPT Image 2.5 Flare. Supports move/rotate, text sizing, and undo/redo. |\n| **Image Text Editor** | Edit text inside images while preserving fonts and layout. Supports batch uploads. |\n| **Annotated Image Edit** | Mark points on an image and describe each change for precise edits. |\n| **Image Layer Splitter** | Draw boxes around objects and extract them as separate transparent PNG layers. |\n| **Long-form video** | Plan a storyboard, generate multi-shot clips, and stitch them with FFmpeg. |\n\nOutside these skills, you can still ask the agent for open-ended image or video edits (including background removal) in plain language.\n\n## Long-form video generation\n\nAsk the agent to create a five-minute, ten-minute, or longer video. The workflow generates individual shots with AI video models, then stitches them into a continuous video using FFmpeg. The maintainer has tested ten five-minute videos, with results meeting expectations; this is an early workflow, and results depend on the models and creative brief.\n\nA typical workflow looks like this:\n\n1. **Plan the storyboard.** The agent works from your brief to plan scenes and shots.\n2. **Establish the characters.** The agent creates character reference sheets, such as three-view references. You can also upload your own character images and ask the agent to use them.\n3. **Create first frames.** The agent uses the character references to generate a first-frame image for each shot, helping maintain visual consistency.\n4. **Generate the clips.** Video models turn the planned shots and reference images into video segments.\n5. **Assemble the video.** Once the clips are ready, the agent stitches them together in storyboard order.\n\nAfter assembly, continue the conversation to revise shots or add scenes. You can guide the whole process through the agent.\n\nYou can attach **reference audio** so clips keep a more consistent character voice or sound direction across shots (supported on the Seedance reference-to-video path via `reference_audios`).\n\nThe [long-form video skill](server/agent/skills/long-form-video.md) defines this workflow. It is still early; suggestions and contributions are welcome through [Issues](https://github.com/saihhold-zhao/polox_ai/issues).\n\n## Troubleshooting and feedback\n\nIf installation or usage goes wrong, ask Codex to inspect the error and help you resolve it. Share the relevant error message and what you were trying to do.\n\nIf you find a bug or an improvement that would help other users, please [open an issue](https://github.com/saihhold-zhao/polox_ai/issues). Codex can help you draft and submit it. Include steps to reproduce, your operating system, and relevant logs; remove API keys and other private information before sharing.\n\n## Local data\n\nPoloX stores its SQLite database at `.data/polox.sqlite` and media under `.data/media`. Back up the entire `.data` directory with the server stopped to preserve your projects and files. API keys are stored in the local database, so keep backups private.\n\nThis edition is intended for local use. Its workspace routes do not require authentication; keep the app on your machine or a private network.\n\n## Open-source foundations\n\nThanks to the projects that make PoloX possible:\n\n| Role | Project |\n| --- | --- |\n| Application framework | [Nuxt](https://github.com/nuxt/nuxt) |\n| UI foundation | [shadcn/ui](https://github.com/shadcn-ui/ui) and its Vue ecosystem |\n| UI template | [nuxt-shadcn-dashboard](https://github.com/dianprata/nuxt-shadcn-dashboard) |\n| Agent harness | [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) |\n\n## License\n\nReleased under the [MIT License](LICENSE). Original third-party copyright and license notices are retained.\n\n## Contact\n\nIf you run into a problem you cannot resolve, contact me on [Discord](https://discord.gg/FwN6s664Dh).\n"
+    },
+    "brief": {
+      "summary": "PoloX AI 将多模态生成与编辑整合到智能代理和无限画布中",
+      "problem": "多种生成、编辑任务分散，缺少连续的创作工作流",
+      "highlights": [
+        "可以用技能生成产品发布图和应用商店素材",
+        "可以通过草图、参考图生成并编辑图片",
+        "可以生成视频并用参考音频保持角色声音一致"
+      ],
+      "target_users": [
+        "独立创作者",
+        "产品设计师",
+        "AI工具开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获50个Star",
+      "caveat": "需自备WaveSpeed API密钥并承担外部API费用",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "saihhold-zhao/polox_ai",
+      "score": 82,
+      "category": "AI 视频",
+      "reason": "Agent驱动图像视频创作编辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 56.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "leancoderkavy/premiere-pro-mcp",
+      "url": "https://github.com/leancoderkavy/premiere-pro-mcp",
+      "description": "Local-first MCP server for supported Adobe Premiere Pro workflows. Connect Claude, Codex, or Cursor through a local CEP bridge; inspect, preview, and approve edits.",
+      "language": "TypeScript",
+      "total_stars": 259,
+      "forks": 42,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adobe",
+        "adobe-premiere-pro",
+        "ai-video-editing",
+        "cep",
+        "claude",
+        "claude-desktop",
+        "codex",
+        "creative-cloud",
+        "cursor",
+        "extendscript",
+        "local-first",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "premiere-automation",
+        "premiere-pro",
+        "typescript",
+        "video-automation",
+        "video-editing",
+        "video-editing-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-27T06:31:32Z",
+      "updated_at": "2026-09-16T03:26:37Z",
+      "pushed_at": "2026-09-16T03:44:19Z",
+      "open_issues": 3,
+      "homepage": "https://premiere-pro-mcp.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# MCP for Adobe Premiere Pro\n\n<!-- mcp-name: io.github.leancoderkavy/premiere-pro -->\n\n[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fleancoderkavy%2Fpremiere-pro-mcp.svg)](https://mcptoplist.com/server/glama%2Fleancoderkavy%2Fpremiere-pro-mcp)\n\n**Give compatible AI assistants structured control over supported Adobe Premiere Pro workflows.**\n\nFree, MIT licensed, local-first, and published to npm as [`premiere-pro-mcp`](https://www.npmjs.com/package/premiere-pro-mcp) — the only package name that installs this project.\n\n[Website](https://premiere-pro-mcp.com/) · [Recorded demo](https://premiere-pro-mcp.com/demo/) · [Compare servers](https://premiere-pro-mcp.com/compare/) · [Setup guides](https://premiere-pro-mcp.com/blog/how-to-set-up-premiere-pro-mcp/) · [Search tools](https://premiere-pro-mcp.com/tools/) · [Troubleshooting](https://premiere-pro-mcp.com/docs/troubleshooting/) · [Release facts](https://premiere-pro-mcp.com/facts/)\n\nDevelopment source: 370 core tools across 53 modules, 4 resources, and 17 guided workflows. A connected UXP host adds 95 capability-gated tools.\n\nThe [completed AE render handoff](docs/after-effects-render-handoff.md) previews and confirms importing one finished render into an existing Premiere bin, with host and file rechecks and an import receipt.\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n[![Node.js](https://img.shields.io/badge/Node.js-20.19%2B-green.svg)](https://nodejs.org)\n[![MCP](https://img.shields.io/badge/MCP-2026--07--28-purple.svg)](https://modelcontextprotocol.io/specification/2026-07-28)\n[![npm](https://img.shields.io/npm/v/premiere-pro-mcp.svg)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![Fly.io](https://img.shields.io/badge/Fly.io-deployed-7C3AED.svg)](https://premiere-pro-mcp.fly.dev)\n[![Premiere Pro](https://img.shields.io/badge/Premiere%20Pro-2020--2026-9999FF.svg)](https://www.adobe.com/products/premiere.html)\n\n[![npm downloads](https://img.shields.io/npm/dm/premiere-pro-mcp.svg?label=npm%20downloads)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![GitHub stars](https://img.shields.io/github/stars/leancoderkavy/premiere-pro-mcp?style=flat&logo=github)](https://github.com/leancoderkavy/premiere-pro-mcp/stargazers)\n[![GitHub forks](https://img.shields.io/github/forks/leancoderkavy/premiere-pro-mcp?style=flat&logo=github)](https://github.com/leancoderkavy/premiere-pro-mcp/network/members)\n[![Open issues](https://img.shields.io/github/issues/leancoderkavy/premiere-pro-mcp.svg)](https://github.com/leancoderkavy/premiere-pro-mcp/issues)\n[![Last commit](https://img.shields.io/github/last-commit/leancoderkavy/premiere-pro-mcp.svg)](https://github.com/leancoderkavy/premiere-pro-mcp/commits)\n[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support%20the%20project-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/leancoderkavy)\n\n</div>\n\n---\n\n![MCP for Adobe Premiere Pro turns a structured AI request into an organized local editing workflow](landing/public/marketing/premiere-pro-mcp-campaign-hero-v1.png)\n\n<details>\n<summary><strong>Table of contents</strong></summary>\n\n- [What is this?](#what-is-this)\n  - [Latest release](#latest-release)\n  - [Current MCP protocol support](#current-mcp-protocol-support)\n- [For editors evaluating an AI workflow](#for-editors-evaluating-an-ai-workflow)\n- [Quick Start](#quick-start)\n  - [Easiest supported path: Claude Desktop](#easiest-supported-path-claude-desktop)\n  - [First proof, before the first edit](#first-proof-before-the-first-edit)\n  - [Other AI assistants](#other-ai-assistants)\n  - [Configure your MCP client](#3-configure-your-mcp-client)\n  - [Verify the bridge in Premiere Pro](#4-verify-the-bridge-in-premiere-pro)\n- [Clients and capability coverage](#codex-plugin)\n  - [Codex plugin](#codex-plugin) · [Claude](#claude) · [GPT-6 Astra tool discovery](#gpt-6-astra-and-agent-tool-discovery)\n  - [Windows and macOS capability coverage](#windows-and-macos-capability-coverage)\n  - [After Effects MOGRT studio](#after-effects-mogrt-studio)\n  - [Collaboration and AI feature boundaries](#collaboration-and-ai-feature-boundaries)\n  - [Authenticated UXP connection](#authenticated-uxp-connection)\n- [Architecture](#architecture)\n- [Tools](#tools)\n- [MCP Resources](#mcp-resources)\n- [Remote Deployment (Fly.io)](#remote-deployment-flyio)\n- [Environment Variables](#environment-variables)\n- [Project Structure](#project-structure)\n- [Technical Details](#technical-details)\n- [Frequently asked questions](#frequently-asked-questions)\n- [Troubleshooting](#troubleshooting)\n- [Star history](#star-history)\n- [Support the project](#support-the-project)\n- [Contributing](#contributing) · [License](#license)\n\n</details>\n\n## What is this?\n\nAn [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants like **Claude**, **Windsurf**, **Cursor**, **GitHub Copilot**, or any MCP-compatible client directly control Adobe Premiere Pro — importing media, editing timelines, applying effects, managing keyframes, exporting, and more.\n\n```text\n\"Add the B-roll clips to V2, apply a cross dissolve between each, color correct them to match the A-roll, and export a 1080p ProRes.\"\n```\n\n### At a glance\n\n| | |\n| --- | --- |\n| Display name | MCP for Adobe Premiere Pro |\n| npm package | `premiere-pro-mcp` |\n| Install (npm route) | `npm install -g premiere-pro-mcp` |\n| Connector install | `premiere-pro-mcp --install-cep` |\n| MCP server name | `io.github.leancoderkavy/premiere-pro` |\n| Repository | <https://github.com/leancoderkavy/premiere-pro-mcp> |\n| Website | <https://premiere-pro-mcp.com> |\n| License | MIT |\n| Hosts | Windows and macOS, Premiere Pro 2020-2026 |\n\nThis project is independent and is not affiliated with or endorsed by Adobe Inc.\nIt is also separate from other MCP servers for Premiere Pro. The only npm package\npublished from this repository is `premiere-pro-mcp`, and no other package name\ninstalls it.\n\n**Comparing similarly named packages?** Both this package and\n`adobe-premiere-pro-mcp` declare a `premiere-pro-mcp` executable. Verify the package\nand repository before configuring a client. The new\n[local configuration helper](docs/client-configuration.md) prints Claude, Cursor,\nVS Code, or Codex settings that point directly to this installation. It is a\nfeature included in v1.15.1 and later.\n\nThe current source exposes 370 core tools for supported workflow steps spanning the supported ExtendScript, QE DOM, local media and interchange analysis, revisioned project-context retrieval, safe edit-planning, project-intake preview, review handoff, connection verification, and guarded After Effects MOGRT authoring, batch, library, render-queue, inspection, and Premiere-handoff workflows. A compatible, authenticated UXP panel adds 95 documented, capability-gated tools without replacing the production CEP bridge.\n\n<a id=\"latest-release\"></a>\n\n### Latest release: 1.15.2\n\nThe published v1.15.2 npm artifact contains **369 core tools**, 367 in its default profile,\nand 460 with a compatible UXP connection. The development catalog above can include\nunreleased work. See the [versioned facts and package provenance](https://premiere-pro-mcp.com/facts/).\n\n### Try a bounded workflow\n\nChoose a setup guide: [Claude Desktop](https://premiere-pro-mcp.com/blog/claude-desktop-premiere-pro-mcp-setup/),\n[Codex](https://premiere-pro-mcp.com/blog/codex-premiere-pro-mcp-setup/),\n[other local MCP clients](https://premiere-pro-mcp.com/blog/how-to-set-up-premiere-pro-mcp/),\nor [ChatGPT connection options](https://premiere-pro-mcp.com/blog/chatgpt-premiere-pro-mcp/).\n\nDownload the [workflow starter kit](https://premiere-pro-mcp.com/workflows/) for\nsynthetic media and three evaluation recipes: a read-only sequence check, an\nexplicitly confirmed review-frame export, and a product-spot preview. No email is\nrequired. The kit has no recorded Premiere demo or verified host result. Start with\na disposable project and use [setup and recovery](https://premiere-pro-mcp.com/docs/troubleshooting/)\nif the connection is unavailable.\n\n### Release highlights\n\n- **Editorial planning:** film evidence, transcript cleanup, caption authoring, shorts and chapter planning, rhythm and speaker layouts, timeline QA, and platform delivery plans.\n- **Cross-app handoff:** capability-aware workflow routes and guarded After Effects render-to-Premiere handoff.\n- **Editing correctness:** verified readback and explicit capability or committed-but-unverified failures across transition, import, effects, source identity, and track operations.\n\n- **MOGRT studio:** an optional, separate After Effects CEP connector can\n  author approval-gated title, callout, quote, and social recipes; constrain\n  them with local brand kits; batch, publish, queue, inspect, and hand them to\n  Premiere without claiming visual or completed-render proof.\n- **Global-update handoff:** a global npm installation can show its server and\n   connector update state in the Windows CEP panel and, after explicit\n   confirmation, update only after Premiere has been quit; it never changes a\n   project, client configuration, source checkout, or custom npm prefix.\n- **Local review planning:** caption timing previews parse caller-supplied\n   SRT/VTT without writing or importing it, while revision-bound editorial\n   evidence stays in the opt-in local context index without provider calls.\n- **Repair preview:** `premiere-pro-mcp --doctor --plan-fixes` produces a\n   privacy-safe, no-write repair plan; the narrowly eligible connector repair\n   still requires an explicit confirmation that Premiere is closed.\n- **Auditable guidance:** the universal setup guide, generated public workflow\n  manifest, and proof runbook make workflow and verification boundaries\n  inspectable without claiming a licensed-host walkthrough occurred.\n- **Faster, clearer delivery:** immutable MCP registration work is reused\n  safely across stateless requests, and the landing now has a lighter,\n  mobile-first workflow view plus current machine-readable facts and crawl\n  guidance for its public pages.\n- **Explicit boundary:** the hosted endpoint remains an operator-managed MCP\n  service; unauthenticated callers are rejected and it does not pair users to\n  local Premiere processes. See the generated [supported action catalog](docs/supported-actions.md)\n  for individual capability and verification contracts.\n\nSee the [v1.15.1 release notes](https://github.com/leancoderkavy/premiere-pro-mcp/releases/tag/v1.15.1)\nfor complete details. Live installation in Premiere Pro still requires host verification.\n\n### Current MCP protocol support\n\nThe server uses the stable TypeScript SDK v2 and serves the `2026-07-28`\nstateless protocol over HTTP and stdio, while retaining legacy MCP compatibility\nthrough `2025-11-25`. Modern clients receive discovery, validated routing headers,\ncache hints, subscription-stream support, and the formal Premiere extension\ncapability. See the [complete MCP capability and boundary report](docs/mcp-2026-07-28-capabilities.md).\n\nIf an MCP client cannot complete its `server/discover` probe, set\n`PREMIERE_MCP_PROTOCOL_MODE=legacy` in that client's server environment and restart\nthe client. This uses the SDK's base stdio transport and the legacy initialization\nhandshake only; leave it unset (or `auto`) for modern MCP capabilities.\n\n---\n\n## For editors evaluating an AI workflow\n\nBefore an assistant changes an active project, use the\n[Premiere Pro AI workflow checklist](https://premiere-pro-mcp.com/blog/premiere-pro-ai-workflow-checklist/)\nto define the target and no-change boundaries, verify the local connection, request\na bounded plan, and inspect the returned result. It is a practical starting point for\nassistant editors and post leads testing a repeatable workflow on a duplicate project\nor small test sequence.\n\nFor product context, see the [Adobe Premiere AI Assistant and MCP comparison](https://premiere-pro-mcp.com/blog/ad"
+    },
+    "brief": {
+      "summary": "让 AI 助手通过 MCP 操作 Premiere Pro",
+      "problem": "减少 Premiere Pro 中重复的导入、剪辑和导出操作",
+      "highlights": [
+        "可以用自然语言整理素材和编辑时间线",
+        "可以预览并确认编辑后再执行",
+        "可以连接 Claude、Codex 或 Cursor"
+      ],
+      "target_users": [
+        "视频剪辑师",
+        "内容创作者",
+        "AI 工具开发者"
+      ],
+      "why_trending": "本周首次收录，已有259个 Star，近期仍在更新",
+      "caveat": "仅支持资料列出的 Premiere 工作流，需本地桥接",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "leancoderkavy/premiere-pro-mcp",
+      "score": 96,
+      "category": "视频剪辑",
+      "reason": "MCP自动化Premiere剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 54.0
+    }
+  }
+]
