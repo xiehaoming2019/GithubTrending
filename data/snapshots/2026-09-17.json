@@ -1,0 +1,531 @@
+[
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "jamiepine/voicebox",
+      "url": "https://github.com/jamiepine/voicebox",
+      "description": "The open-source AI voice studio. Clone, dictate, create.",
+      "language": "TypeScript",
+      "total_stars": 54504,
+      "forks": 6797,
+      "stars_today": 417,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 417
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "cuda",
+        "mlx",
+        "qwen3-tts",
+        "qwen3-tts-ui",
+        "voice-ai",
+        "voice-clone",
+        "whisper"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-25T12:27:03Z",
+      "updated_at": "2026-09-17T05:00:28Z",
+      "pushed_at": "2026-08-09T00:03:42Z",
+      "open_issues": 697,
+      "homepage": "https://voicebox.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/assets/icon-dark.webp\" alt=\"Voicebox\" width=\"120\" height=\"120\" />\n</p>\n\n<h1 align=\"center\">Voicebox</h1>\n\n<p align=\"center\">\n  <strong>The open-source AI voice studio.</strong><br/>\n  Clone any voice. Generate speech. Dictate into any app. Talk to agents in voices you own.<br/>\n  The full voice I/O stack, running locally on your machine.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/jamiepine/voicebox/releases\">\n    <img src=\"https://img.shields.io/github/downloads/jamiepine/voicebox/total?style=flat&color=blue\" alt=\"Downloads\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/releases/latest\">\n    <img src=\"https://img.shields.io/github/v/release/jamiepine/voicebox?style=flat\" alt=\"Release\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/stargazers\">\n    <img src=\"https://img.shields.io/github/stars/jamiepine/voicebox?style=flat\" alt=\"Stars\" />\n  </a>\n  <a href=\"https://github.com/jamiepine/voicebox/blob/main/LICENSE\">\n    <img src=\"https://img.shields.io/github/license/jamiepine/voicebox?style=flat\" alt=\"License\" />\n  </a>\n  <a href=\"https://deepwiki.com/jamiepine/voicebox\">\n    <img src=\"https://img.shields.io/static/v1?label=Ask&message=DeepWiki&color=5B6EF7\" alt=\"Ask DeepWiki\" />\n  </a>\n</p>\n\n<p align=\"center\">\n    <a href=\"https://trendshift.io/repositories/21213\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/21213\" alt=\"jamiepine%2Fvoicebox | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://voicebox.sh\">voicebox.sh</a> •\n  <a href=\"https://docs.voicebox.sh\">Docs</a> •\n  <a href=\"#download\">Download</a> •\n  <a href=\"#features\">Features</a> •\n  <a href=\"#api\">API</a> •\n  <a href=\"docs/content/docs/overview/troubleshooting.mdx\">Troubleshooting</a>\n</p>\n\n<br/>\n\n<p align=\"center\">\n  <a href=\"https://voicebox.sh\">\n    <img src=\"landing/public/assets/app-screenshot-1.webp\" alt=\"Voicebox App Screenshot\" width=\"800\" />\n  </a>\n</p>\n\n<p align=\"center\">\n  <em>Click the image above to watch the demo video on <a href=\"https://voicebox.sh\">voicebox.sh</a></em>\n</p>\n\n<br/>\n\n<p align=\"center\">\n  <img src=\"landing/public/assets/app-screenshot-2.webp\" alt=\"Voicebox Screenshot 2\" width=\"800\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"landing/public/assets/app-screenshot-3.webp\" alt=\"Voicebox Screenshot 3\" width=\"800\" />\n</p>\n\n<br/>\n\n## What is Voicebox?\n\nVoicebox is a **local-first AI voice studio** — a free and open-source alternative to **ElevenLabs** and **WisprFlow** in one app. Clone voices from a few seconds of audio, generate speech in 23 languages across 7 TTS engines, dictate into any text field with a global hotkey, and give any MCP-aware AI agent a voice of your choosing.\n\nThe two cloud incumbents sit on opposite halves of the voice I/O loop — ElevenLabs on output, WisprFlow on input. Voicebox does both, bridges them with a bundled local LLM for refinement and per-profile personas, and runs the whole thing on your machine.\n\n- **Complete privacy** — models, voice data, and captures never leave your machine\n- **7 TTS engines** — Qwen3-TTS, Qwen CustomVoice, LuxTTS, Chatterbox Multilingual, Chatterbox Turbo, HumeAI TADA, and Kokoro\n- **Voice cloning and preset voices** — zero-shot cloning from a reference sample, or 50+ curated preset voices via Kokoro and Qwen CustomVoice\n- **23 languages** — from English to Arabic, Japanese, Hindi, Swahili, and more\n- **Post-processing effects** — pitch shift, reverb, delay, chorus, compression, and filters\n- **Expressive speech** — paralinguistic tags like `[laugh]`, `[sigh]`, `[gasp]` via Chatterbox Turbo; natural-language delivery control via Qwen CustomVoice\n- **Unlimited length** — auto-chunking with crossfade for scripts, articles, and chapters\n- **Stories editor** — multi-track timeline for conversations, podcasts, and narratives\n- **Voice input** — global dictation hotkey with push-to-talk and toggle modes, accessibility-verified auto-paste on macOS, in-app mic on every text field, Whisper-based STT\n- **Agent voice output** — one tool call (`voicebox.speak`) and any MCP-aware agent (Claude Code, Cursor, Cline) speaks to you in a voice you've cloned\n- **Voice personalities** — attach a free-form persona to any voice profile, then Compose, Rewrite, or Respond via a bundled local LLM — agents can invoke the same modes over MCP\n- **API-first** — REST API plus a built-in MCP server for integrating voice I/O into your own apps and agents\n- **Native performance** — built with Tauri (Rust), not Electron\n- **Runs everywhere** — macOS (MLX/Metal), Windows (CUDA), Linux, AMD ROCm, Intel Arc, Docker\n\n---\n\n## Download\n\n| Platform              | Download                                               |\n| --------------------- | ------------------------------------------------------ |\n| macOS (Apple Silicon) | [Download DMG](https://voicebox.sh/download/mac-arm)   |\n| macOS (Intel)         | [Download DMG](https://voicebox.sh/download/mac-intel) |\n| Windows               | [Download MSI](https://voicebox.sh/download/windows)   |\n| Docker                | `docker compose up`                                    |\n\n> **[View all binaries →](https://github.com/jamiepine/voicebox/releases/latest)**\n\n> **Linux** — Pre-built binaries are not yet available. See [voicebox.sh/linux-install](https://voicebox.sh/linux-install) for build-from-source instructions.\n\n> **Having trouble?** See the [Troubleshooting Guide](docs/content/docs/overview/troubleshooting.mdx) for common install, generation, model-download, and GPU issues.\n\n---\n\n## Features\n\n### Multi-Engine Voice Cloning\n\nSeven TTS engines with different strengths, switchable per-generation:\n\n| Engine                      | Languages | Strengths                                                                                                                                |\n| --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------- |\n| **Qwen3-TTS** (0.6B / 1.7B) | 10        | High-quality multilingual cloning, delivery instructions (\"speak slowly\", \"whisper\")                                                     |\n| **Qwen CustomVoice**        | 10        | 9 curated preset voices with natural-language delivery control — no reference audio required                                             |\n| **LuxTTS**                  | English   | Lightweight (~1GB VRAM), 48kHz output, 150x realtime on CPU                                                                              |\n| **Chatterbox Multilingual** | 23        | Broadest language coverage — Arabic, Danish, Finnish, Greek, Hebrew, Hindi, Malay, Norwegian, Polish, Swahili, Swedish, Turkish and more |\n| **Chatterbox Turbo**        | English   | Fast 350M model with paralinguistic emotion/sound tags                                                                                   |\n| **TADA** (1B / 3B)          | 10        | HumeAI speech-language model — 700s+ coherent audio, text-acoustic dual alignment                                                        |\n| **Kokoro**                  | 8         | 50 curated preset voices, tiny 82M model, fast CPU inference                                                                             |\n\n### Emotions & Paralinguistic Tags\n\nOnly **Chatterbox Turbo** interprets paralinguistic tags like `[laugh]` and\n`[sigh]`. Qwen3-TTS, LuxTTS, Chatterbox Multilingual, and HumeAI TADA read them\nliterally as text.\n\nWith **Chatterbox Turbo** selected, type `/` in the text input to open the tag\ninserter and add expressive tags inline with speech:\n\n`[laugh]` `[chuckle]` `[gasp]` `[cough]` `[sigh]` `[groan]` `[sniff]` `[shush]` `[clear throat]`\n\n### Post-Processing Effects\n\n8 audio effects powered by Spotify's `pedalboard` library. Apply after generation, preview in real time, build reusable presets.\n\n| Effect           | Description                                   |\n| ---------------- | --------------------------------------------- |\n| Pitch Shift      | Up or down by up to 12 semitones              |\n| Reverb           | Configurable room size, damping, wet/dry mix  |\n| Delay            | Echo with adjustable time, feedback, and mix  |\n| Chorus / Flanger | Modulated delay for metallic or lush textures |\n| Compressor       | Dynamic range compression                     |\n| Gain             | Volume adjustment (-40 to +40 dB)             |\n| High-Pass Filter | Remove low frequencies                        |\n| Low-Pass Filter  | Remove high frequencies                       |\n\nShips with 4 built-in presets (Robotic, Radio, Echo Chamber, Deep Voice) and supports custom presets. Effects can be assigned per-profile as defaults.\n\n### Unlimited Generation Length\n\nText is automatically split at sentence boundaries and each chunk is generated independently, then crossfaded together. Works with all engines.\n\n- Configurable auto-chunking limit (100–5,000 chars)\n- Crossfade slider (0–200ms) for smooth transitions\n- Max text length: 50,000 characters\n- Smart splitting respects abbreviations, CJK punctuation, and `[tags]`\n\n### Generation Versions\n\nEvery generation supports multiple versions with provenance tracking:\n\n- **Original** — clean TTS output, always preserved\n- **Effects versions** — apply different effects chains from any source version\n- **Takes** — regenerate with a new seed for variation\n- **Source tracking** — each version records its lineage\n- **Favorites** — star generations for quick access\n\n### Async Generation Queue\n\nGeneration is non-blocking. Submit and immediately start typing the next one.\n\n- Serial execution queue prevents GPU contention\n- Real-time SSE status streaming\n- Failed generations can be retried\n- Stale generations from crashes auto-recover on startup\n\n### Voice Profile Management\n\n- Create profiles from audio files or record directly in-app\n- Import/export profiles to share or back up\n- Multi-sample support for higher quality cloning\n- Per-profile default effects chains\n- Organize with descriptions and language tags\n\n### Stories Editor\n\nMulti-voice timeline editor for conversations, podcasts, and narratives.\n\n- Multi-track composition with drag-and-drop\n- Inline audio trimming and splitting\n- Auto-playback with synchronized playhead\n- Version pinning per track clip\n\n### Global Dictation & Voice Input\n\nThe other half of the voice I/O loop. Hold a hotkey anywhere on your system, speak, release — on macOS the transcript pastes straight into the focused text field. Or hit the mic on any Voicebox text input and dictate directly into the app.\n\n- **Configurable chord bindings** — hold-to-speak and tap-to-toggle chords, each rebindable in the in-app chord picker. Holding push-to-talk and tapping `Space` mid-hold upgrades into a toggle session without a gap in audio\n- **Target-aware paste (macOS)** — accessibility-verified injection into the focused text field, with atomic clipboard save/restore so your clipboard isn't clobbered\n- **First-run permissions UX** — in-app gates walk you through the macOS Accessibility and Input Monitoring grants with deep-links to System Settings\n- **In-app mic button** on every Voicebox text field — generation form, profile descriptions, story titles, anywhere you'd type\n- **LLM refinement** — optional cleanup of ums, stutters, and false starts before paste\n- **On-screen pill** — floating overlay surfacing `recording`, `transcribing`, `refining`, and `speaking` states. Same pill agents use when they speak to you, so there's one mental model for both directions of the loop\n\n### Speech-to-Text\n\nVoicebox runs OpenAI Whisper for transcription — the same model that backs dictation, the Captures tab, and the `/transcribe` API. Running on MLX (Apple Silicon) or PyTorch (CUDA / ROCm / DirectML / CPU) depending on your platform.\n\n| Size                          | Notes                                            "
+    },
+    "brief": {
+      "summary": "本地运行的开源 AI 语音工作室",
+      "problem": "解决语音克隆、语音生成和跨应用听写分散的问题",
+      "highlights": [
+        "可以克隆声音并生成多语言语音",
+        "可以用快捷键向任意文本框听写",
+        "可以让 AI Agent 用指定声音回应"
+      ],
+      "target_users": [
+        "配音与内容创作者",
+        "AI Agent 开发者",
+        "重视隐私的用户"
+      ],
+      "why_trending": "总 Star 达 54504，今日新增 417，首次进入本周榜单",
+      "caveat": "Linux 暂无预构建二进制，运行可能需要 GPU",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "jamiepine/voicebox",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆与生成工作室",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 73.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 21,
+      "full_name": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "language": "JavaScript",
+      "total_stars": 260475,
+      "forks": 38986,
+      "stars_today": 1057,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1057
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "developer-tools",
+        "llm",
+        "mcp",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-18T00:51:51Z",
+      "updated_at": "2026-09-17T05:01:05Z",
+      "pushed_at": "2026-09-17T04:37:23Z",
+      "open_issues": 219,
+      "homepage": "https://ecc.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/hero.png\" alt=\"ECC - the agent harness operating system\" width=\"100%\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending\" alt=\"GitHub Trending Repository of the Day\" height=\"46\" />\n    </picture>\n  </a>\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank\" alt=\"Star History Global Rank\" height=\"46\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>Language:</strong>\n  <a href=\"README.md\">English</a> |\n  <a href=\"docs/pt-BR/README.md\">Português (Brasil)</a> |\n  <a href=\"README.zh-CN.md\">简体中文</a> |\n  <a href=\"docs/zh-TW/README.md\">繁體中文</a> |\n  <a href=\"docs/ja-JP/README.md\">日本語</a> |\n  <a href=\"docs/ko-KR/README.md\">한국어</a> |\n  <a href=\"docs/tr/README.md\">Türkçe</a> |\n  <a href=\"docs/ru/README.md\">Русский</a> |\n  <a href=\"docs/vi-VN/README.md\">Tiếng Việt</a> |\n  <a href=\"docs/th/README.md\">ไทย</a> |\n  <a href=\"docs/de-DE/README.md\">Deutsch</a> |\n  <a href=\"docs/es/README.md\">Español</a> |\n  <a href=\"docs/uk-UA/README.md\">Українська</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\"><img src=\"https://img.shields.io/discord/1496644400590094540?logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\" /></a>\n  <a href=\"https://ecc.tools\"><img src=\"https://img.shields.io/badge/Website-ecc.tools-E07856?logo=googlechrome&logoColor=white\" alt=\"Website\" /></a>\n  <a href=\"https://github.com/apps/ecc-tools\"><img src=\"https://img.shields.io/badge/GitHub%20App-ECC%20Tools-181717?logo=github&logoColor=white\" alt=\"GitHub App\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue.svg\" alt=\"MIT license\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/affaan-m/ECC/stargazers\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fstars&style=flat\" alt=\"Stars\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/network/members\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Fforks&style=flat\" alt=\"Forks\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/graphs/contributors\"><img src=\"https://img.shields.io/github/contributors/affaan-m/ECC?style=flat\" alt=\"Contributors\" /></a>\n  <a href=\"https://github.com/marketplace/ecc-tools\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github\" alt=\"GitHub App installs\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/ecc-universal\"><img src=\"https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal&logo=npm\" alt=\"ecc-universal npm downloads\" /></a>\n  <a href=\"https://www.npmjs.com/package/ecc-agentshield\"><img src=\"https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield&logo=npm\" alt=\"ecc-agentshield npm downloads\" /></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white\" alt=\"Shell\" />\n  <img src=\"https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white\" alt=\"TypeScript\" />\n  <img src=\"https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white\" alt=\"Python\" />\n  <img src=\"https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white\" alt=\"Go\" />\n  <img src=\"https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white\" alt=\"Java\" />\n  <img src=\"https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white\" alt=\"Perl\" />\n  <img src=\"https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white\" alt=\"Markdown\" />\n</p>\n\n> [!WARNING]\n> **Official sources only.** Install ECC only from verified channels: the GitHub repository [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC), the npm packages [`ecc-universal`](https://www.npmjs.com/package/ecc-universal) and [`ecc-agentshield`](https://www.npmjs.com/package/ecc-agentshield), the [GitHub App](https://github.com/apps/ecc-tools), the plugin slug `ecc@ecc`, and the project website [ecc.tools](https://ecc.tools). Third-party re-uploads and unofficial mirrors are not maintained or reviewed by the project and may contain malware.\n\n## Install with Claude Code\n\nUse the [guided setup](#install-ecc) or [native plugin commands](#claude-code-details). Both install the same `ecc@ecc` plugin. Choose one and do not stack a full manual Claude install on top.\n\n<div align=\"center\">\n\n<table aria-label=\"ECC primary links\">\n<tr>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://ecc.tools/pricing\">\n    <img src=\"assets/images/community/ecc-tools-mark.svg\" height=\"42\" alt=\"ECC Tools\" /><br />\n    <strong>ECC Pro + GitHub App</strong>\n  </a><br />\n  <sub><a href=\"https://github.com/apps/ecc-tools\">Install free</a> · <a href=\"https://ecc.tools/pricing\">Private repos from $19/seat/mo</a></sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://github.com/sponsors/affaan-m\">\n    <img src=\"assets/images/community/heart.svg\" height=\"42\" alt=\"\" /><br />\n    <strong>Sponsor ECC</strong>\n  </a><br />\n  <sub>Fund the open-source project</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\">\n    <img src=\"assets/images/community/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n</div>\n\n<sub>**OSS stays free.** This repo is MIT-licensed forever. ECC Pro is the hosted GitHub App for private repos. <a href=\"https://github.com/sponsors/affaan-m\">Sponsors</a> and <a href=\"https://ecc.tools/pricing\">Pro subscribers</a> fund the work. That's why a single maintainer ships weekly across 7 harnesses.</sub>\n\n<div align=\"center\">\n\n<sub><strong>Partners &amp; sponsors</strong></sub>\n\n<p align=\"center\" aria-label=\"Partners and sponsors\">\n  <a href=\"https://www.coderabbit.ai\" title=\"CodeRabbit\"><img src=\"assets/images/sponsors/coderabbit.png\" height=\"54\" alt=\"CodeRabbit\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.greptile.com/go/ecc\" title=\"Greptile\"><img src=\"assets/images/sponsors/greptile.png\" height=\"54\" alt=\"Greptile\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.atlascloud.ai/?utm_source=github&amp;utm_medium=link&amp;utm_campaign=ECC\" title=\"Atlas Cloud\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/atlascloud-dark.svg\" /><img src=\"assets/images/sponsors/atlascloud.svg\" width=\"154\" alt=\"Atlas Cloud\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://platform.kimi.ai?aff=ecc\" title=\"Moonshot AI - Kimi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/moonshot-dark.png\" /><img src=\"assets/images/sponsors/moonshot.png\" width=\"132\" alt=\"Moonshot AI - Kimi\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://compute.itomarkets.com\" title=\"Itô Markets\"><picture><source media=\"(prefers-color-scheme: light)\" srcset=\"assets/images/sponsors/ito-transparent-light.png\" /><img src=\"assets/images/sponsors/ito-transparent.png\" width=\"96\" alt=\"Itô Markets\" /></picture></a>\n</p>\n\n<sub><strong>Community sponsors:</strong> <a href=\"https://github.com/mikejmorgan-ai\">Mike Morgan</a> · <a href=\"https://github.com/jasonwu513\">@jasonwu513</a> · <a href=\"https://github.com/1anter\">@1anter</a> · <a href=\"https://github.com/massimotodaro\">@massimotodaro</a> · <a href=\"https://github.com/meadmccabe\">@meadmccabe</a></sub>\n\n<sub><a href=\"https://github.com/sponsors/affaan-m\"><strong>Become a Sponsor</strong></a> · <a href=\"SPONSORS.md\">Sponsor Tiers</a> · <a href=\"SPONSORING.md\">Sponsorship Program</a></sub>\n\n</div>\n\n<p align=\"center\"><a href=\"#install-ecc\">Jump to install ↓</a></p>\n\n# ECC\n\nYour agent can write code, but ECC gives it a coordinated engineering system and toolbox: it plans before it builds, verifies changes with tests, reviews its own work from a fresh context, remembers what matters, and turns repeated wins into reusable skills and workflows.\n\n```text\nplan -> test -> implement -> review -> verify -> remember -> improve\n```\n\nInstead of rebuilding that process in every prompt, you install it once and make it part of how your agent works.\n\n> Optimize the context window. Persist everything else.\n\nECC is MIT-licensed open source. It works best with Claude Code today, has a supported Codex sync path, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the [support status matrix](#platform-support) before assuming feature parity.\n\nAccess to 68 agents, 292 skills, and 94 legacy command shims, plus hooks, rules, memory, continuous learning, and AgentShield security scanning. The agents are specialized for planning, review, build repair, security, architecture, and domain work.\n\n| Included         |       Count | What it gives you                                                                    |\n| ---------------- | ----------: | ------------------------------------------------------------------------------------ |\n| Agents           |   68 agents | Planning, review, build repair, security, architecture, and domain work              |\n| Skills           |  292 skills | TDD, research, security, docs, frontend, data, ML, operations, and more              |\n| Commands         | 94 commands | Convenient entry points while ECC moves to a skills-first surface                    |\n| Hooks and memory |     Runtime | Enforcement, session summaries, continuous learning, instincts, and context controls |\n| Rules            |   Selective | Always-loaded standards you choose by language or project                            |\n| AgentShield      |    Included | Scanning for prompts, hooks, MCP config, permissions, secrets, and agent files       |\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n      <img src=\"assets/star-history-light.svg\" alt=\"ECC star history: first 40,000 stars, January 18 to February 7, 2026\" width=\"100%\" />\n    </picture>\n  </a>\n</p>\n\n## Install ECC\n\n> [!IMPORTANT]\n> ECC 2.2 includes guided package setup for Claude Code, Codex, and Kimi Code.\n> The universal package requires Node.js 18 or newer. Claude plugin setup also\n> requires Git and Claude Code 2.1 or newer on `PATH`.\n\n### Recommended: universal guided setup\n\nFor Claude Code plugin setup, updates, scope changes, and hook-profile changes:\n\n```bash\nnpx ecc-universal@2.2.1 setup\n```\n\nIf npm reports a version or cache error, confirm the registry version before retrying:\n\n```bash\nnpm view ecc-universal version\n```\n\nECC 2.2 supports the same guided setup through modern package runners:\n\n| Package runner | Guided setup command |\n|---|---|\n| npm / npx | `npx ecc-universal@2.2.1 setup` |\n| pnpm | `pnpm dlx ecc-universal@2.2.1 setup` |\n| Yarn 2+ | `yarn dlx ecc-universal@2.2.1 setup` |\n| Bun | `bunx ecc-universal@2.2.1 setup` |\n\nThe examples select [the published ECC 2.2.1 release](https://www.npmjs.com/package/ecc-universal/v/2.2.1), matching this repository's release version. A version pin is not a security audit or an integrity check. Review the release source and registry integrity before running package code; use a reviewed checkout for unreleased changes.\n\nYarn Classic 1 does not provide `yarn dlx`; use `npx`, install the package globally, or upgrade Yarn for a temporary one-shot run.\n\nThe wizard inventories the official marketplace and every native Claude install scope before making changes, then installs, updates, or safely moves `ecc@ecc` to the scope you choo"
+    },
+    "brief": {
+      "summary": "面向多种代码代理的性能优化与安全工具集",
+      "problem": "帮助代码代理更稳定地完成开发任务并积累可复用经验",
+      "highlights": [
+        "可以为 Claude Code 等代理配置技能和记忆",
+        "可以在开发前进行研究并强化安全检查",
+        "可以跨 Claude Code、Codex、Cursor 等工具使用"
+      ],
+      "target_users": [
+        "AI 编程用户",
+        "开发团队",
+        "代理工具开发者"
+      ],
+      "why_trending": "今日新增1057个 Star，总 Star 超26万且近期持续更新",
+      "caveat": "请只从项目列出的官方渠道安装",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "affaan-m/ECC",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "Agent技能与工作流增强",
+      "generated_by_ai": true,
+      "velocity_score": 92,
+      "freshness_score": 40,
+      "ranking_score": 64.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "anthropics/claude-code",
+      "url": "https://github.com/anthropics/claude-code",
+      "description": "Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.",
+      "language": "TypeScript",
+      "total_stars": 145618,
+      "forks": 23503,
+      "stars_today": 165,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 165
+    },
+    "details": {
+      "topics": [],
+      "license_name": "",
+      "created_at": "2025-02-22T17:41:21Z",
+      "updated_at": "2026-09-17T04:57:51Z",
+      "pushed_at": "2026-09-17T00:12:02Z",
+      "open_issues": 12574,
+      "homepage": "https://code.claude.com/docs/en/overview",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Claude Code\n\n![](https://img.shields.io/badge/Node.js-18%2B-brightgreen?style=flat-square) [![npm]](https://www.npmjs.com/package/@anthropic-ai/claude-code)\n\n[npm]: https://img.shields.io/npm/v/@anthropic-ai/claude-code.svg?style=flat-square\n\nClaude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github.\n\n**Learn more in the [official documentation](https://code.claude.com/docs/en/overview)**.\n\n<img src=\"./demo.gif\" />\n\n## Get started\n> [!NOTE]\n> Installation via npm is deprecated. Use one of the recommended methods below.\n\nFor more installation options, uninstall steps, and troubleshooting, see the [setup documentation](https://code.claude.com/docs/en/setup).\n\n1. Install Claude Code:\n\n    **MacOS/Linux (Recommended):**\n    ```bash\n    curl -fsSL https://claude.ai/install.sh | bash\n    ```\n\n    **Homebrew (MacOS/Linux):**\n    ```bash\n    brew install --cask claude-code\n    ```\n\n    **Windows (Recommended):**\n    ```powershell\n    irm https://claude.ai/install.ps1 | iex\n    ```\n\n    **WinGet (Windows):**\n    ```powershell\n    winget install Anthropic.ClaudeCode\n    ```\n\n    **NPM (Deprecated):**\n    ```bash\n    npm install -g @anthropic-ai/claude-code\n    ```\n\n2. Navigate to your project directory and run `claude`.\n\n## Plugins\n\nThis repository includes several Claude Code plugins that extend functionality with custom commands and agents. See the [plugins directory](./plugins/README.md) for detailed documentation on available plugins.\n\n## Reporting Bugs\n\nWe welcome your feedback. Use the `/bug` command to report issues directly within Claude Code, or file a [GitHub issue](https://github.com/anthropics/claude-code/issues).\n\n## Connect on Discord\n\nJoin the [Claude Developers Discord](https://anthropic.com/discord) to connect with other developers using Claude Code. Get help, share feedback, and discuss your projects with the community.\n\n## Data collection, usage, and retention\n\nWhen you use Claude Code, we collect feedback, which includes usage data (such as code acceptance or rejections), associated conversation data, and user feedback submitted via the `/bug` command.\n\n### How we use your data\n\nSee our [data usage policies](https://code.claude.com/docs/en/data-usage).\n\n### Privacy safeguards\n\nWe have implemented several safeguards to protect your data, including limited retention periods for sensitive information, restricted access to user session data, and clear policies against using feedback for model training.\n\nFor full details, please review our [Commercial Terms of Service](https://www.anthropic.com/legal/commercial-terms) and [Privacy Policy](https://www.anthropic.com/legal/privacy).\n"
+    },
+    "brief": {
+      "summary": "终端中的智能编程代理，协助理解代码和处理开发任务",
+      "problem": "减少日常编码、代码理解和 Git 操作的重复工作",
+      "highlights": [
+        "可以用自然语言执行日常编码任务",
+        "可以解释复杂代码并理解项目代码库",
+        "可以在终端处理 Git 工作流"
+      ],
+      "target_users": [
+        "软件开发者",
+        "开源项目维护者",
+        "终端用户"
+      ],
+      "why_trending": "今日新增165 Star，总 Star 超14.5万，本周首次收录",
+      "caveat": "会收集使用反馈和相关对话数据；npm 安装已弃用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "anthropics/claude-code",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "通用编码Agent与工作流",
+      "generated_by_ai": true,
+      "velocity_score": 67,
+      "freshness_score": 20,
+      "ranking_score": 52.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 20,
+      "full_name": "cline/cline",
+      "url": "https://github.com/cline/cline",
+      "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
+      "language": "TypeScript",
+      "total_stars": 68434,
+      "forks": 7387,
+      "stars_today": 112,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 112
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2024-07-06T07:28:10Z",
+      "updated_at": "2026-09-17T04:54:17Z",
+      "pushed_at": "2026-09-17T03:03:39Z",
+      "open_issues": 1338,
+      "homepage": "https://cline.bot",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/icons/icon.png\" width=\"80\" alt=\"Cline\" />\n</p>\n\n<h1 align=\"center\">Cline</h1>\n\n<p align=\"center\">\nThe open source coding agent in your IDE, terminal, & desktop.\n</p>\n\n<div align=\"center\">\n\n<div align=\"center\">\n<table>\n<tbody>\n<td align=\"center\">\n<a href=\"https://docs.cline.bot\" target=\"_blank\"><strong>Docs</strong></a>\n</td>\n<td align=\"center\">\n<a href=\"https://discord.gg/cline\" target=\"_blank\"><strong>Discord</strong></a>\n</td>\n<td align=\"center\">\n<a href=\"https://www.reddit.com/r/cline/\" target=\"_blank\"><strong>r/cline</strong></a>\n</td>\n<td align=\"center\">\n<a href=\"https://github.com/cline/cline/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+Requests%22+sort%3Atop\" target=\"_blank\"><strong>Feature Requests</strong></a>\n</td>\n<td align=\"center\">\n<a href=\"https://cline.bot/join-us\" target=\"_blank\"><strong>Join us!</strong></a>\n</td>\n</tbody>\n</table>\n</div>\n\n</div>\n\n<br>\n\n<div align=\"center\">\n<table>\n<tr>\n<td align=\"center\" width=\"50%\">\n\n### CLI\n\nRun Cline in your terminal.\nInteractive chat or fully headless \nfor CI/CD and scripting.\n\n```\nnpm i -g cline\n```\n\n<a href=\"./apps/cli/README.md\">Learn more</a>\n<br><br>\n\n</td>\n<td align=\"center\" width=\"50%\">\n\n### Desktop App\n\nCline as a native app for macOS and Windows.\nRun agent sessions in any folder, schedule\nroutines, and manage models, plugins, and MCP servers.\n\n<a href=\"https://cline.bot/desktop\">Download for macOS and Windows</a>\n<br><br>\n\n</td>\n</tr>\n<tr>\n<td align=\"center\" width=\"50%\">\n\n### VS Code Extension\n\nAI coding assistant in your editor.\nCreate files, run commands, browse the web,\nand use tools with human-in-the-loop approval.\n\n<a href=\"https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev\">Install from VS Marketplace</a>\n<br><br>\n\n</td>\n<td align=\"center\" width=\"50%\">\n\n### JetBrains Plugin\n\nThe same Cline experience in IntelliJ IDEA,\nPyCharm, WebStorm, GoLand, and the rest of\nthe JetBrains family.\n\n<a href=\"https://plugins.jetbrains.com/plugin/28247-cline\">Install from JetBrains Marketplace</a>\n<br><br>\n\n</td>\n</tr>\n</table>\n</div>\n\n<div align=\"center\">\n<table>\n<tr>\n<td align=\"center\">\n\n### SDK\n\nBuild your own AI agents and integrations powered by the same engine that runs the CLI, desktop app, VS Code extension, and JetBrains plugin. Custom tools, multi-agent teams, connectors, scheduled automations, and more.\n\n```\nnpm install @cline/sdk\n```\n\n<a href=\"https://docs.cline.bot/cline-sdk/overview\">Documentation</a>\n<br><br>\n\n</td>\n</tr>\n</table>\n</div>\n\n---\n\n## Index\n\n| Product | Description | Location | CHANGELOG |\n|---------|------------|--------------|--------------|\n| **SDK** | Node.js programmatic agent API and extension exports. | [`sdk/`](https://github.com/cline/cline/tree/main/sdk) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/sdk/CHANGELOG.md) |\n| **CLI** | Terminal UI, headless mode, shell commands, and CLI-specific flows. | [`apps/cli/`](https://github.com/cline/cline/tree/main/apps/cli) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/apps/cli/CHANGELOG.md) |\n| **VS Code Extension** | The Marketplace extension and extension host integration. | [`/`](https://github.com/cline/cline/tree/main) (WIP migrating) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/CHANGELOG.md) |\n| **Desktop App** | Native macOS and Windows app (Tauri shell, Bun sidecar, Next.js UI). | [`apps/examples/desktop-app/`](https://github.com/cline/cline/tree/main/apps/examples/desktop-app) | [CHANGELOG.md](https://github.com/cline/cline/blob/main/apps/examples/desktop-app/CHANGELOG.md) |\n| **JetBrains Plugin** | JetBrains-hosted client that talks to the shared agent core. | Currently we are not open-sourcing JetBrains plugins | - |\n| **Docs site** | Public documentation pages. | [`docs/`](https://docs.cline.bot/) | - |\n\n## Edits Code Across Your Project\n\nCline reads your project structure, understands the relationships between files, and makes coordinated changes across your codebase. It monitors linter and compiler errors as it works, fixing issues like missing imports, type mismatches, and syntax errors before you even see them. In VS Code and JetBrains, every edit shows up as a diff you can review, modify, or revert. All changes are tracked with checkpoints, so you can easily undo the agent's work.\n\n## Runs Bash Commands\n\nCline executes commands directly in your terminal and watches the output in real time. Install packages, run build scripts, execute tests, deploy applications, manage databases. For long-running processes like dev servers, Cline continues working in the background and reacts to new output as it appears, catching compile errors, test failures, and server crashes as they happen.\n\n## Plan and Act\n\nToggle between Plan mode and Act mode. In Plan mode, Cline explores your codebase, asks clarifying questions, and lays out a strategy. Once you're aligned, switch to Act mode and Cline executes the plan. Every file edit and terminal command requires your approval, so you stay in control of what actually changes. Or toggle auto-approve and let Cline run autonomously.\n\n## Rules and Skills\n\nDefine project-specific rules in `.clinerules` files that guide how Cline works in your codebase: coding standards, architecture conventions, deployment procedures, testing requirements. Rules are picked up automatically by the CLI, VS Code extension, and JetBrains plugin. Use skills to let the model load specific rules when needed.\n\n## Works With Every Model\n\nCline is not locked to a single AI provider. Use whichever model fits your workflow:\n\n| Provider | Models |\n|----------|--------|\n| Anthropic | Claude Opus, Sonnet, Haiku |\n| OpenAI | GPT series models |\n| Google | Gemini series models |\n| OpenRouter | 200+ models from any provider |\n| Vercel AI Gateway | Route to many providers through one gateway |\n| AWS Bedrock | Claude, Llama, and more |\n| Azure / GCP Vertex | All hosted models |\n| Cerebras / Groq | Fast inference models |\n| Ollama / LM Studio | Run local models on your machine |\n| Any OpenAI-compatible API | Self-hosted or third-party endpoints |\n\n## Extend With Plugins or MCP Servers\n\nExtend Cline's capabilities with plugins. Using the SDK, register tools and lifecycle hooks programmatically through the plugin system for logging, auditing, policy enforcement, or adding domain-specific capabilities. Simple plugin example below.\n\n```typescript\nimport { Agent, createTool } from \"@cline/sdk\"\n\nconst deployTool = createTool({\n  name: \"deploy\",\n  description: \"Deploy the current branch to staging.\",\n  inputSchema: { type: \"object\", properties: { env: { type: \"string\" } }, required: [\"env\"] },\n  execute: async (input) => {\n    // your deployment logic\n  },\n})\n\nconst agent = new Agent({ tools: [deployTool], /* ... */ })\n```\n...or use [MCPs](https://github.com/modelcontextprotocol) to connect to databases, query APIs, manage cloud infrastructure, and interact with external systems. Use [community-built servers](https://github.com/modelcontextprotocol/servers) or ask Cline to create custom tools on the fly. In the CLI, manage servers with `cline mcp`.\n\n## Multi-Agent Teams\n\nCoordinate multiple agents working together on complex tasks. A coordinator agent breaks the work into subtasks and delegates to specialist agents, each with their own tools and context. Team state persists across sessions so you can pick up where you left off.\n\n```bash\ncline --team-name auth-sprint \"Plan and implement user authentication with tests\"\n```\n\n## Scheduled Agents\n\nRun agents on cron schedules for recurring automations. Daily PR summaries, weekly dependency checks, codebase health reports. Schedules persist across restarts and run independently of any terminal session.\n\n```bash\ncline schedule create \"PR summary\" \\\n  --cron \"0 9 * * MON-FRI\" \\\n  --prompt \"List all open PRs and their review status\" \\\n  --workspace /path/to/repo\n```\n\n## Connect to Slack, Telegram, Discord, and More\n\nChat with your agent from any messaging platform: Telegram, Slack, Discord, Google Chat, WhatsApp, and Linear. Each conversation thread maps to an agent session with full context. Set up access control to restrict who can interact with your agent.\n\n```bash\n# Connect to Telegram\ncline connect telegram -k $BOT_TOKEN\n# Connect to Slack through webhook\ncline connect slack --bot-token $SLACK_TOKEN --signing-secret $SECRET --base-url $URL\n# Connect to Slack using socket mode\ncline connect slack --bot-token $SLACK_TOKEN --app-token $SLACK_APP_TOKEN\n```\n\n## Headless CLI for CI/CD\n\nRun Cline with zero interaction for scripting and automation. Pipe input, get JSON output, chain commands, integrate into CI/CD pipelines.\n\n```bash\ncline \"Run tests and fix any failures\"\ngit diff origin/main | cline \"Review these changes for issues\"\ncline --json \"List all TODO comments\" | jq -r 'select(.type == \"agent_event\" and .event.text) | .event.text'\n```\n\n## Contributing\n\nStart with the [Contributing Guide](CONTRIBUTING.md). Join our [Discord](https://discord.gg/cline) and head to the `#contributors` channel to connect with other contributors. Check our [careers page](https://cline.bot/join-us) for full-time roles.\n\n## License\n\n[Apache 2.0 © 2026 Cline Bot Inc.](./LICENSE)\n"
+    },
+    "brief": {
+      "summary": "可在编辑器、终端和桌面运行的开源编程代理",
+      "problem": "减少跨文件修改、命令执行和测试修复的重复工作",
+      "highlights": [
+        "可以在项目中协调修改多个文件",
+        "可以运行命令、构建和测试并处理报错",
+        "可以通过审批或自动模式执行开发任务"
+      ],
+      "target_users": [
+        "软件开发者",
+        "团队技术负责人",
+        "AI 工具开发者"
+      ],
+      "why_trending": "本周首次收录，今日新增112个 Star，总 Star 超6.8万",
+      "caveat": "代理可执行命令，自动模式需谨慎使用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cline/cline",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "IDE与终端编码Agent",
+      "generated_by_ai": true,
+      "velocity_score": 62,
+      "freshness_score": 20,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "0xShug0/audio.cpp",
+      "url": "https://github.com/0xShug0/audio.cpp",
+      "description": "An all-in-one, pure C++ inference engine for audio models, powered by ggml. Supports TTS, STT, VAD, voice conversion, music generation, and more, with highly optimized performance. No Python dependency.",
+      "language": "C++",
+      "total_stars": 2799,
+      "forks": 316,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 281
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "amd-gpu",
+        "apple-silicon",
+        "asr",
+        "audio",
+        "audio-analysis",
+        "cpp",
+        "edge-ai",
+        "ggml",
+        "minimax-music3",
+        "music-generation",
+        "speech-analysis",
+        "speech-to-speech",
+        "speech-to-text",
+        "text-to-speech",
+        "tts",
+        "voice-cloning",
+        "voice-conversion",
+        "vulkan",
+        "yue2"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-23T15:40:46Z",
+      "updated_at": "2026-09-17T04:16:23Z",
+      "pushed_at": "2026-09-17T04:10:07Z",
+      "open_issues": 20,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# audio.cpp\n\n[![0xShug0/audio.cpp | Trendshift](https://trendshift.io/api/badge/trendshift/repositories/64983/daily?language=C%2B%2B)](https://trendshift.io/repositories/64983?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-64983)\n\n`audio.cpp` is a high-performance C++ audio inference framework built on top of `ggml`, designed to make modern local audio models practical, portable, and fast.\n\nTired of juggling a dozen Conda environments, hundreds of Python packages, and dependency conflicts just to try a few audio models? audio.cpp gives those paths a shared native runtime instead. Runs on Windows, Linux, and macOS, with support for NVIDIA, AMD, Apple Silicon, and CPU-only machines.\n\nHuggingface main repo: https://huggingface.co/audio-cpp/audio.cpp-gguf\n\nModelScope repo mirror: https://www.modelscope.cn/models/HereIsMark/audio.cpp-gguf\n\n[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/0xShug0/audio.cpp/blob/main/Notebooks/colab_audio_cpp.ipynb)\n\n> [!IMPORTANT]\n>\n> **2026-09-15 - Release v0.8.0: YuE2 and SheetSage2:** YuE2 native song generation and SheetSage2 audio-to-ABC score transcription are now on [main](https://github.com/0xShug0/audio.cpp/tree/main) and included in release v0.8.0.\n>\n> **Arena UI:** The new Arena tab makes it easier to compare local models side by side for TTS, voice conversion, and ASR. Use one shared input, queue multiple models or GGUF variants, then review outputs with metrics!\n>\n> **CUDA performance headline:** multiple TTS paths already run **1.8x to up to 8x faster than their Python reference paths** while cutting end-to-end latency by **45%-85%**.\n>\n> **GGUF performance:** all released model families support GGUF loading, and tested Q8 packages can run up to **1.53x faster** while reducing peak VRAM by up to about **37%** on routes such as Higgs Audio, Fish Audio, and Voxtral. See the [GGUF guide](docs/gguf.md) for support status and the [Q8 performance report](docs/reports/gguf_q8_performance.md) for 16-bit vs Q8 measurements.\n>\n> **Production deployment example:** Try Fun-ASR-Nano and SenseVoice with audio.cpp on the [FunASR platform](https://www.funasr.com/en/deploy/audio-cpp.html)!\n>\n> **VibeVoice 1.5B:** generates a **93.9-minute podcast in 18.2 minutes** with **10 diffusion steps** and without quantization, running about **5.15x faster than real time**.\n>\n> **Supertonic 3:** generates about **10 hours of audio in 3 minutes** on RTX5090. Up to 200x+ real-time on CUDA, 6x+ real-time on CPU, and 47 ms TTFT in CUDA streaming mode.\n> [Demo: 10 hours of audio generated in 3 minutes](https://www.reddit.com/r/LocalLLaMA/comments/1uwpvt9/audiocpp_10_hours_of_audio_generated_in_3_minutes/).\n>\n> **Real-world ASR win:** In [TranscrIA benchmark](https://github.com/Martossien/transcria/blob/main/docs/STT_BENCHMARK_REAL_MEETINGS.md) on messy French meeting audio, audio.cpp’s Nemotron 3.5 ASR matched the same WER as other implementations while using about **1/4 of the wall time**. \n\nIt is built for real end-to-end execution rather than one-off model demos: the same runtime powers TTS, voice cloning, voice conversion, ASR, diarization, VAD, source separation, alignment, codec-style models, and higher-level workflows through a common framework surface.\n\nHighlights:\n\n- **Parity.** Strong parity tooling against Python reference paths.\n- **Performance.** Performance-focused execution, reusable sessions, and batch-style offline inference. **Optimized for CUDA**.\n- **Portability.** A portable native stack centered on `ggml`, with CUDA, HIP/ROCm, Vulkan, Metal, and CPU backends behind shared CLI and server entry points instead of Python-only deployment paths.\n- **Pipelines.** Experimental JSON pipeline support for higher-level multi-step workflows.\n- **Audio Utilities.** Built-in denoise, enhancement, resampling, and STFT/ISTFT utilities for real production-style task paths. Model-based utilities need separately downloaded weights; see [downloads and usage](docs/audio_tools.md#built-in-audio-utilities).\n\n<p><strong><span style=\"font-size:1.1em;\">The goal of the framework is to provide highly optimized, reusable building blocks for audio-related models, so new model integrations can be brought up faster, shared components can be improved once and benefit many families, and real end-to-end inference paths can stay efficient, maintainable, and portable.</span></strong></p>\n\naudio.cpp would not be moving this quickly without generous contributors bringing in real fixes, new capabilities, and careful polish. See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute and for a shout-out to the people already helping shape the project.\n\n> [!TIP]\n> **Contribution focus:** the most helpful contributions right now are improvements to the UI, API server, and pipeline/workflow subsystems. These areas make the existing model surface easier to use, serve, compose, and validate. See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.\n>\n> **New model PRs:** before starting a new model port, **please check the supported model table because several families are already implemented or under testing** and read the [New Model PRs section in CONTRIBUTING.md](CONTRIBUTING.md#new-model-prs). New ports should start under the [community models](docs/community_models/models.md) surface, where review is lighter than core models but still needs reproducible validation.\n\n## News\n\n> [!IMPORTANT]\n> **2026-09-15 - Release 0.8.0:** Since v0.7.0, audio.cpp has added YuE2 song generation, SheetSage2 audio-to-score transcription, BreezeTTS 2, CosyVoice3, Kokoro 82M, Moonshine Streaming ASR, Niagara ASR, and VibeVoice ASR Streaming 7B. The community lineup also grows with Audio8 ASR/TTS, Echo-TTS, Chatterbox Turbo, MiraTTS, Sopro, Soprano, sanoTTS, VoxCPM1, VibeASR, and Sortformer v2.1, alongside Irodori v4.1 Anime support. This brings audio.cpp to **80+ model families and 120+ model variants**!  This release also brings improvements to performance, stability, and usability across the project. Thanks to the community for the contributions, testing, and feedback!\n>\n> Optional server frontend modules add MP3 support, HTTPS listeners, and more customization for server integrations.\n>\n> Thanks to [@DrewThomasson](https://github.com/DrewThomasson) for the Colab UI, [@christopherthompson81](https://github.com/christopherthompson81) for the C ABI, and [@XsquirrelC](https://github.com/XsquirrelC)/VibeASR for the official VibeASR port, extending audio.cpp with support for BitNet models!\n>\n> **2026-08-26 - Release 0.7:** This release adds MiniMax Music 3, MagpieTTS, PersonaPlex, MeanVC2, AudioSR, ControlFoley, FireRedTTS3, FireRedAudio, MiDashengLM-Gen, F5-TTS/Habibi, Granite Speech 5.0 TurboCTC, MMS Forced Aligner, and MOSS-VoiceGenerator, plus DotTTS Edit and ACE-Step 1.5 XL variants, bringing audio.cpp to **62** total model families and **85+** model variants! It also introduces the new Arena UI for side-by-side TTS, voice-conversion, and ASR comparison with shared inputs, queued runs, metrics, and result sorting.\n>\n> **2026-08-13 - Release 0.6:** This release adds **5** new model families - DotTTS, NeuTTS, MuScriptor, MiniMax-H3, and SenseVoice - bringing audio.cpp to **49** total model families and **70+** model variants, alongside the new native WebUI from [@mirek190](https://github.com/mirek190), expanded GGUF packaging, and more shared framework runtime pieces.\n>\n> **2026-07-31 - Release 0.5:** audio.cpp reaches **44 model families** with 9 new additions, early HIP/ROCm support for AMD GPUs, Nix ROCm/HIP build support, Metal optimizations with tested VoxCPM2 runs up to **2.56x faster** on Apple Silicon, and a major GGUF-first WebUI/package-spec usability pass.\n\n**2026-06-25 to 2026-07-23 (release 0.1 to 0.4):** audio.cpp grew from the first released model wave into broad TTS, ASR, music generation, source separation, VAD, diarization, codec, and voice-conversion coverage, with VibeVoice 1.5B/7B, LoRA adapter loading, initial streaming support, and major CUDA Conv1DTransp speedups.\n\n## Supported Models\n\nTask tags: `TTS` text to speech, `Clone` voice cloning, `VC` voice conversion, `S2S` speech-to-speech, `ASR` speech recognition, `Align` forced alignment, `VAD` voice activity detection, `Diar` speaker diarization, `Codec` audio codec, `Sep` source separation, `MIDI` audio-to-symbolic MIDI/events, `Music` music/song generation, `SFX` sound effects, `Video` video generation, `Edit` audio/music editing, `Design` voice design, `Dialogue` multi-speaker dialogue TTS, `Ctrl` TTS/clone voice control such as emotion, style, instruction, caption, or non-verbal tag control.\n\nRuntime tags summarize the supported loading paths. GGUF package precision varies by model and release; check the [audio.cpp GGUF repo](https://huggingface.co/audio-cpp/audio.cpp-gguf) or [docs/gguf.md](docs/gguf.md) for the exact package list. `Bundled` means the tiny runtime asset ships under `assets/framework/models` and needs no separate model download. `Stream` means the family exposes a streaming server/session path.\n\n### Speech Generation And Conversation\n\n| Family | Task | Lang | Variants | Runtime |\n|---|---|---|---|---|\n| **breeze_tts** | TTS, Clone, Design, Ctrl | zh, en | BreezeTTS 2 instruction-conditioned TTS and prompt-audio voice cloning | GGUF BF16/Q8, Stream |\n| **chatterbox** | TTS, Clone, VC| ar, da, de, el, en, es, fi, fr, hi, it, ko, ms, nl, no, pl, pt, sv, sw, tr | Chatterbox with 0.5B backbone | GGUF 16/Q8 |\n| **confucius4_tts** | Clone | zh, en, ja, ko, de, fr, es, id, it, th, pt, ru, ms, vi | Confucius4-TTS multilingual voice cloning | GGUF F32, Stream |\n| **cosyvoice3** | TTS, Clone | zh, en, ja, ko, de, es, fr, it, ru, yue | Fun-CosyVoice3 zero-shot, cross-lingual, and instruction-conditioned TTS | GGUF F32/Q8 |\n| **dots_tts** | TTS, Clone, Edit, Ctrl | multilingual | DotTTS SOAR<br>DotTTS MeanFlow<br>DotTTS Edit | GGUF 16/Q8, Stream |\n| **dramabox** | TTS, Clone | en | DramaBox expressive TTS and voice cloning | GGUF Q8 |\n| **fish_audio** | TTS, Clone, Ctrl | auto, en, zh | Fish Audio S2 Pro | GGUF 16/Q8 |\n| **firered_audio** | ASR, TTS, Clone, Design, Ctrl | zh, en | FireRedAudio multimodal speech/audio model with ASR, understanding, cloning, design, and edit paths | GGUF original/Q8 |\n| **fireredtts3** | TTS, Clone, Design, Ctrl | 24 langs + 21 zh dialects | FireRedTTS3 Base<br>FireRedTTS3 Instruct/Voicedesign | GGUF original/Q8 |\n| **higgs_audio_tts** | TTS, Clone, Ctrl | auto | Higgs Audio v3 TTS 4B | GGUF 16/Q8 |\n| **index_tts2** | TTS, Clone, Ctrl | zh, en, ja, es, ar | IndexTTS-2<br>IndexTTS-2.5 | GGUF 16/Q8 |\n| **kokoro_tts** | TTS | en-us, en-gb, es, fr, hi, it, ja, pt-br, zh | [Kokoro 82M](tests/kokoro_tts/MULTILINGUAL_GGUF.md), 54 preset voices | Safetensors, local GGUF BF16/Q8 |\n| **irodori_tts** | TTS, Clone, Design, Ctrl | ja | Irodori-TTS-v4.1-Small<br>Irodori-TTS-v4.1-Anime<br>Irodori-TTS-500M-v3<br>Irodori-TTS-600M-v3-VoiceDesign | GGUF 16/Q8 |\n| **magpie_tts** | TTS | ar-AE, ar-MSA, ar-SA, de, en, es, fr, hi, it, ko, pt-BR, vi, zh | NVIDIA MagpieTTS Multilingual 357M (v2607) with baked speaker prompts and NanoCodec decode | GGUF original/Q8 |\n| **miotts** | TTS, Clone | en, ja | MioTTS-1.7B | GGUF 16/Q8 |\n| **moss_tts_local** | TTS, Clone, Ctrl | auto, optional language hint | MOSS-TTS-Local-Transformer-v1.5 | GGUF 16/Q8 |\n| **moss_tts_nano** | TTS, Clone | auto | MOSS-TTS-Nano-100M | GGUF 16/Q8 |\n| **neutts** | TTS, Ctrl | en | NeuTTS 2E with built-in speaker prompts and emotion control | GGUF original precision, Stream |\n| **omnivoice** | TTS, Clone, Design, Ctrl | 646+ langs | OmniVoice, Qwen3-0.6B based | GGUF 16/Q8, Stream |\n| **personaplex** | Dialogue, S2S | en | PersonaPlex 7B v1 speech-to-speech conversational model with packaged voice/persona prompts | GGUF Q4/Q8, Stream |\n| **pocket_tts** | TTS, Clone | en, de, it, pt, es | PocketTTS-100M English/German/Italian/Portuguese/Spanish | GG"
+    },
+    "brief": {
+      "summary": "跨平台的 C++ 本地音频模型推理框架",
+      "problem": "减少 Python 依赖和多套音频模型环境的部署成本",
+      "highlights": [
+        "可以本地运行语音合成、识别和变声",
+        "可以生成音乐并进行音频转谱",
+        "可以用统一运行时组合多种音频处理流程"
+      ],
+      "target_users": [
+        "音频开发者",
+        "本地 AI 用户",
+        "语音应用团队"
+      ],
+      "why_trending": "总 Star 达2799，近期持续更新并扩展模型支持",
+      "caveat": "部分模型和音频工具需要另行下载权重",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "0xShug0/audio.cpp",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "覆盖TTS与语音转换的音频引擎",
+      "generated_by_ai": true,
+      "velocity_score": 74,
+      "freshness_score": 70,
+      "ranking_score": 76.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 50798,
+      "forks": 4631,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 332
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-17T05:01:40Z",
+      "pushed_at": "2026-09-17T04:50:53Z",
+      "open_issues": 166,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 20 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 20 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 20. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local fil"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和动画生成确定性的 MP4 视频",
+      "problem": "降低程序化视频制作与批量渲染的门槛",
+      "highlights": [
+        "可以用 AI 编程代理按提示创建视频",
+        "可以把网页视觉和媒体渲染成 MP4",
+        "可以制作字幕、图表和产品介绍视频"
+      ],
+      "target_users": [
+        "视频开发者",
+        "AI 编程代理用户",
+        "内容创作者"
+      ],
+      "why_trending": "总 Star 超 5 万且连续上榜，近期仍有代码更新",
+      "caveat": "需要 Node.js 22 或更高版本",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "为Agent设计的HTML视频渲染",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 70.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "xcslys99/FootageFlow",
+      "url": "https://github.com/xcslys99/FootageFlow",
+      "description": "Open-source footage search, research workspace & link downloader for macOS and Windows.",
+      "language": "Swift",
+      "total_stars": 128,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "creator-tools",
+        "cross-platform",
+        "desktop-app",
+        "ffmpeg",
+        "footage",
+        "macos",
+        "media-downloader",
+        "open-source",
+        "research-tools",
+        "stock-footage",
+        "video-downloader",
+        "video-editing",
+        "video-search",
+        "windows",
+        "yt-dlp"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-08-10T03:03:33Z",
+      "updated_at": "2026-09-17T04:08:39Z",
+      "pushed_at": "2026-09-17T04:18:34Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# FootageFlow\n\n[English](README.md) · [简体中文](README.zh-CN.md)\n\n**Search footage. Paste links. Download media.**\n\nA free and open-source desktop app for macOS and Windows that helps video creators search footage across multiple sources and download supported media from pasted links.\n\n**Research topics, save references, and keep sources with your project.**\n\n[![Latest Release](https://img.shields.io/github/v/release/xcslys99/FootageFlow?display_name=tag&sort=semver)](https://github.com/xcslys99/FootageFlow/releases/latest)\n[![CI](https://github.com/xcslys99/FootageFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/xcslys99/FootageFlow/actions/workflows/ci.yml)\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)\n[![Platforms: macOS + Windows](https://img.shields.io/badge/platforms-macOS%20%2B%20Windows-555.svg)](#install)\n\n**macOS 15+ on Apple Silicon** · **Windows 11 x64** · **Free** · **Open Source**\n\n[Download the latest release for macOS or Windows](https://github.com/xcslys99/FootageFlow/releases/latest) · [All Releases](https://github.com/xcslys99/FootageFlow/releases)\n\n> **Using v0.6.0 or earlier?** Those builds cannot detect new releases. Install the latest version manually once from [GitHub Releases](https://github.com/xcslys99/FootageFlow/releases/latest); v0.7.0 and later can notify you about future stable releases.\n\n## Two ways to use FootageFlow\n\n### 1. Footage Search\n\nSearch footage across multiple sources from one place.\n\n- Concurrent multi-provider search with pagination and **Load More**\n- Advanced filters, including **Downloadable Only**\n- Multi-select and batch download through the Download Manager\n- Projects, favorites, search history, and download history\n- Provider-supplied source, rights, license, and attribution tracking\n\n### 2. Link Downloader\n\nPaste one or more supported public media URLs and let FootageFlow try to analyze and download the available media.\n\n- Reads metadata, available formats, and subtitles reported by the source\n- Downloads full media or a validated start/end clip\n- Offers original, audio-only, and editing-compatible MP4 output when available\n- Works with YouTube, X/Twitter, Vimeo, Dailymotion, and other public sites supported by the bundled yt-dlp integration\n- Sends every task into the same Download Manager with progress, cancellation, retry, history, and source sidecars\n- Lets you choose the destination project before downloading a pasted link\n\nAvailability depends on the source, individual media, permissions, regional restrictions, authentication requirements, and platform changes. FootageFlow is a best-effort link downloader and does not promise 100% success. See [Link Downloader details](docs/LINK_DOWNLOADER.md).\n\n## Workspace and accessibility\n\nv0.12.0 completed the keyboard and screen-reader path through the existing creator workspace:\n\n- **Command Palette** (`⌘K` / `Ctrl+K`), Global Search, and keyboard-first navigation\n- **Local Global Search** across projects, saved media, downloads, history, saved searches, and research notes\n- **Saved Searches**, dynamic **Smart Collections**, project dashboard counts, and manual **Provider Status** checks\n- Keyboard access to filters, result-card actions, Projects, Download Manager, Settings, and update dialogs\n- Clear visible focus on Windows, VoiceOver semantics on macOS, Narrator/UI Automation semantics on Windows, and ten-language accessibility text\n- The update dialog starts at **Not Now**; **View Update** opens the official GitHub Release page and never downloads or installs an update inside the app\n\nWorkspace search stays on this device and does not scan arbitrary folders or upload project content. See [Workspace](docs/WORKSPACE.md), [Keyboard shortcuts](docs/KEYBOARD_SHORTCUTS.md), and [Accessibility](docs/ACCESSIBILITY.md).\n\n## Compound-search relevance\n\nv0.12.1 keeps every required part of a compound request through query planning and local reranking. For example, **Xi'an food** requires both Xi'an and food, while **Berlin night scenes** requires both Berlin and a night-scene signal. FootageFlow never turns an unrecognized place or proper noun into a subject-only request such as `food` or `city night`.\n\nIn the default **Balanced** mode, every required concept must be supported by provider metadata before a result is shown. **Broad** remains an explicit opt-in for loosely related discovery results.\n\n## Smart Duplicate Review (v0.13.0)\n\nSearch results can be reviewed as **Grouped** or **All Results**. Local analysis compares canonical source IDs/URLs, corroborated metadata, and bounded thumbnail fingerprints; it does not download full videos for comparison. A group keeps every original card and its own actions and rights statement. **Recommended version** is a workflow convenience, not a copyright or license judgment. You can turn detection or default collapsing off in Settings. See [Duplicate Review](docs/DUPLICATE_REVIEW.md).\n\n## Creator workflow\n\nFootageFlow is designed for documentary, history, country profile, finance, science, and social-video research. A typical project can stay inside one application:\n\n1. Search a compound topic in the current interface language.\n2. Review and edit the visible queries. FootageFlow keeps the complete topic in ten languages and adds only a small number of visual expansions.\n3. Narrow results with relevance mode, source, media type, year, duration, resolution, rights, or direct-download filters.\n4. Preview useful items, copy source information, save favorites, or add them to a project.\n5. Batch-download available media through the shared queue, or open the original page for discovery-only results.\n6. Open **Project Actions** to generate credits, export a source/attribution report, audit rights, make a portable backup, scan duplicates, or create a contact sheet.\n7. Keep the generated source sidecars with the project and verify current rights before publishing.\n\n### Research & Culture workspace\n\nUse **Media / Research / All** to keep footage discovery and source research clear. Research mode searches Wikipedia, Wikidata, The Met, Art Institute of Chicago, Crossref, and GDELT through their public interfaces. Save a record to **Research Notes**, write a local note and tags, copy its metadata-based citation, refresh it later, or use **Find Related Media** to return to the existing 22-source media workflow.\n\nResearch records are references, not automatically cleared media. Crossref never downloads paper full text, GDELT is discovery-only, and Wikipedia previews require a separate Wikimedia Commons rights check before reuse. **Add as Media** appears only for Met/AIC records whose provider explicitly reports Public Domain and a public original-image URL; it is not inferred from a preview or page. See [Research & Culture workflow](docs/RESEARCH_WORKFLOW.md).\n\nIf you already know the media URL, Link Downloader uses the same project, download, history, and sidecar system. Optional foreground-only clipboard detection can recognize copied public media links locally; it is disabled by default and never uploads clipboard contents.\n\n## Screenshots\n\nThese real v0.12.1 macOS screenshots are captured in English. The Windows edition follows the same product structure with platform-native controls.\n\n![FootageFlow v0.12.1 Quick Search: a complete Xi'an food compound query, source status, filters, and fully loaded multi-source results](docs/images/quick-search-v0121.png)\n\n![FootageFlow v0.12.1 Workspace Smart Collections](docs/images/workspace-smart-collections-v0121.png)\n\n![FootageFlow v0.12.1 Workspace Provider Health across the current source catalog](docs/images/provider-health-v0121.png)\n\n![FootageFlow v0.12.1 Command Palette](docs/images/command-palette-v0121.png)\n\n## Features\n\n- Progressive search across 22 sources with Provider failure isolation\n- Visible and editable compound queries in ten interface languages, with no paid AI requirement\n- Concept-aware local reranking with Precise, Balanced, and Broad modes\n- Source, media type, year, duration, resolution, rights, and downloadability filters\n- Video/image preview, batch selection, projects, favorites, and history\n- Project attribution reports in Markdown, CSV, JSON, and HTML; concise/detailed credits; and rights audit\n- Media / Research / All search modes with Wikipedia, Wikidata, The Met, Art Institute of Chicago, Crossref, and GDELT\n- Local Research Notes, provider-fact citations, related-media queries, research-reference export, and portable project references\n- Portable `.footageflowproject` backup/import with no bundled media, credentials, or absolute paths\n- Local-first duplicate detection and numbered contact-sheet PNG export\n- Full-media and clip downloads with original, M4A, or editing-compatible MP4 output\n- `.source.txt` and `.source.json` beside every successful download\n- Copy Source and Copy Attribution using only Provider-supplied metadata\n- Optional API keys stored only in macOS Keychain or Windows Credential Manager\n- Local-only clipboard link detection, disabled by default\n- English, Simplified Chinese, Traditional Chinese, Spanish, Brazilian Portuguese, Japanese, Korean, German, French, and Russian; English is the first-launch default\n- Cross-platform update notifications that never silently install or force an update\n- No analytics, advertising, tracking, cloud account, paid LLM, OpenAI API, or Codex dependency\n\n## Install\n\n### macOS\n\n1. Download `FootageFlow-<version>-macOS-arm64.dmg` from the [latest Release](https://github.com/xcslys99/FootageFlow/releases/latest).\n2. Open the DMG and drag FootageFlow to Applications.\n3. Open FootageFlow. The current build is Ad Hoc signed and not notarized; if macOS blocks the first launch, use **System Settings → Privacy & Security → Open Anyway**.\n\n### Windows\n\n1. On Windows 11 x64, download `FootageFlow-Setup-<version>-Windows-x64.exe` from the [latest Release](https://github.com/xcslys99/FootageFlow/releases/latest).\n2. Verify it against the attached `.sha256` file, then run the installer.\n3. Open FootageFlow from the Start menu.\n\nThe Windows package is self-contained but is not code-signed yet, so SmartScreen may show an unrecognized-app warning. Only continue when the installer came from this repository's official Release and its checksum matches. A portable `FootageFlow-<version>-Windows-x64-portable.zip` is also provided.\n\nNo terminal or separate Python, Node.js, Swift, .NET, yt-dlp, or FFmpeg installation is required for normal use.\n\n## Quick start\n\n1. Open FootageFlow and search immediately; API setup is optional.\n2. Use **Advanced Filters** or **Downloadable Only** to narrow results.\n3. Select cards to download, add to a project, or copy source information.\n4. Verify rights on the original source page before publishing.\n5. National Archives, Europeana, and YouTube work better with their free official APIs. Optional keys can be added under **Settings → Sources / Providers**.\n6. To use a public media URL, open **Link Downloader**, analyze the link, choose an available format, and download it.\n\nDefault downloads go to `~/Movies/FootageFlow/<Project>/` on macOS and `%USERPROFILE%\\Videos\\FootageFlow\\<Project>\\` on Windows. The root folder is configurable.\n\n## Sources and provider modes\n\nFootageFlow supports 22 sources through a mix of official APIs, public interfaces, limited discovery, and best-effort modes. API keys are optional unless a Provider's official full-search API requires one. One Provider failure never discards successful results from other sources.\n\nThe current source set includes Pexels, Pixabay, Wikimedia Commons, Internet Archive, YouTube, NASA, ESA Multimedia, Library of Congress, National Archives, Europeana, PeerTube/SepiaSearch, Dareful, Mazwai, DVIDS, British Pathé, Videvo, Videezy, Mixkit, Coverr, Vimeo, Openverse, and Dailymotion.\n\n| Access pattern | Sources | What to expect |\n|---|---|---|\n| Public official interfaces | Wikimedia Commons, Internet Archive, NASA, Library of Co"
+    },
+    "brief": {
+      "summary": "跨平台素材搜索、研究与链接下载工作台",
+      "problem": "素材分散在多个来源，搜索、整理和下载流程割裂",
+      "highlights": [
+        "可以跨多个来源搜索并筛选可下载素材",
+        "可以把链接媒体下载到项目并保留来源信息",
+        "可以整理收藏、研究笔记和版权归属记录"
+      ],
+      "target_users": [
+        "视频创作者",
+        "纪录片研究者",
+        "剪辑师"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，覆盖搜索与下载流程",
+      "caveat": "下载成功率受来源权限、地区和平台变化影响",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "xcslys99/FootageFlow",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "素材检索与视频研究下载工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "esengine/estella",
+      "url": "https://github.com/esengine/estella",
+      "description": "A fast 2D game engine — TypeScript SDK, C++/WebAssembly core, visual editor. Ship one project to web, desktop, WeChat MiniGames, playable ads, and native Android / iOS.",
+      "language": "TypeScript",
+      "total_stars": 676,
+      "forks": 49,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "android",
+        "cpp",
+        "ecs",
+        "game-editor",
+        "game-engine",
+        "gamedev",
+        "ios",
+        "typescript",
+        "webassembly",
+        "webgl",
+        "webgpu",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-25T07:34:59Z",
+      "updated_at": "2026-09-17T04:40:20Z",
+      "pushed_at": "2026-09-17T04:40:16Z",
+      "open_issues": 0,
+      "homepage": "https://estellaengine.com/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<img src=\".github/logo.png\" width=\"120\" alt=\"Estella logo\" />\n\n# Estella\n\n**A fast 2D/3D game engine powered by WebAssembly and ECS**\n\n[![CI](https://github.com/esengine/estella/actions/workflows/build.yml/badge.svg)](https://github.com/esengine/estella/actions/workflows/build.yml)\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/esengine/estella)](https://github.com/esengine/estella/releases)\n[![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://isocpp.org/)\n[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop%20%7C%20WeChat%20%7C%20Android%20%7C%20iOS-green.svg)]()\n[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/esengine/estella)\n\n[Website](https://estellaengine.com) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Discord](https://discord.gg/sAX6PXZ9) • [QQ群: 481923584](https://qm.qq.com/q/BONa5LXQ0U)\n\n</div>\n\n---\n\n## What is Estella?\n\nEstella is a **2D/3D game engine** with a TypeScript SDK driven by a high-performance **C++** core — as WebAssembly on the web, and compiled ahead of time on native platforms. It outputs games that run in **web browsers**, on the **desktop**, in **WeChat MiniGames**, as single-file **playable ads**, and as native **Android / iOS** apps. A visual editor is available as a separate, free download.\n\n<div align=\"center\">\n  <img src=\"docs/assets/editor-hero-c5bfd2f3.png\" alt=\"An action-RPG scene open in the Estella editor\" width=\"900\" />\n  <br/>\n  <sub><i>Celestial Heights — an action-RPG scene in the Estella editor, with the full scene graph in the outliner.</i></sub>\n</div>\n\n## Why Estella?\n\n- **Fast** — C++ rendering pipeline compiled to WebAssembly, not interpreted JS\n- **Type-safe** — First-class TypeScript SDK with `defineSystem`, `defineComponent`, and `Query`\n- **Data-oriented** — Entity-Component-System architecture for scalable game logic\n- **Visual editor** — Scene hierarchy, inspector, asset browser — no JSON editing\n- **Cross-platform** — One codebase, deploy to web, desktop, WeChat MiniGames, playable ads, and native mobile\n- **Spine & Physics** — Built-in Spine animation and physics support\n- **Agent-native** — The editor is an MCP server and ships an agent of its own; both drive the same tools its UI does\n\n## Features\n\n| Feature | Description |\n|---------|-------------|\n| **Visual Editor** | Scene editor with hierarchy, inspector, and asset management |\n| **ECS Architecture** | Compose entities from reusable components, drive behavior with systems |\n| **WebGL / WebGPU Rendering** | Sprites, cameras, Spine animations, custom shaders — all in WebAssembly |\n| **TypeScript SDK** | Type-safe API: `defineSystem`, `defineComponent`, `Query`, `Commands` |\n| **Cross-Platform** | One project → web, desktop, WeChat MiniGames, playable ads, and native Android / iOS |\n| **Native mobile** | A real arm64 app rendering through an embedded Dawn (Metal / Vulkan) — not a WebView |\n| **AI agents** | The editor is an MCP server with 65 tools, and ships a built-in agent that drives the same ones |\n\n## Getting Started\n\n### Install\n\nDownload the editor for Windows or macOS from [estellaengine.com](https://estellaengine.com/#download)\n— served from the project's mirror, always the newest release. Every build is also on the\n[releases page](https://github.com/esengine/estella/releases).\n\n### Create a Project\n\n1. Open the editor and click **New Project**\n2. Enter a project name, select a location, and click **Create**\n\nThe editor creates a project with a default scene containing a Camera entity.\n\n### Write Game Logic\n\nAdd entities and components in the scene editor, then write systems in TypeScript:\n\n```typescript\nimport {\n    defineComponent, defineSystem, addSystem,\n    Query, Mut, Res, Time, LocalTransform\n} from 'esengine';\n\nconst Speed = defineComponent('Speed', { value: 200 });\n\naddSystem(defineSystem(\n    [Res(Time), Query(Mut(LocalTransform), Speed)],\n    (time, query) => {\n        for (const [entity, transform, speed] of query) {\n            transform.position.x += speed.value * time.delta;\n        }\n    }\n));\n```\n\nPress **F5** in the editor to preview.\n\n## Let an agent build it\n\nThe editor speaks the **Model Context Protocol**. Point Claude Code, Cursor, or any\nMCP-capable tool at it and the agent drives the real editor — opens projects, spawns\nentities from the same Create menu you use, edits component fields, enters play mode,\ntakes a screenshot to *see* what it built, and exports the finished game. Sixty-five\ntools, all of them the pipelines the UI itself calls.\n\nIt also ships an agent of its own, so you don't need an external tool to start: type a\nsentence in the editor and watch every tool call it makes. Both front doors drive one\ncatalog — what the built-in agent can do and what your MCP client can do are the same\nlist, and both go through the editor's command surface, so creates are undoable and you\ncan take the mouse back mid-turn.\n\n- [The Built-in Agent](https://estellaengine.com/docs/agents/built-in/) — set up a provider and start asking\n- [External Agents (MCP)](https://estellaengine.com/docs/agents/mcp/) — connect Claude Code, Cursor, or your own\n\n## Documentation\n\nFull documentation: [estellaengine.com/docs](https://estellaengine.com/docs)\n\n- [Introduction](https://estellaengine.com/docs/getting-started/introduction/)\n- [Installation](https://estellaengine.com/docs/getting-started/installation/)\n- [Quick Start](https://estellaengine.com/docs/getting-started/quick-start/)\n- [ECS Architecture](https://estellaengine.com/docs/core-concepts/ecs/)\n- [Components](https://estellaengine.com/docs/core-concepts/components/)\n- [Systems](https://estellaengine.com/docs/core-concepts/systems/)\n- [Building & Exporting](https://estellaengine.com/docs/publishing/overview/)\n- [Android & iOS](https://estellaengine.com/docs/publishing/android-ios/)\n- [AI Agents](https://estellaengine.com/docs/agents/built-in/)\n\n## Contributing\n\nWe welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.\n\n## License\n\nThis repository — the engine runtime, the SDK, the asset pipeline, the CLI, the\nproject templates and the editor plugin API — is licensed under the\n[Apache License, Version 2.0](LICENSE).\n\nYou may use, modify, and distribute it **for any purpose, including commercial use**,\nfree of charge. There is no separate commercial license and no noncommercial\nrestriction. We follow [Semantic Versioning](VERSIONING.md) and keep a\n[CHANGELOG](CHANGELOG.md).\n\nThree things to keep in mind:\n\n- **The visual editor is a separate product** and is not open source. It is free to\n  download and use, and it is built on this engine — but its source lives in a\n  private repository rather than here. Everything needed to build, run and ship a\n  game is in this repository: see [BUSINESS_MODEL.md](BUSINESS_MODEL.md) for what\n  that boundary is and what changed.\n\n- **Trademarks.** Apache-2.0 grants rights to the code, not to the \"Estella\" /\n  \"ESEngine\" names or logos. You may state that your project uses Estella, but\n  please don't imply endorsement or ship a fork under the Estella name.\n- **Spine is separate.** The bundled [Spine Runtimes](third_party) are **not** open\n  source. If you ship a game that uses Estella's Spine integration, you need a valid\n  Spine license from Esoteric Software — independent of Estella's Apache-2.0 license.\n  See [NOTICE](NOTICE).\n\nHow the project sustains itself (sponsorship, optional hosted/pro add-ons,\nmarketplace, and support) is described openly in [BUSINESS_MODEL.md](BUSINESS_MODEL.md).\n"
+    },
+    "brief": {
+      "summary": "面向多平台发布的 TypeScript 2D/3D 游戏引擎",
+      "problem": "减少游戏跨网页、桌面和移动平台发布的重复工作",
+      "highlights": [
+        "可以用 TypeScript 编写游戏逻辑",
+        "可以用编辑器搭建场景并预览",
+        "可以发布到网页、微信和移动端"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "TypeScript 开发者",
+        "小型游戏团队"
+      ],
+      "why_trending": "本周首次收录，已有676个 Star，近期仍在更新",
+      "caveat": "可视化编辑器不开源；Spine 需另行授权",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "esengine/estella",
+      "score": 95,
+      "category": "游戏开发",
+      "reason": "跨平台2D游戏引擎与编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.5
+    }
+  }
+]
