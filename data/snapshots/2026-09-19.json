@@ -1,0 +1,537 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 14080,
+      "forks": 762,
+      "stars_today": 3006,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3056
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-09-19T04:44:57Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 36,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "让编程代理按流程执行多阶段安全审计",
+      "problem": "减少安全审计中的漏查、误报和证据不足",
+      "highlights": [
+        "可以扫描代码并建立覆盖记录",
+        "可以交叉验证漏洞候选并生成结构化结果",
+        "可以输出可追溯的审计报告"
+      ],
+      "target_users": [
+        "安全研究员",
+        "开发团队",
+        "代码审计人员"
+      ],
+      "why_trending": "今日新增3006个 Star，且连续上榜",
+      "caveat": "需要支持并行代理的编程代理和隔离沙箱",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码代理的安全审计技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "alibaba/open-code-review",
+      "url": "https://github.com/alibaba/open-code-review",
+      "description": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
+      "language": "Go",
+      "total_stars": 36832,
+      "forks": 2623,
+      "stars_today": 2704,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2704
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agent-skills",
+        "code-review",
+        "code-review-assistant",
+        "harness",
+        "repository-level-context"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-18T02:16:36Z",
+      "updated_at": "2026-09-19T04:44:59Z",
+      "pushed_at": "2026-09-19T03:55:51Z",
+      "open_issues": 217,
+      "homepage": "https://open-codereview.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <a href=\"https://open-codereview.ai\">\n    <img src=\"imgs/logo-core.svg\" alt=\"OpenCodeReview logo\" width=\"180\" />\n  </a>\n  <h1>OpenCodeReview</h1>\n</div>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/41087?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-41087\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <img src=\"https://trendshift.io/api/badge/repositories/41087\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n</p>\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/41087\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/trendshift/repositories/41087/weekly?language=Go\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n  <a href=\"https://trendshift.io/repositories/41087\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/trendshift/repositories/41087/monthly?language=Go\" alt=\"alibaba%2Fopen-code-review | Trendshift\" style=\"width: 280px; height: 60px;\" width=\"280\" height=\"60\" />\n  </a>\n</p>\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/@alibaba-group/open-code-review\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/@alibaba-group/open-code-review?style=flat-square\" /></a>\n  <a href=\"https://github.com/alibaba/open-code-review/actions/workflows/release.yml\"><img alt=\"Build status\" src=\"https://img.shields.io/github/actions/workflow/status/alibaba/open-code-review/release.yml?style=flat-square\" /></a>\n  <a href=\"https://github.com/alibaba/open-code-review/blob/main/LICENSE\"><img alt=\"License\" src=\"https://img.shields.io/github/license/alibaba/open-code-review?style=flat-square\" /></a>\n  <a href=\"https://deepwiki.com/alibaba/open-code-review\"><img alt=\"Ask DeepWiki\" src=\"https://deepwiki.com/badge.svg\" /></a>\n  <a href=\"https://www.bestpractices.dev/projects/13328\"><img alt=\"OpenSSF Best Practices\" src=\"https://img.shields.io/badge/OpenSSF-Gold-D4AF37?style=flat-square\" /></a>\n</p>\n<p align=\"center\">\n  <a href=\"#supported-platforms\"><img alt=\"Windows\" src=\"https://img.shields.io/badge/Windows-supported-blue.svg\" /></a>\n  <a href=\"#supported-platforms\"><img alt=\"macOS\" src=\"https://img.shields.io/badge/macOS-supported-blue.svg\" /></a>\n  <a href=\"#supported-platforms\"><img alt=\"Linux\" src=\"https://img.shields.io/badge/Linux-supported-blue.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Claude Code\" src=\"https://img.shields.io/badge/Claude_Code-supported-blueviolet.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Codex\" src=\"https://img.shields.io/badge/Codex-supported-blueviolet.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Cursor\" src=\"https://img.shields.io/badge/Cursor-supported-blueviolet.svg\" /></a>\n  <a href=\"#supported-agents\"><img alt=\"Kimi Code\" src=\"https://img.shields.io/badge/Kimi_Code-supported-blueviolet.svg\" /></a>\n</p>\n<p align=\"center\">\n  English | <a href=\"docs/i18n/README.zh-CN.md\">简体中文</a> | <a href=\"docs/i18n/README.ja-JP.md\">日本語</a> | <a href=\"docs/i18n/README.ko-KR.md\">한국어</a> | <a href=\"docs/i18n/README.ru-RU.md\">Русский</a>\n</p>\n\n---\n\n## What is Open Code Review?\n\nOpen Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply configure a model endpoint to get started.\n\nIt reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — not just surface-level diff feedback. Beyond diff review, `ocr scan` reviews entire files for auditing unfamiliar codebases or directories that have no meaningful diff.\n\nVisit the [official website](https://open-codereview.ai) for more details.\n\n![Highlights](imgs/highlights-en.png)\n\n## Benchmark\n\n> Compared to general-purpose agents (Claude Code), Open Code Review achieves significantly higher **Precision** and **F1** with the same underlying model, while consuming only **~1/9 of the tokens** and completing reviews faster. Note that its Recall is lower than general-purpose agents — a deliberate trade-off favoring precision over noise.\n\nA real-world code review benchmark built from **50** popular open-source repositories, **200** real Pull Requests, and **10** programming languages — cross-validated by 80+ senior engineers (**1,505** annotated ground-truth issues).\n\n<a href=\"https://huggingface.co/datasets/Alibaba-Aone/aacr-bench\"><img src=\"https://huggingface.co/favicon.ico\" alt=\"Hugging Face\" width=\"20\" height=\"20\" /> Explore the AACR-Bench dataset on Hugging Face</a>.\n\n| Metric | What it measures | Why it matters |\n|--------|-----------------|----------------|\n| **F1** | Harmonic mean of precision and recall | Best single number for overall review quality |\n| **Precision** | Proportion of reported issues that are real defects | Higher = fewer false alarms to triage |\n| **Recall** | Proportion of real defects that are found | Higher = fewer issues slip through review |\n| **Avg Time** | Wall-clock time per review | Matters for CI pipeline latency |\n| **Avg Token** | Total tokens consumed per review | Directly impacts API cost |\n\n![Benchmark](imgs/benchmark-en.png)\n\n## Why Open Code Review?\n\n### The Problem with General-Purpose Agents\n\nIf you've used general-purpose agents like Claude Code with Skills for code review, you've likely encountered these pain points:\n\n- **Incomplete coverage** — On larger changesets, agents tend to \"cut corners,\" selectively reviewing only some files and missing others.\n- **Position drift** — Reported issues frequently don't match the actual code location, with line numbers or file references drifting off target.\n- **Unstable quality** — Natural-language-driven Skills are hard to debug, and review quality fluctuates significantly with minor prompt variations.\n\nThe root cause: a purely language-driven architecture lacks hard constraints on the review process.\n\n### Core Design: Deterministic Engineering × Agent Hybrid\n\nOpen Code Review's core philosophy is to combine deterministic engineering with an agent, each handling what it does best.\n\n**Deterministic Engineering — Hard Constraints**\n\nFor review steps that *must not go wrong*, engineering logic — not the language model — guarantees correctness:\n\n- **Precise file selection** — Determines exactly which files need review and which should be filtered, ensuring no important change is missed.\n- **Smart file bundling** — Groups related files into a single review unit (e.g., `message_en.properties` and `message_zh.properties` are bundled together). Each bundle runs as a sub-agent with isolated context — a divide-and-conquer strategy that stays stable on very large changesets and naturally supports concurrent review.\n- **Fine-grained rule matching** — Matches review rules to each file's characteristics, keeping the model's attention sharply focused and eliminating information noise at the source. Compared to purely language-driven rule guidance, template-engine-based rule matching is more stable and predictable.\n- **External positioning and reflection modules** — Independent comment-positioning and comment-reflection modules systematically improve both the location accuracy and content accuracy of AI feedback.\n\n**Agent — Dynamic Decision-Making**\n\nThe agent's strengths are concentrated where they matter most — dynamic decisions and dynamic context retrieval:\n\n- **Scenario-tuned prompts** — Prompt templates deeply optimized for code review, improving effectiveness while reducing token consumption.\n- **Scenario-tuned toolset** — Distilled from deep analysis of tool-call traces in large-scale production data — including call frequency distributions, per-tool repetition rates, and the impact of new tools on the overall call chain — resulting in a purpose-built toolset that is more stable and predictable for code review than a generic agent toolkit.\n\n## How to Use\n\n### Prerequisites\n\n- **Git >= 2.41** — Open Code Review relies on Git for diff generation, code search, and repository operations.\n\n### CLI\n\n#### Install\n\n```bash\nnpm install -g @alibaba-group/open-code-review\n```\n\nAfter installation, the `ocr` command is available globally.\n\nFor other installation methods (install script, GitHub Release binary, from source), see [Installation](https://open-codereview.ai/docs/installation).\n\n#### Quick Start\n\n**1. Configure LLM**\n\nYou must configure an LLM before reviewing code, unless you use [Delegation Mode](https://open-codereview.ai/docs/delegate).\n\n```bash\nocr config provider          # Select a built-in provider or add a custom one\nocr config model             # Pick a model for the active provider\n```\n\n![Provider setup](imgs/providers.jpg)\n\nThe interactive UI guides you through provider selection, API key entry, and model configuration, then automatically tests connectivity.\n\nFor CLI setup, environment variables, custom providers, and other advanced configuration, see [Configuration](https://open-codereview.ai/docs/configuration).\n\n**2. Review**\n\n```bash\ncd your-project\n\n# Workspace mode — review all staged, unstaged, and untracked changes\nocr review\n\n# Branch range — reviews feature-branch's changes since it diverged from main (merge-base mode)\nocr review --from main --to feature-branch\n\n# Single commit\nocr review --commit abc123\n\n# Resume an interrupted range or commit review\nocr session list\nocr review --from main --to feature-branch --resume <session-id>\n\n# Full-file scan — review whole files instead of a diff (no git history needed)\nocr scan                          # scan the entire repository\nocr scan --path internal/agent    # scan a directory or specific files\nocr scan --resume <session-id>   # resume an interrupted full-file scan\n\n# Save results to a file (recommended for AI host agents)\nocr review --format json --output result.json\n\n# Delegation mode — let your AI coding agent perform the review itself\n# OCR handles file selection and rule resolution; no LLM configuration needed\nocr delegate preview\nocr delegate rule src/main.go src/handler.go\n```\n\n## Documentation\n\nFull documentation lives at **[open-codereview.ai/docs](https://open-codereview.ai/docs)**:\n\n- [Quickstart](https://open-codereview.ai/docs/quickstart) — install and run your first review\n- [Installation](https://open-codereview.ai/docs/installation) — all platforms and package managers\n- [CLI Reference](https://open-codereview.ai/docs/cli-reference) — every command and flag\n- [Review Rules](https://open-codereview.ai/docs/review-rules) — customize review rules with path filtering and targeting\n- [Configuration](https://open-codereview.ai/docs/configuration) — config keys and environment variables\n- [MCP Server](https://open-codereview.ai/docs/mcp) — extend the review agent with external tools\n- Coding Agent Integrations — choose the platform you use\n  - [Claude Code](plugins/open-code-review/README.md#claude-code) — install a plugin with review slash commands\n  - [Codex](plugins/open-code-review/README.md#codex) — install a plugin with callable review skills\n  - [Cursor](plugins/open-code-review/README.md#cursor) — install a plugin with portable review skills\n  - [Kimi Code](plugins/open-code-review/README.md#kimi-code) — install a plugin with review slash commands and skills\n  - [OpenCode](plugins/open-code-review/opencode/README.md) — install native review tools and slash commands\n  - [QCA Forward](plugins/open-code-review/qca/README.md) — run delegation mode with the QCA host model and a ready-to-publish template\n  - [Skill-compatible agents](https://open-codereview.ai/docs/agent"
+    },
+    "brief": {
+      "summary": "面向代码仓库的 AI 代码审查命令行工具",
+      "problem": "通用 AI 审查容易漏文件、误报和定位不准",
+      "highlights": [
+        "可以审查 Git diff 并生成逐行评论",
+        "可以扫描整个文件或目录进行代码审计",
+        "可以检查空指针、线程安全、XSS 和 SQL 注入"
+      ],
+      "target_users": [
+        "软件开发者",
+        "代码审查团队",
+        "CI 流程维护者"
+      ],
+      "why_trending": "今日新增 2704 Star，且项目连续上榜",
+      "caveat": "资料未说明具体模型成本和部署门槛",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "alibaba/open-code-review",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "集成LLM Agent的代码审查工作流",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 71.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "TencentCloud/Octop",
+      "url": "https://github.com/TencentCloud/Octop",
+      "description": "A smarter, self-hosted AI assistant — multi-user, multi-agent.",
+      "language": "Python",
+      "total_stars": 4017,
+      "forks": 416,
+      "stars_today": 569,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 569
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "agentic-ai",
+        "ai",
+        "ai-agent",
+        "ai-agents",
+        "local-first",
+        "long-term-memory"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-08T12:54:20Z",
+      "updated_at": "2026-09-19T04:43:04Z",
+      "pushed_at": "2026-09-19T01:51:42Z",
+      "open_issues": 243,
+      "homepage": "https://octop.cloud",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/assets/readme-banner.png\" alt=\"Octop Banner\" width=\"600\" />\n</p>\n\n<p align=\"center\">\n  <strong>A smarter, self-hosted AI assistant — multi-user, multi-agent.</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/95504?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-95504\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <img src=\"https://trendshift.io/api/badge/repositories/95504\" alt=\"TencentCloud/Octop | Trendshift\" width=\"250\" height=\"55\" />\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.python.org/downloads/\"><img alt=\"Python 3.12+\" src=\"https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white\" /></a>\n  <a href=\"https://github.com/TencentCloud/Octop/blob/main/LICENSE\"><img alt=\"License: MIT\" src=\"https://img.shields.io/badge/license-MIT-green\" /></a>\n  <a href=\"https://github.com/TencentCloud/Octop/releases\"><img alt=\"Version\" src=\"https://img.shields.io/badge/version-1.0.1-orange\" /></a>\n  <a href=\"https://pypi.org/project/octop/\"><img src=\"https://img.shields.io/pypi/v/octop\" alt=\"PyPI\" /></a>\n  <a href=\"https://github.com/astral-sh/ruff\"><img alt=\"Code Style: Ruff\" src=\"https://img.shields.io/badge/code%20style-ruff-000000?logo=ruff&logoColor=white\" /></a>\n  <a href=\"https://github.com/TencentCloud/Octop\"><img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/TencentCloud/Octop?style=social\" /></a>\n  <a href=\"https://github.com/TencentCloud/Octop/fork\"><img alt=\"GitHub forks\" src=\"https://img.shields.io/github/forks/TencentCloud/Octop?style=social\" /></a>\n  <a href=\"https://discord.gg/jPas5J8Ua\"><img alt=\"Discord\" src=\"https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#-highlights\">Highlights</a> ·\n  <a href=\"#-overview\">Overview</a> ·\n  <a href=\"#-core-technology\">Core Technology</a> ·\n  <a href=\"#-features\">Features</a> ·\n  <a href=\"#-roadmap\">Roadmap</a> ·\n  <a href=\"#-quick-start\">Quick Start</a> ·\n  <a href=\"#-contents\">Contents</a>\n</p>\n\n<p align=\"center\">\n  <b>English</b> · <a href=\"README_CN.md\">中文</a>\n</p>\n\n---\n\n**Octop** is an open-source, self-hosted AI assistant. It's not just a tool — it's a digital life form that can operate in parallel. Through its multi-agent architecture, it builds an intelligent environment that is both independent and collaborative for teams, families, and individuals. Best of all, it runs entirely on your machine — the fully self-hosted design means privacy is never a compromise, while single-process startup makes the powerful web console, CLI, and IM integrations readily accessible.\n\nChat through the Web Dashboard, Feishu, DingTalk, QQ, Discord, WeCom, or programmatic HTTP/SSE/WebSocket. Extend capabilities with the **expert library**, **Connectors** (OAuth + MCP), and **ACP** integration for IDE workflows.\n\n## ✨ Highlights\n\n| | Feature | Description |\n|---|---------|-------------|\n| 👥 | **Multi-user expert team** | One admin, shared household; built-in expert library — switch specialists per scenario |\n| 🎭 | **MBTI personas** | 16 personality templates plus an interactive quiz — give each agent a distinct character |\n| 🔒 | **Security built-in** | JWT multi-user isolation, tool approval, shell command guardrails, and PII redaction — data stays local |\n| 🔌 | **Connector ecosystem** | Tencent suite (Docs, Weibo trends, News, …); OAuth and MCP gateway extend resource boundaries |\n| 💾 | **Pluggable backends** | Local disk, Docker containers, PostgreSQL, or COS/S3 — AI operates inside isolated boundaries |\n| 🧠 | **Portable memory** | Powered by harness-memory; memory migrates with the workspace |\n| 📚 | **Knowledge base** | RAG over your documents; semantic retrieval grounds agent answers in your private corpus |\n| 🧩 | **Plugins** | Extend Octop with third-party plugins; bundled plugins are seeded and toggled on demand |\n| ↔️ | **ACP bidirectional** | `octop acp` for IDE/terminal AI; delegate to OpenCode / Claude Code with permission gates |\n| 💻 | **Terminal AI+** | Interactive shell in the browser — AI-assisted command execution and troubleshooting |\n| 🌐 | **Browser AI+** | Headless Chromium sessions for web automation, screenshots, and remote browsing |\n| 🖥️ | **Remote desktop** | Live screen and input from the dashboard on Linux, Windows, and macOS — remote office work and GUI apps; one-click isolated desktop on headless Linux |\n| 🏠 | **Self-hosted** | Dashboard, CLI, IM channels, and cron in one `octop run` — all data under `~/.octop/` |\n\n## 📌 Overview\n\nOctop is a self-hosted AI assistant platform for households and small teams. It runs a single process that serves a web dashboard, a CLI, IM channels (Feishu, DingTalk, QQ, Discord, WeCom, and more), and cron automation — all sharing one control-plane database under `~/.octop/` (SQLite by default; PostgreSQL optional).\n\n> Octop's design goal: keep every conversation, workspace, and credential on your own machine, while giving each user a personal team of specialized agents they can switch between per task.\n\n<details>\n<summary>🐾 What can you do with Octop</summary>\n\n- **Personal assistant** — let a dedicated agent write weekly reports, organize notes, and manage your schedule; memory persists with the workspace.\n- **Family sharing** — one admin account, the whole household; assign different agents and experts per member.\n- **Team helper** — multiple agents collaborate in parallel, bridging Feishu / DingTalk / WeCom to route tasks into group chats.\n- **Developer boost** — delegate coding tasks to OpenCode / Claude Code via ACP, or troubleshoot from the terminal with AI assistance.\n- **Web automation** — use Browser AI+ to fill forms, capture screenshots, and gather public info.\n- **Scheduled tasks** — configure cron in natural language so the agent pushes or runs jobs on time every day.\n\n</details>\n\n## 🧠 Core Technology\n\n| Layer | Technology |\n|-------|-----------|\n| **Language** | Python 3.12+ |\n| **Web framework** | FastAPI + uvicorn |\n| **Agent runtime** | harness-agent |\n| **Gateway** | harness-gateway |\n| **Control plane DB** | SQLite (WAL, default) or PostgreSQL (optional) |\n| **Frontend** | React 18 + TypeScript + Vite + Ant Design |\n| **Scheduling** | APScheduler |\n| **ACP** | agent-client-protocol |\n| **Build / quality** | hatchling · ruff · mypy · pytest |\n\nOctop is built on the Harness stack — a set of focused runtimes that Octop composes into one process:\n\n- **harness-agent** — Agent runtime: model routing, tools, skills, and conversation checkpointing.\n- **harness-gateway** — multi-platform IM channel bridge that normalizes incoming messages into a single processing pipeline.\n- **harness-memory** — hierarchical recall with full-text search, so an agent's memory travels with its workspace.\n- **harness-browser** — CDP-based browser automation with persistent profiles for web tasks.\n\nInstead of an external queue or message broker, Octop routes every surface — Web UI, IM, and cron — through one in-process `HarnessProcessor`. The result is a single, restart-safe process whose entire state is rebuilt from the control-plane database on boot (local SQLite by default; PostgreSQL optional).\n\n## 🤔 Features\n\n### Server & auth\n- Multi-user JWT authentication with admin role\n- First-run setup wizard (`octop init`)\n- Interactive API docs at `/api/docs` (off by default — set `\"enable_api_docs\": true` in `config.json` to enable)\n\n### Agents\n- Multiple agents per user; each has its own workspace, providers, channels, and cron\n- 16 MBTI persona templates + custom system prompt\n- Expert library scanned at boot (`infra/agents/experts/library/`)\n- Workspace backends: local disk, COS, S3, and other remote stores\n\n### Channels & automation\n- IM channels: Feishu, DingTalk, QQ, Discord, WeCom, and more\n- Proactive cron jobs with natural-language and slash-command triggers\n- Unified message processing across Web UI, IM, and cron surfaces\n\n### Surfaces\n- **Web dashboard** — chat, agents, connectors, channels, cron, settings\n- **CLI** — `octop run`, `octop chat`, `octop acp`, admin commands\n- **HTTP/SSE/WebSocket API** — full programmatic access\n\n### Knowledge & plugins\n- **Knowledge base** — RAG over your documents; upload files and let semantic retrieval ground agent answers in your private corpus\n- **Plugins** — install and manage third-party plugins (`octop plugin`); bundled plugins are seeded and toggled on demand from the dashboard\n\n### ACP (Agent Client Protocol)\n\nOctop supports ACP in two directions:\n\n1. **Inbound** — external tools use **your** Octop agent\n   ```bash\n   octop acp --agent main   # stdio ACP server for Zed, OpenCode, …\n   ```\n\n2. **Outbound** — Octop delegates to external coding agents\n   - Dashboard → **ACP** (`/acp`): configure runners (global per user)\n   - Enable **acp_runner** per agent, then delegate in chat\n\nBuilt-in outbound runners include OpenCode, CodeBuddy, Claude Code, and Codex.\n\nFull setup: **[docs/acp.md](docs/acp.md)**.\n\n## 🧭 Roadmap\n\nHere are our mid-to-long term plans:\n\n- [ ] **Shared resource pool** — a central pool of skills and sub-agents that any user can drop into a new expert without rebuilding from scratch.\n- [ ] **Expert sharing** — publish your experts to other users in the same deployment, so good configurations are reused instead of recreated.\n- [ ] **Browser & terminal polishing** — browser skill *recording* (capture a workflow and replay it as a skill) and a more capable terminal AI assistant.\n- [ ] **AgentTeams** — let one coordinator autonomously schedule and orchestrate multiple experts to tackle multi-step tasks.\n- [ ] **Self-evolution** — automatically distill everyday conversations into reusable skills, so the assistant grows with you.\n- [ ] **PC / mobile clients** — native desktop and mobile apps alongside the web dashboard and IM channels.\n\nThis roadmap may shift as the community grows; treat it as indicative only.\n\n## 🚀 Quick Start\n\n### Prerequisites\n\n- **macOS / Linux / Windows**\n- No pre-installed Python required — the installer uses [uv](https://docs.astral.sh/uv/) to provision Python 3.12 in an isolated venv under `~/.octop/`\n- A modern multi-core CPU with a few GB of RAM for the process plus model/embedding caches; enough disk for the database, agent workspaces, and document corpora\n\n### 1. Install\n\n**macOS / Linux** — one-line installer (recommended):\n\n```bash\ncurl -fsSL https://finnie-1258344699.cos.ap-guangzhou.myqcloud.com/octop/install.sh | bash\n```\n\n**Windows (PowerShell)**:\n\n```powershell\nirm https://finnie-1258344699.cos.ap-guangzhou.myqcloud.com/octop/install.ps1 | iex\n```\n\n**Windows (cmd)** — download and run, or from a cloned repo:\n\n```bat\ncurl -fsSL https://finnie-1258344699.cos.ap-guangzhou.myqcloud.com/octop/install.bat -o install.bat\ninstall.bat\n```\n\nAfter installation, open a **new terminal** or reload your shell:\n\n```bash\nsource ~/.zshrc   # Zsh\n# or\nsource ~/.bashrc  # Bash\n```\n\nThe installer places `octop` on your PATH via `~/.octop/bin`. Optional extras:\n\n```bash\n# Browser automation (Playwright Chromium)\ncurl -fsSL https://finnie-1258344699.cos.ap-guangzhou.myqcloud.com/octop/install.sh | bash -s -- --extras browser\n\n# Feishu channel support\ncurl -fsSL https://finnie-1258344699.cos.ap-guangzhou.myqcloud.com/octop/install.sh | bash -s -- --extras channels-feishu\n```\n\nSee [scripts/README.md](scripts/README.md) for all install options (`--version`, `--from-source`, `--mirror`, Windows flags).\n\n**Desktop app** (GUI, no terminal) — grab the artifact for your platform from [GitHub Releases](https://github.com/TencentCloud/Octop/releases/latest):\n\n| Platform | Artifact |\n|----------|----------|\n| Windows | `Octop-desktop-windows-amd64-<version>.exe` (64-bit) / `Octop-desktop-windows-arm64-<version>.exe` (ARM64) — NSIS installer |\n| macOS | `Octop-desktop-darwin-arm64-<version>.dmg` (Apple Silicon) / `Octop-desktop-darwin-amd64-<version>.dmg` (Intel) |\n| Linux | `Octop-desktop-linux-amd64-<version>.tar.gz` / `Octop-d"
+    },
+    "brief": {
+      "summary": "Octop 是可自托管的多用户、多智能体助手平台",
+      "problem": "分散的个人、家庭和团队 AI 助手难以统一管理并保护数据",
+      "highlights": [
+        "可以通过网页、CLI和多个聊天平台使用助手",
+        "可以让多个智能体并行处理个人或团队任务",
+        "可以用浏览器自动化、知识库和定时任务扩展工作流"
+      ],
+      "target_users": [
+        "个人用户",
+        "家庭与小团队",
+        "开发者"
+      ],
+      "why_trending": "今日新增569个 Star，本周首次收录，近期持续活跃",
+      "caveat": "项目有243个开放 Issue，稳定性需自行评估",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "TencentCloud/Octop",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "自托管多用户多Agent助手",
+      "generated_by_ai": true,
+      "velocity_score": 83,
+      "freshness_score": 70,
+      "ranking_score": 67.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 51440,
+      "forks": 4685,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 334
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-19T04:46:10Z",
+      "pushed_at": "2026-09-19T04:42:23Z",
+      "open_issues": 192,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local fil"
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和媒体素材生成确定性的 MP4 视频。",
+      "problem": "网页动画难以稳定批量导出视频。",
+      "highlights": [
+        "可以用 CLI 将 HTML 动画渲染为 MP4",
+        "可以让 AI 编程代理按工作流制作视频",
+        "可以制作字幕、图表和产品介绍视频"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "视频开发者",
+        "内容创作者"
+      ],
+      "why_trending": "总 Star 超 5 万且近期持续更新，连续上榜",
+      "caveat": "需要 Node.js 22 及以上，且有 192 个未关闭 Issue。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "面向代理的HTML视频渲染框架",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "zenstory-ai/novel-to-game",
+      "url": "https://github.com/zenstory-ai/novel-to-game",
+      "description": "Agent skills for source-grounded novel-to-game adaptation (小说改编游戏 / story to game): cited design docs, target-runtime builds, evidence-based QA. Three playable browser examples. For Claude Code, Codex, and Kimi Code.",
+      "language": "Markdown",
+      "total_stars": 787,
+      "forks": 110,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-game-development",
+        "claude-code",
+        "claude-code-skills",
+        "claude-skills",
+        "codex",
+        "game-design",
+        "game-development",
+        "game-prototyping",
+        "gamedev",
+        "interactive-fiction",
+        "kimi-code",
+        "narrative-design",
+        "novel-to-game",
+        "skills",
+        "story-adaptation",
+        "story-to-game",
+        "visual-novel",
+        "zenstory"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-18T16:29:56Z",
+      "updated_at": "2026-09-19T04:12:48Z",
+      "pushed_at": "2026-09-19T04:12:46Z",
+      "open_issues": 1,
+      "homepage": "https://plateau.vibecoco.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"https://zenstory.ai/brand/zenstory-ai-mark.svg\" alt=\"\" width=\"76\" height=\"76\">\n</p>\n\n<h1 align=\"center\">NovelToGame</h1>\n\n<p align=\"center\">\n  <b>A source-grounded novel-to-game workflow: adaptation design, target-runtime builds, and evidence-based QA.</b>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://zenstory.ai/novel-to-game\"><b>Project page</b></a>\n  &nbsp;·&nbsp;\n  <a href=\"#install\"><b>Install</b></a>\n  &nbsp;·&nbsp;\n  <a href=\"#see-what-it-produces\"><b>See what it produces</b></a>\n  &nbsp;·&nbsp;\n  <a href=\"README_ZH.md\"><b>中文</b></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/zenstory-ai/novel-to-game/stargazers\"><img alt=\"Stars\" src=\"https://img.shields.io/github/stars/zenstory-ai/novel-to-game?style=flat-square&color=22D3EE&logo=github&logoColor=white&label=Stars\"></a>\n  <a href=\"https://github.com/zenstory-ai/novel-to-game/releases/latest\"><img alt=\"Release\" src=\"https://img.shields.io/github/v/release/zenstory-ai/novel-to-game?style=flat-square&color=081431&label=Release\"></a>\n  <img alt=\"Skills 7\" src=\"https://img.shields.io/badge/Skills-7-081431?style=flat-square\">\n  <a href=\"https://github.com/zenstory-ai/novel-to-game/actions/workflows/validate.yml\"><img alt=\"Validate\" src=\"https://img.shields.io/github/actions/workflow/status/zenstory-ai/novel-to-game/validate.yml?style=flat-square&label=Validate\"></a>\n  <a href=\"./LICENSE\"><img alt=\"License MIT\" src=\"https://img.shields.io/badge/License-MIT-1F6FEB?style=flat-square\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/zenstory-ai/novel-to-game/discussions\"><img alt=\"GitHub Discussions\" src=\"https://img.shields.io/badge/GitHub%20Discussions-181717?style=for-the-badge&logo=github&logoColor=white\"></a>\n  <a href=\"https://github.com/zenstory-ai/novel-to-game/issues\"><img alt=\"GitHub Issues\" src=\"https://img.shields.io/badge/GitHub%20Issues-181717?style=for-the-badge&logo=github&logoColor=white\"></a>\n</p>\n\nNovelToGame is seven open-source skills for the coding agent you already use (Claude Code, Codex, or Kimi Code). Give it a novel and, if you have one in mind, a target platform or engine. It reads the whole book, chooses a game direction it can defend, designs the world and the look, builds for the runtime the brief locks, and proves the build plays in one recorded run. You get a playable build at the finish level you asked for, plus the design documents behind it. The three public examples below play in a browser right now, no install.\n\n## Play Online\n\nEach game links to the adaptation workspace behind it: source provenance, the concept and the directions it rejected, game and art direction, runnable source, and the QA record from the playable path.\n\n### Journey to the West · Three Borrowings of the Banana Fan\n\n[![Wukong's party and the Bull Demon King's formation remain fully visible above a separate light-silk command tray on the Jilei Mountain stage](examples/journey-to-the-west/screenshots/hero.jpg)](https://xiyouji.vibecoco.ai)\n\n**One wave of a fan blew you fifty thousand li. Take the mountain back one turn at a time.**\n\nCommand Wukong's party through the three borrowings of the Banana-Leaf Fan: read the five-element wheel, follow a fire-vein treasure map, decide when to press deeper or bank the haul, set your formation, transform your way in where force will not work, and turn a demon king who outclasses you into a rainstorm over the Mountain of Flames.\n\n**[Play in browser](https://xiyouji.vibecoco.ai)** · [Adaptation workspace](examples/journey-to-the-west/) · design estimate: 45–90 min · all ages · playable prototype\n\n### Jin Ping Mei · Ledger of Desire\n\n[![Five women of the Ximen household face the player across the household ledger](examples/jin-ping-mei/screenshots/title.jpg)](https://jinpingmei.vibecoco.ai)\n\n**Choose whose door you enter tonight. Find out whose door knocks in the morning.**\n\nTwenty days, five courtyards. Keep silver, influence, reputation, exposure, and household strain in balance; respect each woman's terms; build trust through shared crises; and face a final ledger shaped by what everyone chose and remembers.\n\n**[Play in browser](https://jinpingmei.vibecoco.ai)** · [Adaptation workspace](examples/jin-ping-mei/) · design estimate: 60–90 min · 18+ · playable prototype\n\n### Project Plateau · The Lost World · 3D\n\nA real-time **first-person 3D field-photography game** adapted from Arthur Conan Doyle's *The Lost World*. Cross a connected plateau, observe a living Iguanodon family, expose four glass plates under aerial pressure, and return with the views that survived.\n\nPlay the full expedition on desktop, or watch the 15-second gameplay preview on other devices.\n\nhttps://github.com/user-attachments/assets/27819247-4e4d-4bf0-8f0f-43d4125c4d45\n\n**[Play in your browser — no install](https://plateau.vibecoco.ai)** · [Adaptation workspace](examples/project-plateau/) · [Share feedback](https://github.com/zenstory-ai/novel-to-game/discussions/7) · design estimate: 1–3 min · desktop WebGL2 · playable prototype\n\n## What it is\n\nThere is no GPU, no hosted service, and no bundled engine: the skills run on the model of whichever agent you installed them into. A one-line \"turn this book into a game\" prompt usually yields a reskin or a clickable plot summary, so the work is split into stages. Each stage owns one document, and every decision in it has to cite evidence:\n\n- **Every design decision cites the novel.** Analysis reads the whole book and writes a `SOURCE_BIBLE` where every hard rule, key character goal, turning point and ending, and signature anchor carries its chapter or file location, and every adaptation-boundary row cites its evidence. Source facts are labelled `immutable`, `adaptable`, `open`, or `conflicted`; anything the novel does not define is marked a design invention, never smuggled in as fact.\n- **The game shape is a documented decision, not a default.** The concept stage compares real alternatives and kills directions with named hard vetoes (the core loop ignores the novel's central tension; strip the proper nouns and a generic template remains; the player only spends resources to release a fixed plot). Concept, world design, and art direction are written by different stages into different documents, and the build may not quietly redesign them.\n- **Built for the runtime the brief locks.** The product brief, the one-page requirements sheet the agent drafts first (in `quick` it stops for your decision only on blocking items such as platform, rights, or adult content), locks platform, engine, target runtime, and the runtime actually available for testing. A missing toolchain may not silently become a web build. The design documents are engine-independent Markdown you own.\n- **QA is one real run, six checks, and honest limitations.** The build is launched on the tested runtime and one complete execution proves `launch`, `render`, `input`, `coreLoop`, `outcome`, and `restart`. Fun, balance, other browsers, and rights are written as limitations, never as PASS.\n- **Voice is opt-in and generated at build time by default.** No line goes to a text-to-speech provider unless art direction chooses voice; runtime synthesis needs the product brief's explicit approval, and the novel and design documents are never uploaded.\n\nInteractive fiction is a first-class track: continuous scenes, dialogue, testimony, and key choices can carry the whole game, held to the same agency and evidence requirements as a systems game.\n\n## Install\n\nPrerequisite: you already use Claude Code, Codex, or Kimi Code, and `npx` (Node.js) runs in your terminal.\n\n| Agent CLI | Install | Invoke |\n|---|---|---|\n| Claude Code | `npx skills add zenstory-ai/novel-to-game -g -y -a claude-code -s '*'` | `/novel-to-game` |\n| Codex | `npx skills add zenstory-ai/novel-to-game -g -y -a codex -s '*'` | `$novel-to-game` |\n| Kimi Code | `npx skills add zenstory-ai/novel-to-game -g -y -a kimi-code-cli -s '*'` | `/skill:novel-to-game` |\n\n`-g` installs globally for every directory; drop it to install into the current directory only. **To update, run the same command again, or `npx skills update`.**\n\n<details>\n<summary><strong>All three CLIs at once, or native plugin installation</strong></summary>\n\nInstall adapters for all three CLIs on the same machine:\n\n```bash\nnpx skills add zenstory-ai/novel-to-game -g -y -s '*' \\\n  -a claude-code -a codex -a kimi-code-cli\n```\n\nCloning the repository also enables project-local skill discovery in all three CLIs.\n\n#### Claude Code\n\n```text\n/plugin marketplace add zenstory-ai/novel-to-game\n/plugin install novel-to-game@novel-to-game-skills\n/novel-to-game:novel-to-game quick\n```\n\n#### Codex\n\n```bash\ncodex plugin marketplace add zenstory-ai/novel-to-game\ncodex plugin add novel-to-game@novel-to-game-skills\n```\n\n#### Kimi Code 0.27 or newer\n\n```text\n/plugins install https://github.com/zenstory-ai/novel-to-game\n/reload\n/skill:novel-to-game quick\n```\n\n</details>\n\n> Changes are in [CHANGELOG.md](CHANGELOG.md) and [Releases](https://github.com/zenstory-ai/novel-to-game/releases). The repository moved from `worldwonderer/novel-to-game` to `zenstory-ai/novel-to-game`; install and marketplace commands from older docs no longer resolve, and the commands above are current.\n\n## See what it produces\n\nEvery excerpt below is copied from a file in this repository; the two Chinese examples keep their documents in Simplified Chinese, so those excerpts are translated here and marked as such, with the originals linked. Cuts are marked with \"…\".\n\n### What the design documents look like\n\nIn [Journey to the West](examples/journey-to-the-west/), the Banana-Leaf Fan (owned by Rakshasi, the Bull Demon King's wife) enters the analysis as facts pinned to chapters, in [`analysis/SOURCE_BIBLE.md`](examples/journey-to-the-west/analysis/SOURCE_BIBLE.md) (translated; 3 of the table's 11 rows):\n\n```markdown\n| Fact | Evidence |\n|---|---|\n| The true fan quells fire with one wave, raises wind with two, brings rain with three; Rakshasi first blows Wukong away with it, and he returns after obtaining the wind-fixing pill from Bodhisattva Lingji | Chapter 59 |\n| Wukong turns into an insect and enters her belly to force the fan out of her, but receives a fake; the fake fan raises the flames three times in a row | Chapter 59 |\n…\n| The Bull Demon King also commands the seventy-two transformations; disguised as Bajie he tricks the true fan back, and Wukong, flushed with success, does not look closely | Chapter 61 |\n```\n\n[`concepts/CONCEPT.md`](examples/journey-to-the-west/concepts/CONCEPT.md) turns the fan into a two-sided rule, the fake fan feeding the fire and the true fan's three waves turning the boss fight, and records which rival directions died, and on which veto (translated):\n\n```markdown\nHard-veto results (one line per direction):\n\n- Direction 1 · Three Borrowings of the Banana Fan: passes (none of the six triggered).\n- Direction 2 · The Westward Post Road: triggers item 2 — within the slice length, relationship building decays into event buttons and stat bars with no repeatable trade-off — eliminated.\n- Direction 3 · Two Hearts: triggers item 3 — in the novel the true and the false are told apart by the Buddha, so the player's core tension cannot become a reliable mechanic (it would need a tell the novel does not contain) — eliminated.\n```\n\n[`design/GAME_DESIGN.md`](examples/journey-to-the-west/design/GAME_DESIGN.md) gives each wave exact effects and durations, and says why the timing of the third wave is the final battle's core decision (translated):\n\n```markdown\n| Order | Effect (all enemies, ignores the five elements) | Source |\n|---|---|---|\n| First wave · Quell fire | Clears enemy buffs (keeps the guard-break / stun / exposure our side applied); enemy attack −30% (3 turns) | One wave quells fire |\n| Second wave · Raise wind | Whole party speed +30% (3 turns), seizing the head of the action queue | Two waves raise wind |\n| Third wave · Bring rain | Party heals over time (8% max stamina "
+    },
+    "brief": {
+      "summary": "把小说改编为有证据链的可玩游戏原型",
+      "problem": "解决小说改编缺少依据、设计和测试流程的问题",
+      "highlights": [
+        "可以把小说整理成有出处的游戏设计文档",
+        "可以按目标运行环境生成可玩的原型",
+        "可以用一次完整运行检查启动、操作和重玩"
+      ],
+      "target_users": [
+        "小说改编者",
+        "独立游戏开发者",
+        "AI编程代理用户"
+      ],
+      "why_trending": "本周首次收录，已获787 Star且近期有更新",
+      "caveat": "不自带引擎，需先安装支持的代理和 npx",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "zenstory-ai/novel-to-game",
+      "score": 98,
+      "category": "互动叙事",
+      "reason": "将小说证据化改编为互动游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 59.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "leemysw/yovoice",
+      "url": "https://github.com/leemysw/yovoice",
+      "description": "Open-source voice creation for macOS and Windows. Local TTS, voice cloning, and emotion control — no cloud APIs or per-character fees.",
+      "language": "TypeScript",
+      "total_stars": 59,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audio",
+        "desktop-app",
+        "macos",
+        "text-to-speech",
+        "tts",
+        "voice",
+        "voice-cloning",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-09-15T15:18:35Z",
+      "updated_at": "2026-09-19T04:28:30Z",
+      "pushed_at": "2026-09-19T04:28:26Z",
+      "open_issues": 2,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"web/public/icon/voice-workbench-app-icon-v1.png\" width=\"96\" alt=\"yovoice\" />\n</p>\n\n<h1 align=\"center\">yovoice</h1>\n<p align=\"center\">Give your words a voice.</p>\n<p align=\"center\">\n  <a href=\"web/package.json\"><img src=\"https://img.shields.io/badge/version-0.1.2-blue?style=flat-square\" alt=\"Version 0.1.2\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache--2.0-orange?style=flat-square\" alt=\"License: Apache-2.0\" /></a>\n  <img src=\"https://img.shields.io/badge/macOS-14%2B-black?style=flat-square\" alt=\"macOS 14+ (Apple Silicon)\" />\n  <img src=\"https://img.shields.io/badge/Windows-10%2F11-0078D4?style=flat-square\" alt=\"Windows 10/11 (x64)\" />\n</p>\n<p align=\"center\">English · <a href=\"README_zh.md\">简体中文</a></p>\n\n---\n\nyovoice is an open-source voice creation tool for macOS and Windows that turns text into natural, expressive speech locally. With voice cloning, emotion control, audio project management, and a choice of TTS models, it requires no cloud API calls and incurs no per-character charges, giving you more control over narration, voiceovers, and audio content creation at a lower cost.\n\n![yovoice creation workspace — browser preview](docs/images/yovoice-workspace.png)\n\n---\n\n## Features\n\n- **Voice and expression** — use a reference voice, match a reference performance, adjust emotions, or describe the delivery in words.\n- **A complete audio workflow** — import or record reference audio, trim clips, preview speech, and export your work.\n- **Voice design and cloning** — VoxCPM2 offers text-guided voice design, controllable cloning, and transcript-assisted cloning with automatic multilingual handling, and 48 kHz output.\n- **Local models** — run IndexTTS 2.0 / 2.5, VoxCPM2, OmniVoice and Qwen3-TTS through audio.cpp, with resumable model downloads and GGUF import.\n- **Hardware acceleration** — Metal on Apple Silicon; CPU, NVIDIA CUDA, and experimental Vulkan on Windows.\n- **Agent Skill** — ask your AI agent to set up local speech generation and create voiceovers from text and reference audio.\n\n---\n\n## Supported Models\n\n| Model | Core capabilities |\n| --- | --- |\n| IndexTTS 2.0 | Chinese/English voice cloning, emotion control, reference performance |\n| IndexTTS 2.5 | Multilingual voice cloning, emotion control, pronunciation editing |\n| VoxCPM2 | Text-guided voice design, voice cloning, transcript-assisted cloning |\n| OmniVoice | Attribute-based voice design, voice cloning, non-verbal sound tags |\n| Qwen3-TTS Base · 0.6B / 1.7B | Reference voice cloning, optional transcript guidance, multilingual speech |\n| Qwen3-TTS CustomVoice · 1.7B | 9 built-in voices, text-guided style and emotion |\n| Qwen3-TTS VoiceDesign · 1.7B | Voice design from natural-language descriptions, no reference audio required |\n\nAll models are available in the App and CLI. See [model capabilities](skills/yovoice/references/models.md) for precisions and parameters. OmniVoice weights use the CC-BY-NC license and are restricted to non-commercial use.\n\n---\n\n## Installation\n\nChoose the package for your platform from the repository’s [Releases](../../releases) tab.\n\n| Platform | Package | Install |\n| --- | --- | --- |\n| macOS 14+ · Apple Silicon | `.dmg` | Open the disk image and drag yovoice to Applications |\n| Windows 10/11 · x64 | `-setup.exe` | Run the installer, then open yovoice from the Start menu |\n\nThe Windows installer downloads and installs [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) if needed. Models are downloaded inside the app; uninstalling preserves user data in `~/.yovoice`.\n\nCheck for updates from the app menu on macOS or Windows. Updates are also checked and downloaded in the background; restart to install when ready.\n\n![Install yovoice on macOS](docs/images/yovoice-macos-install.png)\n\n---\n\n## Quick Start\n\n1. **Set up a model.** Open Settings and download your chosen model. The CPU engine is bundled on Windows; CUDA can be downloaded from Settings for NVIDIA GPU acceleration.\n2. **Add a voice.** Import or record a 1–60 second reference clip, or use VoxCPM2 / OmniVoice / Qwen3-TTS VoiceDesign without one.\n3. **Create speech.** Enter your text, choose an expression mode, and select Generate.\n4. **Listen and export.** Preview the result and find previous generations in History.\n\nProjects, voices, and settings are saved in `~/.yovoice`.\n\n---\n\n## CLI & Agent Skill\n\nGive your agent the [yovoice Skill](https://github.com/leemysw/yovoice/tree/main/skills/yovoice) link and ask it to install the Skill and set up the local CLI, engine, and model:\n\n> Install this Skill and set up yovoice for local speech generation: https://github.com/leemysw/yovoice/tree/main/skills/yovoice\n\nThen describe what you want:\n\n> Read narration.txt using voice.wav as the reference voice, with a calm delivery, and save it as narration.wav.\n\nThe agent runs the standalone CLI without opening the desktop app. See the [CLI guide](docs/cli.md) for details.\n\n---\n\n## Development\n\n```sh\nmake install\nmake app-run\n```\n\nSee the [development guide](docs/development.md) for prerequisites. It also covers browser preview, tests, and project structure.\n\n---\n\n## Contributing\n\nBug reports, feature suggestions, and pull requests are welcome. Include your platform, model, and steps to reproduce when reporting a problem. Run `make check` before submitting code changes.\n\n---\n\n## Acknowledgements\n\n- [audio.cpp](https://github.com/0xShug0/audio.cpp) by ShugoAI — the local audio inference engine.\n- [VoxCPM](https://github.com/OpenBMB/VoxCPM) — voice design and cloning models, licensed under Apache-2.0.\n- [IndexTTS](https://github.com/index-tts/index-tts) — the speech synthesis models behind yovoice.\n\n---\n\n## License\n\n[Apache-2.0](LICENSE). Dependencies retain their [original licenses](THIRD_PARTY_NOTICES.md); IndexTTS models are covered separately by their [model license](web/public/model-license.txt).\n"
+    },
+    "brief": {
+      "summary": "面向 macOS 和 Windows 的本地语音创作工具",
+      "problem": "无需云端服务即可生成、克隆并调整情绪语音",
+      "highlights": [
+        "可以将文字生成自然语音并导出",
+        "可以用参考音频克隆和设计声音",
+        "可以通过 CLI 或 AI Agent 批量制作配音"
+      ],
+      "target_users": [
+        "配音创作者",
+        "视频与音频制作者",
+        "AI 工具开发者"
+      ],
+      "why_trending": "本周首次收录，近期持续更新，已获59个 Star",
+      "caveat": "部分模型有单独许可，OmniVoice 仅限非商业使用",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "leemysw/yovoice",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "本地TTS语音克隆与情绪控制",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "hypit-ai/hypit",
+      "url": "https://github.com/hypit-ai/hypit",
+      "description": "Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.",
+      "language": "TypeScript",
+      "total_stars": 10261,
+      "forks": 1259,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agentic-ai",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "compiler",
+        "dsl",
+        "ffmpeg",
+        "generative-ai",
+        "llm",
+        "markup-language",
+        "monorepo",
+        "plugin-system",
+        "programming-language",
+        "text-to-video",
+        "typescript",
+        "video",
+        "video-automation",
+        "video-clone",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-29T18:49:19Z",
+      "updated_at": "2026-09-19T04:45:13Z",
+      "pushed_at": "2026-09-19T04:20:32Z",
+      "open_issues": 5,
+      "homepage": "https://hypit.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/public/hypit-logo-light.svg\">\n    <img alt=\"Hypit\" src=\"./docs/public/hypit-logo-dark.svg\" width=\"400\" height=\"122\">\n  </picture>\n</p>\n\n<h3 align=\"center\">Clone any viral video with AI agents</h3>\n<p align=\"center\">1 command, 100 variants, 100M views.</p>\n\n<p align=\"center\">\n  <a href=\"https://hypit.ai\"><strong>Demo</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"https://hypit.ai/quickstart/\"><strong>Quickstart</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"https://hypit.ai/guide/develop/\"><strong>Develop</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"./README.zh-CN.md\"><strong>简体中文</strong></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/229030\"><img alt=\"Trendshift #1 Repository of the Day\" src=\"https://trendshift.io/api/badge/trendshift/repositories/229030/daily\"></a>\n  <a href=\"https://trendshift.io/repositories/229030\"><img alt=\"Trendshift #1 TypeScript Repository of the Day\" src=\"https://trendshift.io/api/badge/trendshift/repositories/229030/daily?language=TypeScript\"></a>\n</p>\n\n<p align=\"center\">\n  <img alt=\"Stars\" src=\"https://img.shields.io/github/stars/hypit-ai/hypit?style=flat-square&color=FFD700&logo=github&logoColor=white&label=Stars\">\n  <a href=\"./package.json\"><img alt=\"Node 22.15+\" src=\"https://img.shields.io/badge/Node.js-22.15%2B-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white\"></a>\n  <a href=\"./package.json\"><img alt=\"pnpm 10.33\" src=\"https://img.shields.io/badge/pnpm-10.33-F69220?style=flat-square&logo=pnpm&logoColor=white\"></a>\n  <a href=\"./package.json\"><img alt=\"TypeScript 5.9\" src=\"https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white\"></a>\n  <a href=\"./LICENSE\"><img alt=\"License\" src=\"https://img.shields.io/badge/License-Apache--2.0%20with%20conditions-E3B341?style=flat-square\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://hypit.ai\"><img alt=\"Visit our website\" src=\"https://img.shields.io/badge/Visit%20our%20website-DF3C68?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1Ny4wMyAyODcuNDggNDg2Ljk0IDQyNi4wNCI%2BPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTczMy4wMDEsNDYyLjU5MmMtMTEuNDQtMTYuNTEtMzAuMjg1LTI2LjM0NC01MC4zNTMtMjYuMzQ0aC0xNzguNzA1Yy0yMy40OTMsMC00Ny42NzUsMTQuMjM0LTU2LjYyOCwzNS45NjdsLTU0LjA2NSwxNDUuMDUzYy04LjgsMjEuNTIzLTguNjg2LDQ2LjAxMSw0LjI0Nyw2NS4zNTIsMTIuOTksMTkuNDE4LDM3LjAzOCwzMC44OTcsNjAuMzk3LDMwLjg5N2gxNjQuNDljMjcuMDEzLDAsNTEuNDYzLTE2Ljk4OSw2MC45MTQtNDIuMjhsNTYuODAxLTE1Mi4yMjdjNy4wMjEtMTguODI1LDQuMzgxLTM5LjkwOC03LjA1OS01Ni4zOTl2LS4wMzhoLS4wMzh2LjAxOVpNNjMzLjk3OCw2NTIuODEzYy0xLjc5OCw0LjgyMS02LjQ4NSw4LjA3My0xMS42MzIsOC4wNzNoLTE1OS42NWMtOC4zMDMsMC0xMi43OC01LjM1Ny0xNC4zMjktNy42MzNzLTQuNzgzLTguNDc1LTEuNjA3LTE2LjE0N2w0NS42MjgtMTI2LjcyNWM0LjM4MS0xMi4xNDgsMTUuNDU4LTIwLjc5NiwyOC4zNTItMjEuNDY1LjYzMS0uMDM4LDEuMjgyLS4wMzgsMS45NTEtLjAzOGgxNDQuMjY5czIzLjkzMywyLjcxNywxNy43NzMsMjcuOTUxbC01MC43NTUsMTM2LjAwNGgwdi0uMDE5Wk0zNTYuMjUsNjIzLjEyMnMtNDIuNzc3LTIyLjE3My0zMy43ODYtNjIuNDgzbDU2Ljc2Mi0xNTcuMzE2YzkuMTQ1LTI1LjM0OSwzMy4yMTItNDIuMjYxLDYwLjE2OC00Mi4yNjFoMTgxLjc4NWMxMS45NTcsMCwyMy4xNDksNS43OTcsMzAuMDU1LDE1LjU3M2wyNi41NzMsMzcuNjVoLTIxNi4xMjVjLTE2LjY0NCwwLTMxLjU0NywxMC4zNS0zNy4zNDQsMjUuOTYxbC02OC4wODgsMTgyLjg5NWgwdi0uMDE5Wk0yOTIuMDY0LDU0OS41NDNzLTQyLjc5Ny0yMi4xNzMtMzMuNzg2LTYyLjQ4M2w1Ni43NjItMTU3LjMxNmM5LjE2NC0yNS4zNDksMzMuMjMxLTQyLjI2MSw2MC4xNjgtNDIuMjYxaDE3Mi4wMDljMTEuOTU3LDAsMjMuMTQ5LDUuNzk3LDMwLjA1NSwxNS41NzNsMjYuNTczLDM3LjY1aC0yMDYuMzExYy0xNi42NDQsMC0zMS41NDcsMTAuMzUtMzcuMzQ0LDI1Ljk2MWwtNjguMDg4LDE4Mi44OTVoLS4wMzh2LS4wMTlaIi8%2BPC9zdmc%2B\"></a>\n  <a href=\"https://discord.gg/85hnyQnxpn\"><img alt=\"Join our Discord\" src=\"https://img.shields.io/badge/Join%20our%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\"></a>\n  <a href=\"https://t.me/hypitai\"><img alt=\"Join our Telegram\" src=\"https://img.shields.io/badge/Join%20our%20Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white\"></a>\n  <a href=\"https://x.com/hypitai\"><img alt=\"Follow @hypitai on X\" src=\"https://img.shields.io/badge/Follow%20%40hypitai-000000?style=for-the-badge&logo=x&logoColor=white\"></a>\n</p>\n\n<p align=\"center\">\n  ⭐ <em>Help more people find Hypit and grow the community. Star this repo!</em>\n</p>\n\n## Hypit\n\nHypit gives AI agents (Claude Code, Codex...) a language and system to create video. Drop in a video, and your agent clones it as a complete workflow: footage, captions, B-roll and effects, all anchored to words instead of seconds.\n\n**To be clear:** cloning a video is the fastest way in, not the only one. You can start from our templates, or just describe the video you want and your agent writes the workflow from scratch. Generation models are optional too: a workflow can compile captions, motion graphics and code-rendered visuals into a finished video without calling a generation model or incurring its service charges.\n\n![SVML source and live video preview](https://github.com/user-attachments/assets/981c28e8-ddab-4164-85bc-03b5d71275dc)\n\n<p align=\"center\"><em>SVML source on the left, with the corresponding video rendered live on the right.</em></p>\n\n## Install once\n\n```bash\nnpx skills add hypit-ai/hypit -g\n```\n\nThis installs the Skill. On first use, your agent checks for the Hypit executable and helps prepare\nit if needed. Your video project can live anywhere.\n\nHypit is free to use; your Coding Agent and model services have their own accounts and charges.\nHypiHub is our recommended hosted model service. You can also use your own API or local models;\ntell your agent the service name and API documentation so it can set up the appropriate connection.\n\n[Agent environments and entry partners](./docs/guide/agents.md) ·\n[Model and deployment services](./docs/guide/service-partners.md)\n\n## Examples\n\n### UGC\n\n[Generation source](examples/ranking-football/reference.svml) · [Run and production notes](examples/ranking-football/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/f573bdac-62da-4b5d-825d-54d5880a7026\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/3ffd9951-e423-4a48-ad8f-5c596627be69\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/eb62372d-2464-4a4b-83ee-41e227f99a8e\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/9ba050f6-355d-460c-b684-7344cf49c051\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"GOAT DEBATE\"</b> — a 20-second football tier list that puts Ronaldo in D and Messi in S. Two Seedance 2 Mini 720p trolling A-rolls, a 2K goth girl portrait and ten 1K brain-rot B-rolls by GPT Image 2, WhisperX word alignment, a sound-synced ranking board, color-box karaoke captions, buttery-smooth animation and catchy background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap the narrator to banana cat, flip the rankings and Ronaldo becomes GOAT, or replace all players with tech founders — same viral structure, different viral video.</p><p>Total cost: <b>$1.15</b>.</p></td>\n  </tr>\n</table>\n\n### Podcast\n\n[Generation source](examples/podcast/reference.svml) · [Run and production notes](examples/podcast/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/22df72b8-4831-4eb6-957d-676ae9b04f2d\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/9c14c5ae-bd12-4961-9d57-a46d3a2154c6\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/f44c653b-f520-4715-9530-4c2f42114387\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/92f9bf8b-4f83-4d9b-a0e8-ca27fab2cc94\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"DAILY CREATINE\"</b> — an 18-second podcast clip where a muscle barbie forces creatine on a skinny college kid. Three confrontational A-rolls and an aspirational lifestyle B-roll by Seedance 2 Mini 720p, two 2K AI character portraits and three 1K montage panels by GPT Image 2, WhisperX word alignment, split-screen interview layout, speaker-aware karaoke captions, a product-handoff moment and background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap both hosts to Pepe and Doge arguing about doggy arms, replace the creatine with retinol where a pretty boy roasts a tomboy's pores, or ditch the physical product for a CheatGPT app where a himbo jock out-GPAs a PhD student — same podcast format, three ad verticals.</p><p>Total cost: <b>$1.07</b>.</p></td>\n  </tr>\n</table>\n\n### Street Interview\n\n[Generation source](examples/interview/reference.svml) · [Run and production notes](examples/interview/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/666ad535-3231-44fb-b9bc-271817ae79de\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/c39a0425-2dcb-4709-b894-6a9423d351e3\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/8f71552c-0ad1-4d29-8c4e-3b937ab7c887\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/d9cab2e7-e08b-48ef-8d25-bc28ca9efc17\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"NICE RIDE\"</b> — a 26-second street interview where a mob wife drops three rules for making her first million. Three A-rolls by Seedance 2 Mini 720p, one 2K AI character portrait by GPT Image 2, WhisperX word alignment, head-tracked speaker-colored captions driven by face bounding boxes from Google Video Intelligence and YOLOv8 AnimeFace, a sound-synced emoji reveal board with color flashes and reveal sound effects, plus background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap hosts to Wojak and Chad, translate everything to Spanish with exactly the same punchlines, or swap the Lambo for an F1 car where Ada explains to Leon how driving Uber led to an accidental Grand Prix win — same three-stage reveal, distinct street-interview remixes.</p><p>Total cost: <b>$1.09</b>.</p></td>\n  </tr>\n</table>\n\n## Use the Hypit skill\n\nThe `/hypit` skill is available to coding agents. Start a session in any empty or existing project\ndirectory and ask it to create videos for you:\n\n```text\n/hypit Clone this video: /path/to/video.mp4, and replace the ranking content with a comparison of Hypit (official website: hypit.ai) with other AI video products.\n```\n\nOr start without a reference video:\n\n```text\n/hypit Make a ranking video that puts Hypit in S tier.\n```\n\nYour agent can check the environment, request the credentials the video needs, generate the material, and build the finished composition.\n\n### **👉 [Get 100 FREE AI Avatars with unique voices](https://drive.google.com/drive/u/2/folders/18J9Fz7mkU3OQNJ-2Res3eIyFQ2cemIK5)**\n\n## Why Hypit\n\n- **Clone any video:** drop in a video, get the whole workflow — footage, captions, B-roll, effects. Not a script breakdown.\n- **One workflow, 100 variants:** reuse the composition and existing material; generate the parts that change.\n- **Pluggable components:** swap the host without touching the captions. Use the library, fork it, or write your own.\n- **Open source:** no Hypit seat pricing, per-render fees"
+    },
+    "brief": {
+      "summary": "用 AI 代理把视频流程改写并批量生成变体",
+      "problem": "手工替换视频素材、字幕和效果，难以快速批量制作",
+      "highlights": [
+        "可以克隆视频并替换人物、文字和 B-roll",
+        "可以从模板或文字描述生成视频工作流",
+        "可以一条命令批量制作多个视频变体"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "视频自动化开发者",
+        "内容运营团队"
+      ],
+      "why_trending": "本周首次收录，已有10261个 Star，且近期持续更新",
+      "caveat": "代理和模型服务可能另行收费，授权要求需自行确认",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hypit-ai/hypit",
+      "score": 96,
+      "category": "AI 视频",
+      "reason": "Agent驱动短视频批量复刻与剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "tettethu/VibeGame",
+      "url": "https://github.com/tettethu/VibeGame",
+      "description": "VibeGame: Vibe Your Dream Game -- An open-source self-evolving multi-agent framework with an AI-Native game engine that turns your natural language into a fully playable 2D web game and edit it any way you want, built on Claude Code & Codex.",
+      "language": "Python",
+      "total_stars": 247,
+      "forks": 13,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "claude-code",
+        "codex",
+        "creative-coding",
+        "game-development",
+        "game-engine",
+        "image-generation",
+        "multi-agent"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-08-12T14:13:38Z",
+      "updated_at": "2026-09-19T04:16:03Z",
+      "pushed_at": "2026-09-19T04:15:59Z",
+      "open_issues": 0,
+      "homepage": "https://vibegame.tettet.org/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"assets/teaser.webp\" alt=\"VibeGame system teaser\" width=\"780\">\n  <p>\n    <img src=\"https://img.shields.io/badge/Python-%E2%89%A53.12-3776AB?logo=python&logoColor=white\" alt=\"Python 3.12+\">\n    <img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg\" alt=\"Apache License 2.0\">\n    <a href=\"https://www.anthropic.com/claude-code\"><img src=\"https://img.shields.io/badge/Claude_Code-supported-D97757\" alt=\"Claude Code supported\"></a>\n    <a href=\"https://github.com/openai/codex\"><img src=\"https://img.shields.io/badge/Codex-supported-111111\" alt=\"Codex supported\"></a>\n    <a href=\"https://phaser.io\"><img src=\"https://img.shields.io/badge/Engine-Phaser-6456e0\" alt=\"Phaser\"></a>\n  </p>\n  <p>\n    <a href=\"https://vibegame.tettet.org\"><strong>Project Page</strong></a>\n    &nbsp;·&nbsp;\n    <a href=\"https://vibegame.tettet.org/#demos\"><strong>Watch Demos</strong></a>\n    &nbsp;·&nbsp;\n    <a href=\"./technical_report.pdf\"><strong>Technical Report</strong></a>\n    &nbsp;·&nbsp;\n    <a href=\"https://discord.gg/Ec6d9wx8sU\"><strong>Discord</strong></a>\n    &nbsp;·&nbsp;\n    <a href=\"assets/wechat-group.png\"><strong>WeChat Group</strong></a>\n  </p>\n  <p><strong>VibeGame: Vibe Your Dream Game</strong></p>\n</div>\n\n## News\n\n- **[2026.08]** 🚀 We release VibeGame: Prompt-to-Game Development with AI-Native Engine and Self-Evolving Adversarial Agent Team! Check our [Project Page](https://vibegame.tettet.org) and [Technical Report](./technical_report.pdf)\n\n## Demos\n\nWatch the demos and explore more project details on the [Project Page](https://vibegame.tettet.org/#demos).\n\n<table>\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/civilization.jpg\" alt=\"Civilization demo\" width=\"100%\"></a><br><strong>Civilization prototype</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/hk.webp\" alt=\"Hollow Knight demo\" width=\"100%\"></a><br><strong>Hollow Knight boss slice</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/kof.webp\" alt=\"KOF demo\" width=\"100%\"></a><br><strong>Arcade fighter</strong></td>\n  </tr>\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/rog.webp\" alt=\"Roguelike demo\" width=\"100%\"></a><br><strong>Dungeon roguelike</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/intro.webp\" alt=\"VibeGame intro\" width=\"100%\"></a><br><strong>VibeGame Intro</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/fruit_ninja.webp\" alt=\"Fruit Ninja demo\" width=\"100%\"></a><br><strong>Fruit Ninja</strong></td>\n  </tr>\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/parkour_dash.webp\" alt=\"Aniya demo\" width=\"100%\"></a><br><strong>Aniya Parkour</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/sekiro.webp\" alt=\"Sekiro demo\" width=\"100%\"></a><br><strong>Pixel Sekiro</strong></td>\n    <td width=\"33%\" align=\"center\" valign=\"top\"><a href=\"https://vibegame.tettet.org/#demos\"><img src=\"assets/demo/page/thumbs/werewolf.jpg\" alt=\"AI Werewolf demo\" width=\"100%\"></a><br><strong>AI Werewolf party game</strong></td>\n  </tr>\n</table>\n\n## Installation\n\nPrerequisites:\n\n- Python 3.12 or newer.\n- [`uv`](https://docs.astral.sh/uv/getting-started/installation/).\n- `tmux`.\n- At least one supported agent CLI: [Claude Code](https://www.anthropic.com/claude-code) or [Codex](https://github.com/openai/codex).\n\nNode.js and npm are not required for the standard VibeGame setup.\n\n> **First-time Claude Code users**: VibeGame launches agents with `claude --dangerously-skip-permissions`. If you have never used this flag before, run it once in a terminal and accept the confirmation prompt — the first-run consent screen cannot be completed inside VibeGame's managed session, and agent startup will fail without it.\n\n> **Codex users**: after `setup.sh`, run `vibegame setup codex-hooks` once, then open Codex, enter `/hooks`, and trust the newly added VibeGame hooks. The command writes `~/.codex/hooks.json`; the trust step is what actually enables them. Until both are done Codex agents still run, but they never register: the Dashboard stays empty and startup keeps waiting for a session that never appears.\n\n```sh\ngit clone https://github.com/tettethu/VibeGame\ncd VibeGame\n```\n\nTell your agent (Claude Code or Codex):\n\n```text\nRead and follow the instructions in @docs/SETUP.md to set up this project for me.\n```\n\nOr set it up manually:\n\n```sh\n./setup.sh\n```\n\n`setup.sh` links the installed `vibegame` command to this checkout so the CLI can use the bundled engine, templates, and Dashboard. Keep the checkout available; pulling updates changes the installed CLI without reinstalling it.\n\n## Quick Start\n\n```sh\nmkdir my-game && cd my-game\nvibegame init\nvibegame start\n```\n\nOr start an existing project from another directory:\n\n```sh\nvibegame start --project ./my-game \"Continue polishing the boss fight\"\n```\n\nUse VibeGame's standard build workflow for an end-to-end game development goal:\n\n```text\n/vibegame-build Build a compact roguelike dungeon with one boss encounter\n```\n\nRun or close the game directly:\n\n```sh\nvibegame run --port auto\nvibegame close\n```\n\n## VibeGame Dashboard\n\nWe provide a web dashboard for interacting more freely with the agent team and manually editing game properties.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\"><img src=\"assets/dash_chat.webp\" alt=\"VibeGame Dashboard Chat\"><br><strong>Chat</strong><br><sub>Chat with your agents to start building</sub></td>\n    <td width=\"50%\" align=\"center\"><img src=\"assets/dash_asset.webp\" alt=\"VibeGame Dashboard Assets\"><br><strong>Assets</strong><br><sub>Preview animations and adjust sprite bounds</sub></td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\"><img src=\"assets/dash_objects.webp\" alt=\"VibeGame Dashboard Objects\"><br><strong>Objects</strong><br><sub>Configure character animations and properties</sub></td>\n    <td width=\"50%\" align=\"center\"><img src=\"assets/dash_play.webp\" alt=\"VibeGame Dashboard Play\"><br><strong>Play</strong><br><sub>Play the game you are building</sub></td>\n  </tr>\n</table>\n\n## Roadmap\n\n- [x] Release the VibeGame technical report\n- [x] Open-source the Phaser-based VibeGame implementation\n- [ ] Add Godot support\n- [ ] Add Unity support\n- [ ] Expand VibeGame from 2D to end-to-end 3D game creation\n\n## Acknowledgments\n\nWe are inspired by the broader community exploring AI agents for game creation, game development, and gameplay. We thank the teams behind [GameDevBench](https://github.com/waynchi/gamedevbench), [OpenGame](https://github.com/leigest519/OpenGame), [GameCraft-Bench](https://github.com/FreedomIntelligence/gamecraft-bench), and other open-source projects for advancing this field and sharing their work with the community.\n\n- [Claude Code](https://github.com/anthropics/claude-code) and [OpenAI Codex](https://github.com/openai/codex) - agent runtimes supported by VibeGame.\n- [Phaser](https://github.com/phaserjs/phaser) - the web game framework beneath VibeGame's 2D engine.\n- [Trellis](https://github.com/mindfold-ai/trellis) - inspiration for the design of VibeGame's development harness.\n- [agent-sprite-forge](https://github.com/0x0funky/agent-sprite-forge) - inspiration for VibeGame's sprite-generation prompt design.\n\n## License\n\nVibeGame is released under the [Apache License 2.0](LICENSE).\n\n### Commercial Deployment Notification\n\nIf you deploy VibeGame or a modified version as part of a commercial product or service, we kindly ask you to notify us at [kiyotakali075@gmail.com](mailto:kiyotakali075@gmail.com).\n\nPlease include the name of your organization, the product or service name, and a brief description of how VibeGame is being used. No confidential information is required.\n\nThis notification is requested for project tracking and community outreach purposes only. It does not require approval, impose a license fee, or modify any rights granted under the Apache License 2.0.\n"
+    },
+    "brief": {
+      "summary": "用自然语言生成并编辑可玩的2D网页游戏",
+      "problem": "降低从想法到可玩2D游戏原型的开发门槛",
+      "highlights": [
+        "可以用自然语言构建2D网页游戏",
+        "可以通过Dashboard编辑游戏对象和资源",
+        "可以让Claude Code或Codex协作开发游戏"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "游戏原型设计者",
+        "AI编程爱好者"
+      ],
+      "why_trending": "本周首次收录，已有247个Star且近期持续更新",
+      "caveat": "需要Python 3.12、uv、tmux及Claude Code或Codex",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "tettethu/VibeGame",
+      "score": 96,
+      "category": "游戏开发",
+      "reason": "多Agent自然语言生成可玩游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.5
+    }
+  }
+]
