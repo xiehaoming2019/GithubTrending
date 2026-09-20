@@ -1,0 +1,538 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 16706,
+      "forks": 916,
+      "stars_today": 3155,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3155
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-09-20T05:02:38Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 39,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "让编码代理按多阶段流程执行安全审计",
+      "problem": "减少审计遗漏、误报和未经验证的漏洞结论",
+      "highlights": [
+        "可以审计代码库并生成结构化发现记录",
+        "可以分阶段追踪覆盖范围和待验证问题",
+        "可以输出可复核的安全报告"
+      ],
+      "target_users": [
+        "安全研究员",
+        "开发团队",
+        "编码代理使用者"
+      ],
+      "why_trending": "今日新增3155 Star，且已连续上榜",
+      "caveat": "运行目标代码需配置操作系统级沙箱",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码代理的安全审计技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "trycua/cua",
+      "url": "https://github.com/trycua/cua",
+      "description": "Scale computer-use 2.0 with open-source drivers, cross-OS fleets, and benchmarks for training, evaluation, and data generation.",
+      "language": "HTML",
+      "total_stars": 24604,
+      "forks": 1688,
+      "stars_today": 859,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 859
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai-agent",
+        "apple",
+        "computer-use",
+        "computer-use-agent",
+        "containerization",
+        "cua",
+        "desktop-automation",
+        "hacktoberfest",
+        "lume",
+        "macos",
+        "manus",
+        "operator",
+        "swift",
+        "virtualization",
+        "virtualization-framework",
+        "windows",
+        "windows-sandbox"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-01-31T15:02:49Z",
+      "updated_at": "2026-09-20T05:00:41Z",
+      "pushed_at": "2026-09-20T02:14:05Z",
+      "open_issues": 1032,
+      "homepage": "https://cua.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <a href=\"https://cua.ai\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" alt=\"Cua logo\" width=\"150\" srcset=\"img/logo_white.svg\">\n      <source media=\"(prefers-color-scheme: light)\" alt=\"Cua logo\" width=\"150\" srcset=\"img/logo_black.svg\">\n      <img alt=\"Cua logo\" width=\"150\" src=\"img/logo_black.svg\">\n    </picture>\n  </a>\n\n  <p align=\"center\"><strong>Give AI agents computers they can use.</strong><br>Cua provides open-source desktop automation, isolated cloud desktops, local macOS VMs, specialist decision models, and benchmarks for evaluating computer-use agents.</p>\n\n  <p align=\"center\"><strong><a href=\"https://run.cua.ai/?utm_source=github&utm_medium=referral&utm_campaign=fleet_activation&content_id=repo_readme\" target=\"_blank\" rel=\"noopener noreferrer\">Try Cua Fleets now at run.cua.ai</a></strong></p>\n\n  <p align=\"center\">\n    <a href=\"https://cua.ai\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.shields.io/badge/cua.ai-0ea5e9\" alt=\"cua.ai\"></a>\n    <a href=\"https://discord.gg/mVnXXpdE85\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.shields.io/badge/Discord-Join%20Server-10b981?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n    <a href=\"https://x.com/trycua\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.shields.io/twitter/follow/trycua?style=social\" alt=\"Twitter\"></a>\n    <a href=\"https://cua.ai/docs\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.shields.io/badge/Docs-0ea5e9.svg\" alt=\"Documentation\"></a>\n    <br>\n<a href=\"https://trendshift.io/repositories/13685\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/13685\" alt=\"trycua%2Fcua | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n  </p>\n\n</div>\n\n## Choose your path\n\n<div align=\"center\">\n  <table width=\"100%\">\n    <tr>\n      <td colspan=\"2\" align=\"center\" valign=\"top\" width=\"66.66%\">\n        <a href=\"#cua-fleets\">\n          <img src=\"img/card-cua-fleets-wide.gif\" alt=\"Cua Fleets: isolated cloud desktops for your agents\" width=\"100%\">\n        </a>\n      </td>\n      <td align=\"center\" valign=\"top\" width=\"33.33%\">\n        <a href=\"https://github.com/trycua/cua/tree/main/libs/cua-s1\">\n          <img src=\"img/card-cua-s1.gif\" alt=\"CUA-S1: small, specialized models for computer use.\" width=\"100%\">\n        </a>\n      </td>\n    </tr>\n    <tr>\n      <td align=\"center\" valign=\"top\" width=\"33.33%\">\n        <a href=\"#cua-driver\">\n          <img src=\"img/card-cua-driver.gif\" alt=\"Cua Driver: inspect and operate apps on macOS, Windows, and Linux\" width=\"100%\">\n        </a>\n      </td>\n      <td align=\"center\" valign=\"top\" width=\"33.33%\">\n        <a href=\"#lume\">\n          <img src=\"img/card-cua-lume.gif\" alt=\"Lume: local macOS and Linux VMs on Apple Silicon\" width=\"100%\">\n        </a>\n      </td>\n      <td align=\"center\" valign=\"top\" width=\"33.33%\">\n        <a href=\"#cua-bench\">\n          <img src=\"img/card-cua-bench.gif\" alt=\"Cua Bench: create tasks, evaluate agents, and export trajectories\" width=\"100%\">\n        </a>\n      </td>\n    </tr>\n  </table>\n</div>\n\n- **Cua Fleets:** [Provision a Linux desktop, run a command, and save a screenshot](https://cua.ai/docs/tutorials/your-first-cloud-fleet).\n- **CUA-S1:** [Explore small, specialized models for computer-use decisions](#cua-s1).\n- **Cua Driver:** [Operate Calculator and verify its result](https://cua.ai/docs/tutorials/drive-your-first-app).\n- **Lume:** [Create a Tahoe VM and connect over SSH](https://cua.ai/docs/tutorials/create-your-first-lume-vm).\n- **Cua Bench:** [Create and verify a simulated task](https://cua.ai/docs/tutorials/your-first-cua-bench-task).\n\nBring your own agent and model, or explore CUA-S1 for specialized decisions. Cua provides the computer and automation tools. [Computer-Use 2.0](https://cua.ai/docs/concepts/what-is-computer-use) describes an agent moving between code, APIs, and graphical interfaces within the same task.\n\n## See Cua Driver in action\n\nTwo Cua Driver sessions select cells in LibreOffice Calc and objects in Inkscape on an Omarchy desktop while a terminal stays in the foreground. Watch the 50-second demo, then explore [Omarchy on Fleet](https://cua.ai/docs/how-to-guides/sandbox/run-omarchy-on-cloud-fleet).\n\nhttps://github.com/user-attachments/assets/b4e5517c-d2db-4758-b4cf-07131b0753b2\n\n---\n\n## Cua Fleets\n\nProvision isolated cloud desktops at [run.cua.ai](https://run.cua.ai/?utm_source=github&utm_medium=referral&utm_campaign=fleet_activation&content_id=repo_readme). A Fleet maintains sandbox capacity; your code claims a desktop from a pool and uses the Sandbox SDK to run commands, capture screenshots, and interact with apps inside it.\n\n**Your first result:** provision a Linux desktop, run `uname -a`, save a screenshot, and delete the cloud resources. The tutorial covers Fleet credentials, dependencies, and cleanup. Pools can retain paid capacity after a claim ends, so follow its cleanup steps.\n\nLocal sandboxes and Fleets share the Sandbox SDK, but credentials, images, operations, and runtime requirements differ. Use the [runtime support reference](https://cua.ai/docs/reference/sandbox-sdk/runtime-support) to choose an environment. For your own hardware, see [Manage local sandbox lifecycle](https://cua.ai/docs/how-to-guides/sandbox/manage-local-lifecycle).\n\n**[Your first Cloud Fleet](https://cua.ai/docs/tutorials/your-first-cloud-fleet)** | **[Fleet overview](https://cua.ai/docs/cloud-fleets)** | **[Sandbox SDK reference](https://cua.ai/docs/reference/sandbox-sdk)**\n\n---\n\n## Cua Driver\n\nGive your agent tools to inspect and operate native desktop apps and browsers on macOS, Windows, and Linux. Connect through the CLI, MCP, or typed SDKs. Background delivery lets agents work without moving your pointer or taking focus when the app and platform support it; see [platform support](https://cua.ai/docs/reference/cua-driver/platform-support) for the boundaries.\n\n**macOS / Linux**\n\n```sh\n/bin/bash -c \"$(curl -fsSL https://cua.ai/driver/install.sh)\"\n```\n\n**Windows (PowerShell)**\n\n```powershell\nirm https://cua.ai/driver/install.ps1 | iex\n```\n\n**Your first result:** connect your agent, ask it to compute 6 × 7 in Calculator, and have it verify that the app displays 42. The tutorial covers platform setup, permissions, and agent connection.\n\n**[Drive your first app](https://cua.ai/docs/tutorials/drive-your-first-app)** | **[Installation](https://cua.ai/docs/how-to-guides/driver/install)** | **[CLI Reference](https://cua.ai/docs/reference/cua-driver/cli-reference)**\n\nUsing Claude Code, Codex, Cursor, OpenClaw, or another agent? [Find your integration](https://cua.ai/docs/how-to-guides/driver/connect-your-agent). Source documentation and architecture notes live in [`libs/cua-driver/README.md`](libs/cua-driver/README.md).\n\n---\n\n## CUA-S1\n\nCUA-S1 is our family of small, specialized System 1 models for computer use. We use \"System 1\" as an engineering analogy for fast, bounded decisions, such as choosing which value belongs in a field or whether to leave an element alone. It is not a strict classification of model architectures or a replacement for a general-purpose agent's planning and reasoning.\n\nThe first research profile focuses on forms: scoring decisions from structured interface elements and document values rather than generating a response token by token. Application code orders the actions, and the optional Cua Driver integration handles execution with explicit action boundaries.\n\nThe project includes Python model code, synthetic-data generation, training, and evaluation. The GitHub component is an early, source-only research release; model weights are hosted separately on Hugging Face. The source is MIT-licensed. Check each model and dataset card for its scope, limitations, and artifact-specific license.\n\n**[Explore CUA-S1](libs/cua-s1)** | **[Model card](libs/cua-s1/MODEL_CARD.md)** | **[Safety and deployment guidance](libs/cua-s1/SECURITY.md)**\n\n**CUA-S1-FORMS on Hugging Face:** **[Model weights](https://huggingface.co/cua-ai/cua-s1-forms)** | **[Dataset](https://huggingface.co/datasets/cua-ai/cua-s1-forms)**\n\n---\n\n## Lume\n\nCreate and manage local macOS and Linux VMs on Apple Silicon using Apple's Virtualization.Framework.\n\n```bash\n/bin/bash -c \"$(curl -fsSL https://cua.ai/lume/install.sh)\"\n```\n\n**Your first result:** create a vanilla macOS Tahoe VM from an Apple restore image, start it, and connect over SSH. The tutorial uses the Lume CLI directly and explains the unattended setup defaults.\n\n**[Create your first Lume VM](https://cua.ai/docs/tutorials/create-your-first-lume-vm)** | **[Installation](https://cua.ai/docs/how-to-guides/lume/install-lume)** | **[CLI reference](https://cua.ai/docs/reference/lume/cli-reference)**\n\n---\n\n## Cua Bench\n\nBuild computer-use tasks, evaluate agents, and export trajectories for training. Start with a simulated task that requires no VM, Docker, or model API key.\n\nWith Python 3.12 or 3.13 and [uv](https://docs.astral.sh/uv/) installed:\n\n```bash\nuv tool install 'cua-bench[browser]'\nuv tool run --from 'cua-bench[browser]' playwright install chromium\n```\n\n**Your first result:** create a small task, run its reference solution, and verify that its evaluator reports a reward of `1.0`. Then try the same task yourself.\n\n**[Build your first task](https://cua.ai/docs/tutorials/your-first-cua-bench-task)** | **[What is Cua-Bench?](https://cua.ai/docs/concepts/what-is-cua-bench)** | **[CLI reference](https://cua.ai/docs/reference/cua-bench/cli-reference)** | **[Partner with us](https://cuabench.ai/)**\n\n---\n\n## Resources\n\n- [Documentation](https://cua.ai/docs) — Guides, examples, and API reference\n- [Blog](https://cua.ai/blog) — Tutorials, updates, and research\n- [Discord](https://discord.com/invite/mVnXXpdE85) — Community support and discussions\n- [GitHub Issues](https://github.com/trycua/cua/issues) — Bug reports and feature requests\n- [Security](SECURITY.md) — Private vulnerability reporting\n\n## Citation\n\nIf Cua supports your research, please cite the software:\n\n```bibtex\n@software{cua2025,\n  author  = {{Cua AI, Inc.}},\n  title   = {Cua},\n  year    = {2025},\n  url     = {https://github.com/trycua/cua},\n  license = {MIT}\n}\n```\n\nFor reproducibility, include the Cua release or commit used in your experiments. Citation metadata is also available in [`CITATION.cff`](CITATION.cff).\n\n## Contributing\n\nWe welcome contributions! See our [Contributing Guidelines](CONTRIBUTING.md) for details.\n\n## License\n\nMIT License — see [LICENSE](LICENSE.md) for details.\n\nThird-party components have their own licenses:\n\n- [Kasm](libs/kasm/LICENSE) (MIT)\n- [OmniParser](https://github.com/microsoft/OmniParser/blob/master/LICENSE) (CC-BY-4.0)\n- Optional `cua-agent[omni]` includes ultralytics (AGPL-3.0)\n\n## Trademarks\n\nApple, macOS, Ubuntu, Canonical, and Microsoft are trademarks of their respective owners. This project is not affiliated with or endorsed by these companies.\n\n---\n\n## Sponsors\n\n<div align=\"center\">\n\nThank you to all our [GitHub Sponsors](https://github.com/sponsors/trycua)!\n\n|                                                       [Adam Cohen Hillel](https://github.com/adamcohenhillel)                                                        |                                                         [CodeRabbit](https://github.com/coderabbitai)                                                         |                                                         [Zephyr Cloud IO](https://github.com/ZephyrCloudIO)                                                         |\n| :------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------"
+    },
+    "brief": {
+      "summary": "为 AI Agent 提供跨系统电脑操作与评测工具",
+      "problem": "让 AI Agent 能安全操作桌面应用并进行统一测试",
+      "highlights": [
+        "可以让 Agent 操作 macOS、Windows 和 Linux 应用",
+        "可以创建隔离桌面，执行命令并保存截图",
+        "可以构建任务、评估 Agent 并导出操作轨迹"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "自动化测试人员",
+        "桌面应用研究者"
+      ],
+      "why_trending": "今日新增 859 Star，本周首次收录，近期更新活跃",
+      "caveat": "云桌面可能保留付费容量，平台支持也有限制",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "trycua/cua",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "提供电脑操作代理与自动化基础",
+      "generated_by_ai": true,
+      "velocity_score": 89,
+      "freshness_score": 20,
+      "ranking_score": 64.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "yynxxxxx/Codex-X",
+      "url": "https://github.com/yynxxxxx/Codex-X",
+      "description": "OpenAI Codex 桌面端/CLI 的可视化管理工具，具有Provider/API 切换、会话同步、提示词注入、Skills/MCP 管理、TOML 配置可视化的跨平台工具。",
+      "language": "Rust",
+      "total_stars": 3453,
+      "forks": 451,
+      "stars_today": 32,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 32
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-07-04T03:28:35Z",
+      "updated_at": "2026-09-20T04:56:18Z",
+      "pushed_at": "2026-09-18T03:37:47Z",
+      "open_issues": 29,
+      "homepage": "https://codex-x.site",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"README.md\"><img src=\"https://img.shields.io/badge/中文-当前-blue\" alt=\"中文\" /></a>\n  <a href=\"README.en.md\"><img src=\"https://img.shields.io/badge/English-Switch-lightgrey\" alt=\"English\" /></a>\n</p>\n\n<div align=\"center\">\n  <img src=\"apps/desktop/src-tauri/icons/icon.png\" alt=\"Codex-X Logo\" width=\"150\" />\n\n  # Codex-X\n\n  **Codex 可视化提示词注入 · Provider · 会话 · Skills / MCP 管理工具**\n\n  一款面向 **OpenAI Codex 桌面端 / Codex CLI** 的跨平台桌面工具。把提示词模板、自定义 Prompt、第三方 API 供应商、会话同步、Skills / MCP 和 TOML 配置都放进可视化界面里，不用反复手改文件。\n\n  <p>\n    <img src=\"https://img.shields.io/github/v/release/yynxxxxx/Codex-X?label=version&color=blue\" alt=\"version\" />\n    <img src=\"https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-555\" alt=\"platform\" />\n    <img src=\"https://img.shields.io/badge/built%20with-Tauri%202-24C8DB\" alt=\"tauri\" />\n    <img src=\"https://img.shields.io/badge/license-MIT-green\" alt=\"license\" />\n  </p>\n\n  <p>\n    <img src=\"https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white\" />\n    <img src=\"https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white\" />\n    <img src=\"https://img.shields.io/badge/Rust-stable-000000?logo=rust&logoColor=white\" />\n    <img src=\"https://img.shields.io/badge/SQLite-Ready-003B57?logo=sqlite&logoColor=white\" />\n    <img src=\"https://img.shields.io/badge/Vite-Ready-646CFF?logo=vite&logoColor=white\" />\n  </p>\n</div>\n\n---\n\n## Codex-X 是什么？\n\n当你同时使用 Codex 桌面端、CLI、第三方 API、Skills / MCP 和多套提示词时，配置很容易散落在不同文件里。Codex-X 把这些高频操作集中到一个桌面界面中，让当前状态看得见、常用操作点一下就能完成。\n\n你可以用它：\n\n- 像管理插件一样管理提示词：分类、导入 Markdown、自定义编辑、一键启用 / 禁用\n- 内置 5 套提示词模板，同时支持用户把自己的提示词变成可视化模板库\n- 管理多个可命名的官方 Codex 登录与第三方 API，一键复制、切换，并从 cc-switch 导入现有供应商\n- 同步、检查、搜索和删除本地会话，按项目路径整理 Codex 历史记录\n- 集中管理 Skills 与 MCP，查看当前 `config.toml`、`auth.json` 和操作备份\n- 在设置中按日期、模型查看 Token 用量趋势，子代理用量归入所属主会话\n\n## 软件预览\n\n<details open>\n<summary><b>新版 UI：指令提示词管理中心</b></summary>\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/app/new-ui/prompts.png\" alt=\"Codex-X 新版指令提示词管理界面\" width=\"920\" />\n</p>\n\n</details>\n\n<div align=\"center\">\n<table>\n  <tr>\n    <td align=\"center\" width=\"50%\">\n      <b>分类管理</b><br />\n      <sub>把提示词按破甲 / 逆向、软件开发、写作辅助等分类维护</sub><br />\n      <img src=\"docs/screenshots/app/new-ui/prompt-categories.png\" alt=\"Codex-X 提示词分类管理\" width=\"420\" />\n    </td>\n    <td align=\"center\" width=\"50%\">\n      <b>自定义提示词</b><br />\n      <sub>直接添加、编辑或导入自己的 Markdown 提示词</sub><br />\n      <img src=\"docs/screenshots/app/new-ui/prompt-form.png\" alt=\"Codex-X 添加自定义提示词\" width=\"420\" />\n    </td>\n  </tr>\n</table>\n</div>\n\n<details>\n<summary><b>Skills / MCP 可视化管理</b></summary>\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/app/new-ui/skills-mcp.png\" alt=\"Codex-X Skills 与 MCP 管理界面\" width=\"920\" />\n</p>\n\n</details>\n\n## 功能特性\n\n<div align=\"center\">\n<table>\n  <tr>\n    <th align=\"center\" width=\"190\">你想做的事</th>\n    <th align=\"center\">Codex-X 能帮你</th>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>提示词注入管理</b></td>\n    <td align=\"left\">内置 <b>5 套</b>提示词模板，支持分类、GitHub 同步、本地缓存、导入 <code>.md</code>、添加自定义提示词、编辑说明、一键启用 / 禁用。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>启用方式切换</b></td>\n    <td align=\"left\">可选择“保留原提示词”追加写入，也可选择“替换原提示词”完整切换；适合在不同模型、不同任务、不同 Prompt 之间快速切换。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>Provider / API</b></td>\n    <td align=\"left\">保存多个可命名的官方 Codex 登录配置，与第三方供应商统一管理、一键复制和切换；第三方供应商支持连接检测、模型获取 / 测试及从 cc-switch 导入。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>会话管理</b></td>\n    <td align=\"left\">搜索本地会话、按项目路径分组、同步当前供应商、检查会话状态，并支持单选 / 多选 / 项目级永久删除。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>Skills / MCP</b></td>\n    <td align=\"left\">可视化查看 Skills 与 MCP，导入已有配置，从 ZIP 安装 Skill，逐项启用 / 禁用，并检查更新状态。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>配置与登录</b></td>\n    <td align=\"left\">集中查看 <code>config.toml</code> 与 <code>auth.json</code>；官方登录和第三方供应商编辑页均可在 <code>config.toml</code> 旁勾选“开启 1M 上下文窗口”，保存后生效，需模型支持；重要写入前自动备份。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>用量统计</b></td>\n    <td align=\"left\">设置页提供“通用设置 / 用量统计”标签，按日期与模型筛选本地 Token 用量，查看每日趋势、缓存命中率、模型分布及最近 10 个主会话；子代理用量归入所属主会话，不单独计为会话。</td>\n  </tr>\n  <tr>\n    <td align=\"center\"><b>跨平台使用</b></td>\n    <td align=\"left\">提供 macOS Apple Silicon / Intel、Windows MSI / 便携版和 Linux 安装包；安装版可在应用内直接下载、校验并安装更新，便携版继续使用手动下载。</td>\n  </tr>\n</table>\n</div>\n\n## 核心亮点\n\n### 1. 可视化提示词注入中心\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/当前模板库-11_套-2563eb?style=flat-square\" alt=\"当前模板库 11 套\" />\n  <img src=\"https://img.shields.io/badge/离线内置-5_套-16a34a?style=flat-square\" alt=\"离线内置 5 套\" />\n  <img src=\"https://img.shields.io/badge/GitHub_同步-自动更新-f59e0b?style=flat-square\" alt=\"GitHub 自动同步\" />\n  <img src=\"https://img.shields.io/badge/自定义提示词-支持导入_编辑-7c3aed?style=flat-square\" alt=\"支持自定义提示词\" />\n</p>\n\n> [!TIP]\n> **安装后就能用，联网后自动补齐，也能维护自己的提示词库。**\n>\n> 安装包离线自带 5 套模板；软件启动后会从 GitHub `examples/` 同步另外 6 套软件开发与写作辅助模板，以及后续更新。同步成功的在线版本会缓存到本地，临时离线仍可继续使用。你也可以导入自己的 `.md`、新增分类、编辑说明，并像切换插件一样启用或禁用任意提示词。\n\nCodex-X 现在不只是“几套内置 Prompt”的启动器，而是一个可视化提示词注入与管理工具：\n\n- 按分类管理提示词，例如破甲 / 逆向、软件开发、写作辅助，也可以新增自己的分类\n- 支持同步 GitHub 模板、导入 Markdown、手动添加提示词、编辑标题 / 文件名 / 内容\n- 每个提示词都有独立开关，打开时自动按当前启用方式写入 Codex 指令文件\n- 支持“保留原提示词”和“替换原提示词”两种模式，适合日常叠加或完整切换\n- 本地缓存可离线使用，后续模板更新不会影响你自己维护的自定义提示词\n\n<div align=\"center\">\n<table>\n  <tr>\n    <th align=\"center\">模板</th>\n    <th align=\"center\">适合场景</th>\n    <th align=\"center\">获取方式</th>\n  </tr>\n  <tr>\n    <td><a href=\"examples/gpt5.5-unrestricted.md\"><code>gpt5.5-unrestricted.md</code></a></td>\n    <td align=\"left\">短小通用，适合日常 coding 与常规技术任务</td>\n    <td align=\"center\">离线内置<br />GitHub 更新</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/gpt5.4-unrestricted.md\"><code>gpt5.4-unrestricted.md</code></a></td>\n    <td align=\"left\">面向 GPT-5.4 / Codex CLI，偏 CTF 与安全研究工作流</td>\n    <td align=\"center\">离线内置<br />GitHub 更新</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/gpt5.5-jeli.md\"><code>gpt5.5-jeli.md</code></a></td>\n    <td align=\"left\">大白话通用版，提供更完整的工程与逆向执行流程</td>\n    <td align=\"center\">离线内置<br />GitHub 更新</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/gpt-5.6-sol-unrestricted.md\"><code>gpt-5.6-sol-unrestricted.md</code></a></td>\n    <td align=\"left\">gpt5.6-sol 破甲提示词，偏直接执行与中英文任务</td>\n    <td align=\"center\">离线内置<br />GitHub 更新</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/%E6%B5%B7%E9%B8%A53.0%E7%A0%B4%E7%94%B2.md\"><code>海鸥3.0破甲.md</code></a></td>\n    <td align=\"left\">中文技术操作员人格，覆盖 coding、CTF、逆向、内存与协议任务路由</td>\n    <td align=\"center\">离线内置<br />GitHub 更新</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/software-development-maintainer.md\"><code>software-development-maintainer.md</code></a></td>\n    <td align=\"left\">长期维护正式项目，强调复用、最小改动、安全、测试与可维护性</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/software-development-debugging.md\"><code>software-development-debugging.md</code></a></td>\n    <td align=\"left\">从稳定复现和证据采集推进到根因修复与回归验证</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/software-development-code-review.md\"><code>software-development-code-review.md</code></a></td>\n    <td align=\"left\">按严重级别审查缺陷、回归、安全风险和测试缺口</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/writing-clarity-editor.md\"><code>writing-clarity-editor.md</code></a></td>\n    <td align=\"left\">在保留原意和事实的前提下润色中英文表达</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/writing-technical-docs.md\"><code>writing-technical-docs.md</code></a></td>\n    <td align=\"left\">基于代码与事实编写 README、指南、API 和发布文档</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n  <tr>\n    <td><a href=\"examples/writing-structured-draft.md\"><code>writing-structured-draft.md</code></a></td>\n    <td align=\"left\">将零散材料组织成报告、方案、复盘或文章初稿</td>\n    <td align=\"center\">GitHub 在线同步</td>\n  </tr>\n</table>\n</div>\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <b>保留原提示词</b><br />\n      适合已经有个人规则的用户。Codex-X 只追加自己管理的内容，禁用时也只移除这一部分，不动原有提示词。\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <b>替换原提示词</b><br />\n      将所选模板设为当前主要指令入口，适合希望完整切换到某套模板的用户。\n    </td>\n  </tr>\n</table>\n\n每次启用或禁用前都会自动创建备份。除了模板库，你也可以导入、编辑、删除自己的 `.md` 提示词，并通过分类管理把常用提示词整理成自己的工作流。\n\n> [!NOTE]\n> 如果你有好用的提示词模板，欢迎在 [Issues](https://github.com/yynxxxxx/Codex-X/issues) 提交：请附上模板名称、适用场景、Markdown 内容、推荐启用方式和必要说明。合适的模板会考虑收录到 `examples/`，让更多用户可以一键同步使用。\n\n### 2. Provider / API：添加、检测、获取模型、随时切换\n\n> [!NOTE]\n> 启用新的第三方供应商后，新建或重新打开 Codex 会话即可使用新的中转，不需要重启整个 Codex 客户端。\n\n- 保存多个可命名的官方 Codex 登录配置与第三方供应商，随时查看当前正在使用哪一个\n- 点击“复制”直接新增独立副本，无需确认或进入编辑页；名称可稍后修改\n- 切换前可检测连接，并可获取模型进行测试\n- 在同一页面编辑 Base URL、API Key、Model、Wire API 和完整 TOML\n- 从 cc-switch 导入时自动区分新增、更新、合并与跳过；相同 URL + Key 不再重复显示\n- 切回 OpenAI Official 时保留当前官方登录态，第三方配置也不会凭空消失\n\n### 3. 会话管理：同步、检查与永久删除\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <b>同步和检查</b><br />\n      检查本地会话是否和当前 Provider / 模型一致，需要时一键同步到当前供应商配置，不修改聊天内容。\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <b>查找和整理</b><br />\n      按标题、项目路径、供应商或 ID 搜索会话，也可以按项目路径分组查看，适合清理长期使用后积累的会话列表。\n    </td>\n  </tr>\n  <tr>\n    <td colspan=\"2\" valign=\"top\">\n      <b>精确删除</b><br />\n      支持单选、多选，也可以勾选一个或多个项目，一次选中项目下的全部会话；确认后会从 Codex 自身存储中删除对应会话及其派生子会话。\n    </td>\n  </tr>\n</table>\n\n> [!CAUTION]\n> **永久删除不可恢复。** 删除前请先关闭仍在使用这些会话的 Codex 窗口或 CLI，并在确认窗口中再次核对待删除列表。\n\n### 4. Skills / MCP 管理\n\n在【技能和 MCP】页面集中管理 Codex 的能力扩展，不必再到多个目录和配置文件中逐项查找。\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <b>Skills</b><br />\n      查看当前 Skill，导入已有内容或从 ZIP 安装；可以逐项启用 / 禁用，并检查已安装 Skill 是否有更新。\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <b>MCP</b><br />\n      导入前先预览现有 MCP Server，再决定哪些需要纳管；启用或禁用后由 Codex-X 自动维护 Codex 配置。\n    </td>\n  </tr>\n</table>\n\n### 5. TOML 与官方 Auth 管理\n\n- 自动读取 Codex 官方 `auth.json`\n- 支持查看 / 编辑 ChatGPT 登录态 Auth\n- 区分官方 Auth 与第三方 API Key\n- 官方配置可和第三方 Provider 在 UI 中统一管理\n- 查看当前 Codex 正在使用的 live `config.toml`\n- 深色代码预览与语法高亮\n- Provider 编辑页可直接编辑完整 TOML\n- 保存后同步到 Codex 配置目录\n\n### 6. 逆向 Skills 导航\n\n<div align=\"center\">\n  <a href=\"https://yynxxxxx.github.io/Codex-X/\">\n    <img src=\"https://img.shields.io/badge/Codex--X-在线逆向%20Skills%20导航-0ea5e9?style=for-the-badge&logo=githubpages&logoColor=white\" alt=\"Codex-X 在线逆向 Skills 导航\" />\n  </a>\n</div>\n\n<br />\n\n<table>\n  <tr>\n    <td width=\"55%\">\n      <b>在线教程页</b>：解释什么是“破甲”、Codex-X 如何启用 GPT-5.5 / unrestricted jeli、以及如何搭配不同领域的逆向 Skills。\n      <br /><br />\n      <b>分类覆盖</b>：Android APK / Windows EXE / Web 协议逆向。\n      <br /><br />\n      <b>内容包含</b>：Skill 用途、安装方式、来源地址、推荐使用流程。\n    </td>\n    <td width=\"45%\">\n      <ul>\n        <li>🧩 GPT-5.5 / unrestricted jeli 使用流程</li>\n        <li>📱 Android APK 逆向 Skills</li>\n        <li>🪟 Windows EXE / DLL 逆向 Skills</li>\n        <li>🌐 Web / API / 协议逆向 Skills</li>\n        <li>📋 安装命令一键复制</li>\n      </ul>\n    </td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"https://yynxxxxx.github.io/Codex-X/\">\n    <b>🚀 打开 Codex-X 逆向 Skills 导航</b>\n  </a>\n</p>\n\n### 7. 跨平台桌面软件\n\n- macOS Apple Silicon `.dmg`\n- macOS Intel `.dmg`\n- Windows `.msi`\n- Windows Portable `.zip`\n- Linux `.deb` / `.rpm` / `.AppImage`\n- GitHub Releases 自动构建发布\n- 安装版支持应用内自动更新，Windows 便携版保留手动更新\n\n## 技术栈\n\n| 类型 | 技术 |\n| --- | --- |\n| 桌面框架 | Tauri 2 |\n| 前端 | React 18 / TypeScript / Vite |\n| 后端 | Rust |\n| 本地数据 | SQLite / rusqlite |\n| 配置编辑 | TOML / JSON |\n| 发布 | GitHub Actions / GitHub Releases |\n\n## 配置路径\n\nCodex-X 默认读取 Codex 配置目录：\n\n```text\n~/.codex/config.toml\n~/.codex/auth.json\n```\n\n也支持环境变量：\n\n```text\nCODEX_HOME=/path/to/.codex\nCODEXX_HOME=/path/to/codex-x-data\nCC_SWITCH_HOME=/path/to/.cc-switch\n```\n\nCodex-X 自身数据库默认位于：\n\n```text\n~/.codexx/codexx.db\n```\n\n## 下载\n\n请前往 Releases 页面下载：\n\nhttps://github.com/yynxxxxx/Codex-X/releases\n\n## 开发运行\n\n```bash\npnpm install\npnpm dev\n```\n\n构建桌面端：\n\n```bash\npnpm --dir apps/desktop tauri build\n```\n\n## 桌面端安装说明\n\n如果你在未签名 / 未公证的 DMG 中看到“软件已损坏”提示，这是 macOS Gatekeeper 的正常行为。\n\n- 最佳方式：使用 Apple Developer ID 签名并 notarize\n- 仅本地测试：可手动移除 quarantine 属性\n\n```bash\nxattr -dr com.apple.quarantine /Applications/Codex-X.app\n```\n\n## 许可证\n\n本项目基于 [MIT License](https://github.com/yynxxxxx/Codex-X/blob/main/LICENSE) 开源。\n\n## 致谢 / Thanks\n\n感谢 [LINUX DO 论坛](https://linux.do/) 社区的关注、反馈与支持。\n\n## Star History\n\n<p align=\"center\">\n  <a href=\"https://github.com/yynxxxxx/Codex-X/stargazers\">\n    <picture>\n      <source media=\"(prefers-c"
+    },
+    "brief": {
+      "summary": "Codex-X是管理Codex配置、提示词和会话的跨平台工具",
+      "problem": "Codex的提示词、API、会话和Skills配置分散，手动维护不便",
+      "highlights": [
+        "可以可视化切换Provider和API配置",
+        "可以分类管理、导入和启用提示词",
+        "可以搜索同步会话并管理Skills与MCP"
+      ],
+      "target_users": [
+        "Codex用户",
+        "开发者",
+        "提示词维护者"
+      ],
+      "why_trending": "本周首次收录，今日新增32个Star，总Star达3453",
+      "caveat": "部分功能依赖Codex配置和本地数据，具体限制资料中未说明",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "yynxxxxx/Codex-X",
+      "score": 84,
+      "category": "AI Agent / Skills",
+      "reason": "集中管理Codex的Skills与MCP",
+      "generated_by_ai": true,
+      "velocity_score": 46,
+      "freshness_score": 70,
+      "ranking_score": 64.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 33256,
+      "forks": 3929,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 694
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-20T04:56:23Z",
+      "pushed_at": "2026-09-20T05:02:03Z",
+      "open_issues": 32,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Optional remote workers |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\nDownload from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest), then follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nCopy this prompt into your coding agent to install VoiceStudio and configure it for your device:\n\n```text\nInstall and configure the VoiceStudio Electron desktop app on this device,\nthen verify it works. Tauri is archived; do not install or launch it.\nRepository: https://github.com/debpalash/VoiceStudio\n\nRead the repository's install guide for my OS, docs/performance.md, and\nskills/voicestudio/SKILL.md. Install the voicestudio audio-workflow skill\nwith `npx skills add debpalash/VoiceStudio` if your agent supports skills;\notherwise follow that SKILL.md directly.\n\nDetect my OS, CPU architecture, GPU, available RAM/VRAM, free disk space,\nand any existing VoiceStudio installation, backend, or downloaded models.\nReuse existing data and models. Prefer the latest stable Electron installer\nfor my OS and architecture; select an asset named VoiceStudio-Electron.\nFor source setup, follow electron/README.md: bun install, then bun run dev\nfrom the repository root. Let Electron supervise the backend; do not start\na second backend or use legacy tauri scripts.\nIf migrating from Tauri, follow docs/electron-migration.md and back up first.\n\nConfigure local voice cloning using a supported engine and acceleration\nthat fit this device. Keep working defaults and verify the actual execution\ndevice rather than assuming GPU support. Install required dependencies;\nreuse a suitable installed model, or explain the download size and license\nand ask before downloading one. Keep cloud services and analytics opt-in.\n\nStart the app, check /health at the configured backend address (default\nhttp://localhost:3900), and discover its API through /openapi.json. Generate\na short test with a bundled or authorized voice and verify the audio file.\nReport the installed version, engine, actual device, data location, audio\noutput path, and how to reopen the app. Complete the setup, not just a plan;\nidentify any permissions or manual steps you cannot perform.\n```\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only maintained desktop app.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). Root development, build, test, and release commands target Electron; Tauri source is archived and receives no further updates.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE). Models have their own licenses; review them before commercial use. Clone voices only with permission. See [license details](LICENSE-NOTICE.md).\n"
+    },
+    "brief": {
+      "summary": "本地运行的开源语音创作与配音工具",
+      "problem": "解决语音克隆、配音、转写和有声书制作需求",
+      "highlights": [
+        "可以克隆声音并生成语音",
+        "可以为视频制作带时间轴配音",
+        "可以制作有声书和批量音频"
+      ],
+      "target_users": [
+        "配音与视频创作者",
+        "有声书制作人",
+        "本地化团队"
+      ],
+      "why_trending": "总 Star 超3.3万，近期仍有代码活动",
+      "caveat": "模型有独立许可，克隆声音需获授权",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 94,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与转录",
+      "generated_by_ai": true,
+      "velocity_score": 86,
+      "freshness_score": 40,
+      "ranking_score": 74.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 51698,
+      "forks": 4712,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 258
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-20T05:01:53Z",
+      "pushed_at": "2026-09-20T04:45:15Z",
+      "open_issues": 194,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local fil"
+    },
+    "brief": {
+      "summary": "用 HTML 和 CSS 生成可控的 MP4 视频",
+      "problem": "降低程序化视频制作与批量渲染的门槛",
+      "highlights": [
+        "可以用 AI Agent 按描述生成短视频",
+        "可以制作字幕、图表和动效视频",
+        "可以将网页视觉内容渲染为 MP4"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "视频与内容创作者",
+        "前端工程师"
+      ],
+      "why_trending": "总 Star 超 5.1 万，近期持续更新并连续上榜",
+      "caveat": "需要 Node.js 22 及以上，且有 194 个开放问题",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "面向代理的HTML视频渲染框架",
+      "generated_by_ai": true,
+      "velocity_score": 73,
+      "freshness_score": 40,
+      "ranking_score": 68.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "shengshu-ai/Vidu-S",
+      "url": "https://github.com/shengshu-ai/Vidu-S",
+      "description": "Vidu S: Real-Time Interactive, Editable, and Spatial Video Generation",
+      "language": "",
+      "total_stars": 398,
+      "forks": 11,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "real-time-video",
+        "spatial-video",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-03T06:12:54Z",
+      "updated_at": "2026-09-20T04:49:47Z",
+      "pushed_at": "2026-09-20T03:21:06Z",
+      "open_issues": 1,
+      "homepage": "https://www.vidu.com/vidu-stream",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Vidu S\n\n<div align=\"center\" style=\"line-height: 1;\">\n  <a href=\"https://www.vidu.com/vidu-stream\">\n    <img alt=\"Try Vidu S2\"\n      src=\"https://img.shields.io/badge/Try-Vidu%20S2-555555?labelColor=00a67d&color=555555&logo=googlegemini&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://arxiv.org/abs/2609.11638\">\n    <img alt=\"Vidu S2 Paper\"\n      src=\"https://img.shields.io/badge/Vidu%20S2%20Paper-arXiv%3A2609.11638-555555?labelColor=b31b1b&color=555555&logo=arxiv&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://arxiv.org/abs/2607.03118\">\n    <img alt=\"Vidu S1 Paper\"\n      src=\"https://img.shields.io/badge/Vidu%20S1%20Paper-arXiv%3A2607.03118-555555?labelColor=b31b1b&color=555555&logo=arxiv&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://shengshu.feishu.cn/wiki/X7ZLwyLUzi461LkAlNpcTxs1nsy\">\n    <img alt=\"English Documentation\"\n      src=\"https://img.shields.io/badge/Docs-English-555555?labelColor=2f6fed&color=555555&logo=readthedocs&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://shengshu.feishu.cn/wiki/Fz8ywkzEwil84LkbCOKcxotMnvb\">\n    <img alt=\"Chinese Documentation\"\n      src=\"https://img.shields.io/badge/Docs-Chinese-555555?labelColor=0891b2&color=555555&logo=readthedocs&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://platform.vidu.com/vidu-stream/doc\">\n    <img alt=\"English API Documentation\"\n      src=\"https://img.shields.io/badge/API%20Docs-English-555555?labelColor=7c3aed&color=555555&logo=fastapi&logoColor=white\" height=\"32\"/>\n  </a>\n  <a href=\"https://platform.vidu.cn/vidu-stream/doc\">\n    <img alt=\"Chinese API Documentation\"\n      src=\"https://img.shields.io/badge/API%20Docs-Chinese-555555?labelColor=7c3aed&color=555555&logo=fastapi&logoColor=white\" height=\"32\"/>\n  </a>\n</div>\n\n<p align=\"center\">\n  <img src=\"figures/vidu-s2-overview.png\" alt=\"Vidu S2 Overview\" width=\"100%\">\n</p>\n\n## Introduction\n\n### Vidu S2\n\nVidu S2 extends real-time video generation beyond talking-head digital characters to high-resolution interactive avatars, live video editing, and immersive spatial video. It includes Vidu S2-Avatar for controllable character generation and Vidu S2-Editing for transforming live video streams.\n\nKey breakthroughs:\n\n1. **720p real-time interactive avatars**\n   - Vidu S2-Avatar generates 720p video at 25–42 FPS, supports complex instructions such as dancing, and accepts new reference images at any moment during streaming.\n2. **Stable long-horizon generation with Self-Replay Forcing**\n   - Self-Replay Forcing replays re-noised, self-generated trajectories during training to reduce error accumulation across streaming segments.\n3. **Real-time editing of live video**\n   - Vidu S2-Editing transforms incoming video streams using reference images, supporting style transfer, virtual try-on, character replacement, and background replacement while preserving source motion.\n4. **Real-time spatial video for immersive displays**\n   - Produces synchronized stereo views for immersive displays and VR headsets.\n5. **Efficient inference on low-cost GPUs**\n   - TurboDiffusion and TurboServe combine efficient attention, low-bit GEMM, kernel optimizations, and multi-GPU pipelining for real-time inference.\n\n### Vidu S1\n\nVidu S1 is a real-time interactive video generation model for voice-controlled digital characters. Users can guide generated video content at any moment through spoken instructions, enabling live interaction.  \n\nKey breakthroughs:\n1. **Real-time speech control over video content**\n   - Users can directly instruct digital characters to perform actions.\n2. **Infinite-length real-time interactive generation**\n   - Vidu S1 generates 540p video at up to **42 FPS** and can run on consumer GPUs.\n3. **Custom character images and voice tones**\n   - Vidu S1 supports real people, anime-style characters, pets, and other personalized avatars.\n\n## Quick Links\n\n### Vidu S2\n\n- **Try Vidu S2**: https://www.vidu.com/vidu-stream\n- **Vidu S2 Paper**: https://arxiv.org/abs/2609.11638\n\n### Vidu S1\n\n- **Vidu S1 Paper**: https://arxiv.org/abs/2607.03118\n\n## Docs\n\n### English\n\n- **User Guide**: [shengshu.feishu.cn/wiki/X7ZLwyLUzi461LkAlNpcTxs1nsy](https://shengshu.feishu.cn/wiki/X7ZLwyLUzi461LkAlNpcTxs1nsy)\n- **API Documentation**: [platform.vidu.com/vidu-stream/doc](https://platform.vidu.com/vidu-stream/doc)\n- **Vidu S2-Avatar Quickstart**: [platform.vidu.com/vidu-stream/doc/s2-avatar/realtime/quick-start](https://platform.vidu.com/vidu-stream/doc/s2-avatar/realtime/quick-start)\n- **Vidu S2-Editing Quickstart**: [platform.vidu.com/vidu-stream/doc/s2-editing/quick-start](https://platform.vidu.com/vidu-stream/doc/s2-editing/quick-start)\n\n### Chinese\n\n- **User Guide**: [shengshu.feishu.cn/wiki/Fz8ywkzEwil84LkbCOKcxotMnvb](https://shengshu.feishu.cn/wiki/Fz8ywkzEwil84LkbCOKcxotMnvb)\n- **API Documentation**: [platform.vidu.cn/vidu-stream/doc](https://platform.vidu.cn/vidu-stream/doc)\n- **Vidu S2-Avatar Quickstart**: [platform.vidu.cn/vidu-stream/doc/s2-avatar/realtime/quick-start](https://platform.vidu.cn/vidu-stream/doc/s2-avatar/realtime/quick-start)\n- **Vidu S2-Editing Quickstart**: [platform.vidu.cn/vidu-stream/doc/s2-editing/quick-start](https://platform.vidu.cn/vidu-stream/doc/s2-editing/quick-start)\n\n### Agent Skill\n\nFor agent-assisted API integration, use the `vidu-s-api` Skill. In Claude Code, Codex, OpenClaw, or any agent that supports Skills, say directly:\n\n```text\nInstall this skill: https://github.com/shengshu-ai/vidu-s-api/tree/main/skills/vidu-s-api\n```\n\nThe agent will clone and install it into the proper Skills directory. Restart the agent if required, then ask it to load `vidu-s-api` for Vidu S2 API integration.\n\n## Updates\n\n- **[2026-09]**: Vidu S2 is now available to try at [vidu.com/vidu-stream](https://www.vidu.com/vidu-stream)\n- **[2026-07]**: Vidu S1 is now available.\n\n## Citation\n\nIf you find Vidu S useful for your research, please cite:\n\n```bibtex\n@article{zhang2026vidus2,\n  title={Vidu S2: Real-Time Interactive, Editable, and Spatial Video Generation},\n  author={Zhang, Jintao and Jiang, Kai and Chen, Jintao and Wang, Xu and Liu, Deyuan and Li, Jungang and Chen, Dechuang and Lin, Ming and Zhou, Jingjiang and Jin, Haopeng and others},\n  journal={arXiv preprint arXiv:2609.11638},\n  year={2026}\n}\n```\n\n```bibtex\n@article{zhang2026vidus1,\n  title={Vidu S1: A Real-Time Interactive Video Generation Model},\n  author={Zhang, Jintao and Jiang, Kai and Chen, Jintao and Wang, Xu and Luo, Yang and Wang, Yuji and Chen, Dechuang and Li, Jungang and Ye, Chengyang and Chen, Marco and others},\n  journal={arXiv preprint arXiv:2607.03118},\n  year={2026}\n}\n```\n"
+    },
+    "brief": {
+      "summary": "Vidu S 面向实时互动、编辑与空间视频生成",
+      "problem": "解决视频生成难以实时交互、编辑和适配沉浸式显示的问题",
+      "highlights": [
+        "可以生成可实时互动的数字角色视频",
+        "可以对直播画面进行换装、换背景和角色替换",
+        "可以生成适用于VR设备的同步立体视频"
+      ],
+      "target_users": [
+        "视频创作者",
+        "虚拟角色开发者",
+        "VR内容制作团队"
+      ],
+      "why_trending": "本周首次收录，已有398个Star且近期持续更新",
+      "caveat": "项目许可证资料中未说明，使用前需确认授权方式",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "shengshu-ai/Vidu-S",
+      "score": 94,
+      "category": "AI 视频",
+      "reason": "实时可编辑空间视频生成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "aldegad/sprite-gen",
+      "url": "https://github.com/aldegad/sprite-gen",
+      "description": "Generate clean 2D game sprites & animation atlases — component-row pipeline: state rows, alpha cleanup, frame extraction, runtime atlases. Codex/Claude skill.",
+      "language": "Python",
+      "total_stars": 1635,
+      "forks": 154,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-game",
+        "ai-tools",
+        "claude-code",
+        "codex",
+        "game-dev",
+        "gamedev",
+        "pixel-art",
+        "sprite-generation",
+        "sprite-sheet"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-12T06:49:09Z",
+      "updated_at": "2026-09-20T04:29:42Z",
+      "pushed_at": "2026-09-20T04:29:45Z",
+      "open_issues": 2,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">sprite-gen</h1>\n\n<p align=\"center\"><b>One drawing in. Game-ready sprites out — as an atlas, or as transparent motion loops.</b></p>\n\n<p align=\"center\">\n\n**English** · [한국어](README.ko.md) · [日本語](README.ja.md) · [简体中文](README.zh-Hans.md) · [Español](README.es.md) · [Français](README.fr.md)\n\n</p>\n\n<p align=\"center\">\n  <a href=\"https://youtu.be/zVu9YlbPtog\"><img src=\"docs/assets/hero-v2-party.gif\" width=\"960\" alt=\"Animated sprite-gen v2 showcase: paladin, wolf and slime\" /></a>\n</p>\n\n<p align=\"center\"><sub>Each character started as <b>one still image</b>. Grok Imagine brought it to life; sprite-gen extracted the transparent loops, and HyperFrames assembled this showcase.</sub></p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/village-scene.gif\" width=\"600\" alt=\"A samurai and companions walking through a painted village with layered scenery and projected shadows\" />\n</p>\n\n<p align=\"center\"><sub>A separate village composition made from sprite-gen assets. This GIF preserves the 10-second video at 20 fps with a 256-colour palette.</sub></p>\n\n---\n\nAsk an image model for a \"sprite sheet\" and you know what you get: a character whose face changes every frame, a background that won't key out, poses that overlap and drift off-grid, and a PNG your game engine can't actually consume. Cute demo, useless asset.\n\n`sprite-gen` is a Codex/Claude skill and a Python CLI that closes that gap. Give it **one base image** — it drives generation row by row, locks the character's identity, strips the chroma background to real alpha, extracts each pose as a clean transparent frame, and bakes a runtime atlas **with a machine-readable `manifest.json.frame_layout`**. Or hand the same still to a video model and get back a seamless, transparent loop per motion state. For the last 10% that generation never gets right, a **curation webview** lets you compare, reject, nudge and watch the loop live before you bake.\n\n## Start with a request\n\nAsk for **sprites** or **an image**. The agent checks access, asks only for missing provider/motion choices, runs the existing pipeline, and delivers the files. The curation view is optional. Save your choices once to reuse separate sprite and image defaults; a one-off request does not overwrite them. [User workflow and defaults](docs/user-workflow.md).\n\n## Pipelines, independent tools and scenes\n\nThe two sprite pipelines are ordered generation flows. Tool groups contain independent commands; scene creation is an optional workflow that consumes finished assets. `sprite-gen --help` prints this map and groups commands by the code domain that owns them.\n\n```mermaid\nflowchart LR\n    subgraph A[\"A · atlas rows\"]\n        direction LR\n        a1[prepare] --> a2[\"gen · gen-set\"] --> a3[extract] --> a5[compose-atlas]\n        a5 -.-> a4[\"curation (optional)\"]\n        a4 --> a5\n    end\n    subgraph B[\"B · video → loop\"]\n        direction LR\n        b1[video-canvas] --> b2[video] --> b3[video-frames] --> b4[video-loop]\n    end\n    subgraph C[\"C · utilities\"]\n        direction LR\n        c1[cutout] ~~~ c2[slice-sheet] ~~~ c3[unpack-atlas]\n    end\n    subgraph D[\"D · post-processing\"]\n        direction LR\n        d1[recolor] ~~~ d2[compose-layers] ~~~ d3[export-*]\n    end\n    subgraph E[\"E · asset tools (independent)\"]\n        e1[background-tile] ~~~ e2[shadow] ~~~ e3[inspect-motion]\n    end\n    subgraph S[\"S · scene (optional)\"]\n        s1[\"existing assets + scene.json\"] --> s2[scene-render]\n        s1 --> s3[scene-inspect]\n    end\n```\n\n| Pipeline / tool group / workflow | What goes in → what comes out | Docs |\n|---|---|---|\n| **A · atlas rows** | one still + a list of states → `sprite-sheet-alpha.png` + `manifest.json.frame_layout`, with **Breathe** baked on idle poses | [run-contract](docs/run-contract.md) · [breathing](docs/breathing.md) |\n| **B · video → loop** | one still → per state, a seamless transparent GIF / WebP / strip, animated by Grok Imagine and cut at its true period | [video-pipeline](docs/video-pipeline.md) · [video](docs/video.md) |\n| **C · utilities** | an imported image or grid sheet → clean transparent cuts; a finished atlas → a curator-ready run | [sheet-slicing](docs/sheet-slicing.md) · [curation](docs/curation.md) |\n| **D · post-processing** | a finished sheet → deterministic colourways, rig layer composites, Aseprite / Phaser / Flame exports | [recolor](docs/recolor.md) · [layer-tracks](docs/layer-tracks.md) · [engine-export](docs/engine-export.md) |\n| **E · asset tools** | independent PNGs or animations → repeating tiles, projected shadows, motion/contact measurements | [asset-tools](docs/asset-tools.md) |\n| **S · scene** | existing assets + placement, camera and lighting → PNG frames, MP4/GIF, inspection and placement metadata | [scene](docs/scene.md) |\n\nFull index: [`docs/README.md`](docs/README.md). Architecture with domain and pipeline diagrams: [`docs/architecture.md`](docs/architecture.md).\n\n## What you actually get\n\n- **A transparent sprite atlas** (`sprite-sheet-alpha.png`) — real alpha, no leftover chroma fringe, verified against white backgrounds ([why the extractor unmixes instead of peeling](docs/chroma-alpha.md)).\n- **A runtime manifest** (`manifest.json.frame_layout`) — absolute frame rectangles, per-state fps and loop flags. Your engine samples rectangles; it never guesses a grid.\n- **Breathe** — a still idle becomes a living loop, deterministic squash & stretch baked on your curated frames from one sidecar field, anatomy-aware and pixel-true ([details](docs/breathing.md)).\n- **Pixel-art that stays on grid** — the Backbone Lattice measures one grid for the whole subject and holds every cut to it ([details](docs/pixel-unfake.md)).\n- **Motion loops from video** — jumps get a tall canvas, attacks a wide one, the loop point is the clip's own period, and a one-shot action is cut rest → action → rest ([details](docs/video-pipeline.md)).\n- **Deterministic colourways** — `recolor` bakes N variant sheets from a palette map; same input, same output bytes ([details](docs/recolor.md)).\n- **QA you can watch** — per-state GIFs and contact sheets, so motion is judged as motion before anything ships. Cyclic locomotion (walk/run) stays experimental unless motion QA actually passes.\n- **Independent asset tools** — build repeating backgrounds, project shadows from a foot anchor, and inspect timing, duplicate poses and contact evidence. Ambiguous feet produce an unverified measurement ([details](docs/asset-tools.md)).\n- **Optional scene creation** — place existing PNGs, external frame sequences, loop strips or runtime atlases on named planes, with camera motion and shared shadow projection. Sprite generation can finish before this step ([details](docs/scene.md)).\n\n## Quickstart\n\n```bash\n# install (Pillow, NumPy) into a fresh virtualenv — the venv is the only supported interpreter\npython3 -m venv .venv && source .venv/bin/activate\npip install -e .\nsprite-gen --help\n```\n\n**A · atlas rows** — one still to a runtime atlas.\n\n```bash\nsprite-gen prepare --out-dir <run> --character-id <id> --base-image base.png   # request, guides, prompts\nsprite-gen gen-set --run-dir <run> --provider codex                            # every state row, 4 at a time\nsprite-gen extract --run-dir <run>                                             # chroma → transparent frames\nsprite-gen compose-atlas --run-dir <run>                                       # sprite-sheet-alpha.png + manifest.json\nsprite-gen curation --run-dir <run>                                            # (optional) pick, nudge, breathe\n```\n\n**B · video → loop** — one still to transparent loops (needs `ffmpeg`, `img2webp`, and your own `grok` login or `XAI_API_KEY`).\n\n```bash\nsprite-gen video-set --base side=still.png --states idle,walk,run,jump,attack --out-dir set/\n# per item: video-canvas → video → video-frames → video-loop; set/table.md names every result\n```\n\n**C · utilities** — each stands alone.\n\n```bash\nsprite-gen cutout icon.png --white-check              # white/ivory → matte, magenta/green → chroma engine\nsprite-gen slice-sheet --sheet sheet.png --chroma-key magenta --grid 3x2   # multi-figure sheet → per-cell cuts\nsprite-gen unpack-atlas --atlas sheet.png             # finished atlas → curator-ready run (or --pngs-dir folder/)\n```\n\n**D · post-processing** — refine a finished sheet without regenerating.\n\n```bash\nsprite-gen recolor-palette --base <run>/sprite-sheet-alpha.png --out palette.draft.json\nsprite-gen recolor --run-dir <run> --spec recolor.spec.json      # → <run>/variants/\nsprite-gen compose-layers --run-dir <run>                        # rig runs: declared stacks → <run>/layers/\nsprite-gen export-aseprite --run-dir <run>                       # Aseprite JSON for Phaser / Flame\n```\n\n**E · asset tools** — each accepts existing assets, including artwork from other tools.\n\n```bash\nsprite-gen background-tile --source background.png --period 512 --overlap 32 --out tile.png\nsprite-gen shadow --source walk.strip.json --out-dir shadows/\nsprite-gen inspect-motion --source walk.strip.json --out motion.json\n# Only with known same-foot contact and an isolated foot ROI:\nsprite-gen inspect-motion --source walk.strip.json --contacts 0:4 --foot-box 20,70,32,10 --out stance.json\n```\n\n**S · scene** — an optional composition workflow. The [scene contract](docs/scene.md) includes a complete spec.\n\n```bash\nsprite-gen scene-render --spec scene.json --out-dir render/ --formats png,mp4 --export-layers\nsprite-gen scene-inspect --spec scene.json --out scene-check.json\n```\n\nThe agent-facing workflow, gates and contracts live in [`SKILL.md`](SKILL.md).\n\n## Install as a skill\n\n```bash\npython3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \\\n  --repo aldegad/sprite-gen --path . --name sprite-gen\n```\n\nImage generation is part of this engine (`sprite_gen.gen`, providers `codex` and `grok` on a subscription you already pay for, plus an explicit-only `openai` provider for servers and SaaS that bills per call; the general `image-gen` skill is a thin shuttle over it). Video uses **your own** credential — the `grok` CLI login or an `XAI_API_KEY` — and nothing is shipped with the repo ([docs/video.md](docs/video.md)).\n\n`sprite-gen` supports CPython 3.10+; CI runs 3.10 and 3.14. The quickstart needs a Python with working `venv`/`ensurepip`.\n\n## Attribution\n\nThe component-row workflow is inspired by the Apache-2.0 licensed `hatch-pet` skill, but targets generic game sprite atlases and includes no pet packages or pet visual assets.\n\nCommunity contributions, experiments, and their originating pull requests are documented in [`CONTRIBUTORS.md`](CONTRIBUTORS.md).\n\n## License\n\nApache-2.0\n"
+    },
+    "brief": {
+      "summary": "把单张图生成可直接用于游戏的2D精灵与动画图集",
+      "problem": "解决AI生成角色逐帧变形、背景难清除和图集难接入引擎的问题",
+      "highlights": [
+        "可以从一张图生成多状态透明精灵图集",
+        "可以提取视频动作并制作无缝透明循环",
+        "可以预览、筛选和调整帧后导出引擎资源"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "像素美术设计师",
+        "AI工具开发者"
+      ],
+      "why_trending": "总Star达1635，本周首次收录且近期持续更新",
+      "caveat": "视频流程依赖外部模型、登录方式和多个命令行工具",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aldegad/sprite-gen",
+      "score": 94,
+      "category": "游戏开发",
+      "reason": "生成游戏精灵与动画图集",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "ColinGPT9/clips-studio",
+      "url": "https://github.com/ColinGPT9/clips-studio",
+      "description": "Free, open-source Opus Clip alternative that runs entirely on your own PC. Turn long streams and videos into ready-to-post vertical Shorts: multimodal clip detection, speaker-aware face tracking, editable captions, AI edit chat. No uploads, no subscription, no watermark.",
+      "language": "Python",
+      "total_stars": 45,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agent",
+        "clips",
+        "electron",
+        "ffmpeg",
+        "gemma",
+        "instagram",
+        "kick",
+        "local-first",
+        "ollama",
+        "opus-clip-alternative",
+        "self-hosted",
+        "tiktok",
+        "twitch",
+        "twitch-clips",
+        "video-editing",
+        "whisper",
+        "yolov8",
+        "youtube",
+        "youtube-shorts"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-06-11T00:43:41Z",
+      "updated_at": "2026-09-20T03:27:32Z",
+      "pushed_at": "2026-09-20T03:27:28Z",
+      "open_issues": 36,
+      "homepage": "https://colingpt9.github.io/clips-studio/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Clips Kitty: open-source AI video clipping that runs on your own PC\n\n<a href=\"https://apps.microsoft.com/detail/9NB6XT7DSQZZ\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://get.microsoft.com/images/en-us%20dark.svg\">\n    <img alt=\"Get Clips Kitty from the Microsoft Store\" src=\"https://get.microsoft.com/images/en-us%20light.svg\" height=\"52\">\n  </picture>\n</a>\n\n[![Latest release](https://img.shields.io/github/v/release/ColinGPT9/clips-studio?label=release)](https://github.com/ColinGPT9/clips-studio/releases)\n[![Downloads](https://img.shields.io/github/downloads/ColinGPT9/clips-studio/total?label=downloads)](https://github.com/ColinGPT9/clips-studio/releases)\n[![Licence](https://img.shields.io/github/license/ColinGPT9/clips-studio)](LICENSE)\n[![Stars](https://img.shields.io/github/stars/ColinGPT9/clips-studio?style=flat)](https://github.com/ColinGPT9/clips-studio/stargazers)\n[![Open source](https://img.shields.io/badge/open%20source-yes-brightgreen)](https://github.com/ColinGPT9/clips-studio)\n[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)\n[![Docker](https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&logoColor=white)](docs/DOCKER.md)\n\n> **Clips Kitty was called Clips Studio until version 1.1.3**, renamed to meet\n> Microsoft Store naming requirements. Same app, same repository, same data.\n\n<img src=\"docs/brand/mascot.png\" alt=\"\" width=\"150\" align=\"right\">\n\n**Turn long streams and videos into ready-to-post Shorts, Reels, and TikToks,\nentirely on your own machine.** Clips Kitty is a free, open-source AI clip generator\nand video editor for creators: paste a YouTube, Twitch, or Kick link and it finds the\nbest moments, crops them to 9:16 with the speaker kept centred, burns in word-synced\ncaptions, and writes titles, descriptions, and hashtags.\n\nNo cloud AI. No subscription. No per-clip fees. Your footage never leaves your\ncomputer, unless you ask it to publish a clip to your own YouTube channel.\n\n**Why it exists:** most creators growing a channel are doing all of it themselves:\nfilming, streaming, editing, posting. Clipping is how people find you and it is usually\nthe first thing that gets dropped: an editor is a cost most channels cannot justify yet,\nclipping tools charge per video or per month, and cutting them by hand takes a day you\nneeded elsewhere. This runs on hardware you already own, so it costs nothing to use and\nthere is no cap on how many clips you make.\n\n<img src=\"docs/store-screenshots/fs-dashboard-202754.png\" width=\"100%\"\n     alt=\"The Clips Kitty dashboard: paste a YouTube, Twitch or Kick URL, pick caption and\n          format options, and a finished video row showing 38 clips produced in 19m 38s,\n          with live CPU, RAM, GPU and storage readouts beside it.\">\n\n<sub>38 clips from one video in 19 minutes, on one PC, with nothing uploaded.</sub>\n\n---\n\n## Contents\n\n- [What it does](#what-it-does)\n- [How it compares to Opus Clip, Klap, Vizard and CapCut](#how-it-compares-to-opus-clip-klap-vizard-and-capcut)\n- [How it works](#how-it-works)\n- [Features](#features)\n- [What it's built for](#what-its-built-for)\n- [Requirements](#requirements)\n- [Install and run](#install-and-run)\n- [Pick your AI model](#pick-your-ai-model)\n- [Tested hardware and performance](#tested-hardware-and-performance)\n- [Supported platforms](#supported-platforms)\n- [Supported languages](#supported-languages)\n- [Publish to YouTube](#publish-to-youtube)\n- [Publish to every platform at once](#publish-to-every-platform-at-once)\n- [GPU acceleration](#gpu-acceleration)\n- [Command line use](#command-line-use)\n- [Build on it](#build-on-it)\n- [Architecture](#architecture)\n- [Contributing](#contributing)\n- [Roadmap](#roadmap-detail)\n- [License](#license)\n\n---\n\n## What it does\n\nYou give Clips Kitty a long video. It gives you back a folder of finished vertical\nclips you can post, plus a studio to review and fix them before you do.\n\nIt is built for the content most clipping tools handle worst: **live streams, IRL and\ntalking-head footage, podcasts, and gym/fitness content**: long, loosely structured\nvideos where the good moments are buried and a transcript alone won't find them.\n\n## How it compares to Opus Clip, Klap, Vizard and CapCut\n\nClips Kitty is an open-source alternative to cloud clipping tools. The difference that\nmatters is where the work happens: your video is never uploaded, so there is nothing to\nmeter and nothing to charge for.\n\n| Tool | Price, billed monthly | Free tier | Finds the clips for you | Watermark | Uploads your video | Open source |\n| ---- | --------------------- | --------- | ----------------------- | --------- | ------------------ | ----------- |\n| **Clips Kitty** | Free, no paid tier | The whole app | Yes | Never | No, runs on your PC | Yes, AGPL-3.0 |\n| Opus Clip | $15 Starter, $29 Pro | 1080p, watermarked, expires in 3 days | Yes | On the free tier | Yes | No |\n| Klap | $29 Pro, $14 Basic billed yearly | One video | Yes | Not stated | Yes | No |\n| Vizard | $29 Creator, $14.50 billed yearly | 60 credits a month, 720p | Yes | On the free tier | Yes | No |\n| quso.ai | $29 to $49 | 75 credits a month, 720p | Yes | Not stated | Yes | No |\n| Ssemble | $15 to $60, $6 to $24 billed yearly | None listed | Yes | Not stated | Yes | No |\n| Descript | $16, $24, $50 | 60 minutes a month, 720p | Partly, it is a transcript editor | On Free and Hobbyist | Yes | No |\n| CapCut | Free to use, paid tiers at capcut.com | The whole editor | **No, you cut by hand** | Varies by feature | No on the desktop app | No |\n\n**CapCut is the one worth understanding**, because it is the free answer everyone gives.\nIt is a good editor and it costs nothing, but you find every moment and crop every clip\nyourself. Clips Kitty is also free, and that first pass is the part it does for you.\n\n**Opus Clip, Klap or Vizard are the better choice** if you don't have a Windows PC with a\ngraphics card, you clip occasionally, or you need to work from a phone. Clips Kitty is\nbuilt for clipping at volume on hardware you already own.\n\n**[Full comparison of all seven, with what each one is best at](https://colingpt9.github.io/clips-studio/alternatives.html)**\n\n<sub>Prices checked on each company's own pricing page, 17 September 2026. CapCut\npublishes no pricing page we could read, so no price is quoted for it. Plans change; this\ntable won't update itself.</sub>\n\n## How it works\n\n```\n        Video input  (YouTube · Twitch VOD · Kick VOD · local file)\n             │\n             ▼\n        Transcription           faster-whisper, word-level timestamps, local\n             │\n             ▼\n        AI video analysis       audio · visual · reaction signals, computed\n             │                  over the whole video in 1-second bins\n             ▼\n        Clip detection          local LLM scores the transcript in context of\n        and scoring             those signals; signal peaks become candidates\n             │                  too, so laughs and hype aren't missed\n             ▼\n        Video editing           YOLOv8 pose tracking + TalkNet active-speaker\n             │                  detection → 9:16 crop that cuts to whoever is\n             │                  speaking; trims, cuts, watermark\n             ▼\n        Captions/subtitles      word-synced, burned in, fully editable\n             │\n             ▼\n        Multilingual            translate, subtitle, or dub into 19 languages\n             │\n             ▼\n        Export                  organized folders, clean filenames, metadata\n```\n\n**Every stage above runs on your computer.** The only thing that touches the network\nin a normal run is downloading the source video.\n\n### The stages in detail\n\n**Transcription: faster-whisper.** Word-level timestamps, running on CUDA where\navailable and falling back to CPU. Word timing is what makes captions land on the\nright syllable and clips start on a real sentence boundary.\n\n**AI clip scoring.** The transcript is one signal among five. Audio gives loudness\nspikes, burst density (what laughter and applause look like), and silence→explosion\npayoff shapes. Visual gives scene cuts, motion, and face-area changes. A reaction\nsignal fuses those. Each is normalized *within that video*, so a quiet podcast and a\nscreaming stream both produce meaningful peaks. Where real audience data exists\n(Twitch chat replay measured by unique chatters, YouTube's most-replayed heatmap), it\nadds a small capped bonus.\n\nThe local LLM sees the transcript **plus a timeline of those events**, so it can weigh\n\"the words are mild but the room exploded\" correctly. Because small models score\neverything in a narrow band, the finalists then get compared head-to-head in one\nrerank call: relative judgment is much easier for a 7B model than absolute scoring.\n\n**Creator Profiles.** The app builds a knowledge base per creator across their videos:\nrecurring topics, series, collaborators, running jokes, and ongoing storylines. That\ncontext helps it write accurate titles and spot callbacks. It is deliberately\nconservative: a catchphrase has to actually repeat before it counts, knowledge that\nstops being mentioned goes dormant, and every score contribution from it is additive,\ncapped, and can be switched off.\n\n**Video editor.** Non-destructive: trims, internal cuts, mutes, muted words, volume,\nfades, speed, hook text, music, and watermark are stored as operations and applied at\nrender time. There's an AI edit chat too (*\"make it 5 seconds longer\"*, *\"the caption\nsays gost, it should say ghost\"*), where the model proposes and validated code applies.\n\n**Long-form processing.** An opt-in 16:9 path using the same analysis: horizontal\nclips, X/Twitter-length cuts, a best-of highlight reel, or the full stream with dead\nair removed.\n\n**Multilingual pipeline and AI dubbing.** Captions are translated and shown for review\n*before* anything is written or burned, so a bad line gets fixed while it's still\nfixable. A glossary protects channel names, sponsors, and in-jokes from being\ntranslated. Dubbing uses local TTS with auditionable voices.\n\n**Local GPU acceleration.** CUDA for detection and transcription, hardware video\nencoding via NVENC/AMF/QSV (auto-detected, with CPU fallback), and the LLM on GPU\nthrough Ollama.\n\n## Features\n\n- **Multimodal clip detection**: moments scored 0–100 by fusing what's said, audio\n  excitement, visual activity, on-screen reactions, and hook/payoff strength. Every\n  clip clearing the quality bar is kept, with no arbitrary cap.\n- **Speaker-aware face tracking**: YOLOv8 pose detection keeps the subject centred,\n  and in group footage the camera follows **whoever is actually speaking**, decided by\n  TalkNet active-speaker detection from the face and the audio together rather than\n  from movement. When the speaker changes the framing **cuts** to them instead of\n  panning across, the way an editor would. Crop-only framing: never stretched, never\n  distorted.\n- **Podcast mode**: for multi-camera footage, each shot gets its own steady crop on one\n  person, so cuts land on a face with no panning. Within a shot the subject is chosen by\n  mouth motion, falling back to the most prominent face.\n- **Editable burned-in captions**: word-synced, and styled how you like (colour, size,\n  position, words per line, casing, or off). Fix a transcription mistake line by line\n  before export.\n- **AI edit chat**: describe what's wrong in plain language and it re-edits.\n- **AI titles, descriptions, and hashtags**, all editable before export.\n- **Creator Profiles**: the app learns each creator over time to pick and title clips\n  better. Everything stays on your computer, and you can inspect, correct, or wipe it.\n- **Multilingual publishing**: 19 languages, with review before anything is burned.\n- **AI dubbing**: local text-to-speech with voice auditioning per language.\n- **Long-form export**: 16:9 clips, highlight reels, or a de-duplicated stream edit.\n  A highlight reel's description carries **chap"
+    },
+    "brief": {
+      "summary": "本地运行的开源 AI 短视频剪辑工具",
+      "problem": "长视频剪辑耗时，云端工具还可能收费或上传素材",
+      "highlights": [
+        "可以把长直播自动切成竖屏短视频",
+        "可以自动跟踪说话者并生成字幕",
+        "可以在本机编辑并导出短视频素材"
+      ],
+      "target_users": [
+        "直播创作者",
+        "短视频编辑",
+        "注重隐私的用户"
+      ],
+      "why_trending": "本周首次收录，近期有代码更新；总 Star 45",
+      "caveat": "采用 AGPL-3.0，使用前需了解许可要求",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "ColinGPT9/clips-studio",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "自动识别并剪辑长视频短片",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.0
+    }
+  }
+]
