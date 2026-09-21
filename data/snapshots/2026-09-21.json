@@ -1,0 +1,513 @@
+[
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 18236,
+      "forks": 1021,
+      "stars_today": 2428,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2428
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-09-21T05:08:50Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 45,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "problem": "该项目围绕“A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：A coding-agent skill for mul",
+        "主要使用 JavaScript 开发",
+        "许可证：MIT"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 2,428 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agent、agent skill",
+      "generated_by_ai": false,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 67.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "BuilderIO/agent-native",
+      "url": "https://github.com/BuilderIO/agent-native",
+      "description": "A framework for building agentic apps",
+      "language": "TypeScript",
+      "total_stars": 5369,
+      "forks": 500,
+      "stars_today": 98,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 98
+    },
+    "details": {
+      "topics": [
+        "agent-native",
+        "agents",
+        "ai",
+        "react",
+        "typescript"
+      ],
+      "license_name": "",
+      "created_at": "2026-03-12T14:57:10Z",
+      "updated_at": "2026-09-21T05:08:59Z",
+      "pushed_at": "2026-09-21T04:35:43Z",
+      "open_issues": 76,
+      "homepage": "https://www.agent-native.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    media=\"(prefers-color-scheme: dark)\"\n    srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F5476444e54ee4a958966c90caca468e3\"\n  />\n  <source\n    media=\"(prefers-color-scheme: light)\"\n    srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F7628600bc10a4940b78f42c5df7628b0\"\n  />\n  <img\n    alt=\"Agent-Native: The agentic application framework\"\n    src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F7628600bc10a4940b78f42c5df7628b0\"\n  />\n</picture>\n\n# Agent-Native\n\nAgent-Native is an open-source TypeScript framework for building agents that pair autonomous work with a purpose-built UI. Define each capability once as an [action](https://agent-native.com/docs/actions-overview): the agent uses it as a tool, and the UI calls it from code.\n\n## Quick start\n\n```bash\nnpx --yes @agent-native/core@latest create my-agent --standalone --template chat\n```\n\nFollow the [getting started guide](https://agent-native.com/docs/getting-started) for a full intro to the framework.\n\n## Why build agents with UIs?\n\nCoding agents work with more than a text box. Their environment provides context, tools, files, tests, and previews that make their capabilities and results visible.\n\nKnowledge work needs that same kind of environment. A UI shows what an agent can do and gives people familiar ways to inspect, edit, approve, and share its work.\n\n## How Agent-Native works\n\n- **[Shared actions](https://agent-native.com/docs/actions-overview).** The agent calls each capability as a tool, and the UI calls it from code. Both paths use the same validation, permissions, and implementation.\n- **[Shared data](https://agent-native.com/docs/server-database).** Work done by the agent appears in the UI, and work done in the UI is available to the agent.\n- **[Shared application state](https://agent-native.com/docs/context-awareness).** The agent receives relevant UI state, such as the current page, selected record, or active view.\n\nThe agent does not click through the UI. It works through the same action layer as the UI.\n\n### Example: a shared action\n\nCreate `actions/hello.ts`:\n\n```ts\nimport { defineAction } from \"@agent-native/core/action\";\nimport { z } from \"zod\";\n\n// One action powers every app surface: UI, agent, HTTP, MCP, A2A, and CLI.\nexport default defineAction({\n  description: \"Return a friendly greeting.\",\n  schema: z.object({\n    name: z.string().default(\"world\").describe(\"Name to greet\"),\n  }),\n  http: { method: \"GET\" },\n  run: async ({ name }) => {\n    return { message: `Hello, ${name}!` };\n  },\n});\n```\n\nThe agent receives `hello` as a tool. React calls the same function with `useActionQuery(\"hello\", { name: \"Alex\" })`. Agent-Native also exposes it through HTTP, MCP, A2A, and the CLI.\n\n## Included\n\n- **[Agent chat](https://agent-native.com/docs/agent-surfaces):** Let people delegate work, ask questions, and review results in the same UI.\n- **[Authentication and permissions](https://agent-native.com/docs/authentication):** Control who can access and change shared work.\n- **[Skills and memory](https://agent-native.com/docs/agent-resources):** Give agents reusable expertise and persistent context.\n- **[Automations](https://agent-native.com/docs/automations):** Run agent work on schedules or events.\n- **[Agent teams](https://agent-native.com/docs/agent-teams):** Delegate work to specialist agents in the same workspace or across connected agents.\n- **[PostgreSQL backend](https://agent-native.com/docs/server-database):** Use PostgreSQL in production and PGlite for local development on any Nitro-compatible host.\n\nBring your LLM, SQL database, tools, and infrastructure. Everything you build stays yours.\n\nSee Agent-Native in action:\n\nhttps://github.com/user-attachments/assets/ef51644b-6506-46d8-8083-0af7b7e5b65c\n\n<br />\n\n## Open-source agents\n\nStart from one of these agents or use it as an example for your own.\n\n<br />\n\n<table>\n<tr>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Clips**\n\n<a href=\"https://agent-native.com/apps/clips/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F4dc9c87b9a224132855e1cb68cd89f9e?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F462fdb643d5d403a8c54540c5c3292f6?format=webp&width=800\" alt=\"Clips app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nRecord and understand meetings, screens, and voice notes.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Design**\n\n<a href=\"https://agent-native.com/apps/design/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F072f66a3e360464fb48617670ceee46f?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fc9f693f170294bde8ebc733cff368af9?format=webp&width=800\" alt=\"Design app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nGenerate and refine interactive designs.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Slides**\n\n<a href=\"https://agent-native.com/apps/slides/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F710f5b7586cc41deaa0e6f8de658a499?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F6223a64717a04931a6f509696019f48b?format=webp&width=800\" alt=\"Slides app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nCreate and edit on-brand presentations.\n\n<br />\n\n</td>\n</tr>\n<tr>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Analytics**\n\n<a href=\"https://agent-native.com/apps/analytics/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fba632b39758d448594f7e5d2403e5d0f?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F976ea93771b64b9e8c1b3eb12e606e07?format=webp&width=800\" alt=\"Analytics app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nAsk questions of your data and build dashboards.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Calendar**\n\n<a href=\"https://agent-native.com/apps/calendar/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F91d4c18d256b49e6bca24c23ce90a4f2?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F8d9d48bb2f1d498f9601ac28c64edd4c?format=webp&width=800\" alt=\"Calendar app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nFind time, schedule events, and manage bookings.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Mail**\n\n<a href=\"https://agent-native.com/apps/mail/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F216aaef9859144ffa3eb9498fa1132da?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F064aee3ec5cd44879b9c186f63a6d6f4?format=webp&width=800\" alt=\"Mail app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nPrioritize email, draft replies, and follow up.\n\n<br />\n\n</td>\n</tr>\n<tr>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Assets**\n\n<a href=\"https://agent-native.com/apps/assets/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fde445dd867744e9bac5d3e5d04c903b2?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fac5701f0871f4edbb06fa9cdb12b166e?format=webp&width=800\" alt=\"Assets app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nCreate and organize on-brand media.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Content**\n\n<a href=\"https://agent-native.com/apps/content/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fa9f30380b03b4fd1a7d2ab371ddfd798?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F979f792c79834470a513a9d9b733dd84?format=webp&width=800\" alt=\"Content app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nDraft, organize, and publish content.\n\n<br />\n\n</td>\n<td width=\"33%\" align=\"center\" valign=\"top\">\n\n<br />\n\n**Plans**\n\n<a href=\"https://agent-native.com/apps/plan/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fe89439e917044fc9ac9663737e35bf1f?format=webp&width=800\">\n<img src=\"https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F98427229c8c84c30afee56172503c294?format=webp&width=800\" alt=\"Plans app screenshot\" width=\"100%\">\n</picture>\n</a>\n\nCreate and review visual plans with diagrams, wireframes, and prototypes.\n\n<br />\n\n</td>\n</tr>\n</table>\n\nExplore the [full app gallery](https://agent-native.com/apps), or start with the [framework guide](https://agent-native.com/docs/getting-started).\n\n## Documentation and community\n\n- Read the [documentation](https://agent-native.com/docs).\n- Join [Discord](https://discord.gg/qm82StQ2NC) to ask questions, share what you're building, and get help.\n\n## Contributing\n\nWorking on this repository itself? See [DEVELOPMENT.md](./DEVELOPMENT.md) for local setup, workspace structure, and guard scripts.\n\n## License\n\nMIT\n"
+    },
+    "brief": {
+      "summary": "A framework for building agentic apps",
+      "problem": "该项目围绕“A framework for building agentic apps”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：A framework for building age",
+        "主要使用 TypeScript 开发",
+        "主题包括：agent-native、agents、ai、react"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 98 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "BuilderIO/agent-native",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agent、agentic、mcp",
+      "generated_by_ai": false,
+      "velocity_score": 60,
+      "freshness_score": 40,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "hypit-ai/hypit",
+      "url": "https://github.com/hypit-ai/hypit",
+      "description": "Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.",
+      "language": "TypeScript",
+      "total_stars": 12057,
+      "forks": 1452,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 1796
+    },
+    "details": {
+      "topics": [
+        "agentic-ai",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "compiler",
+        "dsl",
+        "ffmpeg",
+        "generative-ai",
+        "llm",
+        "markup-language",
+        "monorepo",
+        "plugin-system",
+        "programming-language",
+        "text-to-video",
+        "typescript",
+        "video",
+        "video-automation",
+        "video-clone",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-29T18:49:19Z",
+      "updated_at": "2026-09-21T05:09:06Z",
+      "pushed_at": "2026-09-21T04:44:10Z",
+      "open_issues": 9,
+      "homepage": "https://hypit.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/public/hypit-logo-light.svg\">\n    <img alt=\"Hypit\" src=\"./docs/public/hypit-logo-dark.svg\" width=\"400\" height=\"122\">\n  </picture>\n</p>\n\n<h3 align=\"center\">Clone any viral video with AI agents</h3>\n<p align=\"center\">1 command, 100 variants, 100M views.</p>\n\n<p align=\"center\">\n  <a href=\"https://hypit.ai\"><strong>Demo</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"https://hypit.ai/quickstart/\"><strong>Quickstart</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"https://hypit.ai/guide/develop/\"><strong>Develop</strong></a>\n  &nbsp;&bull;&nbsp;\n  <a href=\"./README.zh-CN.md\"><strong>简体中文</strong></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/229030\"><img alt=\"Trendshift #1 Repository of the Day\" src=\"https://trendshift.io/api/badge/trendshift/repositories/229030/daily\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/229030\"><img alt=\"Trendshift #1 TypeScript Repository of the Day\" src=\"https://trendshift.io/api/badge/trendshift/repositories/229030/daily?language=TypeScript\"></a>\n  <a href=\"https://trendshift.io/repositories/229030?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-229030\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/229030/weekly?language=TypeScript\" alt=\"hypit-ai/hypit | Trendshift TypeScript Weekly\" width=\"250\" height=\"55\"></a>\n</p>\n\n<p align=\"center\">\n  <img alt=\"Stars\" src=\"https://img.shields.io/github/stars/hypit-ai/hypit?style=flat-square&color=FFD700&logo=github&logoColor=white&label=Stars\">\n  <a href=\"./package.json\"><img alt=\"Node 22.15+\" src=\"https://img.shields.io/badge/Node.js-22.15%2B-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white\"></a>\n  <a href=\"./package.json\"><img alt=\"pnpm 10.33\" src=\"https://img.shields.io/badge/pnpm-10.33-F69220?style=flat-square&logo=pnpm&logoColor=white\"></a>\n  <a href=\"./package.json\"><img alt=\"TypeScript 5.9\" src=\"https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat-square&logo=typescript&logoColor=white\"></a>\n  <a href=\"./LICENSE\"><img alt=\"License\" src=\"https://img.shields.io/badge/License-Apache--2.0%20with%20conditions-E3B341?style=flat-square\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://hypit.ai\"><img alt=\"Visit our website\" src=\"https://img.shields.io/badge/Visit%20our%20website-DF3C68?style=for-the-badge&logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjI1Ny4wMyAyODcuNDggNDg2Ljk0IDQyNi4wNCI%2BPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTczMy4wMDEsNDYyLjU5MmMtMTEuNDQtMTYuNTEtMzAuMjg1LTI2LjM0NC01MC4zNTMtMjYuMzQ0aC0xNzguNzA1Yy0yMy40OTMsMC00Ny42NzUsMTQuMjM0LTU2LjYyOCwzNS45NjdsLTU0LjA2NSwxNDUuMDUzYy04LjgsMjEuNTIzLTguNjg2LDQ2LjAxMSw0LjI0Nyw2NS4zNTIsMTIuOTksMTkuNDE4LDM3LjAzOCwzMC44OTcsNjAuMzk3LDMwLjg5N2gxNjQuNDljMjcuMDEzLDAsNTEuNDYzLTE2Ljk4OSw2MC45MTQtNDIuMjhsNTYuODAxLTE1Mi4yMjdjNy4wMjEtMTguODI1LDQuMzgxLTM5LjkwOC03LjA1OS01Ni4zOTl2LS4wMzhoLS4wMzh2LjAxOVpNNjMzLjk3OCw2NTIuODEzYy0xLjc5OCw0LjgyMS02LjQ4NSw4LjA3My0xMS42MzIsOC4wNzNoLTE1OS42NWMtOC4zMDMsMC0xMi43OC01LjM1Ny0xNC4zMjktNy42MzNzLTQuNzgzLTguNDc1LTEuNjA3LTE2LjE0N2w0NS42MjgtMTI2LjcyNWM0LjM4MS0xMi4xNDgsMTUuNDU4LTIwLjc5NiwyOC4zNTItMjEuNDY1LjYzMS0uMDM4LDEuMjgyLS4wMzgsMS45NTEtLjAzOGgxNDQuMjY5czIzLjkzMywyLjcxNywxNy43NzMsMjcuOTUxbC01MC43NTUsMTM2LjAwNGgwdi0uMDE5Wk0zNTYuMjUsNjIzLjEyMnMtNDIuNzc3LTIyLjE3My0zMy43ODYtNjIuNDgzbDU2Ljc2Mi0xNTcuMzE2YzkuMTQ1LTI1LjM0OSwzMy4yMTItNDIuMjYxLDYwLjE2OC00Mi4yNjFoMTgxLjc4NWMxMS45NTcsMCwyMy4xNDksNS43OTcsMzAuMDU1LDE1LjU3M2wyNi41NzMsMzcuNjVoLTIxNi4xMjVjLTE2LjY0NCwwLTMxLjU0NywxMC4zNS0zNy4zNDQsMjUuOTYxbC02OC4wODgsMTgyLjg5NWgwdi0uMDE5Wk0yOTIuMDY0LDU0OS41NDNzLTQyLjc5Ny0yMi4xNzMtMzMuNzg2LTYyLjQ4M2w1Ni43NjItMTU3LjMxNmM5LjE2NC0yNS4zNDksMzMuMjMxLTQyLjI2MSw2MC4xNjgtNDIuMjYxaDE3Mi4wMDljMTEuOTU3LDAsMjMuMTQ5LDUuNzk3LDMwLjA1NSwxNS41NzNsMjYuNTczLDM3LjY1aC0yMDYuMzExYy0xNi42NDQsMC0zMS41NDcsMTAuMzUtMzcuMzQ0LDI1Ljk2MWwtNjguMDg4LDE4Mi44OTVoLS4wMzh2LS4wMTlaIi8%2BPC9zdmc%2B\"></a>\n  <a href=\"https://discord.gg/85hnyQnxpn\"><img alt=\"Join our Discord\" src=\"https://img.shields.io/badge/Join%20our%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\"></a>\n  <a href=\"https://t.me/hypitai\"><img alt=\"Join our Telegram\" src=\"https://img.shields.io/badge/Join%20our%20Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white\"></a>\n  <a href=\"https://x.com/hypitai\"><img alt=\"Follow @hypitai on X\" src=\"https://img.shields.io/badge/Follow%20%40hypitai-000000?style=for-the-badge&logo=x&logoColor=white\"></a>\n</p>\n\n<p align=\"center\">\n  ⭐ <em>Help more people find Hypit and grow the community. Star this repo!</em>\n</p>\n\n## Hypit\n\nHypit gives AI agents (Claude Code, Codex...) a language and system to create video. Drop in a video, and your agent clones it as a complete workflow: footage, captions, B-roll and effects, all anchored to words instead of seconds.\n\n**To be clear:** cloning a video is the fastest way in, not the only one. You can start from our templates, or just describe the video you want and your agent writes the workflow from scratch. Generation models are optional too: a workflow can compile captions, motion graphics and code-rendered visuals into a finished video without calling a generation model or incurring its service charges.\n\n![SVML source and live video preview](https://github.com/user-attachments/assets/981c28e8-ddab-4164-85bc-03b5d71275dc)\n\n<p align=\"center\"><em>SVML source on the left, with the corresponding video rendered live on the right.</em></p>\n\n## Install once\n\n```bash\nnpx skills add hypit-ai/hypit -g\n```\n\nThis installs the Skill. On first use, your agent checks for the Hypit executable and helps prepare\nit if needed. Your video project can live anywhere.\n\nHypit is free to use; your Coding Agent and model services have their own accounts and charges.\nHypiHub is our recommended hosted model service. You can also use your own API or local models;\ntell your agent the service name and API documentation so it can set up the appropriate connection.\n\n[Agent environments and entry partners](./docs/guide/agents.md) ·\n[Model and deployment services](./docs/guide/service-partners.md)\n\n## Examples\n\n### UGC\n\n[Generation source](examples/ranking-football/reference.svml) · [Run and production notes](examples/ranking-football/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/f573bdac-62da-4b5d-825d-54d5880a7026\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/3ffd9951-e423-4a48-ad8f-5c596627be69\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/eb62372d-2464-4a4b-83ee-41e227f99a8e\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/9ba050f6-355d-460c-b684-7344cf49c051\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"GOAT DEBATE\"</b> — a 20-second football tier list that puts Ronaldo in D and Messi in S. Two Seedance 2 Mini 720p trolling A-rolls, a 2K goth girl portrait and ten 1K brain-rot B-rolls by GPT Image 2, WhisperX word alignment, a sound-synced ranking board, color-box karaoke captions, buttery-smooth animation and catchy background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap the narrator to banana cat, flip the rankings and Ronaldo becomes GOAT, or replace all players with tech founders — same viral structure, different viral video.</p><p>Total cost: <b>$1.15</b>.</p></td>\n  </tr>\n</table>\n\n### Podcast\n\n[Generation source](examples/podcast/reference.svml) · [Run and production notes](examples/podcast/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/22df72b8-4831-4eb6-957d-676ae9b04f2d\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/9c14c5ae-bd12-4961-9d57-a46d3a2154c6\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/f44c653b-f520-4715-9530-4c2f42114387\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/92f9bf8b-4f83-4d9b-a0e8-ca27fab2cc94\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"DAILY CREATINE\"</b> — an 18-second podcast clip where a muscle barbie forces creatine on a skinny college kid. Three confrontational A-rolls and an aspirational lifestyle B-roll by Seedance 2 Mini 720p, two 2K AI character portraits and three 1K montage panels by GPT Image 2, WhisperX word alignment, split-screen interview layout, speaker-aware karaoke captions, a product-handoff moment and background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap both hosts to Pepe and Doge arguing about doggy arms, replace the creatine with retinol where a pretty boy roasts a tomboy's pores, or ditch the physical product for a CheatGPT app where a himbo jock out-GPAs a PhD student — same podcast format, three ad verticals.</p><p>Total cost: <b>$1.07</b>.</p></td>\n  </tr>\n</table>\n\n### Street Interview\n\n[Generation source](examples/interview/reference.svml) · [Run and production notes](examples/interview/README.md)\n\n<table>\n  <tr>\n    <th width=\"16%\">Reference</th>\n    <td width=\"28%\"></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/666ad535-3231-44fb-b9bc-271817ae79de\" controls muted></video></td>\n    <td width=\"28%\"></td>\n  </tr>\n  <tr>\n    <th width=\"16%\">Clones</th>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/c39a0425-2dcb-4709-b894-6a9423d351e3\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/8f71552c-0ad1-4d29-8c4e-3b937ab7c887\" controls muted></video></td>\n    <td width=\"28%\"><video src=\"https://github.com/user-attachments/assets/d9cab2e7-e08b-48ef-8d25-bc28ca9efc17\" controls muted></video></td>\n  </tr>\n  <tr>\n    <td colspan=\"4\"><p><b>\"NICE RIDE\"</b> — a 26-second street interview where a mob wife drops three rules for making her first million. Three A-rolls by Seedance 2 Mini 720p, one 2K AI character portrait by GPT Image 2, WhisperX word alignment, head-tracked speaker-colored captions driven by face bounding boxes from Google Video Intelligence and YOLOv8 AnimeFace, a sound-synced emoji reveal board with color flashes and reveal sound effects, plus background music, concurrently rendered in 64 headless Chromium processes.</p><p>Three clones included: swap hosts to Wojak and Chad, translate everything to Spanish with exactly the same punchlines, or swap the Lambo for an F1 car where Ada explains to Leon how driving Uber led to an accidental Grand Prix win — same three-stage reveal, distinct street-interview remixes.</p><p>Total cost: <b>$1.09</b>.</p></td>\n  </tr>\n</table>\n\n## Use the Hypit skill\n\nThe `/hypit` skill is available to coding agents. Start a session in any empty or existing project\ndirectory and ask it to create videos for you:\n\n```text\n/hypit Clone this video: /path/to/video.mp4, and replace the ranking content with a comparison of Hypit (official website: hypit.ai) with other AI video products.\n```\n\nOr start without a reference video:\n\n```text\n/hypit Make a ranking video that puts Hypit in S tier.\n```\n\nYour agent can check the environment, request the credentials the video needs, generate the material, and build the finished composition.\n\n### **👉 [Get 100 FREE AI Avatars with unique voices](https://drive.google.com/drive/u/2/folders/18J9Fz7mkU3OQNJ-2Res3eIyFQ2cemIK5)**\n\n## Why Hypit\n\n- **Clone any vide"
+    },
+    "brief": {
+      "summary": "Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.",
+      "problem": "该项目围绕“Clone any viral video with AI agents. Not just a script, the whole workflow: swap the face, the words, the B-roll, ship 100 variants in one command, and get your 100M views.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Clone any viral video with A",
+        "主要使用 TypeScript 开发",
+        "主题包括：agentic-ai、ai、ai-agents、ai-video"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 12,057 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hypit-ai/hypit",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agentic",
+      "generated_by_ai": false,
+      "velocity_score": 99,
+      "freshness_score": 70,
+      "ranking_score": 65.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "Volumetenrectify/ae-motion-compiler",
+      "url": "https://github.com/Volumetenrectify/ae-motion-compiler",
+      "description": "Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.",
+      "language": "HTML",
+      "total_stars": 105,
+      "forks": 50,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "abobe",
+        "ae",
+        "after",
+        "after-effects",
+        "animation",
+        "effects",
+        "motion-graphics",
+        "video-editing"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-09T19:22:00Z",
+      "updated_at": "2026-09-21T04:42:06Z",
+      "pushed_at": "2026-09-21T04:42:03Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎬 ae-motion-compiler\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 🚀 Motion Graphics Automation Framework for After Effects\n\nae-motion-compiler is an advanced scripting framework that automates repetitive animation tasks in After Effects. Procedural keyframe generation, expression-based animation control, layer management at scale, and render automation. Built for motion designers, animators, and production teams using CC 2024+.\n\nAccelerate motion graphics production through intelligent automation.\n\n## 📦 Latest\n\n**Version**: 2.4.2 (CC 2024+)\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n## 📖 Index\n- [Details](#🎯-details)\n- [System](#💻-system)\n- [Setup](#📦-setup)\n- [Config](#⚙️-config)\n- [Animation](#🎨-animation)\n- [Tools](#✨-tools)\n- [Support](#🔌-support)\n- [Plans](#🗺️-plans)\n- [Contribute](#🤝-contribute)\n- [Security](#🛡️-security)\n- [Help](#🔧-help)\n- [Legal](#📄-legal)\n- [Info](#⚠️-info)\n\n## 🎯 Details\n\nae-motion-compiler streamlines motion graphics workflows through procedural animation. Define animation patterns once, apply across hundreds of layers. Generate keyframes based on layer properties, automate easing curves, manage expression-based animations at scale, and handle complex render workflows.\n\nIncludes keyframe generators, expression builders, layer organizers, and batch automation tools.\n\n```mermaid\ngraph TD\n    A[Animation Template] --> B[Expression Engine]\n    B --> C[Pattern Recognition]\n    C --> D[Keyframe Generation]\n    D --> E[Layer Application]\n    E --> F[Easing Control]\n    F --> G[Preview]\n    G --> H[Batch Render]\n    H --> I[Output]\n    \n    style A fill:#fff3e0\n    style B fill:#e3f2fd\n    style D fill:#f3e5f5\n    style H fill:#e8f5e9\n    style I fill:#fce4ec\n```\n\n## 💻 System\n\n| Component | Min | Recommended |\n|-----------|-----|-------------|\n| **OS** | ![Windows](https://img.shields.io/badge/Windows-10-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-10.15-000000?style=flat) | ![Windows](https://img.shields.io/badge/Windows-11-0078D4?style=flat) ![Mac](https://img.shields.io/badge/macOS-12-000000?style=flat) |\n| **After Effects** | CC 2024 | CC 2026 current |\n| **Memory** | 8 GB | 16 GB+ |\n| **Storage** | 800 MB | 2.5 GB SSD |\n| **CPU** | 4-core | 8-core+ |\n\n## 📦 Setup\n\nInstalls:\n1. Compatibility check\n2. Script deployment\n3. Expression templates\n4. Configuration\n\n### Manual\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run build\nnpm run install:ae\n```\n\n### First Use\n\n1. Open After Effects\n2. **File → Scripts → ae-motion-compiler**\n3. Main panel opens\n4. Load project template\n\n## ⚙️ Config\n\n### Preferences\n\nSet in script settings:\n\n```yaml\ncore:\n  version: \"2.4\"\n  auto_update: true\n  undo_groups: true\n\nkeyframes:\n  default_easing: \"ease-in-out\"\n  keyframe_spacing: \"uniform\"\n  auto_bezier: true\n  preserve_velocity: true\n\nexpressions:\n  validation: true\n  error_reporting: true\n  performance_mode: \"balanced\"\n  syntax_highlight: true\n\nlayers:\n  batch_limit: 500\n  hierarchy_preserve: true\n  naming_convention: \"kebab-case\"\n  auto_organize: true\n\nrender:\n  queue_management: true\n  output_format: \"mp4\"\n  render_settings: \"high-quality\"\n  monitor_progress: true\n\nexport:\n  include_metadata: true\n  preserve_structure: true\n  backup_source: true\n```\n\n### Templates\n\n- **slide** — Sliding text animations\n- **scale** — Growth/shrink sequences\n- **rotate** — Rotation patterns\n- **color** — Color transition animations\n- **morph** — Shape morphing\n- **stagger** — Cascading effects\n- **bounce** — Physics-based motion\n- **wave** — Wave propagation\n\n## 🎨 Animation\n\n### Keyframe Generation\n\n```javascript\n// Generate keyframes\nanimationEngine.generateKeyframes({\n  layer: \"Title\",\n  property: \"position\",\n  startValue: [0, 0],\n  endValue: [1920, 1080],\n  duration: 3000,\n  easing: \"ease-in-out\"\n});\n```\n\n### Expression Control\n\n```javascript\n// Build expression\nexpressionBuilder.create({\n  type: \"wiggle\",\n  frequency: 2,\n  amplitude: 10,\n  apply_to: \"rotation\"\n});\n```\n\n### Batch Animation\n\n```javascript\n// Apply to multiple layers\nbatchAnimator.apply({\n  layers: [\"all\"],\n  template: \"slide\",\n  offset: 100,\n  duration: 2000,\n  stagger: true\n});\n```\n\n## ✨ Tools\n\n| Tool | Purpose | Use |\n|------|---------|-----|\n| **Keyframe Generator** | Procedural keyframes | Automated timing |\n| **Expression Builder** | Expression creation | Dynamic properties |\n| **Layer Manager** | Organization | Batch operations |\n| **Easing Curve Editor** | Curve control | Animation feel |\n| **Renderer Manager** | Render automation | Batch output |\n| **Timeline Organizer** | Timeline control | Comp structure |\n| **Effect Applier** | Effect automation | Consistent effects |\n| **Preview Player** | Quick preview | Real-time check |\n\n## 🔌 Support\n\n| Feature | Status | Details |\n|---------|--------|---------|\n| **Script-based Animation** | ✅ Full | Procedural keyframes |\n| **Expression Generation** | ✅ Full | Custom expressions |\n| **Batch Processing** | ✅ Full | Multi-layer ops |\n| **Render Automation** | ✅ Full | Queue management |\n| **Effect Presets** | 🟡 Beta | Effect application |\n| **Plugin Integration** | 🟡 Beta | Third-party tools |\n| **Cloud Sync** | 🔶 Alpha | Project backup |\n| **Remote Control** | 🔶 Alpha | API access |\n\n**Status**: ✅ Ready · 🟡 In Progress · 🔶 Development\n\n## 🗺️ Plans\n\n### Q1 2026: Performance\n- Faster keyframe generation\n- Optimized expression parsing\n- Reduced memory usage\n- Better GPU support\n\n### Q2 2026: Features\n- Advanced motion paths\n- Physics engine integration\n- Procedural rigging\n- Puppet pin automation\n\n### Q3 2026: Intelligence\n- Smart ease suggestions\n- Auto-timing optimization\n- Motion prediction\n- Keyframe interpolation\n\n### Q4 2026: Integration\n- Plugin marketplace\n- Effect library\n- Workflow templates\n- Team collaboration\n\n## 🤝 Contribute\n\nHelp develop ae-motion-compiler:\n\n1. **Report Issues** — Bug reports and edge cases\n2. **Suggest Features** — Animation ideas welcome\n3. **Share Templates** — Animation patterns\n4. **Write Docs** — Usage guides\n5. **Test Beta** — Early access program\n\n```bash\ngit clone https://volumetenrectify.github.io/ae-motion-compiler/\ncd ae-motion-compiler\nnpm install\nnpm run dev\nnpm test\n```\n\n## 🛡️ Security\n\n### Data Protection\n- Local processing only\n- No cloud uploads\n- Project backups preserved\n- Encrypted settings\n\n### System Safety\n- Safe script execution\n- Memory management\n- Error recovery\n- Automatic cleanup\n\n### Stability\n- Crash prevention\n- Undo capability\n- Version control\n- Safe rollback\n\n## 🔧 Help\n\n### Issues\n\n| Problem | Solution |\n|---------|----------|\n| **Script won't load** | Check After Effects version |\n| **Keyframes not generating** | Verify layer selection |\n| **Expression error** | Check syntax in builder |\n| **Slow performance** | Reduce batch size |\n| **Memory error** | Close other applications |\n\n### Support\n\n- **Docs**: GitHub Wiki tutorials\n- **Discord**: Community support\n- **Issues**: Bug tracker\n- **Email**: support@motion-compiler.dev\n\n## 📄 License\n\nMIT License - [LICENSE](LICENSE) file.\n\n**Copyright © 2026 Motion Compiler Contributors**\n\n## ⚠️ Info\n\nIndependent project, not affiliated with Adobe Inc. After Effects trademark belongs to Adobe.\n\n### Key Points\n\n1. **License** — Valid After Effects CC 2024+ required\n2. **Terms** — Follow Adobe guidelines\n3. **Backups** — Keep project files safe\n4. **Testing** — Test animations before output\n5. **Performance** — Monitor system resources\n6. **Updates** — Stay current with versions\n7. **Expertise** — Animation skills still essential\n\n### Disclaimer\n\nScript-generated animations require human review and refinement. Quality depends on template design and parameter settings. Professional judgment remains essential for production work. This tool accelerates workflow, not replaces animation expertise.\n\n---\n\n## 🎬 Automate Your Motion Graphics\n\n[![Download](https://img.shields.io/badge/Download%20Link-brightgreen?style=for-the-badge&logo=github)](https://volumetenrectify.github.io/ae-motion-compiler/)\n\n**Accelerate animation production.** Download ae-motion-compiler and streamline your workflow.\n\n*\"Automate repetition. Enhance creativity. Faster production.\"*\n"
+    },
+    "brief": {
+      "summary": "Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.",
+      "problem": "该项目围绕“Motion graphics automation framework for Adobe After Effects CC 2024+. Procedural keyframe generation, expression-based animation control, layer automation, and batch rendering. Scripting tools for animators and motion designers. Includes keyframe generators, expression builders, and render automation.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Motion graphics automation f",
+        "主要使用 HTML 开发",
+        "主题包括：abobe、ae、after、after-effects"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 105 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "动画",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Volumetenrectify/ae-motion-compiler",
+      "score": 60,
+      "category": "动画",
+      "reason": "匹配关键词：animation",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 40.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "renpy/renpy",
+      "url": "https://github.com/renpy/renpy",
+      "description": "The Ren'Py Visual Novel Engine",
+      "language": "Ren'Py",
+      "total_stars": 6847,
+      "forks": 936,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 7
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "python",
+        "renpy",
+        "visual-novel",
+        "visual-novel-engine"
+      ],
+      "license_name": "",
+      "created_at": "2012-06-28T01:21:22Z",
+      "updated_at": "2026-09-21T04:11:06Z",
+      "pushed_at": "2026-09-21T03:46:10Z",
+      "open_issues": 294,
+      "homepage": "http://www.renpy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "==============================\nThe Ren'Py Visual Novel Engine\n==============================\n\nhttps://www.renpy.org\n\n\nBranches\n========\n\nThe following branches are the most interesting.\n\n``fix``\n    The fix branch is used for fixes to the current version of Ren'Py that do\n    not require dangerous changes. The fix branch is also the source of the\n    documentation on https://www.renpy.org/. This branch is automatically\n    merged into master on a regular basis.\n\n    Pull requests that contain fixes or documentation improvements should be\n    made to the fix branch. When a feature release is made (for example, going from 8.6.x to 8.7.0),\n    the master branch is copied to the fix branch. Fix releases are made from this branch.\n\n``master``\n    The master branch is where the main focus of development is. This branch\n    will eventually become the next release of Ren'Py.\n\n    Pull requests that contain new features, that require incompatible changes,\n    or major changes to Ren'Py's internals should be targeted at the master\n    branch.\n\n    Feature releases are made from this branch.\n\n``work/``\n    Work branches contain work that that is intended to be merged into master or fix - pull requests, or pull requests\n    to be. These branches should start with work/<username>/ , or work/shared/ for work shared equally between multiple\n    contributors.\n\n    A github rule enforces that new branches much start  with work/.\n\n``history/``\n    Branches beginning with history/ contain commits that for various reasons are not included in the github interface.\n\n\nGetting Started\n===============\n\nRen'Py depends on a number of Python modules written in Cython and C. For\nchanges to Ren'Py that only involve Python modules, you can use the modules\nfound in the latest nightly build. Otherwise, you'll have to compile the\nmodules yourself.\n\nThe development scripts assume a POSIX-like platform. The scripts should run\non Linux or macOS, and can be made to run on Windows using an environment\nlike MSYS.\n\nNightly Build\n-------------\n\nNightly builds can be downloaded from:\n\n   https://nightly.renpy.org\n\nNote that the latest nightly build is at the bottom of the list. Once you've\nunpacked the nightly, change into this repository, and run::\n\n    ./after_checkout.sh <path-to-nightly>\n\nOnce this script completes, you should be able to run Ren'Py using renpy.sh,\nrenpy.app, or renpy.exe, as appropriate for your platform.\n\nIf the current nightly build doesn't work, please wait 24 hours for a new\nbuild to occur. If that build still doesn't work, contact Tom (`pytom at bishoujo.us`,\nor @renpytom on Twitter/X) to find out what's wrong.\n\nThe ``doc`` symlink will dangle until documentation is built, as described\nbelow.\n\nCompiling the Modules\n----------------------\n\nBuilding the modules requires you have the many dependencies installed on\nyour system. On Ubuntu and Debian, these dependencies can be installed with\nthe command::\n\n    sudo apt install python3-dev libassimp-dev libavcodec-dev libavformat-dev \\\n        libswresample-dev libswscale-dev libharfbuzz-dev libfreetype6-dev libfribidi-dev libsdl2-dev \\\n        libsdl2-image-dev libsdl2-gfx-dev libsdl2-mixer-dev libsdl2-ttf-dev libjpeg-dev pkg-config\n\nRen'Py requires SDL_image 2.6 or greater. If your distribution doesn't include\nthat version, you'll need to download it from:\n\n    https://github.com/libsdl-org/SDL_image/tree/SDL2\n\nWe strongly suggest using a package manager to create virtual environment and\nmanage dependencies. We have tested with `uv <https://docs.astral.sh/uv/>`_ but\nother package managers should work as well. To create a virtual environment and\ninstall dependencies, open a new terminal and run::\n\n    uv sync\n\nAfter that, compile extension modules and run Ren'Py using the command::\n\n    ./run.sh\n\n\nOther Platforms\n---------------\n\nWhere supported, Ren'Py will attempt to find include directories and library paths\nusing pkg-config. If pkg-config is not present, include and library paths can be\nspecified using CFLAGS and LDFLAGS.\n\nIf RENPY_CFLAGS is present in the environment and CFLAGS is not, setup.py\nwill set CFLAGS to RENPY_CFLAGS. The same is true for RENPY_LDFLAGS,\nRENPY_CC, RENPY_CXX, and RENPY_LD.\n\nSetup.py does not support cross-compiling. See https://github.com/renpy/renpy-build\nfor software that cross-compiles Ren'Py for many platforms. The renpy-build system\nalso include some runtime components for Android, iOS, and web.\n\n\nDocumentation\n=============\n\nBuilding\n--------\n\nBuilding the documentation requires Ren'Py to work. You'll either need to\nlink in a nightly build, or compile the modules as described above. You'll\nalso need the `Sphinx <https://www.sphinx-doc.org>`_ documentation generator.\nIf you have pip working, install Sphinx using::\n\n    pip install -U sphinx sphinx_rtd_theme sphinx_rtd_dark_mode sphinx-tabs\n\nOnce Sphinx is installed, change into the ``sphinx`` directory inside the\nRen'Py checkout and run::\n\n    ./build.sh\n\nFormat\n------\n\nRen'Py's documentation consists of reStructuredText files found in sphinx/source, and\ngenerated documentation found in function docstrings scattered throughout the code. Do\nnot edit the files in the ``sphinx/source/inc`` folder directly, as they will be\noverwritten.\n\nDocstrings may include tags on the first few lines:\n\n\\:doc: `section` `kind`\n    Indicates that this function should be documented. `section` gives\n    the name of the include file the function will be documented in, while\n    `kind` indicates the kind of object to be documented (one of ``function``,\n    ``method`` or ``class``. If omitted, `kind` will be auto-detected.\n\\:name: `name`\n    The name of the function to be documented. Function names are usually\n    detected, so this is only necessary when a function has multiple aliases.\n\\:args: `args`\n    This overrides the detected argument list. It can be used if some arguments\n    to the function are deprecated.\n\nFor example::\n\n    def warp_speed(factor, transwarp=False):\n        \"\"\"\n        :doc: warp\n        :name: renpy.warp_speed\n        :args: (factor)\n\n        Exceeds the speed of light.\n\n        `factor`\n            The warp factor. See Sternbach (1991) for details.\n\n        `transwarp`\n            If True, use transwarp. This does not work on all platforms.\n        \"\"\"\n\n        renpy.engine.warp_drive.engage(factor)\n\n\nTranslating\n===========\n\nFor best practices when it comes to translating the launcher and template\ngame, please read:\n\nhttps://lemmasoft.renai.us/forums/viewtopic.php?p=321603#p321603\n\n\nContributing\n============\n\nFor bug fixes, documentation improvements, and simple changes, just make a pull request. For nontrivial changes,\nplease file an issue first so we can discuss the planned change.\n\n\nEfficiency Tools (including Language Models)\n============================================\n\nThe goal of Ren'Py is to provide tools that enable human creativity in the form of visual novels and similar styles\nof games. In service of this goal, developers may use tools that increase their efficiency, including tools that use\nlanguage models.\n\nEvery change to Ren'Py must be created by a human that understands both the change, the\nportions of Ren'Py affected by this change, and the copyright implications of the change. Examples of uses of\nefficiency tools that we consider appropriate include completion where the human only accepts suggestions that\nthey understand and that are correct, and prompts that cause changes that can be immediately\nreviewed by a human for correctness. Larger changes may be created by prompting for smaller changes with reviews\nat each step.\n\nWe do not accept changes where a human does not fully understand the change and how it affects Ren'Py. Large changes\nmade with minimal human review (\"vibe coding\") are not acceptable. If you'd like to make such a change, it's better to\njust bring the idea to us on GitHub and let us make the change. Changes made by agents without human review are not\nacceptable.\n\nOur use of AI is intended to not require disclosure in the\n`Steam Content Survey <https://partner.steamgames.com/doc/gettingstarted/contentsurvey#5>`_. Specifically, we\ndon't use diffusion models or other techniques to generate game content consumed by players, and we do not require\ncreators to use any AI tools, or provide any such tools for creators to use.\n\nAs a special case, we allow machine translation of system messages when there is no human translator for the language.\nWhen a human translator becomes available, their work takes precedence. This exception allows system messages to be\ntranslated to improve accessibility.\n\nLicense\n=======\n\nFor the complete licensing terms, please read:\n\nhttps://www.renpy.org/doc/html/license.html\n\nBy contributing to Ren'Py, you agree to license your contributions under the MIT license. When contributing, you may\nchoose to:\n\n* Retain copyright in your contribution. If you choose this, please \"Copyright (year) Your Name <your email>\" in the\n  copyright notice for any file you change.\n* Assign copyright in your contribution to Tom Rothamel <pytom@bishoujo.us>. This is assumed to be the default if\n  you don't specify otherwise.\n"
+    },
+    "brief": {
+      "summary": "The Ren'Py Visual Novel Engine",
+      "problem": "该项目围绕“The Ren'Py Visual Novel Engine”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：The Ren'Py Visual Novel Engi",
+        "主要使用 Ren'Py 开发",
+        "主题包括：game-engine、python、renpy、visual-novel"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 6,847 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "互动叙事",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "renpy/renpy",
+      "score": 60,
+      "category": "互动叙事",
+      "reason": "匹配关键词：visual novel",
+      "generated_by_ai": false,
+      "velocity_score": 27,
+      "freshness_score": 20,
+      "ranking_score": 39.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "unslothai/unsloth",
+      "url": "https://github.com/unslothai/unsloth",
+      "description": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.",
+      "language": "Python",
+      "total_stars": 76514,
+      "forks": 6994,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai",
+        "chatgpt",
+        "deepseek",
+        "fine-tuning",
+        "gemma",
+        "image-generation",
+        "llama",
+        "llm",
+        "llms",
+        "openai",
+        "python",
+        "qwen",
+        "reinforcement-learning",
+        "self-hosted",
+        "stable-diffusion",
+        "text-to-speech",
+        "tts",
+        "ui",
+        "unsloth"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2023-11-29T16:50:09Z",
+      "updated_at": "2026-09-21T04:50:25Z",
+      "pushed_at": "2026-09-21T04:59:48Z",
+      "open_issues": 1261,
+      "homepage": "https://unsloth.ai/docs",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\" style=\"margin:0;\">\n  <a href=\"https://unsloth.ai/docs\"><picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png\">\n    <img alt=\"Unsloth logo\" src=\"https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20black%20text.png\" height=\"80\" style=\"max-width:100%;\">\n  </picture></a>\n</h1>\n<h3 align=\"center\" style=\"margin: 0; margin-top: 0;\">\nUnsloth is the first desktop app to run and train models.\n</h3>\n\n<p align=\"center\">\n  <a href=\"#-features\">Features</a> •\n  <a href=\"#-get-started\">Quickstart</a> •\n  <a href=\"#-free-notebooks\">Notebooks</a> •\n  <a href=\"https://unsloth.ai/docs\">Documentation</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://unsloth.ai/docs/desktop\">\n    <img height=\"400\" alt=\"unsloth desktop\" src=\"https://unsloth.ai/cgi/image/unsloth_qwen3.8_final_ut2eqWnYJ-SLmu0s7x522.png?format=raw\" />\n  </a>\n</p>\n\n## ⚡ Get started\nDownload the native Unsloth Desktop app for your operating system:\n<table>\n  <tr>\n    <td><b>Platform</b></td>\n    <td><b>Link</b></td>\n  </tr>\n  <tr>\n    <td><b>Windows</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Windows.exe'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>macOS</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-MacOS.dmg'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux x64 / Ubuntu (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Ubuntu.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux ARM64 / Ubuntu 24.04+ (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Ubuntu-ARM64.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux x64 (AppImage)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Linux.AppImage'>Download</a></td>\n  </tr>\n</table>\n\nDownload from [Unsloth](https://unsloth.ai/download) or [GitHub Releases](https://github.com/unslothai/unsloth/releases).\n\nOr if you prefer to install manually:\n\n#### macOS, Linux, WSL:\n```bash\ncurl -fsSL https://unsloth.ai/install.sh | sh\n```\n#### Windows:\n```powershell\nirm https://unsloth.ai/install.ps1 | iex\n```\n#### Docker\n\nThe [Unsloth Docker image](https://hub.docker.com/r/unsloth/unsloth) `unsloth/unsloth` is available on Docker. [Read guide.](https://unsloth.ai/docs/get-started/install/docker)\n\n#### Community:\n\n- [Discord](https://discord.gg/unsloth)\n- [𝕏 (Twitter)](https://x.com/UnslothAI)\n- [Reddit](https://reddit.com/r/unsloth)\n\n## ⭐ Features\nUnsloth works on **Windows, Linux, WSL** and **macOS**. We support **Multi GPU setups, NVIDIA, AMD, Intel GPUs, CPUs** and the **Vulkan** backend.\n\n### Run & Build with AI\n* Run and train LLMs, MLX, GGUF, diffusion, embedding, audio models: [Qwen3.8](https://unsloth.ai/docs/models/qwen3.8), [GLM-5.3-Flash](https://unsloth.ai/docs/models/glm-5.3-flash), [Kimi K3](https://unsloth.ai/docs/models/kimi-k3), MiniMax-H3, [DeepSeek-V4](https://unsloth.ai/docs/models/deepseek-v4), [Gemma 4](https://unsloth.ai/docs/models/gemma-4).\n* **Agents & Tools:** Use local models with [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex), and [MCP](https://unsloth.ai/docs/basics/mcp), including tool calling and code execution.\n* **Search & RAG:** Use private and unlimited web search, deep research, auto-compaction (rolling context window) and RAG.\n* **Image and video:** Run and train [image](https://unsloth.ai/docs/basics/diffusion-image) and video diffusion or multimodal models\n* **Remote & LAN:** Access your local models from any device on [LAN](https://unsloth.ai/docs/basics/lan) or remotely through secure [Cloudflare](https://unsloth.ai/docs/basics/how-to-serve-local-llms-anywhere-secure-remote-access-with-cloudflare-and-unsloth) HTTPS.\n* **Connect:** Serve models through an [OpenAI compatible API](https://unsloth.ai/docs/basics/api). Also connect your ChatGPT/Codex subscription and [cloud providers](https://unsloth.ai/docs/integrations/connections)\n\n\n### Train & Deploy\n* **Fine-tuning:** Train LLMs, diffusion, TTS, and embedding models 2× faster with 70% less VRAM with [no accuracy loss](https://unsloth.ai/blog#training)\n* **Complete support:** Supports [reinforcement learning](https://unsloth.ai/docs/get-started/reinforcement-learning-rl-guide), LoRA, QLoRA, full fine tuning, pretraining, RL, GRPO, DPO, and FP8.\n* **Export & Deploy:** [Export](https://unsloth.ai/docs/new/studio/export) or Deploy models with including [GGUF](https://unsloth.ai/docs/basics/inference-and-deployment/saving-to-gguf), NVFP4, FP8 and more formats.\n* **Datasets:** Build datasets from PDFs, CSVs, DOCX files, and more with [Data Recipes](https://unsloth.ai/docs/new/studio/data-recipe).\n  \n## 🚀 Unsloth Start\n\n[Unsloth Start](https://unsloth.ai/docs/integrations/unsloth-start) connects [Claude Code](https://unsloth.ai/docs/basics/claude-code), [Codex](https://unsloth.ai/docs/basics/codex) and other agents to local models with one command.\n\n```bash\nunsloth start claude --model unsloth/Qwen3.8-27B-GGUF:UD-Q4_K_XL\n```\n\n| Agent | Command |\n| --- | --- |\n| Claude Code | `unsloth start claude` |\n| OpenAI Codex | `unsloth start codex` |\n| DeepSeek Harness | `unsloth start dsh` |\n| Hermes Agent | `unsloth start hermes` |\n| OpenCode | `unsloth start opencode` |\n| OpenClaw | `unsloth start openclaw` |\n\n## 📥 Install\nUnsloth can be used in three ways: **[Unsloth Desktop](https://unsloth.ai/download)**, the desktop app; **[Unsloth Studio](https://unsloth.ai/docs/new/studio/)**, the web UI; or **Unsloth Core**, the code based version.\n\n### Unsloth Desktop (recommended)\n\n<table>\n  <tr>\n    <td><b>Platform</b></td>\n    <td><b>Link</b></td>\n  </tr>\n  <tr>\n    <td><b>Windows</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Windows.exe'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>macOS</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-MacOS.dmg'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux x64 / Ubuntu (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Ubuntu.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux ARM64 / Ubuntu 24.04+ (deb)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Ubuntu-ARM64.deb'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Linux x64 (AppImage)</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/latest/download/Unsloth-Desktop-Linux.AppImage'>Download</a></td>\n  </tr>\n  <tr>\n    <td><b>Windows ARM64</b></td>\n    <td><a href='https://github.com/unslothai/unsloth/releases/download/v0.1.811-beta/Unsloth-Desktop-Windows-ARM64.exe'>Download</a></td>\n  </tr>\n</table>\n\n### Unsloth Studio (web UI)\n\n#### macOS, Linux, WSL:\n```bash\ncurl -fsSL https://unsloth.ai/install.sh | sh\n```\n\n#### Windows:\n```powershell\nirm https://unsloth.ai/install.ps1 | iex\n```\n\n#### Launch\n```bash\nunsloth studio\n```\n\n#### HTTP Secure Deployment\n```bash\nunsloth studio --secure\n```\n\n#### Docker\nUse our [Docker image](https://hub.docker.com/r/unsloth/unsloth) ```unsloth/unsloth```. On Linux, set up GPU access once with `curl -fsSL https://raw.githubusercontent.com/unslothai/unsloth/main/docker/install_nvidia_toolkit.sh -o install_nvidia_toolkit.sh && sudo -E bash install_nvidia_toolkit.sh` (Windows: [Docker Desktop with WSL 2](https://unsloth.ai/docs/get-started/install/docker)).\n\n**Linux / WSL (Bash):**\n```bash\n# use  -e UNSLOTH_STUDIO_SECURE=1  instead of -p 8000:8000 for a public Cloudflare HTTPS link\ndocker run -d --name unsloth --gpus all --ipc=host \\\n  -p 8000:8000 -p 8888:8888 \\\n  -v \"$PWD\":/workspace/host \\\n  -v \"$HOME/.cache/huggingface\":/workspace/.cache/huggingface \\\n  -v unsloth-studio:/opt/unsloth-studio \\\n  unsloth/unsloth && docker logs -f unsloth\n```\nThe log ends with your links and a generated JupyterLab password, plus a generated Unsloth Studio password on the first run against a new `unsloth-studio` volume; change that one on first sign-in or Unsloth Studio stops after an hour. A reused volume keeps the password already stored on it, and `docker exec unsloth unsloth studio reset-password --username unsloth` mints a new one and prints it. Ctrl-C stops following the log, not the container; `docker rm -f unsloth` deletes it. The Hugging Face cache keeps your models and the `unsloth-studio` volume keeps your accounts, chats and trained models, both across `docker rm`; a volume from an older image is migrated on first start, its old code kept under `.unsloth-studio-legacy/`. Those ports publish on every interface: on a cloud host add `-e UNSLOTH_STUDIO_SECURE=1`, drop `-p 8000:8000` and bind JupyterLab to `-p 127.0.0.1:8888:8888`, or bind both to `127.0.0.1` and use an SSH tunnel. Tags (`unsloth/unsloth:core` for notebooks only), GPU support and options: [Docker Hub](https://hub.docker.com/r/unsloth/unsloth).\n\nOn AMD there is a separate image, [`unsloth/unsloth-rocm`](https://hub.docker.com/r/unsloth/unsloth-rocm), with the run command and the supported cards on its [Docker Hub page](https://hub.docker.com/r/unsloth/unsloth-rocm). It carries the training stack only, so there is no Unsloth Studio or JupyterLab in it. On Linux it reaches the card through `/dev/kfd`; on Windows it goes over WSL2's `/dev/dxg` bridge instead, which needs ROCm for WSL on the host (`scripts/install_rocm_wsl_strixhalo.sh`), a docker engine running inside the WSL distribution rather than Docker Desktop's, and a per-architecture build (`ROCM_GFX=<your gfx> bash docker/build.sh --rocm`), since the generic image's torch aborts on the bridge. That build exists for the Strix APUs and RDNA4 (`gfx1150`, `gfx1151`, `gfx1152`, `gfx1200`, `gfx1201`); RDNA3 cards have no bridge path yet. `bash docker/run.sh --rocm` works out the flags on both; on WSL add `UNSLOTH_IMAGE=unsloth-rocm:latest` so it runs that build rather than the published image.\n\n#### Remote HTTPS & LAN Access\nServer-side tools are on by default - so **be careful**! Keep your password safe, or use `--disable-tools` when exposing Unsloth.\n\n**Global HTTPS Access**:\nCreates a free Cloudflare link that serves Unsloth - you can access the link globally (even on your phone!)\n```bash\nunsloth studio --secure\n```\n`-H 0.0.0.0` and different ports also work:\n```bash\nunsloth studio -H 0.0.0.0 -p 8888\n```\n**LAN Access (home network)**: `Settings > API keys > LAN access`\n\n#### Password management & headless starts\nExposing Unsloth (`--secure`, `--cloudflare`, or a non-loopback `-H`) asks once at the terminal for a new admin password. Ctrl+C there aborts the launch rather than exposing the auto-generated one; set a password non-interactively instead, or use `-H 127.0.0.1` to stay off the network. On a non-loopback `-H` bind a terminal nobody answers is not a refusal: after ~30s Unsloth starts anyway and shuts down on the bootstrap deadline, so detached launches (`docker run -dt`, `tmux new -d`) are unaffected. Setting `UNSLOTH_STUDIO_BOOTSTRAP_TIMEOUT=0` disables that shutdown, so give those launches a password instead. A tunnel gets no such timeout and waits indefinitely rather than publish a public URL unasked, so give a detached `--secure` / `--cloudflare` launch its password non-interactively.\n\nHeadless starts:\n```bash\nUNSLOTH_STUDIO_PASSWORD='your-strong-password' unsloth studio --secure   # via env var\n```\nReset your password:\n```bash\nunsloth studio reset-password\n```\n\n#### Developer, Nightly, Uninstall\nTo see developer, nightly and uninstallation etc. instructions, see [advanced installation](#-advan"
+    },
+    "brief": {
+      "summary": "Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.",
+      "problem": "该项目围绕“Local UI to run and train LLMs and diffusion models. Supports GGUF, MLX, Qwen3.8, DeepSeek-V4, MiniMax-H3, Gemma 4, FLUX and more.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Local UI to run and train LL",
+        "主要使用 Python 开发",
+        "主题包括：agent、ai、chatgpt、deepseek"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 76,514 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "unslothai/unsloth",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、tts",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "godot-go/godot-go",
+      "url": "https://github.com/godot-go/godot-go",
+      "description": "Go bindings for Godot 4.7 GDExtension API",
+      "language": "Go",
+      "total_stars": 746,
+      "forks": 30,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cgo",
+        "cgo-bindings",
+        "game-development",
+        "gamedev",
+        "go",
+        "godot",
+        "godot-engine",
+        "godot-gdextension",
+        "golang"
+      ],
+      "license_name": "MIT",
+      "created_at": "2020-07-28T00:09:30Z",
+      "updated_at": "2026-09-21T04:55:13Z",
+      "pushed_at": "2026-09-21T04:56:54Z",
+      "open_issues": 14,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "[![godot-go CI on Linux](https://github.com/godot-go/godot-go/actions/workflows/ci_linux.yaml/badge.svg?branch=main)](https://github.com/godot-go/godot-go/actions/workflows/ci_linux.yaml)\n[![godot-go CI on Windows](https://github.com/godot-go/godot-go/actions/workflows/ci_windows.yaml/badge.svg?branch=main)](https://github.com/godot-go/godot-go/actions/workflows/ci_windows.yaml)\n\n---\n\n# godot-go: Go bindings for Godot 4.7\n\n[Go](https://golang.org/) bindings for the [Godot Game Engine](https://github.com/godotengine/godot) cross-platform game engine. godot-go integrates into Godot through the Godot GDExtension API through cgo.\n\nThe project is currently under heavy development. The API should be considered __EXPERIMENTAL__ and is subject to change. The API is expected to become more stable as we get closer to a 1.0 release.\n\n## Current State of the Project\n\nHere are some high level bullet points:\n* You must have a minimum of Godot 4.7.\n* The tests confirm basic functionality.\n* The bindings are more than likely leaking memory.\n* Not all variant types have been tested.\n* Go to [godot-go-demo-projects](https://github.com/godot-go/godot-go-demo-projects) to look at demo projects running a mix of godot-go and GDScript classes.\n\n## Getting Started\n\nRequirements:\n* clang-format\n* gcc\n* go 1.25.x\n* goimport\n\n### Building Godot-Go\n\nIn order for godot-go to work correctly, you must make sure the godot_headers are in sync between your godot binary and godot-go. Development is built and tested off of [Godot 4.7](https://github.com/godotengine/godot-builds/releases/tag/4.7-stable).\n\n    # Install go dependencies\n    make installdeps\n\n    # exports the latest gdextension_interface.h and extension_api.json from the godot binary\n    GODOT=/some_path/bin/godot make update_godot_headers_from_binary\n\n    # generates code for wrapping gdextension_interface.h and extension_api.json\n    make generate\n\n    # build godot-go\n    make build\n\n### Test\n\nOnce the project successfully builds, run the following commands to generate cached files for the test demo project for the first time (don't be concerned if it fails):\n\n    GODOT=/some_path/bin/godot make ci_gen_test_project_files\n\nFrom here on out, you will just need to run the following command to iteratively test:\n\n    GODOT=/some_path/bin/godot make test\n\nThis will run the demo project in the test directory.\n\nThe expected output can be found in the CI logs.\n\n\n\n## Documentation\n\nA living doc of godot-go is maintained at [docs/overview.md](docs/overview.md).\n\n## Contact\n\nI'm happy to help out anyone interested in the project. Please leave a message in the [Discussion boards](https://github.com/godot-go/godot-go/discussions) or you can add me (surgical#3758) as a friend on the [Godot Engine Discord](https://discord.gg/qZHMsDg) servers. I primarily frequent the **gdnative-dev** room.\n\n## References\n\n* Go 101 article on [Type-Unsafe Pointers](https://go101.org/article/unsafe.html)\n* Cheatsheet for [cgo data type conversion](https://gist.github.com/zchee/b9c99695463d8902cd33)\n* Cross compilation with cgo with [xgo](https://github.com/karalabe/xgo)\n* vscode-go patch to [support cgo](https://github.com/golang/go/issues/35721#issuecomment-568543991)\n* Check [unsafe pointer conversion](https://blog.gopheracademy.com/advent-2019/safe-use-of-unsafe-pointer/)\n* Loading nativescript libraries with a godot server build requires manual modification to the library [.tres](https://godotengine.org/qa/63890/how-to-open-gdnative-projects-with-headless-server-godot).\n* Working with [GDB Go extension](https://nanxiao.me/en/the-tips-of-using-gdb-to-debug-golang-program/)\n\n## Credit\n\n* Inspiration for the project was taken from ShadowApex's earlier project: [godot-go](https://github.com/ShadowApex/godot-go)\n* Inspiration also from [godot-cpp](https://github.com/godotengine/godot-cpp/)\n"
+    },
+    "brief": {
+      "summary": "Go bindings for Godot 4.7 GDExtension API",
+      "problem": "该项目围绕“Go bindings for Godot 4.7 GDExtension API”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Go bindings for Godot 4.7 GD",
+        "主要使用 Go 开发",
+        "主题包括：cgo、cgo-bindings、game-development、gamedev"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 746 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "godot-go/godot-go",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、godot",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "PerroEngine/Perro",
+      "url": "https://github.com/PerroEngine/Perro",
+      "description": "🐕 Perro — A game engine written in Rust attemping to bridge the gap between simplicity, safety, and performance",
+      "language": "Rust",
+      "total_stars": 53,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "open-source",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-08-18T21:29:46Z",
+      "updated_at": "2026-09-21T05:03:04Z",
+      "pushed_at": "2026-09-21T05:02:59Z",
+      "open_issues": 0,
+      "homepage": "https://perroengine.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Perro Engine\n\n<div align=\"center\" style=\"margin-bottom: 16px;\">\n  <img src=\"perro.svg\" alt=\"Perro Logo\" width=\"300\"/>\n</div>\n\n**Perro** is an experimental, open-source game engine written in **Rust**. With a focus on performance and simplicity without sacrificing either.\n\n## Philosophy\n\n- **Simple To Learn**: start with scenes, nodes, and Rust scripts without large registration steps or boilerplate.\n- **Flexible To Use**: reduces borrow-checker friction with direct APIs and scoped closures for mutable access. Separating state from script behavior prevents runtime borrow failures.\n- **Fast In Release**: nodes and scripts are laid out for efficient node and state access, all resources are statically baked in release for efficient and quick retrieval\n\n## Design Goals\n\n- **Full Game-Making Scope**: 2D, 3D, and UI all matter. Perro aims to support both 2D and 3D performantly, with high frame rates and a workflow that stays simple.\n- **Simple Start**: get first scene and script running quickly, with minimal setup and no script-registration boilerplate.\n- **Compiler-Managed Workflow**: let Perro sync scripts, generate glue code, and prepare supported assets so project setup stays small.\n- **Split Model**: scripts are just Rust files (lifecycle + methods); they store #[State] structs which each instance gets a copy of.\n- **Safe Mutation**: access through `NodeID` closures and engine-managed storage avoids borrow-contention edge cases in normal gameplay code (no \"try_get_mut\" fails).\n- **Fast Access**: flat ID lookups keep common node/script operations efficient, with room to cache IDs for hot paths.\n- **Quick Iteration**: project scripts build and reload in usually less than 1 second after initial compilation.\n\n## Game Engineering Workflow\n\nProject scripts use a small, predictable shape. Put per-instance data in a\n`#[State]` struct, lifecycle callbacks in `lifecycle!`, and methods in\n`methods!`:\n\n```rust\n#[derive(Default, Variant)]\nstruct MotionState {\n    speed: f32,\n}\n\n#[State]\nstruct GameState {\n    score: i32,\n    motion: MotionState,\n}\n\nlifecycle!({\n    fn on_update(&self, ctx: &mut ScriptContext<'_, API>) {\n        self.internal_method(ctx);\n    }\n});\n\nmethods!({\n    // GameState methods\n\n    fn internal_method(&self, ctx: &mut ScriptContext<'_, API>) {\n        // private, lifecycle-local logic\n    }\n\n    pub fn externally_callable_method(&self, ctx: &mut ScriptContext<'_, API>) {\n        // externally callable entry point\n    }\n});\n```\n\nThe state type may use any clear name. Group related values in nested structs\nwhen that keeps one script readable. Keep same-script helpers private with\n`fn`; mark methods `pub fn` only when other scripts, signals, or generated\ndispatch need to call them.\n\nGood: keep durable per-node fields in `#[State]`; group related fields in nested structs.\nGood: call private methods from lifecycle callbacks; keep free helpers pure.\nBad: pass `ScriptContext` or `ScriptAPI` into free functions; use lifecycle or methods instead.\nBad: default gameplay state to `Mutex`, `RefCell`, or `thread_local!`.\n\nAuthor scene topology, child nodes, script attachments, refs, and defaults in\ncomposable `.scn` files. Do not construct authored scene trees in gameplay code.\nUse runtime scene APIs to load or instantiate authored `.scn` assets when runtime\ncomposition needs them. Engine internals, tests, and editor/tooling may build\nnodes when their job requires it.\n\nTreat `res/**/*.rs` and `.scn` files as source. Treat `.perro/` generated glue\nas output: inspect it for diagnosis, never edit it as source.\n\nFor more details, see the full documentation: [perroengine.com/docs](https://www.perroengine.com/docs).\n\nLocal reference:\n\n- [Docs Index](docs/index.md)\n- [Engine architecture + extension paths](docs/project/engine_architecture.md)\n- [WASM / Web Target](docs/WASM.md)\n- [ResPath](docs/resources/respath.md)\n- [`project.toml`](docs/project/project_toml.md)\n- [Feature Matrix](docs/project/feature_matrix.md)\n- [Performance + Flexibility Philosophy](docs/project/performance_philosophy.md)\n- [Perro CLI](docs/tools/perro_cli.md)\n\n## Dev Checks\n\n- `cargo check --workspace --all-targets`\n- `cargo test --workspace`\n- `cargo clippy --workspace --all-targets -- -D warnings -F clippy::all`\n\n## Major Features\n\n- **Behavior Scripts + Per-Node State**: a script is function entry points (lifecycle hooks + methods), not a mutable behavior object. When a node binds that script, runtime uses that node’s `ctx.id` to run behavior and resolve that node’s own `#[State]` via `with_state!`/`with_state_mut!`.\n- **Object-Centric Scene Model**: parent/child relationships, concrete node types, and traditional game-object structure stay front and center.\n- **Compiler-Backed Asset Flow**: dev stays flexible with plain files, while build/export bakes supported assets into fast static lookup paths and packs the rest.\n- **Powerful UI System**: UI is built as a real engine system with relative sizing, clamping, and layouts designed to scale from simple menus to larger game interfaces.\n- **Flat ID-Based Runtime Access**: node and script data are addressed by `NodeID`, enabling constant-time lookups for common operations and efficient cross-system interaction.\n- **Predictable Failure Modes**: most runtime misses come from real-world state changes (deleted node, missing tag/name match, unbound script), not from borrow contention between unrelated systems (no `try_get_mut` runtime errors).\n- **Powerful Query Layer**: if you prefer query-style access, filter by type, base type, tag, name, and subtree to gather `NodeID`s, then operate directly through script/node APIs. See [Query System](docs/scripting/query_system.md).\n\n## Contributions\n\nPerro is, of course, **open source**, and contributions are always appreciated: issue reports, new features, system optimizations, and other improvements. Everyone is welcome to join the project.\n\n## Support Perro\n\nDonations help fund full-time development, faster features, and better tooling. If you want to support the project:\n\n- [Support Directly](https://perroengine.com/sponsor)\n- [Sponsor Perro](https://perroengine.com/sponsor)\n\n---\n\n## License\n\nPerro is licensed under the **Apache 2.0 License**. See [LICENSE](LICENSE) for details.\n\n---\n"
+    },
+    "brief": {
+      "summary": "🐕 Perro — A game engine written in Rust attemping to bridge the gap between simplicity, safety, and performance",
+      "problem": "该项目围绕“🐕 Perro — A game engine written in Rust attemping to bridge the gap between simplicity, safety, and performance”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：🐕 Perro — A game engine writ",
+        "主要使用 Rust 开发",
+        "主题包括：game-development、game-engine、gamedev、open-source"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 53 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "PerroEngine/Perro",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、game engine",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  }
+]
