@@ -1,0 +1,537 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "akitaonrails/ai-memory",
+      "url": "https://github.com/akitaonrails/ai-memory",
+      "description": "Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors",
+      "language": "Rust",
+      "total_stars": 7806,
+      "forks": 526,
+      "stars_today": 167,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 167
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-05-21T23:23:51Z",
+      "updated_at": "2026-09-22T05:04:16Z",
+      "pushed_at": "2026-09-22T00:14:33Z",
+      "open_issues": 26,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo-dark.png\">\n    <img alt=\"ai-memory\" src=\"docs/logo-light.png\" width=\"480\">\n  </picture>\n</p>\n\n> Long-term memory for AI coding agents. Quit Claude Code mid-task,\n> start OpenAI Codex in the same directory, continue without\n> re-explaining the architecture, the failed approaches, or the open\n> questions.\n\n[![Release](https://img.shields.io/github/v/release/akitaonrails/ai-memory)](https://github.com/akitaonrails/ai-memory/releases/latest)\n[![Rust](https://img.shields.io/badge/rust-1.95+-blue)](rust-toolchain.toml)\n[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)\n\n## Why ai-memory\n\nYour coding agent already has a memory feature. Claude Code takes its own\nnotes, Cursor remembers some things, and every platform is adding more. All\nof them share the same walls: the notes live on one machine, belong to one\nagent, and vanish from view the moment you switch tools — or teammates.\n\nai-memory is what's on the other side of those walls.\n\n- **It follows you across agents.** Twenty-plus harnesses — Claude Code,\n  Codex, Cursor, Gemini CLI, OpenCode, Grok, Devin, Kimi, Kiro, and more —\n  feed one shared memory. Quit Claude Code mid-task, open Codex in the same\n  directory, and the next agent picks up a real handoff: where you left\n  off, what failed, what's still open. Handoffs are a protocol here, not a\n  convention — typed, owned, claimed exactly once.\n\n- **It follows you across machines.** Memory lives in a server you run —\n  on the same laptop, a homelab box, or wherever — so the project you left\n  on the desktop is the project you resume on the laptop. Same knowledge,\n  same open questions.\n\n- **It works for a team.** Point everyone at one server and what one\n  person's sessions learn, everyone's agents can retrieve. Knowledge is\n  shared per project; personal handoffs stay personal. Multi-user auth,\n  per-person attribution, and an audit log are built in — not a paid tier.\n\n- **Your memory is plain markdown.** The source of truth is a git-backed\n  wiki of ordinary `.md` files: `grep` it, open it in Obsidian, edit it by\n  hand, `rsync` it. The database is a derived index that can always be\n  rebuilt from the files. No vector store to babysit, nothing held hostage\n  in a binary blob.\n\n- **It captures the work itself, silently.** Lifecycle hooks record what\n  actually happened — prompts, tool calls, session boundaries — sanitized\n  at a typed privacy boundary before anything is stored, then consolidated\n  into readable pages. No \"remember this\" ceremony. And the default path\n  uses **zero LLM calls**: capture, search, and handoffs all work with no\n  API key at all.\n\n- **It tells you the truth about itself.** One self-contained binary.\n  Purge commands that say exactly what \"deleted\" means. A measured write\n  ceiling (~700/s) instead of a guessed one. An audit log of every\n  mutation. Boring, in the way infrastructure should be.\n\n## How it works\n\n```\ncapture ──▶ consolidate ──▶ recall ──▶ handoff\n hooks        session-end      search     next agent,\n observe      summaries as     + brief    any harness\n silently     wiki pages       injection\n```\n\nAgents emit sanitized observations through lifecycle hooks as you work.\nAt session end, observations become coherent markdown pages in the\nproject's wiki (optionally LLM-written; useful even without). The next\nsession — any agent, any machine — gets a bounded brief and can search\neverything: full-text, entities, links, and (optionally) vectors, fused\ninto one ranking. Cross-agent handoffs carry the baton explicitly.\n\nThe full design, including the invariants that keep multi-user and\nmulti-session use safe, is in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).\n\n## Support matrix\n\nEvery row below is a first-party integration — MCP registration, lifecycle\nhooks, or both — kept honest by CI. The full matrix with per-agent notes and\ncaveats is in [`docs/support-matrix.md`](docs/support-matrix.md).\n\n| Area | Status |\n| --- | --- |\n| Linux | Supported |\n| macOS | Supported |\n| Windows via WSL2 | Supported |\n| Native Windows | Experimental |\n| Claude Code | Supported |\n| Codex | Supported |\n| Command Code | Supported |\n| Devin CLI | Supported |\n| OpenCode | Supported |\n| OpenCode 2 (`opencode2` beta) | Supported |\n| Cursor | Supported |\n| Gemini CLI | Supported |\n| Oh My Pi / OMP | Supported |\n| Pi | Supported |\n| Crush | Managed-only |\n| Managed workstreams | Opt-in |\n| Claude Desktop | MCP-only |\n| OpenClaw | Supported |\n| Antigravity CLI | Supported |\n| Grok Build CLI | Supported |\n| Swival CLI | MCP-only |\n| Zero | Supported |\n| ZCode | Supported |\n| Kimi Code | Supported |\n| Kiro CLI | Supported |\n| Pool | Hooks-only |\n| VS Code Copilot | MCP-only |\n| Zed | MCP-only |\n| Muse Code | MCP-only |\n| Hermes Agent | Community |\n| LLM/auth providers | Supported |\n| Embedding providers | Supported |\n\n## Coming from another tool?\n\nMost agent-memory tools optimize one thing — extracting atomic facts per turn,\na temporal knowledge graph, an agent-editable memory OS, or a hosted context\nAPI. ai-memory optimizes something different: a **git-backed markdown wiki as\nthe source of truth**, with a derived index for retrieval, captured\nautomatically from lifecycle hooks, shared across agents, machines, and people,\nand working with **zero LLM calls by default**. Here's what carries over from\neach, and what you gain:\n\n| Coming from… | What's similar | What you gain |\n|---|---|---|\n| **Mem0 / fact extractors** (LangMem) | Automatic per-turn capture | Memory compiles into readable **pages** you own and edit, not opaque fact rows; retrieval fuses FTS + entity + graph (+ optional vectors), not vector-only |\n| **Zep / Graphiti** (temporal KG) | Temporal reasoning, typed relations | Bi-temporal-lite (`as_of`, version-filtered search) and typed edges without standing up a graph database — on one binary |\n| **mcp-memory-service** (closest sibling) | SQLite + local embeddings, hook capture, typed edges, honest numbers | Human-editable markdown **pages** instead of fact-rows, plus cross-agent handoffs as a first-class, claim-once protocol |\n| **basic-memory** (file-first sibling) | Markdown-on-disk as the source of truth | Automatic lifecycle capture and a derived FTS/entity/graph index on top, cross-agent handoffs, and multi-user sharing built in |\n| **Claude Code built-in memory** | \"Remember my project\" convenience, zero setup | Synced across machines and agents, searchable, team-capable, and captures tool lifecycle — not a per-laptop `MEMORY.md` |\n| **Hindsight / OpenViking** (hosted, LLM-required) | Living pages / document memory with a background consolidation loop | A self-contained binary that runs zero-LLM by default and keeps memory in files you own; per-project team sharing instead of strict per-bank isolation |\n| **Supermemory / LiquidLM** (hosted memory API) | A managed second brain with automatic ingestion | Git-versioned markdown you own, no required API spend, offline operation, and per-project team sharing — ai-memory remembers *this repo*, not a general vault |\n\nThe consistent theme: **files you own** (git-backed markdown), a **zero-LLM\ndefault**, **one self-contained binary**, **cross-agent + cross-machine + team**\nsharing, **automatic lifecycle capture**, and **typed, claim-once handoffs**.\nOpt-in features (LLM consolidation, vector search) stay opt-in.\n\n**Built on the shoulders of:** the\n[Karpathy LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)\n(compile-not-retrieve),\n[agentmemory](https://github.com/rohitg00/agentmemory) (this project is its Rust\nsuccessor), [basic-memory](https://github.com/basicmachines-co/basic-memory)\n(markdown-on-disk truth),\n[cognee](https://github.com/topoteretes/cognee) (pipeline composition and\ntriplet embeddings),\n[Hermes Agent](https://github.com/NousResearch/hermes-agent) (the\nself-improvement loop), and [A-MEM](https://arxiv.org/abs/2502.12110)\n(Zettelkasten-style atomic notes).\n\nThe full, fair rundown — where each approach wins, where ai-memory differs, the\npublished benchmark — is in [How ai-memory compares](docs/comparison.md).\n\n## Quick start\n\n### Arch Linux (AUR)\n\nFor native Arch installs, use the AUR packages. They install\n`/usr/bin/ai-memory`, packaged hook sources, and both system-level and\nuser-level systemd units.\n\n```bash\nyay -S ai-memory-bin    # prebuilt Linux x86_64/aarch64 binary\nyay -S ai-memory        # builds from source\n```\n\nSingle-user workstation:\n\n```bash\nmkdir -p ~/.config/ai-memory ~/.local/share/ai-memory\nai-memory --data-dir ~/.local/share/ai-memory \\\n  --config ~/.config/ai-memory/config.toml init\nsystemctl --user enable --now ai-memory.service\nai-memory install-mcp --client claude-code --apply\nai-memory install-hooks --agent claude-code --apply\n```\n\nSystem service installs use `/var/lib/ai-memory` and `/etc/ai-memory/` via the\npackaged unit. Full user-service, system-service, auth, and provider setup is in\n[`docs/install.md#arch-linux-native-packages-aur`](docs/install.md#arch-linux-native-packages-aur).\n\n### Docker\n\nYou need: Docker or Podman + an agent CLI from the [Support Matrix](#support-matrix),\nor anything else that speaks MCP.\n\nThe published Docker image includes `linux/amd64` and `linux/arm64` variants,\nso Apple Silicon Macs and ARM64 Linux hosts can pull `akitaonrails/ai-memory`\nwithout `--platform linux/amd64` emulation.\n\nThe default quick-start has **no authentication** - the server binds\nto loopback only, so on a single-user laptop nothing else can reach\nit. Adding a bearer token is a one-line change once you're ready to\nexpose the server on the LAN; see [Security](#security) below.\n\n```bash\n# 1. Install the ai-memory CLI wrapper (a small shell script that\n#    runs the binary inside a container with your $HOME mounted). This is\n#    the only thing that needs to live on the host filesystem.\nmkdir -p ~/.local/bin\nwrapper_tmp=\"$(mktemp -d)\"\ntrap 'rm -rf \"$wrapper_tmp\"' EXIT\nwrapper_base=https://github.com/akitaonrails/ai-memory/releases/latest/download/ai-memory-wrapper\ncurl -fsSL \"$wrapper_base\" -o \"$wrapper_tmp/ai-memory-wrapper\"\ncurl -fsSL \"$wrapper_base.sha256\" -o \"$wrapper_tmp/ai-memory-wrapper.sha256\"\nexpected=\"$(awk 'NR == 1 { print $1 }' \"$wrapper_tmp/ai-memory-wrapper.sha256\")\"\nif command -v sha256sum >/dev/null 2>&1; then\n    actual=\"$(sha256sum \"$wrapper_tmp/ai-memory-wrapper\" | awk '{ print $1 }')\"\nelse\n    actual=\"$(shasum -a 256 \"$wrapper_tmp/ai-memory-wrapper\" | awk '{ print $1 }')\"\nfi\n[ -n \"$expected\" ] && [ \"$actual\" = \"$expected\" ] || { echo \"wrapper checksum mismatch\" >&2; exit 1; }\ninstall -m 0755 \"$wrapper_tmp/ai-memory-wrapper\" ~/.local/bin/ai-memory\nrm -rf \"$wrapper_tmp\"\ntrap - EXIT\n# Most distros put ~/.local/bin on PATH automatically. If `which\n# ai-memory` comes up empty, add this to ~/.bashrc / ~/.zshrc:\n#     export PATH=\"$HOME/.local/bin:$PATH\"\n\n# 2. Start the server. `--restart unless-stopped` makes it come back\n#    on docker daemon restart and on machine boot (provided your\n#    docker service is enabled at boot — `sudo systemctl enable\n#    docker` on most distros). Loopback-only bind (`127.0.0.1:49374`)\n#    so nothing outside this machine can reach it. Omit the LLM /\n#    EMBEDDING lines for zero-LLM mode — FTS5 search still works\n#    without any keys.\ndocker run -d --name ai-memory \\\n    --restart unless-stopped \\\n    -p 127.0.0.1:49374:49374 \\\n    -v ai-memory-data:/data \\\n    -e AI_MEMORY_LLM_PROVIDER=anthropic \\\n    -e ANTHROPIC_API_KEY=sk-ant-... \\\n    -e AI_MEMORY_EMBEDDING_PROVIDER=openai \\\n    -e OPENAI_API_KEY=sk-... \\\n    docker.io/akitaonrails/ai-memory:latest\n\n# 3. Wire your agent CLI in two commands. The wrapper takes care of\n#    mounts and each client's config-path detection. Re-run with\n#    `--agent codex`, `--agent command-code`, `--agent devin`, `--agent opencode`, `--agent opencode2`, `--agent gemini-cli`,\n#    `--agent grok`, `--agent kimi-code`, `--agent kiro-cli`, `--agent omp`,\n# "
+    },
+    "brief": {
+      "summary": "Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors",
+      "problem": "该项目围绕“Solution for long term memory for agent coding CLIs and to facilitate handoff between different agent vendors”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Solution for long term memor",
+        "主要使用 Rust 开发",
+        "许可证：MIT"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 167 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "akitaonrails/ai-memory",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agent、mcp、codex",
+      "generated_by_ai": false,
+      "velocity_score": 67,
+      "freshness_score": 40,
+      "ranking_score": 58.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 52199,
+      "forks": 4763,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 501
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-22T05:09:24Z",
+      "pushed_at": "2026-09-22T05:10:18Z",
+      "open_issues": 196,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nInstall the HyperFrames skills, then describe the video you want:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Cursor, Gemini CLI, Codex, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nDefault to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install all 20 deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nInstalls stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                                                                                                          |\n| `/hyperframes-creative`  | Non-animation creative direction — `frame.md` / `design.md`, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns.                                                                                                                                                                                                                                                                                                                           |\n| `/media-use`             | The media OS — resolve any media need (BGM, SFX, image, icon, logo, voice, color grade, LUT) into a frozen local fil"
+    },
+    "brief": {
+      "summary": "Write HTML. Render video. Built for agents.",
+      "problem": "该项目围绕“Write HTML. Render video. Built for agents.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Write HTML. Render video. Bu",
+        "主要使用 TypeScript 开发",
+        "主题包括：ai、animation、ffmpeg、framework"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 52,199 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：mcp",
+      "generated_by_ai": false,
+      "velocity_score": 82,
+      "freshness_score": 40,
+      "ranking_score": 56.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "Osmantic/ODS",
+      "url": "https://github.com/Osmantic/ODS",
+      "description": "Turn your PC, Mac, or Linux box into an AI server.  LLM inference, chat UI, voice, agents, workflows, RAG, and image generation.",
+      "language": "Python",
+      "total_stars": 6696,
+      "forks": 948,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 74
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "amd",
+        "comfyui",
+        "docker",
+        "llama-cpp",
+        "llm",
+        "local-ai",
+        "n8n",
+        "nvidia",
+        "open-webui",
+        "rag",
+        "self-hosted",
+        "speech-to-text",
+        "strix-halo",
+        "text-to-speech",
+        "workflow-automation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-09T13:14:58Z",
+      "updated_at": "2026-09-22T05:00:54Z",
+      "pushed_at": "2026-09-22T04:58:17Z",
+      "open_issues": 3498,
+      "homepage": "https://discord.gg/qGVygYada3",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# ODS\n\n**Osmantic Deployment System**\n\n<p align=\"center\">\n  <a href=\"https://osmantic.com\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <img src=\"ods/docs/images/osmantic-lockup.png\" alt=\"Osmantic\" width=\"800\">\n  </a>\n</p>\n\n**Turn your PC, Mac, or Linux box into a private AI server.**\n\nAI server and homelab setup is rapidly becoming a solved problem.\nIt should feel that way for everyone.\n\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)\n[![GitHub Stars](https://img.shields.io/github/stars/Osmantic/ODS)](https://github.com/Osmantic/ODS/stargazers)\n[![Release](https://img.shields.io/github/v/release/Osmantic/ODS)](https://github.com/Osmantic/ODS/releases)\n\n[![Watch the demo](https://img.shields.io/badge/Demo-Watch%20on%20YouTube-red?logo=youtube)](https://youtu.be/nO8xFNHX-HA)\n\n</div>\n\nODS installs and wires together everything you need to run AI locally, so you do not have to assemble Ollama, Open WebUI, n8n, ComfyUI, and privacy tools by hand:\n\n- **Local model inference** — run open models on your own hardware\n- **ChatGPT-style web UI** — talk to your models from any browser\n- **Control dashboard** — manage models, services, setup, GPU status, and extensions from one place\n- **Voice, agents, and workflows** — build automations that can listen, speak, call tools, and get work done\n- **RAG and search** — connect local documents, private search, and retrieval workflows\n- **Image generation** — run local image tools without sending prompts to a hosted API\n- **Privacy and ops** — keep service auth, secrets, observability, and diagnostics in one local stack\n\nNo cloud required. No subscriptions required. Your prompts and data stay on your machine unless you choose otherwise. Cloud and hybrid API modes are optional when you want them.\n\n**Release validation:** Operational changes are checked with a release-grade\nfleet and distro lab: zero-prereq bootstrap, fresh installs, product flows,\nfull-model capabilities, lifecycle recovery, and the final User Green gate. See\n[Release Validation](ods/docs/RELEASE_VALIDATION.md) for what a green\nrun proves.\n\n**Repo layout:** the repository root holds the public README, installers,\nsecurity policy, GitHub workflows, and project coordination docs. The\n`ods/` directory is the product runtime: services, installer phases,\ncompose overlays, dashboard, CLI, tests, and operator docs.\n\n**Stable consumption:** `v2.6.0` is the current stable release. `main` moves\nquickly; use it for active development and validation candidates. For forks,\nappliances, labs, or production-like installs, pin a tagged release or audited\ncommit and keep your own validation receipt. Stable patch fixes land on\n`release/2.6.x` before being merged forward. See\n[Release Channels](ods/docs/RELEASE_CHANNELS.md),\n[Installer Trust](ods/docs/INSTALLER_TRUST.md), and\n[Forkability](ods/docs/FORKABILITY.md).\n\n## Get Started\n\nChoose your system, copy the block, run it in a normal terminal. ODS installs the stack, picks a model for your hardware, starts the services, and gives you the local web UI.\n\n**Linux or macOS**\n\n```bash\ncurl -fsSL https://install.osmantic.com/ods.sh | bash\n```\n\n**Windows PowerShell**\n\n```powershell\n$ProgressPreference = \"SilentlyContinue\"\n$odsSrc = Join-Path $env:TEMP (\"ods-install-\" + [guid]::NewGuid().ToString(\"N\"))\n$odsZip = Join-Path $odsSrc \"ods-main.zip\"\nNew-Item -ItemType Directory -Path $odsSrc | Out-Null\nInvoke-WebRequest \"https://github.com/Osmantic/ODS/archive/refs/heads/main.zip\" -OutFile $odsZip\nExpand-Archive -LiteralPath $odsZip -DestinationPath $odsSrc -Force\ncd (Get-ChildItem -LiteralPath $odsSrc -Directory | Select-Object -First 1).FullName\nSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass\n.\\install.ps1\n```\n\nPrerequisites: Docker must be installed and running. On Windows, use Docker Desktop with the WSL2 backend enabled and run the block in a normal, non-Administrator PowerShell window.\n\nThe hosted Linux/macOS endpoint proxies the current bootstrap from repository `main`.\nReviewed merges reach it automatically after edge-cache refresh. `ODS_REF` selects a compatible repository checkout. See\n[Installer Trust](ods/docs/INSTALLER_TRUST.md) to inspect the script or install\na stable release or audited commit manually.\n\nWindows users should not run the `curl ... | bash` command from PowerShell. The PowerShell block above downloads the source ZIP and runs the same Windows installer used by the clone-based workflow. For more detail, see the [Windows Quickstart](ods/docs/WINDOWS-QUICKSTART.md).\n\nAfter install, open **http://localhost:3000** and start chatting.\n\nUninstall later with the matching platform command:\n\n```bash\ncd ~/ods\n./ods-uninstall.sh --force\n```\n\n```powershell\n$installDir = \"$env:USERPROFILE\\ods\"\ncd $installDir\n.\\ods.ps1 uninstall --force\n```\n\nWindows recovery note: if the runtime folder is partial and `.\\ods.ps1` is missing, run the same command from a source checkout as `.\\ods\\installers\\windows\\ods.ps1 uninstall --force`. It removes Docker resources labelled as the ODS compose project before removing the runtime directory.\n\n> **API endpoint:** Linux Docker installs expose llama-server on **http://localhost:11434** by default (`OLLAMA_PORT`) while containers use `llama-server:8080`. macOS native Metal and Windows native/Lemonade paths use **http://localhost:8080** unless overridden. Open WebUI stays on **http://localhost:3000**.\n\n> **No GPU?** ODS also runs in cloud mode — same full stack, powered by OpenAI/Anthropic/Together APIs instead of local inference:\n> ```bash\n> ./install.sh --cloud\n> ```\n\n> **Port conflicts?** Every port is configurable via environment variables. See [`.env.example`](ods/.env.example) for the full list, or override at install time:\n> ```bash\n> WEBUI_PORT=9090 ./install.sh\n> ```\n\n**New here?** Read the [Friendly Guide](ods/docs/HOW-ODS-SERVER-WORKS.md) or [listen to the audio version](https://open.spotify.com/episode/40MvqJ41bC8cEgvUyOyE3K) — a complete walkthrough of what ODS is, how it works, and how to make it your own. No technical background needed.\n\n---\n\n## At A Glance\n\n| Question | Answer |\n|----------|--------|\n| **What is it?** | A local AI server stack for your own hardware, with a one-command Linux/macOS installer and a PowerShell installer for Windows. |\n| **Who is it for?** | People who want private AI at home, in a lab, or on a workstation without hand-wiring a dozen services. |\n| **What do I get?** | Local inference, Open WebUI chat, a control dashboard, voice, agents, workflows, RAG, search, image generation, privacy tools, observability, and developer tools. |\n| **What does it run on?** | Linux, Windows with WSL2/Docker Desktop, and macOS Apple Silicon. |\n| **Is cloud required?** | No. Local mode is the default; cloud and hybrid API modes are optional. |\n\n| If you know... | ODS adds... |\n|----------------|----------------------|\n| **Ollama / llama.cpp** | The surrounding server stack: chat, dashboard, voice, RAG, workflows, agents, privacy, and service management. |\n| **Open WebUI** | A full installer and control plane around Open WebUI, plus pre-wired local services. |\n| **AnythingLLM** | Broader local AI appliance behavior beyond RAG: inference, chat, voice, workflows, image generation, and ops. |\n| **n8n self-hosted AI starter kits** | Workflow automation as one part of a larger private AI server. |\n\n---\n\n> **Current Platform Support**\n>\n> | Platform | Status |\n> |----------|--------|\n> | **Linux** (NVIDIA + AMD + Intel Arc) | **Supported** — install and run today |\n> | **Windows** (NVIDIA + AMD) | **Supported** — install and run today |\n> | **macOS** (Apple Silicon) | **Supported** — install and run today |\n>\n> **Tested Linux distros:** Ubuntu 24.04/22.04, Debian 12, Linux Mint 21.3, Fedora 41+, Rocky Linux 9, Arch Linux, Manjaro, CachyOS, and openSUSE Tumbleweed. Other distros using apt, dnf, pacman, or zypper should also work — [open an issue](https://github.com/Osmantic/ODS/issues) if yours doesn't.\n>\n> **Release validation:** Operational changes run through a release-grade gate\n> that covers zero-prereq bootstrap, clean installs, product behavior,\n> full-model capabilities, lifecycle recovery, and User Green. See\n> [Release Validation](ods/docs/RELEASE_VALIDATION.md) and the\n> [Validation Matrix](ods/docs/VALIDATION-MATRIX.md).\n>\n> **Windows:** Requires Docker Desktop with WSL2 backend. NVIDIA GPUs use Docker GPU passthrough; AMD Strix Halo runs through the platform-specific accelerated path documented in the Windows installer and support matrix.\n>\n> **macOS:** Requires Apple Silicon (M1+) and Docker Desktop. llama-server runs natively with Metal GPU acceleration; all other services run in Docker.\n>\n> See the [Support Matrix](ods/docs/SUPPORT-MATRIX.md) for supported\n> platform claims and the [Validation Matrix](ods/docs/VALIDATION-MATRIX.md)\n> for the layered test surface used to test those claims.\n\n---\n\n## Why ODS?\n\nA handful of companies control the vast majority of global AI traffic — and with it, your data, your costs, and your uptime. Every query you send to a centralized provider is business intelligence you don’t own, running on infrastructure you don’t control, priced on terms you can’t negotiate.\n\nIf AI is becoming critical infrastructure, it shouldn’t be rented. Self-hosting local AI should be a sovereign human right, not a career choice.\n\nBecause running your own AI shouldn't require a CS degree and a weekend of debugging CUDA drivers. Right now, setting up local AI means stitching together a dozen projects, writing Docker configs from scratch, and praying everything talks to each other. Most people give up and go back to paying OpenAI.\n\nWe built ODS so you don't have to.\n\n- **One command** — detects your GPU, picks the right model, generates credentials, launches everything\n- **Chatting in under 2 minutes** — bootstrap mode gives you a working model instantly while your full model downloads in the background\n- **Full service stack, pre-wired** — chat, agents, voice, workflows, search, RAG, image generation, privacy tools, observability, and developer tools. All talking to each other out of the box\n- **Fully moddable** — every service is an extension. Drop in a folder, run `ods enable`, done\n\n<details>\n<summary><b>Manual install (Linux)</b></summary>\n\n```bash\ngit clone https://github.com/Osmantic/ODS.git\ncd ODS/ods\n./install.sh\n```\n\n</details>\n\n<details>\n<summary><b>Windows (PowerShell)</b></summary>\n\nRequires [Docker Desktop](https://www.docker.com/products/docker-desktop/) with WSL2 backend enabled.\n**Install Docker Desktop first and make sure it is running before you start.**\n\nOpen a normal **PowerShell** session and run:\n\n```powershell\n$ProgressPreference = \"SilentlyContinue\"\n$odsSrc = Join-Path $env:TEMP (\"ods-install-\" + [guid]::NewGuid().ToString(\"N\"))\n$odsZip = Join-Path $odsSrc \"ods-main.zip\"\nNew-Item -ItemType Directory -Path $odsSrc | Out-Null\nInvoke-WebRequest \"https://github.com/Osmantic/ODS/archive/refs/heads/main.zip\" -OutFile $odsZip\nExpand-Archive -LiteralPath $odsZip -DestinationPath $odsSrc -Force\ncd (Get-ChildItem -LiteralPath $odsSrc -Directory | Select-Object -First 1).FullName\nSet-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass\n.\\install.ps1\n```\n\n> The `Set-ExecutionPolicy` command allows the installer script to run in the current session. It does not change your system-wide policy.\n> Running as Administrator is not recommended for the installer because user-level paths such as `.opencode`, `data/`, and `.env` can be created with admin-owned permissions.\n\nThe installer detects your GPU, picks the right model, generates credentials, starts all services, and creates a Desktop shortcut to the Dashboard. Manage from the runtime directory with `.\\ods.ps1 status`; uninstall with `.\\ods.ps1 uninstall --force`.\n\n</details>\n\n<details>\n<summary><b>macOS (Apple Silicon)</b></summary>\n\nRequires Apple Silicon (M1+) and [Docker Desktop](https://www.docker.com/products/docker-desktop/)."
+    },
+    "brief": {
+      "summary": "Turn your PC, Mac, or Linux box into an AI server.  LLM inference, chat UI, voice, agents, workflows, RAG, and image generation.",
+      "problem": "该项目围绕“Turn your PC, Mac, or Linux box into an AI server.  LLM inference, chat UI, voice, agents, workflows, RAG, and image generation.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Turn your PC, Mac, or Linux ",
+        "主要使用 Python 开发",
+        "主题包括：ai-agents、amd、comfyui、docker"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 6,696 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "Osmantic/ODS",
+      "score": 60,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech",
+      "generated_by_ai": false,
+      "velocity_score": 57,
+      "freshness_score": 40,
+      "ranking_score": 50.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "vcamapp/app",
+      "url": "https://github.com/vcamapp/app",
+      "description": "VTuber Camera, macOS app that shows your avatar using CoreMedia I/O's virtual camera.",
+      "language": "Swift",
+      "total_stars": 276,
+      "forks": 19,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "avatar",
+        "coremediaio",
+        "macos",
+        "metaverse",
+        "vision",
+        "vrm",
+        "vroid",
+        "vroid-hub",
+        "vtube",
+        "vtuber",
+        "vtubing"
+      ],
+      "license_name": "MIT",
+      "created_at": "2022-02-08T04:03:11Z",
+      "updated_at": "2026-09-22T03:18:49Z",
+      "pushed_at": "2026-09-22T03:18:45Z",
+      "open_issues": 2,
+      "homepage": "https://vcamapp.com/en",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# VCam\nA macOS app that shows an avatar using a virtual camera.\n\nYou can display your virtual avatars on Zoom, Google Meet, etc.\n\n[https://vcamapp.com/en](https://vcamapp.com/en)\n\n[![DEMO](https://github-production-user-asset-6210df.s3.amazonaws.com/8188636/261830133-3486c19a-0625-4a4b-a008-d60c9a3ff52f.png)](https://www.youtube.com/watch?v=5gm7-L174zc)\n\n## Requirements\n- macOS 15 or higher (macOS 26 or higher recommended)\n\nOptimized for Apple Silicon Macs; also available for Intel Macs.  \nWindows and other platforms are currently not supported.\n\n## Documentation\n- [Documentation](https://docs.vcamapp.com)\n\n*Updates to the document by pull request are welcome!*\n\n## License\nThe source code in this repository is under the MIT License. For the Terms of Use, please refer to the official website.\n\nX (Twttier): [@vcamapp](https://x.com/vcamapp)\n"
+    },
+    "brief": {
+      "summary": "VTuber Camera, macOS app that shows your avatar using CoreMedia I/O's virtual camera.",
+      "problem": "该项目围绕“VTuber Camera, macOS app that shows your avatar using CoreMedia I/O's virtual camera.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：VTuber Camera, macOS app tha",
+        "主要使用 Swift 开发",
+        "主题包括：3d、avatar、coremediaio、macos"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 276 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "3D / VTuber",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "vcamapp/app",
+      "score": 84,
+      "category": "3D / VTuber",
+      "reason": "匹配关键词：vtuber、vrm、avatar",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "sgl-project/sglang-omni",
+      "url": "https://github.com/sgl-project/sglang-omni",
+      "description": "SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.",
+      "language": "Python",
+      "total_stars": 1254,
+      "forks": 507,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "asr",
+        "audio-generation",
+        "cuda",
+        "distributed-inference",
+        "inference",
+        "model-serving",
+        "multimodal",
+        "music-generation",
+        "openai-api",
+        "pytorch",
+        "sglang",
+        "speech-recognition",
+        "streaming",
+        "text-to-speech",
+        "tts"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-07T06:58:29Z",
+      "updated_at": "2026-09-22T04:04:41Z",
+      "pushed_at": "2026-09-22T03:48:09Z",
+      "open_issues": 685,
+      "homepage": "https://sgl-project.github.io/sglang-omni/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n<img src=\"https://raw.githubusercontent.com/sgl-project/sglang-omni/main/docs/_static/image/sgl-omni-logo.svg\" alt=\"logo\" width=\"400\"></img>\n\n<p>\n<a href=\"https://pypi.org/project/sglang-omni/\"><img src=\"https://img.shields.io/pypi/v/sglang-omni?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI\" alt=\"PyPI\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/stargazers\"><img src=\"https://img.shields.io/github/stars/sgl-project/sglang-omni?style=for-the-badge&logo=github&label=stars\" alt=\"GitHub stars\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/sgl-project/sglang-omni?style=for-the-badge\" alt=\"license\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-closed-raw/sgl-project/sglang-omni?style=for-the-badge&label=closed%20issues\" alt=\"closed issues\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-raw/sgl-project/sglang-omni?style=for-the-badge&label=open%20issues\" alt=\"open issues\"></a>\n<a href=\"https://deepwiki.com/sgl-project/sglang-omni\"><img src=\"https://img.shields.io/badge/Ask-DeepWiki-087fca?style=for-the-badge\" alt=\"Ask DeepWiki\"></a>\n</p>\n\n</div>\n\n--------------------------------------------------------------------------------\n\n<p align=\"center\">\n<a href=\"https://lmsys.org/blog/\"><b>Blog</b></a> |\n<a href=\"https://sgl-project.github.io/sglang-omni/\"><b>Documentation</b></a> |\n<a href=\"#quick-start\"><b>Quick Start</b></a> |\n<a href=\"https://sgl-project.github.io/sglang-omni/index.html\"><b>Cookbook</b></a> |\n<a href=\"https://github.com/sgl-project/sglang\"><b>SGLang</b></a> |\n<a href=\"https://slack.sglang.io\"><b>Join Slack</b></a>\n</p>\n\n<p align=\"center\">\n⭐ <b><a href=\"https://github.com/sgl-project/sglang-omni/stargazers\">Star SGLang-Omni</a> to help more builders discover open infrastructure for multimodal and speech serving!</b>\n</p>\n\n## News\n\n- [2026/09] 🐧 Day-0 support for [AuK](https://huggingface.co/tencent/AuK) and [AuK-Flash](https://huggingface.co/tencent/AuK-Flash): text + voice instructions → 24 kHz speech on `/v1/audio/speech`, audio + editing instructions → edited speech on `/generate`. \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/auk.html)\\]\n- [2026/09] 🚀 SGLang-Omni **v0.1.6** is on [PyPI](https://pypi.org/project/sglang-omni/). Install with `uv pip install --prerelease=allow \"sglang-omni==0.1.6\"`. \\[[Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\\]\n- [2026/08] 🎵 Day-0 support for [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3): lyrics + caption → 32 kHz stereo song on `/v1/audio/speech`. \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html)\\]\n- [2026/08] 🚀 TTS architecture refactor: shared pipeline state, engine construction, reference encoding, capability metadata, and vocoder scheduling. \\[[Roadmap](https://github.com/sgl-project/sglang-omni/issues/985)\\] \\[[Blog](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/sglang-omni/tts-refactor.md)\\]\n- [2026/06] 🔥 MOSS-TTS Local Transformer v1.5 on SGLang-Omni with native-streaming 48 kHz speech. \\[[Blog](https://lmsys.org/blog/2026-06-17-moss-tts-local-v15/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html)\\]\n- [2026/06] 🔥 Higgs Audio v3 TTS for real-time, controllable speech. \\[[Blog](https://lmsys.org/blog/2026-06-04-higgs-audio-v3-tts/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html)\\]\n\n## About\n\nSGLang-Omni is a multi-stage serving runtime for omni, speech, and TTS models. Its design target is multi-stage decoding: generation split across heterogeneous stages with different compute patterns, dependency structures, and resource needs. SGLang-Omni owns the pipeline topology, stage lifecycle, inter-stage transport, model-family integration layer, and OpenAI-compatible serving surface, while composing with [SGLang](https://github.com/sgl-project/sglang) for high-performance autoregressive scheduling and model execution where applicable.\n\n- **Multi-stage runtime**: SGLang-Omni models generation as coordinated stages: preprocessing, encoders, autoregressive engines, talkers, decoders, vocoders, and aggregators.\n- **Stage-specialized scheduling**: Each stage runs behind a scheduler matched to its workload, from SGLang-backed autoregressive scheduling to lightweight preprocessing and streaming vocoder loops.\n- **Transport-aware execution**: A control plane coordinates requests while the relay data plane moves tensor payloads across shared-memory, NCCL, NIXL, and Mooncake backends.\n- **API surface**: OpenAI-compatible endpoints expose multimodal chat, speech generation, batch speech, streaming speech, uploaded voices, and transcription.\n\n## What SGLang-Omni Serves\n\n- **Omni chat and speech**: [Qwen3-Omni](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_omni.html), [Ming-Omni](https://sgl-project.github.io/sglang-omni/cookbook/ming_omni.html) — multimodal in, text/audio out.\n- **Music generation**: [MiniMax Music 3](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html) — lyrics + caption → 32 kHz stereo song.\n- **Speech generation**: [Higgs Audio v3](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html), [MOSS-TTS](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts.html), [MOSS-TTS Local](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html), [Fish Speech S2-Pro](https://sgl-project.github.io/sglang-omni/cookbook/fishaudio_s2_pro.html), [Qwen3-TTS](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_tts.html), [Voxtral TTS](https://sgl-project.github.io/sglang-omni/cookbook/voxtral_tts.html), [Ming-Omni-TTS](https://sgl-project.github.io/sglang-omni/cookbook/ming_tts.html), [dots.tts](https://sgl-project.github.io/sglang-omni/cookbook/dots_tts.html), [ZONOS2](https://sgl-project.github.io/sglang-omni/cookbook/zonos2.html) — `/v1/audio/speech`, batch, streaming, uploaded voices.\n- **Audio transcription and diarization**: [Qwen3-ASR](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html), [Fun-ASR](https://sgl-project.github.io/sglang-omni/cookbook/fun_asr.html), [ARK-ASR](https://sgl-project.github.io/sglang-omni/cookbook/arkasr.html), [MOSS-Transcribe-Diarize](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html) via `/v1/audio/transcriptions`. MOSS-TD supports speaker labels and timestamps (`response_format=verbose_json`).\n- **SGLang-Omni Router**: Multi-worker OpenAI-compatible front door — health, readiness, lifecycle, capability discovery. [Router guide](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html).\n\n## Hardware Support\n\n| Backend | Status | Notes |\n|---------|--------|-------|\n| **NVIDIA CUDA** | Supported | Default backend with full model coverage. |\n| **Apple Silicon** | Experimental | Qwen3-ASR runs through native MLX or Torch MPS on macOS arm64. Install with [`install.sh`](./install.sh) and follow the [Qwen3-ASR guide](./docs/cookbook/qwen3_asr.md#apple-silicon-mlx). |\n| **Intel GPU (XPU)** | Experimental | Intel Arc GPUs via PyTorch XPU. **Qwen3-ASR, Qwen3-TTS, and Qwen3-Omni serve end-to-end** (Omni thinker via multi-XPU tensor parallelism). Install per [Intel XPU guide](./docs/get_started/installation_xpu.md); the backend is auto-detected. |\n\nAdditional model guides, including experimental and research-oriented paths, are available in the [Cookbook](https://sgl-project.github.io/sglang-omni/).\n\n## Quick Start\n\n- **macOS Apple Silicon:** from a checkout, run [`./install.sh`](./install.sh) for a one-command Homebrew + uv setup. See [installation](./docs/get_started/installation.md#macos-apple-silicon).\n- [Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\n- [TTS usage](https://sgl-project.github.io/sglang-omni/basic_usage/tts.html)\n- [Qwen3-Omni usage](https://sgl-project.github.io/sglang-omni/basic_usage/qwen3_omni.html)\n- [Qwen3-ASR cookbook](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html)\n- [MOSS-Transcribe-Diarize cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html)\n- [Omni router](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html)\n- [Developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html)\n\n## Community & Support\n\nSGLang-Omni welcomes contributors working on inference systems, kernels, scheduling, inter-stage communication, model runners and cache efficiency, model integration, benchmarking, production deployment. Join the [SGLang Slack](https://slack.sglang.io) or read the [developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html).\n\nOrganizations interested in supporting SGLang-Omni, TTS, or omni model serving can contact Chenyang Zhao at [zhaochenyang@lmsys.org](mailto:zhaochenyang@lmsys.org).\n\n## Acknowledgments\n\nSGLang-Omni builds on the SGLang ecosystem and on open model work from the TTS, speech, and omni-model communities. We thank the model teams, systems contributors, and partner organizations helping make open multimodal serving faster, more reliable, and easier to extend.\n"
+    },
+    "brief": {
+      "summary": "SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.",
+      "problem": "该项目围绕“SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：SGLang-Omni is a high-perfor",
+        "主要使用 Python 开发",
+        "主题包括：asr、audio-generation、cuda、distributed-inference"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 1,254 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "sgl-project/sglang-omni",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、tts",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 42.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "JuiceBoxxGames/utsuwa",
+      "url": "https://github.com/JuiceBoxxGames/utsuwa",
+      "description": "Utsuwa is an open-source alternative to Grok Companion. This is a platform where you can have a virtual AI waifu that learns and grows with you, bundled with optional mechanics inspired by Japanese dating sim games. ",
+      "language": "TypeScript",
+      "total_stars": 95,
+      "forks": 21,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-companion",
+        "ai-waifu",
+        "anime",
+        "artificial-intelligence",
+        "chatbot",
+        "dating-sim",
+        "grok-companion",
+        "llm",
+        "ollama",
+        "svelte",
+        "sveltekit",
+        "tauri",
+        "text-to-speech",
+        "threejs",
+        "v-tuber",
+        "virtual-companion",
+        "vrm",
+        "vtuber",
+        "waifu"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-01-20T05:21:25Z",
+      "updated_at": "2026-09-22T03:05:01Z",
+      "pushed_at": "2026-09-22T03:04:59Z",
+      "open_issues": 8,
+      "homepage": "https://www.utsuwa.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "> [!WARNING]\n> Utsuwa and Juice Boxx Games have not minted, launched, endorsed, or authorized any cryptocurrency, token, coin, NFT, or blockchain project. We never will. If you see crypto associated with Utsuwa or The Lab, it is a scam. This repository is the only authentic Utsuwa project repository.\n\n<p align=\"center\">\n  <img alt=\"Utsuwa, an open-source AI companion you can see and talk to\" src=\"static/brand-assets/banner-light.avif\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://utsuwa.ai\">Website</a>\n  ·\n  <a href=\"https://app.utsuwa.ai\">Try it in your browser</a>\n  ·\n  <a href=\"https://docs.utsuwa.ai\">Docs</a>\n  ·\n  <a href=\"https://utsuwa.ai/blog\">Blog</a>\n  ·\n  <a href=\"https://github.com/JuiceBoxxGames/utsuwa/releases\">Releases</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL--3.0-blue.svg\" alt=\"License: AGPL-3.0\"></a>\n  <a href=\"https://github.com/JuiceBoxxGames/utsuwa/releases\"><img src=\"https://img.shields.io/github/v/release/JuiceBoxxGames/utsuwa?label=Release&color=00b2ff\" alt=\"Latest release\"></a>\n  <a href=\"https://nodejs.org/\"><img src=\"https://img.shields.io/badge/Node.js-22+-green.svg\" alt=\"Node.js 22+\"></a>\n  <a href=\"CONTRIBUTING.md\"><img src=\"https://img.shields.io/badge/PRs-welcome-brightgreen.svg\" alt=\"PRs welcome\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/JuiceBoxxGames/utsuwa/releases/latest\">\n    <img alt=\"Download for macOS\" src=\"static/brand-assets/download-buttons/macos-light.avif\" width=\"31%\">\n  </a>\n  <a href=\"https://github.com/JuiceBoxxGames/utsuwa/releases/latest\">\n    <img alt=\"Download for Windows\" src=\"static/brand-assets/download-buttons/windows-light.avif\" width=\"31%\">\n  </a>\n  <a href=\"https://github.com/JuiceBoxxGames/utsuwa/releases/latest\">\n    <img alt=\"Download for Linux\" src=\"static/brand-assets/download-buttons/linux-light.avif\" width=\"31%\">\n  </a>\n</p>\n\n<p align=\"center\">\n  <sub>Beta builds are unsigned, so your OS will warn on first launch (<a href=\"#download-the-desktop-app\">install notes</a>). Prefer zero install? <a href=\"https://app.utsuwa.ai\">Run it in your browser</a>.</sub>\n</p>\n\n---\n\n**Utsuwa is an open-source AI companion with 3D VRM avatars.** A platform where you can have a virtual companion that learns and grows with you, bundled with optional mechanics inspired by Japanese [dating sim](https://en.wikipedia.org/wiki/Dating_sim) games. Utsuwa is privacy-focused: your data is stored locally and never leaves your device.\n\n\"Utsuwa\" means \"vessel\" in Japanese. A container for AI to inhabit visually.\n\n<p align=\"center\">\n  <img alt=\"The Utsuwa app: a 3D VRM companion with chat, mood, and voice\" src=\"static/marketing/companion-light.webp\" width=\"100%\">\n</p>\n\n## Features\n\n- **VRM Model Viewer**: Load and display VRM 3D avatar models with orbit controls, automatic camera framing per model, and live camera settings (zoom, height, horizontal pan, field of view)\n- **Developer Tools**: Test VRM facial expressions and animations, or upload a temporary `.vrm` file for a non-persistent preview that reverts when you leave the page\n- **AR Mode**: On WebXR-capable devices (Android Chrome, headset browsers), place your companion on your real floor, drag her around, and pinch to resize\n- **Photo Mode**: Pose her from a pose library, set her expression, pick a background, add a color filter, vignette, or frame, drop draggable stickers on the shot, and capture in high resolution with a quick snap or self-timer. Head tracking keeps her eyes on your camera while she holds the pose\n- **Touch Reactions**: Tap her and she reacts with an expression and a physics ripple through hair and clothes. Reactions depend on where you tap and how close the two of you are\n- **Scene Backgrounds**: Swap the backdrop behind her for pastel gradients or cute patterns (dots, hearts, sparkles, stripes, gingham) right from the Controls panel; your pick persists\n- **Physics Intensity**: A Movement slider from Subtle to Lively scales how much her hair and outfit respond to motion, respecting each model's own rig tuning\n- **Model-Centric UI**: Full-screen 3D model with unobtrusive overlay controls\n- **3D Speech Bubbles**: Chat responses appear as bubbles that track the model's head in 3D space, revealed word by word at a configurable speed\n- **Chat Window**: A docked panel with conversation history, message copying, and an input. It stays open in Chat window mode, beside the avatar on wide screens and below it on mobile. The full scene continues behind the panel. Choose Immersive for the standalone input bar in Settings > Display.\n- **Keep Screen Awake**: Opt in under Settings > Display to keep the screen on while Utsuwa is visible. The indicator reports the actual lock state; unsupported webviews show a clear unavailable state.\n- **Thinking Status**: A shimmer label narrates what she is actually doing (Remembering, Looking at your photo, Thinking), with a configurable delay and an optional soft audio ping\n- **Chat Interface**: Floating input bar (left, center, or right aligned) with streaming responses\n- **Voice Input**: Speech-to-text via a local Whisper server (Speaches, faster-whisper-server, whisper.cpp), Groq (Whisper), or the browser's Web Speech API, with real-time audio visualization\n- **Show Her Photos**: Show your companion an image via the attach (paperclip) button in the chat bar or drag-and-drop. Vision-capable models (GPT-4o, Claude, Gemini, or local ones like LLaVA) actually see it and can remember the moment, and kept photos live on a scrapbook-style board. Images stay on your device and only ever reach vision-capable models\n- **LLM Integration**: Support for 8 LLM providers: OpenAI, Anthropic, Google, xAI, DeepSeek, Ollama, LM Studio, and any OpenAI-compatible endpoint (OpenRouter, Together, vLLM, ...)\n- **Local Model Discovery**: Ollama and LM Studio discover installed local models directly from your device\n- **MCP Tools**: Connect Model Context Protocol servers — Home Assistant's official MCP integration, web search via SearXNG, and more — and let the companion call their tools during chat. Per-server HTTP/stdio transports, bearer-token authentication, and an `MCP_ENABLED=server` gate for self-hosted web deployments (see [MCP Servers](https://docs.utsuwa.ai/docs/guides/mcp))\n- **Text-to-Speech**: Support for ElevenLabs and OpenAI TTS, local voices via any OpenAI-compatible server (Kokoro-FastAPI, openedai-speech), and local OmniVoice. OmniVoice streams: speech starts while the model is still writing, and foreign words can be spoken per word in their own language and voice. With OmniVoice + Alternative Voice, the model controls its spoken reply via native `speak_segment` / `pause_segment` / `gesture_segment` tool calls (when tool calling is enabled); otherwise the documented inline `speak()` / `pause()` / `gesture()` syntax is used\n- **Fully Local Option**: Run the whole stack offline — local LLM (Ollama/LM Studio), local TTS, and local Whisper STT — so nothing leaves your device\n- **Lip-sync**: Audio-driven mouth animation synced to TTS playback\n- **Animations**: VRMA-based idle and talking animations with automatic blinking\n- **Character Customization**: Customize your companion's name, personality, and system prompt\n- **Avatar Tasks & Timers**: Your companion can schedule reminders for itself, e.g. to check back with you later. Fired and missed timers appear in the reminder dropdown (bell icon) so you can see what happened and dismiss them. Reminders persist across browser reloads and stay in sync between the main app and the desktop overlay\n- **Companion System**: Multi-axis relationship tracking with mood, events, and semantic memory\n- **Semantic Memory**: Local AI-powered memory search using Transformers.js - finds memories by meaning, not just keywords\n- **Memory Inspector**: View, search, add, and delete facts in Settings > Memory. Inspect saved turns, session summaries, character state, and sample response parsing without changing engine behavior.\n- **Memory Graph**: Interactive visualization showing how memories connect semantically\n- **Data Export/Import**: Download your data as a save file, restore anytime\n- **Theming**: Light and dark mode support with system preference detection\n- **Desktop App** *(beta)*: Native desktop app for macOS, Windows, and Linux with transparent overlay mode, so your companion floats on your desktop\n\n### Local-First Storage\n\nAll your data is stored locally on your device using IndexedDB:\n- No database setup required\n- Works offline after initial load\n- Export/import save files to back up or transfer your data\n- Settings > Data to manage your save files\n\n### Companion System\n\nBuild a meaningful relationship with your AI companion through a dating sim-inspired progression system:\n\n- **Multi-axis Relationships**: Track affection, trust, intimacy, comfort, and respect separately\n- **8 Relationship Stages**: Progress from Stranger → Acquaintance → Friend → Close Friend → Romantic Interest → Dating → Committed → Soulmate\n- **Dynamic Mood**: Real-time emotions with causality tracking (she remembers *why* she feels a certain way)\n- **Visual Novel Events**: Milestone moments, romantic scenes, and choices that matter - with custom dialogue and branching responses\n- **Semantic Memory**: Facts are indexed with vector embeddings for meaning-based retrieval - \"outdoor activities\" finds memories about hiking. Runs locally using Transformers.js, no API calls\n- **Natural Progression**: Hybrid system combining app heuristics + LLM suggestions for believable relationship growth\n- **Time-Aware**: Your companion notices when you've been away and reacts accordingly\n- **Scheduled Tasks**: The companion can set timers/reminders for itself. Timers that fired while the app was closed are marked as missed and shown in the reminder dropdown for you to review and dismiss. The list survives a browser reload and is kept in sync across the main app and overlay windows\n\nSee the [Companion System Architecture](https://docs.utsuwa.ai/technology/companion-system) for full details.\n\n### Desktop Application (Beta)\n\nA native desktop app built with Tauri that includes all web features plus:\n\n- **Overlay Mode**: Your companion floats on your desktop with a transparent background\n- **Always-on-Top**: The overlay stays visible over all other windows\n- **Draggable Positioning**: Click and drag the character to reposition anywhere on screen, or lock her in place\n- **Resizable Overlay**: Hover to reveal a soft frame and drag the corner tab to resize; your size is remembered\n- **Overlay Camera**: A separate camera profile (zoom, height, FOV) tuned independently from the main app\n- **Floating Chat**: Expandable chat input that appears when you click the chat icon, with replies in a readable docked bubble\n- **Window Switching**: Seamlessly switch between the full app and overlay mode\n- **Global Hotkeys**: Push-to-talk, toggle overlay, and focus chat with keyboard shortcuts\n\nThe desktop app uses the same codebase as the web version, and your save files are compatible between both.\n\n## Supported Providers\n\n### LLM Providers (8)\n\nUtsuwa supports popular cloud and local LLMs. For endpoints that speak the OpenAI API (OpenRouter, Together, vLLM, LiteLLM, etc.), use the **OpenAI-Compatible** provider:\n- Set the **Base URL** to the endpoint root (e.g. `https://api.openai.com/v1/`).\n- **API Key** is optional; leave it empty for keyless local servers.\n- Enter a model manually or fetch available models after providing a base URL.\n- **Advanced Parameters** (temperature, top-p, max tokens, presence/frequency penalties) are passed to the endpoint when set.\n\n| Category | Providers |\n|----------|-----------|\n| **Cloud** | OpenAI, Anthropic, Google Gemini, DeepSeek, xAI (Grok) |\n| **Local** | Ollama, LM Studio |\n| **OpenAI-Compatible** | OpenRouter, Together, vLLM, LiteLLM, etc. |\n\n#### Context Window and Memory Budget\n\nThe **Context Window** setting is available for every LLM provider. Whe"
+    },
+    "brief": {
+      "summary": "Utsuwa is an open-source alternative to Grok Companion. This is a platform where you can have a virtual AI waifu that learns and grows with you, bundled with optional mechanics inspired by Japanese dating sim games. ",
+      "problem": "该项目围绕“Utsuwa is an open-source alternative to Grok Companion. This is a platform where you can have a virtual AI waifu that learns and grows with you, bundled with optional mechanics inspired by Japanese dating sim games. ”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Utsuwa is an open-source alt",
+        "主要使用 TypeScript 开发",
+        "主题包括：ai、ai-companion、ai-waifu、anime"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 95 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "3D / VTuber",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "JuiceBoxxGames/utsuwa",
+      "score": 72,
+      "category": "3D / VTuber",
+      "reason": "匹配关键词：vtuber、vrm",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 42.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "coval-ai/benchmarks",
+      "url": "https://github.com/coval-ai/benchmarks",
+      "description": "Reproducible voice-AI benchmarking — TTS / STT / S2S latency and accuracy.",
+      "language": "Python",
+      "total_stars": 63,
+      "forks": 13,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "speech-to-text",
+        "text-to-speech",
+        "voice-ai"
+      ],
+      "license_name": "",
+      "created_at": "2026-04-29T00:03:48Z",
+      "updated_at": "2026-09-22T04:49:49Z",
+      "pushed_at": "2026-09-22T05:06:24Z",
+      "open_issues": 14,
+      "homepage": "https://benchmarks.coval.ai/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Coval Benchmarks\n\nPublic, open-source voice-AI benchmarking for STT and TTS providers. Runs on a schedule against a pinned dataset, writes results to Postgres, and surfaces them at [benchmarks.coval.ai](https://benchmarks.coval.ai). Licensed Apache-2.0 — clone, build, and run with your own provider API keys.\n\nSee [`runner/`](runner/) for setup and local-run instructions.\n\n## Methodology\n\nThis is a research benchmark. Results reflect a specific pinned dataset, a\nspecific set of provider model versions, and a specific normalization pipeline.\nAbsolute numbers may not generalize to production workloads. Latency metrics\nand per-provider drift over time are the most informative signals. See\n[`docs/methodology.md`](docs/methodology.md) for the full reproducibility\ncontract.\n\nThe repository is licensed Apache-2.0; the full warranty disclaimer is in\n[`LICENSE`](LICENSE) §7. Third-party SDK licenses (e.g. provider client\nlibraries) are independent of this repository's license — see each SDK's own\nlicense for terms.\n"
+    },
+    "brief": {
+      "summary": "Reproducible voice-AI benchmarking — TTS / STT / S2S latency and accuracy.",
+      "problem": "该项目围绕“Reproducible voice-AI benchmarking — TTS / STT / S2S latency and accuracy.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Reproducible voice-AI benchm",
+        "主要使用 Python 开发",
+        "主题包括：ai、ai-agents、speech-to-text、text-to-speech"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 63 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "coval-ai/benchmarks",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、tts",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 42.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "aphelion-engine/aphelion-editor",
+      "url": "https://github.com/aphelion-engine/aphelion-editor",
+      "description": "Aphelion: A node-based video editing software.",
+      "language": "Python",
+      "total_stars": 28,
+      "forks": 2,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "free-software",
+        "image-manipulation",
+        "lightweight",
+        "lightweight-app",
+        "open-source",
+        "opencv",
+        "pyqt6",
+        "pyqt6-application",
+        "pyqt6-desktop-application",
+        "python",
+        "python3",
+        "video-editing",
+        "video-editing-software",
+        "video-editing-tools",
+        "video-editor",
+        "video-streaming",
+        "videos"
+      ],
+      "license_name": "",
+      "created_at": "2026-08-11T00:50:16Z",
+      "updated_at": "2026-09-22T04:25:07Z",
+      "pushed_at": "2026-09-22T04:25:02Z",
+      "open_issues": 0,
+      "homepage": "https://aphelion-community.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Aphelion Editor\n\n**A node-based video compositor.** Build a graph, preview in real time, export from any Viewer.\n\nAphelion is a desktop suite: node graph, viewport, timeline, media pool, and property inspector. The pipeline is float32 RGB. Export and tracking run off the UI thread. Third-party nodes use the sibling [Plugin SDK](../aphelion-sdk/README.md).\n\nVersion **0.1.0**. Python **3.11+**.\n\n## Features\n\n- **77 built-in nodes** — input/output, generators, color, filters, compositing, transform, keying, roto, tracking, timing, distort, stylize, math\n- **Real-time preview** — decode-time proxy (default 960px), optional 640px playback proxy, frame cache and prefetch\n- **Compositing** — chroma key, matte edge, spill suppress, bezier roto, point and planar tracking, corner pin, merge/dissolve\n- **Color** — grading, exposure, hue/saturation, white balance, levels, vibrance, shadows/highlights, creative looks\n- **Timeline** — playback, in/out, keyframed properties (default 1920×1080 @ 30 fps, 10 s)\n- **Projects** — `.aph` JSON with autosave once a path exists\n- **Export** — MP4 or PNG sequence from the active Viewer\n- **Plugins** — `aphelion_sdk` drop-ins, wheels, and **Preferences → Plugins** (enable, disable, reload)\n\n## Quick start\n\n```bash\ncd aphelion-editor\npython -m venv .venv\n# Windows: .\\.venv\\Scripts\\Activate.ps1\n# macOS / Linux: source .venv/bin/activate\npip install -e \".[dev,freeze]\"\npython main.py\n```\n\nThe launcher creates a project, opens a `.aph`, or restores a recent file. `aphelion --version` prints the app version.\n\nFull install notes: [docs/getting-started.md](docs/getting-started.md).\n\n## Documentation\n\n| Guide | Contents |\n|---|---|\n| [Getting started](docs/getting-started.md) | Environment, install, launch |\n| [User guide](docs/user-guide.md) | Workspace, graph, playback, export, shortcuts |\n| [Plugins](docs/plugins.md) | Folders, preferences, reload |\n| [Architecture](docs/architecture.md) | Packages, boot, frame pipeline |\n| [Packaging](docs/packaging.md) | Wheels, freeze, Windows MSI |\n| [Development](docs/development.md) | Tests, typing, logging |\n| [Plugin SDK](../aphelion-sdk/README.md) | Writing and shipping plugins |\n\n## CLI\n\n```bash\npython main.py\npython main.py --build\npython main.py --build-installer          # Windows MSI → dist/AphelionEditorSetup-0.1.0-win64.msi\npython main.py --build-dir path/to/output\naphelion --version\n```\n\n`--build-installer` includes a freeze. Details: [docs/packaging.md](docs/packaging.md).\n\n## Layout\n\n```\naphelion-editor/\n  src/           Application packages (ui, core, render, …)\n  plugins/       Bundled drop-in plugin modules\n  tests/         pytest\n  main.py        Source-tree launcher\naphelion-sdk/    Public plugin SDK (sibling package)\n```\n\nUI stays in `ui/`. Core logic is Qt-free. Frames are `float32` RGB in `[0, 1]`.\n\n## License\n\n[LICENSE](/LICENSE)\n\n"
+    },
+    "brief": {
+      "summary": "Aphelion: A node-based video editing software.",
+      "problem": "该项目围绕“Aphelion: A node-based video editing software.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Aphelion: A node-based video",
+        "主要使用 Python 开发",
+        "主题包括：free-software、image-manipulation、lightweight、lightweight-app"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 28 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "视频剪辑",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "aphelion-engine/aphelion-editor",
+      "score": 60,
+      "category": "视频剪辑",
+      "reason": "匹配关键词：video editing",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 40.5
+    }
+  }
+]
