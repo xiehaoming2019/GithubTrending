@@ -1,0 +1,525 @@
+[
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "superdesigndev/treg",
+      "url": "https://github.com/superdesigndev/treg",
+      "description": "OpenRouter for agent tools. Join community here: https://discord.gg/6mQYYfFMAn",
+      "language": "Python",
+      "total_stars": 2311,
+      "forks": 225,
+      "stars_today": 230,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 230
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "api-keys",
+        "cli",
+        "credentials",
+        "developer-tools",
+        "dsh-plugin",
+        "mcp",
+        "proxy",
+        "python",
+        "registry",
+        "secrets"
+      ],
+      "license_name": "",
+      "created_at": "2026-07-15T13:38:07Z",
+      "updated_at": "2026-09-23T04:53:28Z",
+      "pushed_at": "2026-09-23T04:45:51Z",
+      "open_issues": 70,
+      "homepage": "https://treg.to",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Treg (OpenRouter for Tools)\n\n![treg — the tool catalog for your agent](docs/assets/treg-hero.png)\n\n**OpenRouter, but for agent tools instead of models.** Point an agent at one base URL with one token\nand it can do the job: **3,000+ catalogued endpoints across 60+ providers** — SEO and backlinks,\nsocial and trends, people and company enrichment, ads, scraping, image and video generation —\n**priced per call, from a cent**,\nwith no provider signup. Plus your own team's keys, skills and CLIs, callable by every teammate's\nagent without the credential ever leaving the server.\n\n**Ask for the task, not the tool.** You do not need to know which vendor sells backlink data, or to\nhold an account with them. Search for what you want to do, read the price, call it.\n\nBuilt for the Superdesign team, live at [treg.to](https://treg.to) — anyone can self-host.\n\n## Why it exists\n\nThe tools an agent needs for real work sit behind subscriptions nobody buys for a single run —\nSemrush $139/mo, Moz $99/mo, Crunchbase $99/mo, Apollo $59/seat — behind signup walls, or behind no\npublic API at all (invite-only, partner-only, app-review-only). treg carries those accounts and\nbills fractions of a cent per call.\n\n## Two kinds of tool, one token\n\n- **The catalog** — external endpoints treg can serve with its own key or through a verified public\n  route that needs no provider key. Own-key calls use the team's prepaid balance; anonymous calls\n  are free. No account with the provider is needed. New verified accounts receive **$1.00 free**\n  once, when they create an eligible team.\n- **Your own tools** — anything a teammate registered: a paid API account, an OAuth connection, a\n  vendor CLI, a `SKILL.md`. **Your own key always wins over treg's, and those calls are never\n  metered.**\n\nThe vocabulary for the second half:\n\n- **tool** = something the registry calls for you with the org's credential. Two kinds:\n  - **endpoint** — an upstream `base_url` + credential **bindings** (each binding injects one\n  secret into the request; a request can carry several, e.g. an OAuth bearer *and* a\n  `developer-token` header).\n  - **CLI** — a vendor binary (`stripe`, `gh`, `vercel`, ...) run with the credential injected.\n- **skill / bundle** = a recipe (`SKILL.md`) + its secrets + its tool(s), registered together.\n\n**The one rule:** the proxy **relays, never models** the upstream, and **injects auth server-side**\n— so it survives upstream API changes and callers never hold keys.\n\n---\n\n# Part 1 · Using the registry\n\nVisit [**treg.to**](https://treg.to) (hosted on Render) — the dashboard,\nsign-in, and every URL below live there.\n\n## Quickstart\n\nSame flow as the dashboard's **Getting started** guide:\n\n```bash\n# 1. install the CLI — also points it at the registry\ncurl -fsSL https://treg.to/install.sh | sh\n\n# 2. sign in (GitHub default · --email for a one-time code · --token for agents/CI)\ntreg login\n\n# 3. do something useful immediately — no key, nothing registered\ntreg catalog search \"backlinks for a domain\"     # find a tool by what it DOES\ntreg call tikhub.tiktok.user.profile --query uniqueId=tiktok\ntreg balance                                     # exactly what that cost\n\n# (or `treg onboard` for the guided walkthrough)\n```\n\nFish Audio provides S2.1 Pro speech, public-voice discovery, and private voice cloning.\nSpeech is binary stdout, so redirect it to a file. A discovered voice's `_id` or a team voice id is\nthe TTS `reference_id`; voices created on treg's Fish account are durable team resources:\n\n```bash\ntreg call fishaudio.tts.s2-1-pro --method POST --header model=s2.1-pro \\\n  --data '{\"text\":\"Hello from treg\",\"format\":\"mp3\"}' > speech.mp3\ntreg call fishaudio.voices.discover --query self=false --query licensed=false --query language=en\ntreg resources list --provider fishaudio --kind voice\n```\n\nWith your own Fish key, requests remain an unrestricted, unmetered upstream relay and Fish owns the\naccount boundary.\n\nCatalog tool inputs are described by `treg catalog get <id>`. Tools marked `strict_query` reject undeclared or repeated query parameters, unsupported values and request bodies.\n\nYour token identifies you on every call (`X-Treg-Token` header) and is the same for all tools.\nDiscover what your team has shared: `treg tool ls` · check credential health: `treg health`.\n\n### Or install it as a Claude Code plugin\n\n```\n/plugin marketplace add superdesigndev/treg\n/plugin install treg@treg\n```\n\nInstalls with no token and no configuration. The skill loads as `treg:treg` and, on its first run,\nwalks your agent through the rest — the CLI, sign-in, then `treg mcp install` — so you end up with\nthe command line **and** treg's tools. Other agents: `npx skills add superdesigndev/treg -s treg`\n(the `-s` matters — without it you also get this repo's internal dev skills).\nSee [docs/CLAUDE-PLUGIN.md](docs/CLAUDE-PLUGIN.md). MiniMax Code / MiniMax Agent users: the same\nskill ships via the MiniMax Plugin Marketplace ([docs/MINIMAX-PLUGIN.md](docs/MINIMAX-PLUGIN.md)).\n\n### Claude.ai connector\n\nThe Claude Connectors Directory surface is `https://treg.to/mcp/v2/`. It exposes only curated\ncatalog endpoints and separates read calls from write calls so Claude receives accurate safety\nsignals. The existing `/mcp/` surface remains available for catalog endpoints, team-owned tools,\nand imported skills. See the [MCP and OAuth architecture](docs/context/architecture/mcp-oauth.md)\nfor the boundary and implementation, and the\n[submission runbook](docs/CLAUDE-CONNECTOR-SUBMISSION.md) for release gates.\n\n## Call a tool you don't have a key for\n\nThe catalog is grouped by what endpoints **do**: keyword and rank tracking, backlinks and authority,\nAI visibility, trending and discovery, publishing to socials, people and company enrichment, ads\nmanagement and creative, measurement.\n\n```bash\ntreg catalog                                    # every platform, busiest first\ntreg catalog search \"find a work email\"         # by the job, not the vendor\ntreg catalog get hunter.people.email.find       # params, PRICE, example response\ntreg call hunter.people.email.find --query domain=reddit.com --query full_name=\"Alexis Ohanian\"\n```\n\n**How a catalogued call is served** — the credential ladder, in order:\n\n1. your team registered its own tool for that provider → that tool, that key;\n2. your team stored a secret for the provider → injected through a virtual tool;\n3. neither, and the endpoint has a verified public route → **no provider key**, free;\n4. otherwise → **treg's own key**, billed to the team's prepaid balance.\n\nThe anonymous price assumes the caller does not send a provider credential header. The faithful\nrelay preserves caller headers, so a caller-supplied provider key can use that key's credits.\nYour own credential always beats treg's, so connecting a key you already pay for makes those calls\nfree of the balance rather than duplicating them. An endpoint treg has no published price for is\n**refused**, not served free — you are told to connect your own key instead. Where several providers\nserve one capability, `treg catalog search` shows them side by side with prices; **choosing is\nyours** — treg does not silently pick or fail over between providers for you. (When treg's own\naccount for a provider is out it may serve the *same* endpoint through a treg-owned relay account,\ndisclosed on the response; a team can opt out.) The exception you opt into: `treg.<capability>` routed endpoints, where treg picks the provider for you and names it.\n\n```bash\ntreg balance          # credit left, calls in flight, recent spend\ntreg topup            # add funds, or set up automatic top-ups\n```\n\nOut of balance is an HTTP **402** carrying `balance_micro`, `estimated_cost_micro` and a `topup_url`,\nso an agent can act on it without reading prose.\n\n**Enrich Arena** lives at `/enrich-arena`, outside the dashboard. Compare enrichment answers with each vendor’s cost and speed,\nvote for the best answer in one click, or watch a sequential waterfall. Browsing is\npublic; submitting requires login, and billable attempts use your team's credits. See the\n[Arena guide](docs/context/interface/enrich-arena.md).\n\n## Share & use your own tools\n\nThe zero-thought path — point treg at a project and it figures out what's shareable:\n\n```bash\ntreg scan     # read-only preview: the keys, skills & CLIs upload would register\ntreg upload   # register them (encrypted server-side); idempotent, --replace to update\n```\n\n`treg upload` scans the `.env` (matching keys against ~80 known providers), every skill\nsubdirectory, and installed catalog CLIs. Three kinds of things go into the registry — here's how\nto share and use each:\n\n### 1. Endpoints (HTTP APIs)\n\n**Share** — one upstream URL callable with a stored key, or bulk from a `.env`:\n\n```bash\ntreg secret add STRIPE_KEY --value sk_live_123\ntreg add stripe --base-url https://api.stripe.com --secret STRIPE_KEY\n\ntreg upload env --select openai,stripe,resend     # or straight from the .env\n```\n\n**Use** — the agent-native way: build the **real** upstream request and prefix it with the proxy.\ntreg resolves the tool by host, injects the credential, and relays everything else faithfully\n(your `X-Treg-Token` is stripped before the upstream sees it):\n\n```\nReal request:   GET https://api.intercom.io/conversations?per_page=5\nThrough treg:   GET https://treg.to/call/https://api.intercom.io/conversations?per_page=5\n                    header:  X-Treg-Token: <your token>\n```\n\nOr the CLI shorthand — and `treg calls` for the audit log:\n\n```bash\ntreg call intercom conversations --query per_page=5\ntreg call stripe v1/balance\n```\n\n### 2. CLIs\n\n**Share** — automatic: `treg upload` detects installed catalog CLIs (`stripe`, `gh`, `vercel`, …)\nand registers them; a recipe-only catalog CLI skill (e.g. `stripe-cli`) auto-becomes runnable too.\n\n**Use** — `treg run` executes the vendor CLI **with the org's credential injected**, so you never\nhold the key or log in:\n\n```bash\ntreg run stripe -- get /v1/balance\ntreg run gh -- pr list\ntreg run --server agentmail-cli inboxes list   # runs on the registry server: the key never reaches you\n```\n\n`--local` (default) runs on your machine; `--server` runs on the registry and streams output back.\nFor a whole session, `treg shell start` opens a subshell where every registered CLI injects\nautomatically — just use `stripe`, `gh`, … normally; `exit` reverts. `treg runs` is the audit log.\n\n### 3. Skills\n\n**Share** — a skill is a whole capability (`SKILL.md` recipe + its secrets + its tool(s)),\nregistered together so the whole team runs the same skill, maintained in one place:\n\n```bash\ntreg upload skills --dir ~/.claude/skills --all   # register a folder of skills in one pass\n```\n\n**Use** — pull any shared skill into your agent; its API calls go through treg with your token,\nso the key stays on the server, never in the skill:\n\n```bash\ntreg skill install seo-blog-writer      # writes into ./.claude/skills/  (--all for the library)\n```\n\n### Manual registration — when the heuristics can't figure a tool out\n\n```bash\n# multi-credential tool (e.g. google-ads: OAuth bearer + a developer-token header)\ntreg tool add google-ads --base-url https://googleads.googleapis.com \\\n  --bind \"secret=<oauth-id>,injector=oauth\" \\\n  --bind \"secret=<dev-id>,name=developer-token,format={secret}\"\n\n# one skill, step by step\ntreg skill init --dir ./my-skill          # drafts treg.json (guesses base_url, finds secrets)\ntreg skill add  --dir ./my-skill          # registers recipe + secrets + tool, atomically\n\n# OAuth via the browser (mints the first token, treg holds it and auto-refreshes)\ntreg oauth connect gsc --client-secret client_secret.json \\\n  --scopes https://www.googleapis.com/auth/webmasters.readonly\n```\n\nFull options for every command: [`USAGE.md`](USAGE.md).\n\nThe CLI sends anonymous command usage to PostHog when using treg.to (no arguments or credentials).\nDisable with `TREG_TELEMETRY=0` or `DO_NOT_TRACK=1`.\nSee [analytics details](USAGE.md#anonymous-usage-analytics).\n\n## Team"
+    },
+    "brief": {
+      "summary": "OpenRouter for agent tools. Join community here: https://discord.gg/6mQYYfFMAn",
+      "problem": "该项目围绕“OpenRouter for agent tools. Join community here: https://discord.gg/6mQYYfFMAn”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：OpenRouter for agent tools. ",
+        "主要使用 Python 开发",
+        "主题包括：agents、api-keys、cli、credentials"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 230 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "superdesigndev/treg",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agent、mcp、claude code",
+      "generated_by_ai": false,
+      "velocity_score": 72,
+      "freshness_score": 70,
+      "ranking_score": 66.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "google/ax",
+      "url": "https://github.com/google/ax",
+      "description": "Google's open agentic orchestration runtime",
+      "language": "Go",
+      "total_stars": 7885,
+      "forks": 365,
+      "stars_today": 2305,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2305
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-30T17:55:01Z",
+      "updated_at": "2026-09-23T04:52:20Z",
+      "pushed_at": "2026-09-20T03:33:20Z",
+      "open_issues": 33,
+      "homepage": "https://agentexecutor.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1>\n  <img src=\"assets/axolotl.svg\" width=\"70\" align=\"absmiddle\" alt=\"AX axolotl\">\n  AX\n</h1>\n\n> [!WARNING]\n> We are still actively refining our core concepts, protocols,\n> and specifications. We will likely to introduce major breaking\n> changes prior to a stable release.\n\n**Declare an agentic task with workspaces and gateway specifications. AX sandboxes it, wires up its workspace, fences its network, and helps running it at scale.**\n\nAX is a high-throughput, declarative orchestrator to run billions of autonomous agent workloads in a cluster. It runs on top of [Agent Substrate](https://github.com/agent-substrate/substrate) for sandboxed execution and is built to run billions of tasks per cluster. If you have used Kubernetes, `ax` will feel similar.\n\n```yaml\n# task.yaml\napiVersion: ax.io/v1alpha1\nkind: Workspace\nmetadata:\n  name: golang\nspec:\n  git:\n    - repo: https://github.com/golang/go.git\n      branch: \"my-fix\"\n---\napiVersion: ax.io/v1alpha1\nkind: Task\nmetadata:\n  name: test\nspec:\n  workspaces:\n    - name: golang\n      goal: \"Ensure that Go tool chain is available and is built from source\"\n  debug: true   # lets you `ax ssh` into the sandbox\n```\n\nThen apply it, watch it come up, and look over the agent's shoulder:\n\n```bash\nax apply -f task.yaml\nax watch task test\nax ssh test -- ls -al /workspace\n```\n\n## Why?\n\nAgents are a new kind of workload. They are neither stateless microservices nor run-to-completion batch jobs. They accumulate state, need strict isolation, call out to model APIs and tool servers, and can burn money in a loop if nobody is watching. AX gives you four small primitives that handle all of that declaratively:\n\n| You want to... | AX gives you |\n|---|---|\n| Run untrusted agent code in an isolated sandbox with CPU/memory limits | **`Task`** |\n| Pre-wire Git repos, MCP servers, and skill packages so every agent starts warm | **`Workspace`** |\n| Lock outbound traffic down to an explicit host allowlist | **`Gateway`** |\n| Configure which LLM the platform itself uses, with credentials from a Kubernetes secret | **`Model`** |\n| Pause an idle agent and pick up exactly where it left off | `ax suspend` / `ax resume` |\n| Shell into a running agent to see what it is doing | `ax ssh` |\n\nEverything is expressed as `ax.io/v1alpha1` manifests and applied with a single command.\n\n## Quick start\n\n### 1. Install the CLI\n\n```bash\ngo install github.com/google/ax/cmd/ax@latest\n```\n\nThis puts the `ax` binary in `$(go env GOPATH)/bin`. Make sure that directory is on your `PATH`.\n\n### 2. Deploy the control plane\n\nYou need a Kubernetes cluster, [`ko`](https://ko.build/) (`brew install ko`), a container registry your cluster can pull from, and a reachable Agent Substrate Control API (in-cluster default: `api.ate-system.svc.cluster.local:443`).\n\n```bash\nmake deploy AX_IMAGE_REPO=<your-registry>\n```\n\nThis deploys Redis, then builds and deploys the control plane images with `ko`. Everything lands in the `ax-system` namespace.\n\n### 3. Run your first task\n\n```bash\nax apply -f examples/task.yaml       # Task + Workspace + Gateway + Model in one file\nax get tasks\n# NAME      ATESPACE   PHASE     ACTOR           WORKER-IP    AGE\n# task123   default    Running   task123         10.20.3.67   1m\n\nax watch task task123                # stream phase and condition changes live\nax ssh task123 -- ls -la /workspace  # poke around inside the sandbox\nax suspend task task123              # checkpoint and pause\nax resume task task123               # pick up where it left off\n```\n\nWant to see the whole lifecycle end to end? Run [`./demo.sh`](demo.sh). It applies a custom workspace, waits for readiness, runs commands over `ax ssh`, and suspends the task.\n\n## Documentation\n\n| Guide | Read it to... |\n|---|---|\n| [Concepts](docs/concepts.md) | Learn what a `Task`, `Workspace`, `Gateway`, and `Model` each do, and how a task moves through phases and conditions. |\n| [Manifests](docs/manifests.md) | Write your own YAML, with an annotated example of every kind. |\n| [Sandbox](docs/sandbox.md) | See what the runner does on boot and what your command can rely on: metadata server, guest services, environment. |\n| [Runners](docs/runner.md) | Understand the contract between the control plane and the task container, and build your own runner image to replace the default. |\n| [Networking](docs/networking.md) | Reach a running task through the atenet router from the cluster, your laptop, or a gRPC client. |\n| [Architecture](DESIGN.md) | Understand how the control plane fits together, plus the [API reference](DESIGN.md#api-reference). |\n| [Development](docs/development.md) | Build, test, and ship changes to AX itself. |\n\n## CLI usage\n\n`ax` talks to the control plane over gRPC. It is deliberately `kubectl`-shaped: `apply`, `get`, `describe`, `watch`, `delete`, plus a few agent-specific verbs.\n\n### Everyday commands\n\n```bash\n# Apply anything (multi-document YAML, file or stdin)\nax apply -f examples/task.yaml\n\n# Tasks\nax get tasks                          # list\nax get tasks -a my-atespace           # list in another atespace\nax get task task123                   # full spec + live status as YAML\nax describe task task123              # human-readable detail\nax watch task task123                 # stream status and condition transitions\nax suspend task task123               # checkpoint actor state and pause\nax resume task task123                # resume a suspended task\nax delete task task123\n\n# Shell into the running sandbox\nax ssh task123                        # interactive shell (task needs spec.debug: true)\nax ssh task123 -- ls -la /workspace   # one-off command\nax ssh task123 -- python3 main.py\n\n# Gateways, workspaces, models follow the same pattern\nax get gateways\n# NAME              ATESPACE   LISTENERS             EGRESS-HOSTS\n# default-gateway   default    8494/gRPC,8080/HTTP   *\nax describe gateway default-gateway\nax delete gateway default-gateway\n\nax get workspaces\n# NAME                ATESPACE   GIT-REPOS   MCP-SERVERS\n# default-workspace   default    1           1\nax describe workspace default-workspace\nax delete workspace default-workspace\n\nax get models\n# NAME            ATESPACE   PROVIDER   MODEL\n# default-model   default    google     gemini-3.8-flash\nax describe model default-model\nax delete model default-model\n\n# Connection plumbing\nax ctx                                # active kube context and how ax is reaching the control plane\nax tunnel list                        # background tunnels (state lives in ~/.ax/tunnels)\nax tunnel stop\nax version\n```\n\n### Works with `kubectx`\n\n`ax` follows your active Kubernetes context. Switch clusters and `ax` resolves and tunnels to that cluster's control plane in the background.\n\n```bash\nkubectx staging-cluster\nax get tasks\n\nkubectx prod-cluster\nax get tasks\n\n# Or target a context without switching\nax --context=dev-cluster get tasks\n```\n\n### Global flags\n\n| Flag | Description | Default |\n|---|---|---|\n| `-a`, `--atespace` | Atespace scope for the command | `default` |\n| `-n`, `--namespace` | Kubernetes namespace where AX is installed | `ax-system` |\n| `--context` | Kubernetes context to target | active `kubectx` / `current-context` |\n| `--server` | Control plane address, bypassing auto-detection | derived from kube context, or `$AX_SERVER` |\n\n## License\n\nApache License 2.0. See [LICENSE](LICENSE) for details.\n"
+    },
+    "brief": {
+      "summary": "Google's open agentic orchestration runtime",
+      "problem": "该项目围绕“Google's open agentic orchestration runtime”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Google's open agentic orches",
+        "主要使用 Go 开发",
+        "许可证：Apache-2.0"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 2,305 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "google/ax",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agentic、agent、mcp",
+      "generated_by_ai": false,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 65.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "agent-substrate/substrate",
+      "url": "https://github.com/agent-substrate/substrate",
+      "description": "Agent Substrate: the core system",
+      "language": "Go",
+      "total_stars": 3071,
+      "forks": 389,
+      "stars_today": 245,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 245
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-13T19:02:38Z",
+      "updated_at": "2026-09-23T04:51:35Z",
+      "pushed_at": "2026-09-22T23:56:02Z",
+      "open_issues": 524,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Agent Substrate\n\n[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)\n\nNOTE: This is not an officially supported Google product. This project is not\neligible for the [Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).\n\n## What is Agent Substrate?\n\nAgent Substrate is a secure-by-default agent execution runtime engineered to run millions of sandboxes with 10x higher density than standard container runtimes. Purpose-built for the era of autonomous agents, Substrate delivers sub-500ms resume operations at over 500 suspend/resume activations per second with native zero-trust kernel and network isolation. It supports multiple sandbox technologies including microVMs and gVisor, enabling consistent lifecycle operations for all sandbox types.\n\nAt its core, Agent Substrate maps a larger set of “actors” (applications such as agents) onto a smaller set of ready “workers”, relying on the fact that agent-like applications tend to be idle most of the time to achieve heavy multiplexing.  It provides functionality to manage an actor’s lifecycle (e.g. create/destroy, suspend/resume), to assign actors to workers in real time, and to route incoming traffic to them.\n\nAgent Substrate is intended to be a low-opinion system.  The workloads it manages don't have to be literal AI agents, but those are the best example of the kind of applications it is designed for.  It is not an SDK for building agents, but rather a system for running them at scale.\n\nAgent Substrate leverages Kubernetes for the infrastructure provisioning and worker lifecycle management (Kubernetes Pods). It builds on top of Kubernetes features like Pods and Pod autoscaling, while Agent Substrate provides agent-specific scheduling and control to achieve lower latency. Using Kubernetes as the underlying system enables consistent infrastructure management across all workloads types that are required for end to end agentic deployments and allows holistic infrastructure optimizations for RL scenarios that span agentic, inference and training cycles.\n\n\n## Demo\n\n[![Agent Substrate Demo](https://img.youtube.com/vi/ZEzkCFJkzjY/hq1.jpg)](https://www.youtube.com/watch?v=ZEzkCFJkzjY)\n\n*Watch the Agent Substrate cluster multiplex ~250 stateful actors across just 8 physical pods.*\n\nThis demo highlights the core developer experience and \"Agentic Infrastructure\" capabilities of Substrate:\n\n1.  **Actor Teleport:** High-performance suspend and resume of actors onto any available worker in the pool with sub-second activation.\n2.  **State Persistence:** Persistent working memory (volatile RAM) and filesystem state preserved perfectly across hibernation cycles via full-state snapshots.\n3.  **Agent Multiplexing:** Demonstrates 30x+ oversubscription by \"juggling\" a large registry of stateful actors onto a small pool of shared physical pods.\n\nTo reproduce this demo in your own cluster, please refer to the detailed walkthrough in the **[Counter Demo](demos/counter/README.md)**.\n\nFor more videos and walkthroughs, visit our YouTube channel: **[agent-substrate](https://www.youtube.com/channel/UCN9PPqlTtVxlcpbQ-NWpfZQ)**.\n\n## Framework Agnostic & Compatibility\n\nAgent Substrate is designed to be **framework and agent harness agnostic**. Because it manages standard OCI containers at the kernel level (via gVisor), it can host agents built on any stack.\n\n*   **Agent Development Kit (ADK):** Support for ADK agents with session state preservation across invocations as actor state. Ideal for all types of agents and stateful tool or subagent calls.\n*   **LangChain:** Ideal execution environment for LangChain agents and tool calls.\n*   **Claude Code, CodeX, and Antigravity:** Support for high-density, stateful coding environments that preserve system state and filesystem state across sessions.\n*   **Model Context Protocol (MCP):** Support for deploying secure, sandboxed MCP servers as Substrate Actors to provide durable tools for any model.\n\n## Ecosystem & Examples\n\n*   **[Agent Executor](https://github.com/google/ax):** A distributed agent runtime that demonstrates building a secure, hyper-scalable agent harness on Agent Substrate (see the [announcement blog](https://cloud.google.com/blog/products/ai-machine-learning/agent-executor-googles-distributed-agent-runtime) and [integration guide](https://github.com/google/ax/blob/main/manifests/README.md)).\n*   **[kagent](https://github.com/kagent-dev/kagent):** A CNCF Sandbox project and Kubernetes-native framework for building, deploying, and managing AI agents that uses Agent Substrate to run sandboxed, stateful agent workloads (see the [announcement blog](https://kagent.dev/blog/the-future-of-kagent)).\n\n## Status and compatibility\n\nAgent Substrate is currently in early development.  It is not ready for\nproduction use, and the APIs are almost guaranteed to change.  We are not\nmaking any guarantees about backward compatibility at this stage, and\neverything in this project may be changed.\n\n### Supported Kubernetes Releases\n\nCurrently we aim to support the [latest stable release](https://kubernetes.io/releases/) of Kubernetes, and the previous minor release.\n\n## Community\n\nFor announcements, technical discussions, and community support, please join\nthe **[ate-dev](https://groups.google.com/g/ate-dev)** Google Group.\n\nWe host a weekly community meeting every Thursday from 10:00am - 11:00am PST.\n- Video call link: https://meet.google.com/uhq-cxvn-dhy\n- Or dial: (US) +1 253-289-6971 PIN: 787 664 574 59#\n- More phone numbers: https://tel.meet/uhq-cxvn-dhy?pin=9044088223662\n- [Meeting notes](https://docs.google.com/document/d/1obSIvfcafLNniLYTQCcT2eCgxHqa2AQ3Ga7YTsju49s) for the weekly sync meeting\n- [Recordings and transcripts](https://drive.google.com/corp/drive/u/0/folders/1rX1S6vPxPrR8dA1lEBuBEXkGKjHtG-mL) of all community meetings\n\nWe also have channels in the CNCF slack; [request an invite here](https://slack.cncf.io/)\nif you don't have access.\n\n- [#substrate-users](https://cloud-native.slack.com/archives/C0B6RCAJULW) to discuss using substrate.\n- [#substrate-dev](https://cloud-native.slack.com/archives/C0B6M3E2J3D) to discuss developing substrate.\n\n## Developing\n\nPlease see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to\nthe project.  We welcome contributions of all kinds, but the project is VERY\nyoung.  Our immediate focus is on building out the core system and demos, so we\nmay not be able to review or merge contributions that don't align with those\ngoals in the near term.\n\n## Quickstart (Development)\n\nTo quickly set up the complete environment:\n\n1. Make sure you have [Go](https://go.dev/doc/install), [`kubectl`](https://kubernetes.io/docs/tasks/tools/), and [`docker`](https://www.docker.com/) installed and configured on your dev machine. We will automatically manage other dependencies via Go, including [`kind`](https://kind.sigs.k8s.io/).\n\n2. Run the following steps:\n```shell\n# create cluster and local registry (IPv4; IP_FAMILY=dual|ipv6 overrides)\nhack/create-kind-cluster.sh\n\n# install ate, PostgreSQL, rustfs\nhack/install-ate-kind.sh --deploy-ate-system\n\n# install counter demo\nhack/install-ate-kind.sh --deploy-demo-counter\n\n# install kubectl-ate\ngo install ./cmd/kubectl-ate\n\n# create a counter actor in the demo's atespace (--template names the\n# actor template, resolved in the actor's atespace)\nkubectl ate create actor my-counter-1 -a ate-demo-counter --template counter\n\n# port-forward the network router to bind to local port `8000`\nkubectl port-forward -n ate-system svc/atenet-router 8000:80\n```\n\n3. In a **separate terminal**, send an HTTP request to increment the counter:\n```shell\ncurl -X POST \\\n   -H \"ate-target-actor: ate-demo-counter/my-counter-1\" \\\n   -i http://localhost:8000/\n```\n\nWorker capacity is versioned: the dataplane (the atelet DaemonSet and the\nworker pods) schedules only on nodes that carry the\n`ate.dev/substrate-version` label, and the install stamps it on every node\nthat exists when it runs. A node added later hosts no workers until you label\nit with the installed version\n(`kubectl label node <node> ate.dev/substrate-version=<build version>`).\n`kubectl get ds -n ate-system -l app=atelet -L ate.dev/substrate-version`\nprints the installed version, off the atelet DaemonSet the install created.\n\n### GKE Quickstart (Development)\n\n1. Create and configure your environment file:\n   ```bash\n   cp hack/ate-dev-env.sh.example .ate-dev-env.sh\n\n   # Edit .ate-dev-env.sh to match your project and preferences, then source it:\n   source .ate-dev-env.sh\n   ```\n\n2. Enable application-default credentials for gcloud:\n   ```bash\n   gcloud auth application-default login --project=${PROJECT_ID}\n   ```\n\n3. Provision the required GCP resources (GKE cluster, GCS, and IAM bindings):\n   ```bash\n   go run ./tools/setup-gcp bootstrap\n   ```\n\n   On a fresh project this step also creates the atelet Workload Identity IAM\n   grants that snapshots depend on — see\n   [what `create iam` actually grants](tools/setup-gcp/README.md#what-create-iam-actually-grants)\n   to audit them or apply them manually. If you bring your own cluster instead,\n   note the required Kubernetes beta APIs can only be enabled **at cluster\n   creation** — see the [Create Cluster warning](tools/setup-gcp/README.md#2-create-cluster).\n\n4. Deploy the Agent Substrate system to your cluster:\n   ```bash\n   ./hack/install-ate.sh --deploy-ate-system\n   ```\n\n   Nodes that GKE adds later (autoscaling, auto-repair, node upgrades) are\n   born with the node pool's labels, so the pool needs\n   `ate.dev/substrate-version` too; see\n   [Node version labels](tools/setup-gcp/README.md).\n\n5. You can then deploy the sample applications. See [demos/counter/README.md](demos/counter/README.md) or [demos/sandbox/README.md](demos/sandbox/README.md) for detailed walkthroughs.\n   ```bash\n   ./hack/install-ate.sh --deploy-demo-counter\n   ```\n\n#### Custom Setup and Deployment\n\nYou can run individual setup steps to create GCP resources as needed. See `go run ./tools/setup-gcp --help` for available options. For example:\n```bash\ngo run ./tools/setup-gcp create cluster\ngo run ./tools/setup-gcp create bucket\n```\n\nTo run the PostgreSQL store backend on Cloud SQL — with IAM database\nauthentication and no passwords — see [tools/setup-gcp/cloud-sql.md](tools/setup-gcp/cloud-sql.md).\n\nSimilarly, you can deploy or cleanup specific Agent Substrate components using the installation script. See `./hack/install-ate.sh --help` for all options.\n```bash\n# Re-deploy only ate-apiserver of the ATE system\n./hack/install-ate.sh --deploy-ate-apiserver\n\n# Delete everything (core system and all demos)\n./hack/install-ate.sh --delete-all\n```\n\n#### Tearing down resources (GCP)\n\nIf you need to delete the resources created by the setup script, you can use the provided script `hack/teardown.sh`. This script will delete resources in the reverse order of creation and handles partial failures gracefully.\n\n```bash\n./hack/teardown.sh --all\n```\n\nOr run individual teardown steps as needed (see `./hack/teardown.sh` for available options).\n\n#### Tearing down local `kind` resources\n\nIf you need to delete the local `kind` cluster and its registry (if it was created by `hack/create-kind-cluster.sh`):\n\n```bash\n./hack/delete-kind-cluster.sh\n```\n\n## Demos\n\nWe provide several sample applications demonstrating Agent Substrate's capabilities:\n\n1. **[Counter Demo](demos/counter/README.md)**: A stateful Go HTTP server demonstrating state preservation across suspends/resumes, and on-demand actor resumption and routing via the Substrate router.\n2. **[Sandbox Demo (Antigravity)](demos/sandbox/README.md)**: A secure, sandboxed execution environment (running Alpine Linux) that allows arbitrary shell execution while preserving filesystem state across sessions.\n3. **[Claude Code Multiplex](demos/claude-code-multiplex/README.md)**: Demonstrates oversubscribing physical hardware by multiplexing multiple Cla"
+    },
+    "brief": {
+      "summary": "Agent Substrate: the core system",
+      "problem": "该项目围绕“Agent Substrate: the core system”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Agent Substrate: the core sy",
+        "主要使用 Go 开发",
+        "许可证：Apache-2.0"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 245 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "agent-substrate/substrate",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agent、agentic、mcp",
+      "generated_by_ai": false,
+      "velocity_score": 72,
+      "freshness_score": 40,
+      "ranking_score": 60.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "sgl-project/sglang-omni",
+      "url": "https://github.com/sgl-project/sglang-omni",
+      "description": "SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.",
+      "language": "Python",
+      "total_stars": 1261,
+      "forks": 512,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 7
+    },
+    "details": {
+      "topics": [
+        "asr",
+        "audio-generation",
+        "cuda",
+        "distributed-inference",
+        "inference",
+        "model-serving",
+        "multimodal",
+        "music-generation",
+        "openai-api",
+        "pytorch",
+        "sglang",
+        "speech-recognition",
+        "streaming",
+        "text-to-speech",
+        "tts"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-07T06:58:29Z",
+      "updated_at": "2026-09-23T04:00:01Z",
+      "pushed_at": "2026-09-23T04:48:57Z",
+      "open_issues": 688,
+      "homepage": "https://sgl-project.github.io/sglang-omni/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n<img src=\"https://raw.githubusercontent.com/sgl-project/sglang-omni/main/docs/_static/image/sgl-omni-logo.svg\" alt=\"logo\" width=\"400\"></img>\n\n<p>\n<a href=\"https://pypi.org/project/sglang-omni/\"><img src=\"https://img.shields.io/pypi/v/sglang-omni?style=for-the-badge&logo=pypi&logoColor=white&label=PyPI\" alt=\"PyPI\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/stargazers\"><img src=\"https://img.shields.io/github/stars/sgl-project/sglang-omni?style=for-the-badge&logo=github&label=stars\" alt=\"GitHub stars\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/sgl-project/sglang-omni?style=for-the-badge\" alt=\"license\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-closed-raw/sgl-project/sglang-omni?style=for-the-badge&label=closed%20issues\" alt=\"closed issues\"></a>\n<a href=\"https://github.com/sgl-project/sglang-omni/issues\"><img src=\"https://img.shields.io/github/issues-raw/sgl-project/sglang-omni?style=for-the-badge&label=open%20issues\" alt=\"open issues\"></a>\n<a href=\"https://deepwiki.com/sgl-project/sglang-omni\"><img src=\"https://img.shields.io/badge/Ask-DeepWiki-087fca?style=for-the-badge\" alt=\"Ask DeepWiki\"></a>\n</p>\n\n</div>\n\n--------------------------------------------------------------------------------\n\n<p align=\"center\">\n<a href=\"https://lmsys.org/blog/\"><b>Blog</b></a> |\n<a href=\"https://sgl-project.github.io/sglang-omni/\"><b>Documentation</b></a> |\n<a href=\"#quick-start\"><b>Quick Start</b></a> |\n<a href=\"https://sgl-project.github.io/sglang-omni/index.html\"><b>Cookbook</b></a> |\n<a href=\"https://github.com/sgl-project/sglang\"><b>SGLang</b></a> |\n<a href=\"https://slack.sglang.io\"><b>Join Slack</b></a>\n</p>\n\n<p align=\"center\">\n⭐ <b><a href=\"https://github.com/sgl-project/sglang-omni/stargazers\">Star SGLang-Omni</a> to help more builders discover open infrastructure for multimodal and speech serving!</b>\n</p>\n\n## News\n\n- [2026/09] 🐧 Day-0 support for [AuK](https://huggingface.co/tencent/AuK) and [AuK-Flash](https://huggingface.co/tencent/AuK-Flash): text + voice instructions → 24 kHz speech on `/v1/audio/speech`, audio + editing instructions → edited speech on `/generate`. \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/auk.html)\\]\n- [2026/09] 🚀 SGLang-Omni **v0.1.6** is on [PyPI](https://pypi.org/project/sglang-omni/). Install with `uv pip install --prerelease=allow \"sglang-omni==0.1.6\"`. \\[[Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\\]\n- [2026/08] 🎵 Day-0 support for [MiniMax Music 3](https://huggingface.co/MiniMaxAI/MiniMax-Music3): lyrics + caption → 32 kHz stereo song on `/v1/audio/speech`. \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html)\\]\n- [2026/08] 🚀 TTS architecture refactor: shared pipeline state, engine construction, reference encoding, capability metadata, and vocoder scheduling. \\[[Roadmap](https://github.com/sgl-project/sglang-omni/issues/985)\\] \\[[Blog](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/sglang-omni/tts-refactor.md)\\]\n- [2026/06] 🔥 MOSS-TTS Local Transformer v1.5 on SGLang-Omni with native-streaming 48 kHz speech. \\[[Blog](https://lmsys.org/blog/2026-06-17-moss-tts-local-v15/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html)\\]\n- [2026/06] 🔥 Higgs Audio v3 TTS for real-time, controllable speech. \\[[Blog](https://lmsys.org/blog/2026-06-04-higgs-audio-v3-tts/)\\] \\[[Cookbook](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html)\\]\n\n## About\n\nSGLang-Omni is a multi-stage serving runtime for omni, speech, and TTS models. Its design target is multi-stage decoding: generation split across heterogeneous stages with different compute patterns, dependency structures, and resource needs. SGLang-Omni owns the pipeline topology, stage lifecycle, inter-stage transport, model-family integration layer, and OpenAI-compatible serving surface, while composing with [SGLang](https://github.com/sgl-project/sglang) for high-performance autoregressive scheduling and model execution where applicable.\n\n- **Multi-stage runtime**: SGLang-Omni models generation as coordinated stages: preprocessing, encoders, autoregressive engines, talkers, decoders, vocoders, and aggregators.\n- **Stage-specialized scheduling**: Each stage runs behind a scheduler matched to its workload, from SGLang-backed autoregressive scheduling to lightweight preprocessing and streaming vocoder loops.\n- **Transport-aware execution**: A control plane coordinates requests while the relay data plane moves tensor payloads across shared-memory, NCCL, NIXL, and Mooncake backends.\n- **API surface**: OpenAI-compatible endpoints expose multimodal chat, speech generation, batch speech, streaming speech, uploaded voices, and transcription.\n\n## What SGLang-Omni Serves\n\n- **Omni chat and speech**: [Qwen3-Omni](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_omni.html), [Ming-Omni](https://sgl-project.github.io/sglang-omni/cookbook/ming_omni.html) — multimodal in, text/audio out.\n- **Music generation**: [MiniMax Music 3](https://sgl-project.github.io/sglang-omni/cookbook/minimax_music3.html) — lyrics + caption → 32 kHz stereo song.\n- **Speech generation**: [Higgs Audio v3](https://sgl-project.github.io/sglang-omni/cookbook/higgs_tts.html), [MOSS-TTS](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts.html), [MOSS-TTS Local](https://sgl-project.github.io/sglang-omni/cookbook/moss_tts_local.html), [Fish Speech S2-Pro](https://sgl-project.github.io/sglang-omni/cookbook/fishaudio_s2_pro.html), [Qwen3-TTS](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_tts.html), [Voxtral TTS](https://sgl-project.github.io/sglang-omni/cookbook/voxtral_tts.html), [Ming-Omni-TTS](https://sgl-project.github.io/sglang-omni/cookbook/ming_tts.html), [dots.tts](https://sgl-project.github.io/sglang-omni/cookbook/dots_tts.html), [ZONOS2](https://sgl-project.github.io/sglang-omni/cookbook/zonos2.html) — `/v1/audio/speech`, batch, streaming, uploaded voices.\n- **Audio transcription and diarization**: [Qwen3-ASR](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html), [Fun-ASR](https://sgl-project.github.io/sglang-omni/cookbook/fun_asr.html), [ARK-ASR](https://sgl-project.github.io/sglang-omni/cookbook/arkasr.html), [MOSS-Transcribe-Diarize](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html) via `/v1/audio/transcriptions`. MOSS-TD supports speaker labels and timestamps (`response_format=verbose_json`).\n- **SGLang-Omni Router**: Multi-worker OpenAI-compatible front door — health, readiness, lifecycle, capability discovery. [Router guide](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html).\n\n## Hardware Support\n\n| Backend | Status | Notes |\n|---------|--------|-------|\n| **NVIDIA CUDA** | Supported | Default backend with full model coverage. |\n| **Apple Silicon** | Experimental | Qwen3-ASR runs through native MLX or Torch MPS on macOS arm64. Install with [`install.sh`](./install.sh) and follow the [Qwen3-ASR guide](./docs/cookbook/qwen3_asr.md#apple-silicon-mlx). |\n| **Intel GPU (XPU)** | Experimental | Intel Arc GPUs via PyTorch XPU. **Qwen3-ASR, Qwen3-TTS, and Qwen3-Omni serve end-to-end** (Omni thinker via multi-XPU tensor parallelism). Install per [Intel XPU guide](./docs/get_started/installation_xpu.md); the backend is auto-detected. |\n\nAdditional model guides, including experimental and research-oriented paths, are available in the [Cookbook](https://sgl-project.github.io/sglang-omni/).\n\n## Quick Start\n\n- **macOS Apple Silicon:** from a checkout, run [`./install.sh`](./install.sh) for a one-command Homebrew + uv setup. See [installation](./docs/get_started/installation.md#macos-apple-silicon).\n- [Installation](https://sgl-project.github.io/sglang-omni/get_started/installation.html)\n- [TTS usage](https://sgl-project.github.io/sglang-omni/basic_usage/tts.html)\n- [Qwen3-Omni usage](https://sgl-project.github.io/sglang-omni/basic_usage/qwen3_omni.html)\n- [Qwen3-ASR cookbook](https://sgl-project.github.io/sglang-omni/cookbook/qwen3_asr.html)\n- [MOSS-Transcribe-Diarize cookbook](https://sgl-project.github.io/sglang-omni/cookbook/moss_transcribe_diarize.html)\n- [Omni router](https://sgl-project.github.io/sglang-omni/basic_usage/omni_router.html)\n- [Developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html)\n\n## Community & Support\n\nSGLang-Omni welcomes contributors working on inference systems, kernels, scheduling, inter-stage communication, model runners and cache efficiency, model integration, benchmarking, production deployment. Join the [SGLang Slack](https://slack.sglang.io) or read the [developer reference](https://sgl-project.github.io/sglang-omni/developer_reference/main.html).\n\nOrganizations interested in supporting SGLang-Omni, TTS, or omni model serving can contact Chenyang Zhao at [zhaochenyang@lmsys.org](mailto:zhaochenyang@lmsys.org).\n\n## Acknowledgments\n\nSGLang-Omni builds on the SGLang ecosystem and on open model work from the TTS, speech, and omni-model communities. We thank the model teams, systems contributors, and partner organizations helping make open multimodal serving faster, more reliable, and easier to extend.\n"
+    },
+    "brief": {
+      "summary": "SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.",
+      "problem": "该项目围绕“SGLang-Omni is a high-performance serving framework for audio models (TTS, ASR) and unified multimodal models.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：SGLang-Omni is a high-perfor",
+        "主要使用 Python 开发",
+        "主题包括：asr、audio-generation、cuda、distributed-inference"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 1,261 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "sgl-project/sglang-omni",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、tts",
+      "generated_by_ai": false,
+      "velocity_score": 27,
+      "freshness_score": 40,
+      "ranking_score": 48.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "bevyengine/bevy",
+      "url": "https://github.com/bevyengine/bevy",
+      "description": "A refreshingly simple data-driven game engine built in Rust",
+      "language": "Rust",
+      "total_stars": 48340,
+      "forks": 4852,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "bevy",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "open-source",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2020-01-18T21:13:55Z",
+      "updated_at": "2026-09-23T04:39:30Z",
+      "pushed_at": "2026-09-23T04:37:28Z",
+      "open_issues": 3421,
+      "homepage": "https://bevy.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# [![Bevy](https://bevy.org/assets/bevy_logo_light_dark_and_dimmed.svg)](https://bevy.org)\n\n[![License](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)](https://github.com/bevyengine/bevy#license)\n[![Crates.io](https://img.shields.io/crates/v/bevy.svg)](https://crates.io/crates/bevy)\n[![Downloads](https://img.shields.io/crates/d/bevy.svg)](https://crates.io/crates/bevy)\n[![Docs](https://docs.rs/bevy/badge.svg)](https://docs.rs/bevy/latest/bevy/)\n[![Discord](https://img.shields.io/discord/691052431525675048.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/bevy)\n\n## What is Bevy?\n\nBevy is a refreshingly simple data-driven game engine built in Rust. It is free and open-source forever!\n\n## WARNING\n\nBevy is still in the early stages of development. Important features are missing. Documentation is sparse. A new version of Bevy containing breaking changes to the API is released [approximately once every 3 months](https://bevy.org/news/bevy-0-6/#the-train-release-schedule). We provide [migration guides](https://bevy.org/learn/migration-guides/), but we can't guarantee migrations will always be easy. Use only if you are willing to work in this environment.\n\n**MSRV:** Bevy relies heavily on improvements in the Rust language and compiler.\nAs a result, the Minimum Supported Rust Version (MSRV) is generally close to \"the latest stable release\" of Rust.\n\n## Design Goals\n\n* **Capable**: Offer a complete 2D and 3D feature set\n* **Simple**: Easy for newbies to pick up, but infinitely flexible for power users\n* **Data Focused**: Data-oriented architecture using the Entity Component System paradigm\n* **Modular**: Use only what you need. Replace what you don't like\n* **Fast**: App logic should run quickly, and when possible, in parallel\n* **Productive**: Changes should compile quickly ... waiting isn't fun\n\n## About\n\n* **[Features](https://bevy.org):** A quick overview of Bevy's features.\n* **[News](https://bevy.org/news/)**: A development blog that covers our progress, plans and shiny new features.\n\n## Docs\n\n* **[Quick Start Guide](https://bevy.org/learn/quick-start/introduction):** Bevy's official Quick Start Guide. The best place to start learning Bevy.\n* **[Bevy Rust API Docs](https://docs.rs/bevy):** Bevy's Rust API docs, which are automatically generated from the doc comments in this repo.\n* **[Official Examples](https://github.com/bevyengine/bevy/tree/latest/examples):** Bevy's dedicated, runnable examples, which are great for digging into specific concepts.\n* **[Community-Made Learning Resources](https://bevy.org/assets/#learning)**: More tutorials, documentation, and examples made by the Bevy community.\n\n## Community\n\nBefore contributing or participating in discussions with the community, you should familiarize yourself with our [**Code of Conduct**](./CODE_OF_CONDUCT.md).\n\n* **[Discord](https://discord.gg/bevy):** Bevy's official discord server.\n* **[Reddit](https://reddit.com/r/bevy):** Bevy's official subreddit.\n* **[GitHub Discussions](https://github.com/bevyengine/bevy/discussions):** The best place for questions about Bevy, answered right here!\n* **[Bevy Assets](https://bevy.org/assets/):** A collection of awesome Bevy projects, tools, plugins and learning materials.\n\n### Contributing\n\nIf you'd like to help build Bevy, check out the **[Contributor's Guide](https://bevy.org/learn/contribute/introduction)**.\nFor simple problems, feel free to [open an issue](https://github.com/bevyengine/bevy/issues) or\n[PR](https://github.com/bevyengine/bevy/pulls) and tackle it yourself!\n\nFor more complex architecture decisions and experimental mad science, please open a [GitHub Discussion](https://github.com/bevyengine/bevy/discussions) so we can brainstorm together effectively!\n\n## Getting Started\n\nWe recommend checking out the [Quick Start Guide](https://bevy.org/learn/quick-start/introduction) for a brief introduction.\n\nFollow the [Setup guide](https://bevy.org/learn/quick-start/getting-started/setup) to ensure your development environment is set up correctly.\nOnce set up, you can quickly try out the [examples](https://github.com/bevyengine/bevy/tree/latest/examples) by cloning this repo and running the following commands:\n\n```sh\n# Switch to the correct version (latest release, default is main development branch)\ngit checkout latest\n# Runs the \"breakout\" example\ncargo run --example breakout\n```\n\nTo draw a window with standard functionality enabled, use:\n\n```rust\nuse bevy::prelude::*;\n\nfn main() {\n    App::new()\n        .add_plugins(DefaultPlugins)\n        .run();\n}\n```\n\n### Fast Compiles\n\nBevy can be built just fine using default configuration on stable Rust. However for really fast iterative compiles, you should enable the \"fast compiles\" setup by [following the instructions here](https://bevy.org/learn/quick-start/getting-started/setup).\n\n## [Bevy Cargo Features][cargo_features]\n\nThis [list][cargo_features] outlines the different cargo features supported by Bevy. These allow you to customize the Bevy feature set for your use-case.\n\n[cargo_features]: docs/cargo_features.md\n\n## Thanks\n\nBevy is the result of the hard work of many people. A huge thanks to all Bevy contributors, the many open source projects that have come before us, the [Rust gamedev ecosystem](https://arewegameyet.rs/), and the many libraries we build on.\n\nA huge thanks to Bevy's [generous sponsors](https://bevy.org). Bevy will always be free and open source, but it isn't free to make. Please consider [sponsoring our work](https://bevy.org/donate/) if you like what we're building.\n\n<!-- This next line need to stay exactly as is. It is required for BrowserStack sponsorship. -->\nThis project is tested with BrowserStack.\n\n## License\n\nBevy is free, open source and permissively licensed!\nExcept where noted (below and/or in individual files), all code in this repository is dual-licensed under either:\n\n* MIT License ([LICENSE-MIT](LICENSE-MIT) or [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))\n* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0))\n\nat your option.\nThis means you can select the license you prefer!\nThis dual-licensing approach is the de-facto standard in the Rust ecosystem and there are [very good reasons](https://github.com/bevyengine/bevy/issues/2373) to include both.\n\nSome of the engine's code carries additional copyright notices and license terms due to their external origins.\nThese are generally BSD-like, but exact details vary by crate:\nIf the README of a crate contains a 'License' header (or similar), the additional copyright notices and license terms applicable to that crate will be listed.\nThe above licensing requirement still applies to contributions to those crates, and sections of those crates will carry those license terms.\nThe [license](https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields) field of each crate will also reflect this.\n\nThe [assets](assets) included in this repository (for our [examples](./examples/README.md)) typically fall under different open licenses.\nThese will not be included in your game (unless copied in by you), and they are not distributed in the published bevy crates.\nSee [CREDITS.md](CREDITS.md) for the details of the licenses of those files.\n\n### Your contributions\n\nUnless you explicitly state otherwise,\nany contribution intentionally submitted for inclusion in the work by you,\nas defined in the Apache-2.0 license,\nshall be dual licensed as above,\nwithout any additional terms or conditions.\n"
+    },
+    "brief": {
+      "summary": "A refreshingly simple data-driven game engine built in Rust",
+      "problem": "该项目围绕“A refreshingly simple data-driven game engine built in Rust”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：A refreshingly simple data-d",
+        "主要使用 Rust 开发",
+        "主题包括：bevy、game-development、game-engine、gamedev"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 48,340 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "bevyengine/bevy",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、game engine",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "TokisanGames/Terrain3D",
+      "url": "https://github.com/TokisanGames/Terrain3D",
+      "description": "A high performance, editable terrain system for Godot 4.",
+      "language": "C++",
+      "total_stars": 4285,
+      "forks": 300,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-development",
+        "gamedev",
+        "gamedev-tool",
+        "gamedevelopment",
+        "godot",
+        "godot-addons",
+        "godot-engine",
+        "godot-plugin",
+        "godot4",
+        "heightmap",
+        "heightmap-terrain",
+        "terrain",
+        "terrain-editing",
+        "terrain-visualization"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-01-22T12:48:26Z",
+      "updated_at": "2026-09-23T04:50:20Z",
+      "pushed_at": "2026-09-23T04:50:15Z",
+      "open_issues": 90,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![Terrain3D Logo](/doc/docs/images/terrain3d.jpg)\n\n# Terrain3D\nA high performance, editable terrain system for Godot 4.\n\n\n## Features\n* Written in C++ as a GDExtension addon, which works with official builds of Godot Engine\n* [Can be accessed](https://terrain3d.readthedocs.io/en/stable/docs/programming_languages.html) by GDScript, C#, and any language Godot supports\n* Terrains as small as 64x64m up to 65.5x65.5km (4295km^2) in non-contiguous and variable sized regions\n* Up to 32 textures\n* Up to 10 levels of detail for the terrain mesh\n* Foliage instancing, with up to 10 levels of detail, and a shadow impostor\n* Sculpting, holes, texture painting, texture detiling, painting colors and wetness\n* Imports heightmaps from [HTerrain](https://github.com/Zylann/godot_heightmap_plugin/), Gaea, World Creator, World Machine, Unity, Unreal and any tool that can export a heightmap. See [heightmaps](https://terrain3d.readthedocs.io/en/stable/docs/heightmaps.html)\n\n\n## Games Using Terrain3D\n\nPlease see the [featured games using Terrain3D](https://terrain3d.readthedocs.io/en/latest/docs/games.html) for examples of what it can do.\n\n\n## Getting Started\n\n1. Read the [Introduction](https://terrain3d.readthedocs.io/en/stable/docs/introduction.html) to understand how this terrain system works.\n\n2. Read the [Installation & Upgrade](https://terrain3d.readthedocs.io/en/stable/docs/installation.html) instructions.\n\n3. Watch the [tutorial videos](https://terrain3d.readthedocs.io/en/stable/docs/tutorial_videos.html) and read through the documentation.\n\n4. For support, read [Getting Help](https://terrain3d.readthedocs.io/en/stable/docs/getting_help.html) and join our [Discord server](https://tokisan.com/discord).\n\n\n## Credit\nDeveloped for the Godot community by:\n\n|||\n|--|--|\n| **Cory Petkovsek, Tokisan Games** | [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/twitter.png?raw=true\" width=\"24\"/>](https://twitter.com/TokisanGames) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/github.png?raw=true\" width=\"24\"/>](https://github.com/TokisanGames) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/www.png?raw=true\" width=\"24\"/>](https://tokisan.com/) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/discord.png?raw=true\" width=\"24\"/>](https://tokisan.com/discord) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/youtube.png?raw=true\" width=\"24\"/>](https://www.youtube.com/@TokisanGames)|\n| **Roope Palmroos, Outobugi Games** | [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/twitter.png?raw=true\" width=\"24\"/>](https://twitter.com/outobugi) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/github.png?raw=true\" width=\"24\"/>](https://github.com/outobugi) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/www.png?raw=true\" width=\"24\"/>](https://outobugi.com/) [<img src=\"https://github.com/dmhendricks/signature-social-icons/blob/master/icons/round-flat-filled/35px/youtube.png?raw=true\" width=\"24\"/>](https://www.youtube.com/@outobugi)|\n\nAnd the contribution team in [AUTHORS.md](https://terrain3d.readthedocs.io/en/stable/docs/authors.html) and on the right of the github page.\n\n\n## Contributing\n\nPlease see [Contributing](https://terrain3d.readthedocs.io/en/latest/docs/contributing.html) if you would like to help make Terrain3D the best terrain system for Godot.\n\n\n## License\n\nThis addon has been released under the [MIT License](https://github.com/TokisanGames/Terrain3D/blob/main/LICENSE.txt).\n"
+    },
+    "brief": {
+      "summary": "A high performance, editable terrain system for Godot 4.",
+      "problem": "该项目围绕“A high performance, editable terrain system for Godot 4.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：A high performance, editable",
+        "主要使用 C++ 开发",
+        "主题包括：game-development、gamedev、gamedev-tool、gamedevelopment"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 4,285 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "TokisanGames/Terrain3D",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、godot",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "lukaszliniewicz/Pandrator",
+      "url": "https://github.com/lukaszliniewicz/Pandrator",
+      "description": "Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.",
+      "language": "Python",
+      "total_stars": 626,
+      "forks": 50,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "audiobook",
+        "audiobook-creator",
+        "audiobook-maker",
+        "chatterbox",
+        "dubbing",
+        "dubbing-ai",
+        "kokoro",
+        "pdf-to-audio",
+        "rvc",
+        "silero",
+        "subtitle-to-speech",
+        "subtitle-to-voice",
+        "text-processing",
+        "text-to-speech",
+        "voice-clone",
+        "voice-cloning",
+        "voiceover",
+        "voxtral",
+        "xtts",
+        "xttsv2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-03-20T14:46:13Z",
+      "updated_at": "2026-09-23T04:53:30Z",
+      "pushed_at": "2026-09-23T04:53:26Z",
+      "open_issues": 18,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/lukaszliniewicz/Pandrator/main/pandrator.png\" alt=\"Pandrator\" width=\"160\" />\n</p>\n\n# Pandrator\n\n**Make audiobooks, subtitles, and voiceovers in one workspace.**\n\nTurn a book into something you can listen to. Transcribe a recording, translate\nits subtitles, or give it a new voice. Pandrator brings the steps together in a\nbrowser interface, with room to review and refine the result as you go.\n\nRun speech and transcription models on your own computer, connect a cloud\nprovider, or let your AI assistant help through MCP. Start with one workflow\nand add more when you need them.\n\n[![Download for Windows (.exe)](https://img.shields.io/badge/Download_for_Windows-.exe-2563eb?style=for-the-badge)](https://github.com/lukaszliniewicz/Pandrator/releases/download/v.0.10.0/PandratorManager-0.9.25-windows-x86_64.exe)\n[![Download for Linux (.AppImage)](https://img.shields.io/badge/Download_for_Linux-.AppImage-168572?style=for-the-badge)](https://github.com/lukaszliniewicz/Pandrator/releases/download/v.0.10.0/PandratorManager-0.9.25-x86_64.AppImage)\n\nWindows 10/11 and Linux desktop · x86-64 · Pandrator 0.10.0 / Manager 0.9.25\n\n[All downloads & release notes](https://github.com/lukaszliniewicz/Pandrator/releases/latest)\n· [Installation help](docs/getting-started/installation.md)\n· [User guides](docs/README.md)\n\n## New in 0.10.0\n\n- **Direct a whole block or a phrase.** Review speaker assignments, emotions,\n  delivery directions, and explicit vocal sounds without changing the spoken\n  words. Inspect the compiled request before generating audio.\n- **Find the right model and voice.** Browse local and cloud capabilities,\n  languages, licences, model variants, saved references, and voice collections.\n- **Automate the setup through MCP.** Configure Gemini directions with preceding\n  and following context, use model-specific ElevenLabs controls, and preview\n  and apply guarded phrase edits.\n- **Transcribe and align more languages.** Use Qwen ASR and forced alignment,\n  optional vocal isolation, and improved CJK speech/subtitle handling.\n- **Work with larger sessions.** Generation rows and history load on demand;\n  continuation keeps completed recordings and shows exactly what will change.\n- **Stronger development checks.** Pinned Ruff and basedpyright checks, targeted\n  debt cleanup, and CI gates help keep fixes from regressing. See the\n  [code quality policy](docs/development/code-quality.md).\n\nSee [speech directions](docs/reference/generation-controls.md),\n[provider controls](docs/speech-performance.md), and the\n[release notes](https://github.com/lukaszliniewicz/Pandrator/releases/tag/v.0.10.0).\n\n## Try your first workflow\n\n1. **Download and run Pandrator Manager.** On Linux, make the AppImage\n   executable first. Choose a parent folder; the Manager creates a `Pandrator`\n   workspace inside it and opens the setup interface in your browser.\n2. **Install Pandrator and the engine you need.** Try **Kokoro** for ready-made\n   narration voices, or **CrispASR** for transcription. You can add voice\n   cloning and other engines later. Docker, WSL, and a separate Python\n   installation are not required.\n3. **Make something small.** Choose **Generate an audiobook** and paste a\n   short passage, or open **Quick Transcribe** to upload a clip or record your\n   microphone. Listen, review, and save the result.\n\nLocal models download separately on first setup; speed and memory requirements\nvary by engine and hardware. The Manager shows the available compute options.\nThe Windows launcher is currently unsigned, so Windows may show an unknown\npublisher warning; the [installation guide](docs/getting-started/installation.md)\nexplains this and the release checksums.\n\n## What would you like to make?\n\n| Start with… | Make… | Guide |\n| --- | --- | --- |\n| A book, document, or pasted text | Narrated audio or an M4B audiobook with chapters and cover art | [First audiobook](docs/getting-started/first-audiobook.md) |\n| An audio/video file or existing subtitles | Reviewed, corrected, or translated subtitles | [First subtitles](docs/getting-started/first-subtitles.md) |\n| A video or subtitle file | Synchronized speech and a dubbed video | [First voiceover](docs/getting-started/first-voiceover.md) |\n| A recording and optional captions | Transcript-guided cuts, reviewed boundaries, and an edited video | [Recording editing with MCP](pandrator_mcp/guides/workflows.md#media-editing) |\n| A short clip or your microphone | A TXT, SRT, or JSON transcript without creating a session | [Quick Transcribe](docs/reference/quick-transcription.md) |\n\n## Use the AI assistant you already have\n\nIf you use **Codex, Claude Code, OpenCode, or another MCP-capable host**, its\nmodel can do Pandrator's language work directly. You do not need to configure\na separate LLM provider or API key in Pandrator for this route.\n\nThis is the **in-harness passive MCP workflow**: Pandrator prepares and tracks\nthe work; the model in your existing conversation processes it and submits\nresults through MCP. “Passive” describes Pandrator's role: it does not make the\nLLM calls itself.\n\n```mermaid\nflowchart TD\n    P[\"Pandrator prepares a batch\"] --> A[\"Your agent corrects, translates, or optimizes\"]\n    A --> V[\"Pandrator validates and saves\"]\n    V -->|More batches| P\n    V -->|Complete| R[\"Review and export, or generate speech\"]\n```\n\nUse it to:\n\n- **Clean PDF/EPUB text** before audiobook preparation, with reviewable changes\n  to document structure and extraction artifacts.\n- **Correct and translate subtitles**, keeping cue identities and shared\n  terminology across batches.\n- **Optimize text for speech** before narration, while retaining the source\n  wording as a separate artifact.\n- **Coordinate a whole workflow**: import a file, process the text, select a\n  voice, generate speech, and return verified deliverables.\n\nAfter [connecting your MCP host](docs/operations/agent-connections.md), try a\nrequest such as:\n\n> Use Pandrator to correct this recording's English subtitles and translate\n> them into Polish. Use your own model through passive dispatch, keep a shared\n> glossary, and export both SRT files. Preserve uncertain wording for review.\n\nPandrator tracks batches, validates submissions, and keeps completed work so\nan interrupted agent can resume. The agent must continue the tool loop;\nstarting a passive run alone does not process it. Speech recognition and\nspeech generation still use the engines you select in Pandrator.\n\nYour host's normal usage limits and costs apply. If its model runs in the\ncloud, the text it processes is sent there, even when Pandrator runs locally.\n\nSee the [passive workflow guide](docs/guides/passive-dispatch.md),\n[end-to-end agent guide](docs/guides/agent-workflows.md), and the\n[reusable workflow skill](pandrator_mcp/skills/pandrator-workflows/SKILL.md).\nThe skill adds workflow guidance; the MCP connection supplies the tools.\nSee [skill installation](pandrator_mcp/README.md#optional-workflow-skill) to add it\nto your host.\n\n## Features in more detail\n\n### Audiobooks and narration\n\n- Import TXT, PDF, EPUB, DOCX, MOBI, or pasted text. MOBI conversion needs\n  optional Calibre.\n- Prepare documents with extraction, OCR, chapter detection, text cleanup,\n  and optional AI assistance.\n- Adjust pronunciation and speech text, generate in segments, compare takes,\n  and regenerate selected passages.\n- Record or upload voice references and retain their transcripts.\n- Export WAV, MP3, Opus, FLAC, or M4B, with audiobook chapters, metadata,\n  and cover art where the format supports them.\n\n### Subtitles, voiceovers, and recording edits\n\n- Transcribe audio/video with timestamps and optional speaker diarization.\n- Import SRT; WebVTT, ASS, and SSA uploads are also recognized, with SRT used\n  as the working subtitle format.\n- Correct, translate, split, merge, and retime cues in a reviewable editor.\n  Use manual edits, configured language providers, or passive MCP processing.\n- Generate synchronized speech and export media with selectable audio and\n  subtitle tracks, including burned-in subtitles.\n- Plan recording cuts from a transcript, inspect and refine their boundaries,\n  and render a reviewed edit while preserving the original media.\n\n### Quick transcription and automation\n\n- Upload audio/video or record and preview your microphone, then copy or\n  download TXT, SRT, or JSON without creating a permanent session.\n- Transcribe through HTTP or MCP: an approved-root file path or a small\n  base64-encoded clip can be supplied through MCP. Larger files are streamed\n  from the host rather than placed in the model's context.\n- Quick transcripts are temporary and expire one hour after completion;\n  save the result you want to keep.\n- Use MCP for session workflows, live voice/model selection, reviewable plans,\n  resumable work, and downloads verified by size and checksum.\n\n## Models and providers\n\n### Local speech generation\n\n**audio.cpp is a local speech provider with several models to choose from,\nand the default for new workspaces.** Select the model packages you want to\ninstall in the Manager, then choose an installed model in **Generate audio**\nsettings. You can switch models or add more later. Available families include:\n\n| audio.cpp model family | Voice options |\n| --- | --- |\n| **Qwen3 TTS 1.7B** | Base for reference-voice cloning; CustomVoice for built-in speakers; VoiceDesign to describe a new voice in any of ten supported languages. |\n| **Fish Audio S2 Pro** | Expressive reference-voice cloning. |\n| **VoxCPM2** | Multilingual reference-voice cloning. |\n| **Chatterbox** | Reference-voice cloning. |\n| **MagpieTTS** | Preset multilingual voices. |\n| **OmniVoice** | Multilingual reference-voice cloning. |\n| **PocketTTS English** | English speech generation. |\n| **FireRedTTS3 Base** | Experimental multilingual reference-voice cloning. |\n| **BreezeTTS 2** | Instruction-based voice design and optional reference cloning in English and Mandarin Chinese. |\n\nThe Manager supplies selectable Q8_0 model packages. CPU, Vulkan, and CUDA\nbuilds are available; the Linux CUDA build is currently best-effort and has not\nbeen verified on NVIDIA hardware. Available voices and languages depend on the\nselected model.\n\nThese dedicated providers also remain available:\n\n| Provider | Voice options and capabilities |\n| --- | --- |\n| **Kokoro-82M v1.0** | Lightweight, CPU-friendly preset voices; a useful first narration engine. |\n| **Silero** | CPU-friendly language-specific voice packs; licence terms differ by pack. |\n| **XTTS v2** | Multilingual and cross-language voice cloning; import fine-tuned model bundles or use the optional XTTS training component. |\n| **Voxtral** | Preset voices; requires a supported GPU/WGPU backend. |\n\nExisting workspaces keep their saved defaults and provider selections.\nStandalone Qwen3 TTS, Fish S2 Pro, VoxCPM2, Chatterbox, and Magpie providers\nremain supported for compatibility. Installed components stay manageable;\nuninstalled ones appear under **Compatibility backends**. In a saved session,\n**Switch to audio.cpp** proposes a matching model family for review. Voices and\nengine settings are not assumed interchangeable, and existing takes remain\nintact. See [switching providers](docs/guides/providers-and-voices.md#switching-from-a-compatibility-provider).\n\nOptional **RVC** converts the voice of generated audio, keeping the original\nand converted takes available. It is a separate post-processing step.\nXTTS training benefits strongly from an NVIDIA GPU.\n\n### Transcription and alignment\n\n| Runtime / provider | Models and capabilities |\n| --- | --- |\n| **CrispASR (local)** | **Whisper large-v3** for multilingual transcription, **Parakeet TDT 0.6B v3** with native word timing, and **MOSS Transcribe-Diarize 0.9B** with speaker diarization. |\n| **Qwen3 ASR / ForcedAligner through audio.cpp (local)** | Multilingual transcription and alignment of accepted captions; selectable model packages and language contro"
+    },
+    "brief": {
+      "summary": "Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.",
+      "problem": "该项目围绕“Turn PDFs and EPUBs into audiobooks; subtitles or videos into dubbed videos (including translation), and more. For free. Pandrator uses local models, including voice-cloning (instant, RVC-enhanced, XTTS fine-tuning) and LLM processing. It aspires to be a user-friendly app with a GUI, an installer and all-in-one packages.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Turn PDFs and EPUBs into aud",
+        "主要使用 Python 开发",
+        "主题包括：audiobook、audiobook-creator、audiobook-maker、chatterbox"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 626 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "lukaszliniewicz/Pandrator",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、dubbing",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "GraphiteEditor/Graphite",
+      "url": "https://github.com/GraphiteEditor/Graphite",
+      "description": "Community-built comprehensive 2D content creation appplication for graphic design, digital art, and interactive real-time motion graphics powered by a node-based procedural graphics engine",
+      "language": "Rust",
+      "total_stars": 27332,
+      "forks": 1263,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-graphics",
+        "animation",
+        "art",
+        "creative-coding",
+        "design",
+        "graphic-design",
+        "graphics",
+        "graphics-editor",
+        "image-manipulation",
+        "image-processing",
+        "motion-design",
+        "motion-graphics",
+        "node-graph",
+        "photo-editor",
+        "procedural",
+        "procedural-drawing",
+        "procedural-generation",
+        "svg-editor",
+        "vector-graphics"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2020-04-26T07:29:29Z",
+      "updated_at": "2026-09-23T04:47:57Z",
+      "pushed_at": "2026-09-23T04:47:52Z",
+      "open_issues": 563,
+      "homepage": "https://graphite.art",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "\n\n<a href=\"https://graphite.art/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/9366c148-4405-484f-909a-9a3526eb9209\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/791508ab-bcd5-4e31-a3b9-1187cfd7a2f6\">\n<img alt=\"Graphite logo\" src=\"https://github.com/user-attachments/assets/791508ab-bcd5-4e31-a3b9-1187cfd7a2f6\">\n</picture>\n</a>\n\n# Your procedural toolbox for 2D content creation\n\n**Graphite is a free, open source vector and raster graphics engine, [available now](https://editor.graphite.art) in alpha. Get creative with a fully nondestructive editing workflow that combines layer-based compositing with node-based generative design.**\n\nHaving begun life as a vector editor, Graphite continues evolving into a generalized, all-in-one graphics toolbox that's built more like a game engine than a conventional creative app. The editor's tools wrap its node graph core, providing user-friendly workflows for vector, raster, and beyond. Photo editing, motion graphics, digital painting, desktop publishing, and VFX compositing are additional competencies on the planned [roadmap](https://graphite.art/features/#roadmap) making Graphite into a highly versatile content creation tool.\n\nLearn more from the [website](https://graphite.art/), subscribe to the [newsletter](https://graphite.art/#newsletter), consider [volunteering](https://graphite.art/volunteer/) or [donating](https://graphite.art/donate/), and remember to give this repository a ⭐!\n\n<br />\n<a href=\"https://discord.graphite.art/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/ad185fac-3b48-446d-863c-2bcb0724abee\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/aa23f503-f3bf-444a-9080-8eaa19fa2fa8\">\n<img alt=\"Discord\" src=\"https://github.com/user-attachments/assets/aa23f503-f3bf-444a-9080-8eaa19fa2fa8\" width=\"48\" height=\"48\">\n</picture>\n</a>\n&nbsp;&nbsp;&nbsp;&nbsp;\n<a href=\"https://www.reddit.com/r/graphite/\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/d8c05686-2eb9-4ac1-8149-728c12b4e71a\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/6f32329a-4d6f-42d8-9a2f-42977c0b3c05\">\n<img alt=\"Reddit\" src=\"https://github.com/user-attachments/assets/6f32329a-4d6f-42d8-9a2f-42977c0b3c05\" width=\"48\" height=\"48\">\n</picture>\n</a>\n&nbsp;&nbsp;&nbsp;&nbsp;\n<a href=\"https://bsky.app/profile/graphiteeditor.bsky.social\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/c736d80c-e9bf-4591-a7e0-a7723057a906\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/3db9b0a1-5ab7-4bff-bfd3-8a4ade7b98bd\">\n<img alt=\"Bluesky\" src=\"https://github.com/user-attachments/assets/3db9b0a1-5ab7-4bff-bfd3-8a4ade7b98bd\" width=\"48\" height=\"48\">\n</picture>\n</a>\n&nbsp;&nbsp;&nbsp;&nbsp;\n<a href=\"https://twitter.com/graphiteeditor\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/115f04cc-e3c2-4f90-ac35-eb9edd3ca9be\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/4ed4185d-a622-418c-bbf4-a0419e690ca9\">\n<img alt=\"Twitter\" src=\"https://github.com/user-attachments/assets/4ed4185d-a622-418c-bbf4-a0419e690ca9\" width=\"48\" height=\"48\">\n</picture>\n</a>\n&nbsp;&nbsp;&nbsp;&nbsp;\n<a href=\"https://www.youtube.com/@GraphiteEditor\">\n<picture>\n<source media=\"(prefers-color-scheme: dark)\" srcset=\"https://github.com/user-attachments/assets/cbc02fad-5cbc-4715-a8e5-860198e989c7\">\n<source media=\"(prefers-color-scheme: light)\" srcset=\"https://github.com/user-attachments/assets/d13b484d-97a8-4d9e-bbe4-c60348b3f676\">\n<img alt=\"YouTube\" src=\"https://github.com/user-attachments/assets/d13b484d-97a8-4d9e-bbe4-c60348b3f676\" width=\"48\" height=\"48\">\n</picture>\n</a>\n<br /><br />\n\nhttps://github.com/user-attachments/assets/f4604aea-e8f1-45ce-9218-46ddc666f11d\n\n## Support our mission ❤️\n\nGraphite is 100% community built and funded. Please become a part of keeping the project alive and thriving with a [donation](https://graphite.art/donate/) if you share a belief in our **mission**:\n\n> Graphite strives to unshackle the creativity of every budding artist and seasoned professional by building the best comprehensive art and design tool that's accessible to all.\n> \n> Mission success will come when Graphite is an industry standard. A cohesive product vision and focus on innovation over imitation is the strategy that will make that possible.\n\n## Screenshots\n\n![Made using nondestructive boolean operations and procedural polka dot patterns](https://github.com/user-attachments/assets/decb7011-18c2-4c68-82af-d1fa5064244a)\n\n![Mandelbrot fractal filled with a noise pattern, procedurally generated and infinitely scalable](https://github.com/user-attachments/assets/9e023997-185b-4f43-a724-797d308d9e7b)\n\n![Design for a magazine spread, a preview of the upcoming focus on desktop publishing](https://github.com/user-attachments/assets/90eca551-5868-4f8d-9016-33958bf96345)\n\n## Contributing/building the code\n\nAre you a graphics programmer or Rust developer? Graphite aims to be one of the most approachable projects for putting your engineering skills to use in the world of open source. See [instructions here](https://graphite.art/volunteer/guide/) for setting up the project and getting started.\n\n## License\n\nGraphite's source code is dual-licensed under your choice of either the [MIT license](LICENSE-MIT) or the [Apache License 2.0](LICENSE-APACHE), at your option, unless otherwise noted within the repository. By submitting code for inclusion in the project, you agree to license your contributions under both licenses, and that you have the authority to do so.\n"
+    },
+    "brief": {
+      "summary": "Community-built comprehensive 2D content creation appplication for graphic design, digital art, and interactive real-time motion graphics powered by a node-based procedural graphics engine",
+      "problem": "该项目围绕“Community-built comprehensive 2D content creation appplication for graphic design, digital art, and interactive real-time motion graphics powered by a node-based procedural graphics engine”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Community-built comprehensiv",
+        "主要使用 Rust 开发",
+        "主题包括：2d-graphics、animation、art、creative-coding"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 27,332 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "动画",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "GraphiteEditor/Graphite",
+      "score": 60,
+      "category": "动画",
+      "reason": "匹配关键词：animation",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 33.0
+    }
+  }
+]
