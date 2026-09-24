@@ -1,23 +1,79 @@
 [
   {
     "repository": {
+      "rank": 16,
+      "full_name": "browser-use/video-use",
+      "url": "https://github.com/browser-use/video-use",
+      "description": "Edit videos with coding agents",
+      "language": "Python",
+      "total_stars": 26665,
+      "forks": 3177,
+      "stars_today": 746,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 746
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-04-12T01:34:42Z",
+      "updated_at": "2026-09-24T08:07:56Z",
+      "pushed_at": "2026-09-24T04:50:14Z",
+      "open_issues": 118,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"static/video-use-banner.png\" alt=\"video-use\" width=\"100%\">\n</p>\n\n# video-use\n\nIntroducing **video-use** — edit videos with Claude Code. 100% open source.\n\nDrop raw footage in a folder, chat with Claude Code, get `final.mp4` back. Works for any content — talking heads, montages, tutorials, travel, interviews — without presets or menus.\n\nTry video-use in [Browser Use Cloud](https://cloud.browser-use.com/v4?utm_campaign=video-use-use-in-cloud&utm_source=github).\n\n## What it does\n\n- **Cuts out filler words** (`umm`, `uh`, false starts) and dead space between takes\n- **Auto color grades** every segment (warm cinematic, neutral punch, or any custom ffmpeg chain)\n- **30ms audio fades** at every cut so you never hear a pop\n- **Burns subtitles** in your style — 2-word UPPERCASE chunks by default, fully customizable\n- **Generates animation overlays** via [HyperFrames](https://github.com/heygen-com/hyperframes), [Remotion](https://www.remotion.dev/), [Manim](https://www.manim.community/), or PIL — spawned in parallel sub-agents, one per animation\n- **Self-evaluates the rendered output** at every cut boundary before showing you anything\n- **Persists session memory** in `project.md` so next week's session picks up where you left off\n\n## Setup prompt\n\nPaste into Claude Code, Codex, Hermes, Openclaw, or any agent with shell access:\n\n```text\nSet up https://github.com/browser-use/video-use for me.\n\nRead install.md first to install this repo, wire up ffmpeg, register the skill with whichever agent you're running under, and set up the ElevenLabs API key — ask me to paste it when you need it. Then read SKILL.md for daily usage, and always read helpers/ because that's where the editing scripts live. After install, don't transcribe anything on your own — just tell me it's ready and wait for me to drop footage into a folder.\n```\n\nThe agent handles the clone, dependencies, skill registration, and prompts you once for your ElevenLabs API key (grab one at [elevenlabs.io/app/settings/api-keys](https://elevenlabs.io/app/settings/api-keys)).\n\nThen point your agent at a folder of raw takes:\n\n```bash\ncd /path/to/your/videos\nclaude    # or codex, hermes, etc.\n```\n\nFor always-on editing from your own VPS or Telegram, run the agent through [Browser Use Box](https://browser-use.com/bux). [Watch the 15-second demo](https://www.tiktok.com/@browser_use/video/7639824093721758989).\n\nAnd in the session:\n\n> edit these into a launch video\n\nIt inventories the sources, proposes a strategy, waits for your OK, then produces `edit/final.mp4` next to your sources. All outputs live in `<videos_dir>/edit/` — the skill directory stays clean.\n\n## Manual install\n\nIf you'd rather do it by hand:\n\n```bash\n# 1. Clone and symlink into your agent's skills directory\ngit clone https://github.com/browser-use/video-use ~/Developer/video-use\nln -sfn ~/Developer/video-use ~/.claude/skills/video-use        # Claude Code\n# ln -sfn ~/Developer/video-use ~/.codex/skills/video-use       # Codex\n\n# 2. Install deps\ncd ~/Developer/video-use\nuv sync                         # or: pip install -e .\nbrew install ffmpeg             # required\nbrew install yt-dlp             # optional, for downloading online sources\n\n# 3. Add your ElevenLabs API key\ncp .env.example .env\n$EDITOR .env                    # ELEVENLABS_API_KEY=...\n```\n\n## How it works\n\nThe LLM never watches the video. It **reads** it — through two layers that together give it everything it needs to cut with word-boundary precision.\n\n<p align=\"center\">\n  <img src=\"static/timeline-view.svg\" alt=\"timeline_view composite — filmstrip + speaker track + waveform + word labels + silence-gap cut candidates\" width=\"100%\">\n</p>\n\n**Layer 1 — Audio transcript (always loaded).** One ElevenLabs Scribe call per source gives word-level timestamps, speaker diarization, and audio events (`(laughter)`, `(applause)`, `(sigh)`). All takes pack into a single ~12KB `takes_packed.md` — the LLM's primary reading view.\n\n```\n## C0103  (duration: 43.0s, 8 phrases)\n  [002.52-005.36] S0 Ninety percent of what a web agent does is completely wasted.\n  [006.08-006.74] S0 We fixed this.\n```\n\n**Layer 2 — Visual composite (on demand).** `timeline_view` produces a filmstrip + waveform + word labels PNG for any time range. Called only at decision points — ambiguous pauses, retake comparisons, cut-point sanity checks.\n\n> Naive approach: 30,000 frames × 1,500 tokens = **45M tokens of noise**.\n> Video Use: **12KB text + a handful of PNGs**.\n\nSame idea as browser-use giving an LLM a structured DOM instead of a screenshot — but for video.\n\n## Pipeline\n\n```\nTranscribe ──> Pack ──> LLM Reasons ──> EDL ──> Render ──> Self-Eval\n                                                              │\n                                                              └─ issue? fix + re-render (max 3)\n```\n\nThe self-eval loop runs `timeline_view` on the _rendered output_ at every cut boundary — catches visual jumps, audio pops, hidden subtitles. You see the preview only after it passes.\n\n## Design principles\n\n1. **Text + on-demand visuals.** No frame-dumping. The transcript is the surface.\n2. **Audio is primary, visuals follow.** Cuts come from speech boundaries and silence gaps.\n3. **Ask → confirm → execute → self-eval → persist.** Never touch the cut without strategy approval.\n4. **Zero assumptions about content type.** Look, ask, then edit.\n5. **12 hard rules, artistic freedom elsewhere.** Production-correctness is non-negotiable. Taste isn't.\n\nSee [`SKILL.md`](./SKILL.md) for the full production rules and editing craft.\n"
+    },
+    "brief": {
+      "summary": "用编码智能体对话剪视频，自动输出成片。",
+      "problem": "手动剪辑耗时，去口癖、加字幕、调色都要逐段处理。",
+      "highlights": [
+        "可以丢进素材文件夹，让 Claude Code 剪出 final.mp4",
+        "可以自动去掉“嗯”“呃”等口癖和多拍间的停顿",
+        "可以烧录字幕，并生成动画叠层、自动调色"
+      ],
+      "target_users": [
+        "视频创作者",
+        "播客与访谈剪辑者",
+        "独立开发者"
+      ],
+      "why_trending": "今日新增 746 Star，本周首次收录，演示直观。",
+      "caveat": "需装 ffmpeg 并配 ElevenLabs API Key，效果看素材。",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
+    },
+    "interest": {
+      "repository": "browser-use/video-use",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "用编码 Agent 自动剪辑成片视频",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 70.2
+    }
+  },
+  {
+    "repository": {
       "rank": 2,
       "full_name": "google/ax",
       "url": "https://github.com/google/ax",
       "description": "Google's open agentic orchestration runtime",
       "language": "Go",
-      "total_stars": 9497,
+      "total_stars": 9510,
       "forks": 469,
       "stars_today": 1543,
       "source": "trending",
       "history_label": "连续上榜",
-      "star_gain": 1612
+      "star_gain": 1625
     },
     "details": {
       "topics": [],
       "license_name": "Apache-2.0",
       "created_at": "2026-03-30T17:55:01Z",
-      "updated_at": "2026-09-24T07:57:43Z",
+      "updated_at": "2026-09-24T08:10:27Z",
       "pushed_at": "2026-09-23T21:08:29Z",
       "open_issues": 38,
       "homepage": "https://agentexecutor.io",
@@ -26,31 +82,33 @@
       "readme": "<h1>\n  <img src=\"assets/axolotl.svg\" width=\"70\" align=\"absmiddle\" alt=\"AX axolotl\">\n  AX\n</h1>\n\n> [!WARNING]\n> We are still actively refining our core concepts, protocols,\n> and specifications. We will likely to introduce major breaking\n> changes prior to a stable release.\n\n**Declare an agentic task with workspaces and gateway specifications. AX sandboxes it, wires up its workspace, fences its network, and helps running it at scale.**\n\nAX is a high-throughput, declarative orchestrator to run billions of autonomous agent workloads in a cluster. It runs on top of [Agent Substrate](https://github.com/agent-substrate/substrate) for sandboxed execution and is built to run billions of tasks per cluster. If you have used Kubernetes, `ax` will feel similar.\n\n```yaml\n# task.yaml\napiVersion: ax.io/v1alpha1\nkind: Workspace\nmetadata:\n  name: golang\nspec:\n  git:\n    - repo: https://github.com/golang/go.git\n      branch: \"my-fix\"\n---\napiVersion: ax.io/v1alpha1\nkind: Task\nmetadata:\n  name: test\nspec:\n  workspaces:\n    - name: golang\n      goal: \"Ensure that Go tool chain is available and is built from source\"\n  debug: true   # lets you `ax ssh` into the sandbox\n```\n\nThen apply it, watch it come up, and look over the agent's shoulder:\n\n```bash\nax apply -f task.yaml\nax watch task test\nax ssh test -- ls -al /workspace\n```\n\n## Why?\n\nAgents are a new kind of workload. They are neither stateless microservices nor run-to-completion batch jobs. They accumulate state, need strict isolation, call out to model APIs and tool servers, and can burn money in a loop if nobody is watching. AX gives you four small primitives that handle all of that declaratively:\n\n| You want to... | AX gives you |\n|---|---|\n| Run untrusted agent code in an isolated sandbox with CPU/memory limits | **`Task`** |\n| Pre-wire Git repos, MCP servers, and skill packages so every agent starts warm | **`Workspace`** |\n| Lock outbound traffic down to an explicit host allowlist | **`Gateway`** |\n| Configure which LLM the platform itself uses, with credentials from a Kubernetes secret | **`Model`** |\n| Pause an idle agent and pick up exactly where it left off | `ax suspend` / `ax resume` |\n| Shell into a running agent to see what it is doing | `ax ssh` |\n\nEverything is expressed as `ax.io/v1alpha1` manifests and applied with a single command.\n\n## Quick start\n\n### 1. Install the CLI\n\n```bash\ngo install github.com/google/ax/cmd/ax@latest\n```\n\nThis puts the `ax` binary in `$(go env GOPATH)/bin`. Make sure that directory is on your `PATH`.\n\n### 2. Deploy the control plane\n\nYou need a Kubernetes cluster, [`ko`](https://ko.build/) (`brew install ko`), a container registry your cluster can pull from, and a reachable Agent Substrate Control API (in-cluster default: `api.ate-system.svc.cluster.local:443`).\n\n```bash\nmake deploy AX_IMAGE_REPO=<your-registry>\n```\n\nThis deploys Redis, then builds and deploys the control plane images with `ko`. Everything lands in the `ax-system` namespace.\n\n### 3. Run your first task\n\n```bash\nax apply -f examples/task.yaml       # Task + Workspace + Gateway + Model in one file\nax get tasks\n# NAME      ATESPACE   PHASE     ACTOR           WORKER-IP    AGE\n# task123   default    Running   task123         10.20.3.67   1m\n\nax watch task task123                # stream phase and condition changes live\nax ssh task123 -- ls -la /workspace  # poke around inside the sandbox\nax suspend task task123              # checkpoint and pause\nax resume task task123               # pick up where it left off\n```\n\nWant to see the whole lifecycle end to end? Run [`./demo.sh`](demo.sh). It applies a custom workspace, waits for readiness, runs commands over `ax ssh`, and suspends the task.\n\n## Documentation\n\n| Guide | Read it to... |\n|---|---|\n| [Concepts](docs/concepts.md) | Learn what a `Task`, `Workspace`, `Gateway`, and `Model` each do, and how a task moves through phases and conditions. |\n| [Manifests](docs/manifests.md) | Write your own YAML, with an annotated example of every kind. |\n| [Sandbox](docs/sandbox.md) | See what the runner does on boot and what your command can rely on: metadata server, guest services, environment. |\n| [Runners](docs/runner.md) | Understand the contract between the control plane and the task container, and build your own runner image to replace the default. |\n| [Networking](docs/networking.md) | Reach a running task through the atenet router from the cluster, your laptop, or a gRPC client. |\n| [Architecture](DESIGN.md) | Understand how the control plane fits together, plus the [API reference](DESIGN.md#api-reference). |\n| [Development](docs/development.md) | Build, test, and ship changes to AX itself. |\n| [Roadmap](docs/roadmap.md) | See planned milestones across core specs, actor architecture, agentic environments, and governance. |\n\n## CLI usage\n\n`ax` talks to the control plane over gRPC. It is deliberately `kubectl`-shaped: `apply`, `get`, `describe`, `watch`, `delete`, plus a few agent-specific verbs.\n\n### Everyday commands\n\n```bash\n# Apply anything (multi-document YAML, file or stdin)\nax apply -f examples/task.yaml\n\n# Tasks\nax get tasks                          # list\nax get tasks -a my-atespace           # list in another atespace\nax get task task123                   # full spec + live status as YAML\nax describe task task123              # human-readable detail\nax watch task task123                 # stream status and condition transitions\nax suspend task task123               # checkpoint actor state and pause\nax resume task task123                # resume a suspended task\nax delete task task123\n\n# Shell into the running sandbox\nax ssh task123                        # interactive shell (task needs spec.debug: true)\nax ssh task123 -- ls -la /workspace   # one-off command\nax ssh task123 -- python3 main.py\n\n# Gateways, workspaces, models follow the same pattern\nax get gateways\n# NAME              ATESPACE   LISTENERS             EGRESS-HOSTS\n# default-gateway   default    8494/gRPC,8080/HTTP   *\nax describe gateway default-gateway\nax delete gateway default-gateway\n\nax get workspaces\n# NAME                ATESPACE   GIT-REPOS   MCP-SERVERS\n# default-workspace   default    1           1\nax describe workspace default-workspace\nax delete workspace default-workspace\n\nax get models\n# NAME            ATESPACE   PROVIDER   MODEL\n# default-model   default    google     gemini-3.8-flash\nax describe model default-model\nax delete model default-model\n\n# Connection plumbing\nax ctx                                # active kube context and how ax is reaching the control plane\nax tunnel list                        # background tunnels (state lives in ~/.ax/tunnels)\nax tunnel stop\nax version\n```\n\n### Works with `kubectx`\n\n`ax` follows your active Kubernetes context. Switch clusters and `ax` resolves and tunnels to that cluster's control plane in the background.\n\n```bash\nkubectx staging-cluster\nax get tasks\n\nkubectx prod-cluster\nax get tasks\n\n# Or target a context without switching\nax --context=dev-cluster get tasks\n```\n\n### Global flags\n\n| Flag | Description | Default |\n|---|---|---|\n| `-a`, `--atespace` | Atespace scope for the command | `default` |\n| `-n`, `--namespace` | Kubernetes namespace where AX is installed | `ax-system` |\n| `--context` | Kubernetes context to target | active `kubectx` / `current-context` |\n| `--server` | Control plane address, bypassing auto-detection | derived from kube context, or `$AX_SERVER` |\n\n## License\n\nApache License 2.0. See [LICENSE](LICENSE) for details.\n"
     },
     "brief": {
-      "summary": "Google's open agentic orchestration runtime",
-      "problem": "该项目围绕“Google's open agentic orchestration runtime”提供开源实现或相关资源。",
+      "summary": "谷歌开源的智能体编排运行时，像 K8s 一样管理 Agent 任务",
+      "problem": "Agent 任务状态难管、隔离弱、易失控烧钱",
       "highlights": [
-        "可以用来试用或扩展：Google's open agentic orches",
-        "主要使用 Go 开发",
-        "许可证：Apache-2.0"
+        "可以用 YAML 声明并运行沙箱 Agent 任务",
+        "可以 ax ssh 进入运行中的沙箱排查",
+        "可以按白名单限制外网并挂起恢复任务"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "AI 平台工程师",
+        "Agent 开发者",
+        "K8s 运维"
       ],
-      "why_trending": "今日新增约 1,543 个 Star，进入 GitHub Trending。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "why_trending": "今日新增 1543 星，连续上榜，谷歌出品",
+      "caveat": "仍在早期，官方称稳定版前会有重大破坏性变更",
       "category": "AI Agent / Skills",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
       "repository": "google/ax",
-      "score": 68,
+      "score": 70,
       "category": "AI Agent / Skills",
-      "reason": "匹配关键词：agentic、agent、mcp",
-      "generated_by_ai": false,
+      "reason": "通用 Agent 编排运行时，声明式 Agent 工作流",
+      "generated_by_ai": true,
       "velocity_score": 97,
       "freshness_score": 40,
-      "ranking_score": 64.2
+      "ranking_score": 65.2
     }
   },
   {
@@ -60,7 +118,7 @@
       "url": "https://github.com/obra/superpowers",
       "description": "An agentic skills framework & software development methodology that works.",
       "language": "Shell",
-      "total_stars": 290888,
+      "total_stars": 290892,
       "forks": 26030,
       "stars_today": 474,
       "source": "trending",
@@ -80,7 +138,7 @@
       ],
       "license_name": "MIT",
       "created_at": "2025-10-09T19:45:18Z",
-      "updated_at": "2026-09-24T07:57:26Z",
+      "updated_at": "2026-09-24T08:06:04Z",
       "pushed_at": "2026-09-22T18:22:49Z",
       "open_issues": 398,
       "homepage": "",
@@ -89,250 +147,176 @@
       "readme": "# Superpowers\n\nSuperpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.\n\n## Table of Contents\n\n- [How it works](#how-it-works)\n- [Commercial Services](#commercial-services)\n- [Getting Started](#installation)\n  - [Claude Code](#claude-code)\n  - [Antigravity](#antigravity)\n  - [Codex App](#codex-app)\n  - [Codex CLI](#codex-cli)\n  - [Cursor](#cursor)\n  - [Devin CLI](#devin-cli)\n  - [Factory Droid](#factory-droid)\n  - [Gemini CLI](#gemini-cli)\n  - [GitHub Copilot CLI](#github-copilot-cli)\n  - [Grok Build CLI](#grok-build-cli)\n  - [Kimi Code](#kimi-code)\n  - [OpenCode](#opencode)\n  - [Pi](#pi)\n  - [Qwen Code](#qwen-code)\n  - [Hermes Agent](#hermes-agent)\n  - [Muse](#muse)\n- [The Basic Workflow](#the-basic-workflow)\n- [When Something Goes Wrong](#when-something-goes-wrong)\n- [Community](#community)\n- [What's Inside](#whats-inside)\n- [Philosophy](#philosophy)\n- [Contributing](#contributing)\n- [Updating](#updating)\n- [License](#license)\n- [Visual companion telemetry](#visual-companion-telemetry)\n\n## How it works\n\nIt starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. \n\nOnce it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. \n\nAfter you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. \n\nNext up, once you say \"go\", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.\n\nThere's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.\n\n## Commercial Services\n\nIf you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.\n\n## Installation\n\nInstallation differs by harness. If you use more than one, install Superpowers separately for each one.\n\n### Claude Code\n\nSuperpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)\n\n#### Official Marketplace\n\n- Install the plugin from Anthropic's official marketplace:\n\n  ```bash\n  /plugin install superpowers@claude-plugins-official\n  ```\n\n#### Superpowers Marketplace\n\nThe Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.\n\n- Register the marketplace:\n\n  ```bash\n  /plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin from this marketplace:\n\n  ```bash\n  /plugin install superpowers@superpowers-marketplace\n  ```\n\n### Antigravity\n\nInstall Superpowers as a plugin from this repository:\n\n```bash\nagy plugin install https://github.com/obra/superpowers\n```\n\nAntigravity runs the plugin's session-start hook, so Superpowers is active from\nthe first message. Reinstall with the same command to update.\n\n### Codex App\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- In the Codex app, click on Plugins in the sidebar.\n- You should see `Superpowers` in the Coding section.\n- Click the `+` next to Superpowers and follow the prompts.\n\n### Codex CLI\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- Open the plugin search interface:\n\n  ```bash\n  /plugins\n  ```\n\n- Search for Superpowers:\n\n  ```bash\n  superpowers\n  ```\n\n- Select `Install Plugin`.\n\n### Cursor\n\n- In Cursor Agent chat, install from marketplace:\n\n  ```text\n  /add-plugin superpowers\n  ```\n\n- Or search for \"superpowers\" in the plugin marketplace.\n\n### Devin CLI\n\n- Install the plugin from this repository:\n\n  ```bash\n  devin plugins install obra/superpowers\n  ```\n\n- Update to the latest version with:\n\n  ```bash\n  devin plugins update superpowers\n  ```\n\n### Factory Droid\n\n- Register the marketplace:\n\n  ```bash\n  droid plugin marketplace add https://github.com/obra/superpowers\n  ```\n\n- Install the plugin:\n\n  ```bash\n  droid plugin install superpowers@superpowers\n  ```\n\n### Gemini CLI\n\n- Install the extension:\n\n  ```bash\n  gemini extensions install https://github.com/obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  gemini extensions update superpowers\n  ```\n\n### GitHub Copilot CLI\n\n- Register the marketplace:\n\n  ```bash\n  copilot plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin:\n\n  ```bash\n  copilot plugin install superpowers@superpowers-marketplace\n  ```\n\n### Grok Build CLI\n\nSuperpowers is available via the [official Grok plugin marketplace](https://github.com/xai-org/plugin-marketplace).\n\n- Install the plugin from xAI's official marketplace:\n\n  ```bash\n  grok plugin install superpowers@xai-official --trust\n  ```\n\n- Or open the marketplace in the TUI, search for Superpowers, and install it:\n\n  ```text\n  /marketplace\n  ```\n\n### Kimi Code\n\nSuperpowers is available in Kimi Code's plugin marketplace.\n\n- Open Kimi Code's plugin manager:\n\n  ```text\n  /plugins\n  ```\n\n- Go to `Marketplace` > `Superpowers` and install it.\n\n- Or install directly from this repository:\n\n  ```text\n  /plugins install https://github.com/obra/superpowers\n  ```\n\n- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)\n\n### OpenCode\n\nOpenCode uses its own plugin install; install Superpowers separately even if you\nalready use it in another harness.\n\n- Tell OpenCode:\n\n  ```\n  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md\n  ```\n\n- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)\n\n### Pi\n\nInstall Superpowers as a Pi package from this repository:\n\n```bash\npi install git:github.com/obra/superpowers\n```\n\nFor local development, run Pi with this checkout loaded as a temporary package:\n\n```bash\npi -e /path/to/superpowers\n```\n\nThe Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.\n\n### Qwen Code\n\nQwen Code installs plugins from Claude Code marketplaces directly.\n\n- Install the plugin from this repository, and pick `superpowers` when prompted:\n\n  ```bash\n  qwen extensions install obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  qwen extensions update superpowers\n  ```\n\n### Hermes Agent\n\nInstall Superpowers as a Hermes plugin from this repository:\n\n```bash\nhermes plugins install obra/superpowers --enable\n```\n\nRestart any active Hermes sessions after installing. Note: Hermes has no\npost-compaction hook, so a very long session that compacts over its first\nturn loses the bootstrap — start a fresh session if skills stop triggering.\n\n### Muse\n\nSuperpowers is available as a native Muse plugin — same repo, same skills, all harnesses. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest — no per-session opt-in.\n\n- Install from a local checkout:\n\n  ```bash\n  muse plugins install ./\n  muse plugins approve superpowers\n  ```\n\n  Or clone and install:\n\n  ```bash\n  git clone https://github.com/obra/superpowers.git\n  muse plugins install ./superpowers\n  muse plugins approve superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  muse plugins update superpowers\n  ```\n\nRestart any active Muse sessions after installing so the `SessionStart` hook takes effect — skills are active immediately, hooks require approval on first install. To verify, start a fresh session and send `Let's make a react todo list` — a working install auto-triggers `brainstorming` before any code is written. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.\n\n## The Basic Workflow\n\n1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.\n\n2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.\n\n3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.\n\n4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest).\n\n5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.\n\n6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.\n\n7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.\n\n**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.\n\n## When Something Goes Wrong\n\nSometimes a session misbehaves: a skill fires when it shouldn't, stays silent when it should, or the agent ignores its plan, repeats work, or burns more tokens than you'd expect. Ask your coding agent to \"figure out what went wrong with superpowers in this session\" and it will invoke the **diagnosing-superpowers** skill. To examine an earlier session, name it: \"figure out what went wrong with superpowers in session `<id>`\".\n\nThe skill reads the session transcript, reports what happened with line-level evidence, and, if you want, packages a scrubbed bundle for a bug report.\n\n## Community\n\nSuperpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).\n\n- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers\n- **Issues**: https://github.com/obra/superpowers/issues\n- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions\n\n## What's Inside\n\n### Skills Library\n\n**Testing**\n- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)\n\n**Debugging**\n- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)\n- **verification-before-completion** - Ensure it's actually fixed\n- **diagnosing-superpowers** - Work out what went wrong in a session, with evidence; export a scrubbed bundle or file an issue\n\n**Collaboration** \n- **brainstorming** - Socratic design refinement\n- **writing-plans** - Detailed implementation plans\n- **executing-plans** - Inline plan execution: one context, one final review\n- **dispatching-parallel-agents** - Concurrent subagent workflows\n- **requesting-code-review** - Pre-review checklist\n- **receiving-code-review** - Responding to feedback\n- **using-git-worktrees** - Parallel development branches\n- **finishing-a-development-branch** - Merge/PR decision workflow\n- **subagent-dr"
     },
     "brief": {
-      "summary": "An agentic skills framework & software development methodology that works.",
-      "problem": "该项目围绕“An agentic skills framework & software development methodology that works.”提供开源实现或相关资源。",
+      "summary": "给编程智能体装上一套完整开发方法论与技能框架",
+      "problem": "编程智能体常直接写代码，缺少需求澄清、计划与测试流程",
       "highlights": [
-        "可以用来试用或扩展：An agentic skills framework ",
-        "主要使用 Shell 开发",
-        "主题包括：ai、brainstorming、coding、obra"
+        "可以让智能体先追问需求，再分块确认设计",
+        "可以自动生成实现计划并派子代理逐项开发",
+        "可在 Claude Code、Cursor、Gemini CLI 等安装"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "使用编程智能体的开发者",
+        "想规范 AI 编码流程的团队",
+        "研究 Agent 技能框架的人"
       ],
-      "why_trending": "今日新增约 474 个 Star，进入 GitHub Trending。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "why_trending": "今日新增 474 星，支持多款主流编码工具，本周首次收录",
+      "caveat": "各工具需分别安装，长会话压缩后可能需重启",
       "category": "AI Agent / Skills",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
       "repository": "obra/superpowers",
-      "score": 72,
-      "category": "AI Agent / Skills",
-      "reason": "匹配关键词：agentic、agent、codex",
-      "generated_by_ai": false,
-      "velocity_score": 81,
-      "freshness_score": 40,
-      "ranking_score": 62.2
-    }
-  },
-  {
-    "repository": {
-      "rank": 14,
-      "full_name": "DeusData/codebase-memory-mcp",
-      "url": "https://github.com/DeusData/codebase-memory-mcp",
-      "description": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
-      "language": "C",
-      "total_stars": 44718,
-      "forks": 3648,
-      "stars_today": 190,
-      "source": "trending",
-      "history_label": "本周首次收录",
-      "star_gain": 190
-    },
-    "details": {
-      "topics": [
-        "aider",
-        "ast",
-        "claude-code",
-        "code-analysis",
-        "code-intelligence",
-        "codex",
-        "cursor",
-        "cypher",
-        "developer-tools",
-        "gemini-cli",
-        "graph-visualization",
-        "kilocode",
-        "knowledge-graph",
-        "mcp",
-        "mcp-server",
-        "model-context-protocol",
-        "opencode",
-        "sqlite",
-        "tree-sitter",
-        "windsurf"
-      ],
-      "license_name": "MIT",
-      "created_at": "2026-02-24T22:01:00Z",
-      "updated_at": "2026-09-24T07:50:57Z",
-      "pushed_at": "2026-09-24T02:51:00Z",
-      "open_issues": 602,
-      "homepage": "https://deusdata.github.io/codebase-memory-mcp/",
-      "archived": false,
-      "default_branch": "main",
-      "readme": "# codebase-memory-mcp\n\n[![GitHub Release](https://img.shields.io/github/v/release/DeusData/codebase-memory-mcp?style=flat&color=blue)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)\n[![CI](https://img.shields.io/github/actions/workflow/status/DeusData/codebase-memory-mcp/dry-run.yml?label=CI)](https://github.com/DeusData/codebase-memory-mcp/actions/workflows/dry-run.yml)\n[![Tests](https://img.shields.io/badge/tests-8050_passing-brightgreen)](https://github.com/DeusData/codebase-memory-mcp)\n[![Languages](https://img.shields.io/badge/languages-162-orange)](https://github.com/DeusData/codebase-memory-mcp)\n[![Hybrid LSP](https://img.shields.io/badge/Hybrid_LSP-10_languages-blue)](#hybrid-lsp)\n[![Agents](https://img.shields.io/badge/agent_surfaces-45-purple)](https://github.com/DeusData/codebase-memory-mcp)\n[![Pure C](https://img.shields.io/badge/pure_C-no_language_runtime-blue)](https://github.com/DeusData/codebase-memory-mcp)\n[![Platform](https://img.shields.io/badge/macOS_%7C_Linux_%7C_Windows-supported-lightgrey)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/DeusData/codebase-memory-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/DeusData/codebase-memory-mcp)\n[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)\n[![VirusTotal](https://img.shields.io/badge/VirusTotal-scanned_every_release-brightgreen?logo=virustotal)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![arXiv](https://img.shields.io/badge/arXiv-2603.27277-b31b1b?logo=arxiv)](https://arxiv.org/abs/2603.27277)\n\n**The fastest and most efficient code intelligence engine for AI coding agents.** Full-indexes an average repository in milliseconds, the Linux kernel (28M LOC, 75K files) in 3 minutes. Answers structural queries in under 1ms. Ships as a native executable with a small verified runtime-asset set for macOS, Linux, and Windows — download, run `install`, done.\n\nHigh-quality parsing through [tree-sitter](https://tree-sitter.github.io/tree-sitter/) AST analysis across all 162 languages, enhanced with [**Hybrid LSP** semantic type resolution](#hybrid-lsp) for Python, TypeScript / JavaScript / JSX / TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl — producing a persistent knowledge graph of functions, classes, call chains, HTTP routes, and cross-service links. 17 MCP tools. No language runtime, hosted service, or API key. Plug and play across 45 supported automatic/conditional client surfaces.\n\n> **Research** — The design and benchmarks behind this project are described in the preprint [*Codebase-Memory: Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration via MCP*](https://arxiv.org/abs/2603.27277) (arXiv:2603.27277). Evaluated across 31 real-world repositories: 83% answer quality, 10× fewer tokens, 2.1× fewer tool calls vs. file-by-file exploration.\n\n> **Security & Trust** — This tool reads your codebase and writes to your agent configuration files. That is what it is designed to do. If you prefer to audit before running, the [full source is here](https://github.com/DeusData/codebase-memory-mcp). For each release product, three behaviourally identical executable candidates (unstripped, debug-stripped, stripped) are submitted to VirusTotal before testing; the selected candidate is then packaged with its SHA-256 unchanged. Release notes link every measured candidate result. Publication permits only the narrowly documented single-Microsoft `!ml` tolerance in [SECURITY.md](SECURITY.md#our-release-policy). All processing happens 100% locally; your code never leaves your machine. Found a security issue? We want to know — see [SECURITY.md](SECURITY.md). Security is Priority #1 for us.\n\n<p align=\"center\">\n  <img src=\"docs/graph-ui-screenshot.png\" alt=\"Graph visualization UI showing the codebase-memory-mcp knowledge graph\" width=\"800\">\n  <br>\n  <em>Built-in 3D graph visualization — explore your knowledge graph at localhost:9749</em>\n</p>\n\n## Why codebase-memory-mcp\n\n- **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.\n- **Plug and play** — native executable plus authenticated release-owned assets for macOS (arm64/amd64), Linux (arm64/amd64), and Windows (amd64). The native install needs no Docker, language runtime, or API keys. Download → `install` → restart agent → done.\n- **162 languages** — vendored tree-sitter grammars compiled into the binary. Nothing to install, nothing that breaks.\n- **120x fewer tokens** — 5 structural queries: ~3,400 tokens vs ~412,000 via file-by-file search. One graph query replaces dozens of grep/read cycles.\n- **45 supported automatic/conditional client surfaces** — `install` configures detected clients and safely activates conditional clients only when their documented platform, marker, or explicit existing config path is present. See [Multi-Agent Support](#multi-agent-support) for the complete matrix and manual/UI-only boundaries.\n- **Built-in graph visualization** — 3D interactive UI at `localhost:9749`, served from the binary itself.\n- **Infrastructure-as-code indexing** — Dockerfiles, Kubernetes manifests, and Kustomize overlays indexed as graph nodes with cross-references. `Resource` nodes for K8s kinds, `Module` nodes for Kustomize overlays with `IMPORTS` edges to referenced resources.\n- **17 MCP tools** — search, trace, architecture, impact analysis, targeted index-coverage checks, Cypher queries, dead code detection, cross-service HTTP linking, ADR management, and more.\n\n## Quick Start\n\n**One-line install** (macOS / Linux):\n```bash\ncurl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash\n```\n\nWith graph visualization UI:\n```bash\ncurl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash\n```\n\n**Windows** (PowerShell):\n```powershell\n# 1. Download the installer\nInvoke-WebRequest -Uri https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.ps1 -OutFile install.ps1\n\n# 2. (Optional but recommended) Inspect the script\nnotepad install.ps1\n\n# 3. Unblock the downloaded file (removes Mark-of-the-Web restriction added by browsers/Invoke-WebRequest)\nUnblock-File .\\install.ps1\n\n# 4. Run it\n.\\install.ps1\n\n```\n\n> **Note:** If you see a script execution policy error, run `Set-ExecutionPolicy -Scope Process Bypass` first, or invoke with `PowerShell -ExecutionPolicy Bypass -File .\\install.ps1`.\n\nOptions: `--skip-config` (binary only, no agent setup), `--dir=<path>` (custom location).\n\n> **Antivirus note:** Microsoft Defender may flag a release binary as\n> `Trojan:Script/Wacatac.B!ml`. This is a known false positive — typically 61 of\n> ~62 engines return clean, and the same detection family hits `gh`, llama.cpp,\n> Godot and Microsoft's own Go toolchain. See\n> [Antivirus False Positives](SECURITY.md#antivirus-false-positives) for the\n> evidence, how to verify the artifacts yourself, and how to report it if you\n> think we are wrong.\n\nRestart your coding agent. Say **\"Index this project\"** — done.\n\n<details>\n<summary>Manual install</summary>\n\n1. **Download** the archive for your platform from the [latest release](https://github.com/DeusData/codebase-memory-mcp/releases/latest):\n   - `codebase-memory-mcp-<os>-<arch>.tar.gz` (macOS/Linux) or `.zip` (Windows)\n\n2. **Extract and install** (each archive includes `install.sh` or `install.ps1`):\n\n   macOS / Linux:\n   ```bash\n   tar xzf codebase-memory-mcp-*.tar.gz\n   ./install.sh\n   ```\n\n   Windows (PowerShell):\n   ```powershell\n   Expand-Archive codebase-memory-mcp-windows-amd64.zip -DestinationPath .\n   Unblock-File .\\install.ps1\n   .\\install.ps1\n   ```\n\n3. **Restart** your coding agent.\n\nThe `install` command automatically strips macOS quarantine attributes and ad-hoc signs the binary — no manual `xattr`/`codesign` needed.\n</details>\n\nThe `install` command auto-detects installed coding agents and configures their documented MCP entries plus durable instructions, skills, and lifecycle hooks where supported.\n\n### Session Coordination Daemon\n\nCBM automatically shares one per-account coordination daemon across Claude Code, Codex, OpenCode, and every other configured client. There is no opt-in setting for MCP servers or hook clients: the first daemon-backed CBM session starts it, each session registers its own work, and the final session shuts it down. The daemon owns long-lived background services such as watchers, shared indexing jobs, and the optional UI. Closing one session cancels work owned only by that session, while work still needed by another session continues.\n\nThe detached daemon does not depend on an MCP frontend's stderr. It keeps owner-only durable records under the canonical `${CBM_CACHE_DIR}/logs` directory (default `~/.cache/codebase-memory-mcp/logs`):\n\n| File | Contents |\n|------|----------|\n| `cbm-daemon.log` | Daemon lifecycle, watcher/indexing, UI, resource, and error events. |\n| `daemon-conflicts.ndjson` | Exact-build, coordination-ABI, and cache-root admission conflicts. |\n| `activation-events.ndjson` | Install/update/uninstall activation progress and outcomes. |\n\nThin frontends still write immediate startup and session-specific errors to their own stderr; MCP JSON-RPC stdout remains clean.\n\nAll active CBM processes must run the exact same version, executable build, coordination ABI, and canonical cache root. Equivalent `CBM_CACHE_DIR` aliases resolve to the same root; a genuinely different root is rejected while any CBM process is active. MCP servers, hooks, one-shot CLI commands, temporary index workers, and the daemon share a crash-safe OS admission barrier; starting an ordinary conflicting process fails before doing work and records an explicit conflict in `${CBM_CACHE_DIR}/logs/daemon-conflicts.ndjson`.\n\nThe native `install`, `update`, and `uninstall` commands are the deliberate exception to that conflict rule. Download, verification, and private same-filesystem staging happen first so a bad candidate never disrupts active work. Activation then publishes account-wide maintenance intent, asks the daemon and every temporary local operation to cancel, and waits to a finite deadline for all coordinated CBM processes to exit. It holds the admission and lifetime barriers exclusively while changing the active binary, configuration, PATH, or indexes. New CBM work cannot enter during this window. Activation progress and results are recorded in `${CBM_CACHE_DIR}/logs/activation-events.ndjson`, and a successful command tells you to restart open coding-agent sessions so they launch the activated build.\n\nPackage-manager setup (npm, PyPI, or Go) verifies and publishes a coherent private cached runtime set. Sidecars are replaced before the executable with per-file atomic renames; an interrupted multi-file publication is detected and repaired on the next launch rather than being described as one crash-atomic filesystem transaction. It does not replace the active native installation and therefore does not stop running CBM sessions. When that cached binary is executed, it still enters the same exact-build admission barrier. The shell and PowerShell installers invoke the verified candidate's native `install` command, so they do receive the full account-wide activation guarantee.\n\nThe ordinary `cli` mode is intentionally separate: it runs one command locally and never starts or connects to the coordination daemon, registers a daemon session, or starts watchers/UI. Its only shared state is the OS admission barrier plus per-project locks for graph mutations. While the command is running, a temporary monitor lets activation cancel that operation and its supervised worker safely; the monitor exits with the command and never becomes a standing daemon. See [CLI Mode](#cli-mode) for d"
-    },
-    "brief": {
-      "summary": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
-      "problem": "该项目围绕“High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.”提供开源实现或相关资源。",
-      "highlights": [
-        "可以用来试用或扩展：High-performance code intell",
-        "主要使用 C 开发",
-        "主题包括：aider、ast、claude-code、code-analysis"
-      ],
-      "target_users": [
-        "希望了解或试用该项目方向的开发者"
-      ],
-      "why_trending": "今日新增约 190 个 Star，进入 GitHub Trending。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
-      "category": "AI Agent / Skills",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
-    },
-    "interest": {
-      "repository": "DeusData/codebase-memory-mcp",
       "score": 76,
       "category": "AI Agent / Skills",
-      "reason": "匹配关键词：mcp、codex、agent",
-      "generated_by_ai": false,
-      "velocity_score": 69,
+      "reason": "可组合 Agent 技能框架与开发方法论",
+      "generated_by_ai": true,
+      "velocity_score": 81,
       "freshness_score": 40,
-      "ranking_score": 61.2
+      "ranking_score": 64.2
     }
   },
   {
     "repository": {
-      "rank": 11,
-      "full_name": "NguyenSiTrung/VieNeuTTSApp",
-      "url": "https://github.com/NguyenSiTrung/VieNeuTTSApp",
-      "description": "Cross-platform, fully-offline Vietnamese/English text-to-speech desktop workstation powered by VieNeu-TTS v3 Turbo (ONNX/CUDA, Voice Cloning, EPUB Audiobooks, PySide6/QML)",
-      "language": "Python",
-      "total_stars": 66,
-      "forks": 18,
-      "stars_today": 0,
-      "source": "radar",
+      "rank": 15,
+      "full_name": "harry7557558/spirula-studio",
+      "url": "https://github.com/harry7557558/spirula-studio",
+      "description": "Cross-vendor 3D Gaussian Splatting trainer - video to splat to mesh, Vulkan or CUDA.",
+      "language": "C++",
+      "total_stars": 830,
+      "forks": 58,
+      "stars_today": 69,
+      "source": "trending",
       "history_label": "本周首次收录",
-      "star_gain": 0
+      "star_gain": 69
     },
     "details": {
       "topics": [
-        "audiobook-generator",
-        "cross-platform",
-        "desktop-app",
-        "offline-tts",
-        "onnx",
-        "onnxruntime",
-        "pyside6",
-        "qml",
-        "speech-synthesis",
-        "text-to-speech",
-        "tts",
-        "vieneu-tts",
-        "vietnamese-tts",
-        "voice-cloning"
+        "360-camera",
+        "3d-gaussian-splatting",
+        "3d-reconstruction",
+        "3dgs",
+        "3dgs-acceleration",
+        "computer-vision",
+        "cross-vendor",
+        "cuda",
+        "gaussian-splatting",
+        "mesh-generation",
+        "quantized-training",
+        "structure-from-motion",
+        "vram-optimization",
+        "vulkan"
       ],
-      "license_name": "",
-      "created_at": "2026-08-26T11:03:46Z",
-      "updated_at": "2026-09-24T07:47:25Z",
-      "pushed_at": "2026-09-24T07:47:21Z",
-      "open_issues": 0,
+      "license_name": "GPL-3.0",
+      "created_at": "2024-05-04T03:03:05Z",
+      "updated_at": "2026-09-24T08:11:01Z",
+      "pushed_at": "2026-09-24T04:27:11Z",
+      "open_issues": 30,
       "homepage": "",
       "archived": false,
-      "default_branch": "main",
-      "readme": "<p align=\"center\">\n  <img src=\"src/vienetts_app/ui/assets/icons/icon_128x128.png\" width=\"96\" alt=\"VieNeuTTS logo\" />\n</p>\n\n# VieNeuTTS\n\n**Cross-platform, fully-offline Vietnamese/English text-to-speech workstation.**\n\nPowered by [VieNeu-TTS v3 Turbo](https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo)\nthrough the `vieneu` Python SDK. On-device ONNX inference on CPU (int8 by\ndefault) with optional NVIDIA CUDA — no cloud, no telemetry: text and audio\nnever leave the machine.\n\n<p align=\"center\">\n  <img alt=\"Platforms\" src=\"https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"Python\" src=\"https://img.shields.io/badge/python-3.10%E2%80%933.13-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"UI\" src=\"https://img.shields.io/badge/UI-PySide6%20%2B%20QML-2dd4bf?labelColor=0f1117\" />\n  <img alt=\"License\" src=\"https://img.shields.io/badge/license-Apache--2.0-2dd4bf?labelColor=0f1117\" />\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/text-studio.png?v=3\" width=\"880\"\n       alt=\"VieNeuTTS text studio: mixed Vietnamese/English synthesis with an emotion tag and a replaying waveform\" />\n</p>\n\n*The text studio, mid-replay: mixed Vietnamese/English input with an inline\n`[cười]` emotion tag, one of ~20 preset voices, and the finished-audio\nwaveform.*\n\n## Features\n\n### 🎙 Text studio — free-text synthesis\n\n- Vietnamese/English **code-switching** in a single request\n- ~20 preset voices grouped **Bắc / Trung / Nam** (North/Central/South), with\n  **one-click audition** from the redesigned voice picker — regional pills,\n  gender/style badges, search, and cached pre-listen samples that never touch\n  your editor text\n- Inline emotion tags: `[cười] [thở dài] [hắng giọng]` (the three cues the\n  v3 Turbo emotion checkpoint was trained on)\n- **Streaming playback** — first chunk observed at about 100 ms in a\n  direct-engine measurement on one Apple M4; end-to-end numbers are tracked\n  in [docs/performance](docs/performance/README.md)\n- 48 kHz WAV or MP3 export — the save dialog's file-type filter picks the\n  format (MP3 encodes via libsndfile, no ffmpeg needed)\n- **Foreground job state** — the status line under the action bar follows\n  your text action (`queued` → `generating`) with its own cancel button.\n  Background audiobook renders never flip it, and cancelling a text action\n  never drops queued audiobook work.\n- **Live preview & silent generation** — the \"Phát trực tiếp\" toggle is **OFF**\n  by default: synthesis generates a clean, validated WAV file directly on disk\n  and automatically replays it from the start upon completion. This eliminates\n  audio buffer underruns when synthesizing on CPU.\n\n### 📄 Long documents\n\nThe paragraph studio runs in two modes behind one docked action bar: a\n**single-document editor** and a **multi-file batch queue**. Import `.txt`,\n`.md`, `.docx`, `.pdf`, or `.srt` and synthesize long-form text with the same\nvoice controls — or drop several files onto the queue and render them back to\nback. Subtitle files import as clean spoken text by default, with an option to\nkeep the original timecodes.\nFor texts longer than ~2,000 words or 10,000 characters, synthesize through the\n**Audiobook (EPUB) studio** (which splits and caches chapter by chapter) rather\nthan submitting one giant block to the Text studio. This avoids ONNX Runtime CPU\nmemory arena growth (~2.5 GB committed memory) and ensures stable processing.\nBoth studios surface an inline advisory once the input passes 2,000 characters,\npointing at the same guidance.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/paragraph-studio.png?v=3\" width=\"880\"\n       alt=\"Paragraph studio with an imported Vietnamese document\" />\n</p>\n\n### 🎛 Audio studio — post-synthesis polish\n\nSend any generated take to the **Studio** tab (from Text, Paragraph, or a\nrendered audiobook chapter) and finish it non-destructively:\n\n- **Op stack** — gain (dB), peak normalize (0 dBFS), silence trim, speed,\n  inter-clip gap, and fade in/out stack as undoable steps; reset returns to\n  the original audio\n- **Clip list** — per-clip preview, reorder, and **segment\n  re-generation**: re-synthesize one sentence with a different voice or edited\n  text without touching the rest of the take\n- **Master monitor** — real-time 48 kHz waveform with click-to-seek and a\n  pause/resume transport; export the mix as WAV or MP3\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/studio.png\" width=\"880\"\n       alt=\"Audio studio: master waveform paused mid-preview, op stack, and clip list\" />\n</p>\n\n### 🧬 Instant voice cloning\n\nClone any voice from a 3–8 s reference clip — optional denoise, instant\npreview, and the cloned voice becomes selectable in every studio.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/voice-cloning.png?v=3\" width=\"880\"\n       alt=\"Voice cloning tab with a reference clip and a cloned voice entry\" />\n</p>\n\n### 📚 EPUB audiobook studio\n\nChapter-aware playback, per-chapter WAV cache, resume, ordered export,\nkaraoke transcript sync with click-to-seek, render ETA, and render-all\nprogress.\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/audiobook-studio.png?v=3\" width=\"880\"\n       alt=\"Audiobook studio with a rendered chapter and the player dock paused mid-chapter\" />\n</p>\n\n### ⚙️ Engine auto-detection, speech tuning & bilingual UI\n\nAutomatic CPU/ONNX vs NVIDIA/CUDA detection with manual override. In Settings,\na **reading-speed control (0.5×–2.0×)** and a **sentence-pause control (0–2 s)**\ntime-stretch the output with a pure-NumPy WSOLA implementation — pitch is\npreserved without the phase-vocoder rumble — on both the batch and streaming\npaths. The UI switches between **Tiếng Việt** and English instantly — no\nrestart.\n\n### 🌏 Optional Qwen engines (CustomVoice / Base)\n\nBeyond VieNeu's Vietnamese/English, the app can run the pinned **Qwen 0.6B**\nengines — **CustomVoice** (10 languages, 9 fixed speakers) and **Base** (the\nsame languages with your own enrolled voice clones). Both install on demand\nfrom Settings with checksum-verified runtime and model packs (offline-pack\nimport supported), run in an isolated model-host subprocess, and follow the\nsame text, batch, audiobook, subtitle, Studio, export, and cache surfaces as\nVieNeu. VieNeu remains the default, and switching engines is explicit and\nrefused mid-job. See [Optional Qwen engines](#optional-qwen-engines-customvoice--base).\n\n**Updates:** the app checks GitHub Releases once at startup (silent when\noffline or current) and the Settings → Cập nhật card shows the running\nversion with a **Kiểm tra** button. When a newer release exists, the card\nsuggests the file for the running platform (Windows / Linux / macOS) with\nan expander for the other platforms' files — downloads open in the browser\nand install by re-extracting over the old folder (Linux: re-run\n`share/linux/install.sh`).\n\n<p align=\"center\">\n  <img src=\"docs/screenshots/settings.png?v=4\" width=\"880\"\n       alt=\"Settings (English UI): reading speed and sentence-pause sliders, live-preview toggle, and the Appearance section\" />\n</p>\n\n## Status\n\nCore features are implemented and tested (1,700+ tests collected at time of\nwriting). Releases v0.1.0 through v0.1.16 are published through the\ntag-triggered pipeline below — every packaged binary is smoke-verified with\nreal synthesis before it ships. Remaining before a 1.0: macOS notarization\n(builds are ad-hoc signed today — see the Gatekeeper notes under Releases)\nand the Phase 6 hardening backlog — see [PROJECT_PLAN.md](PROJECT_PLAN.md)\nand [conductor/tracks.md](conductor/tracks.md).\n\n## Requirements\n\n- Python 3.10–3.13 (3.13 recommended — the SDK does not support 3.14 yet)\n- `uv` for environment management\n- A display server for the GUI (the headless smoke CLI works without one)\n- Model files cached or bundled (first synthesis needs a one-time download —\n  see [Models](#models))\n\nOptional GPU: an NVIDIA GPU with a driver that supports CUDA 12.x\n(`nvidia-smi` reports `CUDA Version` 12.0 or later — R527+ on Windows).\n\n## Setup\n\n```bash\nuv venv --python 3.13 .venv\nuv pip install -p .venv/bin/python -e \".[dev]\"\n```\n\nCUDA from source (Windows/Linux x64, Python 3.13): the app's CUDA engine always\nruns from the checksum-verified managed runtime — install it from the Settings\nCUDA runtime card even in a source checkout (see [Managed CUDA\nruntime](#managed-cuda-runtime)). The optional `[gpu]` extra is not loaded by\nthe engine. Bare `torch==2.8.0` resolves the CPU wheel from PyPI; a locally\nCUDA-capable torch (for the Settings local-runtime scan and your own tooling)\ncomes from the PyTorch cu128 index:\n\n```bash\nuv pip install -p .venv/bin/python --index-url https://download.pytorch.org/whl/cu128 \"torch==2.8.0+cu128\" \"torchaudio==2.8.0+cu128\" \"transformers==4.57.6\"\n```\n\nThe `+cu128` builds satisfy the `[gpu]` pins (`2.8.0+cu128 == 2.8.0` per PEP 440),\nand local-CUDA diagnostics recognise exactly that layout. macOS stays CPU-only.\n\n## Managed CUDA runtime\n\nEvery released download is CPU-only: choose the normal Windows, Linux, or\nmacOS artifact and it runs the ONNX CPU engine without CUDA or Python setup.\nOn **Windows x64** and **Linux x64**, an NVIDIA GPU with a CUDA 12.x-compatible\ndriver can opt into CUDA from the Settings CUDA runtime card. The app downloads\nthe pinned runtime only after you explicitly select Download; macOS remains\nCPU-only.\n\nThe runtime is checksum-verified before installation and is available offline\nafter it is installed. Diagnostics describe the managed runtime and NVIDIA\ndriver status, but the app never executes a locally detected Python runtime or\npackages from it. You can remove a ready inactive runtime from Settings. If\nCUDA has already loaded, restart the app before removal takes effect.\n\nSource checkouts use the same managed runtime, and the benchmark harnesses\nlocate it automatically (`--cuda-runtime DIR` points them at another runtime\nroot).\n\nMaintainers refresh the reviewed wheel metadata (URL, filename, size, and\nSHA-256) with:\n\n```bash\npython scripts/lock_cuda_runtime.py --platform windows-x64 --output /tmp/windows.py\n```\n\nReview the generated direct official URLs and records before copying them into\nthe committed manifest. This maintenance command uses pip's JSON report; the\npackaged application never runs it or pip.\n\n## Optional Qwen engines (CustomVoice / Base)\n\nThe app ships with VieNeu as its Vietnamese-first engine and can additionally\nrun the pinned **Qwen 0.6B** engines. Both are optional and fully on-device;\nneither is bundled, and neither is installed unless you ask for it from\nSettings.\n\n- **Qwen CustomVoice 0.6B** — 10 languages (Chinese, English, Japanese, Korean,\n  German, French, Russian, Portuguese, Spanish, Italian) with 9 fixed speakers.\n  Vietnamese is **not** one of them, which is why VieNeu stays the default.\n- **Qwen Base 0.6B** — the same language set with your own enrolled voice\n  clones (a 3–8 s reference clip plus its transcript).\n- **No style controls on either checkpoint.** Both 0.6B models ignore\n  `instruct` (the pinned `qwen-tts` 0.1.1 drops it for 0.6B, and Qwen's own\n  model table lists instruction control for the 1.7B models only), and they\n  read the text as written rather than interpreting VieNeu's inline emotion\n  tags. The Text tab therefore replaces its `[cười]`-style chips with the\n  reason when a Qwen profile is active: tone comes from the chosen speaker\n  (CustomVoice) or from your enrolled reference clip (Base).\n\nWhat to expect:\n\n- **Two installs per profile — in either format.** Under the default GGUF\n  format that is a managed native runtime pack (~15–30 MB per platform cell)\n  plus a 0.6–1.0 GB talker per variant, with one tokenizer GGUF per\n  quantization (291 MB `Q8_0` / 255 MB `Q4_K_M`, shared by both profiles);\n  under the official format it is a managed runtime (PyTorch + `qwen-tts`,\n  roughly 1.5–3 GB depending on platform and CPU/CUDA/MPS) plus the model\n  itself (~2.5 GB per profile; installing both needs ~4.3 GB because they\n  share ~683 MB of tokenizer files). Settings sh"
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n![](assets/banner.png)\n\n# Spirula Studio\n\n![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)&nbsp;\n![GitHub Releases](https://img.shields.io/github/v/release/harry7557558/spirula-studio)&nbsp;\n![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)\n\n[**Download**](https://github.com/harry7557558/spirula-studio/releases/) &#8226;\n[**Build from Source**](#build-from-source) &#8226;\n[**Gallery**](#gallery) &#8226;\n[**Web Viewer**](https://harry7557558.github.io/spirula-studio/viewer/)\n\n</div>\n\nSpirula Studio trains 3D Gaussian Splatting models &ndash; from raw photo/video to splat to textured mesh &ndash; in one self-contained binary. No Python/PyTorch, no separate COLMAP install. Runs on NVIDIA, AMD, Intel, and Apple GPUs via Vulkan, trains 10M full-SH Gaussians in 8 GB VRAM, and has native support for fisheye and 360° cameras.\n\n<div align=\"center\">\n\n![Spirula Studio - Open Source 3D Gaussian Splatting Pipeline](https://spirula.studio/assets/video/spirula-studio-hero.webp?md5=0ff79909f5c779509664da20b9f9dd61)\n\n<sup>Dataset credit: [Garage](https://www.kaggle.com/datasets/simonbethke/garage) by Simon Bethke (CC BY-SA 4.0); Flight Systems and Control Lab at UTIAS; MegaDepth-X; Mip-NeRF 360.</sup>\n\n</div>\n\n## Features\n\n- Cross vendor support via Vulkan compute &ndash; Runs on **NVIDIA, AMD, Intel, and Apple** GPUs\n\n- One strategy combining advantages of **MCMC/IGS+/MRNF** &ndash; Sharper results, fewer floaters, from objects to large scenes\n\n- Extreme **VRAM efficiency** with quantized training &ndash; Up to 10 million SH3 Gaussians in 8GB VRAM\n\n- Native **360° camera** and **equirectangular** support &ndash; Load a dataset and train, no undistortion needed\n\n- Modified **Bilateral grid** and **PPISP** for exposure/WB correction &ndash; Improving quality without unwanted color shift or darkening\n\n- Built-in **lightning-fast SfM**, **AI masking**, frame extraction from videos &ndash; No need to wait for COLMAP or run separate scripts\n\n- Depth/normal, meshing, skybox, linear color... And more.\n\n## News\n\n- **September 23, 2026: Editing and rendering features** &ndash; Editing features for 3DGS models, sparse reconstructions, meshes, and masks have been added, along with support for exporting image and video renders.\n\n- **September 10, 2026: Metric scale** &ndash; The dataset creation module now uses telemetry metadata in common video and image formats to recover metric scale and orientation, addressing the popular report that reconstruction results are too large/small or tilted.\n\n- **September 3, 2026: LoMa feature support** &ndash; The SfM module now supports [LoMa](https://github.com/davnords/LoMa) for feature detection and matching on difficult datasets.\n\n- **August 14, 2026: macOS support** &ndash; Support for training on macOS/Apple Silicon has been validated. The app can now be downloaded from [Releases page](https://github.com/harry7557558/spirula-studio/releases/).\n\n- **August 8, 2026: Multilingual support** &ndash; Multilingual support has been added, available to both GUI and CLI. Supported languages: English, 日本語, 简体中文, 繁體中文, 한국어, Deutsch, Français, Español, Português, Italiano, Nederlands, Русский, Türkçe.\n\n\n## Download\n\nBinaries for Windows, Linux, and macOS can be downloaded from [Releases page](https://github.com/harry7557558/spirula-studio/releases/). Simply select the one for your platform, download and unzip, and double click to open the GUI.\n\nIf you are training on remote/cloud GPUs, you may use the CLI &ndash; Run `spirula --help` for details. By default, `spirula train` command will serve a viewer on an HTTP port, one you can forward over ssh and view training progress in your web browser.\n\n\n## Build from source\n\nTo build from source, Spirula Studio provides two backends:\n\n- **Vulkan (Recommended):** The cross-platform and cross-vendor option. Most tested. Works on all major GPUs. Faster to build and produces smaller binary.\n\n- **CUDA:** Legacy option for CUDA-capable NVIDIA GPUs.\n\nBoth provide the same training and meshing functionality. CUDA backend may be faster or slower than Vulkan depending on GPU driver, with difference generally within a few percents. Vulkan backend can be slightly more VRAM efficient in some cases.\n\n| Backend | GPU/Vendor Support | Platform Support | Dependencies | Additional Features |\n|--------|--------|--------|--------|--------|\n| Vulkan | NVIDIA, AMD, Intel, Apple Silicon | Windows, Linux, macOS | Vulkan/MoltenVK, CMake/Ninja | Native support for SfM, frame extraction from videos, and AI masking |\n| CUDA | Most NVIDIA GPUs | Windows, Linux | CUDA, CMake/Ninja | - |\n\n<details>\n\n<summary>Details for building the Vulkan backend</summary>\n\n<br/>\n\nMake sure you have Vulkan SDK installed. On macOS, MoltenVK is automatically fetched by CMake. Clone the repository and run the commands:\n\n### Windows with MSVC:\n\n```bat\ncd spirula-studio\\\n.\\build_develop.bat -DSS_BACKEND=vulkan -DSS_ENABLE_PATENTED=ON\n```\n\nIf it builds successfully, you get `build_vulkan\\spirula.exe`.\n\n### Windows with GCC/Clang:\n\n```bat\ncd spirula-studio\\\ncmake -G Ninja -B build_vulkan -DCMAKE_BUILD_TYPE=Release -DSS_BACKEND=vulkan -DSS_ENABLE_PATENTED=ON -DCMAKE_MAKE_PROGRAM=Ninja\ncmake --build build_vulkan -j\n```\n\nPass `-DCMAKE_C_COMPILER` and `-DCMAKE_CXX_COMPILER` to the first `cmake` command if needed.\n\nIf it builds successfully, you get `build_vulkan\\spirula.exe`.\n\n### Linux:\n\n```bash\ncd spirula-studio/\nbash build_develop.bash -DSS_BACKEND=vulkan -DSS_ENABLE_PATENTED=ON\n```\n\nIf it builds successfully, you get `build_vulkan/spirula` binary.\n\n### macOS:\n\n```bash\ncd spirula-studio/\nbash build_develop.bash -DSS_BACKEND=vulkan -DSS_ENABLE_PATENTED=ON\ncmake --build build --target macos_app\ncmake --build build --target macos_dmg\n```\n\nmacOS has only the one backend, so it builds into `build/` rather than into a per-backend tree. If it builds successfully, you get `build/spirula` binary similar to Linux. Additionally, it wraps that binary in a double-clickable `build/Spirula Studio.app`, as well as disk image `build/Spirula Studio.dmg`. MoltenVK is statically linked by default and will run on a Mac without dependency installed.\n\n### Notes regarding third-party licensing\n\n`-DSS_ENABLE_PATENTED=ON` enables decoding video on the GPU instead of shelling out to ffmpeg (about 15x faster frame extraction, and without need to install ffmpeg). However, AVC/HEVC bitstream parsers carry third-party patent exposure. If you turn this on, you are responsible for ensuring compliance with local patent laws regarding AVC/HEVC playback.\n\nMasking needs a SAM checkpoint, which the GUI downloads on first use and caches. The checkpoints are Meta's models under Meta's licenses &ndash; SAM 2.1 is Apache-2.0, SAM 3 is under Meta's own, non-standard license. They are never bundled, and the GUI shows the terms before fetching anything. On the command line, point `--model` at a file you downloaded yourself.\n\n</details>\n\n<details>\n\n<summary>Details for building the CUDA backend</summary>\n\n<br/>\n\nMake sure you have a recent version of CUDA installed. On Windows, you also need MSVC compiler compatible with your CUDA version. Clone the repository and run the commands:\n\n### Windows:\n\n```bat\ncd spirula-studio\\\n.\\build_develop.bat -DSS_BACKEND=cuda\n```\n\nIf it builds successfully, you get `build_cuda\\spirula.exe`.\n\n### Linux:\n\n```bash\ncd spirula-studio/\nbash build_develop.bash -DSS_BACKEND=cuda\n```\n\nIf it builds successfully, you get `build_cuda/spirula` binary.\n\n</details>\n\n## Gallery\n\nYou can find some professional-quality splats trained by Spirula Studio from [Megascapes Library](https://library.getmegascapes.com/) and their [SuperSplat page](https://superspl.at/user/megascapes).\n\nCollection of splats created by the users of Spirula Studio can also be found on [SuperSplat page](https://superspl.at/explore/software/spirula-studio).\n\nSome splats created by the author of Spirula Studio can also be found on my [SuperSplat page](https://superspl.at/user?id=harry7557558).\n\n<!-- ![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/643dadb5/v1/m.webp)&nbsp;\n![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/ed448729/v1/m.webp)&nbsp;\n![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/05e46a4b/v1/m.webp)&nbsp;\n![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/9dd8696b/v1/m.webp)&nbsp;\n![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/0bcb61c6/v1/m.webp)&nbsp;\n![](https://s3-eu-west-1.amazonaws.com/images.playcanvas.com/splat/cdd6f9a2/v1/m.webp)&nbsp; -->\n\n## Trivia\n\nSpirula Studio (formerly spirulae-splat) is named after the now-inactive project [spirulae](https://github.com/harry7557558/spirulae), which was named after the [deep-ocean cephalopod mollusk](https://en.wikipedia.org/wiki/Spirula).\n\nSpirula Studio is developed and maintained almost entirely by one person. Issues and PRs welcome &ndash; I sometimes respond late, but rest assured that I do review them all.\n"
     },
     "brief": {
-      "summary": "Cross-platform, fully-offline Vietnamese/English text-to-speech desktop workstation powered by VieNeu-TTS v3 Turbo (ONNX/CUDA, Voice Cloning, EPUB Audiobooks, PySide6/QML)",
-      "problem": "该项目围绕“Cross-platform, fully-offline Vietnamese/English text-to-speech desktop workstation powered by VieNeu-TTS v3 Turbo (ONNX/CUDA, Voice Cloning, EPUB Audiobooks, PySide6/QML)”提供开源实现或相关资源。",
+      "summary": "跨平台3D高斯泼溅训练工具，视频到splat再到网格",
+      "problem": "3DGS训练通常要装Python、PyTorch和COLMAP，环境繁琐，且多半只支持NVIDIA显卡",
       "highlights": [
-        "可以用来试用或扩展：Cross-platform, fully-offlin",
-        "主要使用 Python 开发",
-        "主题包括：audiobook-generator、cross-platform、desktop-app、offline-tts"
+        "可以用普通视频或照片训练3D高斯模型",
+        "可以在AMD、Intel、Apple显卡上跑训练",
+        "可以导出带纹理网格和图像、视频渲染"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "3D重建爱好者",
+        "游戏影视美术",
+        "图形开发者"
       ],
-      "why_trending": "近期保持活跃，ACG 雷达发现时已有 66 个 Star。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
-      "category": "语音 / 配音",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "why_trending": "今日新增69星；不依赖CUDA，明显降低3DGS上手门槛",
+      "caveat": "GPL-3.0授权；AI遮罩需另下载Meta模型",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
-      "repository": "NguyenSiTrung/VieNeuTTSApp",
-      "score": 84,
-      "category": "语音 / 配音",
-      "reason": "匹配关键词：text-to-speech、tts、voice cloning",
-      "generated_by_ai": false,
-      "velocity_score": 0,
-      "freshness_score": 85,
-      "ranking_score": 54.8
+      "repository": "harry7557558/spirula-studio",
+      "score": 82,
+      "category": "3D / VTuber",
+      "reason": "视频转 3D 高斯泼溅与网格重建管线",
+      "generated_by_ai": true,
+      "velocity_score": 56,
+      "freshness_score": 20,
+      "ranking_score": 58.0
     }
   },
   {
     "repository": {
-      "rank": 2,
-      "full_name": "defold/defold",
-      "url": "https://github.com/defold/defold",
-      "description": "Defold is a completely free to use game engine for development of desktop, console, mobile and web games.",
-      "language": "C++",
-      "total_stars": 6311,
-      "forks": 456,
-      "stars_today": 0,
-      "source": "radar",
+      "rank": 3,
+      "full_name": "davila7/claude-code-templates",
+      "url": "https://github.com/davila7/claude-code-templates",
+      "description": "CLI tool for configuring and monitoring Claude Code",
+      "language": "Python",
+      "total_stars": 31635,
+      "forks": 3592,
+      "stars_today": 389,
+      "source": "trending",
       "history_label": "本周首次收录",
-      "star_gain": 0
+      "star_gain": 440
     },
     "details": {
       "topics": [
-        "c-plus-plus",
-        "clojure",
-        "defold",
-        "game-development",
-        "game-engine",
-        "gamedev",
-        "hacktoberfest",
-        "lua",
-        "multi-platform"
+        "anthropic",
+        "anthropic-claude",
+        "claude",
+        "claude-code"
       ],
-      "license_name": "",
-      "created_at": "2012-05-13T16:03:44Z",
-      "updated_at": "2026-09-24T07:53:40Z",
-      "pushed_at": "2026-09-24T07:57:31Z",
-      "open_issues": 959,
-      "homepage": "https://www.defold.com",
+      "license_name": "MIT",
+      "created_at": "2025-07-04T01:26:26Z",
+      "updated_at": "2026-09-24T08:06:37Z",
+      "pushed_at": "2026-09-24T03:04:57Z",
+      "open_issues": 282,
+      "homepage": "https://aitmpl.com",
       "archived": false,
-      "default_branch": "dev",
-      "readme": "![CI - Main](https://github.com/defold/defold/workflows/CI%20-%20Main/badge.svg)\n![CI - Editor Only](https://github.com/defold/defold/workflows/CI%20-%20Editor%20Only/badge.svg)\n![CI - Engine nightly](https://github.com/defold/defold/workflows/CI%20-%20Engine%20nightly/badge.svg)\n\n[![Join the chat at https://discord.gg/cHBde7J](https://img.shields.io/discord/250018174974689280?color=%237289DA&label=defold&logo=discord&logoColor=white)](https://discord.gg/cHBde7J)\n\n# Defold\n\nRepository for the Defold engine, editor and command line tools.\n\n## Supported by\n[![](https://defold.com/images/logo/others/moonactive-github.png)](https://www.moonactive.com/)\n![](https://defold.com/images/spacer32.png)\n[![](https://defold.com/images/logo/others/rive-github.png)](https://www.rive.app)\n![](https://defold.com/images/spacer32.png)\n\n[![](https://defold.com/images/logo/others/heroiclabs-github.png)](https://www.heroiclabs.com)\n![](https://defold.com/images/spacer32.png)\n[![](https://defold.com/images/logo/others/poki-github.png)](https://www.poki.com)\n![](https://defold.com/images/spacer32.png)\n\n[![](https://defold.com/images/logo/others/denda-github.png)](https://denda-corporate.com/)\n![](https://defold.com/images/spacer32.png)\n[![](https://defold.com/images/logo/others/8bitskull-github.png)](https://www.8bitskull.com)\n![](https://defold.com/images/spacer32.png)\n[![](https://defold.com/images/logo/others/wavedash-github.png)](https://www.wavedash.com)\n![](https://defold.com/images/spacer32.png)\n\n## Folder Structure\n\n* **build_tools** - Build configuration and build tools used by build scripts\n* **ci** - Continuous integration files for GitHub CI ([more info](README_CI.md))\n* **com.dynamo.cr** - Bob\n* **engine** - Engine\n* **editor** - Editor\n* **external** - External libraries that can be rebuilt using our build system\n* **packages** - Prebuilt external packages\n* **scripts** - Build and utility scripts\n* **share** - Misc shared stuff used by other tools. build configuration, valgrind suppression files, etc.\n* **share/ext** - External libraries that are built using custom build steps\n\n## Setup and Build\n\n### Setup Engine\n\nFollow the [setup guide](README_SETUP.md) to install all of the tools needed to build the Defold engine.\n\n### Build Engine\n\nFollow the [build instructions](README_BUILD.md) to build the engine and command line tools.\n\n### Setup, Build and Run Editor\n\nFollow the [instructions](editor/README.md) in the editor folder.\n\n## Engine Overview\n\nAn overview of the engine architecture and additional engine information can be [viewed here](./engine/docs/README.md).\n\n### Platform Specifics\n\n* [iOS](README_IOS.md)\n* [Android](README_ANDROID.md)\n* [HTML5/Emscripten](README_EMSCRIPTEN.md)\n\n## Releasing a new version\n\nThe release process is documented [here](RELEASE.md).\n\n## Complying with licenses\n\nA full list of third party software licenses along with information on how to give attribution and include the licenses in your game can be found in the [COMPLYING WITH LICENSES](/COMPLYING_WITH_LICENSES.md) document in the Defold repository on GitHub.\n"
+      "default_branch": "main",
+      "readme": "[![npm version](https://img.shields.io/npm/v/claude-code-templates.svg)](https://www.npmjs.com/package/claude-code-templates)\n[![npm downloads](https://img.shields.io/npm/dt/claude-code-templates.svg)](https://www.npmjs.com/package/claude-code-templates)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)\n[![Sponsored by Z.AI](https://img.shields.io/badge/Sponsored%20by-Z.AI-2563eb?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiAyMkgyMkwxMiAyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+)](https://z.ai/subscribe?ic=8JVLJQFSKB&utm_source=github&utm_medium=badge&utm_campaign=readme)\n[![Claude for Open Source](https://img.shields.io/badge/Claude-Open%20Source%20Program-D97757?style=flat&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIzIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==)](https://claude.com/contact-sales/claude-for-oss)\n[![Neon Open Source Program](https://img.shields.io/badge/Neon-Open%20Source%20Program-00E599?style=flat)](https://get.neon.com/4eCjZDz)\n[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-sponsor-EA4AAA?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/davila7)\n[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/daniavila)\n[![GitHub stars](https://img.shields.io/github/stars/davila7/claude-code-templates.svg?style=social&label=Star)](https://github.com/davila7/claude-code-templates)\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/15113\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/repositories/15113\" alt=\"davila7%2Fclaude-code-templates | Trendshift\" style=\"width: 200px; height: 40px;\" width=\"125\" height=\"40\"/>\n  </a>\n  <br />\n  <br />\n  <a href=\"https://vercel.com/oss\">\n  <img alt=\"Vercel OSS Program\" src=\"https://vercel.com/oss/program-badge.svg\" />\n  </a>\n  &nbsp;&nbsp;\n  <a href=\"https://get.neon.com/4eCjZDz\">\n  <img alt=\"Neon Open Source Program\" src=\"https://img.shields.io/badge/Neon-Open%20Source%20Program-00E599?style=for-the-badge\" />\n  </a>\n  &nbsp;&nbsp;\n  <a href=\"https://claude.com/contact-sales/claude-for-oss\">\n  <img alt=\"Claude for Open Source\" src=\"docs/claude-oss-badge.svg\" height=\"48\" />\n  </a>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://get.brightdata.com/lcqorc6nzp9w\" target=\"_blank\">\n    <img src=\"https://avatars.githubusercontent.com/u/213028976?s=200&v=4\" alt=\"Bright Data\" width=\"90\" />\n  </a>\n</p>\n\n<h3 align=\"center\">Sponsored by <a href=\"https://get.brightdata.com/lcqorc6nzp9w\">Bright Data</a></h3>\n\n<p align=\"center\">\n  <b>Bright Data proudly supports this project.</b><br />\n  Connect Claude Code to live web data — try their <a href=\"https://get.brightdata.com/lcqorc6nzp9w\">Skills and MCPs</a> for web search, scraping, and structured data feeds.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://get.brightdata.com/lcqorc6nzp9w\">\n    <img src=\"https://img.shields.io/badge/Try%20Bright%20Data-Free-2563eb?style=for-the-badge\" alt=\"Try Bright Data Free\" />\n  </a>\n</p>\n\n```bash\n# Install the Bright Data Skills + MCP for Claude Code\nnpx claude-code-templates@latest --skill web-data/search,web-data/scrape,web-data/data-feeds,web-data/bright-data-mcp,web-data/bright-data-best-practices,development/brightdata-local-search --mcp web-data/brightdata --yes\n```\n\n---\n\n# Claude Code Templates ([aitmpl.com](https://aitmpl.com))\n\n**Ready-to-use configurations for Anthropic's Claude Code.** A comprehensive collection of AI agents, custom commands, settings, hooks, external integrations (MCPs), and project templates to enhance your development workflow.\n\n## Browse & Install Components and Templates\n\n**[Browse All Templates](https://aitmpl.com)** - Interactive web interface to explore and install 100+ agents, commands, settings, hooks, and MCPs.\n\n<img width=\"1787\" height=\"958\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d84feaa4-f871-4843-bbee-42d8f51b2f21\" />\n\n\n## 🚀 Quick Installation\n\n```bash\n# Install a complete development stack\nnpx claude-code-templates@latest --agent development-team/frontend-developer --command testing/generate-tests --mcp development/github-integration --yes\n\n# Browse and install interactively\nnpx claude-code-templates@latest\n\n# Install specific components\nnpx claude-code-templates@latest --agent development-tools/code-reviewer --yes\nnpx claude-code-templates@latest --command performance/optimize-bundle --yes\nnpx claude-code-templates@latest --setting performance/mcp-timeouts --yes\nnpx claude-code-templates@latest --hook git/pre-commit-validation --yes\nnpx claude-code-templates@latest --mcp database/postgresql-integration --yes\n```\n\n## What You Get\n\n| Component | Description | Examples |\n|-----------|-------------|----------|\n| **🤖 Agents** | AI specialists for specific domains | Security auditor, React performance optimizer, database architect |\n| **⚡ Commands** | Custom slash commands | `/generate-tests`, `/optimize-bundle`, `/check-security` |\n| **🔌 MCPs** | External service integrations | GitHub, PostgreSQL, Stripe, AWS, OpenAI |\n| **⚙️ Settings** | Claude Code configurations | Timeouts, memory settings, output styles |\n| **🪝 Hooks** | Automation triggers | Pre-commit validation, post-completion actions |\n| **🎨 Skills** | Reusable capabilities with progressive disclosure | PDF processing, Excel automation, custom workflows |\n\n## 🛠️ Additional Tools\n\nBeyond the template catalog, Claude Code Templates includes powerful development tools:\n\n### 📊 Claude Code Analytics\nMonitor your AI-powered development sessions in real-time with live state detection and performance metrics.\n\n```bash\nnpx claude-code-templates@latest --analytics\n```\n\n### 💬 Conversation Monitor  \nMobile-optimized interface to view Claude responses in real-time with secure remote access.\n\n```bash\n# Local access\nnpx claude-code-templates@latest --chats\n\n# Secure remote access via Cloudflare Tunnel\nnpx claude-code-templates@latest --chats --tunnel\n```\n\n### 🔍 Health Check\nComprehensive diagnostics to ensure your Claude Code installation is optimized.\n\n```bash\nnpx claude-code-templates@latest --health-check\n```\n\n### 🔌 Plugin Dashboard\nView marketplaces, installed plugins, and manage permissions from a unified interface.\n\n```bash\nnpx claude-code-templates@latest --plugins\n```\n\n## 📖 Documentation\n\n**[📚 docs.aitmpl.com](https://docs.aitmpl.com/)** - Complete guides, examples, and API reference for all components and tools.\n\n## Contributing\n\nWe welcome contributions! **[Browse existing templates](https://aitmpl.com)** to see what's available, then check our [contributing guidelines](CONTRIBUTING.md) to add your own agents, commands, MCPs, settings, or hooks.\n\n**Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.**\n\n## Attribution\n\nThis collection includes components from multiple sources:\n\n**Scientific Skills:**\n- **[K-Dense-AI/claude-scientific-skills](https://github.com/K-Dense-AI/claude-scientific-skills)** by K-Dense Inc. - MIT License (139 scientific skills for biology, chemistry, medicine, and computational research)\n\n**Official Anthropic:**\n- **[anthropics/skills](https://github.com/anthropics/skills)** - Official Anthropic skills (21 skills)\n- **[anthropics/claude-code](https://github.com/anthropics/claude-code)** - Development guides and examples (10 skills)\n\n**Community Skills & Agents:**\n- **[obra/superpowers](https://github.com/obra/superpowers)** by Jesse Obra - MIT License (14 workflow skills)\n- **[alirezarezvani/claude-skills](https://github.com/alirezarezvani/claude-skills)** by Alireza Rezvani - MIT License (36 professional role skills)\n- **[wshobson/agents](https://github.com/wshobson/agents)** by wshobson - MIT License (48 agents)\n- **NerdyChefsAI Skills** - Community contribution - MIT License (specialized enterprise skills)\n\n**Commands & Tools:**\n- **[awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)** by hesreallyhim - CC0 1.0 Universal (21 commands)\n- **[awesome-claude-skills](https://github.com/mehdi-lamrani/awesome-claude-skills)** - Apache 2.0 (community skills)\n- **move-code-quality-skill** - MIT License\n- **cocoindex-claude** - Apache 2.0\n\nEach of these resources retains its **original license and attribution**, as defined by their respective authors.\nWe respect and credit all original creators for their work and contributions to the Claude ecosystem.\n\n## 📄 License\n\nThis project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.\n\n## 🔗 Links\n\n- **🌐 Browse Templates**: [aitmpl.com](https://aitmpl.com)\n- **📚 Documentation**: [docs.aitmpl.com](https://docs.aitmpl.com)\n- **💬 Community**: [GitHub Discussions](https://github.com/davila7/claude-code-templates/discussions)\n- **🐛 Issues**: [GitHub Issues](https://github.com/davila7/claude-code-templates/issues)\n\n## Stargazers over time\n[![Stargazers over time](docs/star-history.svg)](https://www.aitmpl.com/component/skill/git/star-history-chart)\n\n---\n\n**⭐ Found this useful? Give us a star to support the project!**\n\n[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor%20on%20GitHub-%E2%9D%A4-EA4AAA?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/davila7)\n\n[![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&slug=daniavila&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/daniavila)\n"
     },
     "brief": {
-      "summary": "Defold is a completely free to use game engine for development of desktop, console, mobile and web games.",
-      "problem": "该项目围绕“Defold is a completely free to use game engine for development of desktop, console, mobile and web games.”提供开源实现或相关资源。",
+      "summary": "Claude Code 配置模板与监控命令行工具",
+      "problem": "Claude Code 的代理、命令和外部集成需手动配置，上手麻烦",
       "highlights": [
-        "可以用来试用或扩展：Defold is a completely free ",
-        "主要使用 C++ 开发",
-        "主题包括：c-plus-plus、clojure、defold、game-development"
+        "可以用 npx 一键装好代理、命令和 MCP",
+        "可以实时查看会话分析和用量监控",
+        "可以按需安装技能、钩子和项目设置"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "Claude Code 用户",
+        "AI 编程爱好者",
+        "开发团队"
       ],
-      "why_trending": "近期保持活跃，ACG 雷达发现时已有 6,311 个 Star。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
-      "category": "游戏开发",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "why_trending": "今日新增 389 Star，本周首次收录，总星数已超 3.1 万",
+      "caveat": "主要面向 Claude Code，其他 AI 编程工具未必适用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
-      "repository": "defold/defold",
-      "score": 72,
-      "category": "游戏开发",
-      "reason": "匹配关键词：gamedev、game engine",
-      "generated_by_ai": false,
-      "velocity_score": 0,
+      "repository": "davila7/claude-code-templates",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Code 配置与监控 CLI 工具链",
+      "generated_by_ai": true,
+      "velocity_score": 80,
       "freshness_score": 20,
-      "ranking_score": 39.0
+      "ranking_score": 54.0
     }
   },
   {
     "repository": {
-      "rank": 1,
-      "full_name": "KunMoe/kun-galgame-forum",
-      "url": "https://github.com/KunMoe/kun-galgame-forum",
-      "description": "🐳 The CUTEST visualnovel / galgame forum! Built with Nuxt4, GO Fiber and PostgreSQL. Kun Visual Novel forum 6th generation! 开源, 免费, 零门槛, 最先进的 Galgame 论坛社区!",
-      "language": "Go",
-      "total_stars": 2005,
-      "forks": 76,
+      "rank": 7,
+      "full_name": "Kevin-Liu-01/Claude-of-Tanks",
+      "url": "https://github.com/Kevin-Liu-01/Claude-of-Tanks",
+      "description": "A World of Tanks-style, Vite-powered, engine-free pure Three.js armored combat simulator resolving plate-level armor, ballistics, modules, spotting, and physics, with 121 tanks and 20 destructible battlefields. Playable entirely in the browser on desktop and mobile devices. Built end-to-end by a multi-agent Claude/Codex pipeline.",
+      "language": "TypeScript",
+      "total_stars": 438,
+      "forks": 86,
       "stars_today": 0,
       "source": "radar",
       "history_label": "本周首次收录",
@@ -340,67 +324,133 @@
     },
     "details": {
       "topics": [
-        "docker",
-        "dokploy",
-        "forum",
-        "galgame",
-        "go-fiber",
-        "gorm",
-        "jwt",
-        "nuxt",
-        "nuxt3",
-        "nuxt4",
-        "pinia",
-        "psql",
-        "redis",
-        "rss",
-        "tailwindcss-v4",
-        "typescript",
-        "visual-novel",
-        "vue",
-        "vue3"
+        "3d-game",
+        "browser-game",
+        "claude",
+        "game",
+        "gamedev",
+        "javascript",
+        "mobile-game",
+        "multi-agent",
+        "procedural-generation",
+        "tank-game",
+        "threejs",
+        "vite",
+        "webgl",
+        "world-of-tanks"
       ],
-      "license_name": "AGPL-3.0",
-      "created_at": "2023-12-02T09:13:38Z",
-      "updated_at": "2026-09-24T07:22:10Z",
-      "pushed_at": "2026-09-24T07:57:37Z",
-      "open_issues": 16,
-      "homepage": "https://kungal.com",
+      "license_name": "MIT",
+      "created_at": "2026-07-29T17:14:28Z",
+      "updated_at": "2026-09-24T08:08:11Z",
+      "pushed_at": "2026-09-24T08:08:07Z",
+      "open_issues": 1,
+      "homepage": "https://claudeoftanks.kevinliu.studio",
       "archived": false,
-      "default_branch": "master",
-      "readme": "![kun-galgame-forum](https://kungal.com/kungalgame.webp)\n\n### **[English](README.md)** | **[日本語](docs/readme/jp.md)** | **[简体中文](docs/readme/chs.md)** | **[繁體中文](docs/readme/cht.md)**\n\n**Contact us: [Telegram](https://telegram.me/kungalgame) | [Discord](https://discord.com/invite/5F4FS2cXhX)**\n\nThe image is sourced from the game [Ark Order](https://apps.qoo-app.com/en/app/9593) and features the character KUN (鲲).\n\n> **AI-assisted development:** Since version **5.1.0**, this project has used LLM-assisted development tools, including Codex and Claude Code. All code through version **5.0.70** was written entirely by hand. The last fully hand-written revision is [v5.0.70 (commit b4ad59e)](https://github.com/KunMoe/kun-galgame-forum/tree/b4ad59eb77d3eaf36d082aa528651039816e1dfa).\n\n# 鲲 Galgame 论坛 (KUN Galgame Forum)\n\n## Website Introduction\n\n鲲 Galgame is a community of people who love visual novels and Galgames. Its public sites include:\n\n- [鲲 Galgame 论坛](https://www.kungal.com) (this project)\n- [鲲 Galgame 表情包](https://sticker.kungal.com)\n- [鲲 Galgame 开发文档](https://soft.moe/kun-visualnovel-docs/kun-forum.html)\n- [鲲 Galgame 导航](https://nav.kungal.org/)\n- [鲲 Galgame 补丁站](https://www.moyu.moe)\n- [鲲 Galgame 论坛状态页](https://down.kungal.com/)\n\nFor more information, visit [About 鲲 Galgame](https://www.kungal.com/kungalgame).\n\n## Features\n\n- **Visual novel catalog** — Community submissions and review backed by the shared Catalog registry, with VNDB references, multilingual metadata, ratings, tags, engines, companies, and release information\n- **Resource sharing** — Game patches, translations, voice packs, and other resources with provider tracking plus platform and language filters\n- **Discussion forum** — Topics, replies, nested comments, polls, reactions, upvotes, favorites, drafts, and moderation workflows\n- **Collaborative editing** — Git-style proposals, review, revision history, reverts, and contributor credits through the Catalog editing engine\n- **Private messaging and chat** — Direct messages, contacts, read state, reactions, and recall support\n- **Moemoepoint** — An ecosystem-wide contribution score whose authoritative balance and ledger are owned by OAuth\n- **Rich content editing** — The shared KUN editor, built on Milkdown and CodeMirror, with KaTeX, syntax highlighting, mentions, and image uploads\n- **Personalized appearance** — Light and dark modes, configurable transparency, fonts, background images, and content-rating preferences\n- **Search and discovery** — Site-wide search across topics, replies, comments, users, and visual novels, plus rankings, activity feeds, release calendars, collections, and recommendations\n- **SEO and feeds** — Nuxt SSR, Schema.org metadata, chunked sitemaps, canonical redirects, and RSS feeds for topics and visual novels\n\n## Architecture\n\nThis repository is a **pnpm workspace monorepo** containing a Go API and a Nuxt frontend. It is a downstream application of [`nextmoe-infra`](https://github.com/next-moe/nextmoe-infra), the identity and shared-service hub for the KUN ecosystem.\n\n| Package    | Responsibility                                                                                                                                                                         |\n| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `apps/api` | **Go Fiber v3 BFF and REST API** — owns forum data and interactions, enriches responses, talks to shared services, and runs scheduled synchronization jobs                             |\n| `apps/web` | **Nuxt 4 SSR frontend** — Vue pages, components, Pinia state, validation, SEO, and browser interaction; Nitro serves feeds, sitemap data, content-image handling, and legacy redirects |\n\nThe forum owns topics, replies, messages, resources, ratings, quizzes, collections, toolsets, local counters, and its PostgreSQL schema. Shared capabilities remain single-sourced in infra:\n\n| Capability                                      | Source of truth                                                                               |\n| ----------------------------------------------- | --------------------------------------------------------------------------------------------- |\n| Identity and user profile                       | OAuth; numeric user IDs stay identical across services                                        |\n| Browser authentication                          | An opaque `kungal_session` cookie backed by Redis; OAuth tokens never live in browser storage |\n| Moemoepoint balance and ledger                  | OAuth; the forum keeps only a cached local view where required                                |\n| Visual novel metadata, claims, and edit history | Catalog; the forum galgame id is the catalog work id, with no mapping                         |\n| Avatars and content images                      | The content-addressed `image_service`                                                         |\n| Galgame and resource comment threads            | The shared Community service                                                                  |\n| Reports and enforcement                         | The shared Trust service                                                                      |\n| Toolset archives                                | The shared Artifact service                                                                   |\n\nThe retired Galgame Wiki family is not a contract for new work. Some compatibility reads and notification surfaces remain temporarily while the catalog cutover finishes, but new submission, claim, review, and editing flows target Catalog.\n\n## Tech Stack\n\n| Layer                | Technology                                                                                                             |\n| -------------------- | ---------------------------------------------------------------------------------------------------------------------- |\n| Frontend             | [Nuxt 4](https://nuxt.com/) + Vue 3 SSR (Nitro node-server)                                                            |\n| UI                   | `@kungal/ui-nuxt` and `@kungal/ui-vue`                                                                                 |\n| Editor               | `@kungal/editor-nuxt`, Milkdown, and CodeMirror                                                                        |\n| Styling              | [Tailwind CSS 4](https://tailwindcss.com/)                                                                             |\n| State management     | [Pinia](https://pinia.vuejs.org/) with persisted state                                                                 |\n| Backend API          | [Go 1.26](https://go.dev/) + [Fiber v3](https://gofiber.io/)                                                           |\n| Database             | PostgreSQL through [GORM](https://gorm.io/), with explicit raw-SQL migrations and no AutoMigrate                       |\n| Cache and sessions   | Redis                                                                                                                  |\n| Search               | PostgreSQL for forum content; the shared Catalog service for visual novels and taxonomy                                |\n| Authentication       | OAuth-backed BFF session with a 90-day sliding lifetime                                                                |\n| Shared services      | Catalog, Community, Trust, Image, Artifact, and OAuth clients                                                          |\n| Scheduler            | [robfig/cron](https://github.com/robfig/cron) for daily maintenance and Catalog event synchronization                  |\n| Validation and tests | Zod, Vitest, Vue Test Utils, and Go tests                                                                              |\n| Deployment           | Docker images published to GHCR and deployed with [Dokploy](https://dokploy.com/); legacy PM2 scripts remain available |\n| Analytics            | [Umami](https://umami.is/)                                                                                             |\n\n## Project Structure\n\n```text\n├── apps/\n│   ├── api/                 # Go Fiber v3 BFF / REST API\n│   │   ├── cmd/             # server, migrate, and one-off maintenance tools\n│   │   ├── internal/        # domain handlers, services, repositories, and models\n│   │   ├── migrations/      # explicit .up.sql / .down.sql migrations\n│   │   └── pkg/             # shared clients, config, errors, permissions, and utilities\n│   └── web/                 # Nuxt 4 SSR frontend\n│       ├── app/             # pages, components, composables, Pinia stores, and styles\n│       ├── server/          # Nitro feeds, sitemap source, middleware, and redirects\n│       └── shared/          # shared TypeScript types and utilities\n├── docker/                  # Dockerfiles, environment examples, and deployment notes\n├── docker-compose*.yml      # local integration and production stacks\n├── scripts/                 # legacy PM2 lifecycle scripts\n└── docs/                    # project docs and generated read-only contract mirrors\n```\n\n## Getting Started\n\n**Prerequisites:** Node.js 24+ with Corepack, Go 1.26+, PostgreSQL, and Redis. Full local functionality also requires the OAuth, Catalog, Image, Artifact, Community, and Trust services from `nextmoe-infra`.\n\nStart the local shared platform first:\n\n```bash\ncd /path/to/nextmoe-infra\ndocker compose -f docker-compose.dev.yml --profile full up -d\n# Optional: refresh the local databases with real-shaped, desensitized data.\n./scripts/refresh-dev-db.sh\n```\n\nThen configure and start the forum:\n\n```bash\ncorepack enable\npnpm install\n\ncp apps/api/.env.example apps/api/.env\ncp apps/web/.env.example apps/web/.env\n\n# Applies this repository's routine local migrations.\npnpm migrate\n\n# API: http://127.0.0.1:2334, Web: http://127.0.0.1:2333\npnpm dev\n```\n\nThe checked-in environment examples target the local infra stack. See the [infra development-environment guide](https://github.com/next-moe/nextmoe-infra/blob/main/docs/dev-environment.md) for service profiles, database refreshes, and local credentials. Cross-repository identity migrations have additional ordering requirements documented in [docs/migration/user/README.md](docs/migration/user/README.md).\n\nTo run the forum in containers after the infra network is available:\n\n```bash\ndocker compose run --rm migrate\ndocker compose up -d kungal-api web\n```\n\nSee [docker/README.md](docker/README.md) for the complete container and deployment runbook.\n\n## Scripts\n\n| Command                                                          | Description                                              |\n| ---------------------------------------------------------------- | -------------------------------------------------------- |\n| `pnpm dev`                                                       | Run API and Web together                                 |\n| `pnpm dev:web` / `pnpm dev:api`                                  | Run one application                                      |\n| `pnpm build`                                                     | Build the Go API, then the Nuxt frontend                 |\n| `pnpm lint` / `pnpm lint:fix`                                    | Check or fix frontend ESLint issues                      |\n| `pnpm typecheck`                                                 | Run the frontend `vue-tsc` check                         |\n| `pnpm -F web test`                                               | Run frontend Vitest tests                                |\n| `pnpm test:api`                                                  | Run Go tests                                             |\n| `pnpm vet`                                                       | Run `go vet`                                         "
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://cot.kevinliu.studio\">\n    <img src=\"public/brand/og-image.png\" alt=\"Claude of Tanks armored battle with the crest badge and wordmark\">\n  </a>\n</p>\n\n<h1 align=\"center\">CLAUDE OF TANKS</h1>\n\n<p align=\"center\">\n  Free browser-native armored combat built with <strong>Three.js</strong>. Take 192 production-visible first-party procedural vehicles\n  across 31 battlefields with physical gunnery, plate-level armor, internal damage, guided missiles,\n  magazine autoloaders, terrain-following suspension, X-ray killcams, multiplayer rooms, and Scene Studio.\n</p>\n\n<table width=\"100%\" align=\"center\">\n<tr>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/\"><img src=\"public/brand/features/play.svg\" height=\"58\" alt=\"Play armored combat\"><br><strong>PLAY</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/docs\"><img src=\"public/brand/nav/docs.svg\" height=\"58\" alt=\"Open the armored vehicle field manual\"><br><strong>FIELD MANUAL</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/gallery\"><img src=\"public/brand/nav/tank-gallery.svg\" height=\"58\" alt=\"Open Tank Gallery\"><br><strong>TANK GALLERY</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"https://cot.kevinliu.studio/studio\"><img src=\"public/brand/nav/studio.svg\" height=\"58\" alt=\"Open Scene Studio\"><br><strong>SCENE STUDIO</strong></a></td>\n<td width=\"20%\" align=\"center\" valign=\"middle\" bgcolor=\"#05080b\"><a href=\"docs/INDEX.md\"><img src=\"public/brand/features/modules.svg\" height=\"58\" alt=\"Open the engineering documentation\"><br><strong>ENGINEERING DOCS</strong></a></td>\n</tr>\n</table>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/featured/f10_studio_urban_crossfire.webp\" alt=\"Armored vehicles exchanging fire in an urban battle\"></td>\n<td width=\"50%\"><img src=\"public/media/featured/f9_studio_fjord_firefight.webp\" alt=\"Tanks fighting across the Fjord battlefield\"></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/featured/f8_studio_m1_firefight.webp\" alt=\"M1 Abrams firing during a close-range tank battle\"></td>\n<td width=\"50%\"><img src=\"public/media/featured/f6_studio_strv_steinburg_duel.webp\" alt=\"Strv 103 fighting through Steinburg\"></td>\n</tr>\n</table>\n\nThese are handmade, deterministic scenes captured with the current game renderer—not concept art. The\n[88-frame showcase archive](public/media/showcase-r1/manifest.json) contains 13 owner-selected scenes, 30 action frames,\n30 close foreground compositions, five directed Studio frames, and ten interface states. The\n[landing selection](public/media/landing-r1/manifest.json) records the six hero frames, feature reel, five camera-rail\nfilms, 24-shot mosaic, and directed Strv 122 versus Leclerc sequence now published on the site.\n\n## Fight, inspect, and direct\n\n<p>\n  <img src=\"public/brand/features/live-combat.svg\" width=\"52\" alt=\"Live tank combat icon\" title=\"Fight\">\n  <img src=\"public/brand/features/armor.svg\" width=\"52\" alt=\"Armor inspection icon\" title=\"Inspect\">\n  <img src=\"public/brand/nav/studio.svg\" width=\"72\" alt=\"Scene Studio icon\" title=\"Direct\">\n</p>\n\n- **Fight:** enter Standard Battle, Capture the Flag, Zone Control, armed low-gravity Turbo Ball, cooperative\n  Endless Horde, or the six-operation Frontline Assault campaign in solo or multiplayer, with physical shell travel, armor geometry, component damage, spotting,\n  terrain, collision, destructible structures, persistent wrecks, mode-specific respawns, and authority-owned results.\n- **Inspect:** open any vehicle in Tank Gallery, articulate the live rig, isolate armor or internal anatomy, and export an\n  exact-surface review packet from the same specification used in combat.\n- **Direct:** stage any roster vehicle on any battlefield in Scene Studio, animate actors and cameras, schedule game FX,\n  and capture stills or video from reproducible scene data.\n\n## Current release\n\n| | Current runtime |\n| --- | --- |\n| Fleet | **192** production-visible and **229** keyed local-development procedural vehicles across **231** saved roster records; **0** GLB-sourced playables |\n| Worlds | **30** authored battlefields with shared structures, wrecks, utility networks, loose props, placement, collision, and destruction |\n| Authority | Fixed **60 Hz** movement, ballistics, armor, damage, spotting, bots, destructibles, and result |\n| Presentation | Direct Three.js/WebGL renderer with a measured **120 FPS** test path, adaptive quality, stable shadows, SMAA/FSR, and GPU recovery |\n| Play | Five battle rules, solo bots, browser-hosted private rooms, LAN rooms, room chat, spectators, respawns, and rematches |\n| Platforms | Mouse/keyboard and complete touch controls with safe-area layout and device-adaptive rendering |\n| Languages | English and Simplified Chinese across the game, Garage, Studio, Gallery, and public docs; local reviewed catalogs managed with General Translation |\n| Tools | Scene Studio, Tank Gallery, exact-surface review, deterministic capture, vehicle anatomy, and release gates |\n\nLanguage selection lives under **Settings → Graphics → Language**. See the\n[localization guide](docs/LOCALIZATION.md) for coverage, intentional exclusions,\nthe General Translation workflow, and release gates.\n\nThe provenance gate currently reports **202 first-party procedural battle playables and 0 GLB-sourced playables**. Comparison inputs are never a playable loading path and are stripped from public builds.\n\n## Field footage\n\n<p>\n  <img src=\"public/brand/features/screenshots.svg\" width=\"52\" alt=\"In-engine battle screenshot icon\" title=\"In-engine footage\">\n  <img src=\"public/brand/features/camera-paths.svg\" width=\"52\" alt=\"Camera path icon\" title=\"Camera rails\">\n</p>\n\nEach frame below opens a looping WebM recorded from the game. The camera rails use live vehicles, maps, ballistics,\nrecoil, impacts, sparks, smoke, debris, and destruction effects.\n\n<table>\n<tr>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/01_desert-ground-rush.webm\"><img src=\"public/media/hero-rails-r2/01_desert-ground-rush.jpg\" alt=\"Open the Desert Ground Rush gameplay film\"></a><br><sub><b>Desert Ground Rush:</b> a low camera threads moving armor and incoming fire.</sub></td>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/04_urban-overhead-dive.webm\"><img src=\"public/media/hero-rails-r2/04_urban-overhead-dive.jpg\" alt=\"Open the Urban Overhead Dive gameplay film\"></a><br><sub><b>Urban Overhead Dive:</b> a rail camera drops into a close street engagement.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/02_winter-ice-orbit.webm\"><img src=\"public/media/hero-rails-r2/02_winter-ice-orbit.jpg\" alt=\"Open the Winter Ice Orbit gameplay film\"></a><br><sub><b>Winter Ice Orbit:</b> tanks exchange fire while the camera circles the frozen contact line.</sub></td>\n<td width=\"50%\"><a href=\"public/media/hero-rails-r2/05_coastal-shell-skim.webm\"><img src=\"public/media/hero-rails-r2/05_coastal-shell-skim.jpg\" alt=\"Open the Coastal Shell Skim gameplay film\"></a><br><sub><b>Coastal Shell Skim:</b> a fast lateral pass follows the shell path through a beach assault.</sub></td>\n</tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"https://cot.kevinliu.studio/home\"><strong>OPEN THE FULL LANDING SHOWCASE</strong></a>\n</p>\n\n## Vehicle-specific mechanics\n\n<p>\n  <img src=\"public/brand/features/vehicle.svg\" width=\"52\" alt=\"Procedural vehicle icon\" title=\"Vehicle-specific systems\">\n  <img src=\"public/brand/features/missile.svg\" width=\"52\" alt=\"Guided missile icon\" title=\"Guided weapons\">\n  <img src=\"public/brand/features/modules.svg\" width=\"52\" alt=\"Internal tank modules icon\" title=\"Internal anatomy and autoloaders\">\n</p>\n\nThe fleet does not reduce every vehicle to the same gun and movement model. Specifications can add their own loading,\nguidance, suspension, ammunition, anatomy, and control behavior while remaining inside the fixed-step authority.\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/mechanic-strv-suspension.webp\" alt=\"Stridsvagn 103 using hydropneumatic suspension to aim on a slope\"><br><sub><b>Swedish siege suspension:</b> the Strv 103A, Strv 103B, and UDES 03 aim their fixed guns by pitching the physical hull. Wheels and both loaded track runs reshape around the solved pose.</sub></td>\n<td width=\"50%\"><img src=\"public/media/feature-evidence-r2/mechanic-mbt70-missile.webp\" alt=\"MBT-70 firing a guided Shillelagh missile\"><br><sub><b>Guided weapons:</b> the MBT-70 fires the Shillelagh as its primary round. IFVs carry vehicle-specific TOW, MILAN, Spike, Konkurs, Arkan, and Jyu-MAT launchers.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/showcase-r2/13_gallery_modules.webp\" alt=\"Leclerc XLR internal modules and crew shown in the current Tank Gallery\"><br><sub><b>Internal anatomy:</b> the Gallery shows crew, gun, turret ring, engine, fuel, ammunition, tracks, optics, radio, and vehicle-specific feed or missile systems.</sub></td>\n<td width=\"50%\"><img src=\"public/media/showcase-r2/01_garage_verdant.webp\" alt=\"Current Claude of Tanks Garage displaying a K2 in Verdant Motor Pool\"><br><sub><b>One shared fleet:</b> battle, garage, Gallery, Studio, bots, icons, diagrams, and technical dossiers read the same vehicle specifications—192 in production or 229 in keyed local development.</sub></td>\n</tr>\n</table>\n\n- **Magazine autoloaders** track ready rounds, intra-magazine cycle time, full replenishment, manual magazine reloads,\n  shell changes, and damage to the loading mechanism. The Leclerc, Type 90, PL-01, and four-round PL-01 105 each carry\n  their own magazine timings.\n- **Guided missiles** travel at visible weapon-specific speeds and steer toward the authority-owned aim point. Launcher\n  damage, rack damage, ammunition count, reload state, guidance, impact, and presentation all remain synchronized.\n- **Hydropneumatic aim** uses the same canonical pose for armor, muzzle, collision, wheels, tracks, remote snapshots, and\n  the camera; there is no separate visual-only tank tilt.\n- **Free look** keeps the sight and turret on target while the camera moves. Hold `Shift` on keyboard, `RB` on a standard\n  controller, or assign another binding in settings.\n\n## Combat systems\n\n<p>\n  <img src=\"public/brand/features/live-combat.svg\" width=\"52\" alt=\"Live combat icon\" title=\"Physical combat\">\n  <img src=\"public/brand/features/armor.svg\" width=\"52\" alt=\"Armor inspection icon\" title=\"Plate-level armor\">\n  <img src=\"public/brand/features/modules.svg\" width=\"52\" alt=\"Internal modules icon\" title=\"Internal damage\">\n</p>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"public/media/showcase-r2/17_live_player_hud.webp\" alt=\"Current production battle HUD during live armored combat in a K2\"><br><sub><b>Battle HUD:</b> dual reticle, ammunition, modules, teams, minimap, chat, performance, and authority-owned combat feedback.</sub></td>\n<td width=\"50%\"><img src=\"public/media/showcase-r2/25_live_killcam_xray.webp\" alt=\"Current X-ray killcam showing the resolved shell path through armor and modules\"><br><sub><b>X-ray killcam:</b> the resolved shell path, struck plate, effective protection, penetration result, damaged modules, and crew.</sub></td>\n</tr>\n<tr>\n<td width=\"50%\"><img src=\"public/media/presentation-r1/ui_combat_firing.webp\" alt=\"Tank firing with current muzzle flash and recoil\"><br><sub><b>Physical gunnery:</b> finite world aim, bore convergence, resolved muzzle transform, visible recoil, dispersion, travel time, and gravity.</sub></td>\n<td width=\"50%\"><img src=\"public/media/presentation-r1/ui_explosion.webp\" alt=\"Tank destruction with fire, sparks, fragments, and smoke\"><br><sub><b>Destruction:</b> fire, sparks, smoke, detached remnants, persistent wreck state, and pooled effects driven by the completed hit.</sub></td>\n</tr>\n</table>\n\n- **Plate-level armor** resolves the actual plate, slope, impa"
     },
     "brief": {
-      "summary": "🐳 The CUTEST visualnovel / galgame forum! Built with Nuxt4, GO Fiber and PostgreSQL. Kun Visual Novel forum 6th generation! 开源, 免费, 零门槛, 最先进的 Galgame 论坛社区!",
-      "problem": "该项目围绕“🐳 The CUTEST visualnovel / galgame forum! Built with Nuxt4, GO Fiber and PostgreSQL. Kun Visual Novel forum 6th generation! 开源, 免费, 零门槛, 最先进的 Galgame 论坛社区!”提供开源实现或相关资源。",
+      "summary": "基于 Three.js 的浏览器坦克对战模拟器，无需引擎。",
+      "problem": "想玩坦克对战通常要装大型客户端，浏览器里难做装甲与弹道模拟。",
       "highlights": [
-        "可以用来试用或扩展：🐳 The CUTEST visualnovel / g",
-        "主要使用 Go 开发",
-        "主题包括：docker、dokploy、forum、galgame"
+        "可以在浏览器和手机上直接开坦克对战",
+        "可以按装甲板、内部模块和弹道逐发算伤害",
+        "可以在场景工作室布置车辆与相机并拍图录像"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "坦克对战游戏玩家",
+        "Three.js 前端开发者",
+        "Web 游戏开发者"
       ],
-      "why_trending": "近期保持活跃，ACG 雷达发现时已有 2,005 个 Star。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
-      "category": "互动叙事",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "why_trending": "总 Star 438，本周首次收录，多智能体流水线做出的完整网页游戏，项目仍在更新。",
+      "caveat": "简介称 121 辆坦克、20 张地图，README 却写 192 辆、30 张，数字不一致。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
-      "repository": "KunMoe/kun-galgame-forum",
-      "score": 60,
-      "category": "互动叙事",
-      "reason": "匹配关键词：visual novel",
-      "generated_by_ai": false,
+      "repository": "Kevin-Liu-01/Claude-of-Tanks",
+      "score": 74,
+      "category": "游戏开发",
+      "reason": "Three.js 浏览器坦克游戏，多 Agent 构建",
+      "generated_by_ai": true,
       "velocity_score": 14,
-      "freshness_score": 20,
-      "ranking_score": 36.5
+      "freshness_score": 70,
+      "ranking_score": 51.0
     }
   },
   {
     "repository": {
-      "rank": 5,
+      "rank": 13,
+      "full_name": "krillinai/OpenCreator",
+      "url": "https://github.com/krillinai/OpenCreator",
+      "description": "Formerly KrillinAI. Open-source AI workspace for creators, powered by Codex. Create videos, images, voice, avatars, video translation, and edits with Agents in one place.",
+      "language": "TypeScript",
+      "total_stars": 12272,
+      "forks": 1260,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "codex-cli",
+        "deskop-app",
+        "dubbing",
+        "image-generation",
+        "localization",
+        "skills",
+        "tts",
+        "video-editing",
+        "video-generation",
+        "video-transcription",
+        "video-translation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2024-12-17T01:59:22Z",
+      "updated_at": "2026-09-24T08:02:14Z",
+      "pushed_at": "2026-09-24T08:02:10Z",
+      "open_issues": 34,
+      "homepage": "https://www.open-creator.ai/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"./docs/images/OpenCreator_logo_vector_dark.svg\" />\n    <img src=\"./docs/images/OpenCreator_logo_vector.svg\" alt=\"OpenCreator\" width=\"380\" />\n  </picture>\n  <br />\n  The open-source AI workspace & Skills for creators\n</h1>\n\n<p>Bring visual creator tools, reusable Skills, and Agents together for scripts, video, images, voice, avatars, translation, and editing—all in one workspace.</p>\n\n<p><strong>OpenCreator was formerly known as KrillinAI.</strong></p>\n\n<a href=\"https://trendshift.io/repositories/13360\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/13360\" alt=\"OpenCreator, formerly KrillinAI: #1 Repository of the Day on Trendshift\" width=\"250\" height=\"55\" /></a>\n\n**English** | [简体中文](./docs/zh/README.md) | [日本語](./docs/ja/README.md) | [한국어](./docs/ko/README.md) | [Bahasa Indonesia](./docs/id/README.md) | [Español](./docs/es/README.md) | [Français](./docs/fr/README.md) | [Deutsch](./docs/de/README.md) | [Português](./docs/pt/README.md) | [Русский](./docs/ru/README.md) | [العربية](./docs/ar/README.md)\n\n[![GitHub Stars](https://badgen.net/github/stars/krillinai/OpenCreator?icon=github&label=Stars&color=EAB308)](https://github.com/krillinai/OpenCreator/stargazers)\n[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)\n[![Bilibili](https://img.shields.io/badge/dynamic/json?label=Bilibili&query=%24.data.follower&suffix=%E7%B2%89%E4%B8%9D&url=https%3A%2F%2Fapi.bilibili.com%2Fx%2Frelation%2Fstat%3Fvmid%3D242124650&logo=bilibili&color=00A1D6&labelColor=FE7398&logoColor=FFFFFF)](https://space.bilibili.com/242124650)\n[![AtomGit G-Star](https://img.shields.io/badge/AtomGit-G--Star-DA203E?style=flat)](https://atomgit.com/krillinai/OpenCreator)\n[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/3GwBGsjs8)\n[![QQ 群](https://img.shields.io/badge/QQ%20群-754069680-green?logo=tencent-qq)](https://qm.qq.com/q/W4YC0PLMeA)\n\n[Highlights](#project-highlights) · [Creator Tools](#creator-tools) · [Skills](#skills) · [Examples](#examples) · [Quick Start](#quick-start) · [Desktop](#desktop) · [Docs](#documentation)\n\n</div>\n\n![OpenCreator Agent workspace](./docs/images/opencreator-home-en.png)\n\n## Project Overview\n\nOpenCreator is built for individuals and teams who want to keep creative and development work running locally. Instead of reimplementing an Agent loop, it uses Codex CLI as the execution engine and adds a stable local Runtime, a visual workspace, and a Desktop host around it.\n\nOpenCreator offers two connected ways to work:\n\n- **Content workspace**: use visual tools and creation templates for video translation and downloading, image and video generation, voiceovers, article and social post writing, short-video scripting, and stick figure animation.\n- **Agent conversation**: start and guide creative or development tasks in natural language, organize conversations by project, keep Runs working in the background, and manage approvals, attachments, files, Skills, MCP, schedules, notifications, memory, and diagnostics from one place.\n\nWeb is the single frontend implementation. Desktop loads the same Web build and adds only capabilities that require the operating system, such as directory selection, window lifecycle, tray behavior, and native notifications. With the same data and content viewport, both platforms share the same general UI and Runtime behavior.\n\n## Project Highlights\n\n- 🤖 **Codex Native**: Reuse the Codex Agent loop, models, reasoning, tool calls, conversations, Skills, and MCP without maintaining a second execution engine.\n\n- 🚀 **Ready-to-Use Desktop App**: Launch OpenCreator directly from the desktop app with Codex CLI included; the local Runtime starts on demand and prepares a default project automatically.\n\n- 🔄 **Managed Runtime Components**: Inspect bundled, active, and latest yt-dlp versions, check for updates periodically, and update manually while keeping the current working version available if an update fails.\n\n- 🎨 **Multimodal Creation**: Create and manage video, images, audio, subtitles, and documents through one connected workflow.\n\n- 🧩 **Creation Templates**: Start creating images and videos from reusable templates without setting up prompts and settings from scratch.\n\n- 🔗 **Dual-Mode Workflow**: Work through either the visual workspace or Agent conversation while one shared state machine keeps steps, progress, and results synchronized.\n\n- 🕘 **Versioning**: Every revision creates a new version while preserving earlier settings and outputs for review and comparison.\n\n- 🧩 **Reusable Skills**: Use video workflow Skills, extend the Agent with your own Skills, and manage MCP through Codex-native configuration.\n\n- 🧠 **Memory**: Keep global, project, and thread memory with summaries and reproducible Run input snapshots.\n\n- 🔐 **Local Security**: Keep data, attachments, and logs local by default, with approvals and redacted diagnostics.\n\n- 🌐 **Localized Interface**: Use the Web or Desktop client in Simplified Chinese, English, or Swedish, with automatic system-language detection or manual selection.\n\n## Creator Tools\n\nThe current release includes ten creator tools. Available models and services depend on your local Codex environment and AI service settings.\n\nOpen the Dashboard to write articles, Xiaohongshu posts, or short-video scripts; create stick figure animations; translate or download videos; generate thumbnails, images, or videos; and create voiceovers with Smart Dubbing.\n\n![OpenCreator Creator Dashboard](./docs/images/product/opencreator-dashboard-en.png)\n\n> More creator tools are continuously being added.\n\n<table width=\"100%\">\n<thead>\n<tr>\n<th width=\"18%\">Workspace</th>\n<th width=\"14%\">Status</th>\n<th width=\"68%\">Capabilities</th>\n</tr>\n</thead>\n<tbody>\n<tr><td valign=\"top\">Video Translation</td><td valign=\"top\">✅ Available</td><td>Import local or public videos; transcribe with cloud or local Whisper services; use LLM context for subtitle segmentation, alignment, terminology, and translation; configure bilingual subtitles, dubbing or a custom voice sample, subtitle styles, landscape or portrait composition, and export SRT, audio, or video</td></tr>\n<tr><td valign=\"top\">Video Downloader</td><td valign=\"top\">✅ Available</td><td>Analyze individual public videos from YouTube, Bilibili, X, TikTok, Instagram, Douyin, Facebook, Xiaohongshu, and Pinterest; compare available formats and download video or audio. Some sources may require platform cookies</td></tr>\n<tr><td valign=\"top\">Thumbnail Generator</td><td valign=\"top\">✅ Available</td><td>Combine a topic, video link, and optional reference image to generate and compare multiple content-thumbnail variations</td></tr>\n<tr><td valign=\"top\">Image Generation</td><td valign=\"top\">✅ Available</td><td>Generate with GPT Image from a prompt and optional reference image, configure the aspect ratio and output count, then preview and download individual images</td></tr>\n<tr><td valign=\"top\">Article Writer</td><td valign=\"top\">✅ Available</td><td>Turn a topic, links, videos, or source documents into editable topic options, an outline, and a complete article; add generated images and export Markdown, HTML, or PDF</td></tr>\n<tr><td valign=\"top\">Xiaohongshu Posts</td><td valign=\"top\">✅ Available</td><td>Generate a complete Xiaohongshu post from a topic or source material, with controls for the target audience, post type, and length, then copy or download the result</td></tr>\n<tr><td valign=\"top\">Short Video Script</td><td valign=\"top\">✅ Available</td><td>Create a shoot-ready segmented script from a topic or source material, tailored to the audience, platform, duration, and tone, then edit, copy, or download it</td></tr>\n<tr><td valign=\"top\">Stick Figure Animation</td><td valign=\"top\">✅ Available</td><td>Turn text or YouTube content into narration, voice, consistent-character storyboard visuals, subtitles, and a downloadable stick figure animation</td></tr>\n<tr><td valign=\"top\">Auto Clips</td><td valign=\"top\">In development</td><td>Analyze long videos, identify highlights, and turn selected moments into reusable short clips</td></tr>\n<tr><td valign=\"top\">Smart Dubbing</td><td valign=\"top\">✅ Available</td><td>Turn scripts into voiceovers with selectable voices, pacing, and emotion controls</td></tr>\n<tr><td valign=\"top\">Video Generation</td><td valign=\"top\">✅ Available</td><td>Generate videos with Seedance from prompts and reference images, then preview, regenerate, and download each version</td></tr>\n<tr><td valign=\"top\">Digital Avatar</td><td valign=\"top\">In development</td><td>Combine scripts, voice, and avatar presentation to produce talking-head videos</td></tr>\n</tbody>\n</table>\n\n## Creation Templates\n\nStart creating from a template instead of building every prompt and setting from scratch. Browse featured templates by category, including video creation and image design, to find a starting point for your idea.\n\nThe collection brings together templates created by OpenCreator and by independent creators. Third-party templates credit their creators and link to the original source on the template detail page.\n\n![Featured creation templates across video and image categories](./docs/images/product/creation-templates-gallery-en.png)\n\nOpen a template to preview its example result and inspect its prompt, settings, tags, author, and original source. Select **Use this template** to start creating with it, then adjust the inputs for your own work.\n\n![Image creation template detail with example result, settings, and prompt](./docs/images/product/creation-templates-detail-en.png)\n\n## Skills\n\nCreator tools provide visual controls; Skills give the Agent reusable instructions and tool workflows. OpenCreator includes video-production Skills in the repository, alongside support for managing local Codex Skills.\n\nThe repository's [`skills/`](./skills/) directory contains reusable instructions for Agents operating the embedded KrillinAI CLI.\n\n| Skill | Capabilities |\n| --- | --- |\n| [KrillinAI CLI](./skills/krillinai-cli/SKILL.md) | Choose commands, check configuration, and interpret progress, manifests, outputs, and errors |\n| [Subtitle](./skills/krillinai-subtitle/SKILL.md) | Download platform captions or transcribe media, translate subtitles, and produce bilingual or short portrait subtitles |\n| [TTS](./skills/krillinai-tts/SKILL.md) | Generate target-language dubbing from subtitles and optionally produce a dubbed video |\n| [Landscape Render](./skills/krillinai-render-horizontal/SKILL.md) | Render landscape videos with bilingual subtitles or dubbed audio and target-language subtitles |\n| [Portrait Render](./skills/krillinai-render-vertical/SKILL.md) | Compose portrait videos with titles, bilingual subtitles, or dubbing |\n| [Cover](./skills/krillinai-cover/SKILL.md) | Generate a cover image from a complete text prompt and save the image and final prompt |\n| [Pipeline Plan](./skills/krillinai-pipeline/SKILL.md) | Validate a multi-stage output plan in dry-run mode; execute actual work through the individual stage Skills |\n\n### Extend with Your Own Skills\n\nOpenCreator supports local Codex Skills defined by `SKILL.md`, so you can add your own methods and workflows rather than relying only on fixed creator tools. Skill availability depends on the active Codex home and installed Skills; video workflow Skills require the CLI and relevant services to be configured. Inclusion in the repository does not mean every Skill is automatically installed or every external service is bundled.\n\n## Conversation and workspace, moving together\n\nDescribe tasks naturally, then step into visual tools whenever you need precise control.\n\n![OpenCreator conversation and visual workspace working together](./docs/images/examples/opencreator-auto-clips-en.png)\n\n### Fine-grained workspace controls\n\nAdjust subtitles, shots, audio, and generation sett"
+    },
+    "brief": {
+      "summary": "开源 AI 创作工作台，用 Agent 做视频、图像、配音与翻译",
+      "problem": "创作者工具分散，视频翻译、配音、图像生成要来回切换多个软件",
+      "highlights": [
+        "可以翻译视频并生成双语字幕和配音",
+        "可以下载 YouTube、B站等平台视频并转录",
+        "可以在一个对话里生成图像、口播脚本和文案"
+      ],
+      "target_users": [
+        "视频创作者",
+        "自媒体运营",
+        "本地化团队"
+      ],
+      "why_trending": "本周首次收录，总 Star 超 1.2 万，近期仍在持续更新",
+      "caveat": "模型与服务能否使用，取决于本地 Codex 环境配置",
+      "category": "创作者自动化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
+    },
+    "interest": {
+      "repository": "krillinai/OpenCreator",
+      "score": 84,
+      "category": "创作者自动化",
+      "reason": "创作者 AI 工作台，视频图像配音翻译一体",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
       "full_name": "A-kirami/webgal-craft",
       "url": "https://github.com/A-kirami/webgal-craft",
       "description": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
@@ -431,104 +481,33 @@
       "readme": "<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft\">\n    <br />\n    <img src=\"./public/webgal-craft-logo.svg\" alt=\"WebGAL Craft Logo\" width=\"160\" />\n    <br />\n    <h1 align=\"center\">WebGAL Craft</h1>\n  </a>\n</p>\n\n<p align=\"center\">\n  面向 WebGAL 创作者的跨平台视觉小说工作室\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/build.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml\" target=\"__blank\"\n    ><img src=\"https://github.com/A-kirami/webgal-craft/actions/workflows/test.yml/badge.svg?branch=main&event=push\" alt=\"Github Actions\"\n  /></a>\n  <a href=\"./LICENSE\">\n    <img src=\"https://img.shields.io/badge/license-MPL--2.0-blue\" alt=\"License MPL-2.0\" />\n  </a>\n  <img src=\"https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux%20%7C%20Android-6f42c1\" alt=\"Supported platforms: Windows, macOS, Linux, Android\" />\n  <br />\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img src=\"https://img.shields.io/github/v/release/A-kirami/webgal-craft?include_prereleases&&color=70aeff&style=social\" alt=\"Release Version\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/stargazers\" target=\"__blank\"\n    ><img alt=\"GitHub stars\" src=\"https://img.shields.io/github/stars/A-kirami/webgal-craft?style=social\"\n  /></a>\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\" target=\"__blank\"\n    ><img alt=\"GitHub downloads\" src=\"https://img.shields.io/github/downloads/A-kirami/webgal-craft/total?style=social\"\n  /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/A-kirami/webgal-craft/releases\">下载最新版</a>\n  ·\n  <a href=\"https://webgalcraft.com\">官方网站</a>\n  ·\n  <a href=\"https://github.com/A-kirami/webgal-craft/issues\">反馈问题</a>\n  ·\n  <a href=\"https://qm.qq.com/q/W2Dt9V2F66\">加入交流群</a>\n</p>\n\nWebGAL Craft 是一款为 [WebGAL](https://github.com/OpenWebGAL/WebGAL) 游戏创作者设计的创作工具。它把项目管理、脚本编辑、资源浏览、可视化语句编辑和实时预览放在同一个工作流里，让创作者可以更直接地组织素材、编写演出并检查游戏效果。\n\n## 特性\n\n**资源管理**\n\n集中管理立绘、背景、音效等项目素材，在创作过程中随取随用。\n\n**可视化编辑**\n\n在可视化界面中组织剧情、对白和演出参数，同时保留脚本编辑能力，兼顾上手效率与精细控制。\n\n**本地历史版本**\n\n自动记录场景保存历史，脚本变更可追溯、可回退，长篇项目也能更稳妥地维护。\n\n**快速预览**\n\n在编辑器中实时预览演出效果，边创作边验证，减少在编辑器和游戏窗口之间反复切换。\n\n**引擎与模板切换**\n\n按作品需要管理和切换 WebGAL 引擎与项目模板，便于适配不同版本和制作风格。\n\n**演出参数复用**\n\n保存常用语句默认值与语句组，减少重复配置和手写脚本，让创作流程更稳定。\n\n## 下载安装\n\n前往 [Releases](https://github.com/A-kirami/webgal-craft/releases) 下载适合你系统的最新版本。\n\n| 平台 | 构建 | 推荐下载 |\n| --- | --- | --- |\n| Windows | 64-bit | `.exe` |\n| macOS | Intel / Apple Silicon | `.dmg` |\n| Linux | x64 | `.AppImage` / `.deb` |\n| Android | arm64 | `.apk` |\n\n## 快速上手\n\n> [!IMPORTANT]\n> WebGAL Craft 需要 WebGAL `4.6.2` 或以上版本的引擎，可在 [WebGAL Releases](https://github.com/OpenWebGAL/WebGAL/releases) 获取\n\n1. 下载并安装适合你系统的 WebGAL Craft。\n2. 打开 WebGAL Craft，在主页安装游戏引擎。\n3. 创建新游戏，或导入已有 WebGAL 游戏目录。\n4. 进入编辑后，在文本/可视化编辑器、资源面板和预览面板之间完成创作。\n\n## 贡献\n\nWebGAL Craft 欢迎任何形式的贡献，详情请阅读[贡献指南](./.github/CONTRIBUTING.md)。\n\n## 许可证\n\nCode: [MPL-2.0](./LICENSE), 2026, Akirami\n\nLogo: CC-BY-NC-ND, Designs by Akirami\n\n## 鸣谢\n\n### 贡献者\n\n感谢以下贡献者对 WebGAL Craft 作出的贡献\n\n<a href=\"https://github.com/A-kirami/webgal-craft/graphs/contributors\">\n  <img src=\"https://contrib.rocks/image?repo=A-kirami/webgal-craft\" />\n</a>\n"
     },
     "brief": {
-      "summary": "WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio",
-      "problem": "该项目围绕“WebGAL 视觉小说工作室 / WebGAL Visual Novel Studio”提供开源实现或相关资源。",
+      "summary": "面向 WebGAL 的跨平台视觉小说创作工作室",
+      "problem": "WebGAL 脚本编写与素材管理分散，创作时要反复切换工具和游戏窗口",
       "highlights": [
-        "可以用来试用或扩展：WebGAL 视觉小说工作室 / WebGAL Visu",
-        "主要使用 TypeScript 开发",
-        "主题包括：galgame、game-development、visual-novel、visual-novel-editor"
+        "可以边写脚本边实时预览演出效果",
+        "可以在可视化界面组织剧情与演出参数",
+        "可以自动记录保存历史，脚本可追溯回退"
       ],
       "target_users": [
-        "希望了解或试用该项目方向的开发者"
+        "视觉小说创作者",
+        "WebGAL 开发者",
+        "独立游戏团队"
       ],
-      "why_trending": "近期保持活跃，ACG 雷达发现时已有 23 个 Star。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "why_trending": "本周首次被雷达收录，项目近期仍有提交，但今日无新增 Star",
+      "caveat": "需 WebGAL 4.6.2 以上引擎，总 Star 仅 23，社区规模较小",
       "category": "互动叙事",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v3-deepseek"
     },
     "interest": {
       "repository": "A-kirami/webgal-craft",
-      "score": 60,
+      "score": 78,
       "category": "互动叙事",
-      "reason": "匹配关键词：visual novel",
-      "generated_by_ai": false,
+      "reason": "WebGAL 视觉小说工作室编辑器",
+      "generated_by_ai": true,
       "velocity_score": 0,
       "freshness_score": 40,
-      "ranking_score": 36.0
-    }
-  },
-  {
-    "repository": {
-      "rank": 4,
-      "full_name": "jschm42/taleweaver",
-      "url": "https://github.com/jschm42/taleweaver",
-      "description": "A next-generation AI-powered text adventure engine featuring dynamic storytelling, procedural world-building, and immersive visual/auditory generation.",
-      "language": "Python",
-      "total_stars": 20,
-      "forks": 2,
-      "stars_today": 0,
-      "source": "radar",
-      "history_label": "本周首次收录",
-      "star_gain": 0
-    },
-    "details": {
-      "topics": [
-        "adventure-engine",
-        "ai",
-        "ai-storytelling",
-        "docker",
-        "frontend",
-        "game",
-        "gamedev",
-        "llm",
-        "python",
-        "quest-generator",
-        "rpg",
-        "rpg-game",
-        "rpg-maker",
-        "storytelling",
-        "text-adventure",
-        "text-to-speech",
-        "text-to-speeh",
-        "vuejs"
-      ],
-      "license_name": "MIT",
-      "created_at": "2026-04-12T10:29:44Z",
-      "updated_at": "2026-09-24T07:55:35Z",
-      "pushed_at": "2026-09-24T07:55:31Z",
-      "open_issues": 0,
-      "homepage": "",
-      "archived": false,
-      "default_branch": "main",
-      "readme": "# TaleWeaver: Generative AI Roleplaying\n\n<!-- markdownlint-disable MD033 MD022 MD032 MD030 MD012 MD009 -->\n\n<p align=\"center\">\n  <img src=\"frontend/src/assets/svg/app-logo.svg\" width=\"200\" alt=\"TaleWeaver Logo\">\n  <br><em>Weave Infinite Adventures.</em>\n</p>\n\n> [!IMPORTANT]\n> **TaleWeaver is currently in active development.**\n> As an early beta release, you may encounter unexpected behavior or creative \"hallucinations.\" We are constantly refining the engine. Contributions and feedback are highly welcome!\n\n**Welcome to the future of interactive storytelling.** TaleWeaver is not just another text adventure. It is a next-generation, browser-based RPG driven entirely by an **omniscient AI Gamemaster**. By combining state-of-the-art Large Language Models with cinematic Text-to-Speech (TTS), TaleWeaver dynamically generates worlds, characters, and storylines on the fly - reacting to your every decision.\n\n**With our immersive voice integration, playing TaleWeaver feels like directing and starring in your own playable audiobook.**\n\n> [!TIP]\n> **Put your headphones on and roleplay!** TaleWeaver works best when you immerse yourself. Don't just give commands—describe your actions, speak to NPCs, and let the AI Gamemaster narrate the consequences.\n\n## Intro Video (Based on older version)\n\n[![TaleWeaver](docs/screenshots/taleweaver_logo_with_playbutton.jpg)](https://youtu.be/lbAxVuU0SnQ)\n\n## 📸 Gallery\n\n<p align=\"center\">\n  <a href=\"docs/screenshots/gameplay.jpg\"><img src=\"docs/screenshots/gameplay.jpg\" width=\"600\" alt=\"Gameplay\"></a>\n  <br><em><b>Adventure Gameplay</b> - Generative AI Roleplaying.</em>\n</p>\n\n\n### Full Screenshot Gallery\n\n<table align=\"center\">\n  <tr>\n    <td><a href=\"docs/screenshots/library.jpg\"><img src=\"docs/screenshots/small/library.jpg\" width=\"180\" alt=\"Adventure Library\"></a></td>\n    <td><a href=\"docs/screenshots/generator.jpg\"><img src=\"docs/screenshots/small/generator.jpg\" width=\"180\" alt=\"World Generator\"></a></td>\n    <td><a href=\"docs/screenshots/gameplay.jpg\"><img src=\"docs/screenshots/small/gameplay.jpg\" width=\"180\" alt=\"Gameplay\"></a></td>\n    <td><a href=\"docs/screenshots/combat-dialog.jpg\"><img src=\"docs/screenshots/small/combat-dialog.jpg\" width=\"180\" alt=\"Combat Dialog\"></a></td>\n  </tr>\n  <tr>\n    <td><a href=\"docs/screenshots/loot-dialog.jpg\"><img src=\"docs/screenshots/small/loot-dialog.jpg\" width=\"180\" alt=\"Loot Dialog\"></a></td>\n    <td><a href=\"docs/screenshots/editor-scenes.jpg\"><img src=\"docs/screenshots/small/editor-scenes.jpg\" width=\"180\" alt=\"Editor Scenes\"></a></td>\n    <td><a href=\"docs/screenshots/editor-npcs.jpg\"><img src=\"docs/screenshots/small/editor-npcs.jpg\" width=\"180\" alt=\"Editor NPCs\"></a></td>\n    <td><a href=\"docs/screenshots/editor-items.jpg\"><img src=\"docs/screenshots/small/editor-items.jpg\" width=\"180\" alt=\"Editor Items\"></a></td>\n  </tr>\n  <tr>\n    <td><a href=\"docs/screenshots/editor-map.jpg\"><img src=\"docs/screenshots/small/editor-map.jpg\" width=\"180\" alt=\"Editor Map\"></a></td>\n    <td><a href=\"docs/screenshots/character-sheet.jpg\"><img src=\"docs/screenshots/small/character-sheet.jpg\" width=\"180\" alt=\"Character Sheet\"></a></td>\n    <td><a href=\"docs/screenshots/editor-script-engine.jpg\"><img src=\"docs/screenshots/small/editor-script-engine.jpg\" width=\"180\" alt=\"Scripting Engine\"></a></td>\n    <td><a href=\"docs/screenshots/editor-validation.jpg\"><img src=\"docs/screenshots/small/editor-validation.jpg\" width=\"180\" alt=\"AI Validation\"></a></td>\n  \n  </tr>\n\n  \n</table>\n\n## 1. The Vision\n\nInstead of a static, predefined story, the AI acts as an intelligent, omniscient Gamemaster (GM). It generates worlds, puzzles, and storylines \"on the fly,\" reacts dynamically to player decisions, and simultaneously manages a strict RPG rulebook in the background.\n\n## 2. Core Features\n\n### 🧠 The Omniscient AI Gamemaster\n* **Limitless Generative Worlds:** The AI generates entire plots, puzzles, and explorable scenes \"on the fly\". No two playthroughs are ever the same.\n* **Dynamic NPCs:** Engage in fluid, natural conversations where the AI fully embodies the persona of every character you meet. NPCs can move between scenes and have their own goals and motivations.\n* **Cover Mode (Sequels & Variations):** Generate sequels, spin-offs, or variations by choosing an existing adventure as a \"Cover Source\". Adjust the similarity index (0% = freely inspired, 100% = very close) and toggle the reuse of visual assets.\n\n### 🎭 Immersive In-Game Interface & Comic Turn Feed\n* **Comic-Style Turn Presentation:** Dynamic turn rendering that separates narrator exposition from character dialogue using expressive comic speech bubbles, speaker avatars, and action markers.\n* **Point-and-Click Scene Hotspots:** Interactive hotspots rendered directly over scene artwork for intuitive discovery, item inspection, and seamless navigation between connected scenes.\n* **Dynamic Character Stage:** Visual character staging area displaying active scene NPCs, speaker portraits, status indicators, and voice-tag audio playback.\n* **Streamlined In-Game HUD:** Modernized HUD featuring a real-time In-Game Clock, contextual action quickbar, expandable Character Sheet, and dedicated modals for locked containers, switches, and combat.\n\n### 🛠️ Fully-Featured Adventure Editor & AI Validation\n* **Complete World Customization:** The Adventure Editor provides dedicated tabs to edit, refine, and build adventure templates: Scenes, Directed Map Routing, NPCs, Items, Switches, Containers, Quests, Awards, Tone, Visuals, and Scripts.\n* **Full CRUD Management:** Create and edit scenes, exits, quests, NPCs, items, containers, switch outcomes, and event scripts directly from the UI with reference autocomplete.\n* **Bidirectional Route Mapping:** Visual route editor for bidirectional and one-way paths with lock descriptions, passcodes, and item unlock conditions.\n* **Sandboxed Python Event Scripts:** Author deterministic, reactive game logic directly in the World-Editor or via AI World-Builder generation. Safely queries and modifies scenes, exits, items, NPCs, avatar stats, variables, and victory conditions without host escapes. See the [Scripting Engine Guide](docs/guides/scripting_engine.md).\n* **Dual-Tier AI & Structural Validation:** Built-in world validation engine that checks graph connectivity, reachable scenes, valid exit endpoints, proper container contents, and crafting ingredient completeness, alongside deep LLM story critiques that detect plot holes, logic inconsistencies, and puzzle dead-ends.\n* **One-Click AI Fix Proposals:** Automatically generate and apply intelligent AI repairs for broken exits, missing keys, or narrative inconsistencies directly from the editor's Validation Tab.\n\n### 🎯 Quests & Meta-Progression\n* **Dynamic Objectives:** Follow main storylines or explore optional side quests. The AI Gamemaster evaluates your actions and dynamically updates your quest log.\n* **Achievement System:** Unlock custom, AI-generated awards (Bronze, Silver, Gold) for exceptional problem-solving and out-of-the-box thinking.\n\n### ⚙️ Deep RPG Mechanics\n* **Strict Rule Enforcement:** While the narrative flows freely, a strict 2-pass RPG rulebook (Mechanics + Narrative) runs in the background.\n* **State Management:** Manage Hitpoints, Stamina, and Mana, while reacting to plot-driven status effects (e.g., Poisoned, Blessed).\n* **Loot & Inventory System:** Dedicated isolated inventory system with specific equipment slots (Head, Chest, Rings, etc.).\n* **Tactical Combat Dialog:** Dedicated combat modal with contextual actions (attack, run, rest, consume) plus integrated loot resolution flow.\n* **Container Gameplay:** Containers can be generated in scenes and inventory, support locked/unlocked states, and may require a code or item condition before access.\n* **Text-Log Discovery System:** Readable objects can contain structured text logs (document, scroll, book, sign) that can be opened directly from scene and inventory interactions.\n\n### 🎧 The Playable Audiobook & Voice Input (Cinematic Audio)\n* **Next-Gen Voice Acting:** Powered by **Google Gemini 3.5 Flash (TTS)** and **ElevenLabs**, the AI Gamemaster narrates your adventure with cinematic quality and emotional depth.\n* **Speech-to-Text & Push-to-Talk (PTT):** True hands-free roleplaying! Hold down the interactive microphone UI button or hotkeys (`V`, `B`, or `T`) to record and speak directly to NPCs and the GM. Releases auto-transcribe and submit immediately.\n* **In-Character Speech Shortcuts:** Hold down `B`, `T`, or `Shift` to automatically prepend `/say ` to your transcription, allowing seamless in-character dialogue.\n* **Background Whisper Model Loading:** Configurable local Whisper model preloads in a background thread to prevent UI blocking, with real-time state logging (idle, loading, active, error).\n\n### 🗺️ Visuals & Sensory Immersion\n* **Dynamic Cartography:** Automatic rendering of hand-drawn style directed graph maps of your discovered scenes using rough.js and dagre[cite: 1].\n* **Babel Fish Multilingualism:** Generate adventures and translate narration instantly in multiple languages.\n\n### 🧠 Bring Your Own Model (BYOK) & Privacy First\n* **Cloud-Tier Intelligence:** Designed to harness the reasoning power of flagship models (Anthropic Opus 5.x, OpenAI 5.x, DeepSeek v4 Pro) via our LiteLLM adapter for flawless, complex world generation. You provide your own API key, meaning you have full control over your data and costs.\n* **Self-Hosted & Tenant-Ready:** Run the backend completely on your own hardware via Docker. Built on SQLite with UUID-based primary keys, your game progress and prompts remain local and private on your machine.\n* **Local Tinkering (Experimental):** While the core engine relies on high-tier models for complex JSON generation, we offer highly experimental support for local execution via **Ollama**. Perfect for developers looking to push the boundaries of local inference, though not yet recommended for stable gameplay.\n\n### Persistent Game Progress & Memory\n* **Memory Feature:** The AI remembers all previous conversations and actions of the player within an adventure.\n* **Persistence:** Progress is permanently stored in the database, allowing sessions to be paused and resumed at any time.\n* **Continuous Auto-Save Milestones:** TaleWeaver now creates automatic checkpoints at major story milestones (scene changes, quest milestones, award events).\n* **Chronicles Timeline + Rollback:** Open the new Chronicles timeline in-game and restore to any recent checkpoint. Rollback performs a hard timeline rewind by restoring stored state and removing future messages after that checkpoint.\n* **Retention Policy:** To keep sessions fast and compact, only the five most recent checkpoints are retained per game session.\n\n### Media & Immersion\n* Optional AI-generated images to enhance the aesthetic.\n* **Import/Export:** Adventures can be backed up or shared.\n* **Offline Image Generation:** Local providers are supported, including **Ollama** and **Stable Diffusion via Automatic1111/Forge API**.\n\n### Recent Feature Highlights\n\n#### 🌟 What's New in v0.6.0-beta\n* **Immersive In-Game & Comic Turn Engine**: Fully reimagined interactive gameplay UI. The narrative feed is rendered as comic-style panels with speaker portraits, custom speech bubbles, and action cues (`ImmersiveStoryFeed`, `useComicTurns`). Scenes now feature interactive point-and-click hotspots (`ImmersiveSceneHotspots`) for room exits and item inspections, a dedicated NPC character stage (`ImmersiveCharacterStage`), voice-tag speech synchronization, and a modernized HUD with an in-game clock widget.\n* **Sandboxed Python Scripting Engine**: Secure, deterministic event logic running in an isolated AST interpreter sandbox (`backend/engine/scripting`). Creators and AI world generators can craft rich lifecycle event triggers (`on_enter_scene`, `on_interact`, `on_turn_start`, `on_turn_end`) affecting scenes, inventory, NPC state, stats, custom persistent variables, and victory/defeat rules. "
-    },
-    "brief": {
-      "summary": "A next-generation AI-powered text adventure engine featuring dynamic storytelling, procedural world-building, and immersive visual/auditory generation.",
-      "problem": "该项目围绕“A next-generation AI-powered text adventure engine featuring dynamic storytelling, procedural world-building, and immersive visual/auditory generation.”提供开源实现或相关资源。",
-      "highlights": [
-        "可以用来试用或扩展：A next-generation AI-powered",
-        "主要使用 Python 开发",
-        "主题包括：adventure-engine、ai、ai-storytelling、docker"
-      ],
-      "target_users": [
-        "希望了解或试用该项目方向的开发者"
-      ],
-      "why_trending": "近期保持活跃，ACG 雷达发现时已有 20 个 Star。",
-      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
-      "category": "游戏开发",
-      "generated_by_ai": false,
-      "prompt_version": "use-cases-v2"
-    },
-    "interest": {
-      "repository": "jschm42/taleweaver",
-      "score": 60,
-      "category": "游戏开发",
-      "reason": "匹配关键词：gamedev",
-      "generated_by_ai": false,
-      "velocity_score": 0,
-      "freshness_score": 40,
-      "ranking_score": 36.0
+      "ranking_score": 45.0
     }
   }
 ]
