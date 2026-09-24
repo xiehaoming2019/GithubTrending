@@ -1,0 +1,528 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "google/ax",
+      "url": "https://github.com/google/ax",
+      "description": "Google's open agentic orchestration runtime",
+      "language": "Go",
+      "total_stars": 9310,
+      "forks": 447,
+      "stars_today": 1543,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1543
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-30T17:55:01Z",
+      "updated_at": "2026-09-24T05:04:12Z",
+      "pushed_at": "2026-09-23T21:08:29Z",
+      "open_issues": 38,
+      "homepage": "https://agentexecutor.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1>\n  <img src=\"assets/axolotl.svg\" width=\"70\" align=\"absmiddle\" alt=\"AX axolotl\">\n  AX\n</h1>\n\n> [!WARNING]\n> We are still actively refining our core concepts, protocols,\n> and specifications. We will likely to introduce major breaking\n> changes prior to a stable release.\n\n**Declare an agentic task with workspaces and gateway specifications. AX sandboxes it, wires up its workspace, fences its network, and helps running it at scale.**\n\nAX is a high-throughput, declarative orchestrator to run billions of autonomous agent workloads in a cluster. It runs on top of [Agent Substrate](https://github.com/agent-substrate/substrate) for sandboxed execution and is built to run billions of tasks per cluster. If you have used Kubernetes, `ax` will feel similar.\n\n```yaml\n# task.yaml\napiVersion: ax.io/v1alpha1\nkind: Workspace\nmetadata:\n  name: golang\nspec:\n  git:\n    - repo: https://github.com/golang/go.git\n      branch: \"my-fix\"\n---\napiVersion: ax.io/v1alpha1\nkind: Task\nmetadata:\n  name: test\nspec:\n  workspaces:\n    - name: golang\n      goal: \"Ensure that Go tool chain is available and is built from source\"\n  debug: true   # lets you `ax ssh` into the sandbox\n```\n\nThen apply it, watch it come up, and look over the agent's shoulder:\n\n```bash\nax apply -f task.yaml\nax watch task test\nax ssh test -- ls -al /workspace\n```\n\n## Why?\n\nAgents are a new kind of workload. They are neither stateless microservices nor run-to-completion batch jobs. They accumulate state, need strict isolation, call out to model APIs and tool servers, and can burn money in a loop if nobody is watching. AX gives you four small primitives that handle all of that declaratively:\n\n| You want to... | AX gives you |\n|---|---|\n| Run untrusted agent code in an isolated sandbox with CPU/memory limits | **`Task`** |\n| Pre-wire Git repos, MCP servers, and skill packages so every agent starts warm | **`Workspace`** |\n| Lock outbound traffic down to an explicit host allowlist | **`Gateway`** |\n| Configure which LLM the platform itself uses, with credentials from a Kubernetes secret | **`Model`** |\n| Pause an idle agent and pick up exactly where it left off | `ax suspend` / `ax resume` |\n| Shell into a running agent to see what it is doing | `ax ssh` |\n\nEverything is expressed as `ax.io/v1alpha1` manifests and applied with a single command.\n\n## Quick start\n\n### 1. Install the CLI\n\n```bash\ngo install github.com/google/ax/cmd/ax@latest\n```\n\nThis puts the `ax` binary in `$(go env GOPATH)/bin`. Make sure that directory is on your `PATH`.\n\n### 2. Deploy the control plane\n\nYou need a Kubernetes cluster, [`ko`](https://ko.build/) (`brew install ko`), a container registry your cluster can pull from, and a reachable Agent Substrate Control API (in-cluster default: `api.ate-system.svc.cluster.local:443`).\n\n```bash\nmake deploy AX_IMAGE_REPO=<your-registry>\n```\n\nThis deploys Redis, then builds and deploys the control plane images with `ko`. Everything lands in the `ax-system` namespace.\n\n### 3. Run your first task\n\n```bash\nax apply -f examples/task.yaml       # Task + Workspace + Gateway + Model in one file\nax get tasks\n# NAME      ATESPACE   PHASE     ACTOR           WORKER-IP    AGE\n# task123   default    Running   task123         10.20.3.67   1m\n\nax watch task task123                # stream phase and condition changes live\nax ssh task123 -- ls -la /workspace  # poke around inside the sandbox\nax suspend task task123              # checkpoint and pause\nax resume task task123               # pick up where it left off\n```\n\nWant to see the whole lifecycle end to end? Run [`./demo.sh`](demo.sh). It applies a custom workspace, waits for readiness, runs commands over `ax ssh`, and suspends the task.\n\n## Documentation\n\n| Guide | Read it to... |\n|---|---|\n| [Concepts](docs/concepts.md) | Learn what a `Task`, `Workspace`, `Gateway`, and `Model` each do, and how a task moves through phases and conditions. |\n| [Manifests](docs/manifests.md) | Write your own YAML, with an annotated example of every kind. |\n| [Sandbox](docs/sandbox.md) | See what the runner does on boot and what your command can rely on: metadata server, guest services, environment. |\n| [Runners](docs/runner.md) | Understand the contract between the control plane and the task container, and build your own runner image to replace the default. |\n| [Networking](docs/networking.md) | Reach a running task through the atenet router from the cluster, your laptop, or a gRPC client. |\n| [Architecture](DESIGN.md) | Understand how the control plane fits together, plus the [API reference](DESIGN.md#api-reference). |\n| [Development](docs/development.md) | Build, test, and ship changes to AX itself. |\n| [Roadmap](docs/roadmap.md) | See planned milestones across core specs, actor architecture, agentic environments, and governance. |\n\n## CLI usage\n\n`ax` talks to the control plane over gRPC. It is deliberately `kubectl`-shaped: `apply`, `get`, `describe`, `watch`, `delete`, plus a few agent-specific verbs.\n\n### Everyday commands\n\n```bash\n# Apply anything (multi-document YAML, file or stdin)\nax apply -f examples/task.yaml\n\n# Tasks\nax get tasks                          # list\nax get tasks -a my-atespace           # list in another atespace\nax get task task123                   # full spec + live status as YAML\nax describe task task123              # human-readable detail\nax watch task task123                 # stream status and condition transitions\nax suspend task task123               # checkpoint actor state and pause\nax resume task task123                # resume a suspended task\nax delete task task123\n\n# Shell into the running sandbox\nax ssh task123                        # interactive shell (task needs spec.debug: true)\nax ssh task123 -- ls -la /workspace   # one-off command\nax ssh task123 -- python3 main.py\n\n# Gateways, workspaces, models follow the same pattern\nax get gateways\n# NAME              ATESPACE   LISTENERS             EGRESS-HOSTS\n# default-gateway   default    8494/gRPC,8080/HTTP   *\nax describe gateway default-gateway\nax delete gateway default-gateway\n\nax get workspaces\n# NAME                ATESPACE   GIT-REPOS   MCP-SERVERS\n# default-workspace   default    1           1\nax describe workspace default-workspace\nax delete workspace default-workspace\n\nax get models\n# NAME            ATESPACE   PROVIDER   MODEL\n# default-model   default    google     gemini-3.8-flash\nax describe model default-model\nax delete model default-model\n\n# Connection plumbing\nax ctx                                # active kube context and how ax is reaching the control plane\nax tunnel list                        # background tunnels (state lives in ~/.ax/tunnels)\nax tunnel stop\nax version\n```\n\n### Works with `kubectx`\n\n`ax` follows your active Kubernetes context. Switch clusters and `ax` resolves and tunnels to that cluster's control plane in the background.\n\n```bash\nkubectx staging-cluster\nax get tasks\n\nkubectx prod-cluster\nax get tasks\n\n# Or target a context without switching\nax --context=dev-cluster get tasks\n```\n\n### Global flags\n\n| Flag | Description | Default |\n|---|---|---|\n| `-a`, `--atespace` | Atespace scope for the command | `default` |\n| `-n`, `--namespace` | Kubernetes namespace where AX is installed | `ax-system` |\n| `--context` | Kubernetes context to target | active `kubectx` / `current-context` |\n| `--server` | Control plane address, bypassing auto-detection | derived from kube context, or `$AX_SERVER` |\n\n## License\n\nApache License 2.0. See [LICENSE](LICENSE) for details.\n"
+    },
+    "brief": {
+      "summary": "Google's open agentic orchestration runtime",
+      "problem": "该项目围绕“Google's open agentic orchestration runtime”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Google's open agentic orches",
+        "主要使用 Go 开发",
+        "许可证：Apache-2.0"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 1,543 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "google/ax",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agentic、agent、mcp",
+      "generated_by_ai": false,
+      "velocity_score": 97,
+      "freshness_score": 40,
+      "ranking_score": 64.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "language": "Shell",
+      "total_stars": 290793,
+      "forks": 26023,
+      "stars_today": 474,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 474
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-09T19:45:18Z",
+      "updated_at": "2026-09-24T05:03:01Z",
+      "pushed_at": "2026-09-22T18:22:49Z",
+      "open_issues": 397,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Superpowers\n\nSuperpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.\n\n## Table of Contents\n\n- [How it works](#how-it-works)\n- [Commercial Services](#commercial-services)\n- [Getting Started](#installation)\n  - [Claude Code](#claude-code)\n  - [Antigravity](#antigravity)\n  - [Codex App](#codex-app)\n  - [Codex CLI](#codex-cli)\n  - [Cursor](#cursor)\n  - [Devin CLI](#devin-cli)\n  - [Factory Droid](#factory-droid)\n  - [Gemini CLI](#gemini-cli)\n  - [GitHub Copilot CLI](#github-copilot-cli)\n  - [Grok Build CLI](#grok-build-cli)\n  - [Kimi Code](#kimi-code)\n  - [OpenCode](#opencode)\n  - [Pi](#pi)\n  - [Qwen Code](#qwen-code)\n  - [Hermes Agent](#hermes-agent)\n  - [Muse](#muse)\n- [The Basic Workflow](#the-basic-workflow)\n- [When Something Goes Wrong](#when-something-goes-wrong)\n- [Community](#community)\n- [What's Inside](#whats-inside)\n- [Philosophy](#philosophy)\n- [Contributing](#contributing)\n- [Updating](#updating)\n- [License](#license)\n- [Visual companion telemetry](#visual-companion-telemetry)\n\n## How it works\n\nIt starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. \n\nOnce it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. \n\nAfter you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. \n\nNext up, once you say \"go\", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.\n\nThere's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.\n\n## Commercial Services\n\nIf you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.\n\n## Installation\n\nInstallation differs by harness. If you use more than one, install Superpowers separately for each one.\n\n### Claude Code\n\nSuperpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)\n\n#### Official Marketplace\n\n- Install the plugin from Anthropic's official marketplace:\n\n  ```bash\n  /plugin install superpowers@claude-plugins-official\n  ```\n\n#### Superpowers Marketplace\n\nThe Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.\n\n- Register the marketplace:\n\n  ```bash\n  /plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin from this marketplace:\n\n  ```bash\n  /plugin install superpowers@superpowers-marketplace\n  ```\n\n### Antigravity\n\nInstall Superpowers as a plugin from this repository:\n\n```bash\nagy plugin install https://github.com/obra/superpowers\n```\n\nAntigravity runs the plugin's session-start hook, so Superpowers is active from\nthe first message. Reinstall with the same command to update.\n\n### Codex App\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- In the Codex app, click on Plugins in the sidebar.\n- You should see `Superpowers` in the Coding section.\n- Click the `+` next to Superpowers and follow the prompts.\n\n### Codex CLI\n\nSuperpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).\n\n- Open the plugin search interface:\n\n  ```bash\n  /plugins\n  ```\n\n- Search for Superpowers:\n\n  ```bash\n  superpowers\n  ```\n\n- Select `Install Plugin`.\n\n### Cursor\n\n- In Cursor Agent chat, install from marketplace:\n\n  ```text\n  /add-plugin superpowers\n  ```\n\n- Or search for \"superpowers\" in the plugin marketplace.\n\n### Devin CLI\n\n- Install the plugin from this repository:\n\n  ```bash\n  devin plugins install obra/superpowers\n  ```\n\n- Update to the latest version with:\n\n  ```bash\n  devin plugins update superpowers\n  ```\n\n### Factory Droid\n\n- Register the marketplace:\n\n  ```bash\n  droid plugin marketplace add https://github.com/obra/superpowers\n  ```\n\n- Install the plugin:\n\n  ```bash\n  droid plugin install superpowers@superpowers\n  ```\n\n### Gemini CLI\n\n- Install the extension:\n\n  ```bash\n  gemini extensions install https://github.com/obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  gemini extensions update superpowers\n  ```\n\n### GitHub Copilot CLI\n\n- Register the marketplace:\n\n  ```bash\n  copilot plugin marketplace add obra/superpowers-marketplace\n  ```\n\n- Install the plugin:\n\n  ```bash\n  copilot plugin install superpowers@superpowers-marketplace\n  ```\n\n### Grok Build CLI\n\nSuperpowers is available via the [official Grok plugin marketplace](https://github.com/xai-org/plugin-marketplace).\n\n- Install the plugin from xAI's official marketplace:\n\n  ```bash\n  grok plugin install superpowers@xai-official --trust\n  ```\n\n- Or open the marketplace in the TUI, search for Superpowers, and install it:\n\n  ```text\n  /marketplace\n  ```\n\n### Kimi Code\n\nSuperpowers is available in Kimi Code's plugin marketplace.\n\n- Open Kimi Code's plugin manager:\n\n  ```text\n  /plugins\n  ```\n\n- Go to `Marketplace` > `Superpowers` and install it.\n\n- Or install directly from this repository:\n\n  ```text\n  /plugins install https://github.com/obra/superpowers\n  ```\n\n- Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)\n\n### OpenCode\n\nOpenCode uses its own plugin install; install Superpowers separately even if you\nalready use it in another harness.\n\n- Tell OpenCode:\n\n  ```\n  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md\n  ```\n\n- Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)\n\n### Pi\n\nInstall Superpowers as a Pi package from this repository:\n\n```bash\npi install git:github.com/obra/superpowers\n```\n\nFor local development, run Pi with this checkout loaded as a temporary package:\n\n```bash\npi -e /path/to/superpowers\n```\n\nThe Pi package loads the Superpowers skills and a small extension that injects the `using-superpowers` bootstrap at session startup and again after compaction. Pi has native skills, so no compatibility `Skill` tool is required. Subagent and task-list tools remain optional Pi companion packages.\n\n### Qwen Code\n\nQwen Code installs plugins from Claude Code marketplaces directly.\n\n- Install the plugin from this repository, and pick `superpowers` when prompted:\n\n  ```bash\n  qwen extensions install obra/superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  qwen extensions update superpowers\n  ```\n\n### Hermes Agent\n\nInstall Superpowers as a Hermes plugin from this repository:\n\n```bash\nhermes plugins install obra/superpowers --enable\n```\n\nRestart any active Hermes sessions after installing. Note: Hermes has no\npost-compaction hook, so a very long session that compacts over its first\nturn loses the bootstrap — start a fresh session if skills stop triggering.\n\n### Muse\n\nSuperpowers is available as a native Muse plugin — same repo, same skills, all harnesses. The `using-superpowers` bootstrap is injected via the native `SessionStart` hook alongside Claude Code, Codex, Cursor, Gemini, Pi, and the rest — no per-session opt-in.\n\n- Install from a local checkout:\n\n  ```bash\n  muse plugins install ./\n  muse plugins approve superpowers\n  ```\n\n  Or clone and install:\n\n  ```bash\n  git clone https://github.com/obra/superpowers.git\n  muse plugins install ./superpowers\n  muse plugins approve superpowers\n  ```\n\n- Update later:\n\n  ```bash\n  muse plugins update superpowers\n  ```\n\nRestart any active Muse sessions after installing so the `SessionStart` hook takes effect — skills are active immediately, hooks require approval on first install. To verify, start a fresh session and send `Let's make a react todo list` — a working install auto-triggers `brainstorming` before any code is written. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.\n\n## The Basic Workflow\n\n1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.\n\n2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.\n\n3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.\n\n4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest).\n\n5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.\n\n6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.\n\n7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.\n\n**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.\n\n## When Something Goes Wrong\n\nSometimes a session misbehaves: a skill fires when it shouldn't, stays silent when it should, or the agent ignores its plan, repeats work, or burns more tokens than you'd expect. Ask your coding agent to \"figure out what went wrong with superpowers in this session\" and it will invoke the **diagnosing-superpowers** skill. To examine an earlier session, name it: \"figure out what went wrong with superpowers in session `<id>`\".\n\nThe skill reads the session transcript, reports what happened with line-level evidence, and, if you want, packages a scrubbed bundle for a bug report.\n\n## Community\n\nSuperpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).\n\n- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers\n- **Issues**: https://github.com/obra/superpowers/issues\n- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions\n\n## What's Inside\n\n### Skills Library\n\n**Testing**\n- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)\n\n**Debugging**\n- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)\n- **verification-before-completion** - Ensure it's actually fixed\n- **diagnosing-superpowers** - Work out what went wrong in a session, with evidence; export a scrubbed bundle or file an issue\n\n**Collaboration** \n- **brainstorming** - Socratic design refinement\n- **writing-plans** - Detailed implementation plans\n- **executing-plans** - Inline plan execution: one context, one final review\n- **dispatching-parallel-agents** - Concurrent subagent workflows\n- **requesting-code-review** - Pre-review checklist\n- **receiving-code-review** - Responding to feedback\n- **using-git-worktrees** - Parallel development branches\n- **finishing-a-development-branch** - Merge/PR decision workflow\n- **subagent-dr"
+    },
+    "brief": {
+      "summary": "An agentic skills framework & software development methodology that works.",
+      "problem": "该项目围绕“An agentic skills framework & software development methodology that works.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：An agentic skills framework ",
+        "主要使用 Shell 开发",
+        "主题包括：ai、brainstorming、coding、obra"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 474 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "obra/superpowers",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：agentic、agent、codex",
+      "generated_by_ai": false,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 62.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "DeusData/codebase-memory-mcp",
+      "url": "https://github.com/DeusData/codebase-memory-mcp",
+      "description": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
+      "language": "C",
+      "total_stars": 44664,
+      "forks": 3644,
+      "stars_today": 190,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 190
+    },
+    "details": {
+      "topics": [
+        "aider",
+        "ast",
+        "claude-code",
+        "code-analysis",
+        "code-intelligence",
+        "codex",
+        "cursor",
+        "cypher",
+        "developer-tools",
+        "gemini-cli",
+        "graph-visualization",
+        "kilocode",
+        "knowledge-graph",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "opencode",
+        "sqlite",
+        "tree-sitter",
+        "windsurf"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-24T22:01:00Z",
+      "updated_at": "2026-09-24T04:59:33Z",
+      "pushed_at": "2026-09-24T02:51:00Z",
+      "open_issues": 601,
+      "homepage": "https://deusdata.github.io/codebase-memory-mcp/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# codebase-memory-mcp\n\n[![GitHub Release](https://img.shields.io/github/v/release/DeusData/codebase-memory-mcp?style=flat&color=blue)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)\n[![CI](https://img.shields.io/github/actions/workflow/status/DeusData/codebase-memory-mcp/dry-run.yml?label=CI)](https://github.com/DeusData/codebase-memory-mcp/actions/workflows/dry-run.yml)\n[![Tests](https://img.shields.io/badge/tests-8050_passing-brightgreen)](https://github.com/DeusData/codebase-memory-mcp)\n[![Languages](https://img.shields.io/badge/languages-162-orange)](https://github.com/DeusData/codebase-memory-mcp)\n[![Hybrid LSP](https://img.shields.io/badge/Hybrid_LSP-10_languages-blue)](#hybrid-lsp)\n[![Agents](https://img.shields.io/badge/agent_surfaces-45-purple)](https://github.com/DeusData/codebase-memory-mcp)\n[![Pure C](https://img.shields.io/badge/pure_C-no_language_runtime-blue)](https://github.com/DeusData/codebase-memory-mcp)\n[![Platform](https://img.shields.io/badge/macOS_%7C_Linux_%7C_Windows-supported-lightgrey)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/DeusData/codebase-memory-mcp/badge)](https://scorecard.dev/viewer/?uri=github.com/DeusData/codebase-memory-mcp)\n[![SLSA 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)\n[![VirusTotal](https://img.shields.io/badge/VirusTotal-scanned_every_release-brightgreen?logo=virustotal)](https://github.com/DeusData/codebase-memory-mcp/releases/latest)\n[![arXiv](https://img.shields.io/badge/arXiv-2603.27277-b31b1b?logo=arxiv)](https://arxiv.org/abs/2603.27277)\n\n**The fastest and most efficient code intelligence engine for AI coding agents.** Full-indexes an average repository in milliseconds, the Linux kernel (28M LOC, 75K files) in 3 minutes. Answers structural queries in under 1ms. Ships as a native executable with a small verified runtime-asset set for macOS, Linux, and Windows — download, run `install`, done.\n\nHigh-quality parsing through [tree-sitter](https://tree-sitter.github.io/tree-sitter/) AST analysis across all 162 languages, enhanced with [**Hybrid LSP** semantic type resolution](#hybrid-lsp) for Python, TypeScript / JavaScript / JSX / TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl — producing a persistent knowledge graph of functions, classes, call chains, HTTP routes, and cross-service links. 17 MCP tools. No language runtime, hosted service, or API key. Plug and play across 45 supported automatic/conditional client surfaces.\n\n> **Research** — The design and benchmarks behind this project are described in the preprint [*Codebase-Memory: Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration via MCP*](https://arxiv.org/abs/2603.27277) (arXiv:2603.27277). Evaluated across 31 real-world repositories: 83% answer quality, 10× fewer tokens, 2.1× fewer tool calls vs. file-by-file exploration.\n\n> **Security & Trust** — This tool reads your codebase and writes to your agent configuration files. That is what it is designed to do. If you prefer to audit before running, the [full source is here](https://github.com/DeusData/codebase-memory-mcp). For each release product, three behaviourally identical executable candidates (unstripped, debug-stripped, stripped) are submitted to VirusTotal before testing; the selected candidate is then packaged with its SHA-256 unchanged. Release notes link every measured candidate result. Publication permits only the narrowly documented single-Microsoft `!ml` tolerance in [SECURITY.md](SECURITY.md#our-release-policy). All processing happens 100% locally; your code never leaves your machine. Found a security issue? We want to know — see [SECURITY.md](SECURITY.md). Security is Priority #1 for us.\n\n<p align=\"center\">\n  <img src=\"docs/graph-ui-screenshot.png\" alt=\"Graph visualization UI showing the codebase-memory-mcp knowledge graph\" width=\"800\">\n  <br>\n  <em>Built-in 3D graph visualization — explore your knowledge graph at localhost:9749</em>\n</p>\n\n## Why codebase-memory-mcp\n\n- **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.\n- **Plug and play** — native executable plus authenticated release-owned assets for macOS (arm64/amd64), Linux (arm64/amd64), and Windows (amd64). The native install needs no Docker, language runtime, or API keys. Download → `install` → restart agent → done.\n- **162 languages** — vendored tree-sitter grammars compiled into the binary. Nothing to install, nothing that breaks.\n- **120x fewer tokens** — 5 structural queries: ~3,400 tokens vs ~412,000 via file-by-file search. One graph query replaces dozens of grep/read cycles.\n- **45 supported automatic/conditional client surfaces** — `install` configures detected clients and safely activates conditional clients only when their documented platform, marker, or explicit existing config path is present. See [Multi-Agent Support](#multi-agent-support) for the complete matrix and manual/UI-only boundaries.\n- **Built-in graph visualization** — 3D interactive UI at `localhost:9749`, served from the binary itself.\n- **Infrastructure-as-code indexing** — Dockerfiles, Kubernetes manifests, and Kustomize overlays indexed as graph nodes with cross-references. `Resource` nodes for K8s kinds, `Module` nodes for Kustomize overlays with `IMPORTS` edges to referenced resources.\n- **17 MCP tools** — search, trace, architecture, impact analysis, targeted index-coverage checks, Cypher queries, dead code detection, cross-service HTTP linking, ADR management, and more.\n\n## Quick Start\n\n**One-line install** (macOS / Linux):\n```bash\ncurl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash\n```\n\nWith graph visualization UI:\n```bash\ncurl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash\n```\n\n**Windows** (PowerShell):\n```powershell\n# 1. Download the installer\nInvoke-WebRequest -Uri https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.ps1 -OutFile install.ps1\n\n# 2. (Optional but recommended) Inspect the script\nnotepad install.ps1\n\n# 3. Unblock the downloaded file (removes Mark-of-the-Web restriction added by browsers/Invoke-WebRequest)\nUnblock-File .\\install.ps1\n\n# 4. Run it\n.\\install.ps1\n\n```\n\n> **Note:** If you see a script execution policy error, run `Set-ExecutionPolicy -Scope Process Bypass` first, or invoke with `PowerShell -ExecutionPolicy Bypass -File .\\install.ps1`.\n\nOptions: `--skip-config` (binary only, no agent setup), `--dir=<path>` (custom location).\n\n> **Antivirus note:** Microsoft Defender may flag a release binary as\n> `Trojan:Script/Wacatac.B!ml`. This is a known false positive — typically 61 of\n> ~62 engines return clean, and the same detection family hits `gh`, llama.cpp,\n> Godot and Microsoft's own Go toolchain. See\n> [Antivirus False Positives](SECURITY.md#antivirus-false-positives) for the\n> evidence, how to verify the artifacts yourself, and how to report it if you\n> think we are wrong.\n\nRestart your coding agent. Say **\"Index this project\"** — done.\n\n<details>\n<summary>Manual install</summary>\n\n1. **Download** the archive for your platform from the [latest release](https://github.com/DeusData/codebase-memory-mcp/releases/latest):\n   - `codebase-memory-mcp-<os>-<arch>.tar.gz` (macOS/Linux) or `.zip` (Windows)\n\n2. **Extract and install** (each archive includes `install.sh` or `install.ps1`):\n\n   macOS / Linux:\n   ```bash\n   tar xzf codebase-memory-mcp-*.tar.gz\n   ./install.sh\n   ```\n\n   Windows (PowerShell):\n   ```powershell\n   Expand-Archive codebase-memory-mcp-windows-amd64.zip -DestinationPath .\n   Unblock-File .\\install.ps1\n   .\\install.ps1\n   ```\n\n3. **Restart** your coding agent.\n\nThe `install` command automatically strips macOS quarantine attributes and ad-hoc signs the binary — no manual `xattr`/`codesign` needed.\n</details>\n\nThe `install` command auto-detects installed coding agents and configures their documented MCP entries plus durable instructions, skills, and lifecycle hooks where supported.\n\n### Session Coordination Daemon\n\nCBM automatically shares one per-account coordination daemon across Claude Code, Codex, OpenCode, and every other configured client. There is no opt-in setting for MCP servers or hook clients: the first daemon-backed CBM session starts it, each session registers its own work, and the final session shuts it down. The daemon owns long-lived background services such as watchers, shared indexing jobs, and the optional UI. Closing one session cancels work owned only by that session, while work still needed by another session continues.\n\nThe detached daemon does not depend on an MCP frontend's stderr. It keeps owner-only durable records under the canonical `${CBM_CACHE_DIR}/logs` directory (default `~/.cache/codebase-memory-mcp/logs`):\n\n| File | Contents |\n|------|----------|\n| `cbm-daemon.log` | Daemon lifecycle, watcher/indexing, UI, resource, and error events. |\n| `daemon-conflicts.ndjson` | Exact-build, coordination-ABI, and cache-root admission conflicts. |\n| `activation-events.ndjson` | Install/update/uninstall activation progress and outcomes. |\n\nThin frontends still write immediate startup and session-specific errors to their own stderr; MCP JSON-RPC stdout remains clean.\n\nAll active CBM processes must run the exact same version, executable build, coordination ABI, and canonical cache root. Equivalent `CBM_CACHE_DIR` aliases resolve to the same root; a genuinely different root is rejected while any CBM process is active. MCP servers, hooks, one-shot CLI commands, temporary index workers, and the daemon share a crash-safe OS admission barrier; starting an ordinary conflicting process fails before doing work and records an explicit conflict in `${CBM_CACHE_DIR}/logs/daemon-conflicts.ndjson`.\n\nThe native `install`, `update`, and `uninstall` commands are the deliberate exception to that conflict rule. Download, verification, and private same-filesystem staging happen first so a bad candidate never disrupts active work. Activation then publishes account-wide maintenance intent, asks the daemon and every temporary local operation to cancel, and waits to a finite deadline for all coordinated CBM processes to exit. It holds the admission and lifetime barriers exclusively while changing the active binary, configuration, PATH, or indexes. New CBM work cannot enter during this window. Activation progress and results are recorded in `${CBM_CACHE_DIR}/logs/activation-events.ndjson`, and a successful command tells you to restart open coding-agent sessions so they launch the activated build.\n\nPackage-manager setup (npm, PyPI, or Go) verifies and publishes a coherent private cached runtime set. Sidecars are replaced before the executable with per-file atomic renames; an interrupted multi-file publication is detected and repaired on the next launch rather than being described as one crash-atomic filesystem transaction. It does not replace the active native installation and therefore does not stop running CBM sessions. When that cached binary is executed, it still enters the same exact-build admission barrier. The shell and PowerShell installers invoke the verified candidate's native `install` command, so they do receive the full account-wide activation guarantee.\n\nThe ordinary `cli` mode is intentionally separate: it runs one command locally and never starts or connects to the coordination daemon, registers a daemon session, or starts watchers/UI. Its only shared state is the OS admission barrier plus per-project locks for graph mutations. While the command is running, a temporary monitor lets activation cancel that operation and its supervised worker safely; the monitor exits with the command and never becomes a standing daemon. See [CLI Mode](#cli-mode) for d"
+    },
+    "brief": {
+      "summary": "High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.",
+      "problem": "该项目围绕“High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：High-performance code intell",
+        "主要使用 C 开发",
+        "主题包括：aider、ast、claude-code、code-analysis"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "今日新增约 190 个 Star，进入 GitHub Trending。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "DeusData/codebase-memory-mcp",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "匹配关键词：mcp、codex、agent",
+      "generated_by_ai": false,
+      "velocity_score": 69,
+      "freshness_score": 40,
+      "ranking_score": 61.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "xujialiu/Zotero-TTS",
+      "url": "https://github.com/xujialiu/Zotero-TTS",
+      "description": "Text-to-speech for Zotero 10: more voices, word and sentence highlighting at once in your own colors, speed and navigation shortcuts, one voice across documents, settings backup and reading-position sync through WebDAV.",
+      "language": "TypeScript",
+      "total_stars": 27,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "azure-speech",
+        "kokoro",
+        "openai",
+        "read-aloud",
+        "text-to-speech",
+        "tts",
+        "zotero",
+        "zotero-addon",
+        "zotero-plugin"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-08-22T16:25:57Z",
+      "updated_at": "2026-09-24T05:03:30Z",
+      "pushed_at": "2026-09-24T05:03:24Z",
+      "open_issues": 10,
+      "homepage": "https://github.com/xujialiu/Zotero-TTS/releases/latest",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"assets/icon.png\" width=\"80\" alt=\"Zotero-TTS icon\"></p>\n<h1 align=\"center\">Zotero-TTS</h1>\n\n<p align=\"center\"><em>Text-to-speech for Zotero 10: more voices, word-and-sentence highlighting in your colors, keyboard shortcuts.</em></p>\n\n<p align=\"center\">\n  <a href=\"https://www.zotero.org\"><img src=\"https://img.shields.io/badge/Zotero-10-green?style=flat-square&logo=zotero&logoColor=CC2936\" alt=\"Zotero 10\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/releases/latest\"><img src=\"https://img.shields.io/github/v/release/xujialiu/Zotero-TTS?style=flat-square&label=Release\" alt=\"Latest release\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/releases\"><img src=\"https://img.shields.io/github/downloads/xujialiu/Zotero-TTS/total?style=flat-square&label=Downloads\" alt=\"Downloads\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/commits/main\"><img src=\"https://img.shields.io/github/last-commit/xujialiu/Zotero-TTS?style=flat-square&label=Last%20commit\" alt=\"Last commit\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\"><b>English</b> · <a href=\"README.zh.md\">简体中文</a></p>\n\n<p align=\"center\"><img src=\"assets/word-highlight.gif\" width=\"720\" alt=\"Read Aloud reading a paragraph: the word being read in blue, its sentence in yellow\"></p>\n\n<p align=\"center\">If you like Zotero-TTS, give it a ⭐ on <a href=\"https://github.com/xujialiu/Zotero-TTS\">GitHub</a> — it helps others find it.</p>\n\n## What it adds\n\nZotero-TTS adds voices and a player to Zotero 10: each provider is an entry\nof the player's first dropdown, and Zotero's own Standard and Premium are\ntwo more, each behind a switch of its own. It\nis built for the way its author reads —\n[why, and where it is going](docs/PHILOSOPHY.md).\n\n- 🗣️ **More voices in the Read Aloud player**, one entry per provider — Fish Audio (free, and the one to start with), Azure Speech, Cloudflare Workers AI, Speechify, a [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) or a [Fish Speech](https://github.com/fishaudio/fish-speech) server on your machine, OpenAI, Xiaomi MiMo or any OpenAI-compatible server — with Zotero's own Standard and Premium beside them, each behind a switch. [→ Providers](#providers)\n- 🎛️ **A player in three layouts** — a bottom bar, a top bar below the toolbar, or a floating panel. Change layout without interrupting playback. [→ Player](#player)\n- 🔖 **Resume where you stopped** — close a document, open it again later, press `Shift+Space`, and Read Aloud starts at the sentence you left off on. [→ Resume where you stopped](#resume-where-you-stopped)\n- 📄 **The whole sentence on screen** — while a PDF is read, a sentence that runs past the bottom of the window, onto the next page or into the next column is scrolled into view instead of left cut, and `Shift+Enter` brings it back the same way. [→ Reading](#reading)\n- 📃 **No line lost at a page turn** — when a sentence runs onto the next page and Zotero would skip that page's first line, the line is read and highlighted like any other. [→ Reading](#reading)\n- 🧵 **No sentence cut in two** — when Zotero breaks a paragraph in the middle of a sentence, the halves are read and highlighted as one sentence. [→ Reading](#reading)\n- 🎧 **A voice browser** in the settings: every voice by provider and language, a play button for a short sample, hearts for favorites, and a switch to offer only the favorites. [→ Voice browser](#voice-browser)\n- ✨ **Word *and* sentence highlighting**, each behind a switch of its own, in your own colors and opacities — for Zotero's voices too. [→ Highlight](#highlight)\n- ⌨️ **Keyboard shortcuts** for speed, volume, jumping by sentence or paragraph, reading from the selection, the player's options panel, auto-scroll mode, the word highlight on or off, and stopping Read Aloud in every tab at once. All rebindable. [→ Shortcuts](#keyboard-shortcuts)\n- 📌 **One voice and speed everywhere** — every document and every open tab, instead of Zotero's choice per language. [→ Reading](#reading)\n- ⏱️ **The pauses are yours** — how long every voice waits between sentences and before a paragraph, shorter as you read faster. [→ Reading](#reading)\n- 💾 **Backup and sync** — settings and reading positions as files, or through your own WebDAV folder, so your settings and bookmarks follow you between computers. [→ Backup and sync](#backup-and-sync)\n- 🖥️ **Windows and macOS voices, spoken by the plugin** — the ones Read Aloud already lists, but with samples, favorites, the cache and, on Windows, word-by-word highlighting. [→ Providers](#providers)\n\n## Install\n\n1. Download `zotero-tts.xpi` from the [latest release](https://github.com/xujialiu/Zotero-TTS/releases/latest) — in Firefox, right-click → *Save Link As…*\n2. **Tools → Plugins → ⚙ → Install Plugin From File…**, then restart Zotero.\n3. Enable a provider in **Edit → Settings → Zotero-TTS** — **Fish Audio** first, if you are not sure ([why](#providers)) — then pick it in the player's first dropdown and one of its voices.\n\n<p align=\"center\"><img src=\"assets/popup.png\" width=\"640\" alt=\"The Read Aloud player with a provider chosen in its first dropdown\"></p>\n\n## Providers\n\n**Start with Fish Audio.** Of everything below, it is the one to try first:\n\n- **Free.** Its free model reads as much as you like, with nothing to pay\n  and no balance to keep on the account.\n- **A key without a credit card.** Sign up at\n  [fish.audio](https://fish.audio), create the key, paste it in — no card,\n  no billing details.\n- **83 languages**, with word-by-word highlighting.\n- **The best-sounding voices here** — Fish Audio's own, the ones its users\n  published, and any you clone from a recording of your own.\n\n[→ Setting it up](tutorials/fish-audio.md)\n\n| Provider | What you need | Cost | Highlighting |\n|---|---|---|---|\n| **Azure Speech** | Speech resource key + region · [tutorial](tutorials/azure-speech-free-tier.md) | Free tier: 500,000 characters a month | word; sentence for the voices named *MAI-Voice-2* |\n| **Cloudflare Workers AI** | Account ID + API token · [tutorial](tutorials/cloudflare-workers-ai.md) | 10,000 free Neurons a day: a few pages with an Aura voice, hours with MeloTTS | sentence |\n| **Speechify** | An API key from platform.speechify.ai · 36 languages, no Mandarin | Free: 50,000 characters a month, about fifteen pages; then $10 a month for a million | word |\n| **Fish Audio** | An API key from fish.audio · official voices, your own clones, and Model IDs, with a switch for each source · [tutorial](tutorials/fish-audio.md) | Free with its free model: no cap, no guarantee; the paid one $15 per million bytes of text, three per Chinese character | word |\n| **Kokoro-FastAPI** | A server on your machine or LAN · [tutorial](tutorials/kokoro-fastapi.md) | Free; CPU works, a GPU is faster | word |\n| **Fish Speech** | A [fish-speech](https://github.com/fishaudio/fish-speech) server on a 24 GB GPU, with voices cloned from your own recordings · [tutorial](tutorials/fish-speech-server.md) | Free | sentence |\n| **OpenAI** | An API key from platform.openai.com | Billed per character | sentence |\n| **Xiaomi MiMo** | An API key from platform.xiaomimimo.com | Free for a limited time | sentence |\n| **OpenAI Compatible** | The address of any server that speaks OpenAI's API, and a key if it wants one: a self-hosted [Chatterbox](tutorials/chatterbox-tts-server.md), a hosted service, a proxy of OpenAI | The server's own price; self-hosted servers are free | sentence |\n| **System voices** | Nothing — Windows and macOS | Free, offline | word on Windows, sentence on macOS |\n| **Zotero Standard / Premium** | A Zotero account signed in under Edit → Settings → Sync; a switch each in the **Zotero** section, both on to begin with | Zotero's own credits, shown and bought in the player | word |\n\nThe player's first dropdown lists every enabled provider that has voices\nright now, and Zotero's own **Zotero Standard** and **Zotero Premium**\nwhile their switches are on, sorted by name.\n\n- **The entries** are Azure, Cloudflare, Fish Audio, Fish Speech, Kokoro,\n  OpenAI, OpenAI Compatible, Speechify, System, Xiaomi MiMo, Zotero\n  Premium and Zotero Standard; the voices under them carry their own\n  names.\n- **Each entry remembers its own last voice** per language: Kokoro → Fish\n  → Kokoro brings the Kokoro voice back.\n- **A provider with nothing to offer** — switched off, its server down,\n  no favorite of its own while only favorites are offered — is not\n  listed until it has voices again.\n- **Without a Zotero account** every other provider still works; only\n  Zotero Standard and Zotero Premium are left out, as in Zotero itself.\n- **When the entry you are on stops offering voices**, the player moves\n  to the provider of the remembered voice, else of the default voice,\n  else to the first entry.\n- **Switching provider or language while paused** takes effect at once;\n  press play and the sentence starts over in the new voice. A voice\n  picked while paused waits for play and carries on from the paused word.\n- **Zotero's own first-run window and its *Manage voices* window** keep\n  filing every plugin voice under Local.\n- **Enable**, at the end of every provider section, runs the connection\n  check first: a provider that does not answer never switches on.\n- **Zotero's own Standard and Premium** have a switch each in the\n  **Zotero** section, both on to begin with. Switch one off and that tier\n  leaves the player's first dropdown, the voice browser and the language\n  list; nothing Zotero remembers is lost, and switching it back on brings\n  its last voice back. They need a Zotero account: signed out, their\n  Enable is greyed, with the reason beside it; signed in, Enable checks\n  that Zotero lists voices in that tier, and Test connection reports the\n  voices and the credits left.\n- **Test connection** probes without switching anything on.\n- While a provider is on its fields are locked — **Disable** to edit them.\n- **Keys, gateway headers and the WebDAV password** are covered by dots.\n  The eye beside a field uncovers it, so the value can be read, selected\n  and copied; a provider that is on keeps its own covered.\n- **Where they are kept**: like every plugin setting, in Zotero's\n  preferences in plain text, and in the settings backup file.\n\n<details>\n<summary><b>OpenAI, Xiaomi MiMo and OpenAI Compatible: how to fill the settings in</b></summary>\n\n- **OpenAI** and **Xiaomi MiMo** each have a section of their own: the\n  API key, the **Model**, and **Voices** to list voice ids yourself,\n  comma-separated — left empty, the service's own voices are offered.\n  Their addresses are fixed.\n- **OpenAI Compatible** is for any other server that speaks OpenAI's API:\n  a [Chatterbox](tutorials/chatterbox-tts-server.md) of your own, a hosted\n  service, a proxy or mirror of OpenAI. **Address** is the server, with or\n  without `/v1`; the **API key** may stay empty for a server that has\n  none; **Model** is the name the server expects, and **Test connection**\n  lists the models it has; **Voices** left empty takes the server's own\n  list. One server at a time.\n- All three highlight by sentence: none of them reports word timings.\n- For Kokoro use the **Kokoro-FastAPI** section instead: that is what gets\n  you word-level highlighting.\n- Settings saved when the three were one section with a **Server**\n  dropdown move into their sections on the first start: the server that\n  was chosen keeps its switch, the other two start off, and a settings\n  backup from that time restores the same way.\n\n</details>\n\n<details>\n<summary><b>Cloudflare Tunnel and other gateways</b></summary>\n\nPut the gateway's headers in **Extra headers** — of the OpenAI Compatible\nsection, or of the **Kokoro-FastAPI** one — as `Name: value` pairs separated by `;`,\nfor example `CF-Access-Client-Id: …; CF-Access-Client-Secret: …`.\nThey go out with every request. [Tutorial](tutorials/remote-access-cloudflare.md).\n"
+    },
+    "brief": {
+      "summary": "Text-to-speech for Zotero 10: more voices, word and sentence highlighting at once in your own colors, speed and navigation shortcuts, one voice across documents, settings backup and reading-position sync through WebDAV.",
+      "problem": "该项目围绕“Text-to-speech for Zotero 10: more voices, word and sentence highlighting at once in your own colors, speed and navigation shortcuts, one voice across documents, settings backup and reading-position sync through WebDAV.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Text-to-speech for Zotero 10",
+        "主要使用 TypeScript 开发",
+        "主题包括：accessibility、azure-speech、kokoro、openai"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 27 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "xujialiu/Zotero-TTS",
+      "score": 72,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech、tts",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 46.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "hajimehoshi/ebiten",
+      "url": "https://github.com/hajimehoshi/ebiten",
+      "description": "A dead simple 2D game engine for Go",
+      "language": "Go",
+      "total_stars": 13501,
+      "forks": 791,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ebiten",
+        "ebitengine",
+        "game",
+        "game-2d",
+        "game-development",
+        "game-engine",
+        "game-engine-2d",
+        "game-library",
+        "gamedev",
+        "go",
+        "golang",
+        "golang-library"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2013-06-16T15:13:01Z",
+      "updated_at": "2026-09-24T04:53:50Z",
+      "pushed_at": "2026-09-24T04:53:46Z",
+      "open_issues": 292,
+      "homepage": "https://ebitengine.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Ebitengine (v2)\n\n[![Go Reference](https://pkg.go.dev/badge/github.com/hajimehoshi/ebiten/v2.svg)](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n[![Build Status](https://github.com/hajimehoshi/ebiten/actions/workflows/test.yml/badge.svg)](https://github.com/hajimehoshi/ebiten/actions?query=workflow%3Atest)\n\n**A dead simple 2D game engine for Go**\n\nEbitengine (formerly known as Ebiten) is an open source game engine for the Go programming language. Ebitengine's simple API allows you to quickly and easily develop 2D games that can be deployed across multiple platforms.\n\n* [Website (ebitengine.org)](https://ebitengine.org)\n* [API Reference](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n* [Cheat Sheet](https://ebitengine.org/en/documents/cheatsheet.html)\n* [Awesome Ebitengine](https://github.com/sedyh/awesome-ebitengine)\n\n![Overview](https://ebitengine.org/images/overview2.png)\n\n## Platforms\n\n* [Windows](https://ebitengine.org/en/documents/install.html?os=windows)\n* [macOS](https://ebitengine.org/en/documents/install.html?os=darwin)\n* [Linux](https://ebitengine.org/en/documents/install.html?os=linux)\n* [FreeBSD](https://ebitengine.org/en/documents/install.html?os=freebsd)\n* [Android](https://ebitengine.org/en/documents/mobile.html) (Cgo required)\n* [iOS](https://ebitengine.org/en/documents/mobile.html) (Cgo required)\n* [WebAssembly](https://ebitengine.org/en/documents/webassembly.html)\n* Nintendo Switch (Cgo required)\n* Xbox (Cgo required) (Xbox support is limited and not available to everyone. Negotiations are currently underway to make it accessible to all.)\n\nFor installation on desktops, see [the installation instruction](https://ebitengine.org/en/documents/install.html).\n\n## Features\n\n* 2D Graphics (Geometry and color transformation by matrices, Various composition modes, Offscreen rendering, Text rendering, Automatic batches, Automatic texture atlas, Custom shaders)\n* Input (Mouse, Keyboard, Gamepads, Touches)\n* Audio (Ogg/Vorbis, MP3, WAV, PCM)\n\n## Packages\n\n* [ebiten](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2)\n  * [audio](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio)\n    * [mp3](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/mp3)\n    * [vorbis](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/vorbis)\n    * [wav](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/audio/wav)\n  * [colorm](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/colorm)\n  * [ebitenutil](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/ebitenutil)\n  * [inpututil](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/inpututil)\n  * [mobile](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/mobile)\n  * [text/v2](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/text/v2)\n  * [vector](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/vector)\n  * [exp/shaderprecomp](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/shaderprecomp)\n  * [exp/textinput](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/textinput)\n  * [exp/vmhost](https://pkg.go.dev/github.com/hajimehoshi/ebiten/v2/exp/vmhost)\n\n## AI coding agents\n\nIf you use an AI coding agent to write or modify Ebitengine code or applications, point it at the [`skills`](skills) directory, which holds skills for working with this repository.\n\n## Community\n\n- [Discord](https://discord.gg/3tVdM5H8cC)\n- `#ebitengine` channel in [Gophers Slack](https://blog.gopheracademy.com/gophers-slack-community/)\n- [GitHub Discussion](https://github.com/hajimehoshi/ebiten/discussions)\n- [`r/ebitengine` in Reddit](https://www.reddit.com/r/ebitengine/)\n\n## License\n\nEbitengine is licensed under Apache license version 2.0. See [LICENSE](LICENSE) file.\n\n[The Ebitengine logo](https://ebitengine.org/images/logo.png) by Hajime Hoshi is licensed under [the Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).\n\nEbitengine bundles third-party libraries. See [NOTICE.md](NOTICE.md) for their licenses.\n"
+    },
+    "brief": {
+      "summary": "A dead simple 2D game engine for Go",
+      "problem": "该项目围绕“A dead simple 2D game engine for Go”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：A dead simple 2D game engine",
+        "主要使用 Go 开发",
+        "主题包括：ebiten、ebitengine、game、game-2d"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 13,501 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "hajimehoshi/ebiten",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、game engine",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "KilledByAPixel/LittleJS",
+      "url": "https://github.com/KilledByAPixel/LittleJS",
+      "description": "Tiny fast HTML5 game engine with many features and no dependencies.",
+      "language": "JavaScript",
+      "total_stars": 4183,
+      "forks": 231,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "box2d",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "javascript",
+        "js13k",
+        "littlejs",
+        "open-source",
+        "threejs",
+        "typescript",
+        "webgl"
+      ],
+      "license_name": "MIT",
+      "created_at": "2021-09-23T21:34:48Z",
+      "updated_at": "2026-09-24T04:52:38Z",
+      "pushed_at": "2026-09-24T04:52:34Z",
+      "open_issues": 9,
+      "homepage": "https://killedbyapixel.github.io/LittleJS/examples",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# LittleJS - The Tiny Fast JavaScript Game Engine\n\n<div align='center' markdown='1'>\n    \n![LittleJS Logo](examples/logo.png)\n\n[![NPM Package][npm]][npm-url]\n[![Build Size][build-size]][build-size-url]\n[![NPM Downloads][npm-downloads]][npmtrends-url]\n[![DeepScan][deepscan]][deepscan-url]\n[![MIT License][license]][license-url]\n[![Discord][discord]][discord-url]\n\n</div>\n\n## 🚂 All Aboard!\n\nLittleJS is a fast, lightweight, and fully open source HTML5 game engine designed for simplicity and performance.\nIts small footprint is packed with a comprehensive feature set including 2D and 3D rendering, physics, particles, sound, and input handling.\nThe code is very clean and well documented with many examples to get you started quickly.\n\n### 🚀 [Join the LittleJS Game Jam](https://itch.io/jam/littlejs-jam)\n\n*The Third Annual LittleJS Game Jam will take place from Oct 2 to Nov 2! Unleash your creativity and develop amazing games using the LittleJS game engine.*\n\n<div align='center' markdown='1'>\n\n## [Demos](https://killedbyapixel.github.io/LittleJS/examples) | [Arcade](https://killedbyapixel.github.io/LittleJSArcade) | [Docs](https://killedbyapixel.github.io/LittleJS/docs) | [FAQ](https://github.com/KilledByAPixel/LittleJS/blob/main/FAQ.md) | [Trailer](https://youtu.be/chuBzGjv7Ms) | [Discord](https://discord.gg/zb7hcGkyZe)  | [AI](https://github.com/KilledByAPixel/LittleJS-AI)\n\n</div>\n\n![LittleJS Screenshot1](examples/screenshot.jpg)\n\n![LittleJS Screenshot2](examples/screenshot2.jpg)\n\n## LittleJS Features\n\n### ✨ Graphics\n\n- Blazing fast WebGL2 + Canvas2D hybrid rendering system\n- Apply [Shadertoy](https://www.shadertoy.com) style shaders for post-processing effects, or on any object or draw\n- Robust particle effect system and [effect design tool](https://killedbyapixel.github.io/LittleJS/examples/particles/)\n- Load sprites and animations into texture sheets at runtime, or import [TexturePacker](https://www.codeandweb.com/texturepacker) and [Aseprite](https://www.aseprite.org) atlases\n\n### 🧊 LittleJS 3D\n\n- Built-in 3D renderer that shares the canvas with your 2D game\n- 3D objects with the same physics, children and timers as 2D\n- Shape builders, extruded sprites and text, and OBJ loading\n- Height map terrain with collision and raycasts\n- Shadow maps, colored lights, specular, emissive glow and fog\n- Particles, trails, billboards and instanced drawing\n- Orbit, chase and first person cameras with mouse picking\n- Custom shaders on any object\n- Optional [Three.js](https://threejs.org) plugin as an alternative renderer\n\n### 🔊 Audio\n\n- Sound and music with mp3, ogg, or wave files\n- Use [ZzFX](https://killedbyapixel.github.io/ZzFX/) sound generator to play sounds without asset files\n- Spatial audio with stereo panning\n- Audio effects plugin with filter, reverb, delay, distortion and compressor\n\n### 🎮 Input\n\n- Comprehensive input handling for mouse, keyboard, gamepad, and touch\n- Customizable on screen gamepad designed for mobile devices\n\n### 💥 Physics\n\n- Robust arcade physics system with collision handling\n- Fast tilemap collision and raycasting\n- Full Box2D integration for realistic physics using [Box2D v2.3.1 wasm](https://github.com/kripken/box2d.js)\n- Grid-based A* pathfinding plugin with optional path smoothing\n\n### 🚀 Flexibility\n\n- Compatible with all modern web browsers and mobile devices\n- Full TypeScript and Module support with example projects for both\n- [Vite](https://vite.dev) starter template for instant dev server with hot reload\n- Great for size coding competitions like [Js13kGames](https://js13kgames.com/)\n- Open Source and [MIT licensed](https://github.com/KilledByAPixel/LittleJS/blob/main/LICENSE)\n\n### 🛠️ Developer Tools\n\n- Live example browser with code editor\n- Import level editor data from [Tiled](https://github.com/mapeditor/tiled) or other JSON\n- Debug overlay and primitive rendering system\n- Medal tracking system with [Newgrounds](https://www.newgrounds.com/) support\n- Node.js build system\n\n### 🤖 AI Friendly\n\n- The entire API is small and well documented so LLMs can produce high quality results\n- [LittleJS AI Tools](https://github.com/KilledByAPixel/LittleJS-AI) - Templates, examples, and prompts tuned for AI + LittleJS workflows\n- [LittleJS GPT](https://chatgpt.com/g/g-67c7c080b5bc81919736bc8815836be6-littlejs-game-maker) - Build LittleJS games right inside ChatGPT\n\n## How To Use LittleJS\n\nTo get started download the latest LittleJS package from GitHub or install via npm: \n\n```\nnpm install littlejsengine\n```\n\nor use `degit` for an empty Vite template\n\n```\nnpx degit KilledByAPixel/LittleJS/examples/vite-starter my-game\ncd my-game\nnpm install\nnpm run dev\n```\n\nHere is a minimal Hello World example game, with the script path pointing at the engine file from the download or npm package.\n\n```html\n<!DOCTYPE html>\n<script src=\"node_modules/littlejsengine/dist/littlejs.js\"></script>\n<script>\nfunction gameInit() {}\nfunction gameUpdate() {}\nfunction gameUpdatePost() {}\nfunction gameRender() {}\nfunction gameRenderPost() { drawTextScreen('Hello World!', mainCanvasSize.scale(.5), 80); }\nengineInit(gameInit, gameUpdate, gameUpdatePost, gameRender, gameRenderPost);\n</script>\n```\n\n## Tutorials\n\n- [Making Awesome Games With LittleJS](https://youtu.be/_dXKU0WgAj8) - A short talk about LittleJS with some tips on how to use it\n- [Tutorial: Breakout](https://github.com/KilledByAPixel/LittleJS/tree/main/examples/breakoutTutorial) - Learn how to make a simple game from scratch\n- [Tutorial: Make a ski game](https://eoinmcgrath.com/little-ski/tutorial.html) - A tutorial by eoinmcg that shows how to make a pixel art style game\n- [LittleJS Quick Reference Sheet](https://github.com/KilledByAPixel/LittleJS/blob/main/REFERENCE.md) - A reference sheet to help you get started\n- [LittleJS FAQ](https://github.com/KilledByAPixel/LittleJS/blob/main/FAQ.md) - Answers to common questions about LittleJS\n- [JS13k Branch](https://github.com/KilledByAPixel/LittleJS/tree/js13k) - A special branch for size coding events that builds to a 7KB zip\n\n## Examples\n\nLittleJS comes with several demos both for learning and using as starter projects to create new games.\n\n- [Example Browser](https://killedbyapixel.github.io/LittleJS/examples/) - Live example browser with all examples and editable source\n- [LittleJS Arcade](https://killedbyapixel.github.io/LittleJSArcade/) - Over 50 example games you can use as starter projects\n- [Short Examples](https://github.com/KilledByAPixel/LittleJS/tree/main/examples/shorts) - 80+ single-file demos showing off individual engine features\n- [Breakout](https://killedbyapixel.github.io/LittleJS/examples/breakout/) - Block breaking game with post-processing effects\n- [Puzzle Game](https://killedbyapixel.github.io/LittleJS/examples/puzzle/) - Match 3 puzzle game with HD rendering and high score tracking\n- [Platformer](https://killedbyapixel.github.io/LittleJS/examples/platformer/) - Platformer/shooter demo that loads level data\n- [Box2D Demo](https://killedbyapixel.github.io/LittleJS/examples/box2d/) - Box2D plugin demonstration and testbed\n- [3D Example](https://killedbyapixel.github.io/LittleJS/examples/3d/) - The 3D plugin in one scene: terrain, shadows, lights, sprites, particles and bloom\n- [3D Racing Game](https://killedbyapixel.github.io/LittleJS/examples/?example=3D%20Racing%20Game) - Built-in 3D plugin: terrain, shadows and a chase camera in one short file\n- [Three.js Platformer](https://killedbyapixel.github.io/LittleJS/examples/threejs/) - 3D platformer with LittleJS gameplay and Three.js rendering\n- [Stress Test](https://killedbyapixel.github.io/LittleJS/examples/stress/) - Sprite rendering benchmark and music system demo\n- [Particle System Designer](https://killedbyapixel.github.io/LittleJS/examples/particles/) - Particle system editor and visualizer\n\n## Builds\n\n| File | Mode | Module | Use case |\n|------|------|--------|----------|\n| [littlejs.js](https://github.com/KilledByAPixel/LittleJS/blob/main/dist/littlejs.js) | Debug | No | Debug mode with asserts |\n| [littlejs.release.js](https://github.com/KilledByAPixel/LittleJS/blob/main/dist/littlejs.release.js) | Release | No | Optimized for release |\n| [littlejs.min.js](https://github.com/KilledByAPixel/LittleJS/blob/main/dist/littlejs.min.js) | Release | No | Optimized for release and minified |\n| [littlejs.esm.js](https://github.com/KilledByAPixel/LittleJS/blob/main/dist/littlejs.esm.js) | Debug | ESM | Debug mode with asserts |\n| [littlejs.esm.min.js](https://github.com/KilledByAPixel/LittleJS/blob/main/dist/littlejs.esm.min.js) | Release | ESM | Optimized for release and minified |\n\n## Games Made With LittleJS\n\nHere are a few of the many amazing games created with LittleJS...\n\n- [Space Huggers](https://www.newgrounds.com/portal/view/819609) - Roguelike platformer shoot-em-up game with procedural levels. by [KilledByAPixel](https://frankforce.com/)\n- [Black Cat Squadron](https://js13kgames.com/games/black-cat-squadron) - One button shooter based on a WW2 Navy squadron. JS13k 5th place! by [repsej](https://github.com/repsej)\n- [L1ttl3 Paws](https://github.com/KilledByAPixel/JS13K2025) - Cat glider with procedural art and levels for JS13K! by [KilledByAPixel](https://frankforce.com/)\n- [KleptoKitty](https://js13kgames.com/games/kleptokitty) - Cat themed heist puzzle. JS13K 22nd place. by [eoinmcg](https://eoinmcg.itch.io/)\n- [The Way of the Dodo](https://js13kgames.com/2024/games/the-way-of-the-dodo) - Single button platformer. JS13k 5th place! by [repsej](https://github.com/repsej)\n- [Undergrowth](https://undergrowth.squidband.uk/) - An interactive music videogame for the band Squid. by [KilledByAPixel](https://frankforce.com/)\n- [204Snake!](https://www.newgrounds.com/portal/view/960100) - A puzzle game that combines 2048 with snake. LittleJS Jam 1st place! by [Sodoj](https://sodoj.itch.io/) and [Shai-P](https://shai-p.itch.io/)\n- [GATOR](https://www.newgrounds.com/portal/view/960757) - Retro platformer shooter game where you rescue animals. LittleJS Jam 2nd place! by [eoinmcg](https://eoinmcg.itch.io/)\n- [A Hedgehog's Search](https://willsm1111.itch.io/a-hedgehogs-search) - Adventure game starring a hedgehog. LittleJS Jam 3rd place! by [willsm1111](https://willsm1111.itch.io/)\n- [Wendol Village](https://js13kgames.com/2024/games/wendol-village) - Warcraft inspired RTS game. by [sanojian](https://github.com/sanojian)\n- [Dead Again](https://js13kgames.com/entries/dead-again) - Top down survival horror. by [sanojian & repsej](https://github.com/sanojian/js13k_2022)\n- [Isletopia](https://store.steampowered.com/app/1861260/Isletopia) - Relaxing strategy game of greenifying barren islands. by [Gamex Studio](https://x.com/gamesgamex)\n- [Tetrimals](https://nixn.itch.io/tetrimals) - A puzzle game mixing Tetris with animals. by [nixn](https://nixn.itch.io/)\n- [Bug&Bee](https://itch.io/jam/littlejs-game-jam-2025/results) - Low fi shoot em up with co-op gameplay. LittleJS Jam 1st place! by [eoinmcg](https://eoinmcg.itch.io/)\n- [Little Platformer](https://psemo.itch.io/little-platformer) - Platformer with many mechanics. LittleJS Jam 2nd place! by [PSEMO](https://psemo.itch.io/), [Solita666](https://itch.io/profile/solita666), [GabrielRG](https://gabrielrg.itch.io/), [Nate](https://natesassoon.itch.io/)\n- [Alien Escape Pinball](https://focaccai.itch.io/alien-pinball) - Pinball game with physics and aliens. by [Focaccai](https://www.focaccai.com/)\n- [LittleJS Jam 2024 Results](https://itch.io/jam/littlejs-jam-2024/results) - All the games from the first LittleJS Game Jam.\n- [LittleJS Jam 2025 Results](https://itch.io/jam/littlejs-game-jam-2025/results) - All the games from the second LittleJS Game Jam.\n\n![A collage of screenshots from games made with LittleJS](examples/games.jpg)\n\n*A sample of games built with LittleJS.*\n\n![LittleJS pixel-art favicon](examples/favicon.png)\n\n[npm]: https://img.shields.io/npm/v/littlejsengine\n[npm-url]: https://www.npmjs.com/package/littlejsengine\n[build-size]: https://img.shields.io/bundlephobia/minzip/li"
+    },
+    "brief": {
+      "summary": "Tiny fast HTML5 game engine with many features and no dependencies.",
+      "problem": "该项目围绕“Tiny fast HTML5 game engine with many features and no dependencies.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Tiny fast HTML5 game engine ",
+        "主要使用 JavaScript 开发",
+        "主题包括：box2d、game-development、game-engine、gamedev"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 4,183 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "KilledByAPixel/LittleJS",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、game engine",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "OpenVicProject/OpenVic",
+      "url": "https://github.com/OpenVicProject/OpenVic",
+      "description": "Main Repo for the OpenVic Project",
+      "language": "GDScript",
+      "total_stars": 473,
+      "forks": 34,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game",
+        "game-development",
+        "gamedev",
+        "godot",
+        "godot-engine",
+        "openvic",
+        "victoria-2",
+        "victoria2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-01-19T18:52:20Z",
+      "updated_at": "2026-09-24T04:54:13Z",
+      "pushed_at": "2026-09-24T04:54:11Z",
+      "open_issues": 44,
+      "homepage": "https://openvic.com",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "[![🖥️ Builds](https://github.com/OpenVicProject/OpenVic/actions/workflows/builds.yml/badge.svg)](https://github.com/OpenVicProject/OpenVic/actions/workflows/builds.yml)\n\n# OpenVic\nMain Repo for the OpenVic Project\n\n### Links\n- [<img src=\"https://img.shields.io/badge/Website-Color?color=3B1919\" height=\"25\" align=\"middle\">](https://www.openvic.com/)\n- [<img src=\"https://img.shields.io/badge/Discord-Color?logo=discord&color=1F1F1F\" height=\"25\" align=\"middle\">](https://discord.gg/vM4E3BFkqH)\n- [<img src=\"https://img.shields.io/badge/Youtube-Color?logo=youtube&logoColor=FF0033&color=212121\" height=\"25\" align=\"middle\">](https://www.youtube.com/@OpenVicProject)\n\n## Quickstart Guide\nFor detailed instructions, view the Contributor Quickstart Guide [here](docs/CONTRIBUTING.md)\n\n## System Requirements\n* [Godot 4.7.2](https://github.com/godotengine/godot/releases/tag/4.7.2-stable)\n* [CMake](https://cmake.org/) 3.28+\n* [Ninja](https://ninja-build.org/)\n* Python 3 (used by the build for code generation)\n\n> [!WARNING]\n> If you are using Arch Linux, do not use the Arch repo package, it is known to break under some GDExtensions, use the official release file.\n\nSee [System Requirements](docs/contribution/system-requirements.md).\n\n## Repo Setup\n1. Clone the OpenVic Repo to a suitable folder using the git command `git clone https://github.com/OpenVicProject/OpenVic.git`\n2. Update the submodules by executing the git command `git submodule update --init --recursive` (only the first-party OpenVic repos are submodules; all third-party dependencies are fetched automatically by CMake during configure)\n\nNote that using a zip download instead of cloning means manually managing the submodules. It is strongly recommended to use git to obtain the source code.\n\nSee [Cloning](docs/contribution/cloning.md).\n\n## [Godot Documentation](https://docs.godotengine.org/en/latest/)\n\n## Build/Run Instructions\n1. Install [Godot 4.7.2](https://github.com/godotengine/godot/releases/tag/4.7.2-stable), [CMake](https://cmake.org/) 3.28+, and [Ninja](https://ninja-build.org/) for your system.\n2. Run the command `git submodule update --init --recursive` to retrieve all related submodules.\n3. Configure and build with the preset for your platform (`windows-x64-template_debug`, `linux-x64-template_debug`, or `macos-universal-template_debug`):\n   ```sh\n   cmake --preset windows-x64-template_debug\n   cmake --build --preset windows-x64-template_debug\n   ```\n   The build copies the extension library into `game/bin/openvic`.\n4. Open with Godot 4, click import and navigate to the `game` directory.\n5. Press \"Import & Edit\", wait for the Editor to finish re-importing assets, and then close the Editor ***without saving*** and reopen the project.\n6. Once loaded, click the play button at the top right, and you should see and hear the game application open on the main menu.\n\nSee [Run, Build, and Export](docs/contribution/run-build-and-export.md).\n\n## Project Export\n1. Build the extension with the `*-template_debug` preset (or `*-template_release` for release), as in the Build/Run instructions above.\n2. Open `game/project.godot` with Godot 4.\n3. Click `Project` at the top left, click `Export`.\n4. If you do not have the templates, you must download the templates, there is highlighted white text at the bottom of the Export subwindow that opens up the template manager for you to download.\n5. Click `Export All`:\n    * If you built with the default or debug target you must export with `Debug`.\n    * If you built with the release target you must export `Release`.\n6. Files will be found in platform specific directories in `game/export`:\n    * On Windows run `game/export/Windows/OpenVic.exe`.\n    * On Linux x86_64 run `game/export/Linux-x86_64/OpenVic.sh`.\n\nSee [Run, Build, and Export](docs/contribution/run-build-and-export.md).\n\n## Extension Debugging\n1. Configure and build the dev preset (`GODOTCPP_DEV_BUILD`, Debug config): `cmake --preset windows-x64-template_debug-dev && cmake --build --preset windows-x64-template_debug-dev`.\n3. [Setup your IDE](https://godotengine.org/qa/108346/how-can-i-debug-runtime-errors-of-native-library-in-godot) so your Command/Host/Launching App is your Godot 4 binary and the Working Directory is the `game` directory.\n4. Start the debugger.\n\nSee [Debugging](docs/contribution/debugging.md).\n\n## Extension Class Reference Documentation\nEvery time you add something to the GDExtension you need to add to the class reference documentation, to do such:\n1. Build the extension (see Build/Run Instructions).\n2. Run your Godot 4 binary with `--doctool --headless ../extension --gdextension-docs` in the `game` directory.\n3. Write documentation in the style of Godot, see [Godot's Writing Documentation: Class Reference Guides](https://docs.godotengine.org/en/stable/contributing/documentation/index.html#class-reference-guides).\n4. Build again.\n\nWindows note: doctool may not work in powershell/vscode terminal use command prompt directly.\n\nIf you change anything that causes new behavior in the GDExtension you should also change the corresponding class reference documentation.\n"
+    },
+    "brief": {
+      "summary": "Main Repo for the OpenVic Project",
+      "problem": "该项目围绕“Main Repo for the OpenVic Project”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Main Repo for the OpenVic Pr",
+        "主要使用 GDScript 开发",
+        "主题包括：game、game-development、gamedev、godot"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 473 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "游戏开发",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "OpenVicProject/OpenVic",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "匹配关键词：gamedev、godot",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 39.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "artcc/freelingo",
+      "url": "https://github.com/artcc/freelingo",
+      "description": "Open-source, self-hosted AI language learning platform with local or cloud LLMs, CEFR study plans, an AI tutor, voice conversations, flashcards, and spaced repetition.",
+      "language": "JavaScript",
+      "total_stars": 132,
+      "forks": 33,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-tutor",
+        "cefr",
+        "docker-compose",
+        "edtech",
+        "fastapi",
+        "flashcards",
+        "language-learning",
+        "listening-practice",
+        "llm",
+        "nextjs",
+        "ollama",
+        "personalized-learning",
+        "python",
+        "self-hosted",
+        "spaced-repetition",
+        "speaking-practice",
+        "speech-to-text",
+        "text-to-speech"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-30T11:43:41Z",
+      "updated_at": "2026-09-24T05:02:59Z",
+      "pushed_at": "2026-09-24T05:03:09Z",
+      "open_issues": 0,
+      "homepage": "https://www.arturocarreterocalvo.com/freelingo",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# FreeLingo\n\n![Hosted](https://img.shields.io/badge/hosted%20service-available-green?style=flat-square)\n![License](https://img.shields.io/badge/license-AGPL%20v3-blue?style=flat-square)\n![Next.js](https://img.shields.io/badge/next.js-16-black?style=flat-square)\n![Python](https://img.shields.io/badge/python-3.14-blue?style=flat-square)\n![Self-hosted](https://img.shields.io/badge/self--hosted-yes-orange?style=flat-square)\n![Version](https://img.shields.io/badge/version-1.9.20-brightgreen?style=flat-square)\n\n<p align=\"left\">\n  <img src=\"assets/logo_large.png\" alt=\"FreeLingo logo\" />\n</p>\n\nOpen source AI language learning platform available in two modes: self-hosted (free, run it on your own\ninfrastructure) and as a hosted service operated by the FreeLingo team with a free plan and paid subscriptions.\nA language model evaluates your CEFR level, generates a personalized study plan, and guides you through\ngrammar, vocabulary, reading comprehension, writing lessons, AI-generated listening and reading exercises, and voice practice.\n\nThe study plan follows a CEFR-aligned curriculum (A1-C2) organized into units with\nclear competencies and prerequisites. After a deterministic placement assessment,\nFreeLingo creates a weekly roadmap based on your selected intensity (4, 8, 12, or\n16 weeks), then unlocks lessons in sequence: grammar, vocabulary, reading, writing,\nand review.\n\nThe platform combines structure and adaptation: lessons stay within curriculum boundaries and include\nnative-language support, flashcards use SM-2 spaced repetition, and Lingu provides contextual text and\nvoice tutoring with durable user-controlled memories. Generated Listening and Reading practice,\npronunciation exercises, XP, streaks, skill scores, unit competencies, and end-of-level tests complete\nthe learning workflow.\n\n## Hosted service\n\n> **Don't want to manage your own server?**\n> FreeLingo is available as a fully managed hosted service at **[freelingo.app](https://freelingo.app)**.\n\nSign up, start with a free plan, or upgrade to a paid subscription — no Docker, no GPU, no maintenance required.\nThe hosted instance is operated by the FreeLingo team.\n\nSelf-hosting remains free and open source under the AGPL-3.0 licence. The hosted service exists for users who prefer a managed experience.\n\n## For businesses\n\nNeed FreeLingo for your team or organisation?\n\n- **Private / on-premise deployment** — Deploy FreeLingo on your own infrastructure with full control over data and configuration. Ideal for schools, language academies, and companies with data-sovereignty requirements.\n- **Dedicated managed instance** — A turnkey deployment operated exclusively for your organisation: setup, hosting, maintenance, and updates included. Your data stays isolated in a dedicated environment.\n- **Commercial licence** — Organisations that need to deploy a customised or white-labelled version without the open-source obligations of the AGPL can obtain a commercial licence. See [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md) for details.\n\n[Get in touch](https://freelingo.app) via the contact form to discuss your requirements.\n\nIf FreeLingo is useful to you or your organisation, consider [**sponsoring the project on GitHub**](https://github.com/sponsors/artcc) to support continued development and keep the self-hosted version free for everyone.\n\n---\n\n## Architecture\n\nMonorepo: `backend/` (Python FastAPI) + `frontend/` (Next.js 16 App Router)\ndeployed via Docker Compose with PostgreSQL 16 and Redis 7.\nThe backend proxies all LLM, TTS, and STT services —\nthe frontend never calls them directly.\n\nSee [the architecture specification](specs/architecture.instructions.md) for system structure and\n[the Docker specification](specs/docker.instructions.md) for runtime and image details.\n\n## Repository\n\n```\nfreelingo/\n├── assets/                          # Logos and static assets\n├── backend/                         # FastAPI (Python)\n├── data/                            # Shared data files\n├── docs/                            # GitHub Pages landing site\n├── frontend/                        # Next.js (React)\n├── messages/                        # i18n translation files (de, en, es, fr, it, nl, pl, pt, ro, ru)\n├── specs/                           # Specification files\n├── AGENTS.md                        # AI assistant instructions\n├── CHANGELOG.md                     # Version history\n├── CODE_OF_CONDUCT.md               # Community guidelines\n├── COMMERCIAL_LICENSE.md            # Commercial licence terms\n├── CONTRIBUTING.md                  # Contribution guidelines\n├── CONTRIBUTOR_LICENSE_AGREEMENT.md # CLA for contributors\n├── DEVELOPMENT.md                   # Local development setup\n├── docker-compose.yml               # Production deployment\n├── docker-compose.dev.yml           # Development deployment\n├── LICENSE                          # AGPL-3.0 licence\n├── README.md                        # This file\n└── run-dev.sh                       # Development helper script\n```\n\n## Stack\n\n- **Frontend:** Next.js 16, shadcn/ui, Tailwind CSS, Zustand, next-intl\n- **Backend:** FastAPI, SQLAlchemy async, Alembic, Pydantic v2\n- **Data:** PostgreSQL 16 and Redis 7\n- **LLM:** Ollama, OpenAI, Anthropic, or DeepSeek\n- **Speech:** Kokoro-FastAPI or OpenAI TTS; faster-whisper or OpenAI Whisper\n- **Auth:** JWT access and refresh tokens with admin/user roles\n- **Deployment:** Docker Compose\n\n## Quick start\n\n### Option A — Git clone + Docker Compose\n\n**Requirements:** Docker, Docker Compose, Git, either a supported cloud LLM API or\n[Ollama](https://ollama.com), and either an NVIDIA GPU for the default local speech services or an\nOpenAI API key for cloud speech.\n\n```bash\n# 1. Clone the repository\ngit clone https://github.com/artcc/freelingo.git\ncd freelingo\n\n# 2. Configure environment\ncp .env.example .env\n# Edit .env: select the LLM and speech providers, configure credentials, and review other settings\n\n# 3. If using the default Ollama provider, pull the recommended model on the host\nollama pull gemma4:e4b\n\n# 4. Start all services (migrations run automatically on first start)\ndocker compose up -d\n```\n\nAccess at `http://localhost:3000` (or `http://<server-ip>:3000`).\nBy default, the first registered user becomes an administrator; set `FIRST_USER_IS_ADMIN=false` to\ndisable this behavior.\n\n---\n\n### Option B — Portainer (Stack)\n\n1. Open Portainer → **Stacks** → **Add stack**.\n2. Choose **Repository** and enter the repo URL, or paste the contents of `docker-compose.yml` directly into the Web editor.\n3. Add the variables from `.env.example`. At minimum, configure `DATA_PATH`, the `POSTGRES_*` values,\n   `REDIS_PASSWORD`, `SECRET_KEY`, and the selected LLM and speech providers and credentials.\n4. Click **Deploy the stack**.\n5. Access the app at `http://<server-ip>:3000`. Database migrations run automatically when the backend starts.\n\n> **Tip:** If Ollama runs on the same host as Portainer, set `OLLAMA_BASE_URL=http://host.docker.internal:11434`. On Linux you may need to add the `extra_hosts` entry in the compose file (already included by default).\n\n## Operational notes\n\n- The recommended model for Ollama is `gemma4:e4b`. It can be changed in `.env`.\n- The backend proxies all LLM, TTS, and STT calls so the frontend never talks directly to providers.\n- The `LLM_PROVIDER` field controls the LLM provider: `ollama` (local, recommended), `openai`, `anthropic`, or `deepseek`.\n- Anthropic's output budget is configurable with `ANTHROPIC_MAX_TOKENS` (default: `8192`) and must stay within the selected model's supported output limit.\n- `TTS_PROVIDER` and `STT_PROVIDER` are independent: `local` (Kokoro / faster-whisper) or `openai` (OpenAI API).\n- Conversation, token, freemium, and trial limits are configurable in `.env.example`. In general\n  quota defaults, `0` means unlimited; in freemium feature quotas, `0` blocks that feature.\n- Supported study languages include English (`en-GB`, `en-US`), Spanish (`es-ES`), Italian (`it-IT`), Portuguese (`pt-PT`), German (`de-DE`), French (`fr-FR`), Japanese (`ja-JP`), Korean (`ko-KR`), and Mainland Chinese (`zh-CN`). The study language is chosen on `/onboarding` and can be expanded later from Settings → My Languages. The user's native language is asked during registration and is used for flashcard translations, tutor feedback, lesson native explanations, and cached native-language help in static grammar, phrasebook, and vocabulary resources.\n\n## Linux host: Redis memory overcommit\n\nRedis requires `vm.overcommit_memory=1` on the host to safely perform background saves (RDB snapshots). Without it, a `fork()` under low memory can fail and Redis may lose data on restart.\n\nRun once on the server:\n\n```bash\nsudo sysctl vm.overcommit_memory=1\necho \"vm.overcommit_memory = 1\" | sudo tee -a /etc/sysctl.conf\n```\n\nThe first command applies the setting immediately (no reboot needed); the second persists it across reboots. This is a host-level setting — it cannot be applied from within the container without elevated privileges.\n\n## Reverse proxy requirement (real-time conversation)\n\nThe real-time voice conversation feature uses a WebSocket connection (`/ws/conversation`). Next.js does not proxy WebSocket upgrades natively, so **a reverse proxy is required in any production deployment** to route `/ws/*` traffic to the backend container.\n\nThis is also a hard browser requirement: `getUserMedia` (microphone access) only works in a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) — HTTPS or localhost. A reverse proxy terminating TLS is therefore mandatory for the conversation feature to work at all in production.\n\nThe WebSocket URL is derived automatically from `window.location`, so no extra configuration is needed on the frontend side — just ensure your reverse proxy forwards `/ws/*` to `backend:8000`.\n\n## Configuring TTS & STT\n\nTTS and STT are required services. Each supports two providers selected independently via `.env`.\n\n### Provider options\n\n- `TTS_PROVIDER=local` uses Kokoro-FastAPI; `TTS_PROVIDER=openai` uses OpenAI TTS.\n- `STT_PROVIDER=local` uses faster-whisper; `STT_PROVIDER=openai` uses OpenAI Whisper.\n- `OPENAI_API_KEY` is required when either service uses OpenAI.\n\nThe default local services in `docker-compose.yml` are configured for NVIDIA GPUs:\n\n```env\nTTS_PROVIDER=local\nSTT_PROVIDER=local\n```\n\nKokoro's bundled voices are English-only. Use OpenAI TTS for other study languages. For CPU-only local\ndeployment, select CPU images, remove GPU reservations, and use a smaller Whisper model as documented\nin [the Docker specification](specs/docker.instructions.md).\n\nOpenAI providers require no local GPU or speech containers:\n\n```env\nTTS_PROVIDER=openai\nSTT_PROVIDER=openai\nOPENAI_API_KEY=sk-...\n```\n\nThe services reuse `OPENAI_API_KEY` when OpenAI is also the LLM provider. See `.env.example` for\navailable settings and [the speech-services specification](specs/speech-services.instructions.md) for\nprovider contracts.\n\n## Development\n\nSee [DEVELOPMENT.md](DEVELOPMENT.md) for instructions on running the project locally for development on macOS.\n\n## Contributing\n\nBug reports, feature suggestions, documentation improvements, and code contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request.\n\nBy opening a pull request you accept the [Contributor License Agreement](CONTRIBUTOR_LICENSE_AGREEMENT.md).\n\n## License\n\nDistributed under the [GNU Affero General Public License v3](LICENSE).\n\nOrganisations that need to deploy FreeLingo without the AGPL's copyleft obligations can obtain a **commercial licence**. See [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md) or [get in touch](https://freelingo.app) via the contact form.\n\n## Author\n\n**Arturo Carretero Calvo** — [@artcc](https://github.com/artcc)\n"
+    },
+    "brief": {
+      "summary": "Open-source, self-hosted AI language learning platform with local or cloud LLMs, CEFR study plans, an AI tutor, voice conversations, flashcards, and spaced repetition.",
+      "problem": "该项目围绕“Open-source, self-hosted AI language learning platform with local or cloud LLMs, CEFR study plans, an AI tutor, voice conversations, flashcards, and spaced repetition.”提供开源实现或相关资源。",
+      "highlights": [
+        "可以用来试用或扩展：Open-source, self-hosted AI ",
+        "主要使用 JavaScript 开发",
+        "主题包括：ai-tutor、cefr、docker-compose、edtech"
+      ],
+      "target_users": [
+        "希望了解或试用该项目方向的开发者"
+      ],
+      "why_trending": "近期保持活跃，ACG 雷达发现时已有 132 个 Star。",
+      "caveat": "当前为规则生成的基础摘要，建议结合 README 判断成熟度。",
+      "category": "语音 / 配音",
+      "generated_by_ai": false,
+      "prompt_version": "use-cases-v2"
+    },
+    "interest": {
+      "repository": "artcc/freelingo",
+      "score": 60,
+      "category": "语音 / 配音",
+      "reason": "匹配关键词：text-to-speech",
+      "generated_by_ai": false,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 36.0
+    }
+  }
+]
