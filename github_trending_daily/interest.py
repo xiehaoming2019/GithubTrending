@@ -300,17 +300,19 @@ def fallback_interest(
     )
 
 
-class OpenAIInterestClassifier:
+class DeepSeekInterestClassifier:
     def __init__(
         self,
         api_key: str | None = None,
         model: str | None = None,
         base_url: str | None = None,
     ) -> None:
-        self.api_key = api_key if api_key is not None else os.getenv("OPENAI_API_KEY", "")
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
+        self.api_key = (
+            api_key if api_key is not None else os.getenv("DEEPSEEK_API_KEY", "")
+        )
+        self.model = model or os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
         self.base_url = (
-            base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+            base_url or os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
         ).rstrip("/")
 
     @property
@@ -344,7 +346,7 @@ class OpenAIInterestClassifier:
             "instructions": CLASSIFIER_PROMPT,
             "input": json.dumps(source, ensure_ascii=False),
             "reasoning": {"effort": "low"},
-            "text": {"verbosity": "low"},
+            "text": {"format": {"type": "json_object"}},
         }
         response = post_json(
             f"{self.base_url}/responses",

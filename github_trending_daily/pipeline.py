@@ -10,7 +10,7 @@ from .email_delivery import EmailSettings, build_message, send_message
 from .github_api import GitHubClient
 from .history import filter_recent_repeats, load_recent_history
 from .interest import (
-    OpenAIInterestClassifier,
+    DeepSeekInterestClassifier,
     fallback_interest,
     select_daily_mix,
 )
@@ -22,7 +22,7 @@ from .ranking import (
     write_candidate_snapshot,
 )
 from .render import render_email_html, render_markdown
-from .summarize import OpenAISummarizer, fallback_brief
+from .summarize import DeepSeekSummarizer, fallback_brief
 from .trending import fetch_trending, load_trending
 
 
@@ -57,7 +57,7 @@ def run_pipeline(
     (raw_dir / f"{report_date.isoformat()}.html").write_text(html, encoding="utf-8")
 
     github = GitHubClient()
-    summarizer = OpenAISummarizer()
+    summarizer = DeepSeekSummarizer()
     cached_repositories, cached_details, cached_briefs = _load_cached_snapshot(report_date)
     history = (
         load_recent_history(report_date, days=history_days)
@@ -155,7 +155,7 @@ def run_pipeline(
 
     matches: list[InterestMatch] = []
     if filter_interests:
-        classifier = OpenAIInterestClassifier()
+        classifier = DeepSeekInterestClassifier()
         if use_ai and classifier.enabled:
             try:
                 matches = classifier.classify(candidate_details)

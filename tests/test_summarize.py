@@ -2,10 +2,20 @@ from __future__ import annotations
 
 import unittest
 
-from github_trending_daily.summarize import _parse_json_response, _response_text
+from github_trending_daily.summarize import (
+    DeepSeekSummarizer,
+    _parse_json_response,
+    _response_text,
+)
 
 
 class SummarizeTests(unittest.TestCase):
+    def test_uses_deepseek_v41_flash_defaults(self) -> None:
+        summarizer = DeepSeekSummarizer(api_key="test-key")
+
+        self.assertEqual("deepseek-flash", summarizer.model)
+        self.assertEqual("https://api.deepseek.com", summarizer.base_url)
+
     def test_extracts_responses_api_text(self) -> None:
         response = {
             "output": [
@@ -29,4 +39,3 @@ class SummarizeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

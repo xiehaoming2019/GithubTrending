@@ -30,7 +30,7 @@ AI 视频、3D / VTuber、语音 / 配音、音乐 / 音效、互动叙事、XR 
 ACG 本地化、ACG 资源 / Mod、创作者自动化中选择最接近的一项。
 """
 
-SUMMARY_PROMPT_VERSION = "use-cases-v2"
+SUMMARY_PROMPT_VERSION = "use-cases-v3-deepseek"
 
 
 def fallback_brief(
@@ -85,7 +85,7 @@ def _guess_category(repo: TrendingRepository, details: RepositoryDetails) -> str
     return "开发工具"
 
 
-class OpenAISummarizer:
+class DeepSeekSummarizer:
     prompt_version = SUMMARY_PROMPT_VERSION
 
     def __init__(
@@ -94,10 +94,12 @@ class OpenAISummarizer:
         model: str | None = None,
         base_url: str | None = None,
     ) -> None:
-        self.api_key = api_key if api_key is not None else os.getenv("OPENAI_API_KEY", "")
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
+        self.api_key = (
+            api_key if api_key is not None else os.getenv("DEEPSEEK_API_KEY", "")
+        )
+        self.model = model or os.getenv("DEEPSEEK_MODEL", "deepseek-flash")
         self.base_url = (
-            base_url or os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+            base_url or os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
         ).rstrip("/")
 
     @property
@@ -135,7 +137,7 @@ class OpenAISummarizer:
             "instructions": SYSTEM_PROMPT,
             "input": json.dumps(source, ensure_ascii=False),
             "reasoning": {"effort": "low"},
-            "text": {"verbosity": "low"},
+            "text": {"format": {"type": "json_object"}},
         }
         response = post_json(
             f"{self.base_url}/responses",
@@ -179,7 +181,7 @@ def _response_text(response: dict[str, Any]) -> str:
                 if isinstance(text, str):
                     parts.append(text)
     if not parts:
-        raise ValueError("OpenAI response did not contain output text")
+        raise ValueError("AI response did not contain output text")
     return "\n".join(parts)
 
 

@@ -15,7 +15,7 @@
 - 达不到标准时宁可少发，不用通用框架、数据库、金融或炒币项目凑数
 - 提取今日新增 Star、总 Star、Fork、语言和简介
 - 补充 Topics、License、README、更新时间等官方仓库数据
-- 使用 OpenAI Responses API 生成结构化中文解读
+- 使用 DeepSeek Responses API 和 V4.1 Flash 生成结构化中文解读
 - 未配置 AI 密钥时自动降级为基础摘要
 - 同一天重复运行时复用已有 AI 摘要，避免重复费用和无意义提交
 - 保存原始快照和 Markdown 日报
@@ -51,12 +51,13 @@ data/candidates/YYYY-MM-DD.json
 在当前 PowerShell 会话设置环境变量：
 
 ```powershell
-$env:OPENAI_API_KEY="你的 API Key"
-$env:OPENAI_MODEL="gpt-5.6-luna"
+$env:DEEPSEEK_API_KEY="你的 DeepSeek API Key"
+$env:DEEPSEEK_MODEL="deepseek-flash"
 py -3 -m github_trending_daily --limit 8
 ```
 
-`gpt-5.6-luna` 适合这种每日批量摘要场景；也可以通过 `OPENAI_MODEL` 换成账户可用的其他 Responses API 模型。
+`deepseek-flash` 对应 DeepSeek V4.1 Flash。项目通过 DeepSeek 官方 Responses API
+生成批量筛选结果和中文摘要。
 
 ### GitHub API Token
 
@@ -90,10 +91,12 @@ py -3 -m unittest discover -s tests -v
 ## 启用每日任务
 
 1. 将仓库推送到 GitHub。
-2. 在仓库 `Settings → Secrets and variables → Actions` 中新增 Secret：`OPENAI_API_KEY`。
-3. 如需更换模型，新增 Variable：`OPENAI_MODEL`。
+2. 在仓库 `Settings → Secrets and variables → Actions` 中新增 Secret：`DEEPSEEK_API_KEY`。
+3. 如需更换模型，新增 Variable：`DEEPSEEK_MODEL`；默认值为 `deepseek-flash`。
 4. 确认 Actions 的 Workflow permissions 允许写入仓库内容。
 5. 在 Actions 页面手动运行一次 `GitHub Trending Daily` 验证结果。
+
+缺少 `DEEPSEEK_API_KEY` 时工作流会直接失败并发送告警，避免继续发送规则兜底文案。
 
 定时任务会提交 `reports/`、`data/snapshots/` 和 `data/candidates/` 的新增内容。
 候选快照用于计算次日 Star 增速；原始 HTML 只用于当次排错，不会提交。

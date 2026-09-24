@@ -29,11 +29,21 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
+      - name: Validate DeepSeek configuration
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          if [ -z "$DEEPSEEK_API_KEY" ]; then
+            echo "::error::Repository secret DEEPSEEK_API_KEY is not configured."
+            exit 1
+          fi
+
       - name: Generate daily report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-luna' }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL || 'deepseek-flash' }}
+          DEEPSEEK_BASE_URL: https://api.deepseek.com
           TRENDING_CANDIDATE_LIMIT: ${{ vars.TRENDING_CANDIDATE_LIMIT || '25' }}
           ACG_RELEVANCE_THRESHOLD: ${{ vars.ACG_RELEVANCE_THRESHOLD || '60' }}
           ACG_RADAR_CANDIDATE_LIMIT: ${{ vars.ACG_RADAR_CANDIDATE_LIMIT || '18' }}

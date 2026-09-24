@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 from github_trending_daily.interest import (
-    OpenAIInterestClassifier,
+    DeepSeekInterestClassifier,
     fallback_interest,
     select_daily_mix,
     select_repositories,
@@ -136,7 +136,7 @@ class FallbackInterestTests(unittest.TestCase):
         )
 
 
-class OpenAIInterestClassifierTests(unittest.TestCase):
+class DeepSeekInterestClassifierTests(unittest.TestCase):
     @patch("github_trending_daily.interest.post_json")
     def test_parses_batch_response(self, post_json_mock) -> None:
         post_json_mock.return_value = {
@@ -154,7 +154,7 @@ class OpenAIInterestClassifierTests(unittest.TestCase):
                 ensure_ascii=False,
             )
         }
-        classifier = OpenAIInterestClassifier(api_key="test-key")
+        classifier = DeepSeekInterestClassifier(api_key="test-key")
         candidates = [
             (
                 _repo("studio/game", "A Godot game engine"),
@@ -168,6 +168,13 @@ class OpenAIInterestClassifierTests(unittest.TestCase):
         self.assertEqual(91, matches[0].score)
         self.assertEqual("游戏开发", matches[0].category)
         self.assertTrue(matches[0].generated_by_ai)
+        request_url, payload = post_json_mock.call_args.args
+        self.assertEqual("https://api.deepseek.com/responses", request_url)
+        self.assertEqual("deepseek-flash", payload["model"])
+        self.assertEqual(
+            {"format": {"type": "json_object"}},
+            payload["text"],
+        )
 
 
 if __name__ == "__main__":
