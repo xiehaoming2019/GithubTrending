@@ -25,7 +25,7 @@
 
 关注方向包括：
 
-- AI Agent / Skills、游戏开发、动画、视频剪辑
+- Harness / Jev、AI Agent / Skills、游戏开发、动画、视频剪辑
 - AI 绘画 / 漫画、AI 视频、3D / VTuber
 - 语音 / 配音、音乐 / 音效、互动叙事
 - XR / 虚拟制作、ACG 本地化、ACG 资源 / Mod、创作者自动化

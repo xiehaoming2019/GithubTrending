@@ -25,12 +25,12 @@ target_users: 1 到 3 类适用人群的字符串数组；
 why_trending: 为什么今天值得关注；Trending 项目参考今日新增 Star，ACG 雷达项目参考
 总 Star、近期活跃度和项目资料进行谨慎判断；
 caveat: 一个需要注意的点；
-category: 必须从 AI Agent / Skills、游戏开发、动画、视频剪辑、AI 绘画 / 漫画、
+category: 必须从 Harness / Jev、AI Agent / Skills、游戏开发、动画、视频剪辑、AI 绘画 / 漫画、
 AI 视频、3D / VTuber、语音 / 配音、音乐 / 音效、互动叙事、XR / 虚拟制作、
 ACG 本地化、ACG 资源 / Mod、创作者自动化中选择最接近的一项。
 """
 
-SUMMARY_PROMPT_VERSION = "use-cases-v3-deepseek"
+SUMMARY_PROMPT_VERSION = "use-cases-v4-harness-jev"
 
 
 def fallback_brief(

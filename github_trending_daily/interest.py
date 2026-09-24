@@ -12,6 +12,7 @@ from .summarize import _parse_json_response, _response_text
 
 
 INTEREST_CATEGORIES = (
+    "Harness / Jev",
     "AI Agent / Skills",
     "游戏开发",
     "动画",
@@ -29,6 +30,22 @@ INTEREST_CATEGORIES = (
 )
 
 CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "Harness / Jev": (
+        "agent harness",
+        "ai harness",
+        "llm harness",
+        "coding agent harness",
+        "eval harness",
+        "agent eval",
+        "agent evaluation",
+        "llm eval",
+        "jev",
+        "typesafe ai",
+        "system one model",
+        "model routing",
+        "tool routing",
+        "llm-as-judge",
+    ),
     "AI Agent / Skills": (
         "agent",
         "agentic",
@@ -168,6 +185,11 @@ CATEGORY_KEYWORDS: dict[str, tuple[str, ...]] = {
 }
 
 DIRECT_TERMS = {
+    "agent harness",
+    "eval harness",
+    "agent eval",
+    "agent evaluation",
+    "jev",
     "agent",
     "agentic",
     "mcp",
@@ -233,7 +255,8 @@ CLASSIFIER_PROMPT = f"""你是 GitHub Trending 的 ACG 与创作者工具选题�
 - 0-29：无关。
 
 AI Agent / Skills 只收 Agent、MCP、Agent Skill、Agent 工作流等项目，不要把所有 LLM
-或通用 AI 库都算进去。数据库、通用 Web 框架、DevOps、监控、金融、炒币等默认无关，
+或通用 AI 库都算进去。Harness / Jev 只收 Agent Harness、Agent Eval、模型或工具路由、
+Jev 决策模型及其直接集成项目。数据库、通用 Web 框架、DevOps、监控、金融、炒币等默认无关，
 除非资料明确显示它直接服务于游戏、动画、视频、绘画、3D、VTuber、语音、音乐、
 互动叙事、XR、ACG 本地化、资源 Mod 或创作者自动化。
 
@@ -439,6 +462,7 @@ def select_daily_mix(
     selected: list[TrendingRepository] = []
     selected_names: set[str] = set()
     category_counts: defaultdict[str, int] = defaultdict(int)
+    agent_categories = {"AI Agent / Skills", "Harness / Jev"}
 
     def add_from(pool: list[TrendingRepository], target: int) -> None:
         added = 0
@@ -449,10 +473,8 @@ def select_daily_mix(
             match = by_repository.get(key)
             if match is None or key in selected_names:
                 continue
-            if (
-                match.category == "AI Agent / Skills"
-                and category_counts[match.category] >= agent_cap
-            ):
+            agent_count = sum(category_counts[category] for category in agent_categories)
+            if match.category in agent_categories and agent_count >= agent_cap:
                 continue
             selected.append(repo)
             selected_names.add(key)

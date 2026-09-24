@@ -8,6 +8,9 @@ from .models import RepositoryDetails, TrendingRepository
 
 
 RADAR_TOPICS = (
+    "agent-harness",
+    "llm-evaluation",
+    "jev",
     "gamedev",
     "game-engine",
     "video-editing",

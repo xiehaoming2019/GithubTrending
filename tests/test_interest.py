@@ -34,6 +34,20 @@ def _repo(
 
 
 class FallbackInterestTests(unittest.TestCase):
+    def test_recognizes_harness_and_jev(self) -> None:
+        repo = _repo(
+            "typesafe/jev-harness",
+            "Agent eval harness with Jev model and tool routing",
+        )
+
+        match = fallback_interest(
+            repo,
+            RepositoryDetails(topics=["agent-harness", "llm-evaluation", "jev"]),
+        )
+
+        self.assertGreaterEqual(match.score, 60)
+        self.assertEqual("Harness / Jev", match.category)
+
     def test_recognizes_agent_skills(self) -> None:
         repo = _repo("creator/agent-skills", "MCP agent skills for Codex workflows")
 
@@ -134,6 +148,31 @@ class FallbackInterestTests(unittest.TestCase):
             3,
             sum(repo.full_name.startswith("agents/") for repo in selected),
         )
+
+    def test_daily_mix_caps_agent_and_harness_categories_together(self) -> None:
+        trending = [
+            _repo("agents/core", "agent", rank=1),
+            _repo("agents/skills", "skills", rank=2),
+            _repo("harness/jev", "jev harness", rank=3),
+            _repo("harness/evals", "eval harness", rank=4),
+        ]
+        matches = [
+            InterestMatch("agents/core", 95, "AI Agent / Skills", ""),
+            InterestMatch("agents/skills", 94, "AI Agent / Skills", ""),
+            InterestMatch("harness/jev", 93, "Harness / Jev", ""),
+            InterestMatch("harness/evals", 92, "Harness / Jev", ""),
+        ]
+
+        selected = select_daily_mix(
+            trending,
+            [],
+            matches,
+            limit=4,
+            threshold=60,
+            radar_target=0,
+        )
+
+        self.assertEqual(3, len(selected))
 
 
 class DeepSeekInterestClassifierTests(unittest.TestCase):
