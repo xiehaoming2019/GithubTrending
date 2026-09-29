@@ -1,0 +1,549 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 44978,
+      "forks": 5156,
+      "stars_today": 3221,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 4251
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-29T05:52:59Z",
+      "pushed_at": "2026-09-29T00:58:42Z",
+      "open_issues": 50,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Optional remote workers |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nDownload from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest), then follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE). Models have their own licenses; review them before commercial use. Clone voices only with permission. See [license details](LICENSE-NOTICE.md).\n"
+    },
+    "brief": {
+      "summary": "本地运行的开源语音克隆与配音工具，覆盖646种语言。",
+      "problem": "想用云端语音服务做克隆和配音，但要付费、还得上传音频数据。",
+      "highlights": [
+        "可以用一段参考录音克隆音色并生成语音",
+        "可以给视频配上分时同步的配音",
+        "可以做听写、转录和有声书批量生成"
+      ],
+      "target_users": [
+        "内容创作者",
+        "视频配音从业者",
+        "注重隐私的用户"
+      ],
+      "why_trending": "今日新增约3200 Star并连续上榜，本地优先的语音方案关注度高。",
+      "caveat": "AGPL-3.0 许可，模型另有许可；克隆声音需获对方授权。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 93,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音、转录与有声书，覆盖ACG配音",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "paperclipai/paperclip",
+      "url": "https://github.com/paperclipai/paperclip",
+      "description": "The open-source app everyone uses to manage agents at work",
+      "language": "TypeScript",
+      "total_stars": 93287,
+      "forks": 15932,
+      "stars_today": 3197,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3197
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-03-02T15:01:51Z",
+      "updated_at": "2026-09-29T05:52:14Z",
+      "pushed_at": "2026-09-29T02:46:34Z",
+      "open_issues": 6010,
+      "homepage": "https://paperclip.ing",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <img src=\"doc/assets/banner.jpg\" alt=\"Paperclip is the app people use to manage AI agents for work.\" width=\"720\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"#quickstart\"><strong>Quickstart</strong></a> &middot;\n  <a href=\"https://docs.paperclip.ing\"><strong>Docs</strong></a> &middot;\n  <a href=\"https://github.com/paperclipai/paperclip\"><strong>GitHub</strong></a> &middot;\n  <a href=\"https://discord.gg/m4HZY7xNG3\"><strong>Discord</strong></a> &middot;\n  <a href=\"https://x.com/papercliping\"><strong>Twitter</strong></a> &middot;\n  <a href=\"https://paperclip.ing\"><strong>Website</strong></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/paperclipai/paperclip/blob/master/LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue\" alt=\"MIT License\" /></a>\n  <a href=\"https://github.com/paperclipai/paperclip/stargazers\"><img src=\"https://img.shields.io/github/stars/paperclipai/paperclip?style=flat\" alt=\"Stars\" /></a>\n  <a href=\"https://www.star-history.com/paperclipai/paperclip\"><img src=\"https://api.star-history.com/badge?repo=paperclipai/paperclip\" alt=\"Star History Rank\" /></a>\n  <a href=\"https://discord.gg/m4HZY7xNG3\"><img src=\"https://img.shields.io/badge/discord-join-7289da\" alt=\"Discord\" /></a>\n</p>\n\n<br/>\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/773bdfb2-6d1e-4e30-8c5f-3487d5b70c8f\" width=\"600\" controls></video>\n</div>\n\n<br/>\n\n# Paperclip is the app people use to manage AI agents for work.\n\nOpen-source orchestration for teams of AI agents.\n\n**If OpenClaw is an _employee_, Paperclip is the _company_.**\n\nPaperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard.\n\nIt looks like a task manager. Under the hood: org charts, budgets, governance, goal alignment, and agent coordination.\n\n**Manage business goals, not pull requests.**\n\n|        | Step            | Example                                                            |\n| ------ | --------------- | ------------------------------------------------------------------ |\n| **01** | Define the goal | _\"Build the #1 AI note-taking app to $1M MRR.\"_                    |\n| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any bot, any provider. |\n| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |\n\n<br/>\n\n<div align=\"center\">\n<table>\n  <tr>\n    <td align=\"center\"><strong>Works<br/>with</strong></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/openclaw.svg\" width=\"32\" alt=\"OpenClaw\" /><br/><sub>OpenClaw</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/claude.svg\" width=\"32\" alt=\"Claude\" /><br/><sub>Claude Code</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/codex.svg\" width=\"32\" alt=\"Codex\" /><br/><sub>Codex</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/cursor.svg\" width=\"32\" alt=\"Cursor\" /><br/><sub>Cursor</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/bash.svg\" width=\"32\" alt=\"Bash\" /><br/><sub>Bash</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/http.svg\" width=\"32\" alt=\"HTTP\" /><br/><sub>HTTP</sub></td>\n  </tr>\n</table>\n\n<em>If it can receive a heartbeat, it's hired.</em>\n\n</div>\n\n<br/>\n\n## Paperclip is right for you if\n\n- ✅ You want to build **autonomous AI organizations**\n- ✅ You **coordinate many different agents** (OpenClaw, Codex, Claude, Cursor) toward a common goal\n- ✅ You have **20 simultaneous Claude Code terminals** open and lose track of what everyone is doing\n- ✅ You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed\n- ✅ You want to **monitor costs** and enforce budgets\n- ✅ You want a process for managing agents that **feels like using a task manager**\n- ✅ You want to manage your autonomous businesses **from your phone**\n\n<br/>\n\n## The four pillars\n\nFour things have to work for an organization of AI agents to actually produce: the tasks, the org, the training, and the infrastructure. Paperclip is built around exactly those four pillars.\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\">\n  <img src=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\" alt=\"The four pillars of Paperclip\">\n</picture>\n\n| Pillar | Built for | What it covers |\n| --- | --- | --- |\n| **Agentic Task Manager** — Declare intent. Agents work. You verify the output. | Everyone, daily | Tasks, approvals & review gates · proactive agent coworkers · auditable routines & workflows · verify from diffs, screenshots & tests |\n| **Org Chart for Agents** — Roles, permissions & boundaries for humans and agents. | Managers | Mixed human + agent org chart · responsibilities, delegation, specialization · governance: who can do what · scoped secrets & company boundaries |\n| **Agent Employee Training** — Design, train & evaluate your AI employees. | Enablers | Skill Studio & shared org-wide skills · evals & saved test runs · active learning loops & quality metrics · performance reviews for agents |\n| **Agentic OS** — The infrastructure that makes the work run. | IT & platform | Cross-provider runtime: any model, any agent · sandboxing, integrations & MCP servers · SSO, GRC, RBAC & cost controls · data privacy, internal trace collection, compounding data value |\n\n<br/>\n\n## Features\n\n<table>\n<tr>\n<td align=\"center\" width=\"33%\">\n<h3>🔌 Bring Your Own Agent</h3>\nAny agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>🎯 Goal Alignment</h3>\nEvery task traces back to the organization mission. Agents know <em>what</em> to do and <em>why</em>.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>💓 Heartbeats</h3>\nAgents wake on a schedule, check work, and act. Delegation flows up and down the org chart.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>💰 Cost Control</h3>\nMonthly budgets per agent. When they hit the limit, they stop. No runaway costs.\n</td>\n<td align=\"center\">\n<h3>🏢 Multi-Organization</h3>\nOne deployment, many organizations. Complete data isolation. One control plane for your portfolio.\n</td>\n<td align=\"center\">\n<h3>🎫 Ticket System</h3>\nEvery conversation traced. Every decision explained. Full tool-call tracing and immutable audit log.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>🛡️ Governance</h3>\nApprove hires, override strategy, pause or terminate any agent — at any time.\n</td>\n<td align=\"center\">\n<h3>📊 Org Chart</h3>\nHierarchies, roles, reporting lines. Your agents have a boss, a title, and a job description.\n</td>\n<td align=\"center\">\n<h3>📱 Mobile Ready</h3>\nMonitor and manage your autonomous businesses from anywhere.\n</td>\n</tr>\n</table>\n\n<br/>\n\n## Problems Paperclip solves\n\n| Without Paperclip                                                                                                                     | With Paperclip                                                                                                                         |\n| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |\n| ❌ You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything.                              | ✅ Tasks are ticket-based, conversations are threaded, sessions persist across reboots.                                                |\n| ❌ You manually gather context from several places to remind your bot what you're actually doing.                                     | ✅ Context flows from the task up through the project and company goals — your agent always knows what to do and why.                  |\n| ❌ Folders of agent configs are disorganized and you're re-inventing task management, communication, and coordination between agents. | ✅ Paperclip gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |\n| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets and throttles agents when they're out. Management prioritizes with budgets.                    |\n| ❌ You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off.                        | ✅ Heartbeats handle regular work on a schedule. Management supervises.                                                                |\n| ❌ You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it.                                | ✅ Add a task in Paperclip. Your coding agent works on it until it's done. Management reviews their work.                              |\n\n<br/>\n\n## Why Paperclip is special\n\nPaperclip handles the hard orchestration details correctly.\n\n|                                   |                                                                                                               |\n| --------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| **Atomic execution.**             | Task checkout and budget enforcement are atomic, so no double-work and no runaway spend.                      |\n| **Persistent agent state.**       | Agents resume the same task context across heartbeats instead of restarting from scratch.                     |\n| **Runtime skill injection.**      | Agents can learn Paperclip workflows and project context at runtime, without retraining.                      |\n| **Governance with rollback.**     | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back safely.        |\n| **Goal-aware execution.**         | Tasks carry full goal ancestry so agents consistently see the \"why,\" not just a title.                        |\n| **Portable company templates.**   | Export/import orgs, agents, and skills with secret scrubbing and collision handling.                          |\n| **True multi-organization isolation.** | Every entity is company-scoped, so one deployment can run many companies with separate data and audit trails. |\n\n<br/>\n\n## What's Under the Hood\n\nPaperclip is a full control plane, not a wrapper. Before you build any of this yourself, know that it already exists:\n\n```\n┌──────────────────────────────────────────────────────────────┐\n│                       PAPERCLIP SERVER                       │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │Identity & │  │  Work &   │  │ Heartbeat │  │Governance │  │\n│  │  Access   │  │   Tasks   │  │ Execution │  │& Approvals│  │\n│  └───────────┘  └───────────┘  └───────────┘  └───────────┘  │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │ Org Chart │  │Workspaces │  │  Plugins  │  │  Budget   │  │\n│  │ & Agents  │  │ & Runtime │  │           │  │ & Costs   │  │\n│  └───────────┘  └───────────┘  └───────────┘  └───────────┘  │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │ Routines  │  │ Secrets & │  │ Activity  │  │  Company  │  │\n│  │& Schedules│  │  Storage  │  │ & Events  │  │Portability│  │\n│  └──"
+    },
+    "brief": {
+      "summary": "开源应用，像管公司一样编排 AI 智能体团队。",
+      "problem": "多开终端管不住多个 AI 代理，成本和进度难以追踪。",
+      "highlights": [
+        "可以给代理设目标和月度预算，超支自动停",
+        "可以用任务看板审批并追溯每次工具调用",
+        "可以接入 Claude Code、Codex、Cursor 等代理"
+      ],
+      "target_users": [
+        "AI 代理重度用户",
+        "技术团队管理者",
+        "独立开发者"
+      ],
+      "why_trending": "今日新增约 3197 Star，连续上榜，代理编排话题热度高。",
+      "caveat": "资料中未说明托管服务与长期维护情况，待办 issue 已过六千。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "paperclipai/paperclip",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "开源Agent管理与编排工作台",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "vectorize-io/hindsight",
+      "url": "https://github.com/vectorize-io/hindsight",
+      "description": "Hindsight: Agent Memory That Learns",
+      "language": "Python",
+      "total_stars": 41427,
+      "forks": 5576,
+      "stars_today": 4561,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 4561
+    },
+    "details": {
+      "topics": [
+        "agentic-ai",
+        "agents",
+        "ai-memory",
+        "memory"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-30T11:49:48Z",
+      "updated_at": "2026-09-29T05:53:18Z",
+      "pushed_at": "2026-09-29T00:09:54Z",
+      "open_issues": 187,
+      "homepage": "https://hindsight.vectorize.io/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![Hindsight Banner](./hindsight-docs/static/img/hindsight-github-banner.png)\n\n[Documentation](https://hindsight.vectorize.io) • [Integrations](https://hindsight.vectorize.io/integrations) • [Cookbook](https://hindsight.vectorize.io/cookbook) • [Benchmarks](https://benchmarks.hindsight.vectorize.io/) • [Paper](https://arxiv.org/abs/2512.12818) • [Hindsight Cloud](https://ui.hindsight.vectorize.io/signup)\n\n[![Release](https://github.com/vectorize-io/hindsight/actions/workflows/release.yml/badge.svg)](https://github.com/vectorize-io/hindsight/actions/workflows/release.yml)\n[![Version](https://img.shields.io/pypi/v/hindsight-api?logo=python&logoColor=white&label=version&color=blue)](https://pypi.org/project/hindsight-api/)\n[![PyPI Downloads](https://img.shields.io/pypi/dm/hindsight-client?logo=pypi&logoColor=white&label=PyPI&color=blue)](https://pypi.org/project/hindsight-client/)\n[![NPM Downloads](https://img.shields.io/npm/dm/%40vectorize-io%2Fhindsight-client?logo=npm&logoColor=white&label=NPM&color=blue)](https://www.npmjs.com/package/@vectorize-io/hindsight-client)\n[![Slack Community](https://img.shields.io/badge/Slack-Join%20Community-4A154B?logo=slack)](https://vectorize.io/slack)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n<br/>\n<p align=\"center\">\n <a href=\"https://www.star-history.com/vectorize-io/hindsight\"><img src=\"https://api.star-history.com/badge?repo=vectorize-io/hindsight&type=rank\" alt=\"Star History Rank\" /> <img src=\"https://api.star-history.com/badge?repo=vectorize-io/hindsight&type=trending\" alt=\"GitHub Trending Repository of the Day\" /></a>\n</p>\n\n</div>\n\n---\n\n## What is Hindsight?\n\nHindsight™ is an agent memory system built to create smarter agents that learn over time. Most agent memory systems focus on recalling conversation history. Hindsight is focused on making agents that learn, not just remember.\n\n<video src=\"https://github.com/user-attachments/assets/923b798d-3581-4897-bb62-9cfa5a931682\" controls></video>\n\nIt eliminates the shortcomings of alternative techniques such as RAG and knowledge graph and delivers state-of-the-art performance on long term memory tasks.\n\n**Contents**\n\n- [Memory Performance & Accuracy](#memory-performance--accuracy)\n- [Quick Start](#quick-start) — [server](#1-start-a-server) · [clients](#2-connect-a-client) · [platforms](#supported-platforms) · [embedded](#python-embedded-no-server-required)\n- [Adding Hindsight to Your Agent](#adding-hindsight-to-your-agent) — [LLM Wrapper](#llm-wrapper-2-lines-of-code) · [integrations](#integrations) · [coding agents](#coding-agents) · [MCP](#mcp-server)\n- [Core Concepts](#core-concepts) — [memory types](#memory-types) · [retain / recall / reflect](#the-three-operations) · [observations](#observations) · [mental models & knowledge pages](#mental-models--knowledge-pages) · [banks](#memory-banks)\n- [Use Cases](#use-cases)\n- [Running in Production](#running-in-production)\n- [Resources](#resources)\n\n---\n\n## Memory Performance & Accuracy\n\nHindsight is the most accurate agent memory system ever tested according to benchmark performance. It has achieved state-of-the-art performance on the LongMemEval benchmark, widely used to assess memory system performance across a variety of conversational AI scenarios. The current reported performance of Hindsight and other agent memory solutions as of January 2026 is shown here:\n\n![Overview](./hindsight-docs/static/img/hindsight-benchmarks.png)\n\n> Live, continuously updated results — including per-model accuracy, latency and cost — are published at [benchmarks.hindsight.vectorize.io](https://benchmarks.hindsight.vectorize.io/).\n\nThe benchmark performance data for Hindsight has been independently reproduced by research collaborators at the Virginia Tech [Sanghani Center for Artificial Intelligence and Data Analytics](https://sanghani.cs.vt.edu/) and The Washington Post. Other scores are self-reported by software vendors.\n\nHindsight is being used in production at Fortune 500 enterprises and by a growing number of AI startups.\n\n---\n\n> 🤖 **Using a coding agent?** Install the Hindsight documentation skill for instant access to docs while you code:\n> ```bash\n> npx skills add https://github.com/vectorize-io/hindsight --skill hindsight-docs\n> ```\n> Works with Claude Code, Cursor, and other AI coding assistants.\n\n---\n\n## Quick Start\n\n### 1. Start a server\n\n#### Docker (recommended)\n\n```bash\nexport OPENAI_API_KEY=sk-xxx\n\ndocker run -it --pull always --name hindsight --restart unless-stopped -p 8888:8888 -p 9999:9999 \\\n  -e HINDSIGHT_API_LLM_API_KEY=$OPENAI_API_KEY \\\n  -v hindsight-data:/home/hindsight/.pg0 \\\n  ghcr.io/vectorize-io/hindsight:latest\n```\n\n>API: http://localhost:8888\n>UI: http://localhost:9999\n\nHindsight works with **25+ LLM providers** via `HINDSIGHT_API_LLM_PROVIDER` — hosted (`openai`, `anthropic`, `gemini`, `groq`, `bedrock`, `vertexai`, `minimax`, `deepseek`, `atlas`, `meta`, …), fully local (`ollama`, `lmstudio`, `llamacpp`), any OpenAI-compatible endpoint, and gateways (`litellm`, `litellmrouter`) that reach the rest. Existing subscriptions work too: `openai-codex` (ChatGPT Plus/Pro), `claude-code` (Claude Pro/Max), `cursor` (Cursor) and `github-copilot` (GitHub Copilot) need no API key. See [supported models](https://hindsight.vectorize.io/developer/models).\n\n#### Docker (external PostgreSQL)\n\n```bash\nexport OPENAI_API_KEY=sk-xxx\nexport HINDSIGHT_DB_PASSWORD=choose-a-password\ncd docker/docker-compose\ndocker compose up\n```\n\n> Oracle AI Database is also supported for enterprise deployments with full feature parity. See the [storage documentation](https://hindsight.vectorize.io/developer/storage) for details.\n\n#### Bare metal (pip)\n\n```bash\npip install hindsight-api\nexport HINDSIGHT_API_LLM_API_KEY=sk-xxx\n\nhindsight-api\n```\n\n#### Kubernetes (Helm)\n\n```bash\nhelm install hindsight oci://ghcr.io/vectorize-io/charts/hindsight \\\n  --set api.llm.provider=openai \\\n  --set api.llm.apiKey=sk-xxx \\\n  --set postgresql.enabled=true\n```\n\n#### Managed (no server)\n\n[Hindsight Cloud](https://vectorize.io/pricing) is the hosted option: managed infrastructure that scales automatically, plus a dashboard, backups, team collaboration and a 99.9% uptime SLA. Billing is usage-based with free credits to start — no fixed monthly or per-seat fee. Point any client at `https://api.hindsight.vectorize.io` with your API key and skip the deployment entirely.\n\n[Compare self-hosted, Cloud and Enterprise →](https://vectorize.io/pricing) · [Sign up →](https://ui.hindsight.vectorize.io/signup)\n\nAll options, including Windows and air-gapped setups, are covered in the [installation guide](https://hindsight.vectorize.io/developer/installation).\n\n### 2. Connect a client\n\n```bash\npip install hindsight-client -U                                  # Python\nnpm install @vectorize-io/hindsight-client                        # Node.js / TypeScript\ngo get github.com/vectorize-io/hindsight/hindsight-clients/go     # Go\ncurl -fsSL https://hindsight.vectorize.io/get-cli | bash          # CLI\n```\n\n#### Python\n\n```python\nfrom hindsight_client import Hindsight\n\nclient = Hindsight(base_url=\"http://localhost:8888\")\n\n# Retain: Store information\nclient.retain(bank_id=\"my-bank\", content=\"Alice works at Google as a software engineer\")\n\n# Recall: Search memories\nclient.recall(bank_id=\"my-bank\", query=\"What does Alice do?\")\n\n# Reflect: Generate disposition-aware response\nclient.reflect(bank_id=\"my-bank\", query=\"Tell me about Alice\")\n```\n\n#### Node.js / TypeScript\n\n```javascript\nconst { HindsightClient } = require('@vectorize-io/hindsight-client');\n\nconst main = async () => {\n  const client = new HindsightClient({ baseUrl: 'http://localhost:8888' });\n\n  await client.retain('my-bank', 'Alice loves hiking in Yosemite');\n\n  const results = await client.recall('my-bank', 'What does Alice like?');\n  console.log(results);\n}\n\nmain();\n```\n\nFull reference: [Python](https://hindsight.vectorize.io/sdks/python) · [Node.js](https://hindsight.vectorize.io/sdks/nodejs) · [Go](https://hindsight.vectorize.io/sdks/go) · [CLI](https://hindsight.vectorize.io/sdks/cli) · [REST API](https://hindsight.vectorize.io/api-reference)\n\n### Supported Platforms\n\n| Platform | Docker | Bare Metal (pip) | Embedded DB (pg0) |\n|----------|--------|------------------|--------------------|\n| **Linux** (x86_64, ARM64) | ✅ | ✅ | ✅ |\n| **macOS** (Apple Silicon / arm64) | ✅ | ✅ | ✅ |\n| **macOS** (Intel / x86_64) | ✅ | ⚠️ | ✅ |\n| **Windows** (x86_64) | ✅ | ✅ | ✅ |\n\n⚠️ Intel Macs: use `hindsight-all-slim` — see the [installation guide](https://hindsight.vectorize.io/developer/installation#supported-platforms) for details.\n\n### Python Embedded (no server required)\n\n```bash\npip install hindsight-all -U\n```\n\nOn Intel (x86_64) Macs, install `hindsight-all-slim` instead — see [Supported Platforms](#supported-platforms).\n\n```python\nimport os\nfrom hindsight import HindsightServer, HindsightClient\n\nwith HindsightServer(\n    llm_provider=\"openai\",\n    llm_model=\"gpt-5-mini\",\n    llm_api_key=os.environ[\"OPENAI_API_KEY\"]\n) as server:\n    client = HindsightClient(base_url=server.url)\n    client.retain(bank_id=\"my-bank\", content=\"Alice works at Google\")\n    results = client.recall(bank_id=\"my-bank\", query=\"Where does Alice work?\")\n```\n\nA [Node.js equivalent](https://hindsight.vectorize.io/sdks/hindsight-all-npm) and a [daemon CLI](https://hindsight.vectorize.io/sdks/embed) are also available.\n\n---\n\n## Adding Hindsight to Your Agent\n\n### LLM Wrapper (2 lines of code)\n\nThe easiest way to add memory to an existing agent is the LLM Wrapper. Swap your LLM client for a wrapped one — memories are then stored and retrieved automatically on every call, with no other changes to your code.\n\n```bash\npip install hindsight-litellm\n```\n\n```python\nfrom openai import OpenAI\nfrom hindsight_litellm import wrap_openai\n\n# Wrap your existing LLM client and you're done.\n# Defaults to Hindsight Cloud; pass hindsight_api_url for a self-hosted server.\nclient = wrap_openai(\n    OpenAI(),\n    bank_id=\"user-123\",\n    hindsight_api_url=\"http://localhost:8888\",\n)\n\n# Hindsight recalls relevant memories before the call\n# and retains the conversation after it.\nresponse = client.chat.completions.create(\n    model=\"gpt-5-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"What do you know about me?\"}],\n)\n```\n\n`wrap_anthropic()` does the same for the Anthropic SDK, and every setting — bank, recall budget, fact types, reflect instead of recall — can be overridden per call with `hindsight_*` kwargs. LiteLLM sits underneath, so the same integration covers **100+ models**. See the [LiteLLM integration](https://hindsight.vectorize.io/sdks/integrations/litellm).\n\nIf you need explicit control over *when* memories are stored and recalled, use the [SDKs or REST API](#2-connect-a-client) directly instead.\n\n### Integrations\n\n**60+ integrations** — most need no code changes.\n\n| | |\n|---|---|\n| **Coding agents** | [Claude Code](https://hindsight.vectorize.io/sdks/integrations/claude-code) · [Codex](https://hindsight.vectorize.io/sdks/integrations/codex) · [Cursor](https://hindsight.vectorize.io/sdks/integrations/cursor) · [GitHub Copilot](https://hindsight.vectorize.io/sdks/integrations/github-copilot) · [opencode](https://hindsight.vectorize.io/sdks/integrations/opencode) · [Cline](https://hindsight.vectorize.io/sdks/integrations/cline) · [Aider](https://hindsight.vectorize.io/sdks/integrations/aider) · [Zed](https://hindsight.vectorize.io/sdks/integrations/zed) · [Continue](https://hindsight.vectorize.io/sdks/integrations/continue) · [Roo Code](https://hindsight.vectorize.io/sdks/integrations/roo-code) · [OpenHands](https://hindsight.vectorize.io/sdks/integrations/openhands) |\n| **Agent frameworks** | [LangGraph / LangChain](https://hindsight.vectorize.io/sdks/integrations/langgraph) · [LlamaIndex](https://hindsight.vectorize.io/sdks/integrations/llamaindex) · [CrewAI](https://hindsight.vectorize.io/sdks/integrations/crewai) · [Pyd"
+    },
+    "brief": {
+      "summary": "为 AI Agent 提供会随时间学习的长期记忆",
+      "problem": "Agent 记不住长期信息，RAG 和知识图谱效果有限",
+      "highlights": [
+        "可以存下对话与事实，之后按需检索",
+        "可以基于记忆生成带倾向的回答",
+        "两行代码包住现有 LLM 调用即可接入"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "后端工程师",
+        "AI 产品团队"
+      ],
+      "why_trending": "单日新增四千多星，连续上榜，关注度很高",
+      "caveat": "需自行部署服务与模型，落地有运维成本",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vectorize-io/hindsight",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "Agent记忆层，服务Agent长期运行",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "dream-num/univer",
+      "url": "https://github.com/dream-num/univer",
+      "description": "The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.",
+      "language": "TypeScript",
+      "total_stars": 21421,
+      "forks": 1812,
+      "stars_today": 1099,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1099
+    },
+    "details": {
+      "topics": [
+        "board",
+        "collaboration",
+        "data-table",
+        "doc",
+        "docx",
+        "excel",
+        "grid",
+        "pdf",
+        "ppt",
+        "pptx",
+        "presentation",
+        "sdk",
+        "sheet",
+        "slides",
+        "spreadsheet",
+        "table",
+        "word",
+        "wordprocessor",
+        "xlsx"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-09-29T12:09:14Z",
+      "updated_at": "2026-09-29T05:53:20Z",
+      "pushed_at": "2026-09-29T05:45:11Z",
+      "open_issues": 145,
+      "homepage": "https://docs.univer.ai",
+      "archived": false,
+      "default_branch": "dev",
+      "readme": "<div align=\"center\">\n\n<img src=\"./docs/img/banner.png\" alt=\"Univer SDK\" width=\"800\" />\n\n**The Office Harness for AI Agents**\n\nSpreadsheets · Documents · Presentations · Bases · Boards · PDFs\n\nHigh-performance, fully customizable Office SDK\n\nBuild embeddable productivity experiences with a plugin architecture, Canvas-based rendering,\na formula engine, and one Facade API that works in the browser and on Node.js.\n\nEnglish | [简体中文](./docs/readme/zh-CN.md) | [繁體中文](./docs/readme/zh-TW.md) | [日本語](./docs/readme/ja-JP.md) | [한국어](./docs/readme/ko-KR.md) | [Español](./docs/readme/es-ES.md)\n\n[🌐 Website](https://univer.ai/) | [📖 Documentation](https://docs.univer.ai) | [✨ Showcase](https://docs.univer.ai/showcase) | [📘 API Reference](https://docs.univer.ai/reference/classes/univer) | [📝 Blog](https://docs.univer.ai/blog)\n\n[![Release](https://img.shields.io/github/v/release/dream-num/univer?style=flat-square)](https://github.com/dream-num/univer/releases)\n[![License](https://img.shields.io/github/license/dream-num/univer?style=flat-square)](./LICENSE)\n[![Build](https://img.shields.io/github/actions/workflow/status/dream-num/univer/build-packages.yml?style=flat-square)](https://github.com/dream-num/univer/actions/workflows/build-packages.yml)\n[![CodeFactor](https://www.codefactor.io/repository/github/dream-num/univer/badge/dev?style=flat-square)](https://www.codefactor.io/repository/github/dream-num/univer/overview/dev)\n[![Codecov](https://img.shields.io/codecov/c/gh/dream-num/univer?token=aPfyW2pIMN&style=flat-square)](https://codecov.io/gh/dream-num/univer)\n\n[![Stars](https://img.shields.io/github/stars/dream-num/univer?style=flat-square)](https://github.com/dream-num/univer/stargazers)\n[![Contributors](https://img.shields.io/github/contributors/dream-num/univer?style=flat-square)](https://github.com/dream-num/univer/graphs/contributors)\n[![Issues](https://img.shields.io/github/issues/dream-num/univer?style=flat-square)](https://github.com/dream-num/univer/issues)\n[![Last Commit](https://img.shields.io/github/last-commit/dream-num/univer?style=flat-square)](https://github.com/dream-num/univer/commits/dev/)\n\n[![Discord](https://img.shields.io/discord/1136129819961217077?logo=discord&logoColor=FFFFFF&label=discord&color=5865F2&style=flat-square)](https://discord.gg/z3NKNT6D2f)\n[![Twitter](https://img.shields.io/twitter/follow/univerhq?style=flat-square&logo=x)](https://twitter.com/univerhq)\n[![Open Collective](https://img.shields.io/opencollective/all/univer?logo=opencollective&style=flat-square)](https://opencollective.com/univer)\n\n[![Trendshift](https://trendshift.io/api/badge/repositories/4376)](https://trendshift.io/repositories/4376)\n\n</div>\n\n## ✨ What is Univer?\n\nUniver is an open-source SDK for creating office applications inside your own product. It gives you the building blocks for spreadsheet, document, and presentation experiences without forcing you into a hosted app or a fixed UI.\n\nUse Univer when you need to:\n\n- Embed spreadsheet or document editing into a SaaS product, internal tool, BI workflow, or AI application.\n- Run workbook/document processing on the server with the same architecture used in the browser.\n- Compose only the features you need through plugins or start quickly with presets.\n- Extend behavior through custom plugins, commands, services, UI components, and Facade APIs.\n\nUniver is not a spreadsheet file viewer only. It is a framework for building your own productivity surface.\n\nAcross the [Univer product family](https://univer.ai/), Office tools share a runtime for storage and computation. Content can be composed and embedded across tools, with linked data and references updating together. People and AI agents can work in the same files. See the [capability matrix](https://univer.ai/capabilities) for product coverage and [Open Source and Pro](#-open-source-and-pro) for this repository's scope.\n\n### Build a collaborative tool with Univer Office SDK\n\n[![Build a collaborative tool with Univer Office SDK](https://i.ytimg.com/vi/1p-SMEiK6Kg/maxresdefault.jpg)](https://www.youtube.com/watch?v=1p-SMEiK6Kg)\n\n[Watch the demo](https://www.youtube.com/watch?v=1p-SMEiK6Kg)\n\n## Built with Univer Office SDK\n\n### Featured example: Univer Workspace\n\n[Univer Workspace](https://github.com/dream-num/univer-workspace) is an open-source, self-hostable workspace built on Univer Office SDK, where people and AI agents create, collaborate on, and review Office content. Developers can use the complete implementation as a reference, learn how to integrate the SDK, and build their own products.\n\n[![A Workspace mini-app beside its linked spreadsheet, with metrics, charts, and controls bound to cells](./docs/img/workspace-mini-app.png)](https://github.com/dream-num/univer-workspace)\n\n- Agents can generate spreadsheet-based mini-apps, such as decision-making dashboards, interactive reports, and business dashboards.\n- Metrics, charts, and controls on the web page are bound to cells, supporting data reads, writes, and collaborative updates.\n\n[Explore Univer Workspace](https://github.com/dream-num/univer-workspace)\n\n### Other examples\n\nThese open-source projects are built with Univer Office SDK:\n\n| Project | Description |\n| --- | --- |\n| [Univer Office for DeepSeek Harness](https://github.com/dream-num/dsh-univer-office) | An Office plugin for DeepSeek Harness with connected content, validation, and isolated worktrees for agent collaboration. |\n| [Univer CLI](https://github.com/dream-num/univer-cli) | A local command-line workspace for agents to create, edit, inspect, and deliver Office content. |\n| [Univer Office for WorkBuddy](https://github.com/dream-num/workbuddy-univer-office) | A local Office integration for WorkBuddy with MCP previews and draft review. Development preview. |\n| [Univer Office for OpenClaw](https://github.com/dream-num/openclaw-univer-office) | Tools for creating, reviewing, and delivering Office content in OpenClaw. |\n\nEach project documents its own setup and SDK licensing requirements.\n\n## 🌟 Highlights\n\n<table>\n  <tr>\n    <td align=\"center\" width=\"33%\">\n      ⚡<br />\n      <strong>Built for large surfaces</strong><br />\n      <sub>Canvas-based rendering and a dedicated formula engine keep complex workbooks responsive.</sub>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      🧩<br />\n      <strong>Plugin-shaped by default</strong><br />\n      <sub>Compose, replace, lazy-load, or extend capabilities without taking the whole stack.</sub>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      🤖<br />\n      <strong>Headless for AI infrastructure</strong><br />\n      <sub>Run workbook and document logic in Node.js to power agents, automation, and server-side workflows.</sub>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"33%\">\n      🛠️<br />\n      <strong>Product-ready SDK</strong><br />\n      <sub>Framework adapters, Facade APIs, presets, and headless runtime fit real integration paths.</sub>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      🌗<br />\n      <strong>Dark-mode ready</strong><br />\n      <sub>UI components and the rendering engine both adapt to light and dark themes.</sub>\n    </td>\n    <td align=\"center\" width=\"33%\">\n      🔌<br />\n      <strong>Unified Facade API</strong><br />\n      <sub>One consistent API surface for workbooks, ranges, formulas, and documents across browser and Node.js.</sub>\n    </td>\n  </tr>\n</table>\n\n## 🚀 Why Univer?\n\n- **Isomorphic by design**: run UI apps in browsers and headless processing in Node.js.\n- **Plugin-first architecture**: every capability is delivered as a composable plugin, so features can be added, removed, replaced, or lazy-loaded.\n- **Preset mode for fast integration**: use the curated plugin collections in [`presets/`](./presets) when you want a working app quickly.\n- **Plugin mode for full control**: manually compose packages when you need custom loading, smaller bundles, or deep integration.\n- **Facade API**: work with workbooks, worksheets, ranges, documents, formulas, commands, and events through a higher-level API.\n- **Canvas rendering engine**: support large editable document surfaces with a rendering layer shared across document types.\n- **Extensible UI**: integrate with React, Vue, Web Components, and framework-specific application shells.\n\n## 🤖 Office Workflows for AI Agents\n\nUniver's AI and collaboration capabilities connect agent operations with interactive editing and human review:\n\n- **Programmatic editing**: agents inspect and modify Office content through structured APIs.\n- **Output verification**: agents check results through content inspection, rendered screenshots, and layout diagnostics.\n- **Worktree collaboration**: agents work in isolated drafts, then people review their changes and decide what to merge.\n\nSee the [AI SDK documentation](https://docs.univer.ai/ai) for integration details. Live editing, shared revisions, and Worktree workflows require the corresponding Web SDK and collaboration capabilities; package availability and licensing vary by feature.\n\n## ⚡ Quick Start\n\nUse **Plugin Mode** for complete product coverage and precise composition. For supported Sheets, Docs, and Node profiles, **Preset Mode** provides a shorter curated setup.\n\n<details open>\n<summary><strong>Plugin Mode</strong></summary>\n\nPlugin Mode gives you lower-level control over packages, style imports, locale merging, Facade API registration, and plugin configuration.\n\n```bash\npnpm add @univerjs/core @univerjs/design @univerjs/docs @univerjs/docs-ui @univerjs/engine-formula @univerjs/engine-render @univerjs/sheets @univerjs/sheets-formula @univerjs/sheets-formula-ui @univerjs/sheets-numfmt @univerjs/sheets-numfmt-ui @univerjs/sheets-ui @univerjs/ui\n```\n\n```ts\nimport { LocaleType, mergeLocales, Univer } from '@univerjs/core'\nimport { FUniver } from '@univerjs/core/facade'\nimport DesignEnUS from '@univerjs/design/locale/en-US'\nimport { UniverDocsPlugin } from '@univerjs/docs'\nimport { UniverDocsUIPlugin } from '@univerjs/docs-ui'\nimport DocsUIEnUS from '@univerjs/docs-ui/locale/en-US'\nimport { UniverFormulaEnginePlugin } from '@univerjs/engine-formula'\nimport { UniverRenderEnginePlugin } from '@univerjs/engine-render'\nimport { UniverSheetsPlugin } from '@univerjs/sheets'\nimport SheetsEnUS from '@univerjs/sheets/locale/en-US'\nimport { UniverSheetsFormulaPlugin } from '@univerjs/sheets-formula'\nimport SheetsFormulaEnUS from '@univerjs/sheets-formula/locale/en-US'\nimport { UniverSheetsFormulaUIPlugin } from '@univerjs/sheets-formula-ui'\nimport SheetsFormulaUIEnUS from '@univerjs/sheets-formula-ui/locale/en-US'\nimport { UniverSheetsNumfmtPlugin } from '@univerjs/sheets-numfmt'\nimport { UniverSheetsNumfmtUIPlugin } from '@univerjs/sheets-numfmt-ui'\nimport SheetsNumfmtUIEnUS from '@univerjs/sheets-numfmt-ui/locale/en-US'\nimport { UniverSheetsUIPlugin } from '@univerjs/sheets-ui'\nimport SheetsUIEnUS from '@univerjs/sheets-ui/locale/en-US'\nimport { UniverUIPlugin } from '@univerjs/ui'\nimport UIEnUS from '@univerjs/ui/locale/en-US'\n\nimport '@univerjs/design/lib/index.css'\nimport '@univerjs/ui/lib/index.css'\nimport '@univerjs/docs-ui/lib/index.css'\nimport '@univerjs/sheets-ui/lib/index.css'\nimport '@univerjs/sheets-formula-ui/lib/index.css'\nimport '@univerjs/sheets-numfmt-ui/lib/index.css'\n\nimport '@univerjs/engine-formula/facade'\nimport '@univerjs/ui/facade'\nimport '@univerjs/sheets/facade'\nimport '@univerjs/sheets-ui/facade'\nimport '@univerjs/sheets-formula/facade'\nimport '@univerjs/sheets-numfmt/facade'\n\nconst univer = new Univer({\n  locale: LocaleType.EN_US,\n  locales: {\n    [LocaleType.EN_US]: mergeLocales(\n      DesignEnUS,\n      UIEnUS,\n      DocsUIEnUS,\n      SheetsEnUS,\n      SheetsUIEnUS,\n      SheetsFormulaEnUS,\n      SheetsFormulaUIEnUS,\n      SheetsNumfmtUIEnUS,\n    ),\n  },\n})\n\nuniver.registerPlugin(UniverRenderEnginePlugin)\nuniver.registerPlugin(UniverFormulaEnginePlugin)\nuniver.registerPlugin(UniverUIPlugin, { container: 'app' })\nuniver.registerPlugin(UniverDocsPlugin)\nuniver.registerPlugin(UniverDocsUIPlug"
+    },
+    "brief": {
+      "summary": "开源 Office SDK，可在自家产品中嵌入表格、文档和幻灯片。",
+      "problem": "自建表格文档编辑能力成本高，托管办公应用又不够灵活。",
+      "highlights": [
+        "可以在浏览器和 Node.js 里嵌入表格编辑器",
+        "可以让 AI Agent 直接读写表格和文档内容",
+        "可以按需拼装插件，自定义功能和界面"
+      ],
+      "target_users": [
+        "SaaS 开发者",
+        "AI Agent 开发者",
+        "内部工具团队"
+      ],
+      "why_trending": "今日新增约 1099 Star，本周首次收录，AI Agent 办公方向受关注。",
+      "caveat": "开源版与 Pro 版范围不同，部分能力需查官方能力矩阵。",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "dream-num/univer",
+      "score": 63,
+      "category": "Harness / Jev",
+      "reason": "面向Agent的Office Harness，用途偏办公",
+      "generated_by_ai": true,
+      "velocity_score": 92,
+      "freshness_score": 20,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "moeru-ai/airi",
+      "url": "https://github.com/moeru-ai/airi",
+      "description": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+      "language": "TypeScript",
+      "total_stars": 49762,
+      "forks": 4958,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 446
+    },
+    "details": {
+      "topics": [
+        "ai-companion",
+        "ai-vtuber",
+        "airi",
+        "digital-life",
+        "grok-companion",
+        "live2d",
+        "neuro-sama",
+        "neurosama",
+        "openclaw",
+        "vrm",
+        "vtuber"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-12-01T16:33:36Z",
+      "updated_at": "2026-09-29T05:51:55Z",
+      "pushed_at": "2026-09-29T05:49:40Z",
+      "open_issues": 242,
+      "homepage": "https://airi.moeru.ai/docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<picture>\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-dark-1280x640.avif\"\n    media=\"(prefers-color-scheme: dark)\"\n  />\n  <source\n    width=\"100%\"\n    srcset=\"./docs/content/public/banner-light-1280x640.avif\"\n    media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n  />\n  <img width=\"250\" src=\"./docs/content/public/banner-light-1280x640.avif\" />\n</picture>\n\n<h1 align=\"center\">Project AIRI</h1>\n\n<p align=\"center\">Re-creating Neuro-sama, a soul container of AI waifu / virtual characters to bring them into our world.</p>\n\n<p align=\"center\">\n  [<a href=\"https://discord.gg/TgQ3Cu2F7A\">Join Discord Server</a>] [<a href=\"https://airi.moeru.ai\">Try it</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.zh-CN.md\">简体中文</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ja-JP.md\">日本語</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ru-RU.md\">Русский</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.vi.md\">Tiếng Việt</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.fr.md\">Français</a>] [<a href=\"https://github.com/moeru-ai/airi/blob/main/docs/README.ko-KR.md\">한국어</a>]\n</p>\n\n<p align=\"center\">\n  <a href=\"https://deepwiki.com/moeru-ai/airi\"><img src=\"https://deepwiki.com/badge.svg\"></a>\n  <a href=\"https://github.com/moeru-ai/airi/blob/main/LICENSE\"><img src=\"https://img.shields.io/github/license/moeru-ai/airi.svg?style=flat&colorA=080f12&colorB=1fa669\"></a>\n  <a href=\"https://discord.gg/TgQ3Cu2F7A\"><img src=\"https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fdiscord.com%2Fapi%2Finvites%2FTgQ3Cu2F7A%3Fwith_counts%3Dtrue&query=%24.approximate_member_count&suffix=%20members&logo=discord&logoColor=white&label=%20&color=7389D8&labelColor=6A7EC2\"></a>\n  <a href=\"https://x.com/proj_airi\"><img src=\"https://img.shields.io/badge/%40proj__airi-black?style=flat&logo=x&labelColor=%23101419&color=%232d2e30\"></a>\n  <a href=\"https://t.me/+7M_ZKO3zUHFlOThh\"><img src=\"https://img.shields.io/badge/Telegram-%235AA9E6?logo=telegram&labelColor=FFFFFF\"></a>\n  <a href=\"./docs/wechat.md\"><img src=\"https://img.shields.io/badge/WeChat-%2307C160?logo=wechat&logoColor=%2307C160&labelColor=FFFFFF\"></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=9g00d%2BZS7nORzcJugNNddJ7rCghZTIR7fhXabGwch2S%2BG%2BKGIKwlN1N2nIqkh2jg&busi_data=eyJncm91cENvZGUiOiIxMDU4MTU2Njk3IiwidG9rZW4iOiJmcnkra1hWNFIxNytEcG0zcHRUdVJIaldlRDFxN0dzK080QWtvTEdOQjJkNEY2eUFta1g1clNpbkxSMS9FQWFYIiwidWluIjoiMTI2MDkwNzMzNSJ9&data=b1eJrwn3GVOUh7YIxZ7l9vHQo99HPmRxKPpMKlDCmfzx8Y57IXb2EZCMaOC9rVTd2U558qpNjwUYUWlPHxVHvg&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ-%2312B7F5?logo=qq&labelColor=FFFFFF\"></a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <!-- readme-section:release-binary-windows -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-windows-x64-setup.exe\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.windows.light.en-US.avif\" />\n    </picture>\n  </a>\n  <!-- readme-section:release-binary-macos -->\n  <a href=\"https://github.com/moeru-ai/airi/releases/download/v0.12.0-beta.5/AIRI-0.12.0-beta.5-darwin-arm64.dmg\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.macos.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://github.com/moeru-ai/airi/releases/latest\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.linux.light.en-US.avif\" />\n    </picture>\n  </a>\n</p>\n\n<p float=\"left\" align=\"center\">\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/QR%20code%20button/section.cards.qrcode.light.en-US.png\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.dark.en-US.avif\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.mobile.light.en-US.avif\" />\n    </picture>\n  </a>\n  <a href=\"https://airi.moeru.ai\">\n    <picture>\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.dark.en-US.png\"\n        media=\"(prefers-color-scheme: dark)\"\n      />\n      <source\n        width=\"33%\"\n        srcset=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\"\n        media=\"(prefers-color-scheme: light), (prefers-color-scheme: no-preference)\"\n      />\n      <img width=\"33%\" src=\"./docs/content/public/assets/download-buttons/download-buttons.browser.light.en-US.png\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.producthunt.com/products/airi?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-airi\" target=\"_blank\"><img src=\"https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=993524&theme=neutral&t=1752696535380\" alt=\"AIRI - A&#0032;container&#0032;of&#0032;cyber&#0032;living&#0032;souls&#0044;&#0032;re&#0045;creation&#0032;of&#0032;Neuro&#0045;sama | Product Hunt\" style=\"width: 250px; height: 54px;\" width=\"250\" height=\"54\" /></a>\n  <a href=\"https://trendshift.io/repositories/14636\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/14636\" alt=\"moeru-ai%2Fairi | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</p>\n\n> Heavily inspired by [Neuro-sama](https://www.youtube.com/@Neurosama)\n\n> [!TIP]\n> On Windows, you can also install AIRI with [winget](https://learn.microsoft.com/windows/package-manager/winget/):\n>\n> ```powershell\n> winget install MoeruAI.AIRI\n> ```\n>\n> Or install AIRI with [Scoop](https://scoop.sh/):\n>\n> ```powershell\n> scoop bucket add airi https://github.com/moeru-ai/airi\n> scoop install airi/airi\n> ```\n>\n> On macOS, you can install AIRI with [Homebrew Cask](https://brew.sh/) without adding a custom tap:\n>\n> ```sh\n> brew install --cask airi\n> ```\n\n> [!WARNING]\n> **Attention:** We **do not** have any officially minted cryptocurrency or token associated with this project. Please check the information and proceed with caution.\n\n> [!NOTE]\n>\n> We've got a whole dedicated organization [@proj-airi](https://github.com/proj-airi) for all the sub-projects born from Project AIRI. Check it out!\n>\n> RAG, memory system, embedded database, icons, Live2D utilities, and more!\n\n> [!TIP]\n> We have a translation project on [Crowdin](https://crowdin.com/project/proj-airi). If you find any inaccurate translations, feel free to contribute improvements there.\n> <a href=\"https://crowdin.com/project/proj-airi\" target=\"_blank\" rel=\"nofollow\"><img style=\"width: 140px; height: 40px;\" src=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png\" srcset=\"https://badges.crowdin.net/badge/light/crowdin-on-dark.png 1x, https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png 2x\" alt=\"Crowdin | Agile localization for tech companies\" width=\"140\" height=\"40\" /></a>\n\nHave you dreamed about having a cyber living being (cyber waifu, digital pet) or digital companion that could play with and talk to you?\n\nWith the power of modern large language models like [ChatGPT](https://chatgpt.com) and famous [Claude](https://claude.ai), asking a virtual being to roleplay and chat with us is already easy enough for everyone. Platforms like [Character.ai (a.k.a. c.ai)](https://character.ai) and [JanitorAI](https://janitorai.com/) as well as local playgrounds like [SillyTavern](https://github.com/SillyTavern/SillyTavern) are already good-enough solutions for a chat based or visual adventure game like experience.\n\n> But, what about the abilities to play games? And see what you are coding at? Chatting while playing games, watching videos, and is capable of doing many other things.\n\nPerhaps you know [Neuro-sama](https://www.youtube.com/@Neurosama) already. She is currently the best virtual streamer capable of playing games, chatting, and interacting with you and the participants. Some also call this kind of being \"digital human.\" **Sadly, as it's not open sourced, you cannot interact with her after her live streams go offline**.\n\nTherefore, this project, AIRI, offers another possibility here: **let you own your digital life, cyber living, easily, anywhere, anytime**.\n\n## Recent DevLogs & Stories\n\n- [DevLog @ 2026.03.23: Mobile performance and game engine exploration](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.23/) - March 23, 2026\n- [DevLog @ 2026.03.14: VRM stage lifecycle, cache, and observability](https://airi.moeru.ai/docs/en/blog/DevLog-2026.03.14/) - March 14, 2026\n- [DevLog @ 2026.02.16: Dome Keeper data collection and training pipeline](https://airi.moeru.ai/docs/en/blog/DevLog-2026.02.16/) - February 16, 2026\n- [DevLog @ 2026.01.01: AIRI Pocket and FlowChat memory experiments](https://airi.moeru.ai/docs/en/blog/DevLog-2026.01.01/) - January 1, 2026\n- [DevLog @ 2025.10.20: Electron migration, new models, and Moeru AI updates](https://airi.moeru.ai/docs/en/blog/DevLog-2025.10.20/) - October 20, 2025\n- [DevLog @ 2025.08.26: Pure vision progress for airi-factorio](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.26/) - August 26, 2025\n- [DevLog @ 2025.08.05: AIRI v0.7 release highlights](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.05/) - August 5, 2025\n- [DevLog @ 2025.08.01: Streaming text animation and grapheme clusters](https://airi.moeru.ai/docs/en/blog/DevLog-2025.08.01/) - August 1, 2025\n- [DevLog @ 2025.07.18: Rethinking airi-factorio with Factorio Learning Environment](https://airi.moeru.ai/docs/en/blog/DevLog-2025.07.18/) - July 18, 2025\n- [DreamLog 0x1: The backstory of Project AIRI](https://airi.moeru.ai/docs/en/blog/DreamLog-0x1/) - June 16, 2025\n- More on the [documentation site](https://airi.moeru.ai/docs/en/)\n\n## What's So Special About This Project?\n\nUnlike the other AI driven "
+    },
+    "brief": {
+      "summary": "开源自托管 AI 虚拟伴侣，能语音聊天并玩游戏",
+      "problem": "想复刻 Neuro-sama 式虚拟角色，自建和掌管不容易",
+      "highlights": [
+        "可以和它实时语音聊天",
+        "可以看它玩 Minecraft 和 Factorio",
+        "可以在网页、macOS、Windows 上运行"
+      ],
+      "target_users": [
+        "AI 虚拟主播爱好者",
+        "VTuber 开发者",
+        "二次元玩家"
+      ],
+      "why_trending": "总星近五万，仓库近期仍在推送，热度再升",
+      "caveat": "目前仍是 beta 版本，实际效果资料中未说明",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "moeru-ai/airi",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "自托管AI VTuber，Live2D/VRM实时语音",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 20,
+      "ranking_score": 70.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 53975,
+      "forks": 4921,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 269
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-29T05:51:41Z",
+      "pushed_at": "2026-09-29T05:52:04Z",
+      "open_issues": 209,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nFor standalone installation, default to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                             "
+    },
+    "brief": {
+      "summary": "用 HTML、CSS 和动画渲染确定性 MP4 视频的框架，专为 AI 代理设计。",
+      "problem": "让 AI 代理从 HTML 稳定产出视频，减少手工剪辑和渲染结果的不确定。",
+      "highlights": [
+        "可以让代理一句话生成 10 秒产品片头",
+        "可以把 GitHub PR 自动做成功能讲解视频",
+        "可以给已有口播视频加字幕或说明条"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端与视频开发者",
+        "内容运营"
+      ],
+      "why_trending": "连续上榜，Star 近 5.4 万，仓库近期仍在提交更新，并随附 21 个代理技能。",
+      "caveat": "资料未说明渲染性能与成品质量，技能安装方式偏复杂。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "HTML写视频渲染，面向Agent的视频生成",
+      "generated_by_ai": true,
+      "velocity_score": 74,
+      "freshness_score": 40,
+      "ranking_score": 68.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "harry0703/MoneyPrinterTurbo",
+      "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+      "description": "利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.",
+      "language": "Python",
+      "total_stars": 126724,
+      "forks": 19790,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video-generator",
+        "content-creation",
+        "ffmpeg",
+        "instagram-reels",
+        "llm",
+        "python",
+        "short-video",
+        "subtitles",
+        "text-to-speech",
+        "tiktok",
+        "video-automation",
+        "video-workflow",
+        "workflow-automation",
+        "youtube-shorts"
+      ],
+      "license_name": "MIT",
+      "created_at": "2024-03-11T02:57:34Z",
+      "updated_at": "2026-09-29T05:49:59Z",
+      "pushed_at": "2026-09-29T05:48:42Z",
+      "open_issues": 40,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# MoneyPrinterTurbo 💸\n\n### 一站式 AI 短视频生成工具\n\n只需提供视频<b>主题</b>或<b>关键词</b>，即可自动生成视频脚本、匹配素材、生成字幕和背景音乐，并合成高清短视频。\n\n[![Version](https://img.shields.io/github/v/release/harry0703/MoneyPrinterTurbo?color=blue&label=version)](https://github.com/harry0703/MoneyPrinterTurbo/releases)\n[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/harry0703/MoneyPrinterTurbo/releases/latest)\n[![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)\n[![Downloads](https://img.shields.io/github/downloads/harry0703/MoneyPrinterTurbo/total)](https://github.com/harry0703/MoneyPrinterTurbo/releases/latest)\n\n<a href=\"https://trendshift.io/repositories/8731\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/8731\" alt=\"harry0703%2FMoneyPrinterTurbo | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n<a href=\"https://www.star-history.com/harry0703/moneyprinterturbo\"><img src=\"https://api.star-history.com/badge?repo=harry0703/MoneyPrinterTurbo\" alt=\"Star History Rank\" style=\"height: 55px;\" height=\"55\"/></a>\n\n简体中文 | [English](README-en.md) | [日本語](README-ja.md) | [版本发布](https://github.com/harry0703/MoneyPrinterTurbo/releases) | [问题反馈](https://github.com/harry0703/MoneyPrinterTurbo/issues)\n\n</div>\n\n## 界面预览 🖥️\n\n<h4 align=\"center\">WebUI</h4>\n\n![](docs/webui.jpg)\n\n<h4 align=\"center\">API</h4>\n\n![](docs/api.jpg)\n\n---\n\n## 特别感谢 ❤️\n\n<div align=\"center\">\n  <a href=\"https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo\" target=\"_blank\"><img src=\"https://gcdn.moonshot.cn/growth-cdn/sponsor/kimi-zh.png\" alt=\"Kimi 赞助 MoneyPrinterTurbo\" width=\"100%\"></a>\n</div>\n\n感谢 [Kimi](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo) 赞助本项目！[Kimi K3](https://www.kimi.com/blog/kimi-k3?aff=moneyprinterturbo) 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型，拥有原生视觉能力与 100 万 Token 上下文，在知识工作、推理和长周期任务中展现前沿性能。在 MoneyPrinterTurbo 中，K3 能直接驱动视频创作，不仅撰写视频文案，还会提炼素材搜索关键词、决定成片画面；对内容理解越准确，匹配到的素材就越贴题。\n\n**MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度，最高赠送 ¥1000。活动截至 2026 年 9 月 30 日。前往 Kimi 开放平台（[中文站](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo)｜[Global](https://platform.kimi.ai?track_id=track-f6b0a640d35c41deb03b247242a1058c&aff=moneyprinterturbo)）体验 API。**\n<br>\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\"><img src=\"docs/sponsors/volcengine-logo.svg\" alt=\"火山引擎\" height=\"32\"></a><br>\n      <a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\"><strong>火山引擎</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢字节火山引擎赞助本项目！火山方舟 Agent/Coding Plan 国模套餐<strong>首购 9.9</strong>，支持 GLM-5.3、Kimi-K3、DeepSeek、MiniMax、Doubao 等，注册免费领 <strong>2500w Token</strong>，统一 API，适配编码与智能体开发。<a href=\"https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo\">立即前往</a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://go.apimart.ai/gh-moneyprinterturbo\"><img src=\"docs/sponsors/apimart-logo.png\" alt=\"APIMart\" width=\"100\"></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://go.apimart.ai/gh-moneyprinterturbo\">APIMart</a> 赞助了本项目！APIMart 是专注 AI 图片/视频生成的低价 API 平台，<strong>GPT-Image-2 低至 &#36;0.006/张，1 美元可出图 160+ 张</strong>。<strong>图片、视频一套异步 API 通吃，换模型不改代码</strong>；提交任务拿 ID，通过轮询或回调获取结果，支持万张级批量生成。按量付费、无月费，通过<a href=\"https://go.apimart.ai/gh-moneyprinterturbo\">此注册链接</a>注册即可开用。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://metaso.cn/minimax-h3/?s=MPT\"><img src=\"docs/sponsors/metaso-logo.png\" alt=\"秘塔科技\" width=\"100\"></a><br>\n      <a href=\"https://metaso.cn/minimax-h3/?s=MPT\"><strong>秘塔科技</strong></a>\n    </td>\n    <td align=\"left\">\n      <strong>MiniMax H3 视频生成 API｜秘塔科技</strong><br>\n      秘塔科技提供高性价比的 MiniMax H3 视频生成服务：<strong>768P 仅 0.09 元/秒，2K 仅 0.15 元/秒</strong>。支持原生 2K、音画同步，API 兼容 <strong>OpenAI 协议</strong>，同时支持 <strong>ComfyUI</strong>，无需自行部署 GPU。<br>\n      🎁 通过 <a href=\"https://metaso.cn/minimax-h3/?s=MPT\">MoneyPrinterTurbo专属链接注册</a>，即可领取赠送额度及专属优惠。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\"><img src=\"docs/sponsors/infistar-logo.svg\" alt=\"Infistar.cc 无限星河\" height=\"56\"></a><br>\n      <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\"><strong>Infistar.cc 无限星河</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\">Infistar.cc 无限星河</a> 赞助本项目！Infistar.cc 提供高性价比的大模型 API 服务：大模型低至<strong>官方 0.1 折</strong>，AI 生图低至 <strong>¥0.06/张</strong>。<br>\n      <strong>一个 API Key，覆盖文案、图片与视频创作</strong>，支持 GPT、Claude、Gemini、DeepSeek、通义千问、可灵等主流模型，无需分组。<br>\n      <strong>全模型支持验真</strong>，价格透明，正规备案，人民币实时计费，<strong>支持对公发票</strong>。<br>\n      🎁 MPT 专属福利：通过<a href=\"https://infistar.cc/register?aff=6T4EYXP2&amp;ref_source=link\">专属链接注册</a>即送 <strong>&#36;5 体验额度</strong>，并享首充特惠。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\"><img src=\"docs/sponsors/ofox-logo.svg\" alt=\"OfoxAI\" width=\"120\"></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\">OfoxAI</a> 赞助本项目！MoneyPrinterTurbo 已集成 Ofox 多模型文生视频，配置 API Key 即可使用。Seedance、MiniMax H3、Wan 生成视频素材，GPT Image 2.5、Seedream 制作封面配图，GPT、Claude、Gemini、DeepSeek 打磨脚本、辅助开发。<strong>一个 Key，文本、图像、视频共用余额</strong>；提供 OpenAI 兼容接口及 Anthropic、Gemini 原生接口。<strong>按量付费、价格公开、官方渠道接入，稳定高速不限量</strong>，前往 <a href=\"https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=moneyprinterturbo\">OfoxAI 查看模型与价格</a>。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\"><img src=\"docs/sponsors/shengsuanyun-logo.jpg\" alt=\"胜算云\" height=\"56\"></a><br>\n      <a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\"><strong>胜算云</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢<a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\">胜算云</a>对本项目的赞助！胜算云是面向 AI 原生团队的模型 API 聚合平台，汇集 Claude、ChatGPT、Gemini 等海内外大语言模型及多媒体模型，支持统一接入与按量调用。<br>\n      平台坚持合规 API 服务，杜绝逆向工程和资源稀释。此外平台提供企业级定制网关，包括团队成本与权限管理、智能路由、安全防护及 BYOK 密钥托管，并提供发票服务。<br>\n      🎁新用户通过<a href=\"https://www.shengsuanyun.com/?from=CH_XUQ4OTSK\">此链接</a>注册，即可领取 10 元 Token 体验额度。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\"><img src=\"docs/sponsors/astraflow-logo.png\" alt=\"星图 AstraFlow\" height=\"56\"></a><br>\n      <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\"><strong>星图 AstraFlow</strong></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\">星图 AstraFlow</a> 赞助本项目！<br>\n      🎬 <strong>视频模型一站式调用</strong>：聚合 MiniMax-H3，Seedance-2.5 等主流视频生成模型，文案生成 + 视频生成一个平台全搞定，无需多端注册、多处对接<br>\n      🚀 <strong>200+ 大模型一键调用，新模型当日上架</strong>：聚合 DeepSeek V4.1、Kimi K3、Qwen 3.8 Max、GLM 5.3 等 200+ 主流大模型，新模型上线当天即可接入<br>\n      💰 <strong>UCloud 上市公司出品，调用计费透明可控</strong>：按 Key 级别计费，调用明细全程可查<br>\n      🎁 <strong>MoneyPrinterTurbo 用户专属福利</strong>：通过<a href=\"https://www.ucloud.cn/site/active/astraflow?ytag=geo_waituo_Money\">专属推广链接</a>注册，即享新用户赠送额度，开箱即用！<a href=\"https://f.howxm.com/xs/u/HVFW5X8EIYV1\">点击领取 50 元算力金</a>\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://fluxionai.space/register?source=github&amp;campaign=moneyprinterturbo&amp;promo=MONEYPRINTERTURBO\"><img src=\"docs/sponsors/fluxionai-logo.png\" alt=\"Fluxion AI\" width=\"120\"></a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://fluxionai.space/register?source=github&amp;campaign=moneyprinterturbo&amp;promo=MONEYPRINTERTURBO\">Fluxion AI</a> 赞助本项目！<strong>一个入口，接入并管理全球主流 AI 模型。</strong>面向个人开发者、技术团队与企业，通过统一 API 接入主流模型，多线路动态调度提升可用性，模型表现、响应时间与费用透明可查。根据不同模型与线路，<strong>API 调用成本较官方或基准价格可降低 40%～98%</strong>。通过<a href=\"https://fluxionai.space/register?source=github&amp;campaign=moneyprinterturbo&amp;promo=MONEYPRINTERTURBO\">专属链接注册</a>，即可获得 <strong>&#36;3 API 额度</strong>。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://reccloud.cn\"><img src=\"docs/sponsors/reccloud-logo.svg\" alt=\"录咖\" height=\"36\"></a><br>\n      <a href=\"https://reccloud.cn\">录咖 AI</a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://reccloud.cn\">录咖（AI 智能多媒体服务平台）</a> 基于本项目提供免费的 <strong>AI 视频生成器</strong>，无需部署，在线即可使用，对新手更加友好。\n    </td>\n  </tr>\n  <tr>\n    <td align=\"center\" width=\"120\">\n      <a href=\"https://picwish.cn\"><img src=\"docs/sponsors/picwish-logo.svg\" alt=\"佐糖\" height=\"36\"></a><br>\n      <a href=\"https://picwish.cn\">佐糖</a>\n    </td>\n    <td align=\"left\">\n      感谢 <a href=\"https://picwish.cn\">佐糖</a> 对本项目的支持与赞助！佐糖提供丰富的<strong>在线图像处理工具</strong>，操作简单，帮助用户轻松完成各类图片处理。\n    </td>\n  </tr>\n</table>\n\n## 作者的另一个开源项目：MangoDisk ⭐\n\n<p align=\"center\">\n  <a href=\"https://mangodisk.app/zh\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://assets.mangodisk.app/images/screenshots/zh/dark-01-deep-cleanup.jpg?ver=1.1.0\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://assets.mangodisk.app/images/screenshots/zh/light-01-deep-cleanup.jpg?ver=1.1.0\">\n      <img src=\"https://assets.mangodisk.app/images/screenshots/zh/light-01-deep-cleanup.jpg?ver=1.1.0\" width=\"900\" alt=\"MangoDisk 深度清理界面\">\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>面向 macOS 和 Windows 的开源磁盘清理、空间分析与系统优化工具</strong><br>\n  一站式清理缓存、大文件、重复文件和应用残留，并提供磁盘空间分析、应用卸载、启动项管理、系统优化与维护\n</p>\n\n<p align=\"center\">\n  <a href=\"https://mangodisk.app/zh\">访问 MangoDisk 官网</a> · <a href=\"https://github.com/harry0703/MangoDisk\">查看 GitHub 开源项目</a>\n</p>\n\n---\n\n## 功能特性 🎯\n\n### 创作入口与工作流\n\n- [x] 提供 **AI Agent、WebUI、API 和 CLI** 四种使用方式，既能快速上手，也能接入自动化流程\n- [x] 从主题自动完成脚本、配音、素材、字幕、配乐和剪辑，也支持在每个环节使用自定义内容\n- [x] 支持 **批量生成多条成片**、任务历史记录，以及生成设置与 API Key 的导入、导出和恢复\n\n### 脚本与模型服务\n\n- [x] 支持 AI 自动生成或改写 **多语言视频脚本**，也可以直接使用自定义脚本\n- [x] 支持 [Kimi / Moonshot AI](https://platform.kimi.com?track_id=track-2f5441d6ffd84c509dd079d78e9db5dc&aff=moneyprinterturbo)、[OpenAI](https://platform.openai.com/api-keys)、[Anthropic Claude](https://platform.claude.com/settings/keys)、[Google Gemini](https://aistudio.google.com/app/apikey)、[DeepSeek](https://platform.deepseek.com/api_keys)、[阿里云通义千问](https://dashscope.console.aliyun.com/apiKey)、[Microsoft Azure OpenAI](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI)、[火山引擎方舟](https://www.volcengine.com/activity/ai618?utm_campaign=hw&utm_content=hw&utm_medium=devrel_tool_web&utm_source=OWO&utm_term=MoneyPrinterTurbo)、[xAI Grok](https://console.x.ai/)、[MiniMax](https://platform.minimaxi.com/) 和 [小米 MiMo](https://platform.xiaomimimo.com/docs/zh-CN/quick-start/first-api-call) 等主流模型服务\n- [x] 兼容 [胜算云](https://www.shengsuanyun.com/?from=CH_XUQ4OTSK)、[APIMart](https://go.apimart.ai/gh-moneyprinterturbo)、[Cloudflare AI Gateway](https://dash.cloudflare.com/)、[魔搭 ModelScope](https://modelscope.cn/docs/model-service/API-Inference/intro)、[AIHubMix](https://aihubmix.com/)、[AIML API](https://aimlapi.com/app/keys)、[EvoLink](https://evolink.ai/dashboard/keys)、[OpenRouter](https://openrouter.ai/settings/keys)、[API Route](https://www.api-route.com/)、[Fluxion AI](https://fluxionai.space/register?source=github&campaign=moneyprinterturbo&promo=MONEYPRINTERTURBO)、[Ollama](https://ollama.com/)、[Claude Code 订阅](https://code.claude.com/docs)、[OneAPI](https://github.com/"
+    },
+    "brief": {
+      "summary": "输入主题或关键词，一键生成高清短视频的 AI 工具。",
+      "problem": "做短视频要写文案、找素材、配字幕和音乐，流程繁琐耗时。",
+      "highlights": [
+        "可以只给一个主题，自动生成视频脚本",
+        "可以自动匹配素材，并生成字幕和背景音乐",
+        "可以通过 WebUI 或 API 调用整套流程"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "自媒体运营",
+        "AI 应用开发者"
+      ],
+      "why_trending": "本周首次收录，总 Star 超 12.6 万，近期仍有代码提交。",
+      "caveat": "资料未说明今日新增 Star；成片效果依赖所选模型与素材。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "harry0703/MoneyPrinterTurbo",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "一键生成短视频的AI自动化工作流",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "ZeroK-RTS/Zero-K",
+      "url": "https://github.com/ZeroK-RTS/Zero-K",
+      "description": "Open source RTS game running on the Spring/Recoil engine",
+      "language": "Lua",
+      "total_stars": 855,
+      "forks": 258,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cross-platform",
+        "game",
+        "gamedev",
+        "lua",
+        "modding",
+        "multi-platform",
+        "open-source",
+        "opensource",
+        "real-time-strategy",
+        "rts",
+        "rts-game",
+        "scifi",
+        "springrts"
+      ],
+      "license_name": "GPL-2.0",
+      "created_at": "2013-08-02T06:57:00Z",
+      "updated_at": "2026-09-29T05:50:19Z",
+      "pushed_at": "2026-09-29T05:50:15Z",
+      "open_issues": 1278,
+      "homepage": "https://zero-k.info",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "\n<br>\n\n[![Badge License]][License]\n\n<br>\n\n<div align = center>\n\n# Zero-K\n\n*RTS game with physical projectiles, smart units* <br>\n*and a powerful UI, running on the **[Spring Engine]**.*\n\n<br>\n<br>\n\n![Label Repository]\n\nThis repository contains only the game module files, <br>\nwithout any associated infrastructure code, tools, or <br>\nartwork sources, seek those in the other repositories.\n\n<br>\n<br>\n\n![Label Usage]\n\nTo play the game, you need to **[Download]** the lobby.\n\n[*» Learn how to import content directly into the engine.*][Importing]\n\nDevelopment guide: https://zero-k.info/mediawiki/Zero-K:Developing\n\n</div>\n\n<br>\n\n\n<!----------------------------------------------------------------------------->\n\n[Spring Engine]: https://springrts.com/\n[Importing]: https://springrts.com/wiki/Gamedev:Structure\n[Download]: http://zero-k.info/Wiki/Download\n\n[License]: LICENSE\n\n\n<!---------------------------------[ Badges ]---------------------------------->\n\n[Badge License]: https://img.shields.io/badge/License-GPL_2-blue.svg?style=for-the-badge\n\n[Label Repository]: https://img.shields.io/badge/Repository-222222?style=for-the-badge&logoColor=white&logo=GitHub\n[Label Usage]: https://img.shields.io/badge/Usage-0085CA?style=for-the-badge&logoColor=white&logo=GitBook\n"
+    },
+    "brief": {
+      "summary": "基于 Spring 引擎的开源即时战略游戏，物理弹道与智能单位。",
+      "problem": "商业 RTS 多闭源且难改动，玩家和开发者缺少可自由修改的完整开源方案。",
+      "highlights": [
+        "可以下载 lobby 免费开玩这款开源 RTS",
+        "可以改 Lua 游戏逻辑，自定义单位与规则",
+        "可以在 GPL-2.0 下复用这份游戏模块代码"
+      ],
+      "target_users": [
+        "RTS 玩家",
+        "Lua 模组作者",
+        "开源游戏开发者"
+      ],
+      "why_trending": "今日新增 Star 为 0，本周首次收录，但仓库 2026 年 9 月仍在提交，项目持续活跃。",
+      "caveat": "仓库只含游戏模块，不含大厅、工具与美术源文件，需另行获取。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ZeroK-RTS/Zero-K",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "开源RTS游戏及引擎，含Mod支持",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 48.0
+    }
+  }
+]
