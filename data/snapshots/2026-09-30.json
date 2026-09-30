@@ -1,0 +1,528 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 48756,
+      "forks": 5457,
+      "stars_today": 4758,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 4758
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-09-30T05:44:11Z",
+      "pushed_at": "2026-09-29T15:45:28Z",
+      "open_issues": 67,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Optional remote workers |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nDownload from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest), then follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE). Models have their own licenses; review them before commercial use. Clone voices only with permission. See [license details](LICENSE-NOTICE.md).\n"
+    },
+    "brief": {
+      "summary": "本地运行的语音克隆与配音工具，支持646种语言。",
+      "problem": "云端语音服务要联网付费，声音数据需上传，本地替代方案少。",
+      "highlights": [
+        "可以克隆声音并用文字生成语音",
+        "可以给视频配上定时对齐的配音",
+        "可以听写转录并批量制作有声书"
+      ],
+      "target_users": [
+        "配音与播客创作者",
+        "独立游戏开发者",
+        "内容本地化团队"
+      ],
+      "why_trending": "今日新增约4758星，连续上榜，本地语音需求旺。",
+      "caveat": "AGPL-3.0协议，各模型许可不同，商用前需确认。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与音频转写工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "vectorize-io/hindsight",
+      "url": "https://github.com/vectorize-io/hindsight",
+      "description": "Hindsight: Agent Memory That Learns",
+      "language": "Python",
+      "total_stars": 43133,
+      "forks": 5806,
+      "stars_today": 2575,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2575
+    },
+    "details": {
+      "topics": [
+        "agentic-ai",
+        "agents",
+        "ai-memory",
+        "memory"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-10-30T11:49:48Z",
+      "updated_at": "2026-09-30T05:43:44Z",
+      "pushed_at": "2026-09-30T00:37:11Z",
+      "open_issues": 168,
+      "homepage": "https://hindsight.vectorize.io/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![Hindsight Banner](./hindsight-docs/static/img/hindsight-github-banner.png)\n\n[Documentation](https://hindsight.vectorize.io) • [Integrations](https://hindsight.vectorize.io/integrations) • [Cookbook](https://hindsight.vectorize.io/cookbook) • [Benchmarks](https://benchmarks.hindsight.vectorize.io/) • [Paper](https://arxiv.org/abs/2512.12818) • [Hindsight Cloud](https://ui.hindsight.vectorize.io)\n\n[![Release](https://github.com/vectorize-io/hindsight/actions/workflows/release.yml/badge.svg)](https://github.com/vectorize-io/hindsight/actions/workflows/release.yml)\n[![Version](https://img.shields.io/pypi/v/hindsight-api?logo=python&logoColor=white&label=version&color=blue)](https://pypi.org/project/hindsight-api/)\n[![PyPI Downloads](https://img.shields.io/pypi/dm/hindsight-client?logo=pypi&logoColor=white&label=PyPI&color=blue)](https://pypi.org/project/hindsight-client/)\n[![NPM Downloads](https://img.shields.io/npm/dm/%40vectorize-io%2Fhindsight-client?logo=npm&logoColor=white&label=NPM&color=blue)](https://www.npmjs.com/package/@vectorize-io/hindsight-client)\n[![Slack Community](https://img.shields.io/badge/Slack-Join%20Community-4A154B?logo=slack)](https://vectorize.io/slack)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n<br/>\n<p align=\"center\">\n <a href=\"https://www.star-history.com/vectorize-io/hindsight\"><img src=\"https://api.star-history.com/badge?repo=vectorize-io/hindsight&type=rank\" alt=\"Star History Rank\" /> <img src=\"https://api.star-history.com/badge?repo=vectorize-io/hindsight&type=trending\" alt=\"GitHub Trending Repository of the Day\" /></a>\n</p>\n\n</div>\n\n---\n\n## What is Hindsight?\n\nHindsight™ is an agent memory system built to create smarter agents that learn over time. Most agent memory systems focus on recalling conversation history. Hindsight is focused on making agents that learn, not just remember.\n\n<video src=\"https://github.com/user-attachments/assets/923b798d-3581-4897-bb62-9cfa5a931682\" controls></video>\n\nIt eliminates the shortcomings of alternative techniques such as RAG and knowledge graph and delivers state-of-the-art performance on long term memory tasks.\n\n**Contents**\n\n- [Memory Performance & Accuracy](#memory-performance--accuracy)\n- [Quick Start](#quick-start) — [server](#1-start-a-server) · [clients](#2-connect-a-client) · [platforms](#supported-platforms) · [embedded](#python-embedded-no-server-required)\n- [Adding Hindsight to Your Agent](#adding-hindsight-to-your-agent) — [LLM Wrapper](#llm-wrapper-2-lines-of-code) · [integrations](#integrations) · [coding agents](#coding-agents) · [MCP](#mcp-server)\n- [Core Concepts](#core-concepts) — [memory types](#memory-types) · [retain / recall / reflect](#the-three-operations) · [observations](#observations) · [mental models & knowledge pages](#mental-models--knowledge-pages) · [banks](#memory-banks)\n- [Use Cases](#use-cases)\n- [Running in Production](#running-in-production)\n- [Resources](#resources)\n\n---\n\n## Memory Performance & Accuracy\n\nHindsight is the most accurate agent memory system ever tested according to benchmark performance. It has achieved state-of-the-art performance on the LongMemEval benchmark, widely used to assess memory system performance across a variety of conversational AI scenarios. The current reported performance of Hindsight and other agent memory solutions as of January 2026 is shown here:\n\n![Overview](./hindsight-docs/static/img/hindsight-benchmarks.png)\n\n> Live, continuously updated results — including per-model accuracy, latency and cost — are published at [benchmarks.hindsight.vectorize.io](https://benchmarks.hindsight.vectorize.io/).\n\nThe benchmark performance data for Hindsight has been independently reproduced by research collaborators at the Virginia Tech [Sanghani Center for Artificial Intelligence and Data Analytics](https://sanghani.cs.vt.edu/) and The Washington Post. Other scores are self-reported by software vendors.\n\nHindsight is being used in production at Fortune 500 enterprises and by a growing number of AI startups.\n\n---\n\n> 🤖 **Using a coding agent?** Install the Hindsight documentation skill for instant access to docs while you code:\n> ```bash\n> npx skills add https://github.com/vectorize-io/hindsight --skill hindsight-docs\n> ```\n> Works with Claude Code, Cursor, and other AI coding assistants.\n\n---\n\n## Quick Start\n\n### 1. Start a server\n\n#### Docker (recommended)\n\n```bash\nexport OPENAI_API_KEY=sk-xxx\n\ndocker run -it --pull always --name hindsight --restart unless-stopped -p 8888:8888 -p 9999:9999 \\\n  -e HINDSIGHT_API_LLM_API_KEY=$OPENAI_API_KEY \\\n  -v hindsight-data:/home/hindsight/.pg0 \\\n  ghcr.io/vectorize-io/hindsight:latest\n```\n\n>API: http://localhost:8888\n>UI: http://localhost:9999\n\nHindsight works with **25+ LLM providers** via `HINDSIGHT_API_LLM_PROVIDER` — hosted (`openai`, `anthropic`, `gemini`, `groq`, `bedrock`, `vertexai`, `minimax`, `deepseek`, `atlas`, `meta`, …), fully local (`ollama`, `lmstudio`, `llamacpp`), any OpenAI-compatible endpoint, and gateways (`litellm`, `litellmrouter`) that reach the rest. Existing subscriptions work too: `openai-codex` (ChatGPT Plus/Pro), `claude-code` (Claude Pro/Max), `cursor` (Cursor) and `github-copilot` (GitHub Copilot) need no API key. See [supported models](https://hindsight.vectorize.io/developer/models).\n\n#### Docker (external PostgreSQL)\n\n```bash\nexport OPENAI_API_KEY=sk-xxx\nexport HINDSIGHT_DB_PASSWORD=choose-a-password\ncd docker/docker-compose\ndocker compose up\n```\n\n> Oracle AI Database is also supported for enterprise deployments with full feature parity. See the [storage documentation](https://hindsight.vectorize.io/developer/storage) for details.\n\n#### Bare metal (pip)\n\n```bash\npip install hindsight-api\nexport HINDSIGHT_API_LLM_API_KEY=sk-xxx\n\nhindsight-api\n```\n\n#### Kubernetes (Helm)\n\n```bash\nhelm install hindsight oci://ghcr.io/vectorize-io/charts/hindsight \\\n  --set api.llm.provider=openai \\\n  --set api.llm.apiKey=sk-xxx \\\n  --set postgresql.enabled=true\n```\n\n#### Managed (no server)\n\n[Hindsight Cloud](https://vectorize.io/pricing) is the hosted option: managed infrastructure that scales automatically, plus a dashboard, backups, team collaboration and a 99.9% uptime SLA. Billing is usage-based with free credits to start — no fixed monthly or per-seat fee. Point any client at `https://api.hindsight.vectorize.io` with your API key and skip the deployment entirely.\n\n[Compare self-hosted, Cloud and Enterprise →](https://vectorize.io/pricing) · [Sign up →](https://ui.hindsight.vectorize.io)\n\nAll options, including Windows and air-gapped setups, are covered in the [installation guide](https://hindsight.vectorize.io/developer/installation).\n\n### 2. Connect a client\n\n```bash\npip install hindsight-client -U                                  # Python\nnpm install @vectorize-io/hindsight-client                        # Node.js / TypeScript\ngo get github.com/vectorize-io/hindsight/hindsight-clients/go     # Go\ncurl -fsSL https://hindsight.vectorize.io/get-cli | bash          # CLI\n```\n\n#### Python\n\n```python\nfrom hindsight_client import Hindsight\n\nclient = Hindsight(base_url=\"http://localhost:8888\")\n\n# Retain: Store information\nclient.retain(bank_id=\"my-bank\", content=\"Alice works at Google as a software engineer\")\n\n# Recall: Search memories\nclient.recall(bank_id=\"my-bank\", query=\"What does Alice do?\")\n\n# Reflect: Generate disposition-aware response\nclient.reflect(bank_id=\"my-bank\", query=\"Tell me about Alice\")\n```\n\n#### Node.js / TypeScript\n\n```javascript\nconst { HindsightClient } = require('@vectorize-io/hindsight-client');\n\nconst main = async () => {\n  const client = new HindsightClient({ baseUrl: 'http://localhost:8888' });\n\n  await client.retain('my-bank', 'Alice loves hiking in Yosemite');\n\n  const results = await client.recall('my-bank', 'What does Alice like?');\n  console.log(results);\n}\n\nmain();\n```\n\nFull reference: [Python](https://hindsight.vectorize.io/sdks/python) · [Node.js](https://hindsight.vectorize.io/sdks/nodejs) · [Go](https://hindsight.vectorize.io/sdks/go) · [CLI](https://hindsight.vectorize.io/sdks/cli) · [REST API](https://hindsight.vectorize.io/api-reference)\n\n### Supported Platforms\n\n| Platform | Docker | Bare Metal (pip) | Embedded DB (pg0) |\n|----------|--------|------------------|--------------------|\n| **Linux** (x86_64, ARM64) | ✅ | ✅ | ✅ |\n| **macOS** (Apple Silicon / arm64) | ✅ | ✅ | ✅ |\n| **macOS** (Intel / x86_64) | ✅ | ⚠️ | ✅ |\n| **Windows** (x86_64) | ✅ | ✅ | ✅ |\n\n⚠️ Intel Macs: use `hindsight-all-slim` — see the [installation guide](https://hindsight.vectorize.io/developer/installation#supported-platforms) for details.\n\n### Python Embedded (no server required)\n\n```bash\npip install hindsight-all -U\n```\n\nOn Intel (x86_64) Macs, install `hindsight-all-slim` instead — see [Supported Platforms](#supported-platforms).\n\n```python\nimport os\nfrom hindsight import HindsightServer, HindsightClient\n\nwith HindsightServer(\n    llm_provider=\"openai\",\n    llm_model=\"gpt-5-mini\",\n    llm_api_key=os.environ[\"OPENAI_API_KEY\"]\n) as server:\n    client = HindsightClient(base_url=server.url)\n    client.retain(bank_id=\"my-bank\", content=\"Alice works at Google\")\n    results = client.recall(bank_id=\"my-bank\", query=\"Where does Alice work?\")\n```\n\nA [Node.js equivalent](https://hindsight.vectorize.io/sdks/hindsight-all-npm) and a [daemon CLI](https://hindsight.vectorize.io/sdks/embed) are also available.\n\n---\n\n## Adding Hindsight to Your Agent\n\n### LLM Wrapper (2 lines of code)\n\nThe easiest way to add memory to an existing agent is the LLM Wrapper. Swap your LLM client for a wrapped one — memories are then stored and retrieved automatically on every call, with no other changes to your code.\n\n```bash\npip install hindsight-litellm\n```\n\n```python\nfrom openai import OpenAI\nfrom hindsight_litellm import wrap_openai\n\n# Wrap your existing LLM client and you're done.\n# Defaults to Hindsight Cloud; pass hindsight_api_url for a self-hosted server.\nclient = wrap_openai(\n    OpenAI(),\n    bank_id=\"user-123\",\n    hindsight_api_url=\"http://localhost:8888\",\n)\n\n# Hindsight recalls relevant memories before the call\n# and retains the conversation after it.\nresponse = client.chat.completions.create(\n    model=\"gpt-5-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"What do you know about me?\"}],\n)\n```\n\n`wrap_anthropic()` does the same for the Anthropic SDK, and every setting — bank, recall budget, fact types, reflect instead of recall — can be overridden per call with `hindsight_*` kwargs. LiteLLM sits underneath, so the same integration covers **100+ models**. See the [LiteLLM integration](https://hindsight.vectorize.io/sdks/integrations/litellm).\n\nIf you need explicit control over *when* memories are stored and recalled, use the [SDKs or REST API](#2-connect-a-client) directly instead.\n\n### Integrations\n\n**60+ integrations** — most need no code changes.\n\n| | |\n|---|---|\n| **Coding agents** | [Claude Code](https://hindsight.vectorize.io/sdks/integrations/claude-code) · [Codex](https://hindsight.vectorize.io/sdks/integrations/codex) · [Cursor](https://hindsight.vectorize.io/sdks/integrations/cursor) · [GitHub Copilot](https://hindsight.vectorize.io/sdks/integrations/github-copilot) · [opencode](https://hindsight.vectorize.io/sdks/integrations/opencode) · [Cline](https://hindsight.vectorize.io/sdks/integrations/cline) · [Aider](https://hindsight.vectorize.io/sdks/integrations/aider) · [Zed](https://hindsight.vectorize.io/sdks/integrations/zed) · [Continue](https://hindsight.vectorize.io/sdks/integrations/continue) · [Roo Code](https://hindsight.vectorize.io/sdks/integrations/roo-code) · [OpenHands](https://hindsight.vectorize.io/sdks/integrations/openhands) |\n| **Agent frameworks** | [LangGraph / LangChain](https://hindsight.vectorize.io/sdks/integrations/langgraph) · [LlamaIndex](https://hindsight.vectorize.io/sdks/integrations/llamaindex) · [CrewAI](https://hindsight.vectorize.io/sdks/integrations/crewai) · [Pydantic AI](http"
+    },
+    "brief": {
+      "summary": "让 AI 智能体记住并学会经验的记忆系统",
+      "problem": "多数智能体只能回忆对话，无法积累经验并持续学习",
+      "highlights": [
+        "可以用 retain、recall、reflect 三步存取记忆",
+        "可以用 Docker 或 pip 快速起一个记忆服务",
+        "可以接入 MCP 给编码助手加长期记忆"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "智能体团队",
+        "后端工程师"
+      ],
+      "why_trending": "今日新增约 2575 Star，连续上榜，关注度很高",
+      "caveat": "基准成绩部分为厂商自报，效果需自行验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vectorize-io/hindsight",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "为 Agent 提供可学习持久记忆层",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "paperclipai/paperclip",
+      "url": "https://github.com/paperclipai/paperclip",
+      "description": "The open-source app everyone uses to manage agents at work",
+      "language": "TypeScript",
+      "total_stars": 94710,
+      "forks": 16079,
+      "stars_today": 2458,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2458
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-03-02T15:01:51Z",
+      "updated_at": "2026-09-30T05:43:49Z",
+      "pushed_at": "2026-09-30T05:43:52Z",
+      "open_issues": 6106,
+      "homepage": "https://paperclip.ing",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <img src=\"doc/assets/banner.jpg\" alt=\"Paperclip is the app people use to manage AI agents for work.\" width=\"720\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"#quickstart\"><strong>Quickstart</strong></a> &middot;\n  <a href=\"https://docs.paperclip.ing\"><strong>Docs</strong></a> &middot;\n  <a href=\"https://github.com/paperclipai/paperclip\"><strong>GitHub</strong></a> &middot;\n  <a href=\"https://discord.gg/m4HZY7xNG3\"><strong>Discord</strong></a> &middot;\n  <a href=\"https://x.com/papercliping\"><strong>Twitter</strong></a> &middot;\n  <a href=\"https://paperclip.ing\"><strong>Website</strong></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/paperclipai/paperclip/blob/master/LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue\" alt=\"MIT License\" /></a>\n  <a href=\"https://github.com/paperclipai/paperclip/stargazers\"><img src=\"https://img.shields.io/github/stars/paperclipai/paperclip?style=flat\" alt=\"Stars\" /></a>\n  <a href=\"https://www.star-history.com/paperclipai/paperclip\"><img src=\"https://api.star-history.com/badge?repo=paperclipai/paperclip\" alt=\"Star History Rank\" /></a>\n  <a href=\"https://discord.gg/m4HZY7xNG3\"><img src=\"https://img.shields.io/badge/discord-join-7289da\" alt=\"Discord\" /></a>\n</p>\n\n<br/>\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/773bdfb2-6d1e-4e30-8c5f-3487d5b70c8f\" width=\"600\" controls></video>\n</div>\n\n<br/>\n\n# Paperclip is the app people use to manage AI agents for work.\n\nOpen-source orchestration for teams of AI agents.\n\n**If OpenClaw is an _employee_, Paperclip is the _company_.**\n\nPaperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard.\n\nIt looks like a task manager. Under the hood: org charts, budgets, governance, goal alignment, and agent coordination.\n\n**Manage business goals, not pull requests.**\n\n|        | Step            | Example                                                            |\n| ------ | --------------- | ------------------------------------------------------------------ |\n| **01** | Define the goal | _\"Build the #1 AI note-taking app to $1M MRR.\"_                    |\n| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any bot, any provider. |\n| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |\n\n<br/>\n\n<div align=\"center\">\n<table>\n  <tr>\n    <td align=\"center\"><strong>Works<br/>with</strong></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/openclaw.svg\" width=\"32\" alt=\"OpenClaw\" /><br/><sub>OpenClaw</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/claude.svg\" width=\"32\" alt=\"Claude\" /><br/><sub>Claude Code</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/codex.svg\" width=\"32\" alt=\"Codex\" /><br/><sub>Codex</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/cursor.svg\" width=\"32\" alt=\"Cursor\" /><br/><sub>Cursor</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/bash.svg\" width=\"32\" alt=\"Bash\" /><br/><sub>Bash</sub></td>\n    <td align=\"center\"><img src=\"doc/assets/logos/http.svg\" width=\"32\" alt=\"HTTP\" /><br/><sub>HTTP</sub></td>\n  </tr>\n</table>\n\n<em>If it can receive a heartbeat, it's hired.</em>\n\n</div>\n\n<br/>\n\n## Paperclip is right for you if\n\n- ✅ You want to build **autonomous AI organizations**\n- ✅ You **coordinate many different agents** (OpenClaw, Codex, Claude, Cursor) toward a common goal\n- ✅ You have **20 simultaneous Claude Code terminals** open and lose track of what everyone is doing\n- ✅ You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed\n- ✅ You want to **monitor costs** and enforce budgets\n- ✅ You want a process for managing agents that **feels like using a task manager**\n- ✅ You want to manage your autonomous businesses **from your phone**\n\n<br/>\n\n## The four pillars\n\nFour things have to work for an organization of AI agents to actually produce: the tasks, the org, the training, and the infrastructure. Paperclip is built around exactly those four pillars.\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\">\n  <img src=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\" alt=\"The four pillars of Paperclip\">\n</picture>\n\n| Pillar | Built for | What it covers |\n| --- | --- | --- |\n| **Agentic Task Manager** — Declare intent. Agents work. You verify the output. | Everyone, daily | Tasks, approvals & review gates · proactive agent coworkers · auditable routines & workflows · verify from diffs, screenshots & tests |\n| **Org Chart for Agents** — Roles, permissions & boundaries for humans and agents. | Managers | Mixed human + agent org chart · responsibilities, delegation, specialization · governance: who can do what · scoped secrets & company boundaries |\n| **Agent Employee Training** — Design, train & evaluate your AI employees. | Enablers | Skill Studio & shared org-wide skills · evals & saved test runs · active learning loops & quality metrics · performance reviews for agents |\n| **Agentic OS** — The infrastructure that makes the work run. | IT & platform | Cross-provider runtime: any model, any agent · sandboxing, integrations & MCP servers · SSO, GRC, RBAC & cost controls · data privacy, internal trace collection, compounding data value |\n\n<br/>\n\n## Features\n\n<table>\n<tr>\n<td align=\"center\" width=\"33%\">\n<h3>🔌 Bring Your Own Agent</h3>\nAny agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>🎯 Goal Alignment</h3>\nEvery task traces back to the organization mission. Agents know <em>what</em> to do and <em>why</em>.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>💓 Heartbeats</h3>\nAgents wake on a schedule, check work, and act. Delegation flows up and down the org chart.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>💰 Cost Control</h3>\nMonthly budgets per agent. When they hit the limit, they stop. No runaway costs.\n</td>\n<td align=\"center\">\n<h3>🏢 Multi-Organization</h3>\nOne deployment, many organizations. Complete data isolation. One control plane for your portfolio.\n</td>\n<td align=\"center\">\n<h3>🎫 Ticket System</h3>\nEvery conversation traced. Every decision explained. Full tool-call tracing and immutable audit log.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>🛡️ Governance</h3>\nApprove hires, override strategy, pause or terminate any agent — at any time.\n</td>\n<td align=\"center\">\n<h3>📊 Org Chart</h3>\nHierarchies, roles, reporting lines. Your agents have a boss, a title, and a job description.\n</td>\n<td align=\"center\">\n<h3>📱 Mobile Ready</h3>\nMonitor and manage your autonomous businesses from anywhere.\n</td>\n</tr>\n</table>\n\n<br/>\n\n## Problems Paperclip solves\n\n| Without Paperclip                                                                                                                     | With Paperclip                                                                                                                         |\n| ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |\n| ❌ You have 20 Claude Code tabs open and can't track which one does what. On reboot you lose everything.                              | ✅ Tasks are ticket-based, conversations are threaded, sessions persist across reboots.                                                |\n| ❌ You manually gather context from several places to remind your bot what you're actually doing.                                     | ✅ Context flows from the task up through the project and company goals — your agent always knows what to do and why.                  |\n| ❌ Folders of agent configs are disorganized and you're re-inventing task management, communication, and coordination between agents. | ✅ Paperclip gives you org charts, ticketing, delegation, and governance out of the box — so you run a company, not a pile of scripts. |\n| ❌ Runaway loops waste hundreds of dollars of tokens and max your quota before you even know what happened.                           | ✅ Cost tracking surfaces token budgets and throttles agents when they're out. Management prioritizes with budgets.                    |\n| ❌ You have recurring jobs (customer support, social, reports) and have to remember to manually kick them off.                        | ✅ Heartbeats handle regular work on a schedule. Management supervises.                                                                |\n| ❌ You have an idea, you have to find your repo, fire up Claude Code, keep a tab open, and babysit it.                                | ✅ Add a task in Paperclip. Your coding agent works on it until it's done. Management reviews their work.                              |\n\n<br/>\n\n## Why Paperclip is special\n\nPaperclip handles the hard orchestration details correctly.\n\n|                                   |                                                                                                               |\n| --------------------------------- | ------------------------------------------------------------------------------------------------------------- |\n| **Atomic execution.**             | Task checkout and budget enforcement are atomic, so no double-work and no runaway spend.                      |\n| **Persistent agent state.**       | Agents resume the same task context across heartbeats instead of restarting from scratch.                     |\n| **Runtime skill injection.**      | Agents can learn Paperclip workflows and project context at runtime, without retraining.                      |\n| **Governance with rollback.**     | Approval gates are enforced, config changes are revisioned, and bad changes can be rolled back safely.        |\n| **Goal-aware execution.**         | Tasks carry full goal ancestry so agents consistently see the \"why,\" not just a title.                        |\n| **Portable company templates.**   | Export/import orgs, agents, and skills with secret scrubbing and collision handling.                          |\n| **True multi-organization isolation.** | Every entity is company-scoped, so one deployment can run many companies with separate data and audit trails. |\n\n<br/>\n\n## What's Under the Hood\n\nPaperclip is a full control plane, not a wrapper. Before you build any of this yourself, know that it already exists:\n\n```\n┌──────────────────────────────────────────────────────────────┐\n│                       PAPERCLIP SERVER                       │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │Identity & │  │  Work &   │  │ Heartbeat │  │Governance │  │\n│  │  Access   │  │   Tasks   │  │ Execution │  │& Approvals│  │\n│  └───────────┘  └───────────┘  └───────────┘  └───────────┘  │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │ Org Chart │  │Workspaces │  │  Plugins  │  │  Budget   │  │\n│  │ & Agents  │  │ & Runtime │  │           │  │ & Costs   │  │\n│  └───────────┘  └───────────┘  └───────────┘  └───────────┘  │\n│                                                              │\n│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐  │\n│  │ Routines  │  │ Secrets & │  │ Activity  │  │  Company  │  │\n│  │& Schedules│  │  Storage  │  │ & Events  │  │Portability│  │\n│  └──"
+    },
+    "brief": {
+      "summary": "开源 AI 智能体团队管理应用，像管理公司一样。",
+      "problem": "多个 AI 智能体并行时难以跟踪进度、控制成本与审批。",
+      "highlights": [
+        "可以给智能体分配目标并设定每月预算",
+        "可以用组织架构图管理智能体角色与汇报线",
+        "可以在仪表盘查看任务、审批与成本"
+      ],
+      "target_users": [
+        "AI 智能体开发者",
+        "技术团队负责人",
+        "平台运维人员"
+      ],
+      "why_trending": "总 Star 超 9.4 万，今日新增 2400 余，连续上榜。",
+      "caveat": "仍处早期，开放 issue 超 6000，资料未说明稳定性。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "paperclipai/paperclip",
+      "score": 74,
+      "category": "AI Agent / Skills",
+      "reason": "统一管理调度工作用 Agent 的应用",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 68.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "NVIDIA/OpenShell",
+      "url": "https://github.com/NVIDIA/OpenShell",
+      "description": "OpenShell is the safe, private runtime for autonomous AI agents.",
+      "language": "Rust",
+      "total_stars": 10852,
+      "forks": 1436,
+      "stars_today": 990,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 990
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-24T22:52:22Z",
+      "updated_at": "2026-09-30T05:43:39Z",
+      "pushed_at": "2026-09-30T04:19:16Z",
+      "open_issues": 499,
+      "homepage": "https://docs.nvidia.com/openshell/latest/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- markdownlint-disable MD033 MD041 -->\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/brand/assets/openshell-banner-dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/brand/assets/openshell-banner-light.png\">\n  <img alt=\"OpenShell\" src=\"docs/brand/assets/openshell-banner-light.png\" width=\"430\">\n</picture>\n\n<!-- markdownlint-enable MD033 MD041 -->\n\n[![License](https://img.shields.io/badge/License-Apache_2.0-blue)](https://github.com/NVIDIA/OpenShell/blob/main/LICENSE)\n[![PyPI](https://img.shields.io/badge/PyPI-openshell-orange?logo=pypi)](https://pypi.org/project/openshell/)\n[![Security Policy](https://img.shields.io/badge/Security-Report%20a%20Vulnerability-red)](SECURITY.md)\n[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.nvidia.com/openshell/latest/index.html)\n\n> [!IMPORTANT]\n> **New in OpenShell 0.1.x:** a stable release cadence, new isolation primitives, an expanded extension surface, and new APIs. [Read the 0.1.0 upgrade guide](https://docs.nvidia.com/openshell/latest/upgrade/0-1-0).\n\nOpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unrestricted access to your data, secrets, or network. You declare what each agent can touch in a policy, and OpenShell enforces it.\n\n## How It Works\n\nOpenShell governs what agents can do in two ways: it instruments the kernel to enforce policy on every file access, system call, and network connection at runtime, and it uses formal verification to check what a policy change would allow before it is applied.\n\n- **Kernel-level enforcement.** Each agent runs in an isolated sandbox. Kernel controls confine which files it can access and which system calls it can make, and every network connection passes through a policy check before it leaves the sandbox. Agents never see real credentials; OpenShell adds them only to requests bound for approved endpoints.\n- **Formally verified policy changes.** Before a policy change is approved, OpenShell uses formal verification to flag risky new access it would grant, such as reaching a new host with credentials or calling a new API method, so those changes wait for human review.\n\nSee [Architecture](https://docs.nvidia.com/openshell/latest/about/architecture) for how the gateway, supervisor, and sandbox fit together.\n\n## Quickstart\n\nYou need Linux, macOS on Apple Silicon, or Windows with WSL 2 (experimental), plus Docker, Podman, or host virtualization. See the [Support Matrix](https://docs.nvidia.com/openshell/latest/about/support-matrix) for details.\n\n```shell\ncurl -LsSf https://raw.githubusercontent.com/NVIDIA/OpenShell/main/install.sh | sh\nopenshell sandbox create --name demo\n```\n\nThe installer sets up the CLI and a local gateway. The default sandbox image is minimal Ubuntu with no agent installed. To run a real agent, follow [Run Your First Agent](https://docs.nvidia.com/openshell/latest/about/run-your-first-agent): it runs OpenCode against a free OpenRouter model and shows how to approve new access as the agent needs it.\n\n## Explore Further\n\n- [Sandboxes](https://docs.nvidia.com/openshell/latest/how-it-works/sandboxes/overview): images, runtimes, GPUs, and lifecycle.\n- [Policies](https://docs.nvidia.com/openshell/latest/how-it-works/policies/overview): filesystem, network, and process rules, with the [advisor](https://docs.nvidia.com/openshell/latest/how-it-works/policies/advisor) and [prover](https://docs.nvidia.com/openshell/latest/how-it-works/policies/prover) for reviewing changes.\n- [Providers](https://docs.nvidia.com/openshell/latest/how-it-works/providers/overview): credentials that work only at approved endpoints, including [inference](https://docs.nvidia.com/openshell/latest/how-it-works/inference).\n- [Gateways](https://docs.nvidia.com/openshell/latest/how-it-works/gateways/overview): the control plane for sandboxes, policy, and access.\n- [Kubernetes](https://docs.nvidia.com/openshell/latest/kubernetes/setup): deploy the gateway with Helm. Your CNI must enforce `NetworkPolicy`.\n- [Extensibility](https://docs.nvidia.com/openshell/latest/extensibility/overview): middleware, interceptors, and compute drivers.\n- [Tutorials](https://docs.nvidia.com/openshell/latest/tutorials/first-network-policy): step-by-step policy and agent walkthroughs.\n- [Prerelease and development builds](https://docs.nvidia.com/openshell/latest/about/installation#prerelease-and-development-builds): try an upcoming release or the latest commit on `main`.\n\n## Agent Skills\n\nInstall the public OpenShell skills for your coding agent:\n\n```shell\nnpx skills add NVIDIA/OpenShell\n```\n\nThe skills teach your agent to drive the OpenShell CLI, write sandbox policies, and debug gateways and inference routing. They live in [`skills/`](skills/) and work without an OpenShell source checkout.\n\n## SDKs\n\nSDKs connect applications to an OpenShell gateway. They do not install the CLI. Use the same OpenShell release for the SDK and the gateway when possible.\n\n| Language | Install | Docs |\n|---|---|---|\n| Python | `uv add openshell` | [README](python/openshell/) |\n| TypeScript | `npm install @nvidia/openshell-sdk` (GitHub Packages) | [README](sdk/typescript/README.md) |\n| Go | `go get github.com/NVIDIA/OpenShell/sdk/go@latest` | [README](sdk/go/README.md) |\n| Rust | `cargo add openshell-sdk --git https://github.com/NVIDIA/OpenShell --tag <release-tag>` | [Installation and usage](docs/sdk/rust.mdx) |\n\n## Community\n\n- **Questions and discussion:** [GitHub Discussions](https://github.com/NVIDIA/OpenShell/discussions)\n- **Bug reports and feature requests:** [GitHub Issues](https://github.com/NVIDIA/OpenShell/issues), using the issue templates\n- **Security vulnerabilities:** follow [SECURITY.md](SECURITY.md). Do not open a GitHub issue.\n- **Roadmap:** [OpenShell Roadmap](https://github.com/orgs/NVIDIA/projects/233) and the [RFC board](https://github.com/orgs/NVIDIA/projects/233/views/6)\n- **Try it in the cloud:** [Brev Launchable](https://brev.nvidia.com/launchable/deploy/now?launchableID=env-3Ap3tL55zq4a8kew1AuW0FpSLsg)\n\nOpenShell is built agent-first: it is developed with the same agent-driven workflows it enables. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and the contribution workflow, and [AGENTS.md](AGENTS.md) for the contributor agent skills and workflow chains.\n\n## Telemetry\n\nOpenShell collects anonymous telemetry, limited to operational categories and counts, to help improve the project. It does not collect sandbox names, hostnames, file paths, prompts, credentials, provider or model names, or user content. To disable it, set `OPENSHELL_TELEMETRY_ENABLED=false` on the gateway, or `server.telemetryEnabled=false` for Helm installs. You can also compile telemetry out entirely. See [Telemetry](https://docs.nvidia.com/openshell/latest/observability/telemetry) for details and the [community telemetry reports](telemetry/README.md) for published usage trends.\n\n## Notice and Disclaimer\n\nThis software automatically retrieves, accesses or interacts with external materials. Those retrieved materials are not distributed with this software and are governed solely by separate terms, conditions and licenses. You are solely responsible for finding, reviewing and complying with all applicable terms, conditions, and licenses, and for verifying the security, integrity and suitability of any retrieved materials for your specific use case. This software is provided \"AS IS\", without warranty of any kind. The author makes no representations or warranties regarding any retrieved materials, and assumes no liability for any losses, damages, liabilities or legal consequences from your use or inability to use this software or any retrieved materials. Use this software and the retrieved materials at your own risk.\n\n## License\n\nThis project is licensed under the [Apache License 2.0](https://github.com/NVIDIA/OpenShell/blob/main/LICENSE).\n"
+    },
+    "brief": {
+      "summary": "英伟达开源的AI智能体安全运行时",
+      "problem": "让AI智能体安全读写文件、装包、调API，不暴露数据和密钥",
+      "highlights": [
+        "可以给每个智能体单独设文件、网络和进程策略",
+        "可以用正式验证预检策略变更，拦住新增访问",
+        "可以跑在本地 Docker 或 Kubernetes 网关上"
+      ],
+      "target_users": [
+        "AI智能体开发者",
+        "平台与安全工程师",
+        "企业AI运维"
+      ],
+      "why_trending": "英伟达出品，今日新增约990 Star，主打内核级隔离",
+      "caveat": "项目较新，0.1.x 版本 API 仍可能变动",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "NVIDIA/OpenShell",
+      "score": 78,
+      "category": "Harness / Jev",
+      "reason": "面向自主 Agent 的安全沙箱运行时",
+      "generated_by_ai": true,
+      "velocity_score": 91,
+      "freshness_score": 40,
+      "ranking_score": 67.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 54313,
+      "forks": 4942,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 338
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-09-30T05:41:55Z",
+      "pushed_at": "2026-09-30T05:44:16Z",
+      "open_issues": 175,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/public/images/hyperframes-logo-motion-1280-trimmed.webp\" alt=\"HyperFrames demo: HTML code on the left transforms into a rendered video on the right\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nFor standalone installation, default to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                                                                                             "
+    },
+    "brief": {
+      "summary": "用 HTML 写动画、渲染成 MP4 视频的开源框架",
+      "problem": "代码做视频门槛高，AI 代理也没有稳定可复现的渲染方式",
+      "highlights": [
+        "可以用一句话让 AI 代理生成产品介绍视频",
+        "可以把 GitHub PR 转成讲解型短视频",
+        "可以给真人出镜视频加字幕而不改动画面"
+      ],
+      "target_users": [
+        "前端开发者",
+        "AI 代理使用者",
+        "视频创作者"
+      ],
+      "why_trending": "资料未给今日新增 Star，但总量超 5.4 万且近期持续提交",
+      "caveat": "需要 Node 22 以上，成片质量取决于 HTML/CSS 功底",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 86,
+      "category": "AI 视频",
+      "reason": "用 HTML 渲染视频，面向 Agent",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 40,
+      "ranking_score": 68.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "nirholas/three.ws",
+      "url": "https://github.com/nirholas/three.ws",
+      "description": "Open-source 3D AI agent framework — GLB/glTF avatars with LLM brains, memory, emotions, and autonomous payments. MCP server · x402 · Solana/EVM · Three.js. Embed anywhere as a web component. Character studio, animation gallery, OAuth 2.1. Browser-native.",
+      "language": "JavaScript",
+      "total_stars": 219,
+      "forks": 52,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "ai-agent",
+        "animation",
+        "avatar",
+        "blockchain",
+        "character-studio",
+        "claude",
+        "embedding",
+        "erc",
+        "gltf",
+        "javascript",
+        "llm",
+        "mcp",
+        "oauth",
+        "onchain",
+        "three-js",
+        "typescript",
+        "vercel",
+        "web-component",
+        "webgl"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-08T20:46:03Z",
+      "updated_at": "2026-09-30T05:43:30Z",
+      "pushed_at": "2026-09-30T05:43:26Z",
+      "open_issues": 2,
+      "homepage": "https://three.ws",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# three.ws                \n \n[**Website**](https://three.ws) · [**Docs**](https://three.ws/docs) · [**Changelog**](https://three.ws/changelog) · [**X / Twitter**](https://x.com/trythreews) · [**GitHub**](https://github.com/nirholas/three.ws) · [**$THREE on pump.fun**](https://pump.fun/FeMbDoX7R1Psc4GEcvJdsbNbZA3bfztcyDCatJVJpump)\n\n[![site](https://img.shields.io/website?url=https%3A%2F%2Fthree.ws&label=three.ws)](https://three.ws) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fsdk?label=%40three-ws%2Fsdk)](https://www.npmjs.com/package/@three-ws/sdk) [![npm](https://img.shields.io/npm/v/%40three-ws%2Fmcp-server?label=%40three-ws%2Fmcp-server)](https://www.npmjs.com/package/@three-ws/mcp-server) [![MCP Registry](https://img.shields.io/badge/MCP_Registry-io.github.nirholas-blue)](https://registry.modelcontextprotocol.io/?q=io.github.nirholas) [![x402scan](https://img.shields.io/badge/x402scan-listed-green)](https://www.x402scan.com/server/17cbd874-52ac-4920-a020-b22ff2489a07) [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![good first issues](https://img.shields.io/github/issues/nirholas/three.ws/good%20first%20issue?label=good%20first%20issues&color=7057ff)](https://github.com/nirholas/three.ws/labels/good%20first%20issue)\n\nhttps://github.com/user-attachments/assets/d52515d1-cb04-4dd6-98bd-fef233312dc4\n\n**Give your AI a body.** three.ws is an open source (Apache-2.0), browser-native 3D AI agent platform. Type a prompt and [**Forge**](https://three.ws/forge) generates a textured 3D model, or drop a GLB you already have. Add an LLM brain, register on-chain, and embed anywhere: no plugins, no server uploads, no installs required.\n\n> **Try it in 60 seconds:** open [three.ws/forge](https://three.ws/forge), type *\"a brass steampunk owl, full body\"*, and download the GLB. Text→3D, image→3D, and sketch→3D — free draft tier, no account. [Jump to the Forge section ↓](#forge--text--image-to-3d)\n\n> **Want to build it with us?** [Your first contribution](docs/first-contribution.md) goes from clone to open pull request in about 15 minutes, with a full worked example. Every [`good first issue`](https://github.com/nirholas/three.ws/labels/good%20first%20issue) names the file to change and the command that proves it worked. Say hello in [Discussions](https://github.com/nirholas/three.ws/discussions) or [Telegram](https://t.me/three_ws_community).\n\n### Meet the avatar: a live 3D model, right here in markdown\n\nDrag to rotate. This is not an image or a video: it is an interactive 3D model rendered natively by GitHub. The avatar was generated from a one-line text prompt on [three.ws Forge](https://three.ws/forge) (free tier), decimated to 1,200 triangles, and embedded as ASCII STL with [readme-3d](packages/readme-3d), our open-source toolkit for putting 3D models in any GitHub README, issue, or discussion.\n\n```stl\nsolid threews_avatar\n facet normal -0.34 -0.93 0.11\n  outer loop\n   vertex 7.06 -3.99 23.19\n   vertex 9.13 -4.19 27.78\n   vertex 3.98 -2.59 25.51\n  endloop\n endfacet\n facet normal -0.94 -0.30 0.16\n  outer loop\n   vertex 17.94 3.99 37.76\n   vertex 18.01 2.79 35.88\n   vertex 18.27 2.91 37.66\n  endloop\n endfacet\n facet normal -0.90 0.43 0.10\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 18.01 2.79 35.88\n   vertex 17.73 2.15 36.16\n  endloop\n endfacet\n facet normal -0.92 0.36 0.15\n  outer loop\n   vertex 18.27 2.91 37.66\n   vertex 17.73 2.15 36.16\n   vertex 17.95 2.20 37.37\n  endloop\n endfacet\n facet normal 0.94 0.34 0.00\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.47 1.83 38.79\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 -0.25 0.33\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 28.47 1.83 38.79\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal 0.99 -0.14 0.08\n  outer loop\n   vertex 28.47 1.83 38.79\n   vertex 28.01 -2.89 36.41\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.06 -0.40\n  outer loop\n   vertex 28.90 0.61 31.76\n   vertex 27.10 -0.47 27.53\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.83 -0.51 -0.22\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 27.10 -0.47 27.53\n   vertex 28.90 0.61 31.76\n  endloop\n endfacet\n facet normal 0.91 0.38 -0.16\n  outer loop\n   vertex 27.20 5.38 33.47\n   vertex 28.90 0.61 31.76\n   vertex 27.03 3.46 27.96\n  endloop\n endfacet\n facet normal 0.89 0.45 0.09\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 28.47 1.83 38.79\n   vertex 27.20 5.38 33.47\n  endloop\n endfacet\n facet normal 0.90 -0.39 -0.20\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.22 -3.16 28.82\n   vertex 27.10 -0.47 27.53\n  endloop\n endfacet\n facet normal 0.82 -0.02 0.58\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 26.14 -2.49 41.92\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.80 0.40 0.44\n  outer loop\n   vertex 26.88 4.99 38.80\n   vertex 23.27 4.13 46.24\n   vertex 28.47 1.83 38.79\n  endloop\n endfacet\n facet normal 0.70 -0.07 -0.71\n  outer loop\n   vertex 27.03 3.46 27.96\n   vertex 24.69 2.15 25.80\n   vertex 25.39 4.36 26.25\n  endloop\n endfacet\n facet normal 0.63 -0.73 0.27\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 26.14 -2.49 41.92\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal 0.56 -0.82 0.08\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.39 -5.14 38.78\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.64 -0.76 -0.12\n  outer loop\n   vertex 28.01 -2.89 36.41\n   vertex 24.40 -5.59 34.11\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.37 -0.89 -0.28\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 23.26 -5.15 31.23\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal 0.42 -0.20 -0.89\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.15 0.41 25.94\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.34 -0.94 0.00\n  outer loop\n   vertex 26.22 -3.16 28.82\n   vertex 23.11 -4.26 27.61\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.40 -0.88 -0.23\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 23.11 -4.26 27.61\n   vertex 26.22 -3.16 28.82\n  endloop\n endfacet\n facet normal -0.24 0.97 -0.05\n  outer loop\n   vertex 24.58 4.14 25.81\n   vertex 25.39 4.36 26.25\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.64 -0.61 -0.46\n  outer loop\n   vertex 27.10 -0.47 27.53\n   vertex 24.14 -2.60 26.21\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.78 -0.11 -0.62\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 22.59 1.54 23.24\n   vertex 22.37 3.43 22.62\n  endloop\n endfacet\n facet normal 0.78 -0.12 -0.61\n  outer loop\n   vertex 25.39 4.36 26.25\n   vertex 24.69 2.15 25.80\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.46 -0.87 -0.17\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 22.59 1.54 23.24\n   vertex 24.69 2.15 25.80\n  endloop\n endfacet\n facet normal 0.05 -0.66 -0.75\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 24.14 -2.60 26.21\n   vertex 24.16 -3.89 27.34\n  endloop\n endfacet\n facet normal 0.32 -0.80 0.50\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 21.60 -3.52 43.21\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.37 -0.90 -0.21\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 21.41 -3.57 27.63\n   vertex 23.11 -4.26 27.61\n  endloop\n endfacet\n facet normal -0.23 -0.54 -0.81\n  outer loop\n   vertex 23.11 -4.26 27.61\n   vertex 21.41 -3.57 27.63\n   vertex 24.14 -2.60 26.21\n  endloop\n endfacet\n facet normal -0.01 -1.00 0.10\n  outer loop\n   vertex 24.39 -5.14 38.78\n   vertex 20.81 -5.34 36.22\n   vertex 24.40 -5.59 34.11\n  endloop\n endfacet\n facet normal 0.52 -0.77 0.37\n  outer loop\n   vertex 20.28 -1.08 52.96\n   vertex 18.87 -2.53 51.93\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.95 0.26\n  outer loop\n   vertex 21.60 -3.52 43.21\n   vertex 20.81 -5.34 36.22\n   vertex 24.39 -5.14 38.78\n  endloop\n endfacet\n facet normal -0.13 -0.99 -0.10\n  outer loop\n   vertex 24.40 -5.59 34.11\n   vertex 20.81 -5.34 36.22\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 0.03 -0.99 -0.15\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 19.99 1.49 22.99\n   vertex 22.59 1.54 23.24\n  endloop\n endfacet\n facet normal 0.91 0.14 0.38\n  outer loop\n   vertex 23.27 4.13 46.24\n   vertex 20.84 0.68 53.36\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.14 -0.99 -0.03\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.62 -2.12 22.03\n  endloop\n endfacet\n facet normal 0.87 0.27 0.43\n  outer loop\n   vertex 20.33 2.84 53.04\n   vertex 20.84 0.68 53.36\n   vertex 23.27 4.13 46.24\n  endloop\n endfacet\n facet normal -0.48 -0.82 0.30\n  outer loop\n   vertex 22.34 1.45 26.31\n   vertex 18.93 2.50 23.81\n   vertex 22.82 1.11 26.12\n  endloop\n endfacet\n facet normal -0.49 -0.80 0.35\n  outer loop\n   vertex 22.82 1.11 26.12\n   vertex 18.93 2.50 23.81\n   vertex 19.99 1.49 22.99\n  endloop\n endfacet\n facet normal 0.80 -0.36 0.47\n  outer loop\n   vertex 20.84 0.68 53.36\n   vertex 20.28 -1.08 52.96\n   vertex 26.14 -2.49 41.92\n  endloop\n endfacet\n facet normal -0.62 -0.30 0.72\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 18.93 2.50 23.81\n   vertex 22.34 1.45 26.31\n  endloop\n endfacet\n facet normal -0.80 0.13 0.59\n  outer loop\n   vertex 21.74 -0.40 26.89\n   vertex 18.46 -1.70 22.74\n   vertex 21.76 -1.78 27.21\n  endloop\n endfacet\n facet normal -0.79 -0.21 0.58\n  outer loop\n   vertex 21.76 -1.78 27.21\n   vertex 18.46 -1.70 22.74\n   vertex 21.75 -2.39 26.98\n  endloop\n endfacet\n facet normal -0.54 -0.84 -0.09\n  outer loop\n   vertex 23.26 -5.15 31.23\n   vertex 17.89 -1.75 31.72\n   vertex 21.41 -3.57 27.63\n  endloop\n endfacet\n facet normal 0.10 -0.26 -0.96\n  outer loop\n   vertex 22.59 1.54 23.24\n   vertex 19.99 1.49 22.99\n   vertex 20.26 3.48 22.48\n  endloop\n endfacet\n facet normal 0.96 0.24 0.12\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.84 0.68 53.36\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal -0.53 -0.80 -0.29\n  outer loop\n   vertex 20.81 -5.34 36.22\n   vertex 17.89 -1.75 31.72\n   vertex 23.26 -5.15 31.23\n  endloop\n endfacet\n facet normal 1.00 0.05 0.05\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.89 8.80 78.04\n   vertex 19.60 7.11 85.93\n  endloop\n endfacet\n facet normal 1.00 0.04 0.04\n  outer loop\n   vertex 19.64 4.31 87.94\n   vertex 19.78 0.25 88.57\n   vertex 19.89 8.80 78.04\n  endloop\n endfacet\n facet normal 0.96 0.26 0.13\n  outer loop\n   vertex 19.46 3.33 58.61\n   vertex 20.67 -0.54 57.28\n   vertex 20.33 2.84 53.04\n  endloop\n endfacet\n facet normal 0.96 -0.29 -0.05\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 20.28 -1.08 52.96\n   vertex 20.84 0.68 53.36\n  endloop\n endfacet\n facet normal -0.11 -0.99 -0.07\n  outer loop\n   vertex 24.14 -2.60 26.21\n   vertex 21.75 -2.39 26.98\n   vertex 18.46 -1.70 22.74\n  endloop\n endfacet\n facet normal 1.00 -0.03 -0.02\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.78 0.25 88.57\n   vertex 19.45 -6.79 83.01\n  endloop\n endfacet\n facet normal 1.00 0.00 0.07\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.45 -6.79 83.01\n   vertex 20.12 -4.30 73.94\n  endloop\n endfacet\n facet normal 0.93 0.30 -0.21\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 19.93 5.01 72.90\n   vertex 19.58 8.54 76.35\n  endloop\n endfacet\n facet normal -0.70 -0.09 0.71\n  outer loop\n   vertex 22.22 3.87 27.21\n   vertex 19.00 3.74 24.02\n   vertex 18.93 2.50 23.81\n  endloop\n endfacet\n facet normal 0.99 0.00 -0.17\n  outer loop\n   vertex 20.12 -4.30 73.94\n   vertex 19.78 1.87 71.95\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 1.00 0.02 -0.01\n  outer loop\n   vertex 19.89 8.80 78.04\n   vertex 20.12 -4.30 73.94\n   vertex 19.93 5.01 72.90\n  endloop\n endfacet\n facet normal 0.79 -0.61 0.01\n  outer loop\n   vertex 20.67 -0.54 57.28\n   vertex 18.66 -3.15 57.91\n   vertex 20.28 -1.08 52.96\n  endloop\n endfacet\n facet normal 0.27 -0.95 0.19\n  outer loop\n   vertex 26.14 -2.49 41.92\n   vertex 18.87 -2.53 51.93\n   vertex 21.60 -3.52 43.21\n  endloop\n endfacet\n facet normal 0.99 0.13 0.11\n  outer l"
+    },
+    "brief": {
+      "summary": "浏览器原生3D AI智能体框架，给AI一个可嵌入的3D身体",
+      "problem": "让LLM智能体拥有3D形象与记忆、情绪，并能直接嵌到网页而无需插件或服务器上传",
+      "highlights": [
+        "可以用一句提示词生成带贴图的GLB模型并下载",
+        "可以把GLB角色接上LLM大脑，加上记忆和情绪",
+        "可以打包成Web Component嵌进任意网站，支持MCP与链上注册"
+      ],
+      "target_users": [
+        "3D网页开发者",
+        "AI智能体开发者",
+        "虚拟角色创作者"
+      ],
+      "why_trending": "本周雷达首次收录，219星、近期仍在更新，把3D角色与智能体、链上支付打包在一起，方向少见",
+      "caveat": "项目涉及$THREE代币与链上支付，实用性与风险需自行判断",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nirholas/three.ws",
+      "score": 82,
+      "category": "3D / VTuber",
+      "reason": "GLB 虚拟形象加 LLM 大脑的 3D 框架",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "taco-group/PISCO",
+      "url": "https://github.com/taco-group/PISCO",
+      "description": "[NeurIPS 2026] PISCO: Precise Video Instance Insertion with Sparse Control",
+      "language": "Python",
+      "total_stars": 62,
+      "forks": 3,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "filming",
+        "image-to-video",
+        "llm",
+        "text-to-video",
+        "video-ai",
+        "video-editing",
+        "video-generation",
+        "video-llm",
+        "video-to-video",
+        "vlm"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-09T15:55:56Z",
+      "updated_at": "2026-09-30T05:36:00Z",
+      "pushed_at": "2026-09-30T05:35:55Z",
+      "open_issues": 2,
+      "homepage": "https://xiangbogaobarry.github.io/PISCO/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# PISCO: Precise Video Instance Insertion with Sparse Control\n\n<h2 align=\"center\">🎉 Accepted to NeurIPS 2026!</h2>\n\nThis repo hosts the official implementation of PISCO: Precise Video Instance Insertion with Sparse Control\n\n[![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b.svg?style=for-the-badge)](https://arxiv.org/abs/2602.08277)\n[![Project Page](https://img.shields.io/badge/Project-Page-1f72ff.svg?style=for-the-badge)](https://xiangbogaobarry.github.io/PISCO/)\n[![Development Tools](https://img.shields.io/badge/GitHub-Development_Tools-2ea44f.svg?style=for-the-badge)](https://github.com/XiangboGaoBarry/PISCO-Development-Tools)\n[![Model-14B](https://img.shields.io/badge/HuggingFace-14B-orange.svg?style=for-the-badge)](https://huggingface.co/xiangbog/PISCO-14B/tree/main)\n[![Model-1.3B](https://img.shields.io/badge/HuggingFace-1.3B-orange.svg?style=for-the-badge)](https://huggingface.co/xiangbog/PISCO-1.3B/tree/main)\n[![Dataset](https://img.shields.io/badge/HuggingFace-Dataset-orange.svg?style=for-the-badge)](https://huggingface.co/datasets/xiangbog/PISCO-Dataset)\n\n\n### Video Demos\n<div align=\"center\">\n\n<video src=\"assets/PISCO_demo.mp4\" width=\"100%\" controls autoplay loop muted></video>\n\n<h4>Instance Insertion</h4>\n\n| |  |  |\n| :---: | :---: | :---: |\n| **Before** | <img src=\"assets/demos/boat_labubu_origin.gif\" width=\"100%\"> | <img src=\"assets/demos/light_origin.gif\" width=\"100%\"> |\n| **After** | <img src=\"assets/demos/boat_labubu_edited.gif\" width=\"100%\"> | <img src=\"assets/demos/light_edited.gif\" width=\"100%\"> |\n\n<h4>Creative</h4>\n\n| |  |  |\n| :---: | :---: | :---: |\n| **Before** | <img src=\"assets/demos/video_origin.gif\" width=\"100%\"> | <img src=\"assets/demos/video1_origin.gif\" width=\"100%\"> |\n| **After** | <img src=\"assets/demos/video_edited.gif\" width=\"100%\"> | <img src=\"assets/demos/video1_edited.gif\" width=\"100%\"> |\n\n<h4>Reposition</h4>\n\n| |  |  |\n| :---: | :---: | :---: |\n| **Before** | <img src=\"assets/demos/bird-12_origin.gif\" width=\"100%\"> | <img src=\"assets/demos/cattle-9_origin.gif\" width=\"100%\"> |\n| **After** | <img src=\"assets/demos/bird-12_edited.gif\" width=\"100%\"> | <img src=\"assets/demos/cattle-9_edited.gif\" width=\"100%\"> |\n\n<h4>Resize</h4>\n\n| |  |  |\n| :---: | :---: | :---: |\n| **Before** | <img src=\"assets/demos/bird-6_origin.gif\" width=\"100%\"> | <img src=\"assets/demos/deer-4_origin.gif\" width=\"100%\"> |\n| **After** | <img src=\"assets/demos/bird-6_edited.gif\" width=\"100%\"> | <img src=\"assets/demos/deer-4_edited.gif\" width=\"100%\"> |\n\n<h4>Simulation</h4>\n\n| |  |  |\n| :---: | :---: | :---: |\n| **Before** | <img src=\"assets/demos/b29377e0-83e8340a_origin.gif\" width=\"100%\"> | <img src=\"assets/demos/racing-13_origin.gif\" width=\"100%\"> |\n| **After** | <img src=\"assets/demos/b29377e0-83e8340a_edited.gif\" width=\"100%\"> | <img src=\"assets/demos/racing-13_edited.gif\" width=\"100%\"> |\n\n</div>\n\n<br>\n\n\n### TODO list\n\n- [x] Release Inference Code\n- [x] Release Development Tools\n- [x] Release Training Code\n- [x] Release Training Set\n\n### Installation\n\n```bash\nconda create -n pisco python=3.12\nconda activate pisco\n# Install the correct version of torch\npip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124\npip install -r requirements.txt\n# Install deepspeed if training 14B model\npip install deepspeed\n```\n\n\n### Inference\n\n```bash\n# 1.3B 480p\npython inference/pretrained/infer_1.3B.py\n# 1.3B 720p\npython inference/pretrained/infer_1.3B_720p.py\n# 14B 480p\npython inference/pretrained/infer_14B.py\n# 14B 720p\npython inference/pretrained/infer_14B_720p.py\n```\n\n\n### Training\n\nPISCO is trained in three stages on top of VACE at 832×480 with 49 frames (Sec. 4.2 of the paper). The 14B model is a mixture of two denoisers that are trained independently with the same schedule: the high-noise expert on timesteps `[0, 0.358]`, the low-noise expert on `[0.358, 1]`.\n\n| Stage | Trainable | LR | Script |\n|---|---|---|---|\n| I. Adapter input warm-up | new input projection of the VACE adapter (`pisco.pisco_patch_embedding`) | 1e-4 | `training/stage1/` |\n| II. Adapter finetuning | full context adapter (`pisco`) | 2e-5 | `training/stage2/` |\n| III. Joint finetuning | adapter + DiT backbone (`pisco,dit`) | 1e-5 | `training/stage3/` |\n\n#### 1. Training data\n\nThe training set contains 20,590 samples: 11,816 synthetic scenes (`Env1`–`Env27`) and 8,774 real videos from VPData (`data_v2`). Every sample is six aligned 832×480 videos of 49 frames:\n\n```\ndataset/PISCO/\n├── PISCO.json                                  # training index\n└── <subset>/                                   # Env1 ... Env27, data_v2\n    ├── <subset>_Unedited/<name>.mp4            # target video with the instance      -> video\n    ├── <subset>_Edited/<name>.mp4              # background video, instance removed  -> pisco_video\n    ├── <subset>_Masked/<name>.mp4              # spatial mask of the instance        -> pisco_video_mask\n    ├── <subset>_Entity/<name>.mp4              # segmented instance                  -> pisco_reference_video\n    ├── <subset>_Edited_Depth/<name>_viz.mp4    # depth of the background video       -> pisco_depth\n    └── <subset>_Depth_Entity/<name>_viz.mp4    # depth of the segmented instance     -> pisco_reference_depth\n```\n\nDownload it from [HuggingFace](https://huggingface.co/datasets/xiangbog/PISCO-Dataset) (36.6 GB of tar shards) and unpack it to `dataset/PISCO`:\n\n```bash\nhuggingface-cli download xiangbog/PISCO-Dataset --repo-type dataset --local-dir PISCO-Dataset\nmkdir -p dataset/PISCO\nfor f in PISCO-Dataset/shards/*.tar; do tar -xf \"$f\" -C dataset/PISCO; done\ncp PISCO-Dataset/PISCO.json dataset/PISCO/\n```\n\nTo train on your own data, arrange it the same way and build the index with\n\n```bash\npython utils/data_utils/generate_data_json.py --dataset_dir dataset/PISCO\n```\n\nDuring training the instance and depth conditions are kept only at randomly sampled keyframes, so the same samples cover single-keyframe, first/last-frame and dense control.\n\n#### 2. Download base weights and initialize PISCO from VACE\n\n```bash\nhuggingface-cli download Wan-AI/Wan2.1-T2V-1.3B --local-dir models/Wan-AI/Wan2.1-T2V-1.3B\nhuggingface-cli download Wan-AI/Wan2.1-VACE-1.3B --local-dir models/Wan-AI/Wan2.1-VACE-1.3B                # 1.3B\nhuggingface-cli download alibaba-pai/Wan2.2-VACE-Fun-A14B --local-dir models/PAI/Wan2.2-VACE-Fun-A14B      # 14B\n\npython utils/checkpoints_init.py --model 1.3B       # writes models/PISCO/inits/\npython utils/checkpoints_init.py --model 14B-low\npython utils/checkpoints_init.py --model 14B-high\n```\n\n#### 3. Train\n\nLogging uses Weights & Biases: set `WANDB_API_KEY`, or `WANDB_MODE=offline`.\n\n```bash\n# Stage I\nbash training/stage1/PISCO-1.3B.sh\nbash training/stage1/PISCO-14B-low-noise.sh\nbash training/stage1/PISCO-14B-high-noise.sh\n\n# Stage II: carry the latest stage-1 checkpoint over, then train\npython utils/copy_to_next_stage.py --model 1.3B --stage 1\npython utils/copy_to_next_stage.py --model 14B --noise low --stage 1\npython utils/copy_to_next_stage.py --model 14B --noise high --stage 1\nbash training/stage2/PISCO-1.3B.sh\nbash training/stage2/PISCO-14B-low-noise.sh\nbash training/stage2/PISCO-14B-high-noise.sh\n\n# Stage III\npython utils/copy_to_next_stage.py --model 1.3B --stage 2\npython utils/copy_to_next_stage.py --model 14B --noise low --stage 2\npython utils/copy_to_next_stage.py --model 14B --noise high --stage 2\nbash training/stage3/PISCO-1.3B.sh\nbash training/stage3/PISCO-14B-low-noise.sh\nbash training/stage3/PISCO-14B-high-noise.sh\n```\n\n> Each stage resumes from the checkpoint in its own output folder (`--auto_load_checkpoints`). Do not skip `copy_to_next_stage.py`: without it the next stage silently starts again from the VACE initialization.\n\nPreview intermediate checkpoints with `python inference/stage{1,2,3}/infer_1.3B.py [--step N]` (or `infer_14B.py`).\n\n### Fine-tuning from PISCO\n\nTo adapt the released `xiangbog/PISCO-1.3B` / `xiangbog/PISCO-14B` checkpoints to your own insertion data (clean video, edited video, depth, and an instance cutout per sample), follow [`doc/finetune_setup.md`](doc/finetune_setup.md):\n\n```bash\npython utils/preprocess_data.py --dataset_dir Dataset/data --num_frames 21\npython utils/generate_dataset_json.py --dataset_dir Dataset/data --repeat 10\nCUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6 bash training/finetune/PISCO-1.3B.sh   # or PISCO-14B.sh (DeepSpeed ZeRO-2)\n```\n\n\n\n[![Star History Chart](https://api.star-history.com/svg?repos=taco-group/PISCO&type=Date)](https://star-history.com/#taco-group/PISCO&Date)\n\n\n### Acknowledgments\n\nThis repo is built upon the [Diffsynth-Studio](https://github.com/modelscope/DiffSynth-Studio) codebase. Thanks to the authors for their great work!"
+    },
+    "brief": {
+      "summary": "PISCO 用稀疏控制把指定物体精确插入视频，是 NeurIPS 2026 论文的开源实现。",
+      "problem": "视频里想加入或移动某个物体，通常要逐帧精细标注，费时且难保持画面一致。",
+      "highlights": [
+        "可以在视频中插入指定物体，只用稀疏关键帧控制",
+        "可以移动、缩放已有物体，或做出模拟效果",
+        "可以基于 1.3B 或 14B 权重微调自己的数据"
+      ],
+      "target_users": [
+        "AI 视频研究者",
+        "视频创作者",
+        "视觉方向学生"
+      ],
+      "why_trending": "NeurIPS 2026 收录，推理、训练代码与数据集均已开源。",
+      "caveat": "总 Star 仅 62，今日无新增，复现对算力和训练经验要求高。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "taco-group/PISCO",
+      "score": 80,
+      "category": "AI 视频",
+      "reason": "稀疏控制的视频实例插入编辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 46.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "ColormaticStudios/quality-godot-first-person-2",
+      "url": "https://github.com/ColormaticStudios/quality-godot-first-person-2",
+      "description": "An actually good first person controller for the Godot Engine (version 2) (Mirror of https://git.colormatic.org/ColormaticStudios/quality-godot-first-person)",
+      "language": "GDScript",
+      "total_stars": 217,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "first-person",
+        "first-person-camera",
+        "first-person-view",
+        "game-development",
+        "gamedev",
+        "godot",
+        "godotengine"
+      ],
+      "license_name": "MIT",
+      "created_at": "2023-11-24T21:33:21Z",
+      "updated_at": "2026-09-30T05:32:28Z",
+      "pushed_at": "2026-09-30T05:32:23Z",
+      "open_issues": 1,
+      "homepage": "https://godotengine.org/asset-library/asset/2418",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# quality-godot-first-person-2\n\nActually good first person controller for the Godot Engine.  \nMIT License (credit Colormatic Studios)\n\nThis first person controller was made because there weren't many first person controllers for Godot at the time, and the ones that did exist were pretty bad.\nIt is highly customizable and comes with many features, QOL, and clean code.\n\nOriginally inspired by StayAtHomeDev's FPS tutorial. You can find that [here](https://www.youtube.com/playlist?list=PLEHvj4yeNfeF6s-UVs5Zx5TfNYmeCiYwf).\n\n# Directions\n\nMove with WASD, space to jump, shift to sprint, C to crouch.\n\n**FEATURES:**\n\n- Extremely configurable\n- In-air momentum\n- Motion smoothing\n- FOV smoothing\n- Movement animations\n- Crouching\n- Sprinting\n- 2 crosshairs/reticles, one is animated (more to come?)\n- Controller/GamePad support\n- In-editor tools (enable editable children to use)\n\nIf you make a cool game with this addon, I would love to hear about it!\n\n# Getting Started\n\nEither use a terminal, or use a graphical Git application like [Git Cola](https://git-cola.github.io/).\nYou need to install Git or a Git GUI application.\n\n**IMPORTANT:** If at any point you get an error, do not continue without fixing it.\n\n**Terminal instructions**\n\n1. Create a new folder for your project, we'll call this the project folder\n2. Open a terminal\n3. Write `cd ` in the terminal, do not press enter yet (`cd` means change directory)\n4. Copy the path of your new folder in your file manager and paste it into the terminal with `ctrl+shift+v` (make sure there is a space after `cd`). This should look like: `cd path/to/project`\n5. Press enter in the terminal\n6. Paste the command `git clone https://git.colormatic.org/ColormaticStudios/quality-godot-first-person.git .` into the terminal with `ctrl+shift+v` and press enter. This will pull the Quality First Person Controller project into your folder, including the test scene\n7. Open Godot Engine and press the import button, then find the `project.godot` in the project folder and open it\n8. You should now have the project open in Godot. Remap all of the keys in input map to your preferences\n\n**GUI instructions**\n\n1. In your Git GUI, click the \"Clone\" button\n2. Paste `https://git.colormatic.org/ColormaticStudios/quality-godot-first-person.git` into the URL box and press enter\n3. Select the folder where you want to put the project. This will pull the Quality First Person Controller project into your folder, including the test scene\n4. Open Godot Engine and press the import button, then find the `project.godot` in the project folder and open it\n5. You should now have the project open in Godot. Remap all of the keys in input map to your preferences\n\n# Wiki\n\n**To start out**, you should probably remap all of the movement keys to your own control set.\n\nYou can make this a super basic controller by just disabling everything.\n\n**Slope/staircase:**\n\nCredit to [roberto-urbani23](https://github.com/roberto-urbani23)  \nIn the character inspector, you can uncheck Stop on Slope and set the max angle to 89 (for some reason, 90 will make the player stuck). Also Snap Length to 1 otherwise your character will not remain attached to stairs if you sprint while going downstairs.\n\n**How to change settings:**\n\nClick on the character node and there should be settings in the \"Feature Settings\" group.\n\n**How to add animations for a mesh:**\n\n- Create a function for your animation and attach it to `_physics_process` to call it every frame.\n- Use `input_dir` as a boolean (it is actually a `Vector2`) to know if the player is walking.\n- Use the `state` member variable to tell if the player is sprinting or crouching.\n- Use the `is_on_floor` function to tell if the player is standing or falling.\n\n**How to change reticles (crosshairs):**\n\nChange the \"Default Reticle\" setting to your reticle file.  \nDuring runtime:  \nUse the `change_reticle` function on the character.\n\n**How to create a new reticle:**\n\n- Choose a reticle to base it off of.\n- Open that reticle and save it as a new reticle.\n- Remove the script from the reticle and create a new one. (for some reason you have to do this)\n- Edit the reticle to your needs.\n- Follow the \"how to change reticles\" directions to use it.\n\n**How to use the editor tools:**\n\n- Enable editable children on the `CharacterBody` node\n- Use the options in the Properties tab to change things\n- These changes apply in runtime as well\n"
+    },
+    "brief": {
+      "summary": "Godot 引擎的高可定制第一人称控制器插件",
+      "problem": "当时 Godot 缺少好用的第一人称控制器，已有方案体验较差",
+      "highlights": [
+        "可以直接在编辑器里调整移动参数",
+        "可以自定义准星并运行时切换",
+        "可以加入蹲伏、冲刺、手柄支持"
+      ],
+      "target_users": [
+        "Godot 游戏开发者",
+        "独立 FPS 制作人"
+      ],
+      "why_trending": "本周首次收录，总 Star 217，近期仍有更新",
+      "caveat": "主仓库是外部镜像站点，资料中未说明中文文档",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ColormaticStudios/quality-godot-first-person-2",
+      "score": 82,
+      "category": "游戏开发",
+      "reason": "Godot 高质量第一人称控制器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 44.0
+    }
+  }
+]
