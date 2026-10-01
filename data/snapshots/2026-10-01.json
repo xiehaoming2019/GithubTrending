@@ -1,0 +1,570 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 50722,
+      "forks": 5622,
+      "stars_today": 3483,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3483
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-10-01T06:10:33Z",
+      "pushed_at": "2026-09-29T15:45:28Z",
+      "open_issues": 99,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Optional remote workers |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nDownload from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest), then follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE). Models have their own licenses; review them before commercial use. Clone voices only with permission. See [license details](LICENSE-NOTICE.md).\n"
+    },
+    "brief": {
+      "summary": "本地运行的开源语音克隆与配音工具，支持 646 种语言。",
+      "problem": "云端语音服务要付费，还得把录音上传，隐私和成本都让人犹豫。",
+      "highlights": [
+        "可以克隆自己的声音，把文字转成语音",
+        "可以给视频配上定时对齐的配音",
+        "可以把文档或故事批量做成有声书"
+      ],
+      "target_users": [
+        "内容创作者",
+        "有声书制作者",
+        "配音与本地化团队"
+      ],
+      "why_trending": "今日新增约 3483 星，连续上榜，本地语音需求正热。",
+      "caveat": "对硬件有要求，模型另有许可，克隆声音需获授权。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音、转录与有声书，直击配音方向",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 149426,
+      "forks": 8031,
+      "stars_today": 743,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 743
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-10-01T06:10:31Z",
+      "pushed_at": "2026-09-14T14:34:56Z",
+      "open_issues": 319,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/50668\" alt=\"DietrichGebert%2Fponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/monthly?language=JavaScript\" alt=\"DietrichGebert%2Fponytail | Trendshift monthly ranking\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <strong>~54% less code (up to 94%) &middot; ~20% cheaper &middot; ~27% faster &middot; 100% safe</strong><br>\n  <sub>Measured on real Claude Code sessions editing a real open-source repo (FastAPI + React), against the same agent with no skill. ~54% is the mean across 12 feature tasks (Haiku 4.5, n=4); it reaches 94% where an agent over-builds (a date picker) and is near zero where the code is already minimal. ponytail keeps every safety guard while a bare \"write one-liners\" prompt drops one. (The earlier single-shot benchmark reported 80-94% as a flat figure; against a fair agentic baseline that is the per-task ceiling, not the average.) <a href=\"benchmarks/results/2026-06-18-agentic.md\">Full writeup</a> &middot; <a href=\"benchmarks/\">reproduce it</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"README.es.md\">Español</a> &middot; <a href=\"README.ko.md\">한국어</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\n## Already built with Ponytail\n\n<a href=\"https://theretriever.app\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/retriever-logo-dark.svg\">\n    <img src=\"assets/retriever-logo-light.svg\" height=\"128\" alt=\"Retriever\">\n  </picture>\n</a>\n\n---\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Before / after\n\nYou ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones.\n\nWith ponytail:\n\n```html\n<!-- ponytail: browser has one -->\n<input type=\"date\">\n```\n\nMore survivors in [examples/](examples/).\n\n## Numbers\n\nThe honest measurement is a real agent doing real work: a headless Claude Code session editing [tiangolo's full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) (a real FastAPI + React repo), scored on the `git diff` it leaves behind. Twelve feature tickets, the same agent with and without the skill, n=4, Haiku 4.5.\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-agentic.svg\" width=\"860\" alt=\"Each arm as a percent of the no-skill baseline across LOC, tokens, cost and time (Haiku 4.5). ponytail is lowest on every metric (LOC 46%, tokens 78%, cost 80%, time 73%); caveman rises above 100% on tokens, cost and time; yagni-oneliner LOC 67%. Safety, separate adversarial tier: baseline, caveman and ponytail 100%, yagni-oneliner 95%.\">\n</p>\n\n| vs no-skill baseline | LOC | tokens | cost | time | safe |\n|---|--:|--:|--:|--:|--:|\n| **ponytail** | **-54%** | **-22%** | **-20%** | **-27%** | **100%** |\n| caveman (terse-prose control) | -20% | +7% | +3% | +2% | 100% |\n| \"YAGNI + one-liners\" prompt | -33% | -14% | -21% | -30% | 95% |\n\nponytail is the only arm that cuts every metric, and the only one that stays fully safe while doing it. The cut is biggest where there is a real over-build trap (date picker 404 to 23 lines, color picker 287 to 23, because it reaches for a native `<input>` instead of a component) and near zero on code that is already minimal. Full method, per-task tables, and limitations: [benchmarks/results/2026-06-18-agentic.md](benchmarks/results/2026-06-18-agentic.md).\n\n<details>\n<summary><strong>Older single-shot numbers (isolated generation)</strong></summary>\n\nFive everyday tasks, three models, three arms (no skill, [caveman](https://github.com/JuliusBrussee/caveman), ponytail), ten runs, median reported. One prompt, one completion, counting lines of the answer:\n\n<p align=\"center\">\n  <img src=\"assets/benchmark-3model.svg\" width=\"860\" alt=\"Median lines of code per arm across Haiku, Sonnet and Opus\">\n</p>\n\nThis showed **80-94% less code**. [#126](https://github.com/DietrichGebert/ponytail/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.\n\n</details>\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect on the models that follow the ladder; a terse reasoning model that spends thinking tokens deliberating the rungs can go the other way (on GPT-5.5 it does).\n\n## How it works\n\nBefore writing code, the agent stops at the first rung that holds:\n\n```\n1. Does this need to exist?   → no: skip it (YAGNI)\n2. Already in this codebase?  → reuse it, don't rewrite\n3. Stdlib does it?            → use it\n4. Native platform feature?   → use it\n5. Installed dependency?      → use it\n6. One line?                  → one line\n7. Only then: the minimum that works\n```\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\n## Install\n\nThe most effort ponytail will ever ask of you:\n\nThe Claude Code and Codex plugins (and the Cursor hooks) run two tiny Node.js lifecycle hooks, so `node` needs to be on your PATH (note for Nix/nvm users: it must be on the non-interactive shell's PATH). If it isn't, the skills still work, the always-on activation just stays quiet instead of erroring on every prompt.\n\n### Claude Code\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n(You have to send two separate prompts for the install to work) \n\nSame steps in the Claude Code Desktop app's Code tab: type the two `/plugin` commands above into the prompt box, or click the **+** button next to it, choose **Plugins** → **Add plugin** to browse your configured marketplaces, and manage marketplaces from **Customize** in the sidebar.\n\n### Codex\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nRun `codex` and open `/hooks`, review and trust its two lifecycle hooks, and start a new thread.\n\nThis same install also covers the Codex desktop app: restart the app after installing and it picks up the plugin.\n\n### GitHub Copilot CLI\n\n```bash\ncopilot plugin marketplace add DietrichGebert/ponytail\ncopilot plugin install ponytail@ponytail\n```\n\nIn an interactive Copilot CLI session, use the slash equivalents:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n/plugin install ponytail@ponytail\n```\n\nCopilot CLI namespaces plugin commands by plugin name. For example:\n\n```text\n/ponytail:ponytail ultra\n/ponytail:ponytail-review\n```\n\n### Pi agent harness\n\n```\npi install git:github.com/DietrichGebert/ponytail\n```\n\n### OpenCode\n\nAdd to `opencode.json`:\n\n```json\n{ \"plugin\": [\"@dietrichgebert/ponytail\"] }\n```\n\nRun from a checkout instead (the plugin reuses `hooks/` and `skills/`):\n\n```json\n{ \"plugin\": [\"./.opencode/plugins/ponytail.mjs\"] }\n```\n\nInjects the ruleset every turn at the active level; adds the `/ponytail` commands (see [Commands](#commands)). OpenCode also auto-loads this repo's `AGENTS.md`, so the rules hold even without the plugin. The plugin adds the `lite/full/ultra/off` levels.\n\nThe `./` path resolves against your project's `opencode.json`; to share one checkout across projects, point it at the absolute path of the `.mjs` instead (it finds its `hooks/` and `skills/` relative to its own file).\n\n### Gemini CLI\n\n```bash\ngemini extensions install https://github.com/DietrichGebert/ponytail\n```\n\nLoads the ruleset as always-on context every session and registers the `/ponytail` commands; the `skills/` ship too, activated when a task needs them.\nThe Gemini adapter intentionally does not ship a root `hooks/hooks.json`: Gemini auto-loads that path, while Ponytail's lifecycle hooks use Claude/Codex event names.\n\n### Qoder\n\nQoder auto-loads `AGENTS.md` from the repo root as always-on context, so running ponytail from a checkout works with zero setup. For per-project rules, copy [`.qoder/rules/ponytail.md`](.qoder/rules/ponytail.md) into your project's `.qoder/rules/`. The six ponytail skills (`/ponytail`, `/ponytail-review`, `/ponytail-audit`, `/ponytail-debt`, `/ponytail-gain`, `/ponytail-help`) are available via Qoder's Skill system; the plugin manifest at [`.qoder-plugin/plugin.json`](.qoder-plugin/plugin.json) points at the `skills/` directory.\n\nFor full plugin-tier support (automatic mode activation + ruleset injection on every prompt), add the hooks from [`hooks/qoder-hooks.json`](hooks/qoder-hooks.json) to your `.qoder/settings.json`. Replace `PONYTAIL_DIR` with the path to your ponytail checkout. Qoder's `UserPromptSubmit` hook activates the default mode on first prompt and injects the ruleset every turn; `PreToolUse` with `task|Task` matcher injects the ruleset into subagents. Level switches (`/ponytail lite|full|ultra|off`) work automatically.\n\n### Antigravity CLI\n\nGoogle is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:\n\n```bash\nagy plugin install https://github.com/DietrichGebert/ponytail\n```\n\nIt reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/ponytail` commands into skills, so you type them into the chat (e.g. `/ponytail-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To"
+    },
+    "brief": {
+      "summary": "给 AI 编程代理装上懒资深开发者思维，少写代码。",
+      "problem": "AI 代理容易过度设计，装组件、加依赖，写出大量没必要的代码。",
+      "highlights": [
+        "可以在写码前逐级判断，能复用就不新写",
+        "可以让日期选择器直接用浏览器原生输入框",
+        "可以在约 20 种代理工具里启用这套技能"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "独立开发者",
+        "前端工程师"
+      ],
+      "why_trending": "今日新增约 743 Star，本周首次收录，讨论度高。",
+      "caveat": "官方称在部分推理模型上可能反而更费成本。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 66,
+      "category": "AI Agent / Skills",
+      "reason": "约束编码 Agent 输出的 Agent Skill，用途偏窄",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 60.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "ComposioHQ/awesome-claude-skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "description": "A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows",
+      "language": "Python",
+      "total_stars": 76207,
+      "forks": 8885,
+      "stars_today": 123,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 123
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "antigravity",
+        "automation",
+        "claude",
+        "claude-code",
+        "codex",
+        "composio",
+        "cursor",
+        "developer-tools",
+        "gemini-cli",
+        "mcp",
+        "openai-codex",
+        "rube",
+        "saas",
+        "skill",
+        "workflow-automation"
+      ],
+      "license_name": "",
+      "created_at": "2025-10-17T07:15:01Z",
+      "updated_at": "2026-10-01T06:07:48Z",
+      "pushed_at": "2026-09-18T07:16:11Z",
+      "open_issues": 1586,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<h1 align=\"center\">Awesome Claude Skills</h1>\n\n<p align=\"center\">\n<a href=\"https://dashboard.composio.dev/login?utm_source=Github&utm_medium=Youtube&utm_campaign=2025-11&utm_content=AwesomeSkills\">\n  <img width=\"1280\" height=\"640\" alt=\"Composio banner\" src=\"https://github.com/user-attachments/assets/e91255af-e4ba-4d71-b1a8-bd081e8a234a\">\n</a>\n\n\n</p>\n\n<p align=\"center\">\n  <a href=\"https://awesome.re\">\n    <img src=\"https://awesome.re/badge.svg\" alt=\"Awesome\" />\n  </a>\n  <a href=\"https://makeapullrequest.com\">\n    <img src=\"https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square\" alt=\"PRs Welcome\" />\n  </a>\n  <a href=\"https://www.apache.org/licenses/LICENSE-2.0\">\n    <img src=\"https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat-square\" alt=\"License: Apache-2.0\" />\n  </a>\n</p>\n<div>\n<p align=\"center\">\n  <a href=\"https://twitter.com/composio\">\n    <img src=\"https://img.shields.io/badge/Follow on X-000000?style=for-the-badge&logo=x&logoColor=white\" alt=\"Follow on X\" />\n  </a>\n  <a href=\"https://www.linkedin.com/company/composiohq/\">\n    <img src=\"https://img.shields.io/badge/Follow on LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white\" alt=\"Follow on LinkedIn\" />\n  </a>\n  <a href=\"https://discord.com/invite/composio\">\n    <img src=\"https://img.shields.io/badge/Join our Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Join our Discord\" />\n  </a>\n  </p>\n</div>\n\nA comprehensive and curated list of 1000+ production ready and practical Claude Skills and Plugins for enhancing productivity across usecases on not just Claude.ai, Claude Code, but also across coding agents like Codex, Cursor, Gemini CLI, Antigravity and more.\n\n## Give your skills real-world actions\n\nSkills tell your agent **how** to work. An MCP Gateway gives it secure access to the tools it needs.\n\nComposio [MCP Gateway](https://composio.dev/mcp-gateway) provides a single MCP endpoint for 1,000+ integrations with built-in authentication, team-based access controls, audit logs, and production-ready reliability.\n\n---\n\n## Quickstart: Connect Claude to 1000+ Apps\n\nThe **connect-apps** plugin lets Claude perform real actions - send emails, create issues, post to Slack. It handles auth and connects to 1000+ apps using Composio under the hood.\n\n### 1. Install the Plugin\n\n```bash\nclaude --plugin-dir ./connect-apps-plugin\n```\n\n### 2. Run Setup\n\n```\n/connect-apps:setup\n```\n\nPaste your API key when asked. (Get a free key at [dashboard.composio.dev](https://dashboard.composio.dev/login?utm_source=Github&utm_content=AwesomeSkills))\n\n### 3. Restart & Try It\n\n```bash\nexit\nclaude\n```\n\n> **Want skills that do more than generate text?** Claude can send emails, create issues, post to Slack, and take actions across 1000+ apps. [See how →](./connect/)\n\nIf you receive the email, Claude is now connected to 1000+ apps.\n\n**[See all supported apps →](https://composio.dev/toolkits)**\n\n---\n\n## Contents\n\n- [What Are Claude Skills?](#what-are-claude-skills)\n- [Skills](#skills)\n  - [Document Processing](#document-processing)\n  - [Development & Code Tools](#development--code-tools)\n  - [Data & Analysis](#data--analysis)\n  - [Business & Marketing](#business--marketing)\n  - [Communication & Writing](#communication--writing)\n  - [Creative & Media](#creative--media)\n  - [Productivity & Organization](#productivity--organization)\n  - [Collaboration & Project Management](#collaboration--project-management)\n  - [Security & Systems](#security--systems)\n  - [App Automation via Composio](#app-automation-via-composio)\n- [Getting Started](#getting-started)\n- [Creating Skills](#creating-skills)\n- [Contributing](#contributing)\n- [Resources](#resources)\n- [License](#license)\n\n## What Are Claude Skills?\n\nClaude Skills are reusable instruction packages that teach an AI agent how to handle a specific class of tasks. Each skill is a folder containing a `SKILL.md` file with YAML frontmatter (name, description) and Markdown instructions, optionally bundled with scripts, references, and assets. Anthropic introduced the format in October 2025 and released it as an [open standard](https://github.com/anthropics/skills) in December 2025; it's now supported by Claude Code, Claude.ai, the Claude API, OpenAI Codex, Cursor, Gemini CLI, Antigravity, and Windsurf.\n\nSkills load progressively. At session start, the agent sees only each skill's name and description — roughly 100 tokens per skill. The full SKILL.md body (typically under 5,000 tokens) loads only when the agent decides the skill is relevant to the current task. Auxiliary files in `scripts/` and `references/` load on demand. This is what lets a single agent host hundreds of skills without bloating its context window.\n\nSkills are not MCP servers and not tools. MCP defines how an agent connects to external systems — auth, transport, tool discovery. Tools are the individual functions an agent invokes. Skills define the workflow — what to do, in what order, with what guardrails — once the agent has the connections and tools it needs. In production, all three layers run together: MCP for access, tools for actions, skills for behavior.\n\n## Skills\n\n### Document Processing\n\n- [docx](https://github.com/anthropics/skills/tree/main/skills/docx) - Create, edit, analyze Word docs with tracked changes, comments, formatting.\n- [pdf](https://github.com/anthropics/skills/tree/main/skills/pdf) - Extract text, tables, metadata, merge & annotate PDFs.\n- [pptx](https://github.com/anthropics/skills/tree/main/skills/pptx) - Read, generate, and adjust slides, layouts, templates.\n- [xlsx](https://github.com/anthropics/skills/tree/main/skills/xlsx) - Spreadsheet manipulation: formulas, charts, data transformations.\n- [Markdown to EPUB Converter](https://github.com/smerchek/claude-epub-skill) - Converts markdown documents and chat summaries into professional EPUB ebook files. *By [@smerchek](https://github.com/smerchek)*\n- [Master Claude for Legal](https://github.com/sboghossian/master-claude-for-legal) - Skill pack for legal teams. NDA triage, multi-party version diff, citation verifier, meeting brief, and the Friday-newsletter status synthesis pattern. Includes 10 reference docs (privilege, verification, long documents, practice areas) and 3 firm templates. Built from the public Anthropic Claude for Legal Teams webinar dataset. *By [@sboghossian](https://github.com/sboghossian)*\n\n### Development & Code Tools\n\n- [artifacts-builder](https://github.com/anthropics/skills/tree/main/skills/web-artifacts-builder) - Suite of tools for creating elaborate, multi-component claude.ai HTML artifacts using modern frontend web technologies (React, Tailwind CSS, shadcn/ui).\n- [aws-skills](https://github.com/zxkane/aws-skills) - AWS development with CDK best practices, cost optimization MCP servers, and serverless/event-driven architecture patterns.\n- [building-blog](https://github.com/BuildShipGrowRepeat/nextjs-sanity-blog-skill) - Adds an SEO-first, i18n-ready blog to a Next.js + Sanity site via a 40-question intake, a one-page plan, and a 20-section spec. Includes a generator for AI hero images via Gemini 3 Pro Image (Nano Banana Pro). *By [@BuildShipGrowRepeat](https://github.com/BuildShipGrowRepeat)*\n- [Changelog Generator](./changelog-generator/) - Automatically creates user-facing changelogs from git commits by analyzing history and transforming technical commits into customer-friendly release notes.\n- [Chrome Relay](https://chrome-relay.kushalsm.com/) - Drives the user's already-open Chrome session — cookies, SSO, extensions, localhost — through a local CLI bridge. Real-Chrome counterpart to Playwright Browser Automation; install via `npx skills add chrome-relay` + a [Chrome Web Store extension](https://chromewebstore.google.com/detail/chrome-relay/cpdiapbifblhlcpnmlmfpgfjlacebokb). No remote relay, no Playwright fixtures, no MCP server needed.\n- [Claude Code Terminal Title](https://github.com/bluzername/claude-code-terminal-title) - Gives each Claud-Code terminal window a dynamic title that describes the work being done so you don't lose track of what window is doing what.\n- [Connect](./connect/) - Connect Claude to any app. Send emails, create issues, post messages, update databases - take real actions across Gmail, Slack, GitHub, Notion, and 1000+ services.\n- [D3.js Visualization](https://github.com/chrisvoncsefalvay/claude-d3js-skill) - Teaches Claude to produce D3 charts and interactive data visualizations. *By [@chrisvoncsefalvay](https://github.com/chrisvoncsefalvay)*\n- [FFUF Web Fuzzing](https://github.com/jthack/ffuf_claude_skill) - Integrates the ffuf web fuzzer so Claude can run fuzzing tasks and analyze results for vulnerabilities. *By [@jthack](https://github.com/jthack)*\n- [finishing-a-development-branch](https://github.com/obra/superpowers/tree/main/skills/finishing-a-development-branch) - Guides completion of development work by presenting clear options and handling chosen workflow.\n- [Full-Page Screenshot](https://github.com/LewisLiu007/full-page-screenshot) - Captures full-page screenshots of web pages via Chrome DevTools Protocol with zero dependencies. *By [@LewisLiu007](https://github.com/LewisLiu007)*\n- [great_cto](https://github.com/avelikiy/great_cto) - Claude Code plugin: 7 specialised subagents (tech-lead, senior-dev, qa-engineer, security-officer, devops, l3-support, project-auditor) orchestrating a full SDLC pipeline — architecture, TDD, 12-angle code review, QA, security audit, deploy. 11 project archetypes auto-detected, 13 compliance frameworks (GDPR/PCI-DSS/HIPAA/SOC2/ISO 27001), self-improving knowledge layer that learns from every incident. *By [@avelikiy](https://github.com/avelikiy)*\n- [iOS Simulator](https://github.com/conorluddy/ios-simulator-skill) - Enables Claude to interact with iOS Simulator for testing and debugging iOS applications. *By [@conorluddy](https://github.com/conorluddy)*\n- [jules](https://github.com/sanjay3290/ai-skills/tree/main/skills/jules) - Delegate coding tasks to Google Jules AI agent for async bug fixes, documentation, tests, and feature implementation on GitHub repos. *By [@sanjay3290](https://github.com/sanjay3290)*\n- [LangSmith Fetch](./langsmith-fetch/) - Debug LangChain and LangGraph agents by automatically fetching and analyzing execution traces from LangSmith Studio. First AI observability skill for Claude Code. *By [@OthmanAdi](https://github.com/OthmanAdi)*\n- [lean-ctx](https://github.com/yvgude/lean-ctx) - MCP server and context runtime for AI coding agents: session caching, AST-aware compression, and 90+ shell patterns to reduce token usage. Supports Claude Code, Cursor, Copilot, and other integrations. Install the Claude Code skill with `lean-ctx init --agent claude-code`; docs at [leanctx.com](https://leanctx.com). *By [@yvgude](https://github.com/yvgude)*\n- [MCP Builder](./mcp-builder/) - Guides creation of high-quality MCP (Model Context Protocol) servers for integrating external APIs and services with LLMs using Python or TypeScript.\n- [move-code-quality-skill](https://github.com/1NickPappas/move-code-quality-skill) - Analyzes Move language packages against the official Move Book Code Quality Checklist for Move 2024 Edition compliance and best practices.\n- [OpenWeb](https://github.com/openweb-org/openweb) - Agent-native way to access any website. Calls the same APIs the website calls (JSON in, JSON out) with auth (cookies, JWT, CSRF, signing) auto-resolved per request. 90+ sites built in. *By [@openweb-org](https://github.com/openweb-org)*\n- [overkill](https://github.com/santiago-vargas-de-kruijf/claude-overkill) - Surfaces advanced, maximalist alternatives to whatever solution is being discussed — advanced data structures, distributed-systems algorithms, niche frameworks, design patterns, and frontier tooling — each ranked on a calibrated complexity scale with learning links and the scenario in which the path pays off. *By [@santiago-vargas-de-kruijf](https://github.com/santiago-vargas-de-kruijf)*\n- [Play"
+    },
+    "brief": {
+      "summary": "收录1000多个Claude Skills的精选清单，多款编程代理可用",
+      "problem": "AI代理缺少可复用的任务流程规范，用户难以找到现成技能",
+      "highlights": [
+        "可以按文档、代码、数据等分类查找现成技能",
+        "可以装connect-apps插件，让Claude操作千余款应用",
+        "可以照SKILL.md格式自己写技能并开源分享"
+      ],
+      "target_users": [
+        "AI代理开发者",
+        "Claude Code用户",
+        "自动化流程搭建者"
+      ],
+      "why_trending": "本周首次收录，今日新增123星，总星超7.6万，技能生态关注度高",
+      "caveat": "开放问题多达1586个，清单条目质量参差，需自行甄别",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ComposioHQ/awesome-claude-skills",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Skills 与工具清单，服务 Agent 技能方向",
+      "generated_by_ai": true,
+      "velocity_score": 63,
+      "freshness_score": 40,
+      "ranking_score": 59.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "mksglu/context-mode",
+      "url": "https://github.com/mksglu/context-mode",
+      "description": "Context window optimization for AI coding agents. Sandboxes tool output (98% reduction), persists session memory, and enforces routing across 17 platforms via MCP + hooks.",
+      "language": "TypeScript",
+      "total_stars": 24555,
+      "forks": 1771,
+      "stars_today": 90,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 90
+    },
+    "details": {
+      "topics": [
+        "antigravity",
+        "claude",
+        "claude-code",
+        "claude-code-hooks",
+        "claude-code-plugins",
+        "claude-code-skill",
+        "codex",
+        "codex-cli",
+        "context-mode",
+        "copilot",
+        "cursor-plugin",
+        "kiro",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "openclaw",
+        "opencode",
+        "pi-agent",
+        "skills",
+        "zed-extension"
+      ],
+      "license_name": "",
+      "created_at": "2026-02-23T05:56:28Z",
+      "updated_at": "2026-10-01T06:08:23Z",
+      "pushed_at": "2026-10-01T00:15:35Z",
+      "open_issues": 303,
+      "homepage": "https://context-mode.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Context Mode\n\n**The other half of the context problem.**\n\n[![users](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Fmksglu%2Fcontext-mode%40main%2Fstats.json&query=%24.message&label=users&color=brightgreen)](https://www.npmjs.com/package/context-mode) [![npm](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Fmksglu%2Fcontext-mode%40main%2Fstats.json&query=%24.npm&label=npm&color=blue)](https://www.npmjs.com/package/context-mode) [![marketplace](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2Fmksglu%2Fcontext-mode%40main%2Fstats.json&query=%24.marketplace&label=marketplace&color=blue)](https://github.com/mksglu/context-mode) [![GitHub stars](https://img.shields.io/github/stars/mksglu/context-mode?style=flat&color=yellow)](https://github.com/mksglu/context-mode/stargazers) [![GitHub forks](https://img.shields.io/github/forks/mksglu/context-mode?style=flat&color=blue)](https://github.com/mksglu/context-mode/network/members) [![Last commit](https://img.shields.io/github/last-commit/mksglu/context-mode?color=green)](https://github.com/mksglu/context-mode/commits) [![License: ELv2](https://img.shields.io/badge/License-ELv2-blue.svg)](LICENSE)\n[![Discord](https://img.shields.io/discord/1478479412700909750?label=Discord&logo=discord&color=5865f2)](https://discord.gg/DCN9jUgN5v)\n[![Hacker News #1](https://img.shields.io/badge/Hacker%20News-%231%20%E2%80%A2%20570%2B%20points-ff6600?logo=ycombinator&logoColor=white)](https://news.ycombinator.com/item?id=47193064)\n\n<p align=\"center\">\n<sub>Used across teams at</sub>\n<br><br>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Microsoft-141414?style=flat\" alt=\"Microsoft\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Google-141414?style=flat&logo=google&logoColor=white\" alt=\"Google\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Meta-141414?style=flat&logo=meta&logoColor=white\" alt=\"Meta\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Amazon-141414?style=flat\" alt=\"Amazon\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/IBM-141414?style=flat\" alt=\"IBM\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/NVIDIA-141414?style=flat&logo=nvidia&logoColor=white\" alt=\"NVIDIA\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/ByteDance-141414?style=flat&logo=bytedance&logoColor=white\" alt=\"ByteDance\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Stripe-141414?style=flat&logo=stripe&logoColor=white\" alt=\"Stripe\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Datadog-141414?style=flat&logo=datadog&logoColor=white\" alt=\"Datadog\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Salesforce-141414?style=flat\" alt=\"Salesforce\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/GitHub-141414?style=flat&logo=github&logoColor=white\" alt=\"GitHub\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Red%20Hat-141414?style=flat&logo=redhat&logoColor=white\" alt=\"Red Hat\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Supabase-141414?style=flat&logo=supabase&logoColor=white\" alt=\"Supabase\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Canva-141414?style=flat\" alt=\"Canva\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Notion-141414?style=flat&logo=notion&logoColor=white\" alt=\"Notion\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Hasura-141414?style=flat&logo=hasura&logoColor=white\" alt=\"Hasura\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Framer-141414?style=flat&logo=framer&logoColor=white\" alt=\"Framer\" /></a>\n<a href=\"#\"><img src=\"https://img.shields.io/badge/Cursor-141414?style=flat&logo=cursor&logoColor=white\" alt=\"Cursor\" /></a>\n</p>\n\n## The Problem\n\nEvery MCP tool call dumps raw data into your context window. A Playwright snapshot costs 56 KB. Twenty GitHub issues cost 59 KB. One access log — 45 KB. After 30 minutes, 40% of your context is gone. And when the agent compacts the conversation to free space, it forgets which files it was editing, what tasks are in progress, and what you last asked for. On top of that, the agent wastes output tokens on filler, pleasantries, and verbose explanations — burning context from both sides.\n\n### How Context Mode Solves It\n\nContext Mode is an MCP server that solves all four sides of this problem:\n\n1. **Context Saving** — Sandbox tools keep raw data out of the context window. 315 KB becomes 5.4 KB. 98% reduction.\n2. **Session Continuity** — Every file edit, git operation, task, error, and user decision is tracked in SQLite. When the conversation compacts, context-mode doesn't dump this data back into context — it indexes events into FTS5 and retrieves only what's relevant via BM25 search. The model picks up exactly where you left off. If you don't `--continue`, previous session data is deleted immediately — a fresh session means a clean slate.\n3. **Think in Code** — The LLM should program the analysis, not compute it. Instead of reading 50 files into context to count functions, the agent writes a script that does the counting and `console.log()`s only the result. One script replaces ten tool calls and saves 100x context. This is a mandatory paradigm across all 17 supported clients, plus the OpenClaw gateway integration: stop treating the LLM as a data processor, treat it as a code generator.\n\n   ```js\n   // Before: 47 × Read() = 700 KB.  After: 1 × ctx_execute() = 3.6 KB.\n   ctx_execute(\"javascript\", `\n     const files = fs.readdirSync('src').filter(f => f.endsWith('.ts'));\n     files.forEach(f => console.log(f + ': ' + fs.readFileSync('src/'+f,'utf8').split('\\\\n').length + ' lines'));\n   `);\n   ```\n4. **No prose-style enforcement** — context-mode keeps raw data out of context but never dictates how the model writes its final answer. Brevity, completeness, formatting — your model's call (or yours via your own `CLAUDE.md` / `AGENTS.md`). Aggressive brevity prompts have been shown to degrade coding/reasoning benchmarks ([Moonshot AI on `kimi-k2.5`](https://github.com/anomalyco/opencode/issues/20258)) — the routing block stays focused on *where data goes*, not on *how the model talks*.\n\n<a href=\"https://www.youtube.com/watch?v=QUHrntlfPo4\">\n  <picture>\n    <img src=\"https://img.youtube.com/vi/QUHrntlfPo4/maxresdefault.jpg\" alt=\"Watch context-mode demo on YouTube\" width=\"100%\">\n  </picture>\n</a>\n<p align=\"center\"><a href=\"https://www.youtube.com/watch?v=QUHrntlfPo4\"><img src=\"https://img.shields.io/badge/%E2%96%B6%EF%B8%8F_Watch_Demo-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white\" alt=\"Watch on YouTube\"></a></p>\n\n## Install\n\nPlatforms are grouped by install complexity. Hook-capable platforms get automatic routing enforcement. Non-hook platforms need a one-time routing file copy.\n\n<details open>\n<summary><strong>Claude Code</strong> — plugin marketplace, fully automatic</summary>\n\n**Prerequisites:** Claude Code v1.0.33+ (`claude --version`). If `/plugin` is not recognized, update first: `brew upgrade claude-code` or `npm update -g @anthropic-ai/claude-code`.\n\n**Install:**\n\n```bash\n/plugin marketplace add mksglu/context-mode\n/plugin install context-mode@context-mode\n```\n\nRestart Claude Code (or run `/reload-plugins`).\n\n**Verify:**\n\n```\n/context-mode:ctx-doctor\n```\n\nAll checks should show `[x]`. The doctor validates runtimes, hooks, FTS5, and plugin registration.\n\n**Routing:** Automatic. The SessionStart hook injects routing instructions at runtime — no file is written to your project. The plugin registers all hooks (PreToolUse, PostToolUse, UserPromptSubmit, PreCompact, SessionStart, Stop) and 11 MCP tools — six sandbox tools (`ctx_batch_execute`, `ctx_execute`, `ctx_execute_file`, `ctx_index`, `ctx_search`, `ctx_fetch_and_index`) plus five meta-tools (`ctx_stats`, `ctx_doctor`, `ctx_upgrade`, `ctx_purge`, `ctx_insight`).\n\n| Slash Command | What it does |\n|---|---|\n| `/context-mode:ctx-stats` | Context savings — per-tool breakdown, tokens consumed, savings ratio. |\n| `/context-mode:ctx-doctor` | Diagnostics — runtimes, hooks, FTS5, plugin registration, versions. |\n| `/context-mode:ctx-index` | Index a local file or directory into the persistent FTS5 knowledge base. |\n| `/context-mode:ctx-search` | Search previously indexed content. |\n| `/context-mode:ctx-upgrade` | Pull latest, rebuild, migrate cache, fix hooks. |\n| `/context-mode:ctx-purge` | Permanently delete all indexed content from the knowledge base. |\n| `/context-mode:ctx-insight` | Opens the hosted Insight dashboard ([context-mode.com/insight](https://context-mode.com/insight)) in your browser — org analytics for AI-assisted engineering teams. |\n\n> **Note:** Slash commands are a Claude Code plugin feature. On other platforms, type `ctx stats`, `ctx doctor`, `ctx index`, `ctx search`, `ctx upgrade`, or `ctx insight` in the chat — the model calls the MCP tool automatically. See [Utility Commands](#utility-commands).\n\n**Status line (optional):** Claude Code's plugin manifest cannot declare a status line, so this is a one-time manual edit to `~/.claude/settings.json`:\n\n```json\n{\n  \"statusLine\": {\n    \"type\": \"command\",\n    \"command\": \"context-mode statusline\"\n  }\n}\n```\n\nAfter saving, restart Claude Code. The bar shows `$ saved this session · $ saved across sessions · % efficient` so you can see savings accumulate in real time. The wiring is path-free — `context-mode statusline` resolves through the bundled CLI regardless of where the plugin cache lives.\n\n<details>\n<summary>Alternative — MCP-only install (no hooks or slash commands)</summary>\n\n```bash\nclaude mcp add context-mode -- npx -y context-mode\n```\n\nThis gives you all 11 MCP tools without automatic routing. The model can still use them — it just won't be nudged to prefer them over raw Bash/Read/WebFetch. Good for trying it out before committing to the full plugin.\n\n</details>\n\n</details>\n\n<details>\n<summary><strong>Gemini CLI</strong> — one config file, hooks included</summary>\n\n**Prerequisites:** Node.js >= 22.5 (or Bun), Gemini CLI installed.\n\n**Install:**\n\n1. Install context-mode globally:\n\n   ```bash\n   npm install -g context-mode\n   ```\n\n2. Add the following to `~/.gemini/settings.json`. This single file registers the MCP server and all four hooks:\n\n   ```json\n   {\n     \"mcpServers\": {\n       \"context-mode\": {\n         \"command\": \"context-mode\"\n       }\n     },\n     \"hooks\": {\n       \"BeforeTool\": [\n         {\n           \"matcher\": \"run_shell_command|read_file|read_many_files|grep_search|search_file_content|web_fetch|activate_skill|mcp__plugin_context-mode|mcp__context-mode|mcp__(?!.*context-mode)\",\n           \"hooks\": [{ \"type\": \"command\", \"command\": \"context-mode hook gemini-cli beforetool\" }]\n         }\n       ],\n       \"AfterTool\": [\n         {\n           \"matcher\": \"\",\n           \"hooks\": [{ \"type\": \"command\", \"command\": \"context-mode hook gemini-cli aftertool\" }]\n         }\n       ],\n       \"PreCompress\": [\n         {\n           \"matcher\": \"\",\n           \"hooks\": [{ \"type\": \"command\", \"command\": \"context-mode hook gemini-cli precompress\" }]\n         }\n       ],\n       \"SessionStart\": [\n         {\n           \"matcher\": \"\",\n           \"hooks\": [{ \"type\": \"command\", \"command\": \"context-mode hook gemini-cli sessionstart\" }]\n         }\n       ]\n     }\n   }\n   ```\n\n3. Restart Gemini CLI.\n\n**Verify:**\n\n```\n/mcp list\n```\n\nYou should see `context-mode: ... - Connected`.\n\n**Routing:** Automatic via SessionStart hook. Optionally copy routing instructions for full model awareness:\n\n```bash\ncp node_modules/context-mode/configs/gemini-cli/GEMINI.md ./GEMINI.md\n```\n\n> **Why the BeforeTool matcher?** It targets only tools that produce large output (`run_shell_command`, `read_file`, `read_many_files`, `grep_search`, `search_file_content`, `web_fetch`, `activate_skill`) plus context-mode's own tools (`mcp__plugin_context-mode`). This avoids unnecessary hook overhead on lightweight tools while intercepting every tool that could flood your co"
+    },
+    "brief": {
+      "summary": "给AI编程助手压缩上下文的MCP工具",
+      "problem": "MCP工具输出很快塞满上下文，压缩后还忘掉改过的文件和任务",
+      "highlights": [
+        "可以把工具输出放进沙箱，减少约98%上下文占用",
+        "可以自动记录文件、任务和错误，会话压缩后接着干",
+        "可以让模型写脚本统计，而不是把大量文件读进来"
+      ],
+      "target_users": [
+        "AI编程助手重度用户",
+        "MCP插件开发者",
+        "多平台AI编码团队"
+      ],
+      "why_trending": "今日新增90星，本周首次收录，上下文管理是当前热门痛点",
+      "caveat": "采用ELv2许可证，企业使用前需确认授权条款",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mksglu/context-mode",
+      "score": 74,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码 Agent 的上下文压缩与 MCP 路由，属 Agent 工具链",
+      "generated_by_ai": true,
+      "velocity_score": 59,
+      "freshness_score": 40,
+      "ranking_score": 57.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "RouteVN/routevn-creator-client",
+      "url": "https://github.com/RouteVN/routevn-creator-client",
+      "description": "RouteVN Creator is a desktop application to create Visual Novels without any coding",
+      "language": "JavaScript",
+      "total_stars": 32,
+      "forks": 6,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "galgame-engine",
+        "game-engine",
+        "interactive-fiction-engine",
+        "routevn",
+        "visual-novel",
+        "visual-novel-creator",
+        "visual-novel-editor",
+        "visual-novel-engine",
+        "visual-novel-framework",
+        "visual-novel-games",
+        "visual-novel-maker",
+        "visual-novel-tools"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-05-23T04:56:46Z",
+      "updated_at": "2026-10-01T06:10:48Z",
+      "pushed_at": "2026-10-01T06:10:45Z",
+      "open_issues": 3,
+      "homepage": "https://routevn.com/creator/about/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# RouteVN Creator Client\n\n[Official Website](https://routevn.com/creator/about/)\n\nRouteVN Creator Client is a frontend application for building Visual Novels with a drag & drop visual UI, without needing to write any code.\n\nThis is a complete **Single Page Application (SPA)** that operates **offline-first**.\n\nBrowser builds persist project data through IndexedDB-backed stores.\n\nDesktop builds persist project data through Tauri/SQLite-backed stores.\n\nAndroid builds run the web app inside a native WebView shell and persist app and\nproject data through native SQLite-backed stores. Tauri is not used for mobile.\n\n## Frameworks used\n\n- [@rettangoli/fe](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-fe) - Is used as the frontend framework\n- [@rettangoli/ui](https://github.com/yuusoft-org/rettangoli/tree/main/packages/rettangoli-ui) - Is used as the UI library\n- [Product](docs/product.md) - Product principles and UX contract\n- [Engineering](docs/engineering.md) - Code structure, stack, and engineering boundaries\n- [Platform Spec](docs/platform/README.md) - Current project model, command/event flow, and storage contracts\n- [Docs Index](docs/README.md) - Entry point for internal documentation\n\n## Project Structure\n\nEntrypoint defined in `static/index.html` with the `<rvn-app>` tag.\n\nSee [docs/README.md](docs/README.md) for the internal docs index, [docs/product.md](docs/product.md) for product principles, and [docs/engineering.md](docs/engineering.md) for the engineering guide.\n\n`src/pages/app/` - **Application entrypoint**\n\nFolder structure\n\n- `src/components/` - Reusable UI components\n- `src/pages/` - Global components with their own state\n- `src/deps/` - Infrastructure and service dependencies injected into pages/components\n- `src/setup.web.js` - Web-specific configuration\n- `src/setup.tauri.js` - Tauri desktop-specific configuration\n- `src/setup.android.js` - Android WebView-specific configuration\n- `android/routevn/` - Native Android WebView shell\n- `src/domain/` - Domain rules, command processing, and state projection\n- `src/collab/` - Collaboration runtime\n- `scripts/` - Build and utility scripts\n- `static/` - Static HTML files and assets\n- `_site/` - Build output directory\n\nThere is no shared `src/setup.common.js` entrypoint today. Shared runtime code lives behind service cores and adapters.\n\n## Adding Routes\n\nTo add a new route, you need to update 3 files:\n\n1. **Create HTML file in `static/`** - Add the static HTML file for the route\n2. **Update `src/pages/app/app.view.yaml`** - Add the route condition and component\n3. **Update `src/pages/app/app.store.js`** - Add the route pattern to the arrays\n\nExample for adding `/project/new-feature`:\n\n```yaml\n# In app.view.yaml\n$elif currentRoutePattern == \"/project/new-feature\":\n  - rvn-new-feature: []\n```\n\n```javascript\n// In app.store.js - add to both routePatterms and routesWithNavBar arrays\n\"/project/new-feature\",\n```\n\n## Development\n\nInstall `rtgl` cli\n\n```shell\nnpm i -g rtgl\n```\n\nInstall dependencies:\n\n```shell\nbun install\n```\n\n**Setup Git Hooks (Required for new developers):**\n\nAfter installing dependencies, Husky will automatically set up git hooks. The pre-push hook will run `bun run lint` to ensure code quality before pushing changes.\n\nIf you're setting up the project for the first time, make sure to run:\n\n```shell\nbun run prepare\n```\n\nThis ensures all git hooks are properly configured.\n\n**Note:** If you encounter errors when pushing due to linting issues, run:\n\n```shell\nbun run lint:fix\n```\n\nThis will automatically fix most linting errors. After fixing, you can commit the changes and push again.\n\n### Web Development\n\nThe project uses platform-specific entry points that are automatically configured during build:\n\nRun the project in watch mode:\n\n```shell\nbun run watch:web\n```\n\nOr build project and serve without watch mode:\n\n```shell\nbun run build:web\nbunx serve _site -p 3001\n```\n\nOpen: http://localhost:3001/project\n\n**Build Commands:**\n\n- `bun run build` or `bun run build:web` - Build for web platform\n- `bun run watch:web` - Watch mode for web development\n\n### Android Application\n\nBuild and install the debug app with packaged local JavaScript:\n\n```shell\nbun run android:install\n```\n\nFor explicit watch-mode development, start the Android JS dev server:\n\n```shell\nbun run watch:android\n```\n\nThe watch script prepares `_site`, configures\n`adb reverse tcp:3001 tcp:3001` when a device is connected, and serves\n`src/setup.android.js`. After it is ready, explicitly relaunch the debug app\nagainst the server:\n\n```shell\nadb shell am start -S -n com.routevn.creator/.MainActivity \\\n  --ez routevnUseDevServer true\n```\n\nNormal launches omit this extra and always use packaged local JavaScript.\n\n### Desktop Application (Tauri)\n\nRouteVN Creator also supports running as a native desktop application using [Tauri](https://tauri.app/), providing better performance and system integration.\n\n**Prerequisites:**\n\nInstall Rust and system dependencies:\n\n```shell\n# Install Rust\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n\n# Linux users need additional system dependencies\n# Ubuntu/Debian:\nsudo apt update\nsudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libayatana-appindicator3-dev librsvg2-dev\n\n# Arch Linux:\nsudo pacman -S --needed webkit2gtk-4.1 base-devel curl wget file openssl libayatana-appindicator librsvg gst-libav gst-plugins-good gst-plugins-bad gst-plugins-ugly\n\n# Fedora/RHEL:\nsudo dnf install webkit2gtk4.1-devel openssl-devel curl wget file libappindicator-gtk3-devel librsvg2-devel\n\n# macOS and Windows: No additional system dependencies needed\n```\n\n**Development:**\n\nThe Tauri build automatically uses the desktop-specific configuration (`src/setup.tauri.js`):\n\nAdd `env.dev` to your env variables. It is required to set the private key for the updater\n\nStart dev server from:\n\n```shell\nbun run watch:tauri\n```\n\nRun the Tauri app in development mode:\n\n```shell\nbun run tauri:dev\n```\n\nFor cross-compilation to Windows from Linux/macOS:\n\n```shell\nbun run tauri:dev:win\n```\n\n**Production Build:**\n\nFor production we build installer using NSIS: https://v2.tauri.app/distribute/windows-installer/\n\nBuild the desktop application:\n\n```shell\nbun run tauri:build\n```\n\nBuild the Linux AppImage on the host:\n\n```shell\nbun run tauri:build:linux:appimage\n```\n\nBuild the Linux AppImage in an Ubuntu 22.04 Docker builder for a more\ncompatible release baseline:\n\n```shell\nbun run tauri:build:linux:appimage:docker\n```\n\nThe Docker-built x86_64 AppImage, signature, and checksum are copied to\n`src-tauri/target/release/bundle/appimage/linux-x86_64-<version>/`.\n\nLinux direct releases are AppImage-only. See\n`docs/runbooks/linux-release.md`.\n\nCross-compile for Windows:\n\n```shell\nbun run tauri:build:win\n```\n\nBuild and notarize the macOS DMG:\n\n```shell\nbun run tauri:build:mac\n```\n\nFor the Apple signing and notarization setup, see [docs/runbooks/macos-signing-and-notarization.md](docs/runbooks/macos-signing-and-notarization.md).\n\nThe built application will be available in `src-tauri/target/release/` with platform-specific installers in `src-tauri/target/release/bundle/`.\n\n**Build Commands:**\n\n- `bun run build:tauri` - Build frontend for Tauri platform\n- `bun run watch:tauri` - Watch mode for Tauri development\n- `bun run tauri:build` - Build complete desktop application\n\n**Platform Support:**\n\n- **Windows**: `.exe` installer and `.msi` package\n- **macOS**: `.app` bundle and `.dmg` installer\n- **Linux x86_64**: `.AppImage`\n\n**Features:**\n\n- Native file system access\n- Better performance than web version\n- Offline-first with local storage\n- Platform-specific optimizations via separate entry points\n- System tray integration (planned)\n- Auto-updates support (planned)\n\n### Android Application (WebView)\n\nThe Android app is a native WebView wrapper around the web build. It bypasses\nTauri entirely and loads packaged assets through AndroidX `WebViewAssetLoader`.\n\nSee [docs/android.md](docs/android.md) for the setup details and version pins.\n\n```shell\nbun run build:android\nbun run android:install\n```\n\n## Community\n\nJoin us on [Discord](https://discord.gg/8J9dyZSu9C) to ask questions, report bugs, and stay up to date.\n\n## License\n\n- This project is licensed under the [MIT License](LICENSE).\n- The name RouteVN, and its logo are the exclusive property of Yuusoft\n"
+    },
+    "brief": {
+      "summary": "无需写代码制作视觉小说的桌面工具",
+      "problem": "解决不会编程的人难以制作视觉小说的问题",
+      "highlights": [
+        "可以用拖拽界面搭建视觉小说剧情",
+        "可以离线编辑并通过本地数据库保存项目",
+        "可以构建为桌面端与安卓应用"
+      ],
+      "target_users": [
+        "视觉小说创作者",
+        "独立游戏爱好者",
+        "无编程基础的人"
+      ],
+      "why_trending": "本周首次收录，近期仍有代码更新",
+      "caveat": "项目较新，Star 少，资料未说明成品案例",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "RouteVN/routevn-creator-client",
+      "score": 88,
+      "category": "互动叙事",
+      "reason": "免代码视觉小说创作桌面工具，直击互动叙事",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "Teriks/dgenerate",
+      "url": "https://github.com/Teriks/dgenerate",
+      "description": "dgenerate is a scriptable command line tool (and library) for generating images and animation sequences using stable diffusion and related techniques, with an accompanying GUI scripting environment.",
+      "language": "Python",
+      "total_stars": 44,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-upscale",
+        "command-line",
+        "command-line-tool",
+        "cross-platform",
+        "gui-application",
+        "image-editing",
+        "image-generation",
+        "image-processing",
+        "scriptable",
+        "stable-diffusion",
+        "upscaling",
+        "video-editing",
+        "video-generation",
+        "video-processing"
+      ],
+      "license_name": "BSD-3-Clause",
+      "created_at": "2023-06-14T02:10:53Z",
+      "updated_at": "2026-10-01T06:08:36Z",
+      "pushed_at": "2026-10-01T06:08:32Z",
+      "open_issues": 30,
+      "homepage": "https://dgenerate.readthedocs.io",
+      "archived": false,
+      "default_branch": "version_6.0.0",
+      "readme": ".. |Documentation| image:: https://readthedocs.org/projects/dgenerate/badge/?version=version_6.0.0\n   :target: http://dgenerate.readthedocs.io/en/version_6.0.0/\n\n.. |Latest Release| image:: https://img.shields.io/github/v/release/Teriks/dgenerate\n   :target: https://github.com/Teriks/dgenerate/releases/latest\n   :alt: GitHub Latest Release\n\n.. |Support Dgenerate| image:: https://img.shields.io/badge/Ko–fi-support%20dgenerate%20-hotpink?logo=kofi&logoColor=white\n   :target: https://ko-fi.com/teriks\n   :alt: ko-fi\n\n=========\ndgenerate\n=========\n\n|Documentation| |Latest Release| |Support Dgenerate|\n\n``dgenerate`` is a scriptable command-line tool (and library) for generating and editing images, generating whole video clips with LTX,\nand processing animated inputs with AI.\n\nWhether you're generating or editing single images, batch processing hundreds of variations, generating a short mp4 from a prompt,\nor transforming entire videos frame-by-frame, dgenerate provides a flexible, scriptable interface for a multitude of generation and editing tasks.\n\nFor the extensive usage manual, manual installation guide, and API documentation, visit `readthedocs <http://dgenerate.readthedocs.io/en/version_6.0.0/>`_.\n\nWhat You Can Do\n===============\n\nImage Generation\n----------------\n\n* Generate images using a number of popular model architectures such as: SD, SDXL, SD3, Flux, and Kolors\n* Batch process multiple parameter combinations combinatorially to generate variations\n* Run large models on limited hardware with inference optimizations and quantization\n* Utilize models from HuggingFace and CivitAI for generation\n* Advanced prompt weighting (LPW), SD-WebUI (Common syntax), InvokeAI syntax, and ``llm4gen`` (SD1.5 only)\n* Control Nets, T2I Adapters, IP Adapters, LoRA, and Textual Inversion (embeddings)\n* Text to image, image to image, and inpainting\n* Diffusion-based image upscaling\n\nVideo generation (LTX)\n----------------------\n\n* Generate a whole clip in one pipeline call with ``--model-type ltx`` (`Lightricks LTX-2.5 <https://huggingface.co/Lightricks/LTX-2.5-Diffusers>`_ and the earlier `LTX-Video <https://huggingface.co/Lightricks/LTX-Video>`_ checkpoints)\n* Text-to-video, or condition with ``--image-seeds``: a still or clip as the opening frames, ``last-frame=`` as the closing frame, or both together\n* Use a video, GIF, or other animated file as conditioning to extend existing footage or generate a lead-in; slice with ``--frame-start`` / ``--frame-end``\n* Process the opening and closing conditioning separately, for example ``--seed-image-processors grayscale + canny``\n* Guide LTX-2.5 with an IC-LoRA from ``--ltx-ic-lora``, such as canny, depth, or pose control, from a reference clip processed by ``--control-image-processors``\n* Load style or effect LoRAs with ``--loras``, on their own or together with an IC-LoRA\n* Set clip length and frame rate with ``--ltx-video-lengths`` and ``--ltx-video-fps``; LTX-2.5 can predict duration from the prompt when length is omitted\n* LTX-2.5 muxes generated audio into mp4 output; the earlier LTX-Video model accepts a GGUF diffusion transformer\n* Example configs under ``examples/ltx/ltx2`` and ``examples/ltx/ltx_video``, and LTX recipes in the Console UI; see the `video generation manual <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#video-generation>`_\n\nImage Processing\n----------------\n\n* Easily chain image processors together for advanced scripted image manipulation\n* Utilize built-in image processors for edge detection, depth mapping, segmentation, feature detection, and more\n* Run upscaling / image restoration models such as ESRGAN, SwinIR, etc... via `spandrel <https://github.com/chaiNNer-org/spandrel>`_\n* Run image processors generically on any image\n\nAnimation & video processing (per frame)\n----------------------------------------\n\n* Run image diffusion once per frame to transform videos into artistic, non-temporally consistent animations (distinct from LTX whole-clip generation above)\n* Process GIF, WebP, APNG, MP4, and any other video format supported by `av <https://github.com/PyAV-Org/PyAV>`_ (ffmpeg)\n* Memory-efficient, streamed processing of video content from disk\n* Apply image processors to any animated input, for example upscaling / classification / mask generation\n\nScripting\n---------\n\n* Utilize the built-in shell language to script generation tasks, work in REPL mode from the Console UI\n* Write scripted workflows with intelligent VRAM/RAM memory management, garbage collection, and caching\n* Write plugins such as image processors, prompt weighters, shell language features, etc. in Python if desired\n\nConfig generation\n-----------------\n\nA local Qwen model writes a dgenerate config from a plain language request. It retrieves the closest example configs and documentation, then checks the result with dgenerate and asks the model to fix anything that is rejected.\n\n.. code-block:: bash\n\n    dgenerate --sub-command assistant -o cat.dgen \"generate a cute cat, 30 steps\"\n\nThis needs the ``xllamacpp`` extra. The Console UI Generate Code menu runs the same command. See the `assistant sub-command <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#sub-command-assistant>`_ in the manual.\n\nGetting Started\n===============\n\nQuick Install\n-------------\n\nDownload an install wizard for your platform from the `releases page <https://github.com/Teriks/dgenerate/releases>`_ for a hassle-free setup into an isolated Python environment. The same binary installs from the command line. See the `network installer <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#network-installer>`_ section of the manual.\n\nManual Install\n--------------\n\n* `Windows <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#windows-install>`_\n* `Linux / WSL <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#linux-or-wsl-install>`_\n* `Linux ROCm <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#linux-with-rocm-amd-cards>`_\n* `MacOS <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#macos-install-apple-silicon-only>`_\n* `Google Colab <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#google-colab-install>`_\n* `XPU (Intel) <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#install-with-xpu-support>`_\n* `Installing From Development Branches <https://dgenerate.readthedocs.io/en/version_6.0.0/manual.html#installing-from-development-branches>`_\n\nSystem Requirements\n-------------------\n\n* **GPU**: NVIDIA with CUDA 12.6 or newer, AMD (ROCm 7.2 or 7.14 on Linux, or AMD's Windows wheel index), or Apple Silicon\n* **Python**: 3.11 or newer, except 3.14.1, and older than 3.15\n* **OS**: Windows, macOS, or Linux\n\nNote: CPU rendering is possible but extremely slow unless the given model is tailored for it.\n\nTwo Ways to Use dgenerate\n=========================\n\nCommand Line\n------------\n\nPerfect for automation and batch processing:\n\n.. code-block:: bash\n\n    dgenerate stable-diffusion-v1-5/stable-diffusion-v1-5 --prompts \"a cute cat\" --inference-steps 15 20 30\n\n    dgenerate --file workflow-config.dgen\n\nInteractive GUI\n---------------\n\n\n.. code-block:: bash\n\n    # launch the Console UI\n\n    dgenerate --console\n\n\nFeatures a syntax-highlighting console / editor:\n\n* REPL / code editor for the built in shell language to assist with building complex workflows\n* Generate Code writes a config script from a plain language request with a local Qwen model\n* Preview plays finished GIF, WebP, APNG, and MP4 clips, including audio. The timeline under the picture has play, scrub, a speaker button (sound waves, or a red X when muted), and a volume slider\n* Vulkan is the default preview on Windows, Linux, and macOS with the ``console_ui_vulkan`` extra. The network installer selects that extra. ``DGENERATE_CONSOLE_UI_VULKAN=0`` keeps the OpenGL viewer from ``console_ui_opengl``\n* Smooth zoom / pan, and a bounding box / coordinate picker\n* Various templating utilities (recipes, and URI builders) for quickly creating scripts and working interactively\n* In editor documentation for all arguments, and built in image processors / plugins\n* Lightweight multiplatform Tkinter-based UI\n\n----\n\n.. image:: https://raw.githubusercontent.com/Teriks/dgenerate-readme-embeds/master/ui5.gif\n   :alt: Console UI Demo"
+    },
+    "brief": {
+      "summary": "用命令行脚本生成和编辑图像、视频的 Python 工具",
+      "problem": "AI 绘图流程难批量复用，参数组合与视频处理缺少统一脚本入口",
+      "highlights": [
+        "可以用命令行批量跑多组参数生成图片变体",
+        "可以把视频逐帧转成风格化动画",
+        "可以用内置 Shell 脚本或 GUI 控制台编排流程"
+      ],
+      "target_users": [
+        "AI 绘图爱好者",
+        "批量出图的工作流用户",
+        "Python 工具开发者"
+      ],
+      "why_trending": "本周首次收录，虽仅 44 星但近两日仍有提交，功能覆盖广",
+      "caveat": "项目仅 44 星，用户规模小；需较新 GPU 与 Python 3.11 以上",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Teriks/dgenerate",
+      "score": 85,
+      "category": "AI 绘画 / 漫画",
+      "reason": "可脚本化 Stable Diffusion 图像与动画序列生成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "phase-rs/phase",
+      "url": "https://github.com/phase-rs/phase",
+      "description": "A rules engine and game client — Rust + WASM + React",
+      "language": "Rust",
+      "total_stars": 296,
+      "forks": 193,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "magic-the-gathering",
+        "mtg",
+        "react",
+        "rust",
+        "tauri",
+        "typescript",
+        "wasm"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T21:31:17Z",
+      "updated_at": "2026-10-01T06:10:38Z",
+      "pushed_at": "2026-10-01T06:10:36Z",
+      "open_issues": 1368,
+      "homepage": "http://preview.phase-rs.dev/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"client/public/logo.webp\" alt=\"phase.rs\" width=\"280\" />\n</p>\n\n<p align=\"center\">\n  <strong>An open-source Magic: The Gathering rules engine and game client</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://preview.phase-rs.dev\"><img alt=\"Play Preview\" src=\"https://img.shields.io/badge/⚡_Play_Preview-Latest-f59e0b?style=for-the-badge\"></a>\n  <a href=\"https://phase-rs.dev\"><img alt=\"Play Online\" src=\"https://img.shields.io/badge/▶_Play_Online-Alpha-6366f1?style=for-the-badge\"></a>\n  <a href=\"https://github.com/phase-rs/phase/releases/latest\"><img alt=\"Download\" src=\"https://img.shields.io/badge/⬇_Download-Desktop-10b981?style=for-the-badge\"></a>\n  <a href=\"https://ko-fi.com/phasers\"><img alt=\"Support on Ko-fi\" src=\"https://img.shields.io/badge/☕_Ko--fi-Support-FF5E5B?style=for-the-badge\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#quick-start\">Quick Start</a> · <a href=\"#features\">Features</a> · <a href=\"#architecture\">Architecture</a> · <a href=\"#development\">Development</a> · <a href=\"https://discord.gg/dUZwhYHUyk\">Discord</a> · <a href=\"https://deepwiki.com/phase-rs/phase\"><img alt=\"Ask DeepWiki\" src=\"https://deepwiki.com/badge.svg\"></a>\n</p>\n\n<!-- coverage-badges:start -->\n<p align=\"center\">\n  <img alt=\"Card Coverage\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fcoverage.json\">\n  <img alt=\"Keywords\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fkeywords.json\">\n  <img alt=\"Cards\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fcards.json\">\n  <br/>\n  <img alt=\"Pauper\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-pauper.json\">\n  <img alt=\"Pioneer\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-pioneer.json\">\n  <img alt=\"Modern\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-modern.json\">\n  <img alt=\"Standard\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-standard.json\">\n  <img alt=\"Legacy\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-legacy.json\">\n  <img alt=\"Vintage\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-vintage.json\">\n  <img alt=\"Commander\" src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fdata.phase-rs.dev%2Fbadges%2Fformat-commander.json\">\n</p>\n<!-- coverage-badges:end -->\n\n---\n\n<p align=\"center\">\n  <img src=\"docs/screenshot.webp\" alt=\"phase.rs gameplay\" width=\"900\" />\n</p>\n\nA Rust-native MTG engine compiling to native and WASM, powering a Tauri desktop app, browser PWA, and WebSocket multiplayer. Implements comprehensive MTG rules using functional architecture — pure reducers, discriminated unions, and immutable state with structural sharing — with an Arena-quality React/TypeScript UI.\n\n## Story\n\nI'm Matt — a millennial software engineer who loves Magic. My six-year-old son asks me to play with him all the time, but the real game is just too complicated for a kid his age.\n\nSo I built [Alchemy](https://matthewevans.github.io/alchemy) ([source](https://github.com/matthewevans/alchemy)) — a simplified, kid-friendly version of MTG we could play together on our iPads. Fewer keywords, no lands, energy that builds each turn, and an adaptive learning mode where he solves math problems for combat bonuses. I had a working version in a single afternoon and fleshed it out over the following week.\n\nAfter that I wanted to see how far I could push it — a real MTG rules engine in Rust, compiling to WASM, with the same React frontend so the whole thing runs in a browser. This whole project went from nothing to where it is now in a matter of weeks.\n\nI'm not trying to make money off this. There are no ads. I'm just a dude who likes Magic.\n\n## Features\n\n- **Rules engine** — Turns, priority, stack, combat, state-based actions, layers, triggers, replacement effects\n- **34,300+ cards** — Parsed from MTGJSON with format support (Commander, Modern, Pioneer, Standard, and more)\n- **AI opponent** — Per-card decision logic, game tree search, and evaluation heuristics\n- **Game UI** — Battlefield, hand, stack, targeting overlays, mana payment, animations, and ambient audio\n- **Multiplayer** — WebSocket server with hidden information, lobby system, and WebRTC peer-to-peer\n- **Metagame feeds** — Automated scraping of top decks from MTGGoldfish, updated daily\n- **Deck builder** — Card search, visual builder, and `.dck`/`.dec` import\n- **Cross-platform** — Tauri desktop (Windows, macOS, Linux), browser PWA, and tablet\n- **Card images** — Scryfall integration with IndexedDB caching\n\n## Contribute a Card with Your LLM\n\nThousands of cards are still unimplemented. If you use Claude Code, Codex CLI, or a similar agent, you can \"lend your LLM\" an hour and ship a real PR — **even if you don't have a Rust toolchain**. The LLM does all the work; you just paste a prompt.\n\nHand this to your LLM:\n\n```\nRead https://raw.githubusercontent.com/phase-rs/phase/main/docs/AI-CONTRIBUTOR.md\nand follow it end-to-end to implement {a card I name, or pick one for me}.\nUse the $engine-implementer skill. Use high thinking. Don't stop for my input.\nOpen a PR when done.\nUse the repository's .github/PULL_REQUEST_TEMPLATE.md for the PR body and fill\nevery section.\n```\n\nFull procedure, two tracks (developer / non-developer), and copy-paste prompts for LLM UIs without web fetch: [docs/AI-CONTRIBUTOR.md](docs/AI-CONTRIBUTOR.md).\n\n## Quick Start\n\n### Prerequisites\n\n- [Rust toolchain](https://rustup.rs/)\n- wasm32 target: `rustup target add wasm32-unknown-unknown` (Windows: see below)\n- wasm-bindgen-cli: `cargo install wasm-bindgen-cli@0.2.114`\n- wasm-opt (optional): `brew install binaryen` or `apt install binaryen`\n- [Node.js](https://nodejs.org/) 22+ and [pnpm](https://pnpm.io/): `npm i -g pnpm`\n\n#### Windows\n\n`rustup` on Windows defaults to the GNU toolchain, which requires `dlltool.exe` and fails with _\"error calling dlltool 'dlltool.exe': program not found\"_. You need [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with the **Desktop development with C++** workload, then switch to the MSVC host:\n\n```powershell\nrustup set default-host x86_64-pc-windows-msvc\nrustup toolchain install nightly --target wasm32-unknown-unknown\n```\n\nVerify with `rustup show active-toolchain` — it should end in `x86_64-pc-windows-msvc`.\n\nThe setup scripts also require `jq` and `curl`, which are not installed by default on Windows. Install them before running `./scripts/setup.sh`:\n\n```powershell\nwinget install jqlang.jq\nwinget install curl.curl   # skip if curl is already on your PATH\n```\n\nOpen a new terminal after installing so the updated PATH takes effect.\n\n### Setup\n\n```bash\ngit clone https://github.com/phase-rs/phase && cd phase\n./scripts/setup.sh     # Fetches data, builds WASM, installs deps\ncd client && pnpm dev  # Start dev server at localhost:5173\n```\n\nIf `tilt` is installed, `setup.sh` skips the eager WASM + card-data build and `tilt up` handles them. Flags: `--agent` (LLM mode — skip Scryfall art; see [docs/AI-CONTRIBUTOR.md](docs/AI-CONTRIBUTOR.md)), `--no-tilt` (force inline build).\n\n### Manual Steps\n\n```bash\n./scripts/gen-card-data.sh            # generate card-data.json\n./scripts/build-wasm.sh               # Build WASM bindings\ncd client && pnpm install && pnpm dev # Start frontend\n```\n\n### Linux Desktop Audio\n\nWebKitGTK has no audio stack of its own — the desktop app's sound effects and\nmusic are GStreamer pipelines it assembles at runtime. The **AppImage bundles\nthat runtime itself** (`bundle.linux.appimage.bundleMediaFramework`), so it\nneeds nothing installed. The **`.deb` declares it** and apt pulls it in. The\n**Flatpak inherits it from `org.gnome.Platform`** (see [Flatpak](#flatpak)).\nRunning from source, or repackaging for another distribution, needs these\ninstalled:\n\n```bash\nsudo apt-get install gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav\n```\n\nBetween them they provide the elements WebKit looks up — `appsrc`/`appsink`,\n`decodebin`, `giostreamsrc`, `autoaudiosink`, and the `qtdemux`/`avdec_aac` pair\nthe bundled `.m4a` tracks decode through. Without them the app starts and plays\nnormally but stays silent, and prints the missing plugins and their packages to\nthe terminal on launch.\n\nRelease-time verification that the shipped AppImage's bundled plugin set really\nresolves those elements is tracked separately, in\n[#8357](https://github.com/phase-rs/phase/issues/8357) — it lives in the release\nworkflow, which is maintainer-owned.\n\n### Flatpak\n\n`packaging/flatpak/` holds a Flatpak manifest for the desktop shell and a\n`build-local.sh` that builds it from an already-released `.deb` or `.AppImage`:\n\n```bash\n./packaging/flatpak/build-local.sh --appimage ~/Downloads/Phase-Desktop-Linux-x86_64.AppImage --install\n```\n\nOn an arm64 machine, pass the matching `Phase-Desktop-Linux-aarch64` artifact instead.\n\nThat needs a release whose shell already carries the update guard described\nbelow; the script refuses older artifacts rather than package them. Run\n`--help` for the full options.\n\n**Why a third Linux artifact.** The two existing ones each leave users out. The\nAppImage pegs a CPU core at idle on the NVIDIA proprietary driver, and the\n`.deb` installs cleanly only on Debian-family distributions — everyone else\nneeds the AppImage or a conversion workaround. A Flatpak covers both gaps at\nonce: it installs the same way on any distribution that has `flatpak`, and it\ninherits a working WebKitGTK and GStreamer stack from the runtime.\n\nIt compiles nothing. Every library `phase-tauri` links against is already in\n`org.gnome.Platform//50`, so the script stages the exact binary from a release\nartifact — the packaged binary stays identical to the one `.deb`/`.AppImage`\nusers run — and the package inherits the runtime's WebKitGTK and GStreamer\nplugin set instead of vendoring its own. Concretely, that buys three things —\nthe first from the packaging format, the other two from that inheritance:\n\n- **Distribution coverage.** The `.deb` is Debian-family only. A Flatpak is the\n  one artifact that installs identically on Fedora, openSUSE, Arch, the\n  immutable/atomic desktops, and Debian/Ubuntu alike, without asking the user\n  to convert a package or fall back to the AppImage.\n- **NVIDIA idle CPU ([#8614](https://github.com/phase-rs/phase/issues/8614)).**\n  The AppImage's bundled, Ubuntu-built WebKitGTK burns close to a full core at\n  idle on the NVIDIA proprietary driver. Measured on the reporter's machine, the\n  Flatpak idles in the same range as a healthy host-WebKit build, while still\n  rendering on the NVIDIA driver rather than falling back to software. The root\n  cause is still unknown — this routes around the bug rather than fixing it, and\n  the measurement covers one machine, one driver version, and one distribution.\n  The AppImage is unaffected on other GPU stacks, so this is not a deprecation —\n  but **NVIDIA users are the ones to point here.**\n- **Audio ([#8615](https://github.com/phase-rs/phase/issues/8615)).** The\n  runtime supplies every element the section above lists, `avdec_aac` included,\n  from the base runtime rather than the optional\n  `org.freedesktop.Platform.codecs-extra` extension. (That is the decoder whose\n  absence makes the AppImage silent; end-to-end playback in the Flatpak has not\n  been verified. The AppImage-side fix is tracked separately.)\n\nA packaged shell must not self-update: `/app` is read-only and `flatpak update`\nowns upgrades. `client/src-tauri/src/update_authority.rs` detects the sandbox\nand declines every release the updater offers. That guard is compiled **into the\nshell binary**, so it only holds for artifacts built from a release that\ncontains it — `build-local.sh` refuses to stage an older binary rather than\nproduce a package that tries to "
+    },
+    "brief": {
+      "summary": "用 Rust 写的万智牌规则引擎和游戏客户端，能跑浏览器和桌面",
+      "problem": "万智牌规则复杂，缺少开源、跨平台的完整规则引擎和可玩客户端",
+      "highlights": [
+        "可以在浏览器或桌面和 AI 对手打万智牌",
+        "可以用 WebSocket 开多人房间与好友联机",
+        "可以让 LLM 帮忙实现卡牌并提交 PR"
+      ],
+      "target_users": [
+        "万智牌玩家",
+        "Rust / WASM 开发者",
+        "开源贡献者"
+      ],
+      "why_trending": "本周首次收录，296 星、193 fork，引擎与客户端一体，还支持用 LLM 补卡牌",
+      "caveat": "资料中未说明测试与稳定性；未关闭 issue 达 1368 个，很多卡牌仍未实现",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "phase-rs/phase",
+      "score": 72,
+      "category": "游戏开发",
+      "reason": "Rust/WASM 规则引擎与卡牌游戏客户端",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 42.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "xujialiu/Zotero-TTS",
+      "url": "https://github.com/xujialiu/Zotero-TTS",
+      "description": "Text-to-speech for Zotero 10: more voices, word and sentence highlighting at once in your own colors, speed and navigation shortcuts, one voice across documents, settings backup and reading-position sync through WebDAV.",
+      "language": "TypeScript",
+      "total_stars": 37,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "azure-speech",
+        "kokoro",
+        "openai",
+        "read-aloud",
+        "text-to-speech",
+        "tts",
+        "zotero",
+        "zotero-addon",
+        "zotero-plugin"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-08-22T16:25:57Z",
+      "updated_at": "2026-10-01T06:01:53Z",
+      "pushed_at": "2026-10-01T06:01:49Z",
+      "open_issues": 9,
+      "homepage": "https://github.com/xujialiu/Zotero-TTS/releases/latest",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"assets/icon.png\" width=\"80\" alt=\"Zotero-TTS icon\"></p>\n<h1 align=\"center\">Zotero-TTS</h1>\n\n<p align=\"center\"><em>Text-to-speech for Zotero 10: more voices, word-and-sentence highlighting in your colors, keyboard shortcuts.</em></p>\n\n<p align=\"center\">\n  <a href=\"https://www.zotero.org\"><img src=\"https://img.shields.io/badge/Zotero-10-green?style=flat-square&logo=zotero&logoColor=CC2936\" alt=\"Zotero 10\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/releases/latest\"><img src=\"https://img.shields.io/github/v/release/xujialiu/Zotero-TTS?style=flat-square&label=Release\" alt=\"Latest release\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/releases\"><img src=\"https://img.shields.io/github/downloads/xujialiu/Zotero-TTS/total?style=flat-square&label=Downloads\" alt=\"Downloads\"></a>\n  <a href=\"https://github.com/xujialiu/Zotero-TTS/commits/main\"><img src=\"https://img.shields.io/github/last-commit/xujialiu/Zotero-TTS?style=flat-square&label=Last%20commit\" alt=\"Last commit\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat-square\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\"><b>English</b> · <a href=\"README.zh.md\">简体中文</a></p>\n\n<p align=\"center\"><img src=\"assets/word-highlight.gif\" width=\"720\" alt=\"Read Aloud reading a paragraph: the word being read in blue, its sentence in yellow\"></p>\n\n<p align=\"center\">If you like Zotero-TTS, give it a ⭐ on <a href=\"https://github.com/xujialiu/Zotero-TTS\">GitHub</a> — it helps others find it.</p>\n\n## What it adds\n\nZotero-TTS adds voices and a player to Zotero 10: each provider is an entry\nof the player's first dropdown, and Zotero's own Standard and Premium are\ntwo more, each behind a switch of its own. It\nis built for the way its author reads —\n[why, and where it is going](docs/PHILOSOPHY.md).\n\n- 🗣️ **More voices in the Read Aloud player**, one entry per provider — Fish Audio (free, and the one to start with), Azure Speech, Cloudflare Workers AI, Speechify, a [Kokoro-FastAPI](https://github.com/remsky/Kokoro-FastAPI) or a [Fish Speech](https://github.com/fishaudio/fish-speech) server on your machine, OpenAI, Xiaomi MiMo or any OpenAI-compatible server — with Zotero's own Standard and Premium beside them, each behind a switch. [→ Providers](#providers)\n- 🎛️ **A player in three layouts** — a bottom bar, a top bar below the toolbar, or a floating panel. Change layout without interrupting playback. [→ Player](#player)\n- 🔖 **Resume where you stopped** — close a document, open it again later, press `Shift+Space`, and Read Aloud starts at the sentence you left off on. [→ Resume where you stopped](#resume-where-you-stopped)\n- 📄 **The whole sentence on screen** — while a PDF is read, a sentence that runs past the bottom of the window, onto the next page or into the next column is scrolled into view instead of left cut, and `Shift+Enter` brings it back the same way. [→ Reading](#reading)\n- 📃 **No line lost at a page turn** — when a sentence runs onto the next page and Zotero would skip that page's first line, the line is read and highlighted like any other. [→ Reading](#reading)\n- 🧵 **No sentence cut in two** — when Zotero breaks a paragraph in the middle of a sentence, the halves are read and highlighted as one sentence. [→ Reading](#reading)\n- 🎧 **A voice browser** in the settings: every voice by provider and language, a play button for a short sample, hearts for favorites, and a switch to offer only the favorites. [→ Voice browser](#voice-browser)\n- ✨ **Word *and* sentence highlighting**, each behind a switch of its own, in your own colors and opacities — for Zotero's voices too. [→ Highlight](#highlight)\n- ⌨️ **Keyboard shortcuts** for speed, volume, skipping by sentence or paragraph, reading from the selection, the player's options panel, auto-scroll mode, the word highlight on or off, highlighting or underlining the sentence being read, and stopping Read Aloud in every tab at once. All rebindable. [→ Shortcuts](#keyboard-shortcuts)\n- 📌 **One voice and speed everywhere** — every document and every open tab, instead of Zotero's choice per language. [→ Reading](#reading)\n- ⏱️ **The pauses are yours** — how long every voice waits between sentences and before a paragraph, shorter as you read faster. [→ Reading](#reading)\n- 💾 **Backup and sync** — settings and reading positions as files, or through your own WebDAV folder, so your settings and bookmarks follow you between computers. [→ Backup and sync](#backup-and-sync)\n- 🖥️ **Windows and macOS voices, spoken by the plugin** — the ones Read Aloud already lists, but with samples, favorites, the cache and, on Windows, word-by-word highlighting. [→ Providers](#providers)\n\n## Install\n\n1. Download `zotero-tts.xpi` from the [latest release](https://github.com/xujialiu/Zotero-TTS/releases/latest) — in Firefox, right-click → *Save Link As…*\n2. **Tools → Plugins → ⚙ → Install Plugin From File…**, then restart Zotero.\n3. Enable a provider in **Edit → Settings → Zotero-TTS** — **Fish Audio** first, if you are not sure ([why](#providers)) — then pick it in the player's first dropdown and one of its voices.\n\n<p align=\"center\"><img src=\"assets/popup.png\" width=\"640\" alt=\"The Read Aloud player with a provider chosen in its first dropdown\"></p>\n\n## Providers\n\n**Start with Fish Audio.** Of everything below, it is the one to try first:\n\n- **Free.** Its free model reads as much as you like, with nothing to pay\n  and no balance to keep on the account.\n- **A key without a credit card.** Sign up at\n  [fish.audio](https://fish.audio), create the key, paste it in — no card,\n  no billing details.\n- **83 languages**, with word-by-word highlighting.\n- **The best-sounding voices here** — Fish Audio's own, the ones its users\n  published, and any you clone from a recording of your own.\n\n[→ Setting it up](tutorials/fish-audio.md)\n\n| Provider | What you need | Cost | Highlighting |\n|---|---|---|---|\n| **Azure Speech** | Speech resource key + region · [tutorial](tutorials/azure-speech-free-tier.md) | Free tier: 500,000 characters a month | word; sentence for the voices named *MAI-Voice-2* |\n| **Cloudflare Workers AI** | Account ID + API token · [tutorial](tutorials/cloudflare-workers-ai.md) | 10,000 free Neurons a day: a few pages with an Aura voice, hours with MeloTTS | sentence |\n| **Speechify** | An API key from platform.speechify.ai · 36 languages, no Mandarin | Free: 50,000 characters a month, about fifteen pages; then $10 a month for a million | word |\n| **Fish Audio** | An API key from fish.audio · official voices, your own clones, and Model IDs, with a switch for each source · [tutorial](tutorials/fish-audio.md) | Free with its free model: no cap, no guarantee; the paid one $15 per million bytes of text, three per Chinese character | word |\n| **Kokoro-FastAPI** | A server on your machine or LAN · [tutorial](tutorials/kokoro-fastapi.md) | Free; CPU works, a GPU is faster | word |\n| **Fish Speech** | A [fish-speech](https://github.com/fishaudio/fish-speech) server on a 24 GB GPU, with voices cloned from your own recordings · [tutorial](tutorials/fish-speech-server.md) | Free | sentence |\n| **OpenAI** | An API key from platform.openai.com | Billed per character | sentence |\n| **Xiaomi MiMo** | An API key from platform.xiaomimimo.com | Free for a limited time | sentence |\n| **OpenAI Compatible** | The address of any server that speaks OpenAI's API, and a key if it wants one: a self-hosted [Chatterbox](tutorials/chatterbox-tts-server.md), a hosted service, a proxy of OpenAI | The server's own price; self-hosted servers are free | sentence |\n| **System voices** | Nothing — Windows and macOS | Free, offline | word on Windows, sentence on macOS |\n| **Zotero Standard / Premium** | A Zotero account signed in under Edit → Settings → Account; a switch each in the **Zotero Read Aloud** section, both on to begin with | Zotero's own credits, bought on zotero.org | word |\n\nThe player's first dropdown lists every enabled provider that has voices\nright now, and Zotero's own **Zotero Standard** and **Zotero Premium**\nwhile their switches are on, sorted by name.\n\n- **The entries** are Azure, Cloudflare, Fish Audio, Fish Speech, Kokoro,\n  OpenAI, OpenAI Compatible, Speechify, System, Xiaomi MiMo, Zotero\n  Premium and Zotero Standard; the voices under them carry their own\n  names.\n- **Each entry remembers its own last voice** per language: Kokoro → Fish\n  → Kokoro brings the Kokoro voice back.\n- **A provider with nothing to offer** — switched off, its server down,\n  no favorite of its own while only favorites are offered — is not\n  listed until it has voices again.\n- **Without a Zotero account** every other provider still works; only\n  Zotero Standard and Zotero Premium are left out, as in Zotero itself.\n- **When the entry you are on stops offering voices**, the player moves\n  to the provider of the remembered voice, else of the default voice,\n  else to the first entry.\n- **Switching provider or language while paused** takes effect at once;\n  press play and the sentence starts over in the new voice. A voice\n  picked while paused waits for play and carries on from the paused word.\n- **Zotero's own first-run window and its *Manage voices* window** keep\n  filing every plugin voice under Local.\n- **Enable**, at the end of every provider section, runs the connection\n  check first: a provider that does not answer never switches on.\n- **Zotero's own Standard and Premium** have a switch each in the\n  **Zotero Read Aloud** section, both on to begin with. Switch one off and\n  that tier leaves the player's first dropdown, the voice browser and the\n  language list; nothing Zotero remembers is lost, and switching it back on\n  brings its last voice back. They need a Zotero account: signed out, their\n  Enable is greyed, with the reason and a **Log in** link beside it;\n  signed in, Enable checks that Zotero lists voices in that tier, and Test\n  connection reports the voices.\n- **Remaining time**: under each tier's name, how long your Zotero\n  account's credits for it will read, as zotero.org counts it. Premium\n  voices cost 10 or 30 credits a minute, so Premium shows a range:\n  *Remaining time: 9min – 26min, depending on voice*. *0min* is red. An\n  **Add more time** link to zotero.org appears once the dearest voice has\n  under 3 minutes.\n- **Enable** keeps a tier off while its time is 0: add more time first.\n- **Test connection** probes without switching anything on.\n- While a provider is on its fields are locked — **Disable** to edit them.\n- **Keys, gateway headers and the WebDAV password** are covered by dots.\n  The eye beside a field uncovers it, so the value can be read, selected\n  and copied; a provider that is on keeps its own covered.\n- **Where they are kept**: like every plugin setting, in Zotero's\n  preferences in plain text, and in the settings backup file.\n\n<details>\n<summary><b>OpenAI, Xiaomi MiMo and OpenAI Compatible: how to fill the settings in</b></summary>\n\n- **OpenAI** and **Xiaomi MiMo** each have a section of their own: the\n  API key, the **Model**, and **Voices** to list voice ids yourself,\n  comma-separated — left empty, the service's own voices are offered.\n  Their addresses are fixed.\n- **OpenAI Compatible** is for any other server that speaks OpenAI's API:\n  a [Chatterbox](tutorials/chatterbox-tts-server.md) of your own, a hosted\n  service, a proxy or mirror of OpenAI. **Address** is the server, with or\n  without `/v1`; the **API key** may stay empty for a server that has\n  none; **Model** is the name the server expects, and **Test connection**\n  lists the models it has; **Voices** left empty takes the server's own\n  list. One server at a time.\n- All three highlight by sentence: none of them reports word timings.\n- For Kokoro use the **Kokoro-FastAPI** section instead: that is what gets\n  you word-level highlighting.\n- Settings saved when the three were one section with a **Server**\n  dropdown move into their sections on the first start: the server that\n "
+    },
+    "brief": {
+      "summary": "给 Zotero 10 加朗读播放器，可接十余种语音服务",
+      "problem": "Zotero 自带朗读语音少、按语言选声，读长文献不便",
+      "highlights": [
+        "可以接 Fish Audio、Azure 等十余种语音源朗读",
+        "单词与句子可同时高亮，颜色和透明度自定义",
+        "可以关掉文档后从上次读到的句子继续听"
+      ],
+      "target_users": [
+        "科研人员",
+        "Zotero 用户",
+        "听读学习者"
+      ],
+      "why_trending": "本周首次收录，语音源与阅读细节做得细，但星标仍少",
+      "caveat": "仅 37 星、9 个未解决 issue，长期稳定性资料中未说明",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "xujialiu/Zotero-TTS",
+      "score": 60,
+      "category": "语音 / 配音",
+      "reason": "Zotero 朗读 TTS 插件，语音用途较窄",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 40.5
+    }
+  }
+]
