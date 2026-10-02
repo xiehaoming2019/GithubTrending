@@ -19,6 +19,8 @@ def request(
     json_body: dict[str, Any] | None = None,
     timeout: int = 30,
     retries: int = 2,
+    retry_base_delay: int = 1,
+    retry_max_delay: int = 10,
 ) -> bytes:
     request_headers = {
         "User-Agent": "github-trending-daily/0.1",
@@ -39,14 +41,18 @@ def request(
             retryable = exc.code in {429, 500, 502, 503, 504}
             if retryable and attempt < retries:
                 retry_after = exc.headers.get("Retry-After")
-                delay = int(retry_after) if retry_after and retry_after.isdigit() else 2**attempt
-                time.sleep(min(delay, 10))
+                delay = (
+                    int(retry_after)
+                    if retry_after and retry_after.isdigit()
+                    else retry_base_delay * 2**attempt
+                )
+                time.sleep(min(delay, retry_max_delay))
                 continue
             detail = exc.read().decode("utf-8", errors="replace")[:500]
             raise HttpError(f"HTTP {exc.code} for {url}: {detail}") from exc
         except (URLError, TimeoutError) as exc:
             if attempt < retries:
-                time.sleep(2**attempt)
+                time.sleep(min(retry_base_delay * 2**attempt, retry_max_delay))
                 continue
             raise HttpError(f"Request failed for {url}: {exc}") from exc
 
@@ -58,8 +64,18 @@ def get_text(
     *,
     headers: dict[str, str] | None = None,
     timeout: int = 30,
+    retries: int = 2,
+    retry_base_delay: int = 1,
+    retry_max_delay: int = 10,
 ) -> str:
-    return request(url, headers=headers, timeout=timeout).decode("utf-8", errors="replace")
+    return request(
+        url,
+        headers=headers,
+        timeout=timeout,
+        retries=retries,
+        retry_base_delay=retry_base_delay,
+        retry_max_delay=retry_max_delay,
+    ).decode("utf-8", errors="replace")
 
 
 def get_json(
@@ -86,4 +102,3 @@ def post_json(
         timeout=timeout,
     )
     return json.loads(response.decode("utf-8", errors="replace"))
-

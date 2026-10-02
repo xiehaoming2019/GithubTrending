@@ -134,7 +134,12 @@ def trending_url(language: str = "") -> str:
 
 
 def fetch_trending(language: str = "") -> tuple[str, list[TrendingRepository]]:
-    html = get_text(trending_url(language))
+    html = get_text(
+        trending_url(language),
+        retries=5,
+        retry_base_delay=5,
+        retry_max_delay=60,
+    )
     repositories = parse_trending(html)
     if not repositories:
         raise RuntimeError("GitHub Trending 页面未解析到项目，页面结构可能已经变化。")
@@ -147,4 +152,3 @@ def load_trending(path: Path) -> tuple[str, list[TrendingRepository]]:
     if not repositories:
         raise RuntimeError(f"测试 HTML 未解析到项目：{path}")
     return html, repositories
-
