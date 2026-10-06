@@ -1,0 +1,534 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "pingdotgg/t3code",
+      "url": "https://github.com/pingdotgg/t3code",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 25704,
+      "forks": 6615,
+      "stars_today": 485,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 485
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-08T23:46:22Z",
+      "updated_at": "2026-10-06T06:30:23Z",
+      "pushed_at": "2026-10-06T06:13:49Z",
+      "open_issues": 2490,
+      "homepage": "https://t3.codes",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# T3 Code\n\nT3 Code is an \"agent harness control surface\". It enables control of the agents on your machine with a best-in-class mobile app ([iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824), [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code)), [web app](https://app.t3.codes) and [Electron-based desktop app](https://t3.codes).\n\nWorks with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.\n\n## \"Wait, what are you selling me?\"\n\nNothing. We built T3 Code because we wanted the best possible development experience with agents. We were inspired by existing solutions like the Codex desktop app, Conductor, Claude Desktop and Cursor Glass, but none met our bar.\n\nWe wanted something performant, remote-ready, and truly open. If we ever go the wrong direction, we want you to have everything you need to fork and build the editor that you want.\n\n## Installation\n\n> [!WARNING]\n> T3 Code currently supports Codex, Claude, Cursor, Grok Build, OpenCode, and Antigravity. Install and authenticate at least one provider before use:\n>\n> - Codex: install [Codex CLI](https://developers.openai.com/codex/cli) and run `codex login`\n> - Claude: install [Claude Code](https://claude.com/product/claude-code) and run `claude auth login`\n> - Cursor: install [Cursor CLI](https://cursor.com/cli) and run `agent login`\n> - Grok Build: install [Grok Build CLI](https://x.ai/cli) and run `grok login`\n> - OpenCode: install [OpenCode](https://opencode.ai) and run `opencode auth login`\n> - Antigravity: enable it in Settings, then use **Install Antigravity** and **Sign in with Google**. No CLI is required.\n\n### Command line\n\n```bash\ncurl -fsSL https://t3.codes/install.sh | sh\n```\n\nOn Windows, in PowerShell:\n\n```powershell\nirm https://t3.codes/install.ps1 | iex\n```\n\nThen run `t3` to start the server and open the local web app. `t3 service install` keeps it running in the background, `t3 update` moves to a newer release, and `t3 --help` has the full reference.\n\nTo try it once without installing, run `npx t3@latest` instead.\n\n### Desktop app\n\nInstall the latest version of the desktop app from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), or from your favorite package registry:\n\n#### Windows (`winget`)\n\n```bash\nwinget install T3Tools.T3Code\n```\n\n#### macOS (Homebrew)\n\n```bash\nbrew install --cask t3-code\n```\n\n#### Debian, Ubuntu (`.deb`)\n\nDownload the `.deb` from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), then:\n\n```bash\nsudo apt install ./T3-Code-*.deb\n```\n\n#### Arch Linux (AUR)\n\nStable:\n\n```bash\nyay -S t3code-bin\n```\n\nNightly:\n\n```bash\nyay -S t3code-nightly-bin\n```\n\nThe AUR packaging is maintained in this repository under [`packaging/aur`](./packaging/aur).\n\n## Some notes\n\nWe are very very early in this project. Expect bugs.\n\nWe are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be.\n\n## Documentation\n\nFull docs live in [docs/](./docs). There's no docs site yet.\n\n- [Install and first run](./docs/user/install.md)\n- [Permission modes](./docs/user/permission-modes.md)\n- [Keyboard shortcuts](./docs/user/keybindings.md)\n- [Project settings](./docs/user/project-settings.md)\n- [Appearance preferences](./docs/user/appearance.md)\n- [Remote access from a phone or another machine](./docs/user/remote-access.md)\n- [Keeping app and server in sync](./docs/user/updating.md)\n- [Source control integrations](./docs/user/source-control.md)\n- Multiple accounts: [Codex](./docs/user/providers-codex.md) · [Claude](./docs/user/providers-claude.md)\n- [Run T3 Code as a background service](./docs/user/background-service.md)\n\nBuilding from source? Start at [docs/internals/overview.md](./docs/internals/overview.md).\n\n## If you REALLY want to contribute still.... read this first\n\n### Install `vp`\n\nT3 Code uses Vite+ so you'll need to install the global `vp` command-line tool.\n\n#### macOS / Linux\n\n```bash\ncurl -fsSL https://vite.plus | bash\n```\n\n#### Windows\n\n```bash\nirm https://vite.plus/ps1 | iex\n```\n\nCheckout their getting started guide for more information: https://viteplus.dev/guide/\n\n### Install dependencies\n\n```bash\nvp i\n```\n\nRead [CONTRIBUTING.md](./CONTRIBUTING.md) before reporting a bug or opening a PR.\n\nHave a feature request? Start an [Ideas discussion](https://github.com/pingdotgg/t3code/discussions/categories/ideas).\n\nNeed support? Join the [Discord](https://discord.gg/jn4EGJjrvv).\n"
+    },
+    "brief": {
+      "summary": "T3 Code 是远程操控本机 AI 编程代理的控制台",
+      "problem": "多个 AI 编程代理分散本地，难以远程统一查看和操作",
+      "highlights": [
+        "可以在手机、网页或桌面端操控本机代理",
+        "可以同时接入 Claude Code、Codex 等六种代理",
+        "可以用一条命令安装并让服务后台常驻"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "多端开发者",
+        "自建工具爱好者"
+      ],
+      "why_trending": "今日新增 485 Star，本周首次收录，开源可自建",
+      "caveat": "项目自述仍处早期，bug 较多，暂不接收大功能贡献",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pingdotgg/t3code",
+      "score": 85,
+      "category": "Harness / Jev",
+      "reason": "Agent Harness控制面，支持多Agent远程控制",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 68.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "msitarzewski/agency-agents",
+      "url": "https://github.com/msitarzewski/agency-agents",
+      "description": "A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.",
+      "language": "Shell",
+      "total_stars": 157406,
+      "forks": 25384,
+      "stars_today": 744,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 744
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2025-10-13T12:12:29Z",
+      "updated_at": "2026-10-06T06:32:37Z",
+      "pushed_at": "2026-10-04T21:17:44Z",
+      "open_issues": 184,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎭 The Agency: AI Specialists Ready to Transform Your Workflow\n\n> **A complete AI agency at your fingertips** - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.\n\n[![GitHub stars](https://img.shields.io/github/stars/msitarzewski/agency-agents?style=social)](https://github.com/msitarzewski/agency-agents)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://makeapullrequest.com)\n[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/msitarzewski)\n[![Download the app](https://img.shields.io/github/v/release/msitarzewski/agency-agents-app?label=Download%20app&color=2563eb)](https://github.com/msitarzewski/agency-agents-app/releases/latest)\n\n> ### 🆕 There's an app now\n>\n> **[Agency Agents](https://agencyagents.app)** is a native app for **macOS, Linux & Windows** that browses the entire roster and installs it into Claude Code, Cursor, Codex, Gemini, Osaurus, and more — with a click. No clone, no scripts, and it auto-updates.\n>\n> **→ [Download the latest release](https://github.com/msitarzewski/agency-agents-app/releases/latest) · [agencyagents.app](https://agencyagents.app)**\n\n---\n\n## 🚀 What Is This?\n\nBorn from a Reddit thread and months of iteration, **The Agency** is a growing collection of meticulously crafted AI agent personalities. Each agent is:\n\n- **🎯 Specialized**: Deep expertise in their domain (not generic prompt templates)\n- **🧠 Personality-Driven**: Unique voice, communication style, and approach\n- **📋 Deliverable-Focused**: Real code, processes, and measurable outcomes\n- **✅ Production-Ready**: Battle-tested workflows and success metrics\n\n**Think of it as**: Assembling your dream team, except they're AI specialists who never sleep, never complain, and always deliver.\n\n---\n\n## ⚡ Quick Start\n\n### Option 1: Install the app (Recommended)\n\nThe fastest way in — no clone, no terminal. [**Agency Agents**](https://agencyagents.app) is a native desktop app (macOS · Linux · Windows) that browses the whole roster and installs agents into Claude Code, Cursor, Codex, Gemini CLI, OpenCode, Qwen, and Osaurus for you, then keeps them up to date.\n\n**[⬇ Download the latest release](https://github.com/msitarzewski/agency-agents-app/releases/latest)** — or on a Mac:\n\n```bash\nbrew install --cask msitarzewski/agency-agents/agency-agents\n```\n\nPrefer the command line? The script-based options below install the same agents.\n\n### Option 2: Use with Claude Code\n\n```bash\n# Install all agents to your Claude Code directory\n./scripts/install.sh --tool claude-code\n\n# Or manually copy a category if you only want one division\ncp engineering/*.md ~/.claude/agents/\n\n# Then activate any agent in your Claude Code sessions:\n# \"Hey Claude, activate Frontend Developer mode and help me build a React component\"\n```\n\n### Option 3: Use as Reference\n\nEach agent file contains:\n- Identity & personality traits\n- Core mission & workflows\n- Technical deliverables with code examples\n- Success metrics & communication style\n\nBrowse the agents below and copy/adapt the ones you need!\n\n### Option 4: Use with Other Tools (GitHub Copilot, Antigravity, Gemini CLI, OpenCode, OpenClaw, Cursor, Aider, Windsurf, Kimi Code, Codex, Osaurus, Hermes, Mistral Vibe, DeepSeek Harness)\n\n```bash\n# Step 1 -- generate integration files for all supported tools\n./scripts/convert.sh\n\n# Step 2 -- install interactively (auto-detects what you have installed)\n./scripts/install.sh\n\n# Or target a specific tool directly\n./scripts/install.sh --tool antigravity\n./scripts/install.sh --tool gemini-cli\n./scripts/install.sh --tool opencode\n./scripts/install.sh --tool copilot\n./scripts/install.sh --tool openclaw\n./scripts/install.sh --tool cursor\n./scripts/install.sh --tool aider\n./scripts/install.sh --tool windsurf\n./scripts/install.sh --tool kimi\n./scripts/install.sh --tool codex\n./scripts/install.sh --tool osaurus\n./scripts/install.sh --tool hermes\n./scripts/install.sh --tool vibe\n./scripts/install.sh --tool dsh\n```\n\n**Install only the teams you need** (not everyone wants every division):\n\n```bash\n./scripts/install.sh                                    # interactive wizard: pick tools + teams\n./scripts/install.sh --tool claude-code --division engineering,security\n./scripts/install.sh --tool cursor --agent frontend-developer,ui-designer\n./scripts/install.sh --list teams                       # see every team + agent count\n./scripts/install.sh --tool opencode --division engineering --dry-run\n```\n\n`--agent` and `--agents-file` take an agent's slug (as `--list agents` prints it), its display name, or its file name without `.md` — the id the [runbook rosters](strategy/runbooks.json) use — so a runbook's team installs as listed:\n\n```bash\npython3 -c 'import json, sys\nfor r in json.load(open(\"strategy/runbooks.json\"))[\"runbooks\"]:\n    if r[\"slug\"] == sys.argv[1]: [print(a) for g in r[\"roster\"] for a in g[\"agents\"]]' startup-mvp > team.txt\n./scripts/install.sh --tool claude-code --agents-file team.txt\n```\n\n> **OpenCode note:** OpenCode's runtime currently registers only ~119 agents and silently drops the rest ([upstream bug](https://github.com/anomalyco/opencode/issues/27988)). Installing a subset with `--division` keeps you under that limit. The installer warns you when a selection would exceed it.\n\nSee the [Multi-Tool Integrations](#-multi-tool-integrations) section below for full details.\n\n---\n\n## 🎨 The Agency Roster\n\n### 💻 Engineering Division\n\nBuilding the future, one commit at a time.\n\n| Agent | Specialty | When to Use |\n|-------|-----------|-------------|\n| 🎨 [Frontend Developer](engineering/engineering-frontend-developer.md) | React/Vue/Angular, UI implementation, performance | Modern web apps, pixel-perfect UIs, Core Web Vitals optimization |\n| 🏗️ [Backend Architect](engineering/engineering-backend-architect.md) | API design, database architecture, scalability | Server-side systems, microservices, cloud infrastructure |\n| 📱 [Mobile App Builder](engineering/engineering-mobile-app-builder.md) | iOS/Android, React Native, Flutter | Native and cross-platform mobile applications |\n| 🤖 [AI Engineer](engineering/engineering-ai-engineer.md) | ML models, deployment, AI integration | Machine learning features, data pipelines, AI-powered apps |\n| 🚀 [DevOps Automator](engineering/engineering-devops-automator.md) | CI/CD, infrastructure automation, cloud ops | Pipeline development, deployment automation, monitoring |\n| 🌐 [Network Engineer](engineering/engineering-network-engineer.md) | Cisco IOS/IOS-XE, Juniper Junos, Palo Alto PAN-OS | Router/switch/firewall configuration, BGP/OSPF, ACLs, show-output troubleshooting |\n| ⚡ [Rapid Prototyper](engineering/engineering-rapid-prototyper.md) | Fast POC development, MVPs | Quick proof-of-concepts, hackathon projects, fast iteration |\n| 💎 [Senior Developer](engineering/engineering-senior-developer.md) | Laravel/Livewire, advanced patterns | Complex implementations, architecture decisions |\n| 🔧 [Filament Optimization Specialist](engineering/engineering-filament-optimization-specialist.md) | Filament PHP admin UX, structural form redesign, resource optimization | Restructuring Filament resources/forms/tables for faster, cleaner admin workflows |\n| ⚡ [Autonomous Optimization Architect](engineering/engineering-autonomous-optimization-architect.md) | LLM routing, cost optimization, shadow testing | Autonomous systems needing intelligent API selection and cost guardrails |\n| 🔩 [Embedded Firmware Engineer](engineering/engineering-embedded-firmware-engineer.md) | Bare-metal, RTOS, ESP32/STM32/Nordic firmware | Production-grade embedded systems and IoT devices |\n| 🚨 [Incident Response Commander](engineering/engineering-incident-response-commander.md) | Incident management, post-mortems, on-call | Managing production incidents and building incident readiness |\n| ⛓️ [Solidity Smart Contract Engineer](engineering/engineering-solidity-smart-contract-engineer.md) | EVM contracts, gas optimization, DeFi | Secure, gas-optimized smart contracts and DeFi protocols |\n| 🧭 [Codebase Onboarding Engineer](engineering/engineering-codebase-onboarding-engineer.md) | Fast developer onboarding, read-only codebase exploration, factual explanation | Helping new developers understand unfamiliar repos quickly by reading the code, tracing code paths, and stating facts about structure and behavior |\n| 📚 [Technical Writer](engineering/engineering-technical-writer.md) | Developer docs, API reference, tutorials | Clear, accurate technical documentation |\n| 💬 [WeChat Mini Program Developer](engineering/engineering-wechat-mini-program-developer.md) | WeChat ecosystem, Mini Programs, payment integration | Building performant apps for the WeChat ecosystem |\n| 👁️ [Code Reviewer](engineering/engineering-code-reviewer.md) | Constructive code review, security, maintainability | PR reviews, code quality gates, mentoring through review |\n| 🗄️ [Database Optimizer](engineering/engineering-database-optimizer.md) | Schema design, query optimization, indexing strategies | PostgreSQL/MySQL tuning, slow query debugging, migration planning |\n| 🌿 [Git Workflow Master](engineering/engineering-git-workflow-master.md) | Branching strategies, conventional commits, advanced Git | Git workflow design, history cleanup, CI-friendly branch management |\n| 🏛️ [Software Architect](engineering/engineering-software-architect.md) | System design, DDD, architectural patterns, trade-off analysis | Architecture decisions, domain modeling, system evolution strategy |\n| 🛡️ [SRE](engineering/engineering-sre.md) | SLOs, error budgets, observability, chaos engineering | Production reliability, toil reduction, capacity planning |\n| 🧬 [AI Data Remediation Engineer](engineering/engineering-ai-data-remediation-engineer.md) | Self-healing pipelines, air-gapped SLMs, semantic clustering | Fixing broken data at scale with zero data loss |\n| 🔧 [Data Engineer](engineering/engineering-data-engineer.md) | Data pipelines, lakehouse architecture, ETL/ELT | Building reliable data infrastructure and warehousing |\n| 🔗 [Feishu Integration Developer](engineering/engineering-feishu-integration-developer.md) | Feishu/Lark Open Platform, bots, workflows | Building integrations for the Feishu ecosystem |\n| 🧱 [CMS Developer](engineering/engineering-cms-developer.md) | WordPress & Drupal themes, plugins/modules, content architecture | Code-first CMS implementation and customization |\n| 📧 [Email Intelligence Engineer](engineering/engineering-email-intelligence-engineer.md) | Email parsing, MIME extraction, structured data for AI agents | Turning raw email threads into reasoning-ready context |\n| 🎙️ [Voice AI Integration Engineer](engineering/engineering-voice-ai-integration-engineer.md) | Speech-to-text pipelines, Whisper, ASR, speaker diarization | End-to-end transcription pipelines, audio preprocessing, structured transcript delivery |\n| 🖧 [IT Service Manager](engineering/engineering-it-service-manager.md) | ITIL 4 service management | Incident/problem/change management, SLAs, CMDB |\n| 🪡 [Minimal Change Engineer](engineering/engineering-minimal-change-engineer.md) | Minimum-viable diffs | Fixing only what's asked, no scope creep |\n| 📜 [OrgScript Engineer](engineering/engineering-orgscript-engineer.md) | OrgScript grammar & AST validation | Designing/parsing OrgScript business-logic definitions |\n| 🧬 [Prompt Engineer](engineering/engineering-prompt-engineer.md) | LLM prompt design & optimization | Turning vague instructions into reliable AI behaviors |\n| 🕸️ [Multi-Agent Systems Architect](engineering/engineering-multi-agent-systems-architect.md) | Multi-agent pipeline design & governance | Topology, context, trust, failure recovery for agent systems |\n| 🛒 [Drupal Shopping Cart Engineer](engineering/enginee"
+    },
+    "brief": {
+      "summary": "把 AI 专家角色装进常用编程工具的提示库",
+      "problem": "通用 AI 编程助手缺少分领域的角色设定与工作流程",
+      "highlights": [
+        "可以一键安装到 Claude Code、Cursor 等工具",
+        "可以按工程、安全等部门只装需要的角色",
+        "可以直接当提示模板参考或改写"
+      ],
+      "target_users": [
+        "AI 编程工具用户",
+        "独立开发者",
+        "技术团队负责人"
+      ],
+      "why_trending": "今日新增 744 Star，本周首次收录，热度较高",
+      "caveat": "它是角色提示集合，不是模型，效果看工具与模型",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "msitarzewski/agency-agents",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "AI专家Agent集合，可安装到多种Agent工具",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 66.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "boykopovar/AnyPS5",
+      "url": "https://github.com/boykopovar/AnyPS5",
+      "description": "Tool for automatic PS5 executables porting to Linux and Windows",
+      "language": "C++",
+      "total_stars": 5129,
+      "forks": 376,
+      "stars_today": 997,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 997
+    },
+    "details": {
+      "topics": [
+        "anyps5",
+        "dynamic-library",
+        "game-porting",
+        "ps5",
+        "ps5-tools",
+        "spir-v",
+        "vulkan"
+      ],
+      "license_name": "GPL-2.0",
+      "created_at": "2026-08-03T21:30:25Z",
+      "updated_at": "2026-10-06T06:32:27Z",
+      "pushed_at": "2026-10-06T05:36:28Z",
+      "open_issues": 118,
+      "homepage": "https://discord.gg/BHFztBPUe",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# About\n\nTool for automatic executables porting to Linux and Windows.\n\nIncludes a [relinker](core/relinker) that converts executable to the target system's native format and implementations of [system prx libraries](core/libs/prx) suitable for dynamic linking. No emulation or separate runtime process.\n\n[Usage](docs/user/USAGE.md), [Build instructions](docs/dev/BUILD.md), [Technical debt of the project](docs/dev/TechnicalDebt.md), [code style conventions](docs/dev/CONVENTIONS.md), [contributing](CONTRIBUTING.md)\n\n## Status\n\n[![libraries](https://boykopovar.github.io/AnyPS5/badge-libraries.svg)](https://boykopovar.github.io/AnyPS5/) [![shaders](https://boykopovar.github.io/AnyPS5/badge-shaders.svg)](https://boykopovar.github.io/AnyPS5/)\n\n[![progress map](https://boykopovar.github.io/AnyPS5/progress.svg)](https://boykopovar.github.io/AnyPS5/)\n\n<sub>* System libraries: percentage of the functions known to the project so far (declared in [core/libs/prx](core/libs/prx)), not of every PS5 system function. The total grows as more functions are declared.</sub>\n\n[List of verified games](docs/user/COMPATIBILITY.md)\n\nDreaming Sarah (2D platformer) runs at a stable 60 fps on a GTX 1050 Ti / i5-7500 3.4GHz.\n\nUnsupported or unexpected states strictly throw `std::runtime_error`. `what()` is printed to stderr and the process terminates.\n\nThe [shader recompiler](core/shader/recompiler/Recompiler.cpp) successfully produces SPIR-V (validated via [Spirv-Tools](3rdparty/SPIRV-Tools) when built with `ANYPS5_ENABLE_SPIRV_TOOLS`).\n\n## Compatibility\n\nSee the [game compatibility list](docs/user/COMPATIBILITY.md) for tested games and known issues.\n\n## Input mapping\n\nSDL-mapped game controllers are supported, including analog sticks and triggers. Keyboard and mouse controls can be configured with an `anyps5-input.ini` file. See [input mapping](docs/user/INPUT_MAPPING.md) for the supported devices and configuration format.\n\n## Disclaimer\n\nThis project is intended for interoperability, research, preservation, and compatibility purposes. It does not include, distribute, or require copyrighted software, firmware, cryptographic keys, or proprietary libraries. Users are responsible for ensuring that any binaries used with this project are obtained and used in accordance with applicable laws and their respective license terms.\n\n## License\n\nThis project is licensed under the GNU General Public License version 2 only.\n"
+    },
+    "brief": {
+      "summary": "把 PS5 可执行文件自动移植成 Linux/Windows 原生程序",
+      "problem": "PS5 游戏没法直接在 PC 上原生运行，需要移植手段",
+      "highlights": [
+        "可以把 PS5 可执行文件转成目标系统的原生格式",
+        "可以用 SDL 手柄或键鼠配置文件操作游戏",
+        "可以把着色器重编译成 SPIR-V 交给 Vulkan 用"
+      ],
+      "target_users": [
+        "游戏移植研究者",
+        "逆向工程爱好者",
+        "PC 游戏玩家"
+      ],
+      "why_trending": "今日新增约 997 Star，本周首次收录，非模拟器路线引发关注",
+      "caveat": "验证通过的游戏很少，有 118 个未解决 issue，兼容性有限",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "boykopovar/AnyPS5",
+      "score": 65,
+      "category": "游戏开发",
+      "reason": "PS5游戏可执行文件自动移植工具",
+      "generated_by_ai": true,
+      "velocity_score": 91,
+      "freshness_score": 70,
+      "ranking_score": 65.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "earthtojake/text-to-cad",
+      "url": "https://github.com/earthtojake/text-to-cad",
+      "description": "Give your agent CAD superpowers.",
+      "language": "Python",
+      "total_stars": 17553,
+      "forks": 1777,
+      "stars_today": 437,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 580
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "ai-agents",
+        "cad",
+        "mechanical-engineering",
+        "robotics",
+        "step",
+        "stl",
+        "stp",
+        "text-to-cad"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-22T01:09:45Z",
+      "updated_at": "2026-10-06T06:32:51Z",
+      "pushed_at": "2026-10-06T05:56:02Z",
+      "open_issues": 35,
+      "homepage": "https://www.texttocad.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"apps/docs/public/brand/logo-texttocad-animated.svg\" alt=\"text-to-cad\" width=\"800\">\n\nGive your agent CAD superpowers.\n\n[Docs](https://www.texttocad.dev)\n\n[![GitHub stars](https://img.shields.io/github/stars/earthtojake/text-to-cad?style=for-the-badge&logo=github&label=Stars)](https://github.com/earthtojake/text-to-cad/stargazers)\n[![skills.sh](https://skills.sh/b/earthtojake/text-to-cad?style=for-the-badge)](https://skills.sh/earthtojake/text-to-cad)\n[![Follow @earthtojake](https://img.shields.io/badge/Follow-%40earthtojake-000000?style=for-the-badge&logo=x)](https://x.com/earthtojake)\n[![Join Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/5FGB9DwJYU)\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)\n[![Tests](https://img.shields.io/github/actions/workflow/status/earthtojake/text-to-cad/test.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=Tests)](https://github.com/earthtojake/text-to-cad/actions/workflows/test.yml?query=branch%3Amain)\n[![cadgen](https://img.shields.io/pypi/v/cadgen?style=for-the-badge&logo=pypi&logoColor=white&label=cadgen)](https://pypi.org/project/cadgen/)\n[![build123d](https://img.shields.io/badge/build123d-0.11-2F6FB0?style=for-the-badge)](https://github.com/gumyr/build123d)\n[![Open CASCADE](https://img.shields.io/badge/Open%20CASCADE-7.9-E2001A?style=for-the-badge)](https://dev.opencascade.org)\n[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](packages/cadgen/pyproject.toml)\n[![Node.js](https://img.shields.io/badge/Node.js-20+-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)\n\n</div>\n\n# text-to-cad\n\nThe text-to-cad plugin gives your agent local workflows for generating 3D models\nas STEP, GLB, STL or 3MF files. It also does design for manufacturing checks,\ngenerates engineering drawings, and connects to popular 3D printing, sheet metal\nand CNC fabrication services.\n\nIt is supported by all popular agents that support plugins or the\n[skills](https://skills.sh) framework, including Claude Code, Codex, Cursor,\nGemini and Grok.\n\n## 💻 Install\n\n### Ask your agent (recommended)\n\nSend this message to your agent and it will install text-to-cad for you.\n\n```text\nInstall text-to-cad from https://github.com/earthtojake/text-to-cad\n```\n\nOr install it yourself:\n\n1. CAD runs through [uv](https://docs.astral.sh/uv/): check that it is installed\n   (`uv --version`), and if it is missing, install it with\n   [uv's installer](https://docs.astral.sh/uv/getting-started/installation/).\n2. Run the commands under your agent app's heading below, or under\n   [Other Agents](#other-agents) if it has none.\n3. Restart the app. Its first start downloads CAD's runtime, so it needs a network\n   connection.\n\nThe plugin for your agent app brings the skills and CAD's viewer, a local server\n(`cadgen mcp`). For an agent without a plugin, install the skills alone. Install\none or the other in an app, not both: two copies means every skill twice.\n\nThe install commands below take the `latest` branch: it holds the plugin alone\nand gets each release once it is on PyPI. `main`, where development happens,\ninstalls too, but can hold changes that aren't released yet. Each app names the\nbranch in its own way (`#latest`, `--ref latest`, `@latest` or\n`--branch latest`); leave it out and the app installs `main`.\n\nEach app's heading also says how to update text-to-cad, and how to reinstall it:\nremove it, then install it again. Updating the plugin updates CAD: the new\nrelease's cadgen is downloaded the first time it runs, and the skills and the\nserver share it. Earlier releases stay in uv's cache until you run `uv cache prune`.\n\n### Claude Code\n\n```bash\nclaude plugin marketplace add earthtojake/text-to-cad#latest\nclaude plugin install text-to-cad@earthtojake\n```\n\nThe plugin also starts CAD's server. Where Claude Code can show app views, CAD\nshows models as viewer cards in the conversation; otherwise, as in a terminal,\nasking it to show a model gives you a link that opens the model in the CAD\nViewer in your browser.\n\nTo update, run these, then restart Claude Code:\n\n```bash\nclaude plugin marketplace update earthtojake\nclaude plugin update text-to-cad@earthtojake\n```\n\nTo reinstall, remove it with these, then run the install commands again:\n\n```bash\nclaude plugin uninstall text-to-cad@earthtojake\nclaude plugin marketplace remove earthtojake\n```\n\n### Claude Desktop\n\nCAD shows models in the chat: ask Claude to show one and it appears as a viewer\ncard you can orbit, add to your prompt, and open full size; Claude can read what\nyou selected and see what you see. It runs locally through uv: add the server to\nClaude Desktop's config (Settings > Developer > Edit Config), then restart the\napp. If Claude Desktop cannot find `uvx`, give its full path (`which uvx`).\n\n```json\n{\n  \"mcpServers\": {\n    \"cad\": {\n      \"command\": \"uvx\",\n      \"args\": [\"--no-config\", \"--managed-python\", \"--python\", \"3.13\", \"--from\", \"cadgen==0.7.15\", \"cadgen\", \"mcp\"],\n      \"env\": {\"CADGEN_INSTALL_CHANNEL\": \"claude-desktop\"}\n    }\n  }\n}\n```\n\nThe config pins a cadgen release in `args`, and uvx keeps the version it first\ndownloads. To update, change that version to the\n[latest release](https://pypi.org/project/cadgen/), then restart Claude Desktop.\n\n### Codex\n\nInstall text-to-cad from Codex's plugin directory:\n[text-to-cad for Codex](https://chatgpt.com/plugins/plugins_6ac09476ef008191a35887b22b0d048a),\nthen **Open in desktop app**.\n\nIn the Codex app the plugin also brings the CAD viewer: **CAD** in the sidebar\n(recent models, and Open), a **CAD** tab beside each thread that the agent\ndrives, and *Open with CAD* for model files.\n\n<details>\n<summary>Manual install</summary>\n\n```bash\ncodex plugin marketplace add earthtojake/text-to-cad --ref latest\ncodex plugin add text-to-cad@earthtojake\n```\n\nTo update, upgrade the `earthtojake` marketplace (or use Plugins › Manage ›\nMarketplace), then restart Codex:\n\n```bash\ncodex plugin marketplace upgrade earthtojake\n```\n\nTo reinstall, remove it with these, then run the install commands again:\n\n```bash\ncodex plugin remove text-to-cad@earthtojake\ncodex plugin marketplace remove earthtojake\n```\n\nThe marketplace was renamed from `text-to-cad` to `earthtojake`; if you added it\nbefore, remove the old one first (`codex plugin marketplace remove text-to-cad`).\n\n</details>\n\n### Cursor\n\nCursor also loads the plugin installed with Claude Code. If the Claude Code plugin\nis installed, Cursor already has text-to-cad: skip this.\n\n```bash\ngit clone --depth 1 --branch latest https://github.com/earthtojake/text-to-cad ~/.cursor/plugins/local/text-to-cad\n```\n\nCursor reads `.cursor-plugin/plugin.json`: restart Cursor after cloning. Teams\ncan import the repository instead, under **Dashboard → Plugins & MCPs → Team\nMarketplaces**.\n\nTo update, pull the latest release, then restart Cursor:\n\n```bash\ngit -C ~/.cursor/plugins/local/text-to-cad pull\n```\n\nTo reinstall, delete the folder, then run the install command again:\n\n```bash\nrm -rf ~/.cursor/plugins/local/text-to-cad\n```\n\n### Grok Build\n\nGrok Build also loads the plugin installed with Claude Code. If the Claude Code\nplugin is installed, Grok Build already has text-to-cad: skip this.\n\n```bash\ngrok plugin install earthtojake/text-to-cad@latest --trust\ngrok plugin enable text-to-cad\n```\n\nGrok Build reads the Claude plugin manifest. Grok shows tool results as text, so\nasking it to show a model gives you a CAD Viewer link.\n\nTo update, run this, then restart Grok Build:\n\n```bash\ngrok plugin update text-to-cad\n```\n\nTo reinstall, remove it with this, then run the install commands again:\n\n```bash\ngrok plugin uninstall text-to-cad\n```\n\n### Gemini\n\n```bash\ngemini extensions install https://github.com/earthtojake/text-to-cad --ref latest --consent --auto-update\n```\n\nGemini installs the plugin as an extension, with the skills and CAD's server, and\nkeeps it up to date (`--auto-update`; `--consent` answers its security prompt). Like Grok, it shows tool results as text, so asking it to show a model\ngives you a CAD Viewer link.\n\nTo update now, run this, then restart Gemini:\n\n```bash\ngemini extensions update text-to-cad\n```\n\nTo reinstall, remove it with this, then run the install command again:\n\n```bash\ngemini extensions uninstall text-to-cad\n```\n\n### Other Agents\n\nFor an agent without plugin support: the skills give you everything you need for\ncore CAD workflows and let you view CAD files in a localhost web app. Install them\nwith the Skills CLI:\n\n```bash\nnpx skills add earthtojake/text-to-cad#latest\n```\n\nThe command asks which agents to install for, and where. To skip the questions,\nname the agent and install for your user:\n`npx skills add earthtojake/text-to-cad#latest -g -a <agent> -y`.\n\nEach skill runs cadgen through uv with the same pinned command the plugin's server\nuses, so uv must be installed. Without the plugin there is no CAD server, so the\nskills open models in the CAD Viewer in your browser.\n\n**To update or reinstall, run the same command again**, then restart the app.\n`add` re-fetches the package and overwrites what is already installed, so it both\nrefreshes existing skills and installs any skill added in a newer release.\n`npx skills update` only refreshes skills already in your lockfile, so it silently\nmisses new ones — which matters here, because releases do add skills.\n\nNeither command removes a skill that was retired upstream; drop one with\n`npx skills remove <skill>` if you need to. The retired `cad-viewer` skill is\nnow covered by the CAD, DXF and robot-description skills, and the retired\n`cad-mcp-setup` by this README's install and update steps. Remove old standalone\ninstalls with `npx skills remove cad-viewer cad-mcp-setup`.\n\nNo plugin for your agent yet?\n[Request one](https://github.com/earthtojake/text-to-cad/issues/new?title=Plugin%20request%3A%20).\n\n### Updates\n\nTo update, ask your agent to update text-to-cad, or run the update commands under\nyour app's heading, then restart the app.\n\nWhen a newer release is out, a copy you installed yourself says so: a blue update\nbutton, first in CAD's navbar and on its home, whose **Send to agent** posts\n\"Update text-to-cad to 0.9.0 from https://github.com/earthtojake/text-to-cad\" to\nyour chat, worded like the install message (the browser viewer's copies it\ninstead), or, in an app that shows CAD's replies as text, a line with its reply.\nYour agent then runs the update commands under your app's heading here. The button\nalso links to the [install instructions](https://www.texttocad.dev/install), to\nupdate by hand. Copies from a plugin directory or the Cursor Marketplace never\nshow it, since their store updates them, and neither does Gemini's extension,\nwhich Gemini updates: for those there is nothing to run.\n\nTo find out, cadgen fetches `api.texttocad.dev/v1/versions` at most once a day:\none anonymous request, with no ID, path or anything about you, never in CI and\nnever for a copy that something else updates. `CADGEN_UPDATE_CHECK=0` turns it off.\n\n### Usage analytics\n\nThe CAD app (the plugin's `cad` server) and the browser viewer (`cadgen viewer`) can send anonymous usage counts: a\nrandom install ID, versions, where you installed it from, your OS and agent app, how often each CAD tool was\ncalled and views were used, and a one-way code and the format of each distinct\nfile shown (to count files, not identify them). Our server also counts installs\nper country, from each request's IP address, as weekly and monthly totals only.\nNever file names, paths, contents or prompts. It is off until you allow it\nin either app's one-time prompt (one answer counts for both); change it later with\n**Share anonymous usage data** in either app's menu (the logo at the top left, over any model), `uvx cadgen analytics on|off`, or by asking your agent to\nturn it off. `DO_NOT_TRACK=1` keeps it o"
+    },
+    "brief": {
+      "summary": "给 AI Agent 加上本地 CAD 建模能力的插件",
+      "problem": "Agent 只能写代码，无法直接产出可制造的 3D 模型文件",
+      "highlights": [
+        "可以用一句话生成 STEP、STL 等 3D 模型",
+        "可以自动做可制造性检查并生成工程图",
+        "可以对接 3D 打印、钣金和 CNC 加工服务"
+      ],
+      "target_users": [
+        "机械工程师",
+        "AI Agent 开发者",
+        "硬件创客"
+      ],
+      "why_trending": "今日新增 437 Star，本周首次收录，说明 Agent 插件生态正往专业工具延伸",
+      "caveat": "首次运行需联网下载 CAD 运行时，并需预先安装 uv",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "earthtojake/text-to-cad",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "为Agent提供CAD技能的集成，偏3D建模",
+      "generated_by_ai": true,
+      "velocity_score": 84,
+      "freshness_score": 40,
+      "ranking_score": 64.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 57443,
+      "forks": 5140,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 570
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-06T06:34:03Z",
+      "pushed_at": "2026-10-06T06:32:44Z",
+      "open_issues": 175,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nFor standalone installation, default to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                      "
+    },
+    "brief": {
+      "summary": "把 HTML、CSS 动画渲染成 MP4 视频的开源框架",
+      "problem": "写代码做视频难以保证渲染结果稳定，用剪辑软件又不够自动化。",
+      "highlights": [
+        "可以让 AI 编码代理按一句话提示生成视频",
+        "可以把 GitHub PR 自动转成讲解视频",
+        "可以给口播视频自动加字幕"
+      ],
+      "target_users": [
+        "前端开发者",
+        "AI 编码代理用户",
+        "短视频创作者"
+      ],
+      "why_trending": "总 Star 超 5.7 万，近期仍在更新，被标为热度再升。",
+      "caveat": "资料中未说明渲染速度与稳定性表现。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "用HTML渲染视频，面向Agent的视频生成框架",
+      "generated_by_ai": true,
+      "velocity_score": 84,
+      "freshness_score": 40,
+      "ranking_score": 69.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "dongnguyenvie/BashCut",
+      "url": "https://github.com/dongnguyenvie/BashCut",
+      "description": "Native macOS video editor that coding agents can drive: everything the UI does, Claude Code and Codex can do through the bashcut CLI or MCP server. Layered timeline, captions, voiceover, plugins.",
+      "language": "Swift",
+      "total_stars": 48,
+      "forks": 16,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agentic-ai",
+        "ai-agents",
+        "apple-silicon",
+        "bashcut",
+        "captions",
+        "claude-code",
+        "cli",
+        "codex",
+        "coding-agents",
+        "homebrew-cask",
+        "macos",
+        "macos-app",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "plugins",
+        "swift",
+        "swiftui",
+        "video-editing",
+        "video-editor"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-02T18:46:34Z",
+      "updated_at": "2026-10-06T06:33:44Z",
+      "pushed_at": "2026-10-06T06:33:38Z",
+      "open_issues": 185,
+      "homepage": "https://github.com/dongnguyenvie/BashCut/releases/latest",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/assets/logo.png\" width=\"128\" height=\"128\" alt=\"BashCut\">\n</p>\n\n<h1 align=\"center\">BashCut</h1>\n\n<p align=\"center\">\n  A native macOS video editor that coding agents can drive.<br>\n  Everything the UI does, Claude Code and Codex can do through the <code>bashcut</code> CLI or MCP.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/dongnguyenvie/BashCut/releases/latest\">Download</a> ·\n  <a href=\"https://testflight.apple.com/join/XwsNZxre\">TestFlight beta</a> ·\n  <a href=\"docs/README.md\">Docs</a> ·\n  <a href=\"docs/guides/automation.md\">Automation</a> ·\n  <a href=\"docs/guides/plugins.md\">Plugins</a> ·\n  <a href=\"https://github.com/dongnguyenvie/bashcut-agent-kit\">Agent kit</a> ·\n  <a href=\"https://github.com/dongnguyenvie/BashCut/issues\">Issues</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"README.vi.md\">Tiếng Việt</a>\n</p>\n\n---\n\n<p align=\"center\">\n  <img alt=\"BashCut demo: Codex terminal, layered timeline, captions, transitions, color and plugins\" src=\".github/assets/app.gif\" width=\"800\">\n</p>\n\n## About\n\nBashCut is a native macOS video editor built on AVFoundation, with a Claude Code / Codex terminal docked beside the\ntimeline. Preview and export share one composition engine, so what you see is what you export. Projects are\nplain JSON next to your footage: agents and scripts read and edit them through the same atomic, undoable edit\noperations the UI uses.\n\nBashCut is under active development: the M0 foundation is accepted on real footage and most of the editor and\nagent features (M1–M3, M5) are in place. See [implementation status](docs/status/implementation.md) for what is\nverified and what is left.\n\n## Use the AI you already pay for\n\nNo extra AI bill: BashCut works with the subscriptions and apps you already have.\n\n| You have | How BashCut uses it |\n|---|---|\n| **Claude subscription** (Pro / Max) | The **Claude** tab in the agent dock runs the real Claude Code CLI with your login. BashCut never passes `ANTHROPIC_API_KEY`, so your plan is used, not API credits |\n| **ChatGPT subscription** (Plus / Pro) | The **Codex** tab runs the real Codex CLI with your ChatGPT login |\n| **Claude Desktop / Codex app** | Point them at BashCut: `bashcut agent setup claude` or `bashcut agent setup codex` installs the editing skills and the `bashcut` MCP server, so they edit the open project from outside the app |\n| **Any other model** (Gemini, GPT, Grok, Mistral, Groq, OpenRouter, a local or OpenAI-compatible server) | Install the **[AI Editor](https://github.com/dongnguyenvie/bashcut-plugins/tree/main/plugins/director)** plugin: a chat agent inside BashCut with your own API key, with thinking levels (`off` / `low` / `medium` / `high`) for reasoning models |\n\nWhichever you pick, the agent edits through the same undoable commands as the UI: every change lands in History,\nshows in Show Changes and can be undone. See [Automation](docs/guides/automation.md).\n\n## What's inside\n\n- Layered timeline: linked audio, sections, snapping, beat grid, split/trim/move, gaps, freeze frames, constant\n  speed and ramps, keyframes, transitions\n- Viewer and source viewer with In/Out, Insert/Overwrite, safe area and compare\n- Captions and text with presets, SRT import, Vietnamese and English\n- Color: LUTs, exposure, contrast, saturation and adjustment layers\n- Audio: volume, fades, ducking under speech, loudness, voiceover recording, source-aligned waveforms\n- Review checks, history, autosave with recovery, external-change reload and conflict handling\n- H.264 export queue with burned-in captions; OTIO export\n- Agent dock with real Claude, Codex and Shell terminals, plus the\n  [agent kit](https://github.com/dongnguyenvie/bashcut-agent-kit) of editing skills\n- `bashcut` CLI and MCP server: every UI action and dialog, with dry runs and revision checks\n- Out-of-process plugins for transcription, voice, beats and loudness, from the\n  [plugin registry](https://github.com/dongnguyenvie/bashcut-plugins)\n\n## Install\n\nRequires macOS 14 or later.\n\n### Homebrew\n\n```sh\nbrew install --cask dongnguyenvie/tap/bashcut\n```\n\nThis installs `BashCut.app` into `/Applications` and links the `bashcut` CLI and `bashcut-mcp` server into\nHomebrew's `bin`, so agents in any terminal can drive the app. Update with `brew upgrade --cask bashcut`; remove\nwith `brew uninstall --cask bashcut` (add `--zap` to also delete settings and caches).\n\n### Download a release\n\nDownload `BashCut-<version>.dmg` (or `.zip`) from the [latest release](https://github.com/dongnguyenvie/BashCut/releases/latest),\nopen it and drag BashCut to Applications. Builds are signed with Developer ID and notarized by Apple; check a download\nagainst the release's `SHA256SUMS` with `shasum -a 256 -c --ignore-missing SHA256SUMS`. To use the CLI from a terminal, link it yourself:\n\n```sh\nsudo ln -s /Applications/BashCut.app/Contents/MacOS/bashcut /usr/local/bin/bashcut\nsudo ln -s /Applications/BashCut.app/Contents/MacOS/bashcut-mcp /usr/local/bin/bashcut-mcp\n```\n\n### TestFlight\n\nJoin the public beta on [TestFlight](https://testflight.apple.com/join/XwsNZxre) (needs the TestFlight app). The\nTestFlight build is the sandboxed Mac App Store build: it runs only the plugins bundled with the app, and its\nbundled CLI cannot run from a regular terminal.\n\nOr build BashCut from source, below.\n\n## How to Build\n\nRequires macOS 14+, Xcode with Swift 6, and network access for the first package resolution.\n\n```sh\nscripts/run.sh\n```\n\nThis builds with SwiftPM, packages `build/BashCut.app`, signs it with the first Apple Development identity in\nyour keychain (or `BASHCUT_SIGN_IDENTITY`) so macOS keeps folder-access grants across rebuilds, and opens it. The\napp executable is `BashCutApp` and the bundled CLI is `bashcut`, avoiding a name collision on case-insensitive\ndisks.\n\nTo try a change against every timeline case, generate the [sample project](docs/guides/sample-project.md) shown\nabove (needs `ffmpeg`):\n\n```sh\nscripts/sample-project.py\n```\n\nFor Xcode, install XcodeGen >= 2.46, then run `scripts/generate-project.sh` and open `BashCut.xcodeproj`\n(generated from `project.yml`). Xcode builds the string catalog; the SwiftPM launcher copies equivalent `.strings`\nresources. The UI follows the system language.\n\n## Verify\n\n```sh\nscripts/verify.sh build\nscripts/verify.sh test\nscripts/verify.sh perf       # 20 synthetic clips, ~30 seconds, 1080×1920\nscripts/verify.sh lint       # requires SwiftLint\nscripts/verify.sh xcode test # regenerates and tests the Xcode project (requires XcodeGen)\n```\n\nPure model tests also run on their own with `cd Packages/BashCutCore && swift test`. Tests never use the real\nvideo workspace or agent CLIs, and package downloads happen at dependency resolution, not in tests.\n\n## Related repositories\n\nTwo other repositories are part of BashCut. Contributions are welcome in each:\n\n| Repository | What it holds | Contribute there |\n|---|---|---|\n| [bashcut-plugins](https://github.com/dongnguyenvie/bashcut-plugins) | The plugin registry (`registry.json`) and its plugins, such as Silence Markers and VieNeu TTS | New plugins and fixes to existing ones. See [Writing plugins](docs/guides/plugins.md) |\n| [bashcut-agent-kit](https://github.com/dongnguyenvie/bashcut-agent-kit) | Editing skills for Claude Code and Codex (footage survey, beat cuts, audio mix, captions, colour, effects, voiceover…). BashCut ships them and loads them in its agent tabs | Editing know-how that agents should follow. See its README › Writing skills |\n\nChanges to the editor itself, its commands and the plugin API belong in this repository.\n\n## Documentation\n\n- [Documentation index](docs/README.md): guides, reference and design specs\n- [Automation: CLI and MCP](docs/guides/automation.md) and the generated\n  [command reference](docs/reference/commands.md)\n- [Project format](docs/reference/project-format.md)\n- [Implementation status](docs/status/implementation.md)\n- [CONTRIBUTING.md](CONTRIBUTING.md): build layout and one-file templates (agent providers, model adapters,\n  commands, capabilities, timeline formats)\n- [CHANGELOG.md](CHANGELOG.md)\n\n## License\n\nMIT. See [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "macOS 原生视频剪辑器，可让编码代理通过 CLI 或 MCP 驱动。",
+      "problem": "剪辑软件操作难被脚本或代理自动完成。",
+      "highlights": [
+        "可以让 Claude Code 在时间线上剪辑并加字幕",
+        "可以用命令行或 MCP 批量改项目 JSON",
+        "可以录旁白、加 LUT 调色并排队导出 H.264"
+      ],
+      "target_users": [
+        "macOS 视频剪辑者",
+        "用 AI 代理做剪辑的开发者"
+      ],
+      "why_trending": "本周首收录，48 星，把剪辑器交给编码代理驱动。",
+      "caveat": "项目仍在开发中，185 个未关闭 issue，资料未说明稳定性。",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "dongnguyenvie/BashCut",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "Agent可驱动的macOS视频剪辑器，含MCP",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "KyaniteLabs/kinocut",
+      "url": "https://github.com/KyaniteLabs/kinocut",
+      "description": "Guardrailed video editing MCP server for AI agents. FFmpeg, Hyperframes, repurposing tools, Python client, and CLI. Local, fast, free.",
+      "language": "Python",
+      "total_stars": 187,
+      "forks": 43,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-tools",
+        "ai-agents",
+        "ai-video",
+        "claude",
+        "claude-code",
+        "cli",
+        "cursor",
+        "ffmpeg",
+        "hyperframes",
+        "mcp",
+        "mcp-server",
+        "mcp-tools",
+        "media-automation",
+        "model-context-protocol",
+        "python",
+        "python-library",
+        "subtitles",
+        "video",
+        "video-automation",
+        "video-editing"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-21T01:27:25Z",
+      "updated_at": "2026-10-06T06:31:50Z",
+      "pushed_at": "2026-10-06T06:31:47Z",
+      "open_issues": 11,
+      "homepage": "https://kinocut.dev/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <a href=\"https://kyanitelabs.tech\">\n    <img src=\"assets/kinocut-hero.webp\" alt=\"Kinocut - guardrailed video editing for AI agents\" width=\"100%\">\n  </a>\n</p>\n\n<!-- mcp-name: io.github.KyaniteLabs/kinocut -->\n\n<h1 align=\"center\">Kinocut</h1>\n\n<p align=\"center\">\n  <strong>Guardrailed video editing MCP server for AI agents.</strong><br>\n  Local-first FFmpeg tools, Video Receipts, quality gates, Hyperframes, and Shorts/Reels repurposing —\n  for Claude Code, Cursor, and any MCP client. Free, Apache-2.0. Formerly mcp-video.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://lobehub.com/mcp/kyanitelabs-kinocut\"><img src=\"https://lobehub.com/badge/mcp/kyanitelabs-kinocut\" alt=\"LobeHub MCP\"></a>\n  <a href=\"https://pypi.org/project/kinocut/\"><img src=\"https://img.shields.io/pypi/v/kinocut.svg\" alt=\"PyPI\"></a>\n  <a href=\"https://kinocut.dev/\"><img src=\"https://img.shields.io/badge/site-kinocut.dev-0A0A0A\" alt=\"kinocut.dev\"></a>\n  <a href=\"https://github.com/KyaniteLabs/kinocut/actions/workflows/ci.yml\"><img src=\"https://github.com/KyaniteLabs/kinocut/actions/workflows/ci.yml/badge.svg?branch=master\" alt=\"GitHub CI\"></a>\n  <img src=\"https://img.shields.io/badge/MCP-203%20tools-orange.svg\" alt=\"203 MCP tools on development tip\">\n  <img src=\"https://img.shields.io/badge/CLI-177%20commands-orange.svg\" alt=\"177 CLI commands on development tip\">\n  <img src=\"https://img.shields.io/badge/python-3.11%2B-blue.svg\" alt=\"Python 3.11+\">\n  <img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"Apache 2.0\">\n</p>\n\n<p align=\"center\">\n  <a href=\"#see-it-work\">Demo</a> &bull;\n  <a href=\"#status-and-releases\">Status</a> &bull;\n  <a href=\"#whats-in-1152\">1.15.2</a> &bull; <a href=\"#whats-in-1151\">1.15.1</a> &bull;\n  <a href=\"#changelog\">Changelog</a> &bull;\n  <a href=\"#beyond-1152-draft--gated\">Beyond</a> &bull;\n  <a href=\"#installation\">Install</a> &bull;\n  <a href=\"#quick-start\">Quick Start</a> &bull;\n  <a href=\"#mcp-tools\">Tools</a> &bull;\n  <a href=\"docs/TOOLS.md\">Tool Reference</a> &bull;\n  <a href=\"docs/RESCUE.md\">Rescue</a> &bull;\n  <a href=\"docs/360_ASSEMBLY.md\">360 assembly</a> &bull;\n  <a href=\"docs/AI_VIDEO_REVIEW_AND_SALVAGE.md\">AI-video</a> &bull;\n  <a href=\"#agent-skill\">Agent Skill</a> &bull;\n  <a href=\"https://kinocut.dev/\">kinocut.dev</a> &bull;\n  <a href=\"#what-is-kinocut\">What is Kinocut?</a> &bull;\n  <a href=\"#faq\">FAQ</a> &bull;\n  <a href=\"llms.txt\">llms.txt</a>\n</p>\n\n> Kinocut is a free, open-source **video editing MCP server** and **AI agent** workflow engine (plus Python client and `kino` CLI) that lets AI agents trim, caption, repurpose, and quality-gate local video media with typed tools and Video Receipts — not invented FFmpeg flags.\n\n## Table of contents\n\n- [What is Kinocut?](#what-is-kinocut)\n- [See It Work](#see-it-work)\n- [Installation](#installation)\n- [Quick Start](#quick-start)\n- [MCP Tools](#mcp-tools)\n- [Status and releases](#status-and-releases)\n- [360 dual-cam assembly](#360-dual-cam-assembly)\n- [Changelog](#changelog)\n- [FAQ](#faq)\n- [Agent Skill](#agent-skill)\n\n---\n\n## What is Kinocut?\n\n**TL;DR:** Kinocut is a free, local-first **video editing MCP server** (plus Python client and `kino` CLI) so AI agents can trim, caption, repurpose, and quality-gate media with typed tools and **Video Receipts** — not invented FFmpeg flags.\n\n**Kinocut** is a free, open-source **[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server**, Python library, and **`kino` CLI** that gives AI agents a **guardrailed local video-editing surface**. It wraps **FFmpeg** (and optional Hyperframes / Whisper extras) with typed tools, preflight validation, **Video Receipt** provenance, and quality/release checkpoints so agent-produced media can be inspected before publish.\n\n| | |\n| --- | --- |\n| **Also known as** | `kino` (CLI); formerly **mcp-video** / `mcp_video` |\n| **Latest published release** | [Official PyPI version](https://pypi.org/project/kinocut/) · [GitHub release](https://github.com/KyaniteLabs/kinocut/releases/latest) |\n| **Product site** | [kinocut.dev](https://kinocut.dev/) |\n| **PyPI** | [`kinocut`](https://pypi.org/project/kinocut/) |\n| **MCP Registry** | [`io.github.KyaniteLabs/kinocut`](https://registry.modelcontextprotocol.io/v0/servers/io.github.KyaniteLabs%2Fkinocut/versions/latest) |\n| **Source** | [GitHub](https://github.com/KyaniteLabs/kinocut) (**canonical code, issues, PRs, CI, and releases**) · [Forgejo](https://git.kyanitelabs.tech/KyaniteLabs/kinocut) (downstream mirror; automated sync cutover pending verification) |\n| **License** | Apache-2.0 |\n| **Runs on** | Your machine (macOS, Linux, Windows) — FFmpeg required on `PATH` |\n| **Not** | A hosted cloud editor, credit-metered SaaS, or untyped FFmpeg shell wrapper |\n\n**Best-fit searches:** video editing MCP server · AI agent video editing · FFmpeg MCP · Claude Code video tools · Cursor MCP video · Shorts/Reels automation · local AI video workflow · guardrailed agentic media.\n\nMachine-readable brief for agents and crawlers: [`llms.txt`](llms.txt) · [extended agent guide](docs/llms-full.txt) · site: [kinocut.dev/llms.txt](https://kinocut.dev/llms.txt).\n\n## See It Work\n\nTell the agent what you want in plain language:\n\n*\"Trim this interview to the strongest 45 seconds, add burned captions, make it vertical, and quality-check it before export.\"*\n\nKinocut turns that into typed, guardrailed tool calls - no FFmpeg flags to guess, no silently broken exports:\n\n```python\nfrom kinocut import Client\nvideo = Client()\n\nclip = video.trim(\"interview.mp4\", start=\"00:02:15\", duration=\"00:00:45\")\nvideo.ai_transcribe(clip.output_path, output_srt=\"captions.srt\")\ncaptioned = video.subtitles(clip.output_path, subtitle_file=\"captions.srt\")\nshort = video.resize(captioned.output_path, aspect_ratio=\"9:16\")\nvideo.release_checkpoint(short.output_path)  # thumbnail + quality gate before you publish\n```\n\n**Primary job:** turn a local interview or podcast into **captioned vertical clips with a Video Receipt** agents can re-run and humans can approve.\n\n**Three things people use it for**\n\n- **Repurposing** — one recording into captioned Shorts, Reels, and TikTok packages with manifests and review artifacts.\n- **Podcast & interview cuts** — find the strongest segment, normalize audio, add chapters, and export.\n- **Agent-driven media in CI** — repeatable, reviewable edits from Claude Code, Cursor, Codex-style clients, or scripts.\n\n**Paths:** [Install matrix](docs/INSTALL.md) · [Golden path](docs/GOLDEN_PATH.md) · [Prompts](docs/PROMPTS.md) · [Tutorial](docs/TUTORIAL_PODCAST_TO_SHORTS.md) · [Compare](docs/COMPARE.md) · [When to recommend](docs/RECOMMEND.md)\n\n## Status and releases\n\n| Surface | Version / tip | What it means |\n| --- | --- | --- |\n| **PyPI / npm checkpoint** | **[1.16.1](https://pypi.org/project/kinocut/1.16.1/)** (2026-10-05) | Last recorded publication checkpoint; consult the registries for the latest version. Install with `pip install kinocut`. |\n| **GitHub latest release / MCP Registry** | **1.16.1** | GitHub release and the initial publication job's canonical registry read confirm 1.16.1; subsequent local registry reads timed out. The live website was last verified at 1.16.0; its 1.16.1 update is prepared, not deployed. Final owner acceptance and fleet rollout remain separate. |\n| **This source version** | **1.16.1** · **203 MCP / 177 CLI** | Maintenance fixes described below; publication is tracked separately in `docs/public_claims.json`. |\n| **Next public release** | **TBD** | Human residuals (directories, launch posts) stay gated; further bumps need a new go-ahead. |\n\nInstall from PyPI for the stable package, including the optional object-matte extra. Clone `master` when you want local development changes beyond the published package; see [docs/PRODUCT_MATTE.md](docs/PRODUCT_MATTE.md) for the published object-matte workflow.\n\n## What's in 1.16.1\n\nVersion **1.16.1** repairs macOS render cleanup and faststart publication, C2PA and model-cache staging, FFmpeg 8.1 filter discovery, and audio preservation in shader/upscale reconstruction. It retains **203 MCP tools / 177 CLI commands** and pairs with `mcp-video==1.6.16`. See [maintenance release notes](docs/status/2026-10-05-1.16.1-release-notes.md) for verification and remaining platform/model acceptance limits.\n\n## What's in 1.16.0\n\nPublished 2026-10-02: **203 MCP tools / 177 CLI commands**; `mcp-video==1.6.15` installs `kinocut==1.16.0`. Operator parity, bounded quality/resource controls and canonical ownership repair are described in [release notes](docs/status/2026-10-02-1.16.0-release-notes.md). The live site shows 1.16.0 (verified 2026-10-05). Shared mobile/web processing, fleet rollout, MCPB Desktop acceptance and final cross-surface owner acceptance remain separate gates.\n\n## What's in 1.15.2\n\nKinocut **1.15.2** ships the verified sound line and an adversarial-hardened engine. Sound mastering now preserves stereo through the measured mastering chain with real caption-speech distance profiles, and `sound-qa-asr` fails closed without a real recognition request. Four guarded local Revideo operations join the public surface with rendered-format validation, and `release-checkpoint` passes the MCP release gate through from the CLI. Hardening from the adversarial audit: the MCP handshake reports the real kinocut version, a central guard rejects outputs that alias an operation's inputs, and oversized error echoes are truncated. Surface grows to **201 MCP tools / 173 CLI commands** — the `mcp-video==1.6.13` shim installs `kinocut==1.15.2`.\n\n## What's in 1.15.1\n\nKinocut **1.15.1** is a maintenance release on top of 1.15.0: the `mcp-video` compatibility shim **1.6.12** carries the registry ownership marker, the legacy `io.github.KyaniteLabs/mcp-video` registry entry was republished so directory listings (Glama, PulseMCP) point at living metadata (#469), and the object-matte engine now streams decode with scratch-directory caps — bounded memory on large inputs (#414). Surface stays **196 MCP / 167 CLI** — no new public tool name.\n\n## What's in 1.15.0\n\nKinocut **1.15.0** (2026-08-19) was the Windows/diagnostics release: first-class Windows support and honest diagnostics on top of 1.14.x (same 360 dual-cam assembly and performance surface), driven by a community bug report. Surface stays **196 MCP / 167 CLI** — no new public tool name.\n\n- **Honest MCP startup failures** — `kino --mcp` keeps the \"requires the 'mcp' package\" hint only when `mcp` is genuinely absent; every other server-tree import failure now prints its real cause (filesystem paths redacted, markup-safe) and exits non-zero. Reported in [#445](https://github.com/KyaniteLabs/kinocut/issues/445).\n- **doctor verifies the MCP server import** — new required `mcp-server-import` check imports the same server tree `--mcp` uses, so `kino doctor` can no longer report OK while MCP mode is broken.\n- **First-class Windows support** — portable projectstore file locking ([#446](https://github.com/KyaniteLabs/kinocut/pull/446), landed with credit) makes `kino --mcp` importable on Windows; lock errors follow a contention-only contract; `kino --help` no longer crashes on legacy cp1252 consoles; and a `windows-latest` CI smoke job (lint, import checks, `kino doctor`, public-surface tests) guards the platform on every change.\n- **360 dual-cam assembly** — any stitched equirect MP4 (Insta360, Ricoh Theta, GoPro MAX, DJI Osmo 360, …) → reviewable `360_assembly_plan` (desk / table / `front_back`, split / switch / PiP / single) → approve → FFmpeg `v360` render. MCP: `video_intent` `goal=` + `video_review_decide`. Python: `Client.propose_360_assembly` / `decide_360_assembly` / `render_360_assembly`. Raw `.insv` / `.360` rejected. Director is a plug (local first; cloud opt-in). Not an optimized-AI claim. Guide: [docs/360_ASSEMBLY.md](docs/360_ASSEMBLY.md).\n- **Faster 360 and import path** — single-pass split/PiP/switch `filter_complex` (source audio kept); sampled quality-gate analyze window; SHA-256 path/m"
+    },
+    "brief": {
+      "summary": "面向 AI 代理的开源视频剪辑 MCP 服务器，本地跑 FFmpeg",
+      "problem": "AI 代理直接手写 FFmpeg 命令容易出错，剪辑结果也难以复核",
+      "highlights": [
+        "可以把采访剪成带字幕的竖版短视频",
+        "可以用它转写音频并生成字幕文件",
+        "可以在发布前做画质检查并出缩略图"
+      ],
+      "target_users": [
+        "AI 代理开发者",
+        "视频创作者",
+        "自动化剪辑团队"
+      ],
+      "why_trending": "总 Star 187，10 月初仍在更新，本周雷达首次收录",
+      "caveat": "需本机安装 FFmpeg；功能多来自项目自述，未获第三方验证",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "KyaniteLabs/kinocut",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "面向AI Agent的守卫式视频编辑MCP服务器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 48.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "YuriPlanet/vera20k",
+      "url": "https://github.com/YuriPlanet/vera20k",
+      "description": "Red Alert 2: Yuri's Revenge rebuilt in Rust / 用 Rust 重写的《红警2：尤里的复仇》",
+      "language": "Rust",
+      "total_stars": 44,
+      "forks": 10,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "command-and-conquer",
+        "game-development",
+        "game-engine",
+        "openra",
+        "ra2",
+        "real-time-strategy",
+        "red-alert-2",
+        "redalert2",
+        "reimplemented-engine",
+        "rts",
+        "yuris-revenge",
+        "yurisrevenge"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-03-29T15:31:02Z",
+      "updated_at": "2026-10-06T06:26:23Z",
+      "pushed_at": "2026-10-06T06:26:20Z",
+      "open_issues": 178,
+      "homepage": "https://yuriplanet.github.io/vera20k/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<img src=\"docs/images/new-conscirpt-hero-image.png\" alt=\"VERA20k hero image\" width=\"100%\">\n\n<p align=\"center\" dir=\"ltr\">\n  <a href=\"README.sv.md\" lang=\"sv\">Svenska</a> · <a href=\"README.zh-CN.md\" lang=\"zh-CN\">简体中文</a> · <a href=\"README.de.md\" lang=\"de\">Deutsch</a> · <a href=\"README.ar.md\" lang=\"ar\" dir=\"rtl\">العربية</a> · <a href=\"README.ru.md\" lang=\"ru\">Русский</a> · <a href=\"README.th.md\" lang=\"th\">ไทย</a> · <a href=\"README.tr.md\" lang=\"tr\">Türkçe</a> · <strong>English</strong>\n  &nbsp;&nbsp;\n  <a href=\"https://github.com/YuriPlanet/vera20k/actions/workflows/macos.yml?query=branch%3Amain\" title=\"Latest macOS library test run (run manually)\"><img src=\"https://github.com/YuriPlanet/vera20k/actions/workflows/macos.yml/badge.svg?branch=main\" alt=\"macOS library tests\" height=\"20\" align=\"middle\"></a>\n  <a href=\"https://github.com/YuriPlanet/vera20k/actions/workflows/linux.yml?query=branch%3Amain\" title=\"Latest Linux library test run (run manually)\"><img src=\"https://github.com/YuriPlanet/vera20k/actions/workflows/linux.yml/badge.svg?branch=main\" alt=\"Linux library tests\" height=\"20\" align=\"middle\"></a>\n  <a href=\"https://github.com/YuriPlanet/vera20k/actions/workflows/windows.yml?query=branch%3Amain\" title=\"Latest Windows library test run (run manually)\"><img src=\"https://github.com/YuriPlanet/vera20k/actions/workflows/windows.yml/badge.svg?branch=main\" alt=\"Windows library tests\" height=\"20\" align=\"middle\"></a>\n  <a href=\"https://discord.gg/kmjRUn5m5F\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?style=flat&amp;logo=discord&amp;logoColor=white\" alt=\"Join Discord\" height=\"20\" align=\"middle\"></a>\n</p>\n\n<!-- Keep all translated READMEs in sync when changing the text below. -->\n\n# VERA20k\n\nVERA20k is a rewrite of the original engine, `gamemd.exe`. It uses the original game files,\nso you'll need your own copy of Yuri's Revenge.\n\n<img src=\"docs/images/vera20k-screenshots.png\" alt=\"VERA20k skirmish setup screen and in-game view\" width=\"100%\">\n\n## Who it's for\n\nVERA20k is made by gamers, for gamers, and players have the final say in where it goes. Thanks\nto its moddable engine, Red Alert 2 has become many games: team battles, campaigns, roleplay,\ntower defense, mods like Mental Omega, competitive 1v1 and more.\n\nVERA20k aims to keep all of it working as it does in the original, but its focus is an engine\nbuilt for multiplayer, especially large team games.\n\n## Project goals\n\n1. Keep the gameplay, visuals and atmosphere of the original Yuri's Revenge.\n2. Support bigger battles: up to **30 players** and **20,000 units** on larger maps.\n3. Incorporate new RTS features.\n4. Integrated multiplayer client\n\n## Current status\n\n**Early development.** Local skirmish is playable on Windows against a basic AI. Retail and\nrandom maps, menus, base building, harvesting, combat and save/load are in place, but there's\nstill a lot to fix and finish.\n\nMultiplayer, campaigns and the original AI are still missing. Aircraft, mind control, bridges\nand several weapons and effects need more work. We haven't demonstrated 30-player,\n20,000-unit battles yet.\n\n## Build and run\n\nYou need Rust 1.88 or newer, a GPU with Vulkan, DirectX 12 or Metal, and the game installed.\nVERA20k has been played on Windows, Linux and macOS.\n\n```sh\ngit clone https://github.com/YuriPlanet/vera20k.git\ncd vera20k\ncp config.toml.example config.toml\n# Edit config.toml and set ra2_dir to your game folder before running:\ncargo run --release --bin vera20k\n```\n\nUse `--release` to play; debug builds are too slow. See\n[CONTRIBUTING.md](CONTRIBUTING.md#set-up) for platform setup and running the tests.\n\n## How we work\n\nMost of the code is written by AI coding agents that I direct. We use Ghidra to study the\noriginal engine, then port its behavior to Rust and check it with\n[comparison tools](tools/native_oracle.md) and playtesting. The working rules are in\n[AGENTS.md](AGENTS.md), with the details in our [research notes](docs/research/README.md).\n\n## Contributing\n\nHelp is welcome. You can write code, test the game, improve the docs, or play it next to the\noriginal and tell us what feels wrong. You don't need reverse-engineering experience to help.\n\nRead [CONTRIBUTING.md](CONTRIBUTING.md), browse the\n[good first issues](https://github.com/YuriPlanet/vera20k/labels/good%20first%20issue), or say\nhi on [Discord](https://discord.gg/kmjRUn5m5F). The\n[architecture overview](https://yuriplanet.github.io/vera20k/) explains how the engine fits together.\n\n## Credits and legal\n\nThanks to OpenRA, XCC Mixer, the ModEnc wiki, Project Perfect Mod, EA's GPL source release of\nCommand & Conquer and Red Alert, World-Altering Editor, Final Alert, YRpp, Ares, Phobos and\nmany others.\n\nLicensed under the [GPLv3](LICENSE-GPL). This repository contains no game files. Command &\nConquer and Red Alert are trademarks of Electronic Arts Inc., and the screenshots show game art\nowned by Electronic Arts. VERA20k is not affiliated with or endorsed by Electronic Arts.\n"
+    },
+    "brief": {
+      "summary": "用 Rust 重写《红警2：尤里的复仇》引擎的开源项目",
+      "problem": "原版引擎老旧，难以支撑大场面联机和长期维护",
+      "highlights": [
+        "可以打本地遭遇战，对手是基础 AI",
+        "可以读取原版零售与随机地图",
+        "可以在 Windows、Linux、macOS 上自行编译运行"
+      ],
+      "target_users": [
+        "红警老玩家",
+        "RTS 引擎开发者",
+        "Mod 作者"
+      ],
+      "why_trending": "本周首次收录，10 月仍有提交，但仅 44 star",
+      "caveat": "早期阶段，联机、战役与原版 AI 均未完成",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "YuriPlanet/vera20k",
+      "score": 80,
+      "category": "游戏开发",
+      "reason": "用Rust重制红警2尤里的复仇",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 46.0
+    }
+  }
+]
