@@ -1,0 +1,559 @@
+[
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "morluto/rea",
+      "url": "https://github.com/morluto/rea",
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "language": "TypeScript",
+      "total_stars": 10451,
+      "forks": 1155,
+      "stars_today": 2956,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2956
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agent-tools",
+        "ai-agents",
+        "binary-analysis",
+        "cli",
+        "coding-agents",
+        "cordis",
+        "ctf",
+        "decompiler",
+        "disassembler",
+        "dsh",
+        "dsh-plugin",
+        "ghidra",
+        "hopper",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "reverse-engineering",
+        "reverse-engineering-tools",
+        "static-analysis"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-14T00:51:32Z",
+      "updated_at": "2026-10-07T06:11:46Z",
+      "pushed_at": "2026-10-07T06:11:16Z",
+      "open_issues": 80,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n**English** · [简体中文](README_zh.md) · [日本語](README_ja.md) · [한국어](README_ko.md) · [العربية](README_ar.md)\n\n# REA: Reverse Engineer Anything\n\n### One MCP for reverse engineering across binaries, applications, and runtime behavior.\n\n**See a feature you like. Understand how it works, down to the binary level.**\n\n[![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)\n[![CI](https://img.shields.io/github/actions/workflow/status/morluto/rea/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/morluto/rea/actions/workflows/ci.yml)\n[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](#tool-catalog-for-investigation)\n[![Node.js 22+](https://img.shields.io/badge/Node.js-22.19%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)\n[![MIT license](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)\n[![Discord](https://img.shields.io/discord/1556595354999332884?logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/GkcryMnJDM)\n\n<a href=\"https://trendshift.io/repositories/82054?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-82054\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/82054\" alt=\"morluto%2Frea | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n[Quick start](#quick-start) · [Current status](#current-status) · [Investigation model](#the-investigation-model) · [Tool catalog](#tool-catalog-for-investigation) · [Roadmap](#roadmap) · [How it works](#how-it-works)\n\n<code>npx rea-agents setup</code>\n\n<br />\n\n<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />\n\n<br />\n\n<table aria-label=\"REA community\">\n<tr>\n<td align=\"center\" width=\"360\">\n  <a href=\"https://discord.gg/GkcryMnJDM\">\n    <img src=\"docs/assets/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Join the Reverse Engineering Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n<br />\n\n</div>\n\n---\n\nSee a feature in an app that you want in your own product? Ask your agent to investigate it with REA. It can inspect the app without its source code, explain how the feature works, show the evidence, and build a version for your project.\n\nREA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.\n\nSetup registers REA with your agent and installs matching workflow instructions. Native analysis can use an existing Hopper or Ghidra installation; setup can optionally install Hopper with approval. Static JavaScript analysis needs neither engine.\n\n## Quick start\n\n### Run setup (recommended)\n\nSet up REA with your agent:\n\n```bash\nnpx rea-agents setup\n```\n\nChoose which supported agents should use REA, then review the exact paths and changes before approving. Existing REA registrations are selected by default; newly detected agents are available to select, but detection alone does not select them. Setup adds MCP access and REA's guided workflow for selected agents. Hopper is a separate optional choice with its own consent. Setup can also record an existing Ghidra installation.\n\nSetup shows its changes before applying them and backs up existing configuration. See [Installation and setup](docs/installation.md) for requirements and setup options.\n\n### AI Coding Assistants (optional)\n\nAdd the skill to your AI coding assistant for richer context:\n\n```bash\nnpx skills add morluto/rea --skill reverse-engineer-anything\n```\n\nThe skill provides REA's investigation workflow. Run setup above to connect REA to your agent and configure analysis tools. Setup already installs a version-matched skill by default; this command installs the repository version.\n\n### With an agent (recommended)\n\nAfter setup, restart your agent and [describe the app or feature](#just-ask-your-agent) you want to understand. Hopper can run in demo mode; if it shows a first-run prompt, choose the demo or enter an existing license.\n\nREA supports Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Windsurf, Devin, OpenCode, Antigravity, GitHub Copilot CLI, Command Code, and VS Code. Existing REA registrations are selected by default during setup; other detected agents remain unselected until chosen. Other agents can use the [manual MCP configuration](#manual-mcp-configuration).\n\n### First result from the terminal\n\nFor your extracted JavaScript/Electron application tree or ASAR, run:\n\n```bash\nnpx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json\n```\n\nReplace the path with your target (for example, `\"D:/apps/example\"` on Windows).\nThis returns inline Evidence, recovered graph, limitations, and unknowns without\nMCP setup, Hopper, Ghidra, or executing the application. For a native app, configure\nits engine first, then use `analyze` with that app's path. Run `doctor` when you\nneed diagnosis; it is not a prerequisite for each analysis.\n\n### Check readiness for the task at hand\n\n`rea doctor` without options is an audit of the whole integration. It checks\nevery detected agent registration, the installed skill, and every optional\nanalysis engine, so it can report `healthy: false` while your current task works.\nChoose a readiness scope for the work you are doing:\n\n| Task                                | Readiness check                                                                              |\n| ----------------------------------- | -------------------------------------------------------------------------------------------- |\n| Static JavaScript/Electron analysis | None. Run `analyze-javascript-application` directly.                                         |\n| Troubleshoot one analysis engine    | `rea doctor --provider ghidra --json` (or `hopper`, `ida`)                                   |\n| Check one agent's MCP registration  | `rea doctor --client codex --json` (see [client IDs](docs/installation.md#supported-agents)) |\n| Check the installed skill           | `rea doctor --skill --json`                                                                  |\n\nA scoped report has `scope.mode: \"explicit\"`. Only `scope_checks` determine\n`healthy` and the exit status. Everything else is listed in\n`informational_checks`; you don't need to fix it for this task. For example, a\nmissing engine you are not using needs no repair. `environment_healthy` still\nsummarizes the full audit. `--target` adds a target check, but without a scope\noption the report remains audit-wide.\n\nWhen more than one installed engine supports a native target, REA does not pick\none: opening the target fails with `code: \"capability_unavailable\"`,\n`details.selection_reason: \"ambiguous\"`, and the providers in\n`details.candidate_ids`. Choose one once: pass `--provider` on\nthe CLI or `provider_id` on `open_binary`, or set `REA_ANALYSIS_PROVIDER` as a\nstanding preference. An explicit selector overrides the environment variable.\nThe session keeps that choice and never falls back to another engine.\nRecovery depends on `details.selection_reason`. For `ambiguous`, choose one of\nthe candidates. For `provider_unavailable`, the engine you selected needs repair,\nso run `rea doctor --provider <id> --json` and follow its remediation. Neither\nreason means you have to install every engine. See\n[Choosing a deep-analysis provider](#choosing-a-deep-analysis-provider).\n\n### Install the rea command\n\nInstall the command-line interface:\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh | bash\n```\n\nThe installer adds `rea` to your system and starts setup when run in a terminal. It requires Node.js and npm to be installed already.\n\nAlternatively, install with npm, then run setup:\n\n```bash\nnpm install --global rea-agents\nrea setup\n```\n\nUpdate either installation with `rea update`.\n\n### Requirements\n\nStatic JavaScript inspection requires the Node/npm runtime only. Host and\nexternal-tool prerequisites depend on the selected workflow; the native\nprovider guides describe their supported platforms.\n\n- macOS 12 or newer\n- Ubuntu 24.04+, Fedora 41+, or 64-bit Arch Linux\n- Node.js 22.x (>=22.19), 24.x (>=24.11), or 26+\n- npm; REA does not require or install a particular npm version\n\nDeep native binary analysis requires [Hopper](https://www.hopperapp.com/), [Ghidra](#ghidra-analysis-provider), or [IDA Pro](#ida-pro-analysis-provider). Hopper is separate software with its own license; its demo supports analysis with vendor-defined limits. Ghidra and IDA are bring-your-own providers.\n\nFirmware region inspection and explicit extraction use caller-supplied Binwalk and Unblob on Linux. See [Firmware analysis](docs/firmware-analysis.md) for setup, provenance, resource limits and native handoff.\n\nStatic APK analysis uses a separately supplied headless JADX JAR and Java, with no emulator or APK execution. See [Android analysis](docs/android-analysis.md) for setup, CLI/MCP operations, coverage and public test fixtures. Authenticated IPA inventory Evidence can be projected with [Apple application analysis](docs/apple-application-analysis.md).\n\nRepository main and npm 4.1.0 include experimental Windows x64 Ghidra support for native x86-64 PE applications on local NTFS, with bundled Job Object, private-DACL, and path-admission controls. Check the [release boundary](docs/installation.md#released-package-and-main) before expecting this from an older npm package. See [Windows Ghidra P0](docs/windows-ghidra-p0.md) for prerequisites and verified scope.\n\nIf something is not working, run:\n\n```bash\nnpx -y rea-agents@latest doctor\n```\n\n`doctor` checks your host, dependencies, analysis tools, and agent configuration without changing them. Use `--json` for structured diagnostics.\n\n### Linux installation and troubleshooting\n\nOn macOS, setup can install Hopper in `~/Applications` after approval. It verifies the official download and does not need Homebrew or administrator privileges.\n\nOn supported Linux distributions, setup can install Hopper and its demo-session dependencies through your system package manager. You may see a system authorization prompt. Demo sessions use a private virtual display, leaving your desktop alone. See [Hopper installation](docs/installation.md#hopper) for download verification and platform details.\n\nThe normal Linux launcher is `/opt/hopper/bin/Hopper`. If Hopper was installed elsewhere:\n\n```bash\nexport HOPPER_LAUNCHER_PATH=/absolute/path/to/Hopper\nrea doctor --json\n```\n\nIf doctor reports a missing analysis engine even though the file exists, inspect shared-library resolution with:\n\n```bash\nldd /opt/hopper/bin/Hopper | grep 'not found'\n```\n\nInstall the missing packages and rerun `rea setup`. The Linux demo needs Xvfb, Python 3, X11, and XTEST; approved setup installs these dependencies. If you use the curl installer, add `~/.local/bin` to your shell `PATH` when needed.\n\nREA defaults `HOPPER_LAUNCHER_PATH` to `/Applications/Hopper Disassembler.app/Contents/MacOS/hopper` on macOS and `/opt/hopper/bin/Hopper` on Linux. Explicit configuration always takes precedence.\n\n### Ghidra analysis provider\n\nAlready use Ghidra? REA can connect it to your agent on Linux x64 or macOS x64/arm64. It accepts **Ghidra 12.1.x** and the **64-bit full JDK** that installation declares (`application.java.min` through `application.java.max`). Current 12.1 releases require JDK 21 or newer and set no maximum. The bridge is verified with Ghidra 12.1.4 and JDK 21. On macOS, your Ghidra installation must also include the native decompiler for your architecture.\n\nSet the installation paths, then run setup:\n\n```bash\nexport GHIDRA_INSTALL_DIR=/absolute/path/to/ghidra_12"
+    },
+    "brief": {
+      "summary": "让 AI 智能体通过 MCP 分析二进制与应用，无需源码。",
+      "problem": "想弄清闭源应用的功能实现，却缺少源码和顺手的逆向工具链。",
+      "highlights": [
+        "可以分析 JavaScript、Electron 应用，且不运行目标程序",
+        "可以让智能体调用 Hopper 或 Ghidra 分析原生二进制",
+        "可以在终端直接跑分析，并返回证据与已知限制"
+      ],
+      "target_users": [
+        "逆向工程师",
+        "安全研究者",
+        "CTF 选手"
+      ],
+      "why_trending": "今日新增约 2956 Star，本周首次收录，热度集中。",
+      "caveat": "原生分析需自备 Hopper 或 Ghidra，需 Node.js 22+。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "morluto/rea",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "逆向工程 MCP Server，服务 Agent 工作流",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 71.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 278420,
+      "forks": 23312,
+      "stars_today": 889,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 889
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-10-07T06:11:00Z",
+      "pushed_at": "2026-10-06T19:04:26Z",
+      "open_issues": 324,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nTwo ways in, two philosophies. **The [Claude Code plugin](https://code.claude.com/docs/en/plugins)** installs the whole set as a managed, read-only bundle that updates when Anthropic's marketplace picks up my releases, so you subscribe rather than fork. **[skills.sh](https://skills.sh/mattpocock/skills)** copies editable skill files into your project, so you can hack on them and make them your own. Pick one: installing both leaves you with every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugins install mattpocock-skills\n```\n\nOr, from inside a session:\n\n```\n/plugin install mattpocock-skills\n```\n\nIt's in Claude Code's official marketplace, so there's nothing to add first. Updates reach you when Anthropic's marketplace moves its pin to a new release, which can lag behind this repo by days or weeks.\n\n**Stuck on an old version?** `claude plugin list` shows what you have, and [CHANGELOG.md](./CHANGELOG.md) shows the latest release. To track this repo directly instead, switch to its own marketplace and turn on auto-update for it under `/plugin` → Marketplaces (it's off by default for marketplaces outside Anthropic's):\n\n```bash\nclaude plugin uninstall mattpocock-skills@claude-plugins-official\nclaude plugin marketplace add mattpocock/skills\nclaude plugin install mattpocock-skills@mattpocock\n```\n\n</details>\n\n<details>\n<summary><strong>Codex, and other agents</strong></summary>\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nPick the skills you want, and which coding agents to install them on. **The installer lets you choose which skills to take, so make sure `setup-matt-pocock-skills` is one of them.**\n\nA native Codex plugin is on the roadmap (see [`.agents/adr/0002-ship-as-a-claude-code-plugin.md`](./.agents/adr/0002-ship-as-a-claude-code-plugin.md)).\n\n</details>\n\n<details>\n<summary><strong>For tinkerers</strong></summary>\n\nUse the same installer, on any agent, including Claude Code:\n\n```bash\nnpx skills@latest add mattpocock/skills\n```\n\nIt writes the skills into your repo as ordinary files you own and can edit. Nothing updates behind your back; pull my latest changes when you want them with `npx skills update`.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, GitLab, local files, or anything else you describe)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [glossary](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md) (still named `CONTEXT.md` at that pinned commit, from before the skills renamed the convention), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `GLOSSARY.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n-"
+    },
+    "brief": {
+      "summary": "Matt Pocock 的日常工程技能集，小巧可组合、可自行改造。",
+      "problem": "AI 编码代理常偏离意图、输出啰嗦、代码不可用，流程又难自己掌控。",
+      "highlights": [
+        "可以用 /grill-me 让代理先追问需求再动手",
+        "可以用共享词汇表减少代理啰嗦输出",
+        "可以用安装命令把技能装进各种编码代理"
+      ],
+      "target_users": [
+        "用 AI 写代码的工程师",
+        "Claude Code 用户",
+        "想自建技能的人"
+      ],
+      "why_trending": "今日新增约 889 Star，本周首次进 Trending，技能可组合易改。",
+      "caveat": "资料未说明技能完整清单与实测效果，安装方式二选一别重复装。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "可复用的 Agent 工程技能集，直接对应 Skills",
+      "generated_by_ai": true,
+      "velocity_score": 89,
+      "freshness_score": 40,
+      "ranking_score": 70.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "ayghri/i-have-adhd",
+      "url": "https://github.com/ayghri/i-have-adhd",
+      "description": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
+      "language": "Python",
+      "total_stars": 54535,
+      "forks": 3133,
+      "stars_today": 326,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 326
+    },
+    "details": {
+      "topics": [
+        "adhd",
+        "claude-",
+        "claude-code-plugin",
+        "claude-skills",
+        "developer-tools",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-13T20:42:06Z",
+      "updated_at": "2026-10-07T06:07:26Z",
+      "pushed_at": "2026-10-06T23:23:46Z",
+      "open_issues": 72,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"./logo.png\" alt=\"i-have-adhd\" width=\"140\" />\n</p>\n<p align=\"center\">\n  <strong align=\"center\">ADHD-friendly outputs. No ADHD diagnosis needed!</strong>\n</p>\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/github/license/ayghri/i-have-adhd?style=flat\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\">\n  <strong title=\"English\" aria-label=\"English\">🇬🇧</strong> ·\n  <a href=\".github/readme/README.zh-CN.md\" title=\"简体中文\" aria-label=\"简体中文\">🇨🇳</a> ·\n  <a href=\".github/readme/README.es.md\" title=\"Español\" aria-label=\"Español\">🇪🇸</a> ·\n  <a href=\".github/readme/README.pt-BR.md\" title=\"Português (Brasil)\" aria-label=\"Português (Brasil)\">🇧🇷</a> ·\n  <a href=\".github/readme/README.ja.md\" title=\"日本語\" aria-label=\"日本語\">🇯🇵</a> ·\n  <a href=\".github/readme/README.vi.md\" title=\"Tiếng Việt\" aria-label=\"Tiếng Việt\">🇻🇳</a> ·\n  <a href=\".github/readme/README.ko.md\" title=\"한국어\" aria-label=\"한국어\">🇰🇷</a> ·\n  <a href=\".github/readme/README.fa.md\" title=\"فارسی\" aria-label=\"فارسی\">🇮🇷</a> ·\n  <a href=\".github/readme/README.th.md\" title=\"ภาษาไทย\" aria-label=\"ภาษาไทย\">🇹🇭</a> ·\n  <a href=\".github/readme/README.ar.md\" title=\"العربية\" aria-label=\"العربية\">🇸🇦</a>\n</p>\n\n\n## Install\n\nCopy/paste into your CLI prompt:\n\n```text\nInstall the i-have-adhd skill/plugin from https://github.com/ayghri/i-have-adhd, refer to the repo's AGENTS.md for instructions.\n```\n\nOr 🔗 [check the installation instructions](INSTALL.md).\n\n## What it does\n\nA skill for your coding assistant that stops it from burying the answer. Action first. Steps numbered. No \"Hope this helps!\"\n\n[Kacper Rutkiewicz | AI Made Simple](https://youtu.be/NEl8kPWZP_Y) has made a good breakdown of an earlier version of the skill.\n## What changes\n\n\n<table>\n<tr>\n<td width=\"50%\">\n\n## Before\n\n> Great question! Let me think about this. Your auth flow has a few moving pieces: the middleware, the token verification, and the cookie handling. Looking at `src/auth.ts`, the `verifyToken` function (around lines 42-58) seems to be using an older `jsonwebtoken` API. One approach would be to update the package and rewrite that function. After making the change, you'd want to run the auth tests to confirm nothing breaks. By the way, you might also want to look at your dependency versions overall. Hope this helps! Let me know if you want to dig deeper.\n\n</td>\n\n<td width=\"50%\">\n\n## After\n\n> Edit `src/auth.ts:42` to update the token validation.\n>\n> 1. Open `src/auth.ts`\n> 2. Replace `verifyToken` (lines 42–58) with the snippet below\n> 3. Run `npm test -- auth.spec.ts`\n>\n> Next: paste the first failing line if any test fails.\n\n</td>\n</tr>\n</table>\n\n\n## The rules\n\n10 rules. Full text in [SKILL.md](./skills/i-have-adhd/SKILL.md).\n\n1. Lead with the next action.\n2. Number multi-step tasks.\n3. End with one concrete next step.\n4. Suppress tangents.\n5. Restate state every turn.\n6. Specific time estimates (minutes, not \"a bit\").\n7. Make wins visible.\n8. Matter-of-fact errors.\n9. Cap lists to 5 items.\n10. No preamble. No recap. No closers.\n\n## Tune it\n\nFork, edit `skills/i-have-adhd/SKILL.md`, then swap your copy in:\n\n```bash\nclaude plugin uninstall i-have-adhd            # drop the upstream copy first:\nclaude plugin marketplace remove i-have-adhd   # fork and upstream share both names\nclaude plugin marketplace add <your-username>/i-have-adhd\nclaude plugin install i-have-adhd@i-have-adhd\n```\n\nRestart your coding assistant, then re-invoke `/i-have-adhd`.\n\n## Credits\n\nLoosely based on *The Adult ADHD Tool Kit* by J. Russell Ramsay and Anthony L. Rostain. Adapted for how an LLM should respond, not how a human should organize their day.\n\n## License\n\n[MIT](LICENSE).\n\nStar ⭐ if it saved you one scroll past one \"Great question!\"\n"
+    },
+    "brief": {
+      "summary": "让编码助手先给答案、步骤化输出，不再绕弯子。",
+      "problem": "编码助手的回答常被客套话和铺垫淹没，关键操作难找。",
+      "highlights": [
+        "可以让助手先给下一步操作，再解释",
+        "可以把多步任务自动编号，并限制列表长度",
+        "可以让每轮回答重申进度和下一步"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "AI 编程工具用户",
+        "易分心的程序员"
+      ],
+      "why_trending": "今日新增 326 星，本周首次收录，痛点普遍。",
+      "caveat": "只改输出风格，资料中未说明实际提效数据。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ayghri/i-have-adhd",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "约束 Agent 输出风格的技能插件",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 61.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 54368,
+      "forks": 6088,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 3646
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "tauri",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-10-07T06:11:24Z",
+      "pushed_at": "2026-10-07T06:08:25Z",
+      "open_issues": 109,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a> ·\n    <a href=\"README_JA.md\">日本語</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Optional remote workers |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nOn Windows, run `irm https://voicestudio.sh/install | iex` in PowerShell.\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nOr download from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest) (macOS `.dmg`, Windows `.exe`, Linux `.AppImage` or `.deb`) and follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\n| Hardware | Support |\n|---|---|\n| NVIDIA GPU (Windows / Linux) | CUDA acceleration |\n| Apple Silicon | Metal (MPS) acceleration |\n| No dedicated GPU (Intel/AMD integrated graphics, older PCs) | Fully usable on the CPU, slower; setup installs the small CPU build of PyTorch (about 5 GB free disk) |\n| Windows on ARM (Snapdragon X etc.) | **Experimental**, validation pending: native ARM64 app, x64 Python backend under emulation, CPU only |\n| Intel Mac | App UI only; connect to a remote backend ([why](docs/install/macos.md)) |\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE). Models have their own licenses; review them before commercial use. Clone voices only with permission. See [license details](LICENSE-NOTICE.md).\n"
+    },
+    "brief": {
+      "summary": "本地运行的开源语音工具，可克隆配音，支持646种语言。",
+      "problem": "云端语音服务收费高、数据要上传，想本地处理的选择不多。",
+      "highlights": [
+        "可以克隆声音或用文字描述设计音色",
+        "可以给视频配上对齐时间的多语言配音",
+        "可以口述记录、转写录音并生成有声书"
+      ],
+      "target_users": [
+        "内容创作者",
+        "独立开发者",
+        "有声书制作者"
+      ],
+      "why_trending": "总 Star 超5.4万，仓库近期仍有更新，本地语音需求升温。",
+      "caveat": "AGPL-3.0 许可，模型各有许可证，商用需确认；克隆需获授权。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 90,
+      "category": "语音 / 配音",
+      "reason": "本地 TTS、声音克隆与视频配音工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 76.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 58077,
+      "forks": 5172,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 634
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-07T06:11:05Z",
+      "pushed_at": "2026-10-07T06:12:28Z",
+      "open_issues": 184,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nFor standalone installation, default to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                      "
+    },
+    "brief": {
+      "summary": "用 HTML 和 CSS 写动画，渲染成确定性 MP4 视频",
+      "problem": "手写视频渲染链路门槛高，AI 生成的画面难以稳定输出成视频",
+      "highlights": [
+        "可以让 AI 代理用一句话生成产品发布视频",
+        "可以把 GitHub PR 变成讲解视频",
+        "可以给已有口播视频自动加字幕"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "短视频创作者",
+        "前端动效开发者"
+      ],
+      "why_trending": "连续上榜，用 HTML 渲染视频的思路对 AI 代理很友好",
+      "caveat": "依赖 Node 22 与无头浏览器，资料未说明渲染性能与耗时",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "HTML 渲染视频框架，面向 Agent 生成动画",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 71.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "slaterain/nv-rs",
+      "url": "https://github.com/slaterain/nv-rs",
+      "description": "Experimental Fallout: New Vegas engine reimplementation in Rust and Bevy. Requires your own game data; base-game foundations first.",
+      "language": "Rust",
+      "total_stars": 22,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "bevy",
+        "experimental",
+        "fallout-new-vegas",
+        "game-engine",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-10-03T21:43:03Z",
+      "updated_at": "2026-10-07T06:12:04Z",
+      "pushed_at": "2026-10-07T06:07:37Z",
+      "open_issues": 15,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# nv-rs\n\n[![Rust](https://img.shields.io/badge/Rust-2021_edition-orange.svg)](https://www.rust-lang.org/)\n[![Engine](https://img.shields.io/badge/Engine-Bevy_0.16-blue.svg)](https://bevyengine.org/)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE-MIT)\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE-APACHE)\n[![Platform](https://img.shields.io/badge/Platform-Windows-purple.svg)](docs/PLAYTESTING.md)\n[![Status](https://img.shields.io/badge/Status-experimental-lightgrey.svg)](docs/MILESTONES.md)\n\nA from-scratch reimplementation of **Fallout: New Vegas** in **Rust** with the\n**Bevy** engine. It runs the game from the `Data` folder of an installation you\nown and aims to behave exactly like the original (1:1).\n\n> [!IMPORTANT]\n> nv-rs is an independent project, not affiliated with or endorsed by\n> Bethesda Softworks, ZeniMax Media, Obsidian Entertainment or Microsoft. It\n> contains no game files; you need your own legally obtained copy of the game.\n> See [LEGAL.md](LEGAL.md).\n\n---\n\n## How it works\n\n- **Original files at runtime.** nv-rs reads the game's own plugins, archives,\n  meshes, textures, sounds, menus and shaders directly. There is no\n  conversion step, and the installation is never modified.\n- **Behaviour from the original program.** Rules, constants and formulas come\n  from the game's program (`FalloutNV.exe`, read in Ghidra), its data, and\n  recordings of the original game. Nothing is invented or tuned by eye. The\n  method is described in [docs/METHODOLOGY.md](docs/METHODOLOGY.md) and the\n  decisions behind it in [docs/adr/](docs/adr/README.md).\n- **Checked against the original.** Tools in [`research/`](research/) record\n  what the original program actually does (function results on the real CPU,\n  live arguments and state) so that Rust code can be tested against it.\n- **Simulation separate from presentation.** Game rules live in plain Rust\n  crates with no external libraries. The Bevy app only draws, plays sound\n  and reads input. That split also keeps the planned VR support possible\n  ([docs/VR.md](docs/VR.md)).\n\n---\n\n## Repository layout\n\n```\nnv-rs/\n├── Cargo.toml         # core workspace (no external crates)\n├── crates/            # readers, game rules, tools and test fixtures (table below)\n├── viewer/            # the Bevy app (its own workspace, Bevy 0.16)\n├── research/          # Ghidra scripts and native oracle tools\n│   ├── ghidra/        # identity, complete export, function cards, name import\n│   └── nv-oracle/     # nv-call, nv-probe, nv-inject (own workspace, 32-bit Windows)\n├── docs/              # roadmap, method, decisions, topic findings\n├── scripts/           # packaging\n└── distribution/      # files shipped in playtest packages\n```\n\n| Group | Crates | What they do |\n| --- | --- | --- |\n| **Formats** | `esm`, `bsa`, `nif`, `dds`, `mp3`, `speedtree`, `shaders`, `assets` | Read the game's files: plugins and records, archives, meshes and animations, textures, audio, trees, compiled shaders, and the loose-file/archive lookup. |\n| **Game** | `world`, `physics`, `script`, `ui`, `preview`, `cellview` | The game's rules: world state, actors, AI, combat, dialogue, quests, inventory, saves, collision, the script engine, menus built from the game's XML, and per-cell scene data. |\n| **Tools** | `nvinspect` | Command-line inspection of real game data: records, cells, meshes, collision walks, coverage tables and more. |\n| **Test content** | `testdata` | Builds synthetic plugins, archives and meshes for tests, so tests never need game files. |\n| **Engine** | `viewer` (binary `nv-viewer`) | The Bevy app: rendering, audio and input on top of the game crates. |\n\n[ADR-0004](docs/adr/0004-mudcrab-style-layout.md) plans to merge these groups\ninto five crates (`formats`, `game`, `tools`, `test-content`, `engine`) and to\nregroup the docs.\n\n---\n\n## Roadmap\n\nMilestones are worked in order, and each has an acceptance gate checked\nagainst the original game. Status and evidence are in\n[docs/MILESTONES.md](docs/MILESTONES.md).\n\n- [ ] **M1: Opening and persistent world** (active): the opening movie and\n  wakeup, Doc Mitchell's character creation, leaving for Goodsprings, and\n  saving and reloading with all state intact.\n- [ ] **M2: Core gameplay loop:** Sunny's tutorial and a Goodsprings quest\n  branch: movement, weapons, damage, AI, dialogue, loot, trade, progression\n  and V.A.T.S.\n- [ ] **M3: Base-game systems and campaign:** coverage of quests, creatures,\n  weapons, effects, factions, companions, travel and menus, up to campaign\n  completion.\n- [ ] **M4: Stability and performance:** long play without crashes or lost\n  state, with measured frame times and streaming.\n- [ ] **M5: DLC and mods:** official DLC and documented plugin, archive and\n  script-extension behaviour.\n- [ ] **M6: VR:** shared simulation with independent aim and views, tested on\n  a headset.\n\nThe opening has been played live from Doc's vigor tester through the SPECIAL\nmenu. That segment is not the whole opening, and nothing here is a complete\nplaythrough yet. Native NVSE plugin DLLs are not supported, original-game\nsaves are not interchangeable with nv-rs saves, and VR and performance targets\nhave not been validated.\n\n---\n\n## Quick start\n\n### Play a test build\n\nDownload a Windows x64 ZIP from\n[Releases](https://github.com/slaterain/nv-rs/releases), extract it, and run\n`Play.cmd`. Point it at your own `Fallout New Vegas\\Data` folder. Read\n[docs/PLAYTESTING.md](docs/PLAYTESTING.md) first.\n\n### Build from source\n\nInstall stable Rust, then:\n\n```sh\n# Core workspace: readers, game rules, nvinspect\ncargo build --release\ncargo test --workspace\n\n# The Bevy app (separate workspace)\ncd viewer\ncargo run --release -- \"<path to Fallout New Vegas\\Data>\" GSDocMitchellHouse\n```\n\nThe core crates and their tests need no game files. Running the viewer and\n`nvinspect` on real assets needs your `Data` folder.\n\n---\n\n## Documentation\n\n| Read this | For |\n| --- | --- |\n| [docs/MILESTONES.md](docs/MILESTONES.md) | Active work, blockers, evidence and the next action |\n| [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the game's program is read and reimplemented, with sources |\n| [docs/adr/](docs/adr/README.md) | Decisions: method, symbols, decompiled code, layout, tools |\n| [docs/RESEARCH_WORKFLOW.md](docs/RESEARCH_WORKFLOW.md) | Day-to-day research steps and provenance |\n| [research/ghidra](research/ghidra/README.md), [research/nv-oracle](research/nv-oracle/README.md) | The research tools and how to run them |\n| [docs/TECHNICAL_REFERENCE.md](docs/TECHNICAL_REFERENCE.md) | Detailed feature descriptions |\n| [docs/OPENING.md](docs/OPENING.md), [docs/OPENING_LOOK_IK.md](docs/OPENING_LOOK_IK.md), [docs/FACE_CREATION.md](docs/FACE_CREATION.md), [docs/PERSISTENCE.md](docs/PERSISTENCE.md), [docs/VIGOR.md](docs/VIGOR.md) | M1 topic findings |\n| [docs/VR.md](docs/VR.md) | VR boundaries and proposals |\n| [docs/PLAYTESTING.md](docs/PLAYTESTING.md), [docs/MAINTAINING.md](docs/MAINTAINING.md) | Testing builds and maintaining releases |\n\n---\n\n## Contributing\n\nnv-rs is a personal project maintained by **slaterain**. Contributions are\nwelcome through forks and pull requests when they fit the active milestone.\nRead [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/GOVERNANCE.md](docs/GOVERNANCE.md)\nfirst.\n\n## Legal and license\n\nOriginal code is dual-licensed under [MIT](LICENSE-MIT) or\n[Apache-2.0](LICENSE-APACHE), at your option. The licence covers only original\nwork. Fallout and Fallout: New Vegas are trademarks of their respective owners.\nRead [LEGAL.md](LEGAL.md) for the full notice, including how material learned\nfrom the game's program is handled.\n"
+    },
+    "brief": {
+      "summary": "用Rust和Bevy重写《辐射：新维加斯》引擎的实验项目",
+      "problem": "让玩家用开源引擎运行自有游戏数据，并复刻原版行为",
+      "highlights": [
+        "可以读取你自有的游戏数据文件直接运行",
+        "可以用命令行工具检查游戏记录和网格",
+        "可以对照原版程序验证重写逻辑是否一致"
+      ],
+      "target_users": [
+        "辐射系列玩家",
+        "Rust/Bevy开发者",
+        "游戏引擎研究者"
+      ],
+      "why_trending": "用Rust复刻经典RPG的实验项目，本周首次收录",
+      "caveat": "项目极早期，仅开头片段可玩，需自备正版游戏数据",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "slaterain/nv-rs",
+      "score": 85,
+      "category": "游戏开发",
+      "reason": "辐射新维加斯引擎 Rust/Bevy 重实现",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "MartinDelophy/ai-video-editor",
+      "url": "https://github.com/MartinDelophy/ai-video-editor",
+      "description": "Open-source, local-first video editor where creators and AI agents edit the same real timeline.",
+      "language": "JavaScript",
+      "total_stars": 890,
+      "forks": 115,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-music",
+        "ai-video-editor",
+        "ai-voiceover",
+        "automatic-captions",
+        "browser-ai",
+        "joyvasa",
+        "liveportrait",
+        "modelscope",
+        "onnx",
+        "pwa",
+        "react",
+        "talking-avatar",
+        "text-to-speech",
+        "video-editor",
+        "video-processing",
+        "video-restoration",
+        "webassembly",
+        "webcodecs",
+        "webgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-09T04:43:11Z",
+      "updated_at": "2026-10-07T06:05:41Z",
+      "pushed_at": "2026-10-07T06:05:37Z",
+      "open_issues": 5,
+      "homepage": "https://video-editor.ai-creator.top/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Timeline Studio — Browser AI Video Editor\n\n**English** | [中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Français](README.fr.md) | [Deutsch](README.de.md) | [Português](README.pt-BR.md) | [ไทย](README.th.md) | [Tiếng Việt](README.vi.md) | [Русский](README.ru.md)\n\n[![Live Demo](https://img.shields.io/badge/Live_Demo-Timeline_Studio-35ead9?style=flat-square)](https://video-editor.ai-creator.top/)\n[![MIT License](https://img.shields.io/github/license/MartinDelophy/ai-video-editor?style=flat-square)](LICENSE)\n[![skills.sh](https://skills.sh/b/MartinDelophy/ai-video-editor)](https://skills.sh/MartinDelophy/ai-video-editor)\n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md) [![LINUX DO](https://shorturl.at/ggSqS)](https://linux.do)\n<a href=\"https://toolindex.net/tools/timeline-studio?ref=badge\" target=\"_blank\" rel=\"noopener\">\n  <img src=\"https://toolindex.net/badge/timeline-studio/small.svg?theme=dark\" alt=\"Timeline Studio - Listed on Tool Index\" width=\"130\" height=\"30\" />\n</a>\n\n## Create with Anna\n\nTry the Anna edition for AI-assisted editing and project continuity:\n\n- Describe your edit to Anna, review a plan based on your brief and clip metadata, then apply supported clip ordering and simple 1× video trims.\n- Projects and media save automatically to Anna cloud storage and can resume with the same Anna account in another browser. Local project checkpoints provide an additional recovery option.\n- Refine the editable multi-track timeline, add AI voiceovers and manual captions, and export MP4 using an available browser encoder.\n\nThis desktop preview plans from metadata, without analyzing video frames or audio; local AI features depend on the Anna container’s capabilities.\n\n→ [Try Timeline Studio on Anna](https://anna.partners/store/@martindelophy/timeline-studio)\n\n## Responsible use of deep synthesis\n\nThis tool uses deep-synthesis technology and is intended solely for technical research and learning.\n\nUsers must ensure that they:\n\n- use only facial images or videos of themselves or people who have provided lawful authorization;\n- do not create or distribute any illegal, infringing, false, or misleading content;\n- do not present generated content as authentic footage or impersonate another person without their consent.\n\nUsers are solely responsible for any legal liability arising from violations of these requirements.\n\n## Project updates\n\n- **2026-10-07** — Visual clips now support cuts down to 0.05 seconds, fixing rejected cuts at valid short intro positions such as 0.45 seconds. Trimming, speed changes and project recovery share the same minimum duration. Fixed frozen video playback when entering or leaving the large canvas preview by restoring source timing, playback and frame callbacks on the new video element.\n- **2026-10-05** — Depth sampling now uses Fast 8, Standard 16 and Fine 24 samples/s. Fast and Standard use RIFE to output 24 fps while sampling and encoding overlap in a bounded pipeline. Source audio is preserved; completed analysis remains reusable after generation failure. Fixed sampling clocks and reuse of RIFE sessions, pair pixels and tensors reduce redundant interpolation without lowering precision, resolution or sample counts. RIFE now downloads from owned, immutable Hugging Face and ModelScope mirrors with verified checksums, automatic fallback and a shared cache.\n- **2026-10-04** — Depth map — Turn video into grayscale depth: near is bright, far is dark. Depth analysis overlaps frame decoding with inference, encodes PNGs in the worker, and throttles UI updates. Depth-map preview and export now interpolate between samples, match trimmed and retimed source timestamps, and reuse decoded images. Depth-map video saved to My assets. Generated depth videos replace their source clips while retaining assets; playback duration follows the visual sequence, fixing zero duration after clearing and reinserting video. Depth videos now include source audio matched to trimming and speed changes; the original video and its sound remain available. Editable depth-assisted relighting adds a lamp-position sphere and hold-to-compare preview, with refreshed frames after timeline dragging.\n- **2026-10-04** — Main and picture-in-picture videos now support clip-level volume and spatial audio directly, without separating audio. Settings are saved with the project and applied in preview and export. Desktop visual properties omit the redundant Audio tab; use the existing audio controls.\n- **2026-10-02** — Long timeline waveforms now render only the visible region, avoiding browser canvas limits and broken white strips after import or reload. Scrolling preserves source-time alignment, and long-video waveform decoding yields between batches.\nSee the public [Roadmap](ROADMAP.md) for planned work, [Releases](https://github.com/MartinDelophy/ai-video-editor/releases) for shipped changes, and [Issues](https://github.com/MartinDelophy/ai-video-editor/issues) for focused tasks and bugs.\n\n## What can it produce?\n\nExplore reproducible before/after examples and editing recipes:\n\n→ [AI Video Editing Skills Handbook](https://github.com/MartinDelophy/timeline-studio-handbook)\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/77422?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-77422\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/77422/daily?language=JavaScript\" alt=\"MartinDelophy%2Fai-video-editor | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/77422?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-77422\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/77422/weekly?language=JavaScript\" alt=\"MartinDelophy%2Fai-video-editor | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\nTimeline Studio is a local-first AI video editor that runs in the browser. It combines a CapCut-style multi-track timeline with WebGPU AI music and repair, multilingual voiceovers, automatic captions, talking-avatar generation, and deterministic offline export.\n\n[Open the editor](https://video-editor.ai-creator.top/) · [Watch on YouTube](https://youtu.be/bqKhpPPa-qo) · [Hugging Face Space](https://huggingface.co/spaces/haixin/timeline-studio)\n\n## Video demo\n\n### Auto Edit\n\nVisual analysis, keyframes, captions, and export.\n\nhttps://github.com/user-attachments/assets/e8327caa-429e-40ff-a7fe-a59e6cf7a464\n\n### AI Repair\n\nTimed watermark removal with before/after review.\n\nhttps://github.com/user-attachments/assets/aea9f5b4-c720-4b0c-9067-5ec124eef982\n\n### AI Voiceover\n\nhttps://github.com/user-attachments/assets/304a744e-d620-4380-9c17-19af3726f5a4\n\n![Timeline Studio editor](docs/screenshots/editor-timeline.png)\n\n## AI capabilities\n\n- **Multilingual voiceover:** Chinese and mixed Chinese/English Hojo TTS Light 80M FP16 reference voices (晴岚 and 若溪), with autoregressive generation on WebGPU and stable waveform decoding on WASM; English Kokoro 82M; and browser Piper voices for German, Spanish, French, Italian, and Brazilian Portuguese.\n- **Local AI music:** Stable Audio 3 Small Q4 ONNX runs through WebGPU with translated free-form prompts, 30/60/90/120-second choices, waveform-aware long-track looping, persistent model caching, and automatic insertion into My Assets.\n- **Automatic captions:** Whisper small q8 ONNX with waveform-aware timing and conservative Chinese recognition cleanup.\n- **Smart framing:** YOLOS tiny subject detection and MODNet portrait matting for smart crop, caption avoidance, and background removal across images and complete videos.\n- **AI Repair:** browser-local MI-GAN watermark/object removal with multiple timed repair regions, plus NanoVSR 644K WebGPU 4× restoration for images and videos with synchronized before/after comparison.\n- **AI vocal separation:** isolate vocals and place the instrumental stem on the music track without leaving the browser workflow.\n- **Digital human:** JoyVASA audio-to-motion and LivePortrait neural rendering with WebGPU, 256px preview and 512px quality paths.\n- **Local-first inference:** large models are lazy-loaded, revision-pinned, and cached by the service worker; supported workflows run without uploading project media to an editing backend.\n\n## Resilient model delivery\n\nBrowser AI models are mirrored on both Hugging Face and ModelScope. Timeline Studio uses ModelScope first for Chinese interfaces and domestic sessions, uses Hugging Face first elsewhere, remembers the first working source for the current runtime, and automatically falls back to the other source when needed. Cache identities are shared across both providers, so switching routes does not download the same revision twice.\n\n- Stable Audio: [Hugging Face](https://huggingface.co/haixin/stable-audio-3-small-music-onnx) · [ModelScope](https://www.modelscope.cn/models/martindelophy/stable-audio-3-small-music-onnx/files?version=main)\n- Voice models: [Hugging Face](https://huggingface.co/haixin/timeline-studio-voice-models/tree/074a57bc4dac9c58568b031898ea79da6f36b282) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-voice-models/files?version=9cb5ab964c014b182701153bd00f7a2202f5dce8) (mixed upstream licenses; see the repository model card)\n- Timeline Studio ONNX models: [Hugging Face](https://huggingface.co/haixin/timeline-studio-onnx-models) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-onnx-models/files?version=main)\n- Depth Anything V2 Small Q4F16: [Hugging Face](https://huggingface.co/haixin/timeline-studio-onnx-models/tree/a0806c6fb9484894dcb78df523156d244461515d/depth-anything-v2-small) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-onnx-models/files?version=4cc757f80330e22cb8f82b628c53ceca6307fd12&subpath=depth-anything-v2-small) (Apache-2.0)\n- Vocal remover: [Hugging Face](https://huggingface.co/haixin/timeline-studio-vocal-remover) · [ModelScope](https://www.modelscope.cn/models/martindelophy/timeline-studio-vocal-remover/files?version=main)\n\n## Editing and export\n\n- Contiguous main Visuals track plus timed picture-in-picture overlays.\n- Direct canvas selection, movement, proportional resize, rotation, masks, filters, effects, animation, speed, and explicit keyframes, plus desktop four-way color grading with fully keyframeable temperature, tint, saturation, hue, wheel saturation, and luminance controls.\n- Captions, stickers, voiceover, separated source audio, and music on independent timed tracks.\n- CapCut-style snapping, alignment guides, clip menus, split/duplicate/delete, timeline zoom, undo/redo, and portable `.timeline` projects.\n- Native media playback for a responsive preview; export uses a separate deterministic offline rendering path.\n- WebCodecs MP4/WebM composition with shared preview/export geometry, audio mixing, captions, overlays, effects, and MediaRecorder fallback.\n- Installable PWA with a cached app shell and multilingual UI.\n\n## Agent Skill\n\nThe repository includes the [AI Video Editing Skill for Codex, Claude Code, Copilot and Gemini CLI](skills/edit-timeline-studio/README.md), backed by [`edit-timeline-studio`](skills/edit-timeline-studio/SKILL.md) for planning, executing, and verifying editable video timelines.\n\nIt helps an agent:\n\n- inspect media and preserve the user's editing brief;\n- describe reversible edits with stable clip IDs and explicit timestamps;\n- operate the hosted or local editor through the browser compatibility path;\n- validate declarative edit plans with `skills/edit-timeline-studio/scripts/validate_edit_plan.mjs`;\n- verify track placement, transitions, captions, overlays, audible audio, and final export artifacts;\n- keep the editable `.timeline` project as the source of truth instead of returning only an opaque render.\n\nThe versioned headle"
+    },
+    "brief": {
+      "summary": "浏览器里的本地AI视频剪辑器，人和AI代理共用一个真实时间线",
+      "problem": "视频剪辑工具多为本地软件或云端服务，AI功能常要上传素材，代理自动化也不方便",
+      "highlights": [
+        "可以让AI代理按你的描述自动排序片段并做1倍速剪切",
+        "可以在浏览器里生成多语言AI配音和自动字幕",
+        "可以本地去水印、修复画质并导出MP4，不用上传素材"
+      ],
+      "target_users": [
+        "视频创作者",
+        "AI代理开发者",
+        "注重隐私的剪辑爱好者"
+      ],
+      "why_trending": "本周首次收录，总星标890且近期持续更新，本地AI剪辑加代理协作方向较少见",
+      "caveat": "项目较新，桌面预览仅按元数据规划，不分析画面音频，AI功能依赖容器能力",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "MartinDelophy/ai-video-editor",
+      "score": 88,
+      "category": "视频剪辑",
+      "reason": "本地视频编辑器，人机共用同一条时间线",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "leancoderkavy/premiere-pro-mcp",
+      "url": "https://github.com/leancoderkavy/premiere-pro-mcp",
+      "description": "Adobe Premiere Pro MCP — independent, local-first server for supported workflows. Connect Claude, Codex, or Cursor through a local CEP bridge.",
+      "language": "TypeScript",
+      "total_stars": 332,
+      "forks": 65,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "adobe",
+        "adobe-premiere-pro",
+        "ai-video-editing",
+        "cep",
+        "claude",
+        "claude-desktop",
+        "codex",
+        "creative-cloud",
+        "cursor",
+        "extendscript",
+        "local-first",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "premiere-automation",
+        "premiere-pro",
+        "typescript",
+        "video-automation",
+        "video-editing",
+        "video-editing-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-27T06:31:32Z",
+      "updated_at": "2026-10-07T06:06:43Z",
+      "pushed_at": "2026-10-07T06:07:00Z",
+      "open_issues": 2,
+      "homepage": "https://premiere-pro-mcp.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# MCP for Adobe Premiere Pro — local MCP server\n\n<!-- mcp-name: io.github.leancoderkavy/premiere-pro -->\n\n[![MCP Toplist](https://mcptoplist.com/badge/glama%2Fleancoderkavy%2Fpremiere-pro-mcp.svg)](https://mcptoplist.com/server/glama%2Fleancoderkavy%2Fpremiere-pro-mcp)\n\n**Adobe Premiere Pro MCP server for reviewable, local-first workflows with compatible AI assistants.**\n\nPremiere Pro automation for Claude, Cursor, Codex, and other MCP clients: AI-assisted editing, project organization, and export checks through Adobe's documented UXP and CEP/ExtendScript APIs.\n\nFree, MIT licensed, local-first, and published to npm as [`premiere-pro-mcp`](https://www.npmjs.com/package/premiere-pro-mcp) — the only package name that installs this project.\n\n[Website](https://premiere-pro-mcp.com/) · [Recorded demo](https://premiere-pro-mcp.com/demo/) · [Compare servers](https://premiere-pro-mcp.com/compare/) · [Setup guides](https://premiere-pro-mcp.com/blog/how-to-set-up-premiere-pro-mcp/) · [Search tools](https://premiere-pro-mcp.com/tools/) · [Troubleshooting](https://premiere-pro-mcp.com/docs/troubleshooting/) · [Release facts](https://premiere-pro-mcp.com/facts/)\n\nDevelopment source: 393 core tools across 60 modules, 4 resources, and 24 guided workflows. A connected UXP host adds 96 capability-gated tools.\n\nThe [completed AE render handoff](docs/after-effects-render-handoff.md) previews and confirms importing one finished render into an existing Premiere bin, with host and file rechecks and an import receipt.\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)\n[![Node.js](https://img.shields.io/badge/Node.js-20.19%2B-green.svg)](https://nodejs.org)\n[![MCP](https://img.shields.io/badge/MCP-2026--07--28-purple.svg)](https://modelcontextprotocol.io/specification/2026-07-28)\n[![npm](https://img.shields.io/npm/v/premiere-pro-mcp.svg)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![Website](https://img.shields.io/badge/website-premiere--pro--mcp.com-7C3AED.svg)](https://premiere-pro-mcp.com/)\n[![Premiere Pro](https://img.shields.io/badge/Premiere%20Pro-2020--2026-9999FF.svg)](https://www.adobe.com/products/premiere.html)\n\n[![npm downloads](https://img.shields.io/npm/dm/premiere-pro-mcp.svg?label=npm%20downloads)](https://www.npmjs.com/package/premiere-pro-mcp)\n[![GitHub stars](https://img.shields.io/github/stars/leancoderkavy/premiere-pro-mcp?style=flat&logo=github)](https://github.com/leancoderkavy/premiere-pro-mcp/stargazers)\n[![GitHub forks](https://img.shields.io/github/forks/leancoderkavy/premiere-pro-mcp?style=flat&logo=github)](https://github.com/leancoderkavy/premiere-pro-mcp/network/members)\n[![Open issues](https://img.shields.io/github/issues/leancoderkavy/premiere-pro-mcp.svg)](https://github.com/leancoderkavy/premiere-pro-mcp/issues)\n[![Last commit](https://img.shields.io/github/last-commit/leancoderkavy/premiere-pro-mcp.svg)](https://github.com/leancoderkavy/premiere-pro-mcp/commits)\n[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support%20the%20project-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/leancoderkavy)\n\n</div>\n\n---\n\n![MCP for Adobe Premiere Pro turns a structured AI request into an organized local editing workflow](https://premiere-pro-mcp.com/marketing/premiere-pro-mcp-campaign-hero-v1.png)\n\n<details>\n<summary><strong>Table of contents</strong></summary>\n\n- [What is this?](#what-is-this)\n  - [Latest release](#latest-release)\n  - [Current MCP protocol support](#current-mcp-protocol-support)\n- [For editors evaluating an AI workflow](#for-editors-evaluating-an-ai-workflow)\n- [Quick Start](#quick-start)\n  - [Easiest supported path: Claude Desktop](#easiest-supported-path-claude-desktop)\n  - [First proof, before the first edit](#first-proof-before-the-first-edit)\n  - [Other AI assistants](#other-ai-assistants)\n  - [Configure your MCP client](#3-configure-your-mcp-client)\n  - [Verify the bridge in Premiere Pro](#4-verify-the-bridge-in-premiere-pro)\n- [Clients and capability coverage](#codex-plugin)\n  - [Codex plugin](#codex-plugin) · [Claude](#claude) · [GPT-6 Astra tool discovery](#gpt-6-astra-and-agent-tool-discovery) · [GPT-6 Sol and Luna](#gpt-6-sol-and-gpt-6-luna) · [Claude Fable 5.1](#claude-fable-51) · [Claude Opus 5.5](#claude-opus-55)\n  - [Windows and macOS capability coverage](#windows-and-macos-capability-coverage)\n  - [After Effects MOGRT studio](#after-effects-mogrt-studio)\n  - [Collaboration and AI feature boundaries](#collaboration-and-ai-feature-boundaries)\n  - [Authenticated UXP connection](#authenticated-uxp-connection)\n- [Architecture](#architecture)\n- [Tools](#tools)\n- [MCP Resources](#mcp-resources)\n- [Remote Deployment (Fly.io)](#remote-deployment-flyio)\n- [Environment Variables](#environment-variables)\n- [Project Structure](#project-structure)\n- [Technical Details](#technical-details)\n- [Frequently asked questions](#frequently-asked-questions)\n- [Troubleshooting](#troubleshooting)\n- [Star history](#star-history)\n- [Support the project](#support-the-project)\n- [Contributing](#contributing) · [License](#license)\n\n</details>\n\n## What is this?\n\n**MCP for Adobe Premiere Pro** is the independent, MIT-licensed local MCP server\npublished as `premiere-pro-mcp` by\n[leancoderkavy/premiere-pro-mcp](https://github.com/leancoderkavy/premiere-pro-mcp).\nInstall this package and its separate Premiere connector to connect a compatible\nAI assistant to supported project inspection, timeline editing, and export tools.\nStart with `verify_premiere_connection` and make no changes until the bridge works.\n\n### Find the right Adobe Premiere Pro MCP guide\n\n| Goal | Guide |\n| --- | --- |\n| Understand the local server and connector | [What is Adobe Premiere Pro MCP?](https://premiere-pro-mcp.com/what-is-premiere-pro-mcp/) |\n| Connect Claude Desktop, Cursor, or Codex | [Claude Desktop](https://premiere-pro-mcp.com/blog/claude-desktop-premiere-pro-mcp-setup/) · [Cursor](https://premiere-pro-mcp.com/blog/cursor-premiere-pro-mcp-setup/) · [Codex](https://premiere-pro-mcp.com/blog/codex-premiere-pro-mcp-setup/) |\n| Choose between similarly named projects | [Source-linked server comparison](https://premiere-pro-mcp.com/compare/) |\n| Match a repeatable task to a tool and verification step | [Adobe Premiere Pro automation guide](https://premiere-pro-mcp.com/blog/premiere-pro-workflow-automation/) |\n| Check a tool before planning an edit | [Published tool catalog](https://premiere-pro-mcp.com/tools/) |\n| Confirm released version and provenance | [Published package facts](https://premiere-pro-mcp.com/facts/) |\n\n\nAn [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server that lets AI assistants like **Claude**, **Windsurf**, **Cursor**, **GitHub Copilot**, or any MCP-compatible client directly control Adobe Premiere Pro — importing media, editing timelines, applying effects, managing keyframes, exporting, and more.\n\n```text\n\"Add the B-roll clips to V2, apply a cross dissolve between each, color correct them to match the A-roll, and export a 1080p ProRes.\"\n```\n\n### At a glance\n\n| | |\n| --- | --- |\n| Display name | MCP for Adobe Premiere Pro |\n| npm package | `premiere-pro-mcp` |\n| Install (npm route) | `npm install -g premiere-pro-mcp` |\n| Connector install | `premiere-pro-mcp --install-cep` |\n| MCP server name | `io.github.leancoderkavy/premiere-pro` |\n| Repository | <https://github.com/leancoderkavy/premiere-pro-mcp> |\n| Website | <https://premiere-pro-mcp.com> |\n| License | MIT |\n| Hosts | Windows and macOS, Premiere Pro 2020-2026 |\n\nThis project is independent and is not affiliated with or endorsed by Adobe Inc.\nIt is also separate from other MCP servers for Premiere Pro. The only npm package\npublished from this repository is `premiere-pro-mcp`, and no other package name\ninstalls it.\n\n**Comparing similarly named packages?** Both this package and\n`adobe-premiere-pro-mcp` declare a `premiere-pro-mcp` executable. Verify the package\nand repository before configuring a client. The new\n[local configuration helper](docs/client-configuration.md) prints Claude, Cursor,\nVS Code, or Codex settings that point directly to this installation. It is a\nfeature included in v1.15.1 and later.\n\nThe current source exposes 393 core tools for supported workflow steps spanning the supported ExtendScript, QE DOM, local media and interchange analysis, revisioned project-context retrieval, safe edit-planning, project-intake preview, review handoff, connection verification, and guarded After Effects MOGRT authoring, batch, library, render-queue, inspection, and Premiere-handoff workflows. A compatible, authenticated UXP panel adds 96 documented, capability-gated tools without replacing the production CEP bridge.\n\n<a id=\"latest-release\"></a>\n\n### Latest release: 1.20.0\n\nThe published v1.20.0 npm artifact contains **393 core tools**, 391 in its default profile,\nand 487 with a compatible UXP connection. The development catalog above can include\nunreleased work. See the [versioned facts and package provenance](https://premiere-pro-mcp.com/facts/).\n\nGitHub releases use `v<SemVer>` for both title and tag, such as `v1.20.0`.\nSee [release naming and version conventions](docs/release-conventions.md).\n\n### Try a bounded workflow\n\nChoose a setup guide: [Claude Desktop](https://premiere-pro-mcp.com/blog/claude-desktop-premiere-pro-mcp-setup/),\n[Codex](https://premiere-pro-mcp.com/blog/codex-premiere-pro-mcp-setup/),\n[other local MCP clients](https://premiere-pro-mcp.com/blog/how-to-set-up-premiere-pro-mcp/),\nor [ChatGPT connection options](https://premiere-pro-mcp.com/blog/chatgpt-premiere-pro-mcp/).\n\nDownload the [workflow starter kit](https://premiere-pro-mcp.com/workflows/) for\nsynthetic media and three evaluation recipes: a read-only sequence check, an\nexplicitly confirmed review-frame export, and a product-spot preview. No email is\nrequired. The kit has no recorded Premiere demo or verified host result. Start with\na disposable project and use [setup and recovery](https://premiere-pro-mcp.com/docs/troubleshooting/)\nif the connection is unavailable.\n\n### Release highlights\n\n- **1.20.0 verified range removal:** `ripple_remove_timeline_ranges` previews, then applies a multi-range ripple removal with a single-use confirmation token and clip-level readback (QE razor; experimental).\n- **1.20.0 effect safety:** effect colours read and write losslessly, ambiguous property names (for example repeated Lumetri controls) are refused unless `property_index` is given, and `duplicate_clip` copies keep the original length.\n- **1.20.0 import and metadata additions:** `import_fcp_xml` can import into the open project, `import_folder` accepts `target_bin`, `get_encoder_presets` pages with `limit`/`offset`, `set_footage_interpretation` sets `field_type`, and XML/AAF/EDL imports through `import_media` no longer report a false error.\n- **1.19.1 timeline fixes:** bounded sequence pages with continuation, measured unlinked-clip compatibility, and faster ripple movement with a large-edit opt-in and scaled host waits.\n- **1.19.1 safer handoffs:** AME queue-wide start requires explicit opt-in, malformed MOGRT files refuse before host import, and uncertain committed edits retain inspection guidance.\n- **1.19.1 transcript and capture fixes:** empty host-attached transcripts can accept guarded imports; stored values and still files do not establish temporal animation. A short actual video export is needed to assess keyframe curves.\n\n- **Editorial planning:** film evidence, transcript cleanup, caption authoring, shorts and chapter planning, rhythm and speaker layouts, timeline QA, and platform delivery plans.\n- **Cross-app handoff:** capability-aware workflow routes and guarded After Effects render-to-Premiere handoff.\n- **Editing correctness:** verified readback and explicit capability or committed-but-unverified failures across transition, import, effects, source identity, and track operations. Insert edits ripple QE sync-locked tracks i"
+    },
+    "brief": {
+      "summary": "让 AI 助手在本地控制 Premiere Pro 做剪辑",
+      "problem": "手动整理素材、加转场、导出成片重复费时",
+      "highlights": [
+        "可以让 AI 导入素材并整理到指定轨道",
+        "可以让 AI 给片段加交叉溶解等转场",
+        "可以让 AI 按设定分辨率与编码导出成片"
+      ],
+      "target_users": [
+        "视频剪辑师",
+        "自媒体创作者",
+        "AI 工具开发者"
+      ],
+      "why_trending": "雷达本周首次收录，332 Star，MIT 本地优先",
+      "caveat": "非 Adobe 官方项目，需额外安装 CEP 连接器",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "leancoderkavy/premiere-pro-mcp",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "Premiere Pro MCP，Agent 驱动剪辑自动化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  }
+]
