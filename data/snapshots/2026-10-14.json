@@ -1,0 +1,539 @@
+[
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 63927,
+      "forks": 7107,
+      "stars_today": 1748,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 9559
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-10-14T05:03:22Z",
+      "pushed_at": "2026-10-14T04:12:11Z",
+      "open_issues": 157,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a> ·\n    <a href=\"README_JA.md\">日本語</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Reusable recipes & watch folders |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nOn Windows, run `irm https://voicestudio.sh/install | iex` in PowerShell.\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nOr download from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest) (macOS `.dmg`, Windows `.exe`, Linux `.AppImage` or `.deb`) and follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\n| Hardware | Support |\n|---|---|\n| NVIDIA GPU (Windows / Linux) | CUDA acceleration |\n| Apple Silicon | Metal (MPS) acceleration |\n| No dedicated GPU (Intel/AMD integrated graphics, older PCs) | Fully usable on the CPU, slower; setup installs the small CPU build of PyTorch (about 5 GB free disk) |\n| Windows on ARM (Snapdragon X etc.) | **Experimental**, validation pending: native ARM64 app, x64 Python backend under emulation, CPU only |\n| Intel Mac | App UI only; connect to a remote backend ([why](docs/install/macos.md)) |\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE) covers the application, including commercial use under its conditions. Model weights, tokenizers, voices and generated-output conditions are separate; a paid app licence does not grant those rights. Clone voices only with permission. Model Manager now shows versioned model-source notices, evidence links and unresolved review gaps from the [shared inventory](docs/licensing/model-inventory.md). Its optional [reviewed-file preview](docs/licensing/model-review-workflow.md) does not enforce ordinary downloads or certify commercial permission. See [license details](LICENSE-NOTICE.md).\n\n"
+    },
+    "brief": {
+      "summary": "全本地开源语音工具，可克隆、配音、转写做有声书",
+      "problem": "云端语音服务贵，还要把私人录音传到别人服务器",
+      "highlights": [
+        "可以克隆自己的声音，朗读任意文本",
+        "可以给视频配多语言配音并卡准时间轴",
+        "可以本地转写录音、做有声书和批量任务"
+      ],
+      "target_users": [
+        "配音与内容创作者",
+        "播客有声书制作者",
+        "注重隐私的技术用户"
+      ],
+      "why_trending": "今日新增1748星，本地语音替代方案热度再升",
+      "caveat": "AGPL-3.0；模型权重和声音授权另算，克隆需获允许",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆与多语言视频配音",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "storytold/artcraft",
+      "url": "https://github.com/storytold/artcraft",
+      "description": "ArtCraft is an intentional crafting engine for artists, designers, and filmmakers",
+      "language": "Rust",
+      "total_stars": 26223,
+      "forks": 4106,
+      "stars_today": 4081,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 4081
+    },
+    "details": {
+      "topics": [
+        "3d-graphics",
+        "ai",
+        "aivideo",
+        "filmmaking",
+        "imagegeneration"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-03-31T23:19:12Z",
+      "updated_at": "2026-10-14T05:04:15Z",
+      "pushed_at": "2026-10-11T13:47:59Z",
+      "open_issues": 327,
+      "homepage": "https://getartcraft.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">ArtCraft</h1>\n<p align=\"center\"><strong>The IDE for artists.</strong></p>\n\n<!-- Main video: https://www.youtube.com/watch?v=kzvQMdg66Go\n     GitHub media issue: https://github.com/storytold/artcraft/issues/1951 -->\n\nhttps://github.com/user-attachments/assets/7339bd09-3e0d-44a7-a024-af9de64e4c11\n\n<p align=\"center\">\n  <a href=\"https://www.youtube.com/watch?v=kzvQMdg66Go\">Watch the two-minute ArtCraft demo on YouTube</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/artcraft\"><img alt=\"Discord members online\" src=\"https://img.shields.io/discord/1359579021108842617?style=for-the-badge&amp;label=Discord&amp;color=5865F2&amp;logo=discord&amp;logoColor=white\"></a>\n  <a href=\"https://www.youtube.com/@OfficialArtCraftStudios\"><img alt=\"YouTube\" src=\"https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&amp;logo=youtube&amp;logoColor=white\"></a>\n  <a href=\"https://x.com/get_artcraft\"><img alt=\"X\" src=\"https://img.shields.io/badge/X-181717?style=for-the-badge&amp;logo=x&amp;logoColor=white\"></a>\n  <a href=\"https://www.linkedin.com/company/artcraft-ai\"><img alt=\"LinkedIn\" src=\"https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://getartcraft.com/\">Download ArtCraft</a> ·\n  <a href=\"https://github.com/storytold/artcraft/releases\">GitHub releases</a> ·\n  <a href=\"./_docs/dev_setup.md\">Build from source</a>\n</p>\n\nArtCraft is the IDE for interactive AI image and video creation. Compose in 2D, stage scenes in 3D, and choose the models that fit your work. Turn prompting into *crafting* with visual tools for precise, repeatable results.\n\n## Show, Don't Tell: Advanced Crafting Features\n\nArtists need control over composition, character identity, and camera placement. Build the scene before you generate it. Click any preview to view it at full size.\n\n| Feature                                                                                                             | Preview                                                                                                                                                                                                                                                                                                           |\n| ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **Image to Location**<br>Place virtual actors in a consistent environment and plan multiple shots in the same room. | <a href=\"https://github.com/user-attachments/assets/21f103e3-cc19-4882-a630-9caa1b76ae31\"><img src=\"https://github.com/user-attachments/assets/21f103e3-cc19-4882-a630-9caa1b76ae31\" width=\"180\" alt=\"Image to Location demo\"></a>                                                                                |\n| **3D Image Compositing**<br>Layer backdrops, foregrounds, and props in 3D to build compositions with depth.         | <a href=\"https://github.com/user-attachments/assets/f93a616f-571d-474e-bcc0-53736de7303d\"><img src=\"https://github.com/user-attachments/assets/f93a616f-571d-474e-bcc0-53736de7303d\" width=\"180\" alt=\"3D Image Compositing demo\"></a>                                                                             |\n| **2D Image Compositing**<br>Compose a scene with image layers, background removal, and drawing tools.               | <a href=\"https://github.com/user-attachments/assets/d6f99391-e496-4c62-9e37-29734ba5f899\"><img src=\"https://github.com/user-attachments/assets/d6f99391-e496-4c62-9e37-29734ba5f899\" width=\"180\" alt=\"2D Image Compositing demo\"></a>                                                                             |\n| **Image to 3D Mesh**<br>Turn an image into a 3D object you can position, rotate, and frame precisely.               | <a href=\"https://github.com/user-attachments/assets/600a405c-e360-48c1-9b42-6e657ae6243b\"><img src=\"https://github.com/user-attachments/assets/600a405c-e360-48c1-9b42-6e657ae6243b\" width=\"180\" alt=\"Image to 3D Mesh demo\"></a>                                                                                 |\n| **Character Posing**<br>Pose characters and set your camera before generating the final shot.                       | <a href=\"https://raw.githubusercontent.com/storytold/github-media/22a27373707b13f48fc56405f1f89ca143c43d5d/character-posing.webp\"><img src=\"https://raw.githubusercontent.com/storytold/github-media/22a27373707b13f48fc56405f1f89ca143c43d5d/character-posing.webp\" width=\"180\" alt=\"Character Posing demo\"></a> |\n| **Scene Blocking with Kitbashing**<br>Combine 3D asset kits to control camera angles, object placement, and depth.  | <a href=\"https://github.com/user-attachments/assets/eef025ac-0346-4a46-a023-d48e23629eb5\"><img src=\"https://github.com/user-attachments/assets/eef025ac-0346-4a46-a023-d48e23629eb5\" width=\"180\" alt=\"Scene Blocking with Kitbashing demo\"></a>                                                                   |\n| **Character Identity Transfer**<br>Use a posed mannequin to guide the placement and pose of your character.         | <a href=\"https://github.com/user-attachments/assets/629119ee-8c76-4a83-9827-8c6c995a3ec1\"><img src=\"https://github.com/user-attachments/assets/629119ee-8c76-4a83-9827-8c6c995a3ec1\" width=\"180\" alt=\"Character Identity Transfer demo\"></a>                                                                      |\n| **Background Removal**<br>Isolate subjects to use as props, layers, or backdrops in 2D and 3D scenes.               | <a href=\"https://github.com/user-attachments/assets/90c65057-5531-404f-83af-b34e66e24ec1\"><img src=\"https://github.com/user-attachments/assets/90c65057-5531-404f-83af-b34e66e24ec1\" width=\"180\" alt=\"Background Removal demo\"></a>                                                                               |\n| **Mixed Asset Crafting**<br>Combine image cutouts, worlds, and 3D meshes in one scene.                              | <a href=\"https://raw.githubusercontent.com/storytold/github-media/main/ship-editing.gif\"><img src=\"https://raw.githubusercontent.com/storytold/github-media/main/ship-editing.gif\" width=\"180\" alt=\"Mixed Asset Crafting demo\"></a>                                                                               |\n\nMore previews are coming for scene blocking, canvas editing, and scene relighting.\n\n## Quick and Easy Prompting\n\nStart with a prompt when you want to explore an idea quickly, then use the canvas and scene tools to refine it.\n\n| Feature                                                                                                       | Preview                                                                                                                                                                                                                                 |\n| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **Text to Image**<br>Explore ideas across a wide range of image models with a text prompt.                    | <a href=\"https://github.com/user-attachments/assets/9cc289cd-faf4-4eaf-aed2-21134cce127c\"><img src=\"https://github.com/user-attachments/assets/9cc289cd-faf4-4eaf-aed2-21134cce127c\" width=\"180\" alt=\"Text to Image demo\"></a>          |\n| **Prompted Image Editing**<br>Describe changes to an image with models such as Nano Banana Pro and GPT Image. | <a href=\"https://github.com/user-attachments/assets/a06fa6ad-936c-42d0-8767-48fdbb8ff141\"><img src=\"https://github.com/user-attachments/assets/a06fa6ad-936c-42d0-8767-48fdbb8ff141\" width=\"180\" alt=\"Prompted Image Editing demo\"></a> |\n| **Canvas Image Editing**<br>Use drawing, masks, and inpainting to guide exactly where an image changes.       | <a href=\"https://github.com/user-attachments/assets/f036e08a-f3a6-417a-98ee-ec7f04b2b5ff\"><img src=\"https://github.com/user-attachments/assets/f036e08a-f3a6-417a-98ee-ec7f04b2b5ff\" width=\"180\" alt=\"Canvas Image Editing demo\"></a>   |\n| **Image to Video**<br>Animate an image with your choice of video models and generation controls.              | <a href=\"https://github.com/user-attachments/assets/2bc6c592-511e-4fba-b40f-03c96699b7f7\"><img src=\"https://github.com/user-attachments/assets/2bc6c592-511e-4fba-b40f-03c96699b7f7\" width=\"180\" alt=\"Image to Video demo\"></a>         |\n\nMore previews are coming for image inpainting and image ingredients.\n\n## Models and Providers Supported within ArtCraft\n\n| Provider     | Models and workflows                                                                            |\n| ------------ | ----------------------------------------------------------------------------------------------- |\n| **ArtCraft** | Images, video, music and sound, 3D meshes, and worlds. Browse the complete model catalog below. |\n| Grok         | Grok Imagine and Grok Video.                                                                    |\n| Midjourney   | Midjourney image generation.                                                                    |\n| Sora         | Sora 1, Sora 2, and GPT Image 1.                                                                |\n| World Labs   | Marble world generation with Gaussian splats.                                                   |\n\n<details>\n<summary><strong>ArtCraft: the full 62-model catalog</strong></summary>\n\n<!-- Catalog source: artcraft-services/crates/service/web/storyteller_web/src/configs/omni_gen/\n     image_models.rs, video_models/video_models.rs + by_type/, audio_models.rs,\n     mesh_models.rs, and splat_models.rs. Include the GenerationProvider::Artcraft\n     mappings, not every model defined for other providers. -->\n\n† Currently disabled. ‡ Restricted model; not currently available in the desktop app.\n\n#### Images (16)\n\n| Family      | Models                                                                              |\n| ----------- | ----------------------------------------------------------------------------------- |\n| Nano Banana | Nano Banana; Nano Banana 2; Nano Banana Pro                                         |\n| GPT Image   | GPT Image 1.5; GPT Image 2; GPT Image 2.5 Flare; GPT Image 2.5 Sunburst             |\n| FLUX        | FLUX.1 [dev]; FLUX.1 [schnell]; FLUX 1.1 [pro]; FLUX 1.1 [pro] ultra                |\n| Seedream    | Seedream 4; Seedream 4.5; Seedream 5 Lite; Seedream 5.0 Pro; Seedream 5.0 Pro Ultra |\n\n#### Video (25)\n\n| Family   | Models                                                                                                                        |\n| -------- | ----------------------------------------------------------------------------------------------------------------------------- |\n| Seedance | Seedance 1.0 Lite †; Seedance 1.5 Pro; Seedance 2.0                                                                           |\n| Kling    | Kling 1.6 Pro; Kling 2.1 Pro †; Kling 2.1 Master †; Kling 2.5 Turbo Pro; Kling 2.6 Pro; Kling 3.0 Pro †; Kling 3.0 Standard † |\n| Veo      | Veo 2 †; Veo 3 †; Veo 3 Fast; Veo 3.1; Veo 3.1 Fast; Veo 3.1 Lite                                                             |\n| Sora     | Sora 2 †; Sora 2 Pro †                                                                                                        |\n| Vidu     | Vidu Q3; Vidu Q3 Turbo                                                                                                        |\n| MiniMax  | MiniMax H3; MiniMax H3 Turbo ‡; MiniMax H3 Ultra "
+    },
+    "brief": {
+      "summary": "面向创作者的 AI 图像与视频创作 IDE",
+      "problem": "提示词难精确控制构图、角色与镜头位置",
+      "highlights": [
+        "可以在 3D 场景里摆好角色和机位再生成",
+        "可以分层合成 2D 素材并自动抠掉背景",
+        "可以把图片转成 3D 网格并自由摆放取景"
+      ],
+      "target_users": [
+        "插画师",
+        "分镜与概念设计师",
+        "影视创作者"
+      ],
+      "why_trending": "今日新增约 4081 Star，已连续上榜，热度可观",
+      "caveat": "未说明内置模型与收费方式，未关闭 issue 有 327 个",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "storytold/artcraft",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "面向创作者的交互式AI图像视频IDE",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 20,
+      "ranking_score": 70.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "cathrynlavery/diagram-design",
+      "url": "https://github.com/cathrynlavery/diagram-design",
+      "description": "Editorial diagram design for Claude Code, Codex, GitHub Copilot, Cursor, Factory Droid, and Pi. 44 diagram types. Self-contained HTML + SVG. No shadows. No Mermaid slop.",
+      "language": "HTML",
+      "total_stars": 54485,
+      "forks": 3448,
+      "stars_today": 1815,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1815
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "codex",
+        "data-visualization",
+        "diagrams",
+        "drawio",
+        "mermaid",
+        "svg"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-16T18:01:16Z",
+      "updated_at": "2026-10-14T05:03:51Z",
+      "pushed_at": "2026-10-13T21:48:36Z",
+      "open_issues": 46,
+      "homepage": "https://diagramdesign.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/hero/hero-dark.webp\">\n    <img alt=\"Diagram Design. Editorial diagrams your designer won't hate.\" src=\"docs/hero/hero-light.webp\">\n  </picture>\n</h1>\n\n**An agent skill that draws diagrams as one self-contained HTML + SVG file, in your brand.<br>45 diagram types. No shadows. No Mermaid slop.**\n\n[![GitHub stars](https://img.shields.io/github/stars/cathrynlavery/diagram-design?style=flat-square&color=bf4520)](https://github.com/cathrynlavery/diagram-design/stargazers)\n[![skills.sh installs](https://skills.sh/b/cathrynlavery/diagram-design?style=flat-square)](https://skills.sh/cathrynlavery/diagram-design/diagram-design)\n[![CI](https://img.shields.io/github/actions/workflow/status/cathrynlavery/diagram-design/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/cathrynlavery/diagram-design/actions/workflows/ci.yml)\n[![Plugin version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fcathrynlavery%2Fdiagram-design%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&style=flat-square&color=555555)](CHANGELOG.md)\n[![MIT license](https://img.shields.io/badge/license-MIT-555555?style=flat-square)](LICENSE)\n\n<a href=\"https://trendshift.io/repositories/26141\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/26141\" alt=\"cathrynlavery/diagram-design on Trendshift\" width=\"250\" height=\"55\"/></a>\n\n**[Website](https://diagramdesign.dev) · [Gallery](https://cathrynlavery.github.io/diagram-design/) · [Changelog](CHANGELOG.md)**\n\n[Install](#install) · [What it makes](#what-it-makes) · [Quickstart](#quickstart) · [Match your brand](#onboarding-make-it-look-like-your-brand) · [Import](#import-from-drawio-mermaid-or-excalidraw) · [Export](#export-to-png--svg) · [Contributing](#contributing)\n\n<code>npx skills add cathrynlavery/diagram-design</code>\n\n<br><br>\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/hero/demo.gif\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/hero/demo-light.gif\">\n  <img src=\"docs/hero/demo.gif\" alt=\"A prompt typed into an agent session becomes a finished architecture diagram, then a plain first-pass diagram is redrawn with the skill, then the gallery of diagram types\" width=\"900\">\n</picture>\n\n</div>\n\n<br>\n\nAsk your agent in plain words:\n\n- *\"Make me an architecture diagram of my app: frontend, backend, database, Redis cache.\"*\n- *\"I need a quadrant showing Q2 projects by impact vs effort.\"*\n- *\"Give me a sequence of a bearer call with token refresh on 401.\"*\n- *\"Onboard diagram-design to https://yoursite.com\"* (pulls your palette and fonts so every diagram after this one matches your site)\n\nThe agent picks the type, states its plan, and writes one `.html` file you can open by double-clicking.\n\n---\n\n## Install\n\nWorks with any host that reads Agent Skills, including Cursor, Claude Code, Codex, GitHub Copilot, Gemini CLI, Cline, Windsurf and Amp:\n\n```bash\nnpx skills add cathrynlavery/diagram-design\n```\n\nIn Claude Code, the plugin marketplace gets you updates and the slash commands:\n\n```text\n/plugin marketplace add cathrynlavery/diagram-design\n/plugin install diagram-design@diagram-design\n```\n\nOfficial builds come only from this repository. LittleMight, Cathryn Lavery's company, publishes the plugin directory listings; a listing under any other name is an unofficial copy. [PRIVACY.md](PRIVACY.md) lists what the skill sends over the network.\n\n<details>\n<summary><b>Claude Code</b>: turn on auto-update</summary>\n\nAfter installing, run `/plugin`, open **Marketplaces**, select **diagram-design**, and choose **Enable auto-update**. Claude Code disables auto-update by default for third-party marketplaces; after this toggle, it refreshes the marketplace and installed plugin in the background after startup. Run `/reload-plugins` when prompted, or let the next session load the update.\n\n</details>\n\n<details>\n<summary><b>Cursor</b>, Cline, Gemini CLI, Windsurf, Amp, Zed, Warp, Roo, Kilo and other Agent Skills hosts</summary>\n\nThe cross-agent [`skills` CLI](https://skills.sh) resolves this repository, detects `skills/diagram-design/SKILL.md`, and installs the whole skill (`references/`, `assets/`, `scripts/`) into every host root you select, including Cursor's:\n\n```bash\nnpx skills add cathrynlavery/diagram-design\n```\n\nWhen the selected roots resolve to more than one skills directory, the CLI asks for an installation method and recommends **Symlink**: one canonical copy, linked into each root, so a later update reaches all of them at once. Pass `--copy` for independent copies per host instead. A selection that resolves to a single directory is copied, because the distinction is immaterial there. Where symlinks are unavailable (Windows without Developer Mode) the CLI falls back to copies and reports which roots it copied.\n\nThis is a standalone install, separate from the marketplaces below: it does not follow marketplace updates automatically. Pull merged updates with `npx skills update diagram-design`. It also installs the Agent Skill only, so the `/export-diagram`, `/import-mermaid`, `/profile`, and `/doctor` command surfaces stay with the native packages. On a host that has one of the marketplaces below, prefer the marketplace.\n\n> **One-time migration:** an existing standalone `npx skills add` copy will not start following the Codex marketplace automatically. Remove that standalone copy, then use the Codex marketplace commands. Likewise, uninstall a personal Cowork copy and reinstall Diagram Design from your organization's marketplace. Future marketplace version bumps then flow through each client's native update path.\n\n</details>\n\n<details>\n<summary><b>Codex</b></summary>\n\n```bash\ncodex plugin marketplace add cathrynlavery/diagram-design\ncodex plugin add diagram-design@diagram-design\n```\n\nCodex refreshes configured Git marketplaces at startup. To fetch immediately, run `codex plugin marketplace upgrade diagram-design` and start a new session.\n\n</details>\n\n<details>\n<summary><b>GitHub Copilot</b></summary>\n\n```bash\ncopilot plugin marketplace add cathrynlavery/diagram-design\ncopilot plugin install diagram-design@diagram-design\n```\n\nCopilot installs the shared Diagram Design skill plus its doctor, export, import, and profile capabilities from the existing repository marketplace. Confirm discovery with `copilot skill list` (or `/skills` in an interactive session), then ask for a diagram in natural language. To fetch a merged update, run `copilot plugin marketplace update diagram-design`, then `copilot plugin update diagram-design@diagram-design`.\n\n</details>\n\n<details>\n<summary><b>Factory Droid</b></summary>\n\n```bash\ndroid plugin marketplace add https://github.com/cathrynlavery/diagram-design\ndroid plugin install diagram-design@diagram-design --scope user\n```\n\nDroid tracks Git plugins by commit rather than the manifest's display version. To fetch a merged update, run `droid plugin marketplace update diagram-design`, then `droid plugin update diagram-design@diagram-design --scope user`, and start a new session.\n\n</details>\n\n<details>\n<summary><b>Claude Cowork</b> (organization marketplace)</summary>\n\nOrganization GitHub marketplaces currently require a private or internal repository, so first mirror this public repository into one owned by your organization. In **Organization settings → Plugins**, choose **Add plugin → GitHub**, connect that mirror, and enable **Sync automatically** from the marketplace menu. Automatic sync runs when a pull request containing a plugin version bump is merged to the mirror's default branch; direct pushes do not trigger the webhook. Install Diagram Design from the resulting organization marketplace.\n\n</details>\n\n<details>\n<summary><b>Pi</b></summary>\n\n```bash\npi install https://github.com/cathrynlavery/diagram-design\n```\n\nRun `/reload` in an open Pi session. Pi makes the skill available for matching diagram requests; use `/skill:diagram-design` to invoke it explicitly. Pi also loads the `/export-diagram`, `/import-mermaid`, `/import-excalidraw`, `/profile`, and `/doctor` prompt templates. The unpinned Git install is intentional: Pi has no automatic package refresh, so run `pi update --extensions` to pull merged updates.\n\n</details>\n\n<details>\n<summary><b>Kiro</b></summary>\n\nImport the Agent Skill from the repository subdirectory URL:\n\n```text\nhttps://github.com/cathrynlavery/diagram-design/tree/main/skills/diagram-design\n```\n\nKiro copies imported skills into `.kiro/skills/` for a workspace or `~/.kiro/skills/` globally, so re-import the URL to pick up updates. Custom agents that declare resources should include `skill://diagram-design/**/SKILL.md`.\n\n</details>\n\n<details>\n<summary><b>OpenCode</b></summary>\n\nCopy or symlink `skills/diagram-design/` to `.opencode/skills/diagram-design` in a project or `~/.config/opencode/skills/diagram-design` globally. OpenCode has no Diagram Design marketplace package; copied installs update only when you replace the directory from a newer checkout.\n\n</details>\n\n<details>\n<summary><b>Editable install</b> (customize the style guide in a clone)</summary>\n\nManaged installs are convenient, but changes to `references/style-guide.md` may be replaced by package updates. Saved profiles in `~/.diagram-design/profiles/` survive updates, and projects with a `.diagram-design` marker are unaffected. Clone the repo and install the local path if you plan to customize the working style guide directly:\n\n```bash\ngit clone git@github.com:cathrynlavery/diagram-design.git ~/code/diagram-design\n\n# Pi: register the checkout as a local package\npi install ~/code/diagram-design\n\n# Claude Code: symlink the inner skill\nln -s ~/code/diagram-design/skills/diagram-design ~/.claude/skills/diagram-design\n\n# Other Agent Skills hosts: create only the roots you use\nmkdir -p ~/.agents/skills ~/.cursor/skills ~/.cline/skills ~/.kiro/skills ~/.config/opencode/skills ~/.copilot/skills\nln -s ~/code/diagram-design/skills/diagram-design ~/.agents/skills/diagram-design\nln -s ~/code/diagram-design/skills/diagram-design ~/.cursor/skills/diagram-design\nln -s ~/code/diagram-design/skills/diagram-design ~/.cline/skills/diagram-design\nln -s ~/code/diagram-design/skills/diagram-design ~/.kiro/skills/diagram-design\nln -s ~/code/diagram-design/skills/diagram-design ~/.config/opencode/skills/diagram-design\nln -s ~/code/diagram-design/skills/diagram-design ~/.copilot/skills/diagram-design\n```\n\nThe shared skill lives at `skills/diagram-design/`. Pi discovers it through the repo's standard `skills/` package directory; Claude Code, GitHub Copilot, Codex, Factory Droid, Cursor, and other Agent Skills-compatible tools use the same files.\n\n</details>\n\n---\n\n## How it compares\n\n| | Mermaid / PlantUML | draw.io / Excalidraw | Diagram Design |\n|---|---|---|---|\n| You make it by | Writing text | Dragging shapes by hand | Describing it to your agent |\n| Layout | Automatic | Manual | Placed by the agent on a 4px grid, with CI checks for overlaps and clipping |\n| Look | The renderer's theme | Whatever you draw | One opinionated editorial style, matched to your brand |\n| Output | Text that renders on GitHub | An editable `.drawio` or `.excalidraw` file | One HTML file with inline SVG, exportable to SVG or PNG |\n| Change it later | Edit the text | Edit the canvas | Ask the agent again, or edit the SVG |\n| Existing diagrams | | | Redraws Mermaid, draw.io and Excalidraw files |\n\nThe downsides are real. Output quality depends on the model you run it with, and the same prompt can lay out differently twice. The result is not an editable source format: there is no text to diff in a pull request and no canvas to drag a box on. For docs that live in Git and change every sprint, Mermaid is still the better fit. Diagram Design is for the diagram you are going to publish.\n\n---\n\n## Why I built it\n\nI wanted diagrams I actually liked for my blog posts on [li"
+    },
+    "brief": {
+      "summary": "面向编程 Agent 的图表技能，输出单文件 HTML+SVG",
+      "problem": "Agent 生成的 Mermaid 图样式粗糙，难直接用于正式文档",
+      "highlights": [
+        "可以说需求生成架构图，双击就能打开",
+        "可按官网配色字体生成品牌统一图表",
+        "可导入 drawio/Mermaid 再导出 PNG/SVG"
+      ],
+      "target_users": [
+        "使用 AI 编程的开发者",
+        "写技术文档的人",
+        "需要做图的设计师"
+      ],
+      "why_trending": "连续上榜，今日新增约 1815 Star，支持多种 Agent 主机",
+      "caveat": "仓库描述写 44 种图，README 写 45 种，略有出入",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cathrynlavery/diagram-design",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "Agent技能，生成自包含SVG图表",
+      "generated_by_ai": true,
+      "velocity_score": 99,
+      "freshness_score": 40,
+      "ranking_score": 66.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "morluto/rea",
+      "url": "https://github.com/morluto/rea",
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "language": "TypeScript",
+      "total_stars": 215260,
+      "forks": 53067,
+      "stars_today": 54679,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 54679
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "binary-analysis",
+        "claude-code",
+        "cli",
+        "codex",
+        "cordis",
+        "ctf",
+        "decompiler",
+        "developer-tools",
+        "dsh",
+        "dsh-plugin",
+        "ghidra",
+        "hopper",
+        "llm",
+        "mcp",
+        "model-context-protocol",
+        "rea",
+        "reverse-engineering",
+        "static-analysis"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-14T00:51:32Z",
+      "updated_at": "2026-10-14T05:04:48Z",
+      "pushed_at": "2026-10-14T04:49:17Z",
+      "open_issues": 535,
+      "homepage": "https://rea.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n**English** · [简体中文](docs/readme/README_zh.md) · [繁體中文](docs/readme/README_zh-TW.md) · [日本語](docs/readme/README_ja.md) · [한국어](docs/readme/README_ko.md) · [Türkçe](docs/readme/README_tr.md) · [Русский](docs/readme/README_ru.md) · [Tiếng Việt](docs/readme/README_vi.md) · [ไทย](docs/readme/README_th.md) · [Deutsch](docs/readme/README_de.md) · [Español](docs/readme/README_es.md) · [Français](docs/readme/README_fr.md) · [Українська](docs/readme/README_uk.md) · [Polski](docs/readme/README_pl.md) · [Português (Brasil)](docs/readme/README_pt-BR.md) · [العربية](docs/readme/README_ar.md) · [فارسی](docs/readme/README_fa.md) · [Bahasa Indonesia](docs/readme/README_id.md) · [Italiano](docs/readme/README_it.md)\n· [Ελληνικά](docs/readme/README_el.md)\n\n# REA: Reverse Engineer Anything\n\n### One MCP for reverse engineering across binaries, applications, and runtime behavior.\n\n**See a feature you like. Understand how it works, down to the binary level.**\n\n[![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)\n[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)\n[![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#what-you-can-analyze)\n[![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)\n[![MIT license](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)\n[![Discord](https://img.shields.io/discord/1556595354999332884?logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/GkcryMnJDM)\n\n<a href=\"https://trendshift.io/repositories/82054?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-82054\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/82054\" alt=\"morluto%2Frea | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n**[Website](https://rea.tools/) · [Guides](https://rea.tools/guides/) · [Showcases](https://rea.tools/showcase/)**\n\n[Quick start](#quick-start) · [How REA works](#how-rea-works) · [What you can analyze](#what-you-can-analyze) · [Showcases](#showcases) · [FAQ](#faq) · [Documentation](#documentation)\n\n<code>npx rea-agents setup</code>\n\n> [!IMPORTANT]\n> Get REA from [morluto/rea](https://github.com/morluto/rea),\n> [rea.tools](https://rea.tools/), or the [rea-agents npm package](https://www.npmjs.com/package/rea-agents).\n> Follow the installation and release links from these official sources. A similar\n> repository name or copied README does not establish that a download is official.\n\n<br />\n\n<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />\n\n<br /><br />\n\n<table aria-label=\"REA community\">\n<tr>\n<td align=\"center\" width=\"360\">\n  <a href=\"https://discord.gg/GkcryMnJDM\">\n    <img src=\"docs/assets/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Join the Reverse Engineering Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n<br />\n\n</div>\n\n---\n\nSee a feature in an app that you want in your own product? Ask your agent to investigate it with REA. It can inspect the app without its source code, explain how the feature works, show the evidence, and build a version for your project.\n\nREA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.\n\nSetup registers REA with your agent and installs matching workflow instructions. Native analysis can use an existing Hopper, Ghidra, or IDA installation; setup can optionally install Hopper with approval. Static JavaScript analysis needs no native analysis engine.\n\n> **[Visit the REA website](https://rea.tools/)** for setup instructions, illustrated guides, and real case studies.\n\n## Quick start\n\nOn Linux, Ghidra, JADX, firmware tool launches and static JavaScript/Electron\nanalysis require a procps-compatible `ps` on REA's `PATH` for process ownership\nchecks. Recovery steps are in `docs/installation.md` under\n\"Linux owned-process prerequisite\".\n\n### Set up your agent\n\nWith Node.js and npm installed, run:\n\n```bash\nnpx rea-agents setup\n```\n\nChoose your agents, review the proposed changes, and approve them. Setup adds\nREA's MCP server and matching workflow instructions, with backups of existing\nconfiguration. Restart your agent afterward.\n\nSetup supports Claude Code, Codex, Cursor, Gemini CLI, Grok Build and\n[other agents](docs/installation.md#supported-agents). See\n[installation and setup](docs/installation.md) for provider configuration and\nmanual MCP registration.\n\n### Ask your agent\n\n```text\nUnderstand how search works in the Notes app, show me the evidence, and build a\nsimilar feature for my project.\n```\n\nReplace Notes with your target app and the feature you want to understand.\n\n### Use the terminal\n\nInspect an extracted JavaScript/Electron app directory or ASAR:\n\n```bash\nnpx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json\n```\n\nThe result includes modules, imports, Electron boundaries and their evidence.\nReplace the path with your target, such as `\"D:/apps/example\"` on Windows.\n\nTo install the `rea` command for regular use:\n\n```bash\nnpm install --global rea-agents\nrea --help\n```\n\nFor native analysis, configure a provider first. See the\n[CLI and Evidence guide](docs/cli.md) for native commands, provider selection,\nsnapshots and scripting.\n\n### Update REA\n\nREA changes quickly, and new releases include frequent bug fixes. Keep your\ninstallation up to date.\n\nFor a CLI installed with `npm install --global` or `bun add --global`:\n\n```bash\nrea update\n```\n\nBun global updates require Bun 1.2.17 or later. With an older Bun release,\nupgrade Bun manually before running `rea update`.\n\nTo refresh your agent registrations and skill, run the setup command printed\nby the update.\n\nIf you use `npx`, update your agent setup with:\n\n```bash\nnpx rea-agents@latest setup\n```\n\nReview the setup changes and restart your agent. For one-off CLI commands,\nuse `npx rea-agents@latest` followed by the command. With Bun, use\n`bunx rea-agents@latest` in place of `npx rea-agents@latest`.\n\n## How REA works\n\nYour agent calls REA through MCP to inspect the target and trace relevant code.\nREA returns findings with their evidence. The agent uses them to ask follow-up\nquestions, explain the behavior, or write and test an implementation.\nCLI commands use the same workflows.\n\n![REA investigation flow: your agent asks about a local target, REA inspects and traces it using analysis tools, and the agent uses the returned code, references and unknowns to explain, implement and test.](website/public/assets/figures/rea-investigation-flow.svg)\n\n[Open the full-size figure](website/public/assets/figures/rea-investigation-flow.svg).\n\n<a id=\"current-status\"></a>\n\n## What you can analyze\n\nREA requires Node.js 22.x (>=22.19), 24.x (>=24.11), or 26+, plus npm.\nAdditional tools and host support depend on the target:\n\n| Target                 | What REA returns                                                                     | Requirements and guide                                                                                                                |\n| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |\n| Native binaries        | Pseudocode, assembly, strings, symbols, calls and references                         | Hopper, Ghidra or IDA; [native analysis](docs/native-investigation.md)                                                                |\n| Offline ELF layout     | Sections, segments, original symbols/relocations and static mitigation candidates    | Caller-supplied pwntools on Linux x64; [binary diagnostics](docs/binary-diagnostics.md)                                               |\n| Go binaries            | Embedded compiler version, modules, replacements and build settings                  | Built-in static ELF/PE/thin Mach-O inspection; no Go installation required                                                            |\n| Rust binaries          | Embedded cargo-auditable crate names, versions, sources and dependency edges         | Built-in static ELF/PE/thin Mach-O inspection; [Rust binaries](docs/rust-binaries.md)                                                 |\n| WASM artifact          | Validation, sections, exact import/export WAT forms and decoded WAT                  | Caller-supplied WABT 1.0.42; `inspect_wasm_artifact`                                                                                  |\n| EVM bytecode           | Dispatch selectors, byte offsets, inferred arguments and mutability                  | Local raw/hex carrier on Linux x64; [offline EVM guide](docs/evm-bytecode.md)                                                         |\n| SQLite databases       | Tables, columns, indexes, views, triggers and selected ordinary-table rows           | Local database/WAL snapshot; Node.js 24.x >=24.15 or 26+ with native SQLite limits                                                    |\n| Recorded Linux crashes | Raw notes, every recorded thread's registers/signals and optional mapping candidates | Caller-supplied pwntools on Linux x64; optional GDB/pwndbg; [recorded crashes](docs/recorded-crashes.md)                              |\n| JavaScript / Electron  | Modules, imports, source maps, routes, IPC and native add-on relationships           | Node.js and npm; Linux: procps-compatible `ps`; [application analysis](docs/javascript-application-workflows.md)                      |\n| Websites               | Page structure, scripts, network observations and requested screenshots              | A Chrome-family browser; [browser analysis](docs/browser-observation.md)                                                              |\n| Saved network captures | Requests, responses, exposed payloads and source locations                           | HAR or Fiddler Everywhere SAZ; mitmdump on Linux for native mitmproxy; [capture guide](docs/web-network-captures.md)                  |\n| .NET assemblies        | Metadata, CIL instructions, declared native dependencies and build comparisons       | None (static only); [managed-code guide](docs/managed-code-analysis.md)                                                               |\n| Android APKs           | Manifest declarations, classes, decompiled methods and references                    | Headless JADX and a full JDK on Linux/macOS/Windows x64; [Android guide](docs/android-analysis.md)                                    |\n| Android devices        | Devices, packages, processes, logs, dumps, screen captures, and APK/file transfers   | Caller-supplied adb (emulator or hardware); [ADB guide](docs/adb-device-analysis.md)                                                  |\n| JEB projects           | Engine-backed project units, artifact digests and type/method pseudo-code            | A caller-started JEB client serving MCP, selected with REA_JEB_MCP_URL; [JEB guide](docs/jeb-analysis.md)                             |\n| Android resources      | Decoded manifest, string tables, locales and version facts                           | Caller-supplied Apktool launcher; [resource guide](docs/apktool-resource-analysis.md)                                                 |\n| Flutter apps           | Dart snapshot hash, per-ABI library digests and engine build provenance              | None (static APK parsing)"
+    },
+    "brief": {
+      "summary": "把逆向工程接进 AI 智能体的 MCP 工具，可分析二进制与应用。",
+      "problem": "看懂没有源码的程序很难，人工逆向耗时且门槛高。",
+      "highlights": [
+        "可以让智能体分析二进制，输出伪代码与证据",
+        "可以分析 JavaScript/Electron 应用的结构",
+        "可以在终端直接跑命令，结果可导出 JSON"
+      ],
+      "target_users": [
+        "安全研究人员",
+        "CTF 选手",
+        "AI 智能体开发者"
+      ],
+      "why_trending": "今日新增 Star 极高且连续上榜，MCP 逆向工作流受关注。",
+      "caveat": "原生分析需自备 Hopper、Ghidra 或 IDA，并要求 Node 22+。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "morluto/rea",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "面向逆向工程的MCP Agent技能工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "vercel-labs/skills",
+      "url": "https://github.com/vercel-labs/skills",
+      "description": "The open agent skills tool - npx skills",
+      "language": "TypeScript",
+      "total_stars": 34668,
+      "forks": 2956,
+      "stars_today": 190,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 190
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-01-14T21:31:18Z",
+      "updated_at": "2026-10-14T05:02:57Z",
+      "pushed_at": "2026-10-09T17:54:47Z",
+      "open_issues": 1117,
+      "homepage": "https://skills.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# skills\n\nThe CLI for the open agent skills ecosystem.\n\n<!-- agent-list:start -->\nSupports **OpenCode**, **Claude Code**, **Codex**, **Cursor**, and [75 more](#supported-agents).\n<!-- agent-list:end -->\n\n<p>\n  <a href=\"https://vercel.com/labs#labs-products\"><img alt=\"Vercel Labs Product\" src=\"https://img.shields.io/badge/LABS-PRODUCT-0a0a0a.svg?style=for-the-badge&amp;logo=Vercel&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/skills\"><img alt=\"npm version: skills\" src=\"https://img.shields.io/npm/v/skills.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://github.com/vercel-labs/skills/blob/main/LICENSE\"><img alt=\"License: MIT\" src=\"https://img.shields.io/github/license/vercel-labs/skills.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/skills\"><img alt=\"npm downloads per month: skills\" src=\"https://img.shields.io/npm/dm/skills.svg?style=for-the-badge&amp;labelColor=000000&amp;label=npm%20downloads\" height=\"28\"></a>\n  <a href=\"https://skills.sh/vercel-labs/skills\"><img alt=\"skills.sh\" src=\"https://skills.sh/b/vercel-labs/skills?style=for-the-badge\" height=\"28\"></a>\n</p>\n\n## Install a Skill\n\n```bash\nnpx skills add vercel-labs/agent-skills\n```\n\n## Use a Skill Without Installing\n\nGenerate a prompt for one skill, or start a supported coding agent interactively:\n\n```bash\nnpx skills use vercel-labs/agent-skills@web-design-guidelines | claude\nnpx skills use vercel-labs/agent-skills --skill web-design-guidelines --agent claude-code\n```\n\n`skills use` resolves sources the same way as `skills add`, writes the selected skill files to a temporary directory, and prints only the generated prompt to stdout unless `--agent` is provided. With `--agent`, it starts one supported agent interactively with the generated prompt.\n\n### Source Formats\n\n```bash\n# GitHub shorthand (owner/repo)\nnpx skills add vercel-labs/agent-skills\n\n# Full GitHub URL\nnpx skills add https://github.com/vercel-labs/agent-skills\n\n# Direct path to a skill in a repo\nnpx skills add https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines\n\n# GitLab URL\nnpx skills add https://gitlab.com/org/repo\n\n# Azure Repos (Azure DevOps Services or Server)\nnpx skills add https://dev.azure.com/org/project/_git/repo\nnpx skills add https://dev.azure.com/org/project/_git/repo?path=/skills/web-design&version=GBmain\n\n# Any git URL\nnpx skills add git@github.com:vercel-labs/agent-skills.git\n\n# Local path\nnpx skills add ./my-local-skills\n```\n\n### Private Repositories\n\nUse the same command for public and private repositories. The CLI uses the authentication already configured for the repository URL:\n\n```bash\n# GitHub shorthand or HTTPS (Git credential helper, GitHub CLI, then SSH fallback)\nnpx skills add acme/private-skills\n\n# SSH on GitHub, GitLab, or another Git host\nnpx skills add git@github.com:acme/private-skills.git\nnpx skills add ssh://git@git.example.com/acme/private-skills.git\n\n# HTTPS on any Git host (uses your configured Git credential helper)\nnpx skills add https://git.example.com/acme/private-skills.git\nnpx skills add https://dev.azure.com/org/project/_git/private-skills\n```\n\nFor GitHub HTTPS and shorthand sources, `skills` first uses normal Git credentials. If that fails and GitHub CLI is authenticated, it tries `gh repo clone`, followed by SSH. It does not execute `gh auth token` or copy the stored GitHub CLI credential into the Node.js process.\n\nFor GitHub tree lookups, `skills` first tries the API anonymously, then an explicitly supplied environment token, then `gh api`. GitHub CLI applies its own stored authentication and returns only the API response; the credential is never printed to or read by `skills`. If API access still fails, update checks fall back to an authenticated Git clone.\n\n`GITHUB_TOKEN` or `GH_TOKEN` can be set explicitly for GitHub API access, including private repository downloads and update checks. They are optional for installs when Git, GitHub CLI, or SSH authentication is already configured.\n\n### Options\n\n| Option                    | Description                                                                                                                                        |\n| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `-g, --global`            | Install to user directory instead of project                                                                                                       |\n| `-a, --agent <agents...>` | <!-- agent-names:start -->Target specific agents (e.g., `claude-code`, `codex`). See [Supported Agents](#supported-agents)<!-- agent-names:end --> |\n| `-s, --skill <skills...>` | Install specific skills by name (use `'*'` for all skills)                                                                                         |\n| `-l, --list`              | List available skills without installing                                                                                                           |\n| `--copy`                  | Copy files instead of symlinking to agent directories                                                                                              |\n| `-y, --yes`               | Skip all confirmation prompts                                                                                                                      |\n| `--all`                   | Install all skills to all agents without prompts                                                                                                   |\n\n### Examples\n\n```bash\n# List skills in a repository\nnpx skills add vercel-labs/agent-skills --list\n\n# Install specific skills\nnpx skills add vercel-labs/agent-skills --skill frontend-design --skill skill-creator\n\n# Install a skill with spaces in the name (must be quoted)\nnpx skills add owner/repo --skill \"Convex Best Practices\"\n\n# Install to specific agents\nnpx skills add vercel-labs/agent-skills -a claude-code -a opencode\n\n# Non-interactive installation (CI/CD friendly)\nnpx skills add vercel-labs/agent-skills --skill frontend-design -g -a claude-code -y\n\n# Install all skills from a repo to all agents\nnpx skills add vercel-labs/agent-skills --all\n\n# Install all skills to specific agents\nnpx skills add vercel-labs/agent-skills --skill '*' -a claude-code\n\n# Install specific skills to all agents\nnpx skills add vercel-labs/agent-skills --agent '*' --skill frontend-design\n\n# Install from a direct SKILL.md or archive download URL\nnpx skills add https://example.com/download/my-skill\n```\n\nDirect download URLs are tried after well-known discovery. They may point to a single valid `SKILL.md` file or a `.zip`, `.tar`, `.tar.gz`, or `.tgz` archive; the URL does not need to include a file extension. Downloads are limited to 10 MiB, extracted content to 25 MiB, and archives to 1000 files by default. Override with `SKILLS_DOWNLOAD_MAX_BYTES`, `SKILLS_EXTRACT_MAX_BYTES`, and `SKILLS_EXTRACT_MAX_FILES` when you trust the source.\n\n### Installation Scope\n\n| Scope       | Flag      | Location            | Use Case                                      |\n| ----------- | --------- | ------------------- | --------------------------------------------- |\n| **Project** | (default) | `./<agent>/skills/` | Committed with your project, shared with team |\n| **Global**  | `-g`      | `~/<agent>/skills/` | Available across all projects                 |\n\n### Installation Methods\n\nWhen installing interactively, you can choose:\n\n| Method                    | Description                                                                                 |\n| ------------------------- | ------------------------------------------------------------------------------------------- |\n| **Symlink** (Recommended) | Creates symlinks from each agent to a canonical copy. Single source of truth, easy updates. |\n| **Copy**                  | Creates independent copies for each agent. Use when symlinks aren't supported.              |\n\n## Other Commands\n\n| Command                      | Description                                   |\n| ---------------------------- | --------------------------------------------- |\n| `npx skills use <source>`    | Use one skill without installing              |\n| `npx skills list`            | List installed skills (alias: `ls`)           |\n| `npx skills find [query]`    | Search for skills interactively or by keyword |\n| `npx skills remove [skills]` | Remove installed skills from agents           |\n| `npx skills update [skills]` | Update installed skills to latest versions    |\n| `npx skills init [name]`     | Create a new SKILL.md template                |\n\n### `skills list`\n\nList all installed skills. Similar to `npm ls`.\n\n```bash\n# List project installed skills \nnpx skills list\n\n# List only global skills\nnpx skills ls -g\n\n# Filter by specific agents\nnpx skills ls -a claude-code -a cursor\n```\n\n### `skills find`\n\nSearch for skills interactively or by keyword.\n\n```bash\n# Interactive search (fzf-style)\nnpx skills find\n\n# Search by keyword\nnpx skills find typescript\n\n# Search across every repository owned by an organization or user\nnpx skills find react --owner vercel\n```\n\n### `skills update`\n\n```bash\n# Update all skills (interactive scope prompt)\nnpx skills update\n\n# Update a single skill by name\nnpx skills update my-skill\n\n# Update multiple specific skills\nnpx skills update frontend-design web-design-guidelines\n\n# Update only global or project skills\nnpx skills update -g\nnpx skills update -p\n\n# Non-interactive (auto-detects scope: project if in a project, else global)\nnpx skills update -y\n```\n\n| Option          | Description                                                               |\n| --------------- | ------------------------------------------------------------------------- |\n| `-g, --global`  | Only update global skills                                                 |\n| `-p, --project` | Only update project skills                                                |\n| `-y, --yes`     | Skip scope prompt (auto-detect: project if in a project dir, else global) |\n| `[skills...]`   | Update specific skills by name instead of all                             |\n\n### `skills init`\n\n```bash\n# Create SKILL.md in current directory\nnpx skills init\n\n# Create a new skill in a subdirectory\nnpx skills init my-skill\n```\n\n### `skills remove`\n\nRemove installed skills from agents.\n\n```bash\n# Remove interactively (select from installed skills)\nnpx skills remove\n\n# Remove all skills from an exact lock source\nnpx skills remove owner/repo\n\n# Remove specific skill by name\nnpx skills remove web-design-guidelines\n\n# Remove multiple skills\nnpx skills remove frontend-design web-design-guidelines\n\n# Remove from global scope\nnpx skills remove --global web-design-guidelines\n\n# Remove from specific agents only\nnpx skills remove --agent claude-code cursor my-skill\n\n# Remove all installed skills without confirmation\nnpx skills remove --all\n\n# Remove all skills from a specific agent\nnpx skills remove --skill '*' -a cursor\n\n# Remove a specific skill from all agents\nnpx skills remove my-skill --agent '*'\n\n# Use 'rm' alias\nnpx skills rm my-skill\n```\n\n| Option         | Description                                      |\n| -------------- | ------------------------------------------------ |\n| `-g, --global` | Remove from global scope (~/) instead of project |\n| `-a, --agent`  | Remove from specific agents (use `'*'` for all)  |\n| `-s, --skill`  | Specify skills to remove (use `'*'` for all)     |\n| `-y, --yes`    | Skip confirmation prompts                        |\n| `--all`        | Shorthand for `--skill '*' --agent '*' -y`       |\n\n## What are Agent Skills?\n\nAgent skills are reusable instruction sets that extend your coding agent's capabilities. They're defined in `SKILL.md`\nfiles with YAML frontmatter containing a `name` and `descripti"
+    },
+    "brief": {
+      "summary": "Vercel 出品的开放 Agent 技能安装与管理 CLI",
+      "problem": "技能分散在各仓库，手动复制到不同 AI 编码助手很麻烦",
+      "highlights": [
+        "可以用 npx skills add 从 GitHub 装技能",
+        "可以不安装，直接生成提示词喂给 Claude",
+        "可以一条命令装到 80 种编码 Agent"
+      ],
+      "target_users": [
+        "AI 编码工具用户",
+        "Agent 开发者",
+        "团队协作工程师"
+      ],
+      "why_trending": "今日新增 190 Star，支持约 80 种编码 Agent，本周首次收录",
+      "caveat": "仓库开放 issue 超 1100 个，项目较新需留意稳定性",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vercel-labs/skills",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "开源Agent技能生态安装CLI",
+      "generated_by_ai": true,
+      "velocity_score": 69,
+      "freshness_score": 40,
+      "ranking_score": 65.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 62979,
+      "forks": 5650,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 2536
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "animation",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "mcp",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-14T05:04:12Z",
+      "pushed_at": "2026-10-14T05:00:57Z",
+      "open_issues": 277,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need: the `/hyperframes` router installs each creation workflow on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 21 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 21 skills agents load on demand. Read `/hyperframes` first — it's the router and capability map; it picks a workflow for any \"make me a…\" request — video, deck, or composition port — and points to the domain skills below.\n\nFor standalone installation, default to the **core set** — the router installs each creation workflow on demand. `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 21. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (the router, the `hyperframes-*` domain skills, and `media-use` — plus whatever is already installed; `/figma` stays on demand) and never expands a partial install; the creation workflows install **on demand** — the router runs `npx hyperframes skills update <workflow>` before entering one. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Router\n\n| Skill          | Use when                                                                                                                                                                                                                                                                 |\n| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes` | **Read first** for any request to make / create / edit / animate / render a video, animation, or motion graphic. Capability map for the domain skills, the intent layer that confirms every creation brief up front, and intent router for the creation workflows below. |\n\n### Creation workflows\n\n| Skill                      | Use when                                                                                                                                                                                                                     |\n| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/product-launch-video`    | Any **website** — marketing / launching / promoting a product (from its URL, a brief, or a script), or a site tour / showcase / social clip featuring the site's own visuals. Up to ~3 min (sweet spot 30-90s).              |\n| `/faceless-explainer`      | **Explaining a topic / concept** from arbitrary text — no product, no URL, no website capture; every visual is LLM-invented (typography / abstract / diagram / data-viz).                                                    |\n| `/pr-to-video`             | A **GitHub pull request** (PR URL, `owner/repo#N` ref, or \"this PR\") → changelog / feature-reveal / fix / refactor explainer, read via the `gh` CLI.                                                                         |\n| `/embedded-captions`       | Adding **captions / subtitles** to an existing talking-head video (footage untouched) — verbatim rail, embedded climax behind the subject, or pure-cinematic embed.                                                          |\n| `/talking-head-recut`      | Packaging an existing talking-head / interview / podcast video with **designed graphic overlays** — lower-thirds, data callouts, kinetic titles, pull-quotes, side panels, PiP.                                              |\n| `/motion-graphics`         | A short, **unnarrated, design-led motion graphic** (~under 10s) — kinetic type, stat / chart hit, logo sting, lower-third, animated tweet / headline. MP4 or transparent overlay.                                            |\n| `/music-to-video`          | A **music track** (audio file, video to pull audio from, or one generated from a mood brief) → a **beat-synced** video — lyric, slideshow, or kinetic promo; music drives pacing.                                            |\n| `/slideshow`               | A **presentation / pitch deck / interactive deck** — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode. Output is a navigable deck, not a rendered video.                                     |\n| `/general-video`           | **Anything else** — longer or multi-scene pieces, brand / sizzle reel, title card, static loop, freeform composition. Input- and length-agnostic fallback, and the home of companion mode (co-create with the full toolbox). |\n| `/remotion-to-hyperframes` | **Porting an existing Remotion** (React) composition's source to HyperFrames HTML. One-way migration, not creation.                                                                                                          |\n\n### Domain skills (loaded on demand)\n\nAtomic capabilities the creation workflows compose against — pull one when you need that specific layer.\n\n| Skill                    | Covers                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |\n| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |\n| `/hyperframes-core`      | The composition contract — `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, determinism rules.                                                                                                                                                                                                                                                                                                                       |\n| `/hyperframes-animation` | All animation knowledge — atomic motion rules, scene blueprints, transitions, runtime adapters (GSAP / Lottie / Three.js / Anime.js / CSS / WAAPI / TypeGPU).                                                                                                                                                                                                                                                                                                                        |\n| `/hyperframes-keyframes` | Seek-safe keyframe authoring across runtimes — GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, 3D depth — plus `hyperframes keyframes` diagnostics for rendered motion.                                                                                                                      "
+    },
+    "brief": {
+      "summary": "把 HTML 与 CSS 渲染成确定性 MP4 视频的开源框架",
+      "problem": "让 AI 编程助手按提示词产出可复现的视频，而不用手工剪辑或拼素材",
+      "highlights": [
+        "可以用一句提示词生成产品介绍短视频",
+        "可以把 GitHub PR 内容转成讲解视频",
+        "可以给已有口播视频自动加字幕"
+      ],
+      "target_users": [
+        "AI 编程助手用户",
+        "视频自动化开发者",
+        "内容创作者"
+      ],
+      "why_trending": "总 Star 近 6.3 万，仓库本月仍在推送更新，主打让 Agent 直接产出视频",
+      "caveat": "需要 Node 22 以上；资料未说明渲染速度与成本",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 85,
+      "category": "AI 视频",
+      "reason": "HTML渲染视频，专为Agent设计",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "shinshin86/mesh-avatar-studio",
+      "url": "https://github.com/shinshin86/mesh-avatar-studio",
+      "description": "Turn one illustration into an animated 2D mesh avatar with a coding agent and a local editor",
+      "language": "TypeScript",
+      "total_stars": 679,
+      "forks": 79,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "2d-animation",
+        "avatar",
+        "claude-code",
+        "codex",
+        "mesh-deformation",
+        "vtuber",
+        "webgl"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-04T03:33:57Z",
+      "updated_at": "2026-10-14T04:54:08Z",
+      "pushed_at": "2026-10-14T04:54:47Z",
+      "open_issues": 0,
+      "homepage": "https://shinshin86.github.io/mesh-avatar-studio/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Mesh Avatar Studio\n\n[日本語](README.ja.md)\n\nTurn a single illustration into an animated 2D mesh avatar: it blinks, talks, turns its head,\nbreathes and sways its hair. A coding agent prepares the avatar from your image; you fine-tune\nit in a local editor with a live preview.\n\nSee it move on the [landing page](https://shinshin86.github.io/mesh-avatar-studio/).\n\n![The editor with the Miko sample](docs/images/en/01-overview.png)\n\n## Try the sample\n\nRequires Node.js 22.17+.\n\n```sh\nnpm install\nnpm run dev\n```\n\nOpen the URL printed in the terminal (for example `http://127.0.0.1:5173/`). The editor opens\nthe bundled sample, Miko in a qipao. Pick a part on the left, drag its dots on the image and\nwatch the preview on the right. The sample is read-only; when you change it, choose\n**Copy and keep editing** to continue in your own copy.\n\n### Using Windows\n\nUse `git clone` to download the repository when possible. If you use a ZIP, open its\nProperties in File Explorer and select **Unblock**, if shown, before extracting it.\n\nCreate `projects/` yourself under your Windows account before asking an agent to work in it.\nFolders created by another account or an agent running in a sandbox can have permissions\nthat prevent the editor from reading them. If a project cannot be read, use the folder's\n**Properties → Security** settings to grant your account access to the whole project,\nincluding its files and subfolders through permission inheritance.\n\n## How it works\n\nMaking an avatar from your own illustration takes four steps. Steps 1 and 4 are done by a\ncoding agent (Claude Code or Codex) working in this repository; steps 2 and 3 happen in the\neditor.\n\n### 1. Ask your agent to create the avatar\n\nOpen Claude Code or Codex in this repository folder and give it your illustration:\n\n> Create an avatar from this image following docs/agent-guide.md: `/path/to/your-image.png`\n\nThe agent follows [the agent guide](docs/agent-guide.md): it checks how accurately it reads\ncoordinates, places the rig on zoomed grids, cuts the image into layers and reviews the\navatar in fixed poses. The project is saved in `projects/<name>/`, which is never committed.\nBest results come from a front-facing, head-and-shoulders PNG with a transparent background.\nWhen no project is open, the editor shows this request ready to copy.\n\n![The request for a new avatar](docs/images/en/06-new-project.png)\n\nRecommended setups:\n\n| Agent | Model |\n|---|---|\n| Claude Code | Claude Opus 5.5 |\n| Codex | GPT-6.1 Sol |\n\n### 2. Open the project and check it\n\nStart the editor (`npm run dev`), choose **Open project** and pick your project from the list.\nIn the preview, use **Pose test** to turn and tilt the head and close the eyes, and\n**Lip sync** to check the vowel mouth shapes.\n\n![Lip sync check](docs/images/en/03-lip-sync.png)\n\n### 3. Fix what looks wrong by dragging\n\nSelect a part on the left. Its dots are highlighted on the image; drag them to fix the\nplacement. The preview follows your changes immediately. Some values also decide how the image\nis cut into layers: eye and hand outlines, and the head, hair and bun areas used for the hair\nmask. After changing those, a banner appears; choose **Save and rebuild layers** there. It takes\na few seconds.\n\n![Editing the eye outline](docs/images/en/02-edit-handles.png)\n\n![Rebuilding layers after changing an outline](docs/images/en/04-rebuild.png)\n\nZoom with a pinch or Ctrl/Cmd+scroll, pan with two fingers or by dragging empty space, and use\n**Fit selected part** to jump to the current part.\n\n### 4. Get drawn eyes and mouths\n\nWithout drawings, the eyes and mouth move by mesh deformation alone. Drawn closed eyes and\nvowel mouths make blinking and talking look much more natural. In **Drawn variants**, check\n**Eyes**, **Mouth** or both, copy the message and paste it into Codex opened in this\nrepository folder. Codex draws them with its built-in image generation and imports them; the\neditor reloads them automatically. (Claude Code cannot generate images; its message prepares\nthe masks and prompts for you to hand to an image generator.)\n\n**Expressions** is optional: it adds drawn sad and surprised eyes and closed angry and sad\nmouths. The avatar switches to them for those expressions and emotion tags and still blinks\nand speaks; avatars without them look the same as before.\n\n![Requesting drawn mouths](docs/images/en/05-variants.png)\n\n## Share your avatar\n\nChoose **Export .mavatar** in the editor to download one file containing the saved rig,\nbuilt layers, drawn expressions and avatar metadata. **Include source image** is on by\ndefault so the recipient can edit it in Studio. If you have unsaved edits, use **Save and\nexport**; changed outlines need a layer rebuild first. Read-only views export the original files.\n\nIn **Open project**, choose **Import .mavatar** or drop the file there. Studio creates a new\nfolder under `projects/`, using a new name if one already exists. Import requires `npm run dev`\nand accepts archives up to 128 MiB. Without the source image, the imported avatar can play but\ncannot be edited or rebuilt. Omitting the source does not remove the built images.\nSee the [avatar format](docs/format.md) for the file contents.\n\n## Live and streaming\n\n![The Live page](docs/images/en/07-live.png)\n\nOpen your project in the editor and choose **Live**. Start the camera, face forward with\nrelaxed eyes and a closed mouth, then choose **Calibrate**. You can adjust mirroring,\nsensitivity and smoothing, or enable microphone lip sync. Camera video and microphone\naudio stay on your machine; only numeric avatar motion values reach the stream view.\n\nChoose a background and **Copy OBS URL**, or **Open stream view in a new tab** to check it first. Keep the Live page open and add the URL as an\nOBS **Browser Source**, for example at **1080 × 1080**. The transparent background works\ndirectly in OBS. For other capture software, choose green and apply a chroma key.\nBoth pages use the local development server (`npm run dev`). The stream view shows idle\nmotion when the Live page stops sending updates.\n\nOptional **Lighting** adds shading that follows a light you drag over the avatar. It is off\nby default; open its section near the bottom of the Live page, or below the preview in the\neditor. The OBS URL includes the lighting settings. See [Lighting](docs/reference.md#lighting).\n\nKeep the Live page open in its own window. Open the OBS URL inside OBS or in another\ntab; do not paste it into the tab running Live. If the page reports that tracking has\nstopped or slowed while hidden, bring its window to the front.\n\n![The stream view with a green background](docs/images/en/08-stream.png)\n\nSwitch expressions such as a smile, surprise or a wink with the **Expression** buttons or\nkeys **1**–**8** while tracking continues. A Stream Deck button or a keyboard shortcut can\nswitch them while another app such as OBS is in front; macOS Shortcuts keys do not work in\nevery app ([details](docs/reference.md#switching-expressions-from-other-apps)).\n\nSave up to eight lighting setups, such as a red light from below for a horror game, as\npresets, and switch them with **Shift**+**1**–**8** or the same kind of shortcut\n([details](docs/reference.md#lighting-presets)).\n\nThe camera is optional: with only the microphone on, the avatar keeps its idle motion and\nyour voice moves the mouth. To appear as the avatar in Zoom, Google Meet and similar apps, use\nOBS's Virtual Camera ([steps](docs/reference.md#video-calls)).\n\nStream view options, troubleshooting and privacy details are in the\n[reference](docs/reference.md#live-and-streaming).\n\n## Releases\n\nFor changes to `mesh-avatar`, run `npm run changeset` and include the generated file in your\nPR. On `main`, GitHub Actions opens or updates a `chore: version packages` PR with the next\nversion and changelog; merging it publishes `mesh-avatar` to npm with provenance. The Studio\nroot package stays private. Publishing uses npm trusted publishing: on npmjs.com, add a trusted publisher for\n`mesh-avatar` that names this repository and the `release.yml` workflow; no npm token is stored\nin the repository. A publish that npm cannot match to a trusted publisher waits in the\nStaged Packages tab until a maintainer approves it with 2FA. In repository\nSettings → Actions → General, enable **Allow GitHub Actions to create and approve pull requests**\nso the workflow can open version PRs. Run `npm run e2e`\nlocally before opening a PR; CI runs the other checks and does not install Playwright browsers.\n\n## More\n\n- [Agent guide](docs/agent-guide.md): the step-by-step procedure agents follow\n- [Reference](docs/reference.md): projects, building layers by hand, all editor controls, tests\n- [Rig fields](docs/rig-fields.md): what every value in `rig.json` means\n- [Avatar format](docs/format.md): folder and `.mavatar` layouts, metadata and validation\n\n## License\n\nThe code is released under the [MIT License](LICENSE).\n\nThe sample character Miko (`samples/miko-qipao/`) is not covered by the MIT License. Miko is the\ncharacter of AITuber OnAir, © Yuki Shindo (AITuber OnAir), and her images are provided under the\n[Miko Character Usage Guidelines](https://miko.aituberonair.com/#terms); see\n[samples/miko-qipao/MIKO_ASSET_TERMS.md](samples/miko-qipao/MIKO_ASSET_TERMS.md). They may be used\nand modified as part of your own works, but not redistributed on their own or as an asset\ncollection. This project is not an official AITuber OnAir product.\n\nFace tracking uses [MediaPipe](https://github.com/google-ai-edge/mediapipe) (`@mediapipe/tasks-vision`\nand the Face Landmarker model in `vendor/mediapipe/`), © The MediaPipe Authors, licensed under the\nApache License 2.0; see [vendor/mediapipe/LICENSE](vendor/mediapipe/LICENSE).\n"
+    },
+    "brief": {
+      "summary": "把一张插画变成会眨眼说话的 2D 网格虚拟形象",
+      "problem": "做虚拟形象通常需要建模和动画技能，普通人很难上手",
+      "highlights": [
+        "可以让编码智能体从插画自动搭出骨架分层",
+        "可以在本地编辑器拖圆点修眨眼张嘴",
+        "可以用摄像头和麦克风驱动形象做直播"
+      ],
+      "target_users": [
+        "VTuber 主播",
+        "插画师",
+        "独立创作者"
+      ],
+      "why_trending": "本周首次收录，679 星，MIT 开源，编辑与直播在一处",
+      "caveat": "需 Node.js 22.17+，眼嘴动画最好另配绘图才自然",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "shinshin86/mesh-avatar-studio",
+      "score": 87,
+      "category": "3D / VTuber",
+      "reason": "插画转2D网格动画虚拟形象",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 58.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "dzhng/yap",
+      "url": "https://github.com/dzhng/yap",
+      "description": "Local screen recording and agent-assisted video editing for Claude Code, Codex and other AI agents on macOS.",
+      "language": "TypeScript",
+      "total_stars": 57,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "audio-editing",
+        "claude-code",
+        "codex",
+        "macos",
+        "mcp",
+        "open-source",
+        "screen-recorder",
+        "screen-recording",
+        "transcription",
+        "video-editing",
+        "video-processing"
+      ],
+      "license_name": "",
+      "created_at": "2026-09-17T13:06:13Z",
+      "updated_at": "2026-10-14T05:03:30Z",
+      "pushed_at": "2026-10-14T05:03:26Z",
+      "open_issues": 0,
+      "homepage": "https://justyap.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/readme/header.png\" alt=\"Yap — just yap; your agent makes it a great video\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/dzhng/yap/releases/latest\"><img alt=\"Latest release\" src=\"https://img.shields.io/github/v/release/dzhng/yap?label=release\"></a>\n  <img alt=\"macOS 26+ on Apple Silicon\" src=\"https://img.shields.io/badge/macOS-26%2B%20%C2%B7%20Apple%20Silicon-black\">\n  <img alt=\"Works with Claude Code, Codex and MCP agents\" src=\"https://img.shields.io/badge/works%20with-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20MCP-blue\">\n  <img alt=\"Runs locally\" src=\"https://img.shields.io/badge/runs-100%25%20local-green\">\n</p>\n\n---\n\n**Yap is a tool your AI agent uses to help you communicate.**\n\nSome ideas are faster to show than to write: a bug you can see, a product you\nwant to demo, an update for your team, a story for your podcast. With Yap you\njust talk and show. Record your screen or camera, or drop in any video, and say\nit however it comes out. Your agent turns it into what you meant.\n\nScreen recording, transcripts, video editing and audio cleanup all serve that one\njob: getting your ideas across clearly. Yap gives **Claude Code, Codex, or any\nagent harness** the eyes, ears and hands to work with video. Your agent decides\nwhat makes your point land.\n\n**Just yap. Your agent makes it a great video.**\n\n**[Get started →](#get-started)** Your agent can install it for you.\n\n## Communication in both directions\n\n**Show your agent.** Instead of typing three paragraphs about a bug or a design,\nrecord it and talk. Your agent sees what was on screen at the exact moment you\nsaid \"this\", hears what you meant, and acts on it.\n\n**Get your point across.** When the audience is people, your agent turns your\nrough take into something worth their time: cut to the point, captioned, cleaned\nup and in the right format for where it's going.\n\n## What people make with it\n\n- **Messages for coworkers.** Async updates, walkthroughs and code-review\n  narrations that come back tight, with chapters, a summary and captions.\n- **Bug reports and feedback for your agent.** \"Watch me do this\" becomes\n  instructions your agent can follow.\n- **Launch and demo videos.** One take of you showing the product becomes a\n  polished demo, cut per audience or per platform.\n- **Podcasts and talks.** Clean audio, consistent loudness, highlight clips with\n  captions, and transcripts your agent can turn into show notes or a post.\n- **You, at your best.** Rehearse a pitch and get evidence on pacing and filler\n  words, keep your best take, or fix a misspoken word in your own voice.\n\nThe full picture, including what's possible today and what isn't yet, is in\n[positioning](positioning.md).\n\n## How it works\n\n<p align=\"center\">\n  <img src=\".github/readme/01-you-ask-agent-edits.png\" alt=\"1. record, 2. ask in your own words, 3. the agent edits\" width=\"85%\">\n</p>\n\n1. **Yap.** Record from the menu bar (screen, microphone, system audio and an\n   optional camera), let your agent start a recording, or hand it a video you\n   already have.\n2. **Ask** your agent in plain words, for example \"Cut this into a tight 60-second\n   demo with captions\" or \"Here's the bug, fix it.\" Attach a reference video if you\n   have a style in mind.\n3. **Your agent makes it clear.** It reads the transcript, looks at the frames and\n   listens to the audio to understand what you said. Then it acts on it, or cuts\n   around the stumbles, adds what you asked for, reviews the result and exports\n   the final video.\n\nDon't like a choice? Say so in one more sentence. Every edit is a revision you\ncan undo.\n\n## Things you can ask for\n\n> \"Watch this recording of the checkout bug and fix it.\"\n\n> \"Tighten this into a 60-second product demo. Cut the dead air and false starts.\"\n\n> \"Make a vertical version for X with big, punchy captions.\"\n\n> \"Here's a launch video I love. Match its pacing and caption style.\"\n\n> \"I said 'version three' at 0:42 but meant 'version two'. Fix it in my voice.\"\n\n> \"Zoom in when I open the settings panel, fade out at the end, export 1080p.\"\n\n> \"Clean up the background hum and give me an M4A of just the narration.\"\n\n> \"I practised my pitch on camera. How's my pacing, and where did I ramble?\"\n\n> \"Turn yesterday's podcast episode into three captioned clips and show notes.\"\n\n> \"Make a two-minute update for my team from this recording, with a summary.\"\n\n## What your agent gets\n\n<p align=\"center\">\n  <img src=\".github/readme/02-evidence-not-opinions.png\" alt=\"The toolkit supplies transcript, waveform and frames; the agent decides\" width=\"85%\">\n</p>\n\nEvery capability is there to help the message land. Yap itself makes **zero\neditorial decisions** and has no built-in agent; your agent makes them all. Yap\nhands it evidence about what you said and showed, plus precise operations, so the\nresult follows your intent instead of a built-in house style.\n\n| | What your agent can use |\n| --- | --- |\n| **See and hear** | Local transcription with word timings and search, frames and storyboards, waveforms and spectrograms, scene and cursor events, speaker turns, loudness measurement |\n| **Cut and arrange** | Multi-range cuts, takes from several recordings, layers and picture-in-picture, canvas and aspect changes, retiming, undo and history |\n| **Polish** | Captions seeded from the transcript in your own fonts, zoom and crop, fades and gain curves, noise reduction, music and room tone |\n| **Fix a word** | Regenerate a misspoken phrase in the speaker's own voice with a local model |\n| **Deliver** | MP4 video, WAV or M4A audio, SRT/VTT captions, and editable project packages |\n\nEverything runs on your Mac. Recordings, transcripts and voice models stay local.\n\n## Your originals are never touched\n\n<p align=\"center\">\n  <img src=\".github/readme/03-originals-untouched.png\" alt=\"The original stays put while the agent edits revisions it can undo\" width=\"85%\">\n</p>\n\nEdits are non-destructive. The agent works on revisions of a project, and the\nsource recording stays byte-for-byte as you captured it. Any revision can be\npreviewed, compared, undone or restored, so letting an agent edit carries no risk.\n\n## Get started\n\nRequires **Apple Silicon and macOS 26 or newer**.\n\nThe zero-effort route is to let your agent install it. Open Claude Code or Codex\nand say:\n\n> Install Yap (the Mac app, which sets up the yap CLI and skill) by following\n> https://justyap.io/llms.txt\n\nThen record something and ask for the video you want.\n\nYour agent installs the app; the app installs the rest. The [agent setup](#agent-setup)\nbelow is what it follows.\n\n## Agent setup\n\nThese steps are written for the agent doing the install, so they're precise.\nLinux containers can exercise the portable CLI contracts but cannot run the native\napp or capture macOS media.\n\n### 1. Install the app from the latest release\n\nUse the [latest stable GitHub release](https://github.com/dzhng/yap/releases/latest),\nnot a source build. Download its `SHA256SUMS`, `release.json` and the ZIP that\n`SHA256SUMS` names (`Yap-macos-arm64.zip`) together, and run\n`shasum -a 256 -c SHA256SUMS` before extracting. Check the receipt's architecture,\nminimum macOS version and signing status.\n\nExtract with `ditto -x -k <zip-path> <new-directory>`. If `Yap.app` is already in\n`/Applications` or `~/Applications`, quit it and replace that copy; otherwise install\nat `~/Applications/Yap.app`. The app runs only from one of those two folders. Node is\nbundled; consumers do not need Bun, Node or Swift. Opening Yap at macOS login\nis opt-in: the installing agent asks the user, then uses `yap login.setEnabled`\nonly after an explicit yes.\n\nThe skill's [installation procedure](skills/yap/references/installation.md) holds the\nexecutable commands. Releases are not notarized: a download made with `curl` is never\nblocked, while a browser download needs **Open Anyway** in System Settings → Privacy &\nSecurity. Never remove quarantine attributes. Installation does not grant capture\npermissions.\n\n### 2. Open the app; it installs the rest\n\n`open ~/Applications/Yap.app` (or the copy you replaced). With **Set up my agents**\non (the default), the app installs and keeps current, at every launch including the\nrelaunch after an update:\n\n- the `yap` command at `~/.local/bin/yap`, plus a marked PATH line in the login\n  shell profile when no startup file already puts `~/.local/bin` on PATH;\n- the [consumer skill](skills/yap) for every agent harness it finds, replacing any\n  global skill named `yap` with the copy bundled in the app.\n\nDon't copy a launcher or run `npx skills add` yourself. If `cli.status` or\n`skill.status` reports a problem, the installation procedure and the\n[skill lifecycle](skills/yap/references/skill-lifecycle.md) hold the manual fallback.\nStart a fresh agent session so the skill is discovered (`$yap` for Codex, `/yap` for Claude).\n\n### 3. Verify before operating\n\n```sh\n~/.local/bin/yap cli.status\n~/.local/bin/yap skill.status\n~/.local/bin/yap capture.status --help\n~/.local/bin/yap service.health\n```\n\nUse the full path in the session that installed Yap; the PATH line reaches only new\nlogin shells.\n\nOperation help returns its schema without launching the app. `service.health`\nchecks the installed runtime and may launch the app's local service; it does not\nstart recording. Save `yap --help` to a file when discovering operation names,\nthen request help for only the operation you need. Parse each operation's JSON\nenvelope, including failures; a successful request can still describe pending or\nfailed background work. Follow the skill for pinned revisions, retry identities\nand verification of delivered media. Report the result to the user as a short\nchecklist: release tag, app location, command, skill and service health.\n\n## Releases\n\nDownload the app from [GitHub Releases](https://github.com/dzhng/yap/releases).\nThe [release notes](scripts/release-notes.md) describe release limitations and\nlink to agent setup. Built binaries are release assets;\nsource control retains their reproducible inputs rather than generated app bundles.\n\nVersion tags trigger a verified GitHub release. The [build and release guide](scripts/README.md)\nexplains version ownership, CI hooks and personal source installs.\n\n## Contributing\n\n### Product boundary\n\n**This project makes zero editorial decisions. It only provides primitives.**\nRecording, transcription, search and detection supply evidence. The caller (your\nagent) decides what to change and submits explicit operations. Defaults fill\nparameters within a requested operation; they never authorize another treatment\nor an automatic edit. Original media remains intact.\n\n**Output by default.** If an operation can produce its output, it does, and\nreports every problem as an issue on that output. Refusal is for malformed or\nambiguous input, identity or revision conflicts, resource bounds, missing\nprerequisites, destructive actions, and execution that failed. Each clamp, fallback or unmet target\nnames what was requested and what was produced. The\n[protocol guide](packages/protocol/README.md#issues) describes the contract.\n\nDevelopment verifies those primitives with explicit fixture operations. A user's\nrecording is reusable test input, not an invitation to edit it or ask its owner\nfor personal keep/remove judgments.\n\n### Where things belong\n\n- [Native app](apps/macos/README.md): recording controls and the service child's lifetime.\n- [Service](apps/service/README.md): composition of domain owners, native work and public delivery.\n- [CLI/MCP](apps/cli/README.md): adapters over the [shared protocol](packages/protocol/README.md)\n  and [local client](packages/client/README.md).\n- [Core](packages/core/README.md): immutable assets, acquisitions, revisions, jobs and publication.\n- [Composition](packages/composition/README.md): pure authoring, exact clocks and compiled plans.\n- [Native media](helpers/mac/README.md): capture, physical sample support and plan execution.\n  The [prepared voice worker](helpers/voic"
+    },
+    "brief": {
+      "summary": "本地录屏加 AI 代理剪辑视频的 macOS 工具",
+      "problem": "录屏后自己剪辑很费时，AI 代理又缺处理视频的眼睛和耳朵",
+      "highlights": [
+        "可以说句话让代理剪成 60 秒演示并加字幕",
+        "可以录屏讲 bug，代理看懂画面后直接动手修",
+        "可以用本机模型改口误，导出视频、音频和字幕"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "独立开发者和播客主",
+        "技术内容创作者"
+      ],
+      "why_trending": "本周首次收录，把录屏、转录和代理剪辑打通，转录与语音模型都跑在本地",
+      "caveat": "仅支持 Apple Silicon 与 macOS 26 以上，发布包未公证，需手动放行",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "dzhng/yap",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "本地录屏与Agent辅助视频剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.2
+    }
+  }
+]
