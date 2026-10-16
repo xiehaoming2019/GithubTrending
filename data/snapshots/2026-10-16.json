@@ -1,0 +1,558 @@
+[
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 69441,
+      "forks": 7602,
+      "stars_today": 3024,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3024
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-10-16T04:43:49Z",
+      "pushed_at": "2026-10-16T01:13:32Z",
+      "open_issues": 186,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"README_CN.md\">简体中文</a> ·\n    <a href=\"README_JA.md\">日本語</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Reusable recipes & watch folders |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nOn Windows, run `irm https://voicestudio.sh/install | iex` in PowerShell.\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nOr download from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest) (macOS `.dmg`, Windows `.exe`, Linux `.AppImage` or `.deb`) and follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\n| Hardware | Support |\n|---|---|\n| NVIDIA GPU (Windows / Linux) | CUDA acceleration |\n| Apple Silicon | Metal (MPS) acceleration |\n| No dedicated GPU (Intel/AMD integrated graphics, older PCs) | Fully usable on the CPU, slower; setup installs the small CPU build of PyTorch (about 5 GB free disk) |\n| Windows on ARM (Snapdragon X etc.) | **Experimental**, validation pending: native ARM64 app, x64 Python backend under emulation, CPU only |\n| Intel Mac | App UI only; connect to a remote backend ([why](docs/install/macos.md)) |\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\n<a href=\"https://forms.gle/2PYCvd39hbwijzX37\"><img src=\"docs/media/sponsor-slot.svg\" alt=\"Your brand — apply for a featured VoiceStudio sponsor slot\" width=\"640\" /></a>\n\n**Become a featured partner.** [Apply for a paid placement](https://forms.gle/2PYCvd39hbwijzX37) · [Email us](mailto:partner@voicestudio.sh)\n\nSupport development: [GitHub Sponsors](https://github.com/sponsors/debpalash) · [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Sponsorship details](SPONSORS.md)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE) covers the application, including commercial use under its conditions. Model weights, tokenizers, voices and generated-output conditions are separate; a paid app licence does not grant those rights. Clone voices only with permission. Model Manager now shows versioned model-source notices, evidence links and unresolved review gaps from the [shared inventory](docs/licensing/model-inventory.md). Its optional [reviewed-file preview](docs/licensing/model-review-workflow.md) does not enforce ordinary downloads or certify commercial permission. See [license details](LICENSE-NOTICE.md).\n\n"
+    },
+    "brief": {
+      "summary": "本地运行的开源语音工具，可克隆、配音、转写和做有声书",
+      "problem": "云端语音服务按量收费、音频要外传，成本与隐私都难自控",
+      "highlights": [
+        "可以克隆自己的声音朗读任意文本",
+        "可以给视频配上多语言定时配音",
+        "可以录音转文字、批量生成有声书"
+      ],
+      "target_users": [
+        "播客与视频创作者",
+        "配音与有声书制作者",
+        "本地化与翻译团队"
+      ],
+      "why_trending": "今日新增约 3000 星，连续上榜，说明本地语音替代方案关注度高",
+      "caveat": "需自备合适硬件，模型权重许可与声音克隆授权要自行确认",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 90,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与转写全流程",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 76.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
+      "language": "JavaScript",
+      "total_stars": 280564,
+      "forks": 41721,
+      "stars_today": 1013,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1013
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "anthropic",
+        "claude",
+        "claude-code",
+        "developer-tools",
+        "llm",
+        "mcp",
+        "productivity"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-18T00:51:51Z",
+      "updated_at": "2026-10-16T04:38:34Z",
+      "pushed_at": "2026-10-15T19:17:01Z",
+      "open_issues": 215,
+      "homepage": "https://ecc.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"assets/hero.png\" alt=\"ECC - the agent harness operating system\" width=\"100%\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending\" alt=\"GitHub Trending Repository of the Day\" height=\"46\" />\n    </picture>\n  </a>\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank&theme=dark\" />\n      <img src=\"https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank\" alt=\"Star History Global Rank\" height=\"46\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>Language:</strong>\n  <a href=\"README.md\">English</a> |\n  <a href=\"docs/ar/README.md\">العربية</a> |\n  <a href=\"docs/pt-BR/README.md\">Português (Brasil)</a> |\n  <a href=\"README.zh-CN.md\">简体中文</a> |\n  <a href=\"docs/zh-TW/README.md\">繁體中文</a> |\n  <a href=\"docs/ja-JP/README.md\">日本語</a> |\n  <a href=\"docs/ko-KR/README.md\">한국어</a> |\n  <a href=\"docs/tr/README.md\">Türkçe</a> |\n  <a href=\"docs/ru/README.md\">Русский</a> |\n  <a href=\"docs/vi-VN/README.md\">Tiếng Việt</a> |\n  <a href=\"docs/th/README.md\">ไทย</a> |\n  <a href=\"docs/de-DE/README.md\">Deutsch</a> |\n  <a href=\"docs/es/README.md\">Español</a> |\n  <a href=\"docs/uk-UA/README.md\">Українська</a> |\n  <a href=\"docs/pl/README.md\">Polski</a> |\n  <a href=\"docs/bn/README.md\">বাংলা</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\"><img src=\"https://img.shields.io/discord/1496644400590094540?logo=discord&logoColor=white&label=Discord&color=5865F2\" alt=\"Discord\" /></a>\n  <a href=\"https://ecc.tools\"><img src=\"https://img.shields.io/badge/Website-ecc.tools-E07856?logo=googlechrome&logoColor=white\" alt=\"Website\" /></a>\n  <a href=\"https://github.com/apps/ecc-tools\"><img src=\"https://img.shields.io/badge/GitHub%20App-ECC%20Tools-181717?logo=github&logoColor=white\" alt=\"GitHub App\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue.svg\" alt=\"MIT license\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/affaan-m/ECC\"><img src=\"https://img.shields.io/github/stars/affaan-m/ECC?style=flat\" alt=\"GitHub stars\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/forks\"><img src=\"https://img.shields.io/github/forks/affaan-m/ECC?style=flat\" alt=\"GitHub forks\" /></a>\n  <a href=\"https://github.com/affaan-m/ECC/graphs/contributors\"><img src=\"https://img.shields.io/github/contributors/affaan-m/ECC?style=flat\" alt=\"Contributors\" /></a>\n  <a href=\"https://github.com/marketplace/ecc-tools\"><img src=\"https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github\" alt=\"GitHub App installs\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/ecc-universal\"><img src=\"https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal&logo=npm\" alt=\"ecc-universal npm downloads\" /></a>\n  <a href=\"https://www.npmjs.com/package/ecc-agentshield\"><img src=\"https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield&logo=npm\" alt=\"ecc-agentshield npm downloads\" /></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white\" alt=\"Shell\" />\n  <img src=\"https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white\" alt=\"TypeScript\" />\n  <img src=\"https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white\" alt=\"Python\" />\n  <img src=\"https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white\" alt=\"Go\" />\n  <img src=\"https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white\" alt=\"Java\" />\n  <img src=\"https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white\" alt=\"Perl\" />\n  <img src=\"https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white\" alt=\"Markdown\" />\n</p>\n\n> [!WARNING]\n> **Official sources only.** Install ECC only from verified channels: the GitHub repository [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC), the npm packages [`ecc-universal`](https://www.npmjs.com/package/ecc-universal) and [`ecc-agentshield`](https://www.npmjs.com/package/ecc-agentshield), the [GitHub App](https://github.com/apps/ecc-tools), the plugin slug `ecc@ecc`, and the project website [ecc.tools](https://ecc.tools). Third-party re-uploads and unofficial mirrors are not maintained or reviewed by the project and may contain malware.\n\n## Install with Claude Code\n\nUse the [guided setup](#install-ecc) or [native plugin commands](#claude-code-details). Both install the same `ecc@ecc` plugin. Choose one and do not stack a full manual Claude install on top.\n\n<div align=\"center\">\n\n<table aria-label=\"ECC primary links\">\n<tr>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://ecc.tools/pricing\">\n    <img src=\"assets/images/community/ecc-tools-mark.svg\" height=\"42\" alt=\"ECC Tools\" /><br />\n    <strong>ECC Pro + GitHub App</strong>\n  </a><br />\n  <sub><a href=\"https://github.com/apps/ecc-tools\">Install free</a> · <a href=\"https://ecc.tools/pricing\">Private repos from $19/seat/mo</a></sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://github.com/sponsors/affaan-m\">\n    <img src=\"assets/images/community/heart.svg\" height=\"42\" alt=\"\" /><br />\n    <strong>Sponsor ECC</strong>\n  </a><br />\n  <sub>Fund the open-source project</sub>\n</td>\n<td width=\"33%\" align=\"center\">\n  <a href=\"https://discord.gg/36yGMHGFbR\">\n    <img src=\"assets/images/community/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n</div>\n\n<sub>**OSS stays free.** This repo is MIT-licensed forever. ECC Pro is the hosted GitHub App for private repos. <a href=\"https://github.com/sponsors/affaan-m\">Sponsors</a> and <a href=\"https://ecc.tools/pricing\">Pro subscribers</a> fund the work. That's why a single maintainer ships weekly across 7 harnesses.</sub>\n\n<div align=\"center\">\n\n<sub><strong>Partners &amp; sponsors</strong></sub>\n\n<p align=\"center\" aria-label=\"Partners and sponsors\">\n  <a href=\"https://www.coderabbit.ai\" title=\"CodeRabbit\"><img src=\"assets/images/sponsors/coderabbit.png\" height=\"54\" alt=\"CodeRabbit\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://www.greptile.com/go/ecc\" title=\"Greptile\"><img src=\"assets/images/sponsors/greptile.png\" height=\"54\" alt=\"Greptile\" /></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://platform.kimi.ai?aff=ecc\" title=\"Moonshot AI - Kimi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/moonshot-dark.png\" /><img src=\"assets/images/sponsors/moonshot.png\" width=\"132\" alt=\"Moonshot AI - Kimi\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://compute.itomarkets.com\" title=\"Itô Markets\"><picture><source media=\"(prefers-color-scheme: light)\" srcset=\"assets/images/sponsors/ito-transparent-light.png\" /><img src=\"assets/images/sponsors/ito-transparent.png\" width=\"96\" alt=\"Itô Markets\" /></picture></a>&nbsp;&nbsp;&nbsp;\n  <a href=\"https://serpapi.com/github-ecc\" title=\"SerpApi: Web Search API\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/images/sponsors/serpapi-logo-dark-mode.svg\" /><img src=\"assets/images/sponsors/serpapi-logo-light-mode.svg\" width=\"200\" alt=\"SerpApi: Web Search API\" /></picture></a>\n</p>\n\n<sub><strong>Past sponsors:</strong> <a href=\"https://www.atlascloud.ai/?utm_source=github&amp;utm_medium=link&amp;utm_campaign=ECC\">Atlas Cloud</a> · <a href=\"https://github.com/mikejmorgan-ai\">Mike Morgan (inactive)</a></sub>\n\n<sub><strong>Community sponsors:</strong> <a href=\"https://github.com/jasonwu513\">@jasonwu513</a> · <a href=\"https://github.com/1anter\">@1anter</a> · <a href=\"https://github.com/massimotodaro\">@massimotodaro</a> · <a href=\"https://github.com/meadmccabe\">@meadmccabe</a></sub>\n\n<sub><a href=\"https://github.com/sponsors/affaan-m\"><strong>Become a Sponsor</strong></a> · <a href=\"SPONSORS.md\">Sponsor Tiers</a> · <a href=\"SPONSORING.md\">Sponsorship Program</a></sub>\n\n</div>\n\n<p align=\"center\"><a href=\"#install-ecc\">Jump to install ↓</a></p>\n\n# ECC\n\nYour agent can write code, but ECC gives it a coordinated engineering system and toolbox: it plans before it builds, verifies changes with tests, reviews its own work from a fresh context, remembers what matters, and turns repeated wins into reusable skills and workflows.\n\n```text\nplan -> test -> implement -> review -> verify -> remember -> improve\n```\n\nInstead of rebuilding that process in every prompt, you install it once and make it part of how your agent works.\n\n> Optimize the context window. Persist everything else.\n\nECC is MIT-licensed open source. It works best with Claude Code today, has native Codex and Qoder plugin paths, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the [support status matrix](#platform-support) before assuming feature parity.\n\nAccess to 71 agents, 311 skills, and 97 legacy command shims, plus hooks, rules, memory, continuous learning, and AgentShield security scanning. The agents are specialized for planning, review, build repair, security, architecture, and domain work.\n\n| Included         |       Count | What it gives you                                                                    |\n| ---------------- | ----------: | ------------------------------------------------------------------------------------ |\n| Agents           |   71 agents | Planning, review, build repair, security, architecture, and domain work              |\n| Skills           |  311 skills | TDD, research, security, docs, frontend, data, ML, operations, and more              |\n| Commands         | 97 commands | Convenient entry points while ECC moves to a skills-first surface                    |\n| Hooks and memory |     Runtime | Enforcement, session summaries, continuous learning, instincts, and context controls |\n| Rules            |   Selective | Always-loaded standards you choose by language or project                            |\n| AgentShield      |    Included | Scanning for prompts, hooks, MCP config, permissions, secrets, and agent files       |\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/affaan-m/ecc\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/svg?repos=affaan-m/ECC&type=Date&theme=dark\" />\n      <img src=\"https://api.star-history.com/svg?repos=affaan-m/ECC&type=Date\" alt=\"Live star history chart for affaan-m/ECC\" width=\"100%\" />\n    </picture>\n  </a>\n</p>\n\n## Install ECC\n\n> [!IMPORTANT]\n> ECC 2.2 includes guided package setup for Claude Code, Codex, and Kimi Code.\n> The universal package requires Node.js 18 or newer. Claude plugin setup also\n> requires Git and Claude Code 2.1 or newer on `PATH`.\n\n### Recommended: universal guided setup\n\nFor Claude Code plugin setup, updates, scope changes, and hook-profile changes:\n\n```bash\nnpx ecc-universal@2.2.3 setup\n```\n\n#### Windows first-time walkthrough\n\nIf you are new to command-line tools, use this copy-and-paste path:\n\n1. Install Node.js 18 or newer, Git, and Claude Code.\n2. Open **PowerShell** from the Windows Start menu.\n3. Confirm that each prerequisite is available:\n\n   ```powershell\n   node --version\n   git --version\n   claude --version\n   ```\n\n4. Run the guided installer:\n\n   ```powershell\n   npx ecc-universal@2.2.3 setup\n   ```\n\n5. For a typical personal setup, choose **Global user**, choose **Standard** hooks, and confirm.\n6. Start a new Claude Code session and run `/plugin list` to verify that `ecc@ecc` is enabled.\n\nThis path does not require cloning the repository. If any prerequisite command is not found, install or repair that prerequisite before rerunning ECC setup.\n\nIf npm reports a version or cache error, confir"
+    },
+    "brief": {
+      "summary": "为多种编程智能体提供性能优化的开源工具集。",
+      "problem": "各智能体缺少统一的技能、记忆与安全配置。",
+      "highlights": [
+        "可以给 Claude Code 配置统一技能与记忆",
+        "可以在 Codex、Cursor 等工具间复用设置",
+        "可以接入研究优先的流程与安全防护"
+      ],
+      "target_users": [
+        "智能体开发者",
+        "AI 编程工具用户",
+        "技术团队负责人"
+      ],
+      "why_trending": "本周首次收录，今日新增超千星，多智能体统一配置需求正热。",
+      "caveat": "请只从官方仓库、npm 包等渠道安装，第三方镜像可能有恶意代码。",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "affaan-m/ECC",
+      "score": 80,
+      "category": "Harness / Jev",
+      "reason": "Agent Harness性能优化与技能记忆系统",
+      "generated_by_ai": true,
+      "velocity_score": 91,
+      "freshness_score": 40,
+      "ranking_score": 68.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "anthropics/claude-plugins-official",
+      "url": "https://github.com/anthropics/claude-plugins-official",
+      "description": "Official, Anthropic-managed directory of high quality Claude Code Plugins.",
+      "language": "Python",
+      "total_stars": 39313,
+      "forks": 4341,
+      "stars_today": 307,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 307
+    },
+    "details": {
+      "topics": [
+        "claude-code",
+        "mcp",
+        "skills"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-11-20T18:36:20Z",
+      "updated_at": "2026-10-16T04:43:35Z",
+      "pushed_at": "2026-10-16T02:40:22Z",
+      "open_issues": 1131,
+      "homepage": "https://code.claude.com/docs/en/plugins",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Claude Code Plugins Directory\n\nA curated directory of high-quality plugins for Claude Code.\n\n> **⚠️ Important:** Make sure you trust a plugin before installing, updating, or using it. Anthropic does not control what MCP servers, files, or other software are included in plugins and cannot verify that they will work as intended or that they won't change. See each plugin's homepage for more information.\n\n## Structure\n\n- **`/plugins`** - Internal plugins developed and maintained by Anthropic\n- **`/external_plugins`** - Third-party plugins from partners and the community\n\n## Installation\n\nPlugins can be installed directly from this marketplace via Claude Code's plugin system.\n\nTo install, run `/plugin install {plugin-name}@claude-plugins-official`\n\nor browse for the plugin in `/plugin > Discover`\n\n## Contributing\n\n### Internal Plugins\n\nInternal plugins are developed by Anthropic team members. See `/plugins/example-plugin` for a reference implementation.\n\n### External Plugins\n\nThird-party partners can submit plugins for inclusion in the marketplace. External plugins must meet quality and security standards for approval. To submit a new plugin, use the [plugin directory submission form](https://clau.de/plugin-directory-submission).\n\n## Plugin Structure\n\nEach plugin follows a standard structure:\n\n```\nplugin-name/\n├── .claude-plugin/\n│   └── plugin.json      # Plugin metadata (required)\n├── .mcp.json            # MCP server configuration (optional)\n├── commands/            # Slash commands (optional)\n├── agents/              # Agent definitions (optional)\n├── skills/              # Skill definitions (optional)\n└── README.md            # Documentation\n```\n\n## Plugin names are immutable\n\nThe `name` field in a marketplace entry is an **immutable slug**. Once a plugin has been published, its `name` must not change — users have it installed under that slug, and renaming it breaks their install with a `plugin-not-found` error.\n\n- To change how a plugin is labeled in the UI, set or update `displayName` instead.\n- If a rename is genuinely unavoidable, add an entry to the top-level `renames` map in `.claude-plugin/marketplace.json` so existing installs auto-migrate:\n\n```json\n\"renames\": {\n  \"old-name\": \"new-name\"\n}\n```\n\nThe Claude Code plugin loader reads this map and transparently rewrites the old slug to the new one on the user's next sync.\n\n## Skill-bundle plugins\n\nWhen a plugin's source repository ships skills (`SKILL.md` files) without a `.claude-plugin/plugin.json` manifest, the marketplace entry can declare the skills directly using `strict: false` and an explicit `skills` array.\n\n```json\n{\n  \"name\": \"example-bundle\",\n  \"description\": \"Brief description of the bundled skills.\",\n  \"author\": { \"name\": \"Author Name\" },\n  \"category\": \"development\",\n  \"source\": {\n    \"source\": \"git-subdir\",\n    \"url\": \"https://github.com/example-org/sdk.git\",\n    \"path\": \"packages/agent-skills\",\n    \"ref\": \"main\",\n    \"sha\": \"<commit sha>\"\n  },\n  \"strict\": false,\n  \"skills\": [\n    \"./skill-a\",\n    \"./skill-b\",\n    \"./skill-c\"\n  ],\n  \"homepage\": \"https://github.com/example-org/sdk\"\n}\n```\n\nEach path in `skills` is relative to `source.path` and points at a directory containing a `SKILL.md`. Paths can reach deeper than a single level — for example, `[\"./libA/skill-1\", \"./libB/skill-2\"]` exposes a curated subset across multiple library subdirectories. Each skill is registered as `<plugin-name>:<skill-name>` in Claude Code.\n\nFor the underlying schema, see [Strict mode](https://code.claude.com/docs/en/plugin-marketplaces) in the marketplace documentation.\n\n## License\n\nPlease see each linked plugin for the relevant LICENSE file.\n\n## Documentation\n\nFor more information on developing Claude Code plugins, see the [official documentation](https://code.claude.com/docs/en/plugins).\n"
+    },
+    "brief": {
+      "summary": "Anthropic 官方维护的 Claude Code 插件目录，可一键浏览安装。",
+      "problem": "Claude Code 插件散落各处，来源难辨，用户不好筛选和安装。",
+      "highlights": [
+        "可以用 /plugin install 命令直接安装插件",
+        "可以按 Anthropic 内置与第三方分区浏览",
+        "可以把自家 skill 打包提交收录进市场"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "插件开发者",
+        "MCP 工具作者"
+      ],
+      "why_trending": "今日新增约 307 Star，官方背书，MCP 与 Skills 热度高。",
+      "caveat": "官方声明不审核插件内容，装第三方插件前需自行确认安全。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "anthropics/claude-plugins-official",
+      "score": 86,
+      "category": "AI Agent / Skills",
+      "reason": "Anthropic官方Claude插件与MCP目录",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 40,
+      "ranking_score": 67.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "morluto/rea",
+      "url": "https://github.com/morluto/rea",
+      "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
+      "language": "TypeScript",
+      "total_stars": 275182,
+      "forks": 69315,
+      "stars_today": 32314,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 32314
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "binary-analysis",
+        "claude-code",
+        "cli",
+        "codex",
+        "cordis",
+        "decompiler",
+        "developer-tools",
+        "dsh",
+        "dsh-plugin",
+        "ghidra",
+        "hopper",
+        "llm",
+        "mcp",
+        "model-context-protocol",
+        "rea",
+        "reverse-engineering",
+        "static-analysis",
+        "touhou"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-14T00:51:32Z",
+      "updated_at": "2026-10-16T04:44:15Z",
+      "pushed_at": "2026-10-16T04:34:10Z",
+      "open_issues": 1014,
+      "homepage": "https://rea.tools",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n**English** · [简体中文](docs/readme/README_zh.md) · [繁體中文](docs/readme/README_zh-TW.md) · [日本語](docs/readme/README_ja.md) · [한국어](docs/readme/README_ko.md) · [Türkçe](docs/readme/README_tr.md) · [Русский](docs/readme/README_ru.md) · [Tiếng Việt](docs/readme/README_vi.md) · [ไทย](docs/readme/README_th.md) · [Deutsch](docs/readme/README_de.md) · [Español](docs/readme/README_es.md) · [Français](docs/readme/README_fr.md) · [Українська](docs/readme/README_uk.md) · [Polski](docs/readme/README_pl.md) · [Português (Brasil)](docs/readme/README_pt-BR.md) · [العربية](docs/readme/README_ar.md) · [فارسی](docs/readme/README_fa.md) · [Bahasa Indonesia](docs/readme/README_id.md) · [Italiano](docs/readme/README_it.md)\n· [Ελληνικά](docs/readme/README_el.md)\n\n# REA: Reverse Engineer Anything\n\n### One MCP for reverse engineering across binaries, applications, and runtime behavior.\n\n**See a feature you like. Understand how it works, down to the binary level.**\n\n[![npm version](https://img.shields.io/npm/v/rea-agents?style=flat-square&color=cb3837)](https://www.npmjs.com/package/rea-agents)\n[![MCP tool catalog](https://img.shields.io/badge/MCP-tool_catalog-5c4ee5?style=flat-square)](docs/mcp-contracts.md#generated-catalog)\n[![Node.js requirements](https://img.shields.io/badge/Node.js-requirements-339933?style=flat-square&logo=nodedotjs&logoColor=white)](#what-you-can-analyze)\n[![skills.sh](https://skills.sh/b/morluto/rea?style=flat-square)](https://skills.sh/morluto/rea/reverse-engineer-anything)\n[![MIT license](https://img.shields.io/badge/license-MIT-f4c430?style=flat-square)](LICENSE)\n[![Discord](https://img.shields.io/discord/1556595354999332884?logo=discord&logoColor=white&label=Discord&color=5865F2)](https://discord.gg/GkcryMnJDM)\n\n<a href=\"https://trendshift.io/repositories/82054?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-82054\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/82054\" alt=\"morluto%2Frea | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n**[Website](https://rea.tools/) · [Guides](https://rea.tools/guides/) · [Showcases](https://rea.tools/showcase/)**\n\n[Quick start](#quick-start) · [How REA works](#how-rea-works) · [What you can analyze](#what-you-can-analyze) · [Showcases](#showcases) · [FAQ](#faq) · [Documentation](#documentation)\n\n<code>npx rea-agents setup</code>\n\n</div>\n\n> [!IMPORTANT]\n> Get REA from [morluto/rea](https://github.com/morluto/rea),\n> [rea.tools](https://rea.tools/), or the [rea-agents npm package](https://www.npmjs.com/package/rea-agents).\n> Follow the installation and release links from these official sources. A similar\n> repository name or copied README does not establish that a download is official.\n\n<div align=\"center\">\n\n<br />\n\n<img src=\"docs/assets/rea-hopper-analysis.png\" alt=\"REA launching its analysis bridge inside Hopper while inspecting a native binary\" width=\"1200\" />\n\n<br /><br />\n\n<table aria-label=\"REA community\">\n<tr>\n<td align=\"center\" width=\"360\">\n  <a href=\"https://discord.gg/GkcryMnJDM\">\n    <img src=\"docs/assets/discord.svg\" height=\"42\" alt=\"Discord\" /><br />\n    <strong>Join the Reverse Engineering Community</strong>\n  </a><br />\n  <sub>Discord · Q&amp;A · Show and Tell</sub>\n</td>\n</tr>\n</table>\n\n<br />\n\n</div>\n\n---\n\nSee a feature in an app that you want in your own product? Ask your agent to investigate it with REA. It can inspect the app without its source code, explain how the feature works, show the evidence, and build a version for your project.\n\nREA connects your agent to tools for inspecting native binaries, JavaScript and Electron apps, .NET assemblies, and websites. You can also use the same tools from your terminal. Analysis runs locally, and results include the evidence and limitations behind each conclusion.\n\nSetup registers REA with your agent and installs matching workflow instructions. Native analysis can use an existing Hopper, Ghidra, or IDA installation; setup can optionally install Hopper with approval. Static JavaScript analysis needs no native analysis engine.\n\n> **[Visit the REA website](https://rea.tools/)** for setup instructions, illustrated guides, and real case studies.\n\n## Quick start\n\nOn Linux, Ghidra, JADX, firmware tool launches and static JavaScript/Electron\nanalysis require a procps-compatible `ps` on REA's `PATH` for process ownership\nchecks. Recovery steps are in `docs/installation.md` under\n\"Linux owned-process prerequisite\".\n\n### Set up your agent\n\nWith Node.js and npm installed, run:\n\n```bash\nnpx rea-agents setup\n```\n\nChoose your agents, review the proposed changes, and approve them. Setup adds\nREA's MCP server and matching workflow instructions, with backups of existing\nconfiguration. Restart your agent afterward.\n\nSetup supports Claude Code, Codex, Cursor, Gemini CLI, Grok Build and\n[other agents](docs/installation.md#supported-agents). See\n[installation and setup](docs/installation.md) for provider configuration and\nmanual MCP registration.\n\n### Ask your agent\n\n```text\nUnderstand how search works in the Notes app, show me the evidence, and build a\nsimilar feature for my project.\n```\n\nReplace Notes with your target app and the feature you want to understand.\n\n### Use the terminal\n\nInspect an extracted JavaScript/Electron app directory or ASAR:\n\n```bash\nnpx -y rea-agents@latest analyze-javascript-application /absolute/path/to/app --json\n```\n\nThe result includes modules, imports, Electron boundaries and their evidence.\nReplace the path with your target, such as `\"D:/apps/example\"` on Windows.\n\nTo install the `rea` command for regular use:\n\n```bash\nnpm install --global rea-agents\nrea --help\n```\n\nFor native analysis, configure a provider first. See the\n[CLI and Evidence guide](docs/cli.md) for native commands, provider selection,\nsnapshots and scripting.\n\n### Update REA\n\nREA changes quickly, and new releases include frequent bug fixes. Keep your\ninstallation up to date.\n\nFor a CLI installed with `npm install --global` or `bun add --global`:\n\n```bash\nrea update\n```\n\nBun global updates require Bun 1.2.17 or later. With an older Bun release,\nupgrade Bun manually before running `rea update`.\n\nTo refresh your agent registrations and skill, run the setup command printed\nby the update.\n\nIf you use `npx`, update your agent setup with:\n\n```bash\nnpx rea-agents@latest setup\n```\n\nReview the setup changes and restart your agent. For one-off CLI commands,\nuse `npx rea-agents@latest` followed by the command. With Bun, use\n`bunx rea-agents@latest` in place of `npx rea-agents@latest`.\n\n## How REA works\n\nYour agent calls REA through MCP to inspect the target and trace relevant code.\nREA returns findings with their evidence. The agent uses them to ask follow-up\nquestions, explain the behavior, or write and test an implementation.\nCLI commands use the same workflows.\n\n![REA investigation flow: your agent asks about a local target, REA inspects and traces it using analysis tools, and the agent uses the returned code, references and unknowns to explain, implement and test.](website/public/assets/figures/rea-investigation-flow.svg)\n\n[Open the full-size figure](website/public/assets/figures/rea-investigation-flow.svg).\n\n<a id=\"current-status\"></a>\n\n## What you can analyze\n\nREA requires Node.js 22.x (>=22.19), 24.x (>=24.11), or 26+, plus npm.\nAdditional tools and host support depend on the target:\n\n| Target                 | What REA returns                                                                     | Requirements and guide                                                                                                                |\n| ---------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |\n| Native binaries        | Pseudocode, assembly, strings, symbols, calls and references                         | Hopper, Ghidra or IDA; [native analysis](docs/native-investigation.md)                                                                |\n| Offline ELF layout     | Sections, segments, original symbols/relocations and static mitigation candidates    | Caller-supplied pwntools on Linux x64; [binary diagnostics](docs/binary-diagnostics.md)                                               |\n| Go binaries            | Embedded compiler version, modules, replacements and build settings                  | Built-in static ELF/PE/thin Mach-O inspection; no Go installation required                                                            |\n| Rust binaries          | Embedded cargo-auditable crate names, versions, sources and dependency edges         | Built-in static ELF/PE/thin Mach-O inspection; [Rust binaries](docs/rust-binaries.md)                                                 |\n| WASM artifact          | Validation, sections, exact import/export WAT forms and decoded WAT                  | Caller-supplied WABT 1.0.42; `inspect_wasm_artifact`                                                                                  |\n| EVM bytecode           | Dispatch selectors, byte offsets, inferred arguments and mutability                  | Local raw/hex carrier on Linux x64; [offline EVM guide](docs/evm-bytecode.md)                                                         |\n| SQLite databases       | Tables, columns, indexes, views, triggers and selected ordinary-table rows           | Local database/WAL snapshot; Node.js 24.x >=24.15 or 26+ with native SQLite limits                                                    |\n| Recorded Linux crashes | Raw notes, every recorded thread's registers/signals and optional mapping candidates | Caller-supplied pwntools on Linux x64; optional GDB/pwndbg; [recorded crashes](docs/recorded-crashes.md)                              |\n| JavaScript / Electron  | Modules, imports, source maps, routes, IPC and native add-on relationships           | Node.js and npm; Linux: procps-compatible `ps`; [application analysis](docs/javascript-application-workflows.md)                      |\n| Websites               | Page structure, scripts, network observations and requested screenshots              | A Chrome-family browser; [browser analysis](docs/browser-observation.md)                                                              |\n| Saved network captures | Requests, responses, exposed payloads and source locations                           | HAR or Fiddler Everywhere SAZ; mitmdump on Linux for native mitmproxy; [capture guide](docs/web-network-captures.md)                  |\n| .NET assemblies        | Metadata, CIL instructions, declared native dependencies and build comparisons       | None (static only); [managed-code guide](docs/managed-code-analysis.md)                                                               |\n| Android APKs           | Manifest declarations, classes, decompiled methods and references                    | Headless JADX and a full JDK on Linux/macOS/Windows x64; [Android guide](docs/android-analysis.md)                                    |\n| Android devices        | Devices, packages, processes, logs, dumps, screen captures, and APK/file transfers   | Caller-supplied adb (emulator or hardware); [ADB guide](docs/adb-device-analysis.md)                                                  |\n| JEB projects           | Engine-backed project units, artifact digests and type/method pseudo-code            | A caller-started JEB client serving MCP, selected with REA_JEB_MCP_URL; [JEB guide](docs/jeb-analysis.md)                             |\n| Android resources      | Decoded manifest, string tables, locales and version facts                           | Caller-supplied Apktool launcher; [resource guide](docs/apktool-resource-analysis.md)                                                 |\n| Flutter apps           | Dart snapshot hash, per-ABI library digests and engine build provenance           "
+    },
+    "brief": {
+      "summary": "让 AI 代理逆向分析应用与二进制文件。",
+      "problem": "想弄清闭源应用某功能怎么实现，却拿不到源码。",
+      "highlights": [
+        "可以分析原生二进制的伪代码与调用关系",
+        "可以拆解 JS/Electron 应用与 .NET 程序集",
+        "可以让代理带证据给出可参考的实现方案"
+      ],
+      "target_users": [
+        "逆向工程师",
+        "AI 代理开发者",
+        "功能调研者"
+      ],
+      "why_trending": "资料显示今日新增约 3.2 万 Star，连续上榜。",
+      "caveat": "更新频繁需常升级；原生分析依赖 Hopper/Ghidra 等外部工具。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "morluto/rea",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "面向逆向工程的Agent MCP，含游戏分析场景",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 62.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "swax/dub-anything",
+      "url": "https://github.com/swax/dub-anything",
+      "description": "A tool that allows AI to direct the dubbing process, uses the original actor voices and does the audio generation on your local PC",
+      "language": "Python",
+      "total_stars": 21,
+      "forks": 3,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-dubbing",
+        "cuda",
+        "dubbing",
+        "indextts",
+        "local-ai",
+        "localization",
+        "omnivoice",
+        "python",
+        "speech-recognition",
+        "subtitles",
+        "text-to-speech",
+        "translation",
+        "video-dubbing",
+        "voice-cloning",
+        "wisper"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-07T04:04:04Z",
+      "updated_at": "2026-10-16T04:44:07Z",
+      "pushed_at": "2026-10-16T04:44:03Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Dub Anything\n\nDub films and shows into another language **in each actor's own voice**, with\nthe original music and sound effects intact. It runs on your own PC, and an AI\ncoding agent directs the dub line by line, the way a dubbing director would.\n\nYou give it a video file. You get the same file back as\n`my-show (dubbed).mkv`: the dub plays by default, the original audio is one\ntrack away, and subtitles in both languages are included.\n\nIt dubs Japanese, Spanish, Korean and Chinese into English, and English into\nJapanese, Spanish and Cantonese (yue). Need another language? Just ask: your agent adds the new\npair as part of the job. Once it works, please\n[send it back](#other-languages-and-hardware) so everyone gets it.\n\n## Demos\n\n| A Japanese anime, dubbed into English | A Japanese film, dubbed into English |\n|---|---|\n| [![A Japanese anime, dubbed into English](https://img.youtube.com/vi/qXosYS-cTXk/maxresdefault.jpg)](https://www.youtube.com/watch?v=qXosYS-cTXk) | [![A Japanese film, dubbed into English](https://img.youtube.com/vi/2DsFAoTbQ8E/maxresdefault.jpg)](https://www.youtube.com/watch?v=2DsFAoTbQ8E) |\n\n## What makes it different\n\nMost dubbing tools run a fixed pipeline: transcribe, translate, clone each\nspeaker from one clip, speed up whatever runs long. Dub Anything differs where\na listener notices:\n\n- **An agent directs, line by line.** It works out who says each line from\n  voice matching, video frames and the dialogue, fixes what speech recognition\n  misheard, writes a translation timed to the actor, and triages every QA flag.\n  It tells you which lines are guesses instead of hiding them.\n- **Each line is acted like the original.** The cloned voice is prompted with\n  the actor's own delivery of that very line, so a shout stays a shout and a\n  murmur stays a murmur.\n- **Each line takes the actor's time.** Every take is re-timed to end where the\n  actor stops, so turns land where they did in the original, without dead air.\n  Each line's length is predicted before rendering, so the translation is\n  written to fill the time.\n- **Every line is checked.** Each rendered line is transcribed back. A garbled\n  one gets fresh takes, up to three rounds, and the best take is kept.\n- **It reads the picture.** Burned-in captions become the transcript (and often\n  name the speaker), and text on screen, like title cards and signs, can be\n  translated as subtitles placed beside it.\n- **The rest stays original.** Between lines you hear the original soundtrack,\n  so songs, laughs and names stay the actor's own.\n- **Chosen by ear.** The defaults were picked by listening to the alternatives\n  side by side. What was measured is in [docs/research.md](docs/research.md).\n\n## What you need\n\n- **macOS (Apple Silicon M1/M2/M3/M4 or Intel)** with Metal (MPS) acceleration,\n  or **a Windows PC with an NVIDIA GPU** with at least 6 GB of memory. A 16 GB\n  card runs everything at once. (Linux should be a short port; see\n  [below](#other-languages-and-hardware).)\n- **Disk space:** about 40 GB for VoiceStudio, the models and the tools'\n  environments, plus room to work: a movie in both voices used about\n  85 GB until it was cleaned up.\n- **An AI coding agent** that reads [AGENTS.md](AGENTS.md): Claude Code,\n  Codex, Cursor or similar.\n- **[VoiceStudio](https://github.com/debpalash/VoiceStudio)**, the open-source\n  voice engine Dub Anything drives. The setup guide installs it.\n\n## Getting started\n\n1. **Set up once** with [docs/setup.md](docs/setup.md): VoiceStudio, its\n   models, ffmpeg and uv.\n2. **Open this folder in your agent** and ask, for example:\n\n   > Dub D:\\movies\\my-show.mkv into English.\n\n3. **Pick a voice** when it asks ([below](#choosing-a-voice)). Into Japanese\n   or Spanish there's nothing to pick.\n4. **Let it work.** The machines separate, transcribe, render and check while\n   the agent directs each part as soon as it's drafted. It tells you if\n   something needs you.\n5. **Listen.** At the end you get the dubbed file and a short list of moments\n   to check, with their times. Tell the agent what to change, and it\n   re-renders just those parts.\n\nThe agent can't hear, so you're the ears: you judge the acting, the voices and\nthe mix, and you decide what may be cloned or shared.\n\nThe steps above are the normal direct workflow. Jellyfin is an optional way to\nqueue library videos with a headless director; its separate setup is in\n[docs/jellyfin.md](docs/jellyfin.md). Direct dubs do not need the plugin, worker,\nor updater. The [script guide](scripts/README.md) identifies each entry point.\n\n## Choosing a voice\n\n| | **Actor's voice** (default) | **American** |\n|---|---|---|\n| Sounds like | The actor speaking English, with their own accent | Native American English, converted toward each actor's voice |\n| Best for | Live action | Anime and animation |\n| Trade-offs | Accented English | Less like the actors in live action, a little less of the acting, and a few times slower to render |\n\nNot sure? Ask for both. Each gets its own audio track, and you switch between\nthem in your player (the actor's voice plays by default). The American voice\nhas so far been used on Japanese sources.\n\nInto Japanese or Spanish, the actor's voice is the only one: each actor speaks\nthe new language with their own accent.\n\n## How long it takes\n\nA short clip takes minutes. A movie in both voices takes about seven\nhours of machine time on a laptop RTX 4090, nearly all of it on the GPU; the\nactor's voice alone takes about half that. The agent directs while the renders\nrun, and on a long video it can split the directing across helper agents.\n\n## Privacy\n\nYour video and audio stay on your machine: the models run locally, and the\ninternet is only used to download them. Your agent does read the transcripts\nand the video frames it looks at, so those go wherever your agent's model runs.\n\n## Responsible use\n\nOnly dub media you have the rights to, and only clone voices with the consent\nthe use requires. A dub made from someone else's film or voice is for private\nuse unless you have permission.\n\n## How it works\n\n1. **Split** the video into ~3-minute parts at pauses in speech.\n2. **Separate** the voices from the music and effects (Mel-Band Roformer).\n3. **Transcribe** each part with Whisper large-v3, with two other recognisers\n   as a second opinion, and burned-in captions where there are any.\n4. **Cast** each line by matching voices across the whole show, checked\n   against video frames.\n5. **Direct** (the agent): correct the transcript, translate, and time every\n   line to the actor.\n6. **Voice** each line. The actor's voice: OmniVoice clones the actor, prompted\n   with their own delivery of that line. American: IndexTTS speaks native\n   English following the actor's delivery, and Chatterbox converts it to the\n   actor's voice.\n7. **Fit, mix and check.** Each take is re-timed to end where the actor stops,\n   mixed over the original background, and transcribed back to catch garbled\n   words.\n8. **Deliver** into your video file. Nothing is re-encoded, and every stream is\n   checked against the original before the file is replaced.\n\n<details>\n<summary>The whole pipeline in one diagram</summary>\n\n![How a dub gets made](docs/process.png)\n\nThe diagram is [docs/process.jg](docs/process.jg), a\n[Jumpgate](https://github.com/swax/jumpgate) file. It is rendered with\n`npm run render -- <path>/docs/process.jg --width 1800 --height 2700` from\nJumpgate's `packages/jumpgate`.\n\n</details>\n\n## Documentation\n\n- [docs/jellyfin.md](docs/jellyfin.md): Jellyfin dashboard plugin, local queue,\n  and headless Codex or Claude Code directors\n- [docs/setup.md](docs/setup.md): installing everything, step by step\n- [AGENTS.md](AGENTS.md): the agent's instructions, and a dub from start to\n  finish\n- [docs/directing.md](docs/directing.md): the directing workflow, every tool,\n  and the gotchas\n- [docs/languages/](docs/languages/README.md): notes for each language, and\n  how to add one\n- [docs/research.md](docs/research.md): what was measured and tried\n- [docs/roadmap.md](docs/roadmap.md): what's next\n\n## Running it without an agent\n\nThe scripts are plain Python, so you can drive a dub yourself and write the\ndirected scripts by hand. With VoiceStudio's Python\n(`$py = \"C:\\git\\VoiceStudio\\.venv\\Scripts\\python.exe\"`),\n`scripts/dub_anything.py` runs the machine work of a whole dub:\n\n```powershell\n& $py scripts\\dub_anything.py new D:\\movies\\my-show.mkv --voices both   # a job named my_show\n& $py scripts\\dub_anything.py run my_show --watch   # prep, then render each part marked ready\n# write work\\my_show-NN\\script.json for each part, then:\n& $py scripts\\dub_anything.py ready my_show 01\n& $py scripts\\dub_anything.py status my_show\n```\n\n<details>\n<summary>Or one step at a time</summary>\n\nWith the backend running (`scripts/backend.py start`):\n\n```powershell\n& $py scripts\\split.py videos\\episode.mkv                      # long video -> parts at pauses\n& $py scripts\\dub.py prep videos\\episode-parts\\episode-01.mp4  # upload, separate, transcribe\n& $py scripts\\draft.py episode-01                              # careful transcript, suggested cast\n# write work\\episode-01\\script.json and the cast in work\\voices.json\n& $py scripts\\dub.py generate episode-01 --match-level         # clone, time, mix, export\n& $py scripts\\lineqa.py episode-01                             # check each rendered line\n& $py scripts\\assemble.py episode --parts 1-4                  # one video with both audio tracks\n& $py scripts\\deliver.py D:\\movies\\episode.mkv actor=videos\\episode-parts\\dubbed\\episode.dubbed.mp4\n```\n\nSome steps need their own environments (`separate.py`, `subs.py`,\n`second.py`; see [AGENTS.md](AGENTS.md)).\n\n</details>\n\nThe workflow, the script format and every tool are in\n[docs/directing.md](docs/directing.md).\n\n## Other languages and hardware\n\nAsk for a language pair that isn't here yet, and your agent adds it as part of\nthe job. The voices aren't the limit: VoiceStudio clones voices in hundreds of\nlanguages. What's new for each language is what the scripts know about it: the\nphrases Whisper hallucinates in it, the recognisers that give second opinions,\nand how QA compares a take with its line. That lives in one module,\n`scripts/languages/<code>.py`. The agent writes it, then checks the pair on a\nshort test dub before adding it, as\n[docs/languages/](docs/languages/README.md#adding-a-language) describes.\n\n**Please send new languages back.** If your agent added a language or a pair,\nopen a pull request with its module, its notes (`docs/languages/<code>.md`)\nand the pair's entry in `PAIRS`, so the next person gets it ready-made.\n\nThe models run on Metal MPS (on Apple Silicon macOS) or CUDA (on Windows/Linux)\nand fall back to the CPU without it, slower. Video is encoded with\nApple VideoToolbox on macOS, NVENC on Windows/Linux when NVIDIA is present,\nelse x264. Platform differences (paths, desktop app runtime detection, GPU locks,\naudio separation environments) are handled automatically across macOS and Windows.\n\n## Contributing\n\nBug reports, ideas and pull requests are welcome, new languages most of all.\n[docs/directing.md](docs/directing.md) explains how the pieces fit. Python is\nformatted and linted with ruff (`uvx ruff format`, `uvx ruff check`), and\n[docs/setup.md](docs/setup.md) shows how to turn on the pre-commit check.\n\n`videos/` and `work/` are git-ignored so that source media, transcripts and\nvoice references stay out of the repository. Don't force-add them, and use\ninvented examples in docs and commit messages.\n\n## Built on\n\nDub Anything is direction and glue around excellent open-source work:\n\n- [VoiceStudio](https://github.com/debpalash/VoiceStudio): the voice backend\n  (dubbing jobs, cloning, mixing)\n- [OmniVoice](https://github.com/k2-fsa/OmniVoice): the actor's-voice clones\n- [IndexTTS](https://github.com/index-tts/index-tts): native English for the\n  American voice\n- [Chatterbox](https://github.com/resemble-ai/chatterbox): voice conversion to\n  each actor's timbre\n- [Whisp"
+    },
+    "brief": {
+      "summary": "用原演员声音在本地给影视配音的AI工具",
+      "problem": "传统配音流程固定，长句被加速、口型对不上、听感差",
+      "highlights": [
+        "可以把日语动漫用原演员声音配成英语",
+        "可以保留原音乐和音效，只替换对白",
+        "可以本地运行，视频和音频不离开电脑"
+      ],
+      "target_users": [
+        "影视本地化爱好者",
+        "独立字幕/配音组",
+        "AI配音研究者"
+      ],
+      "why_trending": "总star仅21，本周首次收录，方向稀缺",
+      "caveat": "需自备AI编码代理和6GB以上显卡，耗时数小时",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "swax/dub-anything",
+      "score": 82,
+      "category": "语音 / 配音",
+      "reason": "本地AI配音流程，保留原声克隆",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 56.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "ludovic111/horizon",
+      "url": "https://github.com/ludovic111/horizon",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "language": "Rust",
+      "total_stars": 42,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "differential-testing",
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-10-16T04:42:42Z",
+      "pushed_at": "2026-10-16T04:42:39Z",
+      "open_issues": 58,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/banner.webp\" alt=\"Horizon: Minecraft: Java Edition 26.3, rewritten in Rust and checked against vanilla by 281 differential harnesses\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/ludovic111/horizon/actions/workflows/ci.yml\"><img src=\"https://github.com/ludovic111/horizon/actions/workflows/ci.yml/badge.svg?branch=main\" alt=\"CI\"></a>\n  <img src=\"https://img.shields.io/badge/Minecraft-Java%2026.3-5D9C3F\" alt=\"Minecraft Java 26.3\">\n  <img src=\"https://img.shields.io/badge/Rust-stable-B7410E?logo=rust&logoColor=white\" alt=\"Rust\">\n  <img src=\"https://img.shields.io/badge/vanilla%20parity-100%25-F0795A\" alt=\"Vanilla parity 100%\">\n  <img src=\"https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-2A2470\" alt=\"Linux, macOS and Windows\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-3B2F7E\" alt=\"MIT license\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev\"><b>Website</b></a> ·\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"#what-changed-in-v202610131\"><b>What changed</b></a> ·\n  <a href=\"#screenshots\"><b>Screenshots</b></a> ·\n  <a href=\"#project-status\"><b>Parity status</b></a> ·\n  <a href=\"docs/README.md\"><b>Documentation</b></a>\n</p>\n\n# Horizon\n\nA Rust rewrite of Minecraft: Java Edition 26.3 built for one-to-one vanilla parity, checked against the game itself with differential tests.\n\nEvery subsystem matches vanilla in all 281 parity harnesses, on Linux and macOS: 100% of what the harnesses compare (see [Project status](#project-status)). The native client is playable on Linux, macOS (Apple Silicon) and Windows.\n\n> Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft. Horizon contains no Minecraft code, assets or data: you need your own legally obtained copy of Minecraft: Java Edition 26.3.\n\n## What changed in v2026.10.13.1\n\nThe latest release ([notes](https://github.com/ludovic111/horizon/releases/tag/v2026.10.13.1)):\n\n- **Horizon's own menus:** a new title screen, world list, options and pause menu in the launcher's style, over a live frozen landscape. The vanilla look is still available: Options → Interface → Menu style → Classic.\n- **Graphics settings, Simple and Advanced:** presets (Performance, Balanced, Quality, Ultra), or every rendering, quality, display and performance setting, each with a short description and its cost, plus a performance overlay.\n- **Much faster rendering:** for example, at render distance 8 over a village, 363 → 2,409 FPS on an RTX 4080. Render distance 32 still stutters in places.\n- **Fixed:** no sound on Linux; Linux builds that only ran on the machine they were built on; a missing DLL on Windows (the launcher no longer needs the Visual C++ runtime); memory growing and the frame rate dropping near villages (mobs were duplicated when chunks reloaded); resource preparation failing on Linux with \"Missing … java-objc-bridge\" ([#41](https://github.com/ludovic111/horizon/issues/41)); the hand and held item at high FOV; missing swing animations.\n\n## Download\n\nHorizon is downloaded only through **the Horizon launcher**: get it from [playhorizon.dev](https://playhorizon.dev) or from [the launcher's releases](https://github.com/ludovic111/horizon/releases?q=launcher-v&expanded=true) (the newest `launcher-v*` release, currently [launcher-v0.1.3](https://github.com/ludovic111/horizon/releases/tag/launcher-v0.1.3)), for Linux x86-64, macOS Apple Silicon or Windows x64. The launcher installs and updates the game, prepares its resources from your own copy of Minecraft, starts the client or a dedicated server, and updates itself.\n\n**You need** Minecraft: Java Edition installed with the official launcher, with 26.3 played once; Python 3.10 or newer and Java 25 (a JDK, e.g. Eclipse Temurin 25) for the one-time resource preparation; and a GPU with Vulkan on Linux and Windows, or any Apple Silicon Mac.\n\n### The launcher\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/launcher-play.webp\" alt=\"The launcher's Play page: v2026.10.14.1 ready to play, its summary, Client and Server, the version picker and Play, the resources and the Minecraft folder as a numbered list\"></td>\n    <td width=\"50%\"><img src=\"docs/media/launcher-patch-notes.webp\" alt=\"The launcher's Patch notes page, showing the notes of Horizon 2026.10.14.1\"></td>\n  </tr>\n</table>\n\nIt lists Horizon's releases and installs the build for your platform, shows each release's patch notes, updates Horizon and itself, and doubles as a command-line tool and an MCP server. See [the launcher's README](launcher/README.md).\n\n## Screenshots\n\nCaptured in the Rust client itself, with vanilla assets and no mods or shaders.\n\n### Menus and settings\n\n<table>\n  <tr>\n    <td colspan=\"2\"><img src=\"docs/media/menu-title.webp\" alt=\"Horizon's title screen: the mark and the pages on the left, the Horizon title, Singleplayer and Multiplayer, and the last world played and the faint wordmark, over a veiled snowy landscape\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/menu-worlds.webp\" alt=\"The Singleplayer page: three worlds with their dates and game modes, and Create world and Play buttons\"></td>\n    <td width=\"50%\"><img src=\"docs/media/settings.webp\" alt=\"The Video settings in their Simple view: a preset, render distance, field of view, framerate, VSync and GUI scale, each with what it costs\"></td>\n  </tr>\n</table>\n\nThe vanilla menus are one setting away: Options → Interface → Menu style → Classic. See [Graphics settings](docs/graphics.md).\n\n### In game\n\n<table>\n  <tr>\n    <td colspan=\"2\"><img src=\"docs/media/sunset.webp\" alt=\"Sunset over a savanna river valley and a plains village\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/village.webp\" alt=\"A plains village with farms, an iron golem and animals\"></td>\n    <td width=\"50%\"><img src=\"docs/media/survival.webp\" alt=\"Survival at dusk: a zombie attacks near the village\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/nether.webp\" alt=\"A crimson forest in the Nether with a zombified piglin\"></td>\n    <td width=\"50%\"><img src=\"docs/media/night.webp\" alt=\"Moonrise over a torch-lit village and river\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/underwater.webp\" alt=\"Salmon swimming in a river\"></td>\n    <td width=\"50%\" valign=\"middle\">\n      Vanilla world generation ported to Rust (terrain, aquifers, carvers, features, villages and the Nether), every block model with smooth lighting and biome tints, the vanilla sky and fog, mobs, the HUD, chat and advancements: everything in these frames is drawn by Horizon.\n    </td>\n  </tr>\n</table>\n\n## What it does\n\nHorizon reimplements the Minecraft Java client and its game logic in Rust, one subsystem at a time, and compares each piece with the vanilla game. Each `tools/test_*_parity.py` harness drives the same inputs through Horizon and through the vanilla client and server bytecode from your own copy of the game, then checks that the outputs are identical. It is for players and developers interested in game reimplementation, and for anyone who wants to see how far a behaviour-exact native rewrite can go.\n\nThe [native client](docs/native-client.md) opens on a vanilla-style title screen with world creation and selection, and generates worlds with the Rust port of the vanilla generators: noise terrain, aquifers, surface rules, carvers and placed features, all checked against vanilla. It streams and lights chunks on worker threads and renders every vanilla block model with smooth lighting, biome tints, the vanilla sky, sun, moon, stars and clouds. Gameplay includes:\n\n- validated player physics, health and hunger;\n- mining with vanilla tool rules and loot tables;\n- placing, crafting, chests and furnaces;\n- dropped items, particles and sounds;\n- passive and hostile mobs with combat and vanilla AI, including guardians, shulkers, illagers, ravagers, the wither, the ender dragon fight, the breeze, the creaking, the sniffer, the happy ghast, llamas and the copper golem;\n- villagers that take jobs, trade, restock, meet at the bell and sleep in beds, on a port of vanilla's brain;\n- raids and pillager patrols;\n- dispensers, crafters, the loom and the recipe book;\n- every command, scoreboards and teams, the player list, subtitles and the HUD overlays;\n- boats, minecarts, item frames, paintings and armor stands;\n- shields, maps, books, fireworks, beacons, advancements and statistics;\n- Anvil saves, joining vanilla servers, and opening a world to LAN.\n\n## Agent control\n\nAI agents and scripts can play Horizon. `horizon-ctl`, shipped beside the game in every release folder, is a command line that reads the game as JSON and acts like a player; `horizon-ctl mcp` serves the same commands as an MCP server (one tool per command, screenshots returned as images).\n\n```sh\nhorizon-ctl launch --world Survival --seed 5 --wait   # finds the version the launcher installed\nhorizon-ctl state                                       # position, health, food, target, screen...\nhorizon-ctl find-block birch_log                        # the nearest logs\nhorizon-ctl goto -0.5 65 -2.5 --near 2.5                # walks there along a path\nhorizon-ctl break -1 65 -3                              # mines it; replies with the drops\nhorizon-ctl open-inventory && horizon-ctl click-slot 0  # menus: slots, buttons by label, text fields\n```\n\nCommands block until the action is done and reply with what happened; errors are JSON with distinct exit codes, `horizon-ctl help` lists every command and `horizon-ctl COMMAND --help` explains one with examples. It talks to the game over a Unix socket on Linux and macOS and over a token-protected localhost port on Windows. See [Agent control in the native client guide](docs/native-client.md#agent-control-horizon-ctl-and-mcp).\n\n## Build from source\n\nFor developers. Requirements: Rust 1.90 or newer, Python 3.10 or newer, JDK 25, and on Linux the ALSA and udev development headers (`libasound2-dev libudev-dev` on Debian and Ubuntu). Development and the vanilla harnesses run on Linux.\n\nHorizon contains no game files and never downloads them. It builds its resources from **your own copy** of Minecraft: Java Edition 26.3, verified against the checksums in `research-lock.json`:\n\n1. **Client:** install Java Edition with the official launcher and play 26.3 once. Horizon reads `versions/26.3/`, `libraries/` and `assets/` from the launcher's game directory (`~/.minecraft` on Linux). If yours lives elsewhere, pass `--minecraft-dir` or set `HORIZON_MINECRAFT_DIR`.\n2. **Server jar:** the 26.3 server jar, from the `downloads.server.url` in your launcher's `versions/26.3/26.3.json` (or [minecraft.net/download/server](https://www.minecraft.net/en-us/download/server) while 26.3 is the current release). Pass it with `--server-jar` or set `HORIZON_SERVER_JAR`. It is only needed the first time.\n\n```sh\ngit clone https://github.com/ludovic111/horizon.git\ncd horizon\ncargo run --release -p horizon-prepare -- --prepare --server-jar ~/Downloads/server.jar   # needs JDK 25\ncargo run --release -p horizon-prepare -- sounds   # optional: sounds from your launcher install\ncargo run --release -p horizon-client\n```\n\nEverything prepared lands in the gitignored `.local/`. It is derived from the game: never commit it or share it.\n\nThe client starts on the title screen. Command-line options (`--world`, `--seed`, `--creative`, `--render-distance`, `--dedicated`), controls, playing and scripting through `horizon-ctl` and its MCP server, and the architecture are described in [the native client guide](docs/native-client.md). The rest of the documentation is indexed in [docs/README.md](docs/README.md), including [the parity workflow](docs/parity-workflow.md).\n\n## Project status\n\nThe table below is the project's own audit of each subsystem. Every subsystem now matches vanilla in every harness that compares it. 100% means 100% of what the harnesses compare, not proof that"
+    },
+    "brief": {
+      "summary": "用 Rust 从零重写 Minecraft Java 版，靠差分测试对齐原版行为",
+      "problem": "原版 Java 客户端性能与平台受限，想用原生代码重实现又怕行为偏离原版",
+      "highlights": [
+        "可以在 Linux、macOS 和 Windows 上玩原生 Rust 客户端",
+        "可以用 Horizon 启动器装游戏、备资源、跑客户端或服务端",
+        "可以切换图形预设并打开性能叠加层看帧率"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "游戏引擎开发者",
+        "Rust 学习者"
+      ],
+      "why_trending": "本周首次收录；用 281 个差分测试逐项对齐原版，做法少见",
+      "caveat": "仍需自备正版 Minecraft，且渲染距离 32 时仍会卡顿",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ludovic111/horizon",
+      "score": 78,
+      "category": "游戏开发",
+      "reason": "Rust重写Minecraft的体素游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 54.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "leemysw/yovoice",
+      "url": "https://github.com/leemysw/yovoice",
+      "description": "Open-source local AI audio & music studio for macOS & Windows. TTS, voice cloning, songs with lyrics, and multi-track scores — 100% offline, zero API fees.",
+      "language": "TypeScript",
+      "total_stars": 1547,
+      "forks": 120,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-music",
+        "audio",
+        "desktop-app",
+        "local-ai",
+        "macos",
+        "mcp",
+        "midi",
+        "music-generation",
+        "offline-ai",
+        "skill",
+        "text-to-speech",
+        "tts",
+        "voice",
+        "voice-cloning",
+        "voice-cloning-app",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-09-15T15:18:35Z",
+      "updated_at": "2026-10-16T04:39:28Z",
+      "pushed_at": "2026-10-16T04:39:28Z",
+      "open_issues": 7,
+      "homepage": "https://yovoice.leemysw.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"web/public/icon/voice-workbench-app-icon-v1.png\" width=\"96\" alt=\"yovoice\" />\n</p>\n\n<h1 align=\"center\">yovoice</h1>\n<p align=\"center\">Give your words a voice. Compose your ideas into songs.</p>\n<p align=\"center\">\n  <a href=\"https://yovoice.leemysw.com\"><img src=\"https://img.shields.io/badge/website-yovoice.leemysw.com-10b981?style=flat-square\" alt=\"Website\" /></a>\n  <a href=\"web/package.json\"><img src=\"https://img.shields.io/badge/version-0.2.0-blue?style=flat-square\" alt=\"Version 0.2.0\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache--2.0-orange?style=flat-square\" alt=\"License: Apache-2.0\" /></a>\n  <img src=\"https://img.shields.io/badge/macOS-14%2B-black?style=flat-square\" alt=\"macOS 14+ (Apple Silicon)\" />\n  <img src=\"https://img.shields.io/badge/Windows-10%2F11-0078D4?style=flat-square\" alt=\"Windows 10/11 (x64)\" />\n</p>\n<p align=\"center\">English · <a href=\"README_zh.md\">简体中文</a></p>\n\n<p align=\"center\"><a href=\"https://yovoice.leemysw.com\">Website</a> · <a href=\"docs/cli.md\">CLI & Agent Skill</a> · <a href=\"docs/api.md\">API / MCP Deployment</a> · <a href=\"docs/development.md\">Development</a></p>\n\n---\n\nyovoice is an open-source, local-first audio and music creation studio for macOS and Windows. \n\nTurn text into expressive speech, natural cloned voices, complete vocal songs, and multi-track scores right on your machine. Featuring zero-shot voice cloning, emotional performance controls, AI music generation with lyrics, and General MIDI score arranging—**all running 100% locally with zero cloud API calls, zero per-character fees, and zero Python environment headaches.**\n\n![yovoice creation workspace — browser preview](docs/images/yovoice-workspace.png)\n\n---\n\n## Why yovoice?\n\n- 🔒 **100% Local Privacy**: Runs entirely on your local GPU/CPU. Your manuscripts, reference voices, and creations never leave your computer.\n- 💸 **Zero Recurring Fees**: Say goodbye to per-character/per-minute meters and expensive cloud voice/music subscriptions.\n- ⚡ **Native C++ Performance (No Python Hell)**: Powered by [audio.cpp](https://github.com/0xShug0/audio.cpp) v0.9.1. Ships with bundled Windows CUDA 12.4/13.3 runtimes and native macOS Metal support. Double-click and create—no Conda or PyTorch conflicts.\n- 🎛️ **Creator Workstation**: Multi-take versioning for side-by-side comparison, waveform trimming, timeline scrolling, and clean stems/MIDI export.\n- 🤖 **MCP & AI Agent Ecosystem**: Connect DeepSeek, Qwen, Claude, OpenAI, or local Ollama to write scores and lyrics in seconds. Includes a native Model Context Protocol (MCP) server for Cursor and Claude Code.\n\n---\n\n## Features\n\n- **Voice and expression** — use a reference voice, match a reference performance, adjust emotions, or describe the delivery in words.\n- **A complete audio workflow** — import or record reference audio, trim clips, preview speech, and export your work.\n- **Voice design and cloning** — VoxCPM2 offers text-guided voice design, controllable cloning, and transcript-assisted cloning with automatic multilingual handling, and 48 kHz output.\n- **Music generation** — describe a style, write lyrics with section markers, and generate full songs or instrumentals with ACE-Step 1.5; every take is kept as a version to compare.\n- **Score** — write each part by bar and beat, import MIDI or let an Agent write the score, then render it with a General MIDI sound font and a role-based mix; results are exactly repeatable and export to MIDI and stems. See [Score](docs/score.md).\n- **Optional AI service** — connect DeepSeek, Qwen, Kimi, OpenAI, Anthropic, Ollama or any compatible API to let AI write arrangements and lyrics; keys stay on this computer. See [AI service](docs/ai.md).\n- **Local models** — run IndexTTS 2.0 / 2.5, VoxCPM2, OmniVoice, Qwen3-TTS, Breeze TTS 2 and Kokoro through audio.cpp, with resumable model downloads and GGUF import.\n- **Hardware acceleration** — Metal on Apple Silicon; CPU, NVIDIA CUDA, and experimental Vulkan on Windows.\n- **Agent Skill & MCP** — ask your AI agent to set up local speech generation and create voiceovers from text and reference audio.\n\n---\n\n## Hardware & VRAM Quick Guide\n\n| Use Case | Recommended Hardware | Recommended Models |\n| --- | --- | --- |\n| 🟢 **Lightweight & Blazing Fast** | Any CPU / 4 GB+ RAM | **Kokoro-82M** (only 189 MB Q8, millisecond latency, runs great on CPU) |\n| 🟡 **High-Fidelity Voice Cloning** | 4 GB – 6 GB VRAM / 8 GB+ Apple Silicon | **VoxCPM2** (2B, 48 kHz), **IndexTTS 2.0/2.5**, **Qwen3-TTS** |\n| 🔴 **Full Song & Music Generation** | 12 GB+ VRAM / 16 GB+ Apple Silicon | **ACE-Step 1.5 Turbo** (BF16, 10 GB), **YuE2 3B** |\n\n---\n\n## Supported Models\n\n| Model | Parameters | Model file size by precision | Core capabilities |\n| --- | --- | --- | --- |\n| IndexTTS 2.0 | — | Q8 · 3.63 GB<br>F16 · 4.65 GB<br>ORIG · 8.08 GB | Chinese/English voice cloning, emotion control, reference performance |\n| IndexTTS 2.5 | — | Q8 · 3.50 GB<br>F16 · 4.55 GB<br>ORIG · 7.89 GB | Multilingual voice cloning, emotion control, pronunciation editing |\n| VoxCPM2 | 2B | Q8 · 2.96 GB<br>BF16 · 4.77 GB<br>ORIG · 4.96 GB | Text-guided voice design, voice cloning, transcript-assisted cloning |\n| OmniVoice | 0.6B | Q8 · 1.35 GB<br>BF16 · 1.64 GB<br>F16 · 1.64 GB | Attribute-based voice design, voice cloning, non-verbal sound tags |\n| Qwen3-TTS Base | 0.6B | Q8 · 1.99 GB<br>BF16 · 2.52 GB | Reference voice cloning, optional transcript guidance, multilingual speech |\n| Qwen3-TTS Base | 1.7B | Q8 · 2.70 GB<br>BF16 · 4.20 GB<br>ORIG · 4.54 GB | Reference voice cloning, optional transcript guidance, multilingual speech |\n| Qwen3-TTS CustomVoice | 1.7B | Q8 · 2.82 GB<br>BF16 · 4.18 GB | 9 built-in voices, text-guided style and emotion |\n| Qwen3-TTS VoiceDesign | 1.7B | Q8 · 2.82 GB<br>BF16 · 4.18 GB | Voice design from natural-language descriptions, no reference audio required |\n| Breeze TTS 2 | ~3B | Q4 · 3.79 GB<br>Q8 · 5.08 GB<br>BF16 · 7.34 GB | Chinese and English voice design, cloning and voice direction; GPU recommended, requires the v0.9.1 engine |\n| Kokoro-82M 1.0 Official | 82M | Q8 · 189.55 MB<br>BF16 · 211.95 MB | 49 built-in voices, multilingual speech excluding Japanese |\n| Kokoro-82M 1.0 | 82M | Q8 · 932.66 MB | 54 built-in voices, full multilingual resources including Japanese; import only |\n| Kokoro-82M 1.1-zh | 82M | Q8 · 255.32 MB | 100 Chinese and 3 English voices; experimental, import only |\n| ACE-Step 1.5 Turbo | — | BF16 · 10.09 GB | Songs and instrumentals from a style prompt and lyrics, 50+ vocal languages; requires engine v0.9.1 |\n\nAll models are available in the App and CLI. See [model selection](docs/models.md) for input requirements and examples. OmniVoice (CC-BY-NC) and Breeze TTS 2 (BreezeBlue Research and Non-Commercial License) weights are restricted to non-commercial use.\n\n---\n\n## Installation\n\nChoose the package for your platform from the repository’s [Releases](../../releases) tab or visit the [official website](https://yovoice.leemysw.com).\n\n| Platform | Package | Install |\n| --- | --- | --- |\n| macOS 14+ · Apple Silicon | `.dmg` | Open the disk image and drag yovoice to Applications |\n| Windows 10/11 · x64 | `-setup.exe` | Run the installer, then open yovoice from the Start menu |\n| Windows 10/11 · x64 · NVIDIA GPU | `-cuda12.4-setup.exe` | Bundles the CUDA 12.4 runtime; works with older GPUs and drivers and uses the GPU from first launch |\n| Windows 10/11 · x64 · NVIDIA GPU | `-cuda13.3-setup.exe` | Bundles the CUDA 13.3 runtime; needs a newer driver, smaller download |\n\nThe Windows installer downloads and installs [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) if needed. Models are downloaded inside the app; uninstalling preserves user data in `~/.yovoice`.\n\nCheck for updates from the app menu on macOS or Windows. Updates are also checked and downloaded in the background; restart to install when ready. Windows updates download only the app (`-update.exe`) and keep the installed runtime; when a release recommends a newer runtime you can upgrade it in Settings → Inference engine.\n\n![Install yovoice on macOS](docs/images/yovoice-macos-install.png)\n\n---\n\n## Quick Start\n\n1. **Set up a model.** Download a model in Settings (e.g. Kokoro-82M for fast narration, or VoxCPM2 for cloning).\n2. **Create a project.** Choose Story dubbing, Speech generation, Music, or Score.\n3. **Add content.** Enter text, lyrics, or notes, then pick a character and adjust style.\n4. **Generate audio.** Select Generate, then preview, compare takes, edit, and export.\n\n---\n\n## CLI & Agent Skill\n\nGive your agent the [yovoice Skill](https://github.com/leemysw/yovoice/tree/main/skills/yovoice) link and ask it to install the Skill and set up the local CLI, engine, and model:\n\n> Install this Skill and set up yovoice for local speech generation: https://github.com/leemysw/yovoice/tree/main/skills/yovoice\n\nThen describe what you want:\n\n> Read narration.txt using voice.wav as the reference voice, with a calm delivery, and save it as narration.wav.\n\nThe agent runs the standalone CLI without opening the desktop app. See the [CLI guide](docs/cli.md) for details.\n\n---\n\nRun `yovoice serve` to provide an authenticated HTTP API and MCP inference service for other machines. See the [API / MCP deployment guide](docs/api.md) for deployment and client examples.\n\n## Development\n\n```sh\nmake install\nmake app-run\n```\n\nSee the [development guide](docs/development.md) for prerequisites. It also covers browser preview, tests, and project structure.\n\n---\n\n## Contributing\n\nBug reports, feature suggestions, and pull requests are welcome. Include your platform, model, and steps to reproduce when reporting a problem. Run `make check` before submitting code changes.\n\n---\n\n## Acknowledgements\n\n- [audio.cpp](https://github.com/0xShug0/audio.cpp) by ShugoAI — the local audio inference engine.\n- [VoxCPM](https://github.com/OpenBMB/VoxCPM) — voice design and cloning models, licensed under Apache-2.0.\n- [IndexTTS](https://github.com/index-tts/index-tts) — the speech synthesis models behind yovoice.\n- [OmniVoice](https://github.com/k2-fsa/OmniVoice) — voice design and cloning models.\n- [Qwen3-TTS](https://github.com/QwenLM/Qwen3-TTS) — voice cloning, built-in voices, and text-guided voice design.\n- [ACE-Step](https://github.com/ace-step/ACE-Step-1.5) — music generation from style prompts and lyrics.\n- [go-meltysynth](https://github.com/sinshu/go-meltysynth), [MuseScore General](https://musescore.org/en/handbook/3/soundfonts-and-sfz-files#gm_soundfonts), [GeneralUser GS](https://www.schristiancollins.com/generaluser) and SGM-V2.01 by David Shan — the SoundFont synthesizer and sound fonts behind score rendering.\n- Kokoro — lightweight speech synthesis with built-in voices: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) and [Kokoro-82M-v1.1-zh](https://huggingface.co/hexgrad/Kokoro-82M-v1.1-zh).\n\n---\n\n## Star History\n\n<a href=\"https://www.star-history.com/?repos=leemysw%2Fyovoice&type=date&legend=bottom-right\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/chart?repos=leemysw/yovoice&type=date&theme=dark&legend=bottom-right\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/chart?repos=leemysw/yovoice&type=date&legend=bottom-right\" />\n   <img alt=\"Star History Chart\" src=\"https://api.star-history.com/chart?repos=leemysw/yovoice&type=date&legend=bottom-right\" />\n </picture>\n</a>\n\n---\n\n## License\n\n[Apache-2.0](LICENSE). Dependencies retain their [original licenses](THIRD_PARTY_NOTICES.md); IndexTTS models are covered separately by their [model license](web/public/model-license.txt).\n"
+    },
+    "brief": {
+      "summary": "本地离线的 AI 语音与音乐创作工作台，可克隆音色、生成歌曲。",
+      "problem": "云端 TTS 和音乐生成按字符收费、要联网，隐私与费用难兼顾。",
+      "highlights": [
+        "可以把文字转成带情绪的语音，并克隆参考音色",
+        "可以根据风格提示和歌词生成完整歌曲或伴奏",
+        "可以用 AI Agent 或 MCP 写歌词、编曲与生成旁白"
+      ],
+      "target_users": [
+        "配音与有声创作者",
+        "独立音乐爱好者",
+        "本地部署用户"
+      ],
+      "why_trending": "本周首次收录，已获 1547 星，近期持续更新，主打全离线零 API 费用。",
+      "caveat": "部分模型权重仅限非商用；全曲生成建议 12GB 以上显存。",
+      "category": "音乐 / 音效",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "leemysw/yovoice",
+      "score": 80,
+      "category": "音乐 / 音效",
+      "reason": "本地AI音频音乐工作室，含歌声克隆",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 50.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "YarnSpinnerTool/YarnSpinner-Godot-GDScript",
+      "url": "https://github.com/YarnSpinnerTool/YarnSpinner-Godot-GDScript",
+      "description": "The official Godot (GDScript) integration for Yarn Spinner, the friendly dialogue tool.",
+      "language": "GDScript",
+      "total_stars": 88,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "gamedev",
+        "gdscript",
+        "godot",
+        "narrative",
+        "spinner",
+        "tools",
+        "yarn",
+        "yarnspinner"
+      ],
+      "license_name": "",
+      "created_at": "2026-02-25T07:23:21Z",
+      "updated_at": "2026-10-16T04:38:37Z",
+      "pushed_at": "2026-10-16T04:38:33Z",
+      "open_issues": 2,
+      "homepage": "https://yarnspinner.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Yarn Spinner for Godot (GDScript)\n\n> [!CAUTION]\n> This is Yarn Spinner for Godot (GDScript) Early Access 3.2. There will be bugs, we might change the API or features with an update, or something may break. We do not recommend you use this to ship a game just yet. \n\nYarn Spinner for Godot (GDScript) is a pure-GDScript implementation of the Yarn Spinner dialogue system for the Godot engine. It runs compiled Yarn programs and aims for full feature parity with Yarn Spinner for Unity 3.2, including node groups, saliency, detours, smart variables, localisation, and voice over support.\n\nRequires Godot 4.6 or later (not the .NET/Mono version).\n\n> [!IMPORTANT]\n> Yarn Spinner for Godot (GDScript) is not yet for sale (it will always be available here for free, too). We rely on your support to keep everything free and accessible. If you want to support us during Early Access, you can support us on [GitHub Sponsors](https://github.com/sponsors/YarnSpinnerTool) or [Patreon](https://patreon.com/secretlab). GitHub sponsors of $25 and above, and Patreon members of the \"Scribe\" or above tier will receive a license to the paid version when it is released.\n\nVisit the [documentation](https://docs.yarnspinner.dev/yarn-spinner-for-godot/godot-gdscript) and [Yarn Spinner site](https://yarnspinner.dev) for more information.\n\n> [!TIP]\n> **Please submit issues or feature requests via this form during Early Access:** http://yarnspinner.dev/pre-release-feedback\n\n## Samples\n\nThe samples live in their own project in the [YarnSpinner-Godot-Samples](https://github.com/YarnSpinnerTool/YarnSpinner-Godot-Samples) repository. \n\nThe samples project ships without this addon: copy this repository's `addons/yarn_spinner/` folder into the samples project's `addons/` directory first (the samples README has step-by-step instructions), then open the project in Godot 4.6+, open the scene for the sample you want, and run it with \"Run Current Scene\" (F6).\n\nThe intention is that Yarn Spinner for Godot (C#) and Godot (GDScript) will ship with a full suite of samples on par with the samples supplied as part of Yarn Spinner for Unity.\n\n## Differences from Yarn Spinner for Godot (C#)\n\nYarn Spinner for Godot (C#) is a port of Yarn Spinner for Unity that uses the core Yarn Spinner C# library directly. \n\nIt requires the .NET-enabled build of Godot, a `.csproj`/`.sln`, and compiles Yarn scripts inside the editor via a C# import plugin. \n\nThis GDScript version is a complete reimplementation of the Yarn Spinner runtime in pure GDScript, with no .NET dependency, no DLLs, no C# project needed. It works with the standard (non-.NET) Godot editor and export templates, making it accessible to GDScript-only projects. \n\nYarn scripts are compiled with the Yarn Spinner compiler bundled with the addon (with `ysc` as a fallback), and both versions produce identical runtime behaviour from the same `.yarn` source files.\n\n## Differences from Yarn Spinner for Unity\n\nThe VM, protobuf parser, library, and markup system were all written to match Unity's behaviour, and the runtime is checked against Yarn Spinner's own test plans, but there are some differences:\n\n- **CLDR plural rules** -- `[plural]` and `[ordinal]` use the same CLDR plural rules as Yarn Spinner, for every locale it supports.\n- **Culture** -- Unity formats the results of `string()`, `number()`, `bool()` and `format()` using the player's current culture. This implementation always uses the invariant culture, so `string(3.5)` is `3.5` on every device.\n- **Extra built-in functions** -- As well as Yarn Spinner's built-in functions, this implementation provides `abs`, `clamp`, `lerp`, `inverse_lerp`, `smoothstep`, `pow`, `sqrt`, `sign`, `wrap`, `mod`, `length`, `uppercase`, `lowercase`, `first_letter_caps`, `plural` and `ordinal`. Unity doesn't have these, so scripts that call them won't run there unless you register matching functions.\n- **Async model** -- Unity uses C# `async`/`await` with `YarnTask` and `CancellationTokenSource` chains. This implementation uses Godot signals and `await` with a simpler `YarnCancellationToken`. The behaviour is largely the same, but the presenter API signatures are different (signals instead of tasks).\n- **Command discovery** -- Unity uses `[YarnCommand]` and `[YarnFunction]` attributes on methods. This implementation uses a naming convention (`_yarn_command_<name>` and `_yarn_function_<name>`), registering methods from `class_name` scripts when the dialogue runner starts, and from the rest of the scene tree once the scene is ready. When you export your game, the plugin records which scripts declare these methods, so the exported game doesn't need to search for them.\n- **Error handling** -- Unity throws exceptions for invalid states (missing variables, bad option indices, etc.). This implementation reports them with `push_error`, and stops the dialogue when it can't safely continue.\n- **Markup rendering** -- The built-in line presenter renders `[b]`, `[i]`, `[u]`, `[s]`, `[code]`, `[style]` and palette markers as BBCode. In Unity these are rendered by TextMesh Pro.\n- **Execution limits** -- The virtual machine can optionally stop runaway scripts with `max_instructions_per_step` and `max_call_stack_depth`. Both are off by default; Unity has no equivalent.\n- **Localisation** -- Unity has multiple line provider backends (built-in, Unity Localization package, Addressables). This implementation uses Godot's `TranslationServer` directly, with the text, asset and fallback locales set on the line provider.\n\n## License\n\nThis project uses the Yarn Spinner Public License. You're free to use it in your own projects, commercial or otherwise. The only restrictions are around redistributing it as part of a competing dialogue tool, and using it to train AI models. Full details are in [LICENSE.md](LICENSE.md). For a plain-language summary of the license terms and the intent behind its use, see the [YSPL FAQ](https://yarnspinner.dev/yspl).\n\n## Installation\n\nThe addon is the `addons/yarn_spinner/` folder inside this repository. That folder is the only part that goes into your project; the rest of the repository (tests, compiler sources, this file) stays behind.\n\n1. Clone or download this repository.\n2. Copy `addons/yarn_spinner/` into your Godot project's `addons/` directory, or symlink it from your checkout. The result should be `res://addons/yarn_spinner/plugin.cfg` in your project.\n3. In the Godot editor, go to **Project > Project Settings > Plugins** and enable **Yarn Spinner**.\n4. Drop your `.yarnproject` and `.yarn` files into your Godot project. The plugin compiles them automatically on import using its bundled compiler -- any time a `.yarn` file or the `.yarnproject` changes, Godot reimports and recompiles. No separate install is needed.\n5. Only if the bundled compiler isn't available for your platform: install `ysc` (the [Yarn Spinner Console](https://github.com/YarnSpinnerTool/YarnSpinner-Console) tool) as a fallback with `dotnet tool install YarnSpinner.Console --global --version 3.2.2`.\n6. Assign the imported `.yarnproject` to a Dialogue Runner in your scene.\n\nIf Godot reports missing dependencies on `res://addons/yarn_spinner/...` paths, or scripts fail to parse with `Could not find type \"YarnDialogueRunner\"`, the addon isn't at the path the project expects. The usual cause is copying the whole repository into `addons/`, which puts the addon at `addons/YarnSpinner-Godot-GDScript/addons/yarn_spinner`. Move the inner `yarn_spinner` folder so it sits directly under `addons/`, then reload the project.\n\n## How It Works\n\nThe Yarn Spinner compiler (bundled with the addon, or `ysc`) compiles `.yarn` scripts into a binary protobuf program. This plugin reads that binary at import time, parses it into an in-memory program representation, and executes it in a stack-based virtual machine. The VM handles control flow, variable storage, function calls, and content delivery. A dialogue runner orchestrates the VM and routes lines, options, and commands to presenter nodes in your scene tree.\n\nYou write dialogue in Yarn, and the plugin compiles and runs it. Compilation happens automatically when Godot imports the `.yarnproject` file, using the compiler binary bundled with the addon (or `ysc` from your PATH as a fallback).\n\n## Architecture\n\nThe plugin has three layers:\n\n**Core** (`addons/yarn_spinner/core/`) contains the rntime engine. The protobuf parser reads compiled `.yarnproject` binaries. The virtual machine executes instructions. The yarn library provides built-in functions and operators. Variable storage holds game state. The line provider resolves localised text and applies markup. The saliency system selects content when multiple candidates match\n\n**Dialogue Runner** (`addons/yarn_spinner/dialogue_runner.gd`) is the main node you add to your scene. It owns the VM, discovers commands from your scene tree, coordinates presenters, and exposes signals for dialogue lifecycle events. All configuration is done through its exported properties in the inspector.\n\n**Presenters** (`addons/yarn_spinner/ui/`) display content to the player. The line presenter shows dialogue text with typewriter effects. The options presenter shows choice buttons. The voice over presenter plays audio files synced to lines. You can subclass `YarnDialoguePresenter` to build your own.\n\n## Components\n\n### YarnDialogueRunner\n\nThe central node. Add it to your scene, assign a `.yarnproject`, an call `start_dialogue()`. Key properties:\n\n- `yarn_project` -- the compiled Yarn project to run\n- `start_node` -- which node to begin from (default: `\"Start\"`)\n- `auto_start` -- start dialogue when the scene loads\n- `variable_storage` -- where game state is stored (auto-created if not set)\n- `saliency_strategy` -- how to pick between competing content candidates\n- `show_selected_option_as_line` -- re-display the chosen option as a line of dialogue\n- `auto_discover_commands` -- find `_yarn_command_*` methods in your scene automatically\n\nSignals: `dialogue_started`, `dialogue_completed`, `dialogue_cancelled`, `node_started`, `node_completed`, `command_unhandled`, `command_received`.\n\nTo choose a Yarn node from a dropdown on your own scripts, export a `String` with the `yarn_node` hint, naming the property that holds the Dialogue Runner or Yarn Project:\n\n```gdscript\n@export var dialogue_runner: YarnDialogueRunner\n@export_custom(PROPERTY_HINT_NONE, \"yarn_node:dialogue_runner\") var start_at: String\n```\n\n### YarnLinePresenter\n\nDisplays a line of dialogue with optional typewriter animation (letter-by-letter or word-by-word). Expects a `RichTextLabel` for text and an optional `Label` for character names. Shows a continue indicator when the line is fully revealed.\n\n### YarnOptionsPresenter\n\nShows dialogue choices as buttons. Creates a button per option, handles keyboard and mouse selection, and can hide or disable unavailable options.\n\n### YarnDialoguePresenter\n\nBase class for custom presenters. Override `run_line()` to handle lines and `run_options()` to handle choices. Multiple presenters can be active at once -- the runner coordinates them.\n\n### YarnVariableStorage\n\nBase class for game state storage. The built-in `YarnInMemoryVariableStorage` stores variables in a dictionary. Subclass it to save to disk or sync with your game systems. Supports typed access (`get_float`, `get_bool`, `get_string`) and change subscriptions with automatic cleanup.\n\n### Custom Commands\n\nDefine commands in your scripts by naming methods `_yarn_command_<name>`. The runner discovers them automatically. Return a `Signal` to make the runner wait for it before continuing.\n\nA `static` method is called with just its arguments. A method that isn't `static` belongs to a node, so its first argument in Yarn is the name of the node to call it on. Methods on autoloads are called with just their arguments, `static` or not.\n\n```gdscript\nstatic func _yarn_command_shake(intensity: float) -> void:\n    # called from Yarn: <<shake 2.5>>\n    pass\n\n# On a script att"
+    },
+    "brief": {
+      "summary": "Godot 上纯 GDScript 的 Yarn 对话系统，直接运行 Yarn 剧本。",
+      "problem": "在 Godot 做分支对话，常要自己写剧本解析、流程控制和状态管理。",
+      "highlights": [
+        "可以用 Yarn 脚本写分支对话并直接运行",
+        "可以接入本地化与配音，多语言共用一套剧本",
+        "可以用 Godot 信号接管台词和选项显示"
+      ],
+      "target_users": [
+        "Godot 独立游戏开发者",
+        "叙事剧情设计师",
+        "GDScript 程序员"
+      ],
+      "why_trending": "本周首次收录，纯 GDScript 无需 .NET，官方持续更新。",
+      "caveat": "仍是 3.2 早期访问版，官方不建议现在用于正式发行。",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "YarnSpinnerTool/YarnSpinner-Godot-GDScript",
+      "score": 88,
+      "category": "互动叙事",
+      "reason": "Godot官方Yarn对话叙事集成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 50.0
+    }
+  }
+]
