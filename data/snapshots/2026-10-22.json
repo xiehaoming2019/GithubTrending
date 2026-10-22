@@ -1,0 +1,410 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 37086,
+      "forks": 2308,
+      "stars_today": 2012,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2520
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-10-22T05:03:54Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 78,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "把编码代理变成分阶段安全审计员",
+      "problem": "代理安全审计时，发现难验证、结论难复现",
+      "highlights": [
+        "可以让代理按六阶段审计代码库",
+        "可以生成并校验findings.json等报告",
+        "可以多次运行，复用旧结果补查缺口"
+      ],
+      "target_users": [
+        "安全工程师",
+        "代码审计人员",
+        "编码代理使用者"
+      ],
+      "why_trending": "今日新增2012星，连续上榜，源自Cloudflare实践",
+      "caveat": "需要强隔离沙箱，否则不执行目标代码",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 76,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码 Agent 的安全审计 Skill，多阶段工作流",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 69.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "stablyai/orca",
+      "url": "https://github.com/stablyai/orca",
+      "description": "Orca is the place for working with a fleet of agents (e.g. Grok Bot, Claude Code). Run any coding agent with your own subscription. Available on desktop, mobile and remote runtime.",
+      "language": "TypeScript",
+      "total_stars": 101630,
+      "forks": 6426,
+      "stars_today": 1541,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1608
+    },
+    "details": {
+      "topics": [
+        "ade",
+        "agent-ide",
+        "ai-agents",
+        "automation",
+        "bot",
+        "claude-code",
+        "codex",
+        "ghostty",
+        "grok-bot",
+        "hermes-agent",
+        "mobile-app",
+        "muse",
+        "openclaw",
+        "opencode",
+        "orchestration",
+        "pi",
+        "runtime",
+        "terminal",
+        "worktrees",
+        "yc-backed"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-17T03:28:57Z",
+      "updated_at": "2026-10-22T05:02:24Z",
+      "pushed_at": "2026-10-22T05:04:30Z",
+      "open_issues": 8616,
+      "homepage": "https://orca.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">\n  <a href=\"https://onOrca.dev\"><img src=\"resources/build/icon.png\" alt=\"Orca\" width=\"64\" valign=\"middle\" /></a> Orca\n</h1>\n\n<p align=\"center\">\n  <a href=\"https://github.com/stablyai/orca\"><img src=\"https://img.shields.io/github/stars/stablyai/orca?style=flat&amp;label=%E2%98%85&amp;color=08C\" alt=\"GitHub stars\" /></a>\n  <a href=\"https://github.com/stablyai/orca/releases\"><img src=\"docs/assets/readme-downloads.svg\" alt=\"Total downloads across all releases\" /></a>\n  <img src=\"https://img.shields.io/badge/license-MIT-08C?style=flat\" alt=\"License: MIT\" />\n  <a href=\"https://discord.gg/fzjDKHxv8Q\"><img src=\"https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white\" alt=\"Join the Orca Discord\" /></a>\n  <a href=\"https://x.com/orca_build\"><img src=\"https://img.shields.io/badge/X-000000?logo=x&logoColor=white\" alt=\"Follow Orca on X\" /></a>\n  <img src=\"https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-4493F8?style=flat-square\" alt=\"Supported platforms: macOS, Windows, and Linux\" />\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"docs/readme/README.zh-CN.md\">中文</a> · <a href=\"docs/readme/README.ja.md\">日本語</a> · <a href=\"docs/readme/README.ko.md\">한국어</a> · <a href=\"docs/readme/README.es.md\">Español</a> · <a href=\"docs/readme/README.fr.md\">Français</a> · <a href=\"docs/readme/README.pt.md\">Português</a></sub>\n</p>\n\n<p align=\"center\">\n  <strong>The AI Orchestrator for 100x builders.</strong><br/>\n  Run Codex, ClaudeCode, OpenCode or Pi side-by-side — each in its own worktree, tracked in one place.\n</p>\n\n<h3 align=\"center\"><a href=\"https://onorca.dev/download\"><ins>Download Orca</ins></a></h3>\n\n<p align=\"center\">\n  <img src=\"docs/assets/readme-hero.jpg\" alt=\"Orca desktop app running agents in parallel worktrees, with the Orca mobile companion app in the corner\" width=\"960\" />\n</p>\n\n## Features\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Mobile Companion\n\nMonitor and steer your agents from your phone — get notified when an agent finishes and send follow-ups from anywhere.\n\n[iOS App Store](https://apps.apple.com/us/app/orca-ide/id6766130217) · [Android APK](https://www.onorca.dev/download/android) · [Docs →](https://www.onorca.dev/docs/mobile)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/mobile\"><picture><source srcset=\"docs/assets/feature-wall/mobile-companion-app-showcase.gif\" type=\"image/gif\"><img src=\"docs/assets/feature-wall/mobile-companion-app-showcase.jpg\" alt=\"Orca desktop with the mobile companion app\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Parallel Worktrees\n\nFan one prompt across five agents, each in its own isolated git worktree — compare the results and merge the winner.\n\n[Docs →](https://www.onorca.dev/docs/model/worktrees)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/model/worktrees\"><picture><source srcset=\"docs/site/public/docs/tab-split.gif\" type=\"image/gif\"><img src=\"docs/site/public/docs/posters/tab-split.jpg\" alt=\"Parallel worktree orchestration\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Terminal Splits\n\nGhostty-class terminals with WebGL rendering, infinite splits, and scrollback that survives restarts.\n\n[Docs →](https://www.onorca.dev/docs/terminal)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/terminal\"><picture><source srcset=\"resources/onboarding/feature-wall/tile-02.webp\" type=\"image/webp\"><img src=\"resources/onboarding/feature-wall/tile-02.poster.jpg\" alt=\"Terminal splits\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Design Mode\n\nClick any UI element in a real Chromium window to send its HTML, CSS, and a cropped screenshot straight into your agent's prompt.\n\n[Docs →](https://www.onorca.dev/docs/browser/design-mode)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/browser/design-mode\"><picture><source srcset=\"docs/site/public/docs/orca-design-mode.gif\" type=\"image/gif\"><img src=\"resources/onboarding/feature-wall/tile-05.poster.jpg\" alt=\"Embedded browser and Design Mode\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### GitHub &amp; Linear, Native\n\nBrowse PRs, issues, and project boards in-app — open a worktree from any task and review without a context switch.\n\n[Docs →](https://www.onorca.dev/docs/review/linear)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/review/linear\"><picture><source srcset=\"resources/onboarding/feature-wall/tile-03.webp\" type=\"image/webp\"><img src=\"resources/onboarding/feature-wall/tile-03.poster.jpg\" alt=\"GitHub and Linear task workflows in Orca\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### SSH Worktrees\n\nRun agents on a beefy remote box with full file editing, git, and terminals — auto-reconnect and port forwarding included.\n\n[Docs →](https://www.onorca.dev/docs/ssh)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/ssh\"><picture><source srcset=\"resources/onboarding/feature-wall/tile-06.webp\" type=\"image/webp\"><img src=\"resources/onboarding/feature-wall/tile-06.poster.jpg\" alt=\"Remote worktrees over SSH\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Annotate AI Diffs\n\nDrop comments on any diff line and ship them back to the agent — review, edit, and commit without leaving Orca.\n\n[Docs →](https://www.onorca.dev/docs/review/annotate-ai-diff)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/review/annotate-ai-diff\"><picture><source srcset=\"docs/site/public/docs/annotate-ai-diff.gif\" type=\"image/gif\"><img src=\"resources/onboarding/feature-wall/tile-08.poster.jpg\" alt=\"Annotate AI-generated diffs\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Drag Files to Agents\n\nVS Code's editor with autosave everywhere — drag files or images straight into an agent prompt.\n\n[Docs →](https://www.onorca.dev/docs/editing/file-explorer)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/editing/file-explorer\"><picture><source srcset=\"resources/onboarding/feature-wall/tile-07.gif\" type=\"image/gif\"><img src=\"resources/onboarding/feature-wall/tile-07.poster.jpg\" alt=\"Drag files and images into an agent prompt\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"middle\">\n\n### Orca CLI\n\nAgents drive Orca too — script every workflow with `orca worktree create`, `snapshot`, `click`, and `fill`.\n\n[Docs →](https://www.onorca.dev/docs/cli/overview)\n\n</td>\n<td width=\"50%\">\n  <a href=\"https://www.onorca.dev/docs/cli/overview\"><picture><source srcset=\"resources/onboarding/feature-wall/tile-09.webp\" type=\"image/webp\"><img src=\"resources/onboarding/feature-wall/tile-09.poster.jpg\" alt=\"Script Orca from the CLI\" width=\"100%\" /></picture></a>\n</td>\n</tr>\n</table>\n\n**Also in the box:**\n\n- **[Quick open](https://www.onorca.dev/docs/model/quick-open)** — Search across worktrees, files, agents, commands, and repo context without leaving your flow.\n- **[Account switcher &amp; usage tracking](https://www.onorca.dev/docs/agents/usage-tracking)** — See Claude and Codex usage and rate-limit resets, and hot-swap accounts without re-logging in.\n- **[Rich repo previews](https://www.onorca.dev/docs/editing/markdown)** — Preview Markdown, images, PDFs, and repo docs in the workspace.\n- **[Computer Use](https://www.onorca.dev/docs/cli/computer-use)** — Let agents operate desktop apps and visible UI when a workflow needs real interaction.\n- **[Notifications and unread state](https://www.onorca.dev/docs/notifications)** — Know when an agent finishes or needs attention, then mark threads unread to come back later.\n- **And many, many more** — we ship daily, so this list is perpetually behind. The [changelog](https://github.com/stablyai/orca/releases) is the real feature list.\n\n---\n\n## Supported Agents\n\nWorks with **any CLI agent** — if it runs in a terminal, it runs in Orca.\n\n<p>\n  <a href=\"https://docs.anthropic.com/claude/docs/claude-code\"><kbd><img src=\"docs/assets/claude-logo.svg\" alt=\"Claude Code logo\" width=\"16\" valign=\"middle\" /> Claude Code</kbd></a> &nbsp;\n  <a href=\"https://github.com/openai/codex\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=openai.com&sz=64\" alt=\"Codex logo\" width=\"16\" valign=\"middle\" /> Codex</kbd></a> &nbsp;\n  <a href=\"https://x.ai/cli\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=x.ai&sz=64\" alt=\"Grok logo\" width=\"16\" valign=\"middle\" /> Grok</kbd></a> &nbsp;\n  <a href=\"https://cursor.com/cli\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=cursor.com&sz=64\" alt=\"Cursor logo\" width=\"16\" valign=\"middle\" /> Cursor</kbd></a> &nbsp;\n  <a href=\"https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=github.com&sz=64\" alt=\"GitHub Copilot logo\" width=\"16\" valign=\"middle\" /> GitHub Copilot</kbd></a> &nbsp;\n  <a href=\"https://dev.meta.ai/docs/muse-code\"><kbd><img src=\"src/shared/agent-icons/muse.png\" alt=\"Muse logo\" width=\"16\" valign=\"middle\" /> Muse</kbd></a> &nbsp;\n  <a href=\"https://deepseek-harness.github.io/deepseek-harness/\"><kbd><img src=\"src/shared/agent-icons/dsh.png\" alt=\"DeepSeek Harness logo\" width=\"16\" valign=\"middle\" /> DeepSeek Harness</kbd></a> &nbsp;\n  <a href=\"https://zcode.z.ai/en/docs\"><kbd><img src=\"src/shared/agent-icons/zcode.png\" alt=\"ZCode logo\" width=\"16\" valign=\"middle\" /> ZCode</kbd></a> &nbsp;\n  <a href=\"https://opencode.ai/docs/cli/\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=opencode.ai&sz=64\" alt=\"OpenCode logo\" width=\"16\" valign=\"middle\" /> OpenCode</kbd></a> &nbsp;\n  <a href=\"https://mimo.xiaomi.com/coder\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=mimo.xiaomi.com&sz=64\" alt=\"MiMo Code logo\" width=\"16\" valign=\"middle\" /> MiMo Code</kbd></a> &nbsp;\n  <a href=\"https://ampcode.com/manual#install\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=ampcode.com&sz=64\" alt=\"Amp logo\" width=\"16\" valign=\"middle\" /> Amp</kbd></a> &nbsp;\n  <a href=\"https://openclaude.gitlawb.com/\"><kbd><img src=\"resources/openclaude-logo.png\" alt=\"OpenClaude logo\" width=\"16\" valign=\"middle\" /> OpenClaude</kbd></a> &nbsp;\n  <a href=\"https://antigravity.google/docs/cli-overview\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=antigravity.google&sz=64\" alt=\"Antigravity logo\" width=\"16\" valign=\"middle\" /> Antigravity</kbd></a> &nbsp;\n  <a href=\"https://pi.dev\"><kbd><img src=\"https://pi.dev/favicon.svg\" alt=\"Pi logo\" width=\"16\" valign=\"middle\" /> Pi</kbd></a> &nbsp;\n  <a href=\"https://omp.sh\"><kbd><img src=\"https://omp.sh/favicon.svg\" alt=\"oh-my-pi logo\" width=\"16\" valign=\"middle\" /> oh-my-pi</kbd></a> &nbsp;\n  <a href=\"https://hermes-agent.nousresearch.com/docs/\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=nousresearch.com&sz=64\" alt=\"Hermes Agent logo\" width=\"16\" valign=\"middle\" /> Hermes Agent</kbd></a> &nbsp;\n  <a href=\"https://devin.ai/cli\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=devin.ai&sz=64\" alt=\"Devin logo\" width=\"16\" valign=\"middle\" /> Devin</kbd></a> &nbsp;\n  <a href=\"https://block.github.io/goose/docs/quickstart/\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=goose-docs.ai&sz=64\" alt=\"Goose logo\" width=\"16\" valign=\"middle\" /> Goose</kbd></a> &nbsp;\n  <a href=\"https://docs.augmentcode.com/cli/overview\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=augmentcode.com&sz=64\" alt=\"Auggie logo\" width=\"16\" valign=\"middle\" /> Auggie</kbd></a> &nbsp;\n  <a href=\"https://github.com/autohandai/code-cli\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=autohand.ai&sz=64\" alt=\"Autohand Code logo\" width=\"16\" valign=\"middle\" /> Autohand Code</kbd></a> &nbsp;\n  <a href=\"https://github.com/charmbracelet/crush\"><kbd><img src=\"https://www.google.com/s2/favicons?domain=charm.sh&sz=64\" alt=\"Charm logo\" width=\"16\" valign=\"middle\" /> Charm</kbd></a> &nbsp;\n  <a href=\"https://docs.cline.bot/cline-cli/overview\"><kbd>"
+    },
+    "brief": {
+      "summary": "多代理并行编排的AI开发桌面",
+      "problem": "多个编码代理分散在不同终端，难统一管理和比较结果",
+      "highlights": [
+        "可以让多个代理在独立worktree并行改代码",
+        "可以用手机查看代理进度并发送后续指令",
+        "可以在网页点选元素，把HTML和CSS发给代理"
+      ],
+      "target_users": [
+        "独立开发者",
+        "工程团队",
+        "AI代理重度用户"
+      ],
+      "why_trending": "今日新增1541 Star，连续上榜，多代理编排需求升温",
+      "caveat": "项目较新且未关闭issue多，稳定性待验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "stablyai/orca",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "多编码 Agent 编排 IDE，接近 Agent Harness",
+      "generated_by_ai": true,
+      "velocity_score": 97,
+      "freshness_score": 40,
+      "ranking_score": 66.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 171993,
+      "forks": 9357,
+      "stars_today": 2079,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2079
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-10-22T05:04:26Z",
+      "pushed_at": "2026-10-18T01:55:14Z",
+      "open_issues": 70,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/50668\" alt=\"DietrichGebert%2Fponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/stories\"><img src=\"assets/stories-banner.png\" alt=\"Using Ponytail at work? Tell us your story\" width=\"760\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/monthly?language=JavaScript\" alt=\"DietrichGebert%2Fponytail | Trendshift monthly ranking\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/v5/hero.jpg\" width=\"880\" alt=\"Ponytail 5, rebuilt from the ground up: -53% code, -41% time, -26% cost, -45% tokens. And yet 98% of risky logic ships with a test, without Ponytail 68%.\">\n</p>\n\n<p align=\"center\">\n  <strong>Ponytail 5: rebuilt from the ground up.</strong><br>\n  <strong>-53% code &middot; -41% time &middot; -26% cost &middot; -45% tokens</strong><br>\n  <strong>And yet: 98% of risky logic ships with a test.</strong> Without Ponytail: 68%.<br>\n  <sub>Benchmarked in Claude Code, the same agent with and without the skill: 39 tasks including a real FastAPI + React repo, Opus 5.5, 5 runs each. <a href=\"#numbers\">Details</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"i18n/README.es.md\">Español</a> &middot; <a href=\"i18n/README.ko.md\">한국어</a> &middot; <a href=\"i18n/README.zh-CN.md\">简体中文</a> &middot; <a href=\"i18n/README.ja.md\">日本語</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\n## Already built with Ponytail\n\n<a href=\"https://theretriever.app\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/retriever-logo-dark.svg\">\n    <img src=\"assets/retriever-logo-light.svg\" height=\"128\" alt=\"Retriever\">\n  </picture>\n</a>\n\n---\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Numbers\n\n<p align=\"center\">\n  <img src=\"assets/v5/chart.png\" width=\"880\" alt=\"Share of the no-skill baseline. Lines of code: Ponytail v4.13 52%, Ponytail 5 47%. Output tokens: 57% and 55%. Cost: 84% and 74%. Time: 62% and 59%.\">\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/v5/tests.png\" width=\"880\" alt=\"Half the code, and yet better: 98% of risky logic ships with a test (no skill 68%); the agent's own tests catch 66% of injected bugs (no skill 46%).\">\n</p>\n\nTwo things the chart does not show: in a blind comparison, Ponytail 5's replies beat the previous Ponytail's 110 to 67. And on the six security tasks (SQL injection, path traversal, forged tokens, rate limiting, malformed CSV rows, caching) it passed all 30 runs: less code, no less safe. Method, per-task tables and limits: [benchmarks/results/2026-10-07-agentic.md](benchmarks/results/2026-10-07-agentic.md).\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect.\n\n## Before / after\n\n<p align=\"center\">\n  <img src=\"assets/v5/beforeafter.png\" width=\"880\" alt=\"Add a date picker to the frontend. No skill: 335 lines, a calendar and a date picker built by hand. Ponytail 5: one 10-line file that reuses the repo's Input with type date, so the browser brings the calendar.\">\n</p>\n\nYou ask for a date picker. Without Ponytail, the agent installs a date picker library or builds a whole calendar by hand: 335 lines. Ponytail 5 first looks at what is already there: the repo has an `Input` component, and every browser has a date picker. It puts the two together. 10 lines.\n\nMore survivors in [examples/](examples/).\n\n## The review, rebuilt\n\n<p align=\"center\">\n  <img src=\"assets/v5/review.png\" width=\"880\" alt=\"The review, rebuilt. A real /ponytail-review finding from the benchmark: the change renamed a field, and an untouched file, src/routes/feed.js, now crashes. Must fix: the Atom feed now crashes on every request, with what this is, the problem, the fix, and what happens if we skip it. 100% of planted problems found, no skill 87%. 100% of problems outside the diff found, no skill 78%.\">\n</p>\n\n`/ponytail-review` used to look only for code to cut. Now it reviews like the senior dev who gets paged when it breaks: it reads the code your change touches, not just the diff, and checks bugs, security, real load, missing tests, speed, and what to cut. Each finding says what the code does, what goes wrong, how to fix it, and what happens if you don't.\n\n## The audit, rebuilt\n\n<p align=\"center\">\n  <img src=\"assets/v5/audit.png\" width=\"880\" alt=\"Your whole repo, ranked. Fix this first. A real /ponytail-audit from the benchmark on a warehouse stock repo: 1 must fix, office batches with 1,200 fail completely; 2 must fix, the import silently skips bad rows; 3 must fix, a mistyped SKU in an office batch is silently ignored; 4 should fix, the risky code paths have no tests; 5 nice to have, the API crashes on a body that isn't an object. Verdict: fix 1 first.\">\n</p>\n\n`/ponytail-audit` runs the same checks on the whole repo. It maps the code first: entry points, how data moves, what load the project expects. Then it ranks what it finds and tells you what to fix first. The old audit only listed what to delete.\n\n## New in 5.3: the band\n\n<p align=\"center\">\n  <img src=\"assets/band/band.png\" width=\"880\" alt=\"The ponytail band in Claude Code, above the prompt. Detail mode: cost $23.80, last turn $1.14, average $0.72 per turn; 56.7M tokens, 168k output, 33 turns; agent time 52m 14s; reuse 71%, 5 used, 2 new; tests passed after the last change. Compact mode shows the same in one line.\">\n</p>\n\nIn Claude Code, ponytail now shows a band above the prompt: what the current task costs, how many tokens and how much agent time it used, how often it reused existing code instead of writing new code, and whether the tests passed after the last change. Its buttons switch the level, run `/ponytail-review` or `/ponytail-audit`, copy the task as Markdown, and fold the band into one line. Don't want it? `/ponytail band` hides it, the same command brings it back. Needs Claude Code 2.1.290 or later, in the terminal or the desktop app. It does not show in the VS Code chat panel, cloud sessions or `claude -p`.\n\n<p align=\"center\">\n  <img src=\"assets/band/board.png\" width=\"880\" alt=\"The ponytail board, a local page: 61 sessions, 20h 13m agent time, $285.30 and 492.5M tokens in the last 30 days; agent time per project over time; the latest sessions with their tests; active days and streak.\">\n</p>\n\n**Board** opens a local page with every task across your projects: cost, agent time and tokens over time, every session with its tests, and the days you worked. By default, everything stays on your machine, in `~/.config/ponytail/band/`. `/ponytail band import` adds your past Claude Code sessions to it, with their cost, agent time and tokens.\n\n## How it works\n\n<p align=\"center\">\n  <img src=\"assets/v5/ladder.png\" width=\"880\" alt=\"Before writing code, stop at the first rung that holds: 1 does this need to exist, 2 already in this codebase, 3 does the standard library do it, 4 a native platform feature, 5 an installed dependency, 6 can it be one line, 7 only then the minimum that works, plus one small test if it has logic.\">\n</p>\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\nLogic with a branch, a loop, a parser, money or security leaves one small test behind. Every reply ends with what was skipped or not checked and any risk you should know.\n\n## The prompt\n\nPonytail is one prompt: [`skills/ponytail/SKILL.md`](skills/ponytail/SKILL.md). The compact version, for agents that read a rules file, is [`AGENTS.md`](AGENTS.md). Everything else in this repo loads that prompt into different agents.\n\n## Install\n\n**Claude Code**, as two separate prompts:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n\n**Codex:**\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nThen open `/hooks` in Codex, trust its two lifecycle hooks, and start a new thread.\n\n**Any other agent:** copy [`AGENTS.md`](AGENTS.md) into your project, or ask your agent to install [`skills/ponytail/SKILL.md`](skills/ponytail/SKILL.md) as a skill. Step by step for Copilot, Cursor, OpenCode, Gemini and the rest: **[INSTALL.md](INSTALL.md)**.\n\nThat was it. He'd be proud. He won't say it.\n\nActive every session, with a handful of commands (see [Commands](#commands)). `/ponytail ultra` exists for when the codebase has wronged you personally. Startup and mode-change text shows the current mode.\n\nOnly install ponytail from `DietrichGebert/ponytail` on GitHub or `@dietrichgebert/ponytail` on npm. It never ships `.exe` or `.dll` files; a copy that does is not mine.\n\n## Commands\n\n| Command | What it does |\n|---------|--------------|\n| `/ponytail [lite \\| full \\| ultra \\| off]` | Set the intensity, or turn it off. No argument switches ponytail on at the default level if it is off, and otherwise reports the current level. |\n| `/ponytail band [on \\| off]` | Claude Code only: hide or show the band above the prompt. No argument switches it. The level stays. |\n| `/ponytail band import` | Claude Code only: add your past Claude Code sessions to the board, with their cost, agent time and tokens. |\n| `/ponytail-review` | Review the current diff like the senior dev who gets paged when it breaks: bugs, security, real load, risky code without a test, slow paths, and what to cut. Each finding says what the code does, what goes wrong, how to fix it, and what happens if you don't. Name a target in plain words to narrow or widen it: "
+    },
+    "brief": {
+      "summary": "让 AI 编程助手少写代码，优先复用已有实现",
+      "problem": "AI 编程助手容易过度设计、重复造轮子，增加维护成本",
+      "highlights": [
+        "可以约束助手只写任务必需代码",
+        "可以优先复用仓库已有组件，少新增代码",
+        "可以用 /ponytail-review 审查代码改动"
+      ],
+      "target_users": [
+        "AI 编程助手用户",
+        "独立开发者",
+        "代码审查者"
+      ],
+      "why_trending": "今日新增2079 Star，本周首次收录，少写代码思路受关注",
+      "caveat": "效果数据来自项目自测，实际收益需独立验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "编码 Agent 的极简风格 Skill 插件",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "fegennari/3DWorld",
+      "url": "https://github.com/fegennari/3DWorld",
+      "description": "3D Procedural Game Engine Using OpenGL ",
+      "language": "C++",
+      "total_stars": 1431,
+      "forks": 116,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "artificial-intelligence",
+        "building-generator",
+        "city-generator",
+        "computer-graphics",
+        "game-engine",
+        "game-engine-3d",
+        "physics-simulation",
+        "procedural-generation",
+        "procedural-terrain",
+        "realtime",
+        "terrain-generator",
+        "universe-generator"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2018-04-08T23:16:34Z",
+      "updated_at": "2026-10-22T04:58:31Z",
+      "pushed_at": "2026-10-22T04:58:27Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "![REPO SIZE](https://img.shields.io/github/repo-size/fegennari/3DWorld.svg) \n![CODE SIZE](https://img.shields.io/github/languages/code-size/fegennari/3DWorld.svg) \n![License](https://img.shields.io/github/license/fegennari/3DWorld.svg)\n\n3DWorld Blog: https://3dworldgen.blogspot.com\n\n3DWorld is a cross-platform OpenGL-based 3D Game Engine that I've been working on since I took the CS184 computer graphics course at UC Berkeley in 2001.\nIt has the following features:\n* 3D graphics functions, classes, and wrappers around OpenGL\n* Shader generator/processor with hot reload\n* Procedural content generation for terrain, vegetation, cities, building interiors and exteriors, etc.\n* Procedural universe generator with galaxies, stars, planets, moons, etc.\n* Procedural voxel 3D terrain generation with realtime user editing\n* Terrain generator including various noise functions, erosion, realtime user editing, heightmap read/write\n* Procedural building (interior and exterior), road, and city generation\n* NPC AI behaviors for people, cars, and animals with target selection and path finding/navigation\n* Physics simulation for primitive object types and others (> 10K dynamic objects)\n* Realtime day/night cycle with weather (rain, snow, hail, wind, lightning)\n* Physically based materials with reflection and refraction\n* Dynamic shadows, ambient occlusion, up to 1024 dynamic light sources, postprocessing effects\n* Skeletal animation and procedural animation\n* Built-in first person shooter game \"smiley killer\"\n* Build-in spaceship + planet colonization game\n* Building open world item collection and zombie gameplay mode\n* Computer AI for players in the FPS game, building gameplay, and ships in the universe game\n* Importer for Lightwave object file, 3DS formats, and Assimp for other file formats\n* Reading support for textures: JPEG, PNG, BMP, TIFF, TGA, DDS\n* Optimized for fast load and realtime rendering of large models (> 1GB of vertex/texture data)\n\nI converted the project from svn to git at commit 6607.\nMost of the code is written in C++, with GLSL for shaders.\nThis is intended to be a cross-platform project.\nMicrosoft Visual Studio Insiders 2026 Community project files are included.\nA linux/gcc makefile is also included, but is more experimental. See README.linux for more details.\nThe project should build under gcc on linux with some work, but may not run with all graphics drivers.\n\nBe warned, this is a large repository, currently about 1GB.\nI've included source code, config files, textures, sounds, small models, lighting files, scene data, heightmaps, and project files.\nThis repo does not contain the large model files used in some scenes, you'll have to download these separately.\nThis means that some of the scene config files won't fully work because they can't find their referenced data.\nThe current list of dependencies is:\n* OpenGL 4.5 (Should come with Windows 8/10/11 latest graphics drivers)\n* OpenAL 1.1 (optional) (System Install: https://www.openal.org/downloads/ or you can try the newer openal-soft: https://github.com/kcat/openal-soft)\n* freeglut-2.8.1 (Current 3.0 version probably works: https://sourceforge.net/projects/freeglut/)\n* freealut-1.1.0 (optional) (One version is here: https://github.com/vancegroup/freealut)\n* zlib-1.2.11 (You can download a newer version from here: https://zlib.net/)\n* glew-2.0.0 (2.1.0 probably works as well: http://glew.sourceforge.net/)\n* gli (Latest version: https://github.com/g-truc/gli / header only, included in dependencies directory)\n* glm-0.9.9.0 (Latest version: https://glm.g-truc.net/0.9.9/index.html or https://github.com/g-truc/glm / header only, included in dependencies directory)\n* libpng-1.2.20 (optional) (My version is very old; Latest version: https://libpng.sourceforge.io/index.html); Can be replaced with stb_image in most cases, except for map image export.)\n* libtiff-4.3.0 (optional) (Latest version: http://www.simplesystems.org/libtiff/)\n* Assimp (optional) (See build instructions at https://github.com/assimp/assimp/blob/master/Build.md ; The vcpkg build instructions are probably the easiest.)\n* libtarga (source included)\n* STB headers: stb_image, stb_image_write, stb_dxt (source included)\n\nI've included stripped down versions of most of these libraries in the dependencies directory.\nI removed all large files that aren't required by 3DWorld, in some cases even examples/tests/documentation.\nThese have been built with MS Visual Studio Insiders 2026 Community on Windows 11.\nIf you want to use these, you'll need to copy the directories to the root directory and rebuild any libraries needed for other versions of Windows or Visual Studio.\nIf you clone/install vcpkg it should be at the same level as the 3DWorld directory.\n\nNote that many of these dependencies are old and could be replaced with newer libraries. I've been concentrating on adding content and I'm not too interested in this.\nFreeglut should probably be replaced with SDL, and the image libraries with STB. (STB is used as a fallback but doesn't support all of the images used.)\n\nIf you want to build 3DWorld, you can use the projects in the dependencies/ folder, or download and build them yourself and change the project settings to use them.\nI currently use the x64 MS Visual Studio Insiders 2026 Community build target for 3DWorld, but the win32 build target also works.\nIt should compile and run in either 32 or 64-bit mode if you copy the DLLs from the lib64/ folder into the root of the repo and make some other project settings changes.\n\nIf you have linux, you can try to build using the provided makefile. The file README.linux should be helpful.\nI've gotten 3DWorld to build and mostly run on Ubuntu 20.04 with gcc 9.\n\n3DWorld takes a config filename on the command line. If not found, it reads defaults.txt and uses any config file(s) listed there.\nSome of these congig files include models such as the Sponza Atrium, Stanford Dragon, sportscar, etc.\nThese files are too large to store in the git repo. I've attempted to have 3DWorld generate nonfatal errors if the models can't be found.\nMany of the larger models can be found on Sketchfab or at the McGuire Computer Graphics Archive:\nhttp://casual-effects.com/data/\nAlso see image_and_model_credits.txt in the root of the repo.\n\nI've packaged up the 3D models that are too large for the GitHub repo and put them on Google Drive. The current version is v10 and can be found here:\nhttps://drive.google.com/file/d/1X_Do9Mzyj7bl1N4W-Kh0Rb7N5lNTIfa1/view?usp=drive_link\n\nSome of these models are stored in 3DWorld's internal format and should not be reused in other projects. Others come from websites such as Mixamo.\nThere is also a textures directory with additional textures used with building interiors that can be merged with the project textures directory.\n\nSystem requirements:\n* Windows 10/11; Linux when using the makefile with gcc.\n* Microsoft Visual Studio 2026. The professional or community version is needed for OpenMP support. You can also try to use gcc on linux.\n* A relatively new generation of Nvidia or AMD GPU (Runs on my laptop with integrated graphics, but at 12-20 FPS)\n* At least 16GB system memory for the larger scenes\n* At least 8GB GPU memory for the larger scenes; My GPU has 12GB of memory\n\nTroubleshooting:\nIt seems like some systems (AMD cards in particular) require an OpenGL core context. This can be selected by adding \"use_core_context 1\" in the config file.\nThis can also be enabled in scene_config/config_post.txt, which is a file that applies after reading all other top-level config files.\nIn some situations (some Nvidia cards), using a core context can be slower, which is why I don't have it enabled by default in all scenes.\n\nUseful Keys (see readme-keys.txt for more key bindings):\n* a,s,d,w: Movement\n* q,e: Change weapon (gameplay mode)\n* 'space': Jump/fire\n* 'esc': Quit\n* 'tab': Onscreen menu (navigate with arrow keys and 'X' to switch menus)\n* b: Enable objects/physics/AI (for ground mode and universe mode gameplay)\n* F1: Switch between ground/universe/tiled terrain modes\n* F2: Toggle gameplay mode\n* m: Toggle fullscreen mode\n* h: Toggle flight move\n* v: Change camera mode (crystal ball/orbit vs. first person)\n* V: Toggle mouse look\n* K: Toggle overhead map mode\n* x: Pause\n* Mouse Left: Turn/Action\n* Mouse Right: Fire\n\nI currently have this repo up for educational purposes under the GPLv3 license.\nSome sub-modules are available with other licenses compatible with commercial use in my GitHub account.\nIt's not meant as a commercial tool and I'm not trying to make money here.\nThat's also why I don't spend money on software, models, or textures.\nI'm also not looking for others to work on the project at this stage, though I'm accepting feedback, bug reports, and suggestions.\nMaybe things will change if I decide to make a real game out of this.\nIf you would like to use something here for your project, please let me know.\n\nThere is no further documentation for 3DWorld.\nHowever, I do have a blog that includes descriptions of the algorithms and lots of screenshots:\nhttps://3dworldgen.blogspot.com\nAnd my YouTube channel:\nhttps://www.youtube.com/@FrankGennari\n\nPlease do not send me bot/AI generated pull requests. Please do not make suggestions related to the dependencies directory. This is included as a reference and the user is expected to update and/or build these libraries themselves.\n\nHere are some screenshots linked from my blog:\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiXdx3c9m1WFQm68JOPsoYzLE7DkXxGrEEwuvzo0VupI23hMSzuW8DDnqsWYD85cy-EV92BacvNky0vsgEgHnO3vgnGW4WYZ3Nj3Z1vSCM5y4IfdLrYg2JaaYzXf6dRonqosb7t7lmQZZ7ZJ9LlK_t3TUYJKWiyJUk0gmIfaC0hs0gOA_I8Uj9bDtO6RYaA/w640-h360/factory_office_roof.jpg)\n\nThis is a procedurally generated factory interior with machines, tanks, catwalks, ladders, and pipes. (config_heightmap.txt)\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7bt1KabOKD8tUIxaACMEEDsk2oP4105fUaz4RMGqucAxEAkSKGN4-sX0yMv2IXHMUkWNUNspp0KDuGZIduZoBXAo_K_PQizCx_CtfGjj88GLMXw44jOGmPAs2VUwy__8GckC5MICg4dUV0cK-ripMByVsHX80Wjkzb4XRuuugZXi5_nT4Rc5VwTTI6nP7/w640-h360/mall_7_levels.jpg)\n\nThis is the interior of a 7 level procedurally generated mall interior. (config_heightmap.txt)\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7PsshxXhRFU_pkkJn9yv4e4-STzjeO1ZnwlKEXL2xGC-nrf0mb9fL4G2etkCRonHcjb7OQ1IdLrNhA9lDyTmitVcDQZeXVBRTsww2FxhEwbCwGVZ4XdthBSYfZL4EM-SsRx6yfBjYDozqpEaje0vDy5pdryYG2Flw45Dj4sFRPyvejizgTxerSYWJUQJU/w640-h360/mall_food_court.jpg)\n\nHere is a procedurally generated mall food court with tables and chairs, and stores to the sides. (config_heightmap.txt)\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiDYcHMxI8d4EmqEt_R9zwbcmtk0wfCadahSXeP3xZU9SdXGkMqMAcFVxMMlcOvDRh7Lg5KhEjgosmId9HtHdtuErQd0okK7Vb7IU0RHeKpONDTc887BDIgWeuR8E0dHChU-vKQxkdnjWzaRLGSWBjmIa3O7z6PYR9v-j4oNYpuOzD9PJcv4XR-45YJYghK/w640-h360/racks1.jpg)\n\nHere is a retail area of a building with racks of shelves. Buildings can contain tens of thousands of interactive objects the player can take and carry around. (config_heightmap.txt)\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgI1KwsSM00BSkCWUr5OPrXMg5lsjeKk7GOPFdmGkk1NsHlYv4w-StMW8NJKZMHpRt3EoriqCyjD0xRM2E2BqLSBX5zts36VHn8s6TEuQCuhHFq6sFzLyqWSdOxroqB_37utAtB8nN0soiLp-cVFJwnL8VHyBdNNupxdF3HbjmtDdPm4-clTvTquk_JgOYK/w640-h360/sec_monitors_no_base.jpg)\n\nCameras placed in other rooms show realtime video feeds on security monitors. (config_heightmap.txt)\n\n![alt text](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUaakhysxiViFwntixF7D2F_FAOnU6mnm6A6jIkpdVrLmu5aW80dFXJ6pTiWWUcoamsLy44aPl3aZtM5QgwLDQxk2LpoGvy03TMAW0jlOr7bpNsoI-en8TXIJDjxkGhgIxhq1yFvRfq5xeYX1ElEK_kIUMt-Fsw9SaT_ap7tpNVXwrxLpJ5b9nCB-rruWz/w640-h338/zombie_pool_party.jpg)\n\nZombies (with path finding and other AI behaviors) walking around and falling into an indoor pool. The water water surface has ripples, splashes, reflectio"
+    },
+    "brief": {
+      "summary": "开源OpenGL 3D程序化游戏引擎，能生成地形城市和宇宙。",
+      "problem": "它把地形、城市、建筑和宇宙等内容生成与游戏运行合在一起，方便做开放世界原型。",
+      "highlights": [
+        "可以生成地形、植被、城市和建筑内外景。",
+        "可以实时编辑体素地形并读写高度图。",
+        "可以驱动NPC寻路、物理和昼夜天气。"
+      ],
+      "target_users": [
+        "图形学学习者",
+        "游戏引擎开发者",
+        "开放世界原型作者"
+      ],
+      "why_trending": "总Star约1400，仓库仍在更新，程序化生成与游戏系统较完整，适合研究。",
+      "caveat": "仓库约1GB，且缺少部分大模型；Linux构建较实验性。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "fegennari/3DWorld",
+      "score": 82,
+      "category": "游戏开发",
+      "reason": "OpenGL 程序化生成 3D 游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 44.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "piper-tts-apps/piper-app-apple",
+      "url": "https://github.com/piper-tts-apps/piper-app-apple",
+      "description": "The original Piper(https://github.com/OHF-Voice/piper1-gpl), now on iOS and macOS",
+      "language": "Swift",
+      "total_stars": 65,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ios",
+        "ios-app",
+        "ios-application",
+        "neural-network",
+        "piper",
+        "piper-tts",
+        "pipertts",
+        "speech-synthesis",
+        "speech-to-text",
+        "text-to-speech",
+        "tts"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2024-01-11T01:15:07Z",
+      "updated_at": "2026-10-22T05:03:20Z",
+      "pushed_at": "2026-10-22T05:03:19Z",
+      "open_issues": 10,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://apps.apple.com/us/app/piper-neural-tts/id6759636010\">\n    <img src=\"PiperApp/Resources/piper_apple_app_logo.png\" width=\"130\"><br>\n    <img src=\"https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg\" width=\"180\">\n  </a>\n</p>\n\n<h3 align=\"center\">\n  Piper is now available on the App Store! 🎉<br>\n  Experience high-quality <b>offline neural text-to-speech</b> directly on your device.<br><br>\n  Want to try the latest features early?<br>\n  Join the <a href=\"https://testflight.apple.com/join/Adkg5F5H\">TestFlight Beta</a> 🚀\n</h3>\n\n<p align=\"center\">\n  <a href=\"https://testflight.apple.com/join/Adkg5F5H\">\n    <img src=\"https://camo.githubusercontent.com/f8394f7cf70cc272e627e53e2d46241bc3fc83f145ee9e95a09a248efa2e72e8/68747470733a2f2f616e6f746865726c656e732e6170702f74657374666c696768742d62616467652e706e67\" width=\"180\">\n  </a>\n</p>\n\n[![Build](https://github.com/piper-tts-apps/piper-app-apple/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/piper-tts-apps/piper-app-apple/actions/workflows/build.yml)\n\n# 📥 Cloning & Building Piper\n\n## System Requirements\n\n* iOS 18.0+\n* macOS 13.3+\n* Xcode 26+\n* `mise`\n\n---\n\n## Getting the Sources\n\n```bash\ngit clone https://github.com/piper-tts-apps/piper-app-apple.git\ncd piper-app-apple\n```\n\n---\n\n## Install Toolchain (via mise)\n\nPiper uses `mise` to manage development tools.\n\nInstall mise\n\n```bash\ncurl https://mise.run | sh\n```\n\nThen install tools:\n\n```bash\nmise install\n```\n\nThis installs:\n\n* Tuist\n* SwiftLint\n\n---\n\n## Generate the Xcode Project\n\nPiper uses **Tuist** with Swift Package Manager for dependencies. First resolve SPM dependencies, then generate the workspace:\n\n```bash\nmise run install\nmise run generate\n```\n\nOpen the generated `Piper.xcworkspace` in Xcode.\n\n```bash\nopen Piper.xcworkspace\n```\n\n> **Note:** Run `mise run install` whenever `Package.swift` or dependencies change. Otherwise `mise run generate` alone is sufficient.\n\n### Available Mise Tasks\n\n| Task | Description |\n|------|-------------|\n| `mise run install` | Resolve SPM dependencies (`Package.swift`) |\n| `mise run generate` | Generate Xcode project |\n| `mise run build <number> [simulator\\|device]` | Build from command line (for CI) |\n| `mise run lint [--fix]` | Run SwiftLint |\n\n---\n\n# 📱 Running the App\n\n## Simulator\n\n1. Open the generated workspace\n2. Select an iOS Simulator\n3. Build & Run `Piper`\n\n---\n\n## Physical Device\n\n1. Open the generated workspace\n2. Select your device\n3. Configure code signing for:\n   * `Piper`\n   * `PiperTTS`\n\n---\n\n# Project Structure\n\n* `PiperApp` – Main iOS/macOS app\n* `PiperTTS` – Audio Unit extension\n* `PiperAppUtils` – Shared utilities, model management, constants\n* `PiperTests` – Unit tests for `PiperAppUtils`\n* `Screenshots` – UI tests for App Store screenshots\n\n# License\n\nMIT – see `LICENSE-MIT`, GPL-3.0 for bundled resources\n"
+    },
+    "brief": {
+      "summary": "Piper 离线神经语音合成登陆 iOS 和 macOS，文字可离线朗读。",
+      "problem": "想在苹果设备上离线把文字转成自然语音，而不依赖云端服务。",
+      "highlights": [
+        "可以在 iPhone 或 Mac 上离线朗读文本",
+        "可以用 TestFlight 提前试用新功能",
+        "可以从源码自行构建并安装应用"
+      ],
+      "target_users": [
+        "需要离线朗读的用户",
+        "无障碍阅读用户",
+        "苹果平台开发者"
+      ],
+      "why_trending": "本周首次收录，项目已上架 App Store，开源 TTS 落地苹果端。",
+      "caveat": "需 iOS 18+、macOS 13.3+，部分资源为 GPL-3.0。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "piper-tts-apps/piper-app-apple",
+      "score": 80,
+      "category": "语音 / 配音",
+      "reason": "Piper 语音合成移植到 iOS 与 macOS",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 43.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "adalinesimonian/gdvm",
+      "url": "https://github.com/adalinesimonian/gdvm",
+      "description": "Godot Version Manager",
+      "language": "Rust",
+      "total_stars": 102,
+      "forks": 6,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cli",
+        "console",
+        "devops",
+        "game-development",
+        "gamedev",
+        "gdvm",
+        "godot",
+        "godot-engine",
+        "godot3",
+        "godot4",
+        "rust",
+        "version",
+        "version-manager"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2024-12-22T12:11:43Z",
+      "updated_at": "2026-10-22T04:56:52Z",
+      "pushed_at": "2026-10-22T04:56:47Z",
+      "open_issues": 5,
+      "homepage": "https://gdvm.io/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!--\nSPDX-FileCopyrightText: Copyright (C) 2024 Adaline Simonian\nSPDX-License-Identifier: GPL-3.0-or-later\n\nThis file is part of gdvm.\n\ngdvm is free software: you can redistribute it and/or modify it under the\nterms of the GNU General Public License as published by the Free Software\nFoundation, either version 3 of the License, or (at your option) any later\nversion.\n\ngdvm is distributed in the hope that it will be useful, but WITHOUT ANY\nWARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR\nA PARTICULAR PURPOSE. See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with\nthis program. If not, see <https://www.gnu.org/licenses/>.\n-->\n\n# gdvm — Godot Version Manager\n\n![Project banner](https://gdvm.io/gdvm-github-banner.png)\n\n<!--[Follow on Bluesky](https://bsky.app/profile/gdvm.io)-->\n\n[![GitHub Release](https://img.shields.io/github/v/release/adalinesimonian/gdvm)](https://github.com/adalinesimonian/gdvm/releases/latest) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/adalinesimonian/gdvm/ci.yml?branch=main)](https://github.com/adalinesimonian/gdvm/actions/workflows/ci.yml) [![License](https://img.shields.io/github/license/adalinesimonian/gdvm)](https://github.com/adalinesimonian/gdvm/blob/main/COPYING) [![Bluesky](https://img.shields.io/badge/Bluesky-follow-blue?logo=bluesky&style=social)](https://bsky.app/profile/gdvm.io) [![GitHub Stargazers](https://img.shields.io/github/stars/adalinesimonian/gdvm?style=social)](https://github.com/adalinesimonian/gdvm/stargazers)\n\nGodot Version Manager (gdvm) is a tool designed to simplify the installation, management, and switching between different versions of the Godot Engine.\n\nWhether you're working on multiple projects or need to test features across various Godot versions, you'll never need to manually fuss with Godot installations again.\n\ngdvm is a community-driven project, not affiliated with Godot Engine or the Godot Foundation.\n\n<p align=\"center\">\n  <b><a href=\"#installation\">Installation</a></b> |\n  <b><a href=\"#usage\">Usage</a></b> |\n  <b><a href=\"#github-actions\">GitHub Actions</a></b> |\n  <b><a href=\"#registries\">Registries</a></b> |\n  <b><a href=\"#contributing\">Contributing</a></b> |\n  <b><a href=\"#licence\">Licence</a></b>\n</p>\n\n## Installation\n\nInstall on \\*nix systems (including MacOS):\n\n```bash\ncurl -sSL https://gdvm.io/install.sh | bash\n```\n\nInstall on Windows:\n\n```powershell\npowershell -NoProfile -Command \"(iwr -useb 'https://gdvm.io/install.ps1.txt').Content | iex\"\n```\n\n### Supported Platforms\n\n- Windows (64-bit, 32-bit, and 64-bit ARM)\n- macOS (64-bit Intel and Apple Silicon)\n- Linux (64-bit, 32-bit, and 64-bit ARM)\n\n## Usage\n\nOnce installed, you can use the `gdvm` command to manage your Godot installations. Here are some common commands:\n\n```bash\ngdvm use latest         # Set the global default to the latest stable.\ngdvm use --pre latest   # Set the global default to the latest build of any kind\n                        # (stable/rc/beta/dev).\n\ngdvm pin csharp:latest  # Pin the current folder to latest stable with C#,\n                        # using a gdvm.toml file.\n```\n\n> [!TIP]\n> Associate `.godot` files with `~/.gdvm/bin/godot.exe` to auto-use the correct version. gdvm can also detect the required version from `project.godot`.\n\n```bash\ngdvm run             # Run the default Godot for the folder.\ngodot                # Alias for `gdvm run`.\ngodot_console        # Windows variant keeping the console open.\n\ngdvm run csharp:3.5  # Run Godot 3.5 with C#.\ngdvm run \"4.5-rc*\"   # Run the latest 4.5 release candidate.\ngdvm remove 3.5      # Removes Godot 3.5 without C#.\n\ngdvm list            # List installed versions.\ngdvm search 4        # Search available 4.x versions.\n\ngdvm prune           # Remove idle installs and cached archives.\ngdvm upgrade         # Upgrade gdvm.\n\ngdvm list --format json       # List installed versions in JSON for scripting.\nGDVM_GODOT_VERSION=4.4 godot  # Use a specific version with scripts that expect\n                              # \"godot\" in PATH.\n```\n\n> [!NOTE]\n> Upgrading from an older version of gdvm? The Godot version syntax changed.\n>\n> The `csharp:` prefix replaces the old `--csharp` flag, and pins are stored in `gdvm.toml`.\n>\n> Your existing commands and `.gdvmrc` files still work. See [Migrating to the new version syntax](MIGRATION.md) for the details.\n\nFor more information, run `gdvm --help`.\n\n### Using gdvm with debuggers\n\nWhile for most purposes it is more than enough to run `godot`, the shim provided by gdvm, or `gdvm run` directly, debuggers often need to attach directly to the Godot process. To do so, they typically require a path to the Godot binary to launch or attach to.\n\nSee the dedicated guide for details and examples (including a Visual Studio Code debugger configuration): [Using gdvm with debuggers](docs/debuggers.md).\n\n### Shell Completions\n\nThe installer sets up tab completions for your shell automatically if you are using bash, zsh, fish, or PowerShell. To set them up manually, add the matching line to your shell's profile:\n\n```sh\neval \"$(gdvm completions bash)\"           # bash (~/.bashrc)\neval \"$(gdvm completions zsh)\"            # zsh (~/.zshrc)\ngdvm completions fish | source            # fish (~/.config/fish/config.fish)\ngdvm completions powershell | Out-String | Invoke-Expression  # PowerShell ($PROFILE)\n```\n\n## GitHub Actions\n\nUse the [setup-gdvm](https://github.com/marketplace/actions/setup-gdvm) GitHub Action to install gdvm on your CI runners. Once gdvm is set up, you can install and run any Godot version just like you would locally.\n\n```yaml\nsteps:\n  - uses: adalinesimonian/setup-gdvm@v1\n\n  - run: gdvm install 4.5\n  - run: godot --version\n```\n\nYou can also pin a specific gdvm version:\n\n```yaml\nsteps:\n  - uses: adalinesimonian/setup-gdvm@v1\n    with:\n      version: 0.15.0\n```\n\nSee the [setup-gdvm repository](https://github.com/adalinesimonian/setup-gdvm) for more details.\n\n## Registries\n\ngdvm installs official Godot builds by default. Custom registries let you install from anywhere else, such as builds from your own CI pipeline or wherever else.\n\nA version can be qualified by registry and variant, as `registry/variant:version`:\n\n```bash\ngdvm install 4.4               # Official registry, default variant.\ngdvm install csharp:4.4        # Official registry, C# variant.\ngdvm install mybuilds/4.4      # \"mybuilds\" registry, default variant.\ngdvm install mybuilds/web:4.4  # \"mybuilds\" registry, \"web\" variant.\n```\n\nIf you don't specify a registry, gdvm uses the official one. Similarly, if you don't specify a variant, gdvm uses the `default` variant.\n\nYou must add a registry to your gdvm configuration before installing from it:\n\n```bash\ngdvm registry add mybuilds https://builds.example.com/godot\n# You can also add a registry on your local filesystem:\ngdvm registry add mybuilds file:///home/user/godot-builds\n\ngdvm registry list     # Show configured registries.\ngdvm registry refresh  # Refresh cached index of all registries.\n\ngdvm registry remove mybuilds\n```\n\n> [!WARNING]\n> A custom registry can serve anything, even potentially malicious payloads. gdvm checks that a download matches the registry's `sha512`, but cannot guarantee the safety of anything it runs from it.\n>\n> Therefore, you must confirm that you trust the source of any registry the first time it's used. You will also be warned on every use of it later. You can use `-y` or `--yes` to skip the prompt in scripts. However, **make sure that you trust the source of any custom registry you add.**\n\n### Sharing with a project\n\nYou can point to a custom registry in `gdvm.toml`. This way, everyone who clones the repo and runs `gdvm` in it will automatically use the right build from the right registry, without needing to configure it themselves.\n\n```toml\n[godot]\nversion = \"mybuilds/4.4-stable\"\n\n[registries.mybuilds]\nurl = \"https://builds.example.com/godot\"\n```\n\nKeep in mind that when you run `gdvm pin mybuilds/4.4-stable`, it only writes the version. **You must also add a `[registries]` section to make the alias resolve for others.** Otherwise, it will use whatever `mybuilds` registry is configured in their gdvm config, or fail if they don't have one.\n\nThe first time you clone a repo with a pinned registry, gdvm will prompt you to confirm that you trust it.\n\n### Hosting your own\n\nA registry is essentially just a bunch of static JSON files (and optionally, the archives themselves). You can host one on any web server or keep one on the filesystem and point to it with a `file://` URL.\n\ngdvm can build one from archives you already have:\n\n```bash\ngdvm registry init ./my-registry --name \"My Builds\"\n\n# Add a build from a URL, such as a GitHub release or S3 bucket:\ngdvm registry add-build ./my-registry --version 4.4-stable \\\n    --platform linux-x86_64 \\\n    --url https://builds.example.com/godot/Godot_v4.4-stable_linux.x86_64.zip\n\n# Add a build from a local file and store it in the registry:\ngdvm registry add-build ./my-registry --version 4.4-stable \\\n    --platform linux-x86_64 \\\n    --store \\\n    --file ./Godot_v4.4-stable_linux.x86_64.zip\n\ngdvm registry validate ./my-registry  # Non-zero exit code if invalid.\n```\n\nYou can combine this with a CI pipeline that builds Godot to your needs to automatically add the build to a registry. Then you can share that registry with your team or the public, and they can use it with gdvm without needing to build Godot themselves.\n\n## Contributing\n\nPlease see [Contributing](CONTRIBUTING.md) for guidelines.\n\n## Code of Conduct\n\nPlease see [Code of Conduct](CODE_OF_CONDUCT.md) for details.\n\n## Licence\n\nThis project is licensed under the GNU General Public License v3.0 or later. See [COPYING](COPYING) for more information.\n"
+    },
+    "brief": {
+      "summary": "Godot 版本管理器，一条命令装好并切换多个引擎版本",
+      "problem": "手动安装多个 Godot 版本、给不同项目切换版本很麻烦",
+      "highlights": [
+        "可以用 gdvm use 切换全局或项目级 Godot 版本",
+        "可以按 gdvm.toml 自动识别项目所需版本并运行",
+        "可以在 CI 中用 setup-gdvm 装指定版本跑测试"
+      ],
+      "target_users": [
+        "Godot 游戏开发者",
+        "多版本兼容测试者",
+        "CI 维护者"
+      ],
+      "why_trending": "本周首次收录，Rust 编写，项目近期仍有提交",
+      "caveat": "自定义 registry 内容无法保证安全，需自行确认来源",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "adalinesimonian/gdvm",
+      "score": 64,
+      "category": "游戏开发",
+      "reason": "Godot 引擎版本管理 CLI 工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 35.0
+    }
+  }
+]
