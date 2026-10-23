@@ -1,0 +1,523 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 39947,
+      "forks": 2495,
+      "stars_today": 2979,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2979
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-10-23T05:04:15Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 79,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "让编码代理分六阶段执行可验证安全审计的技能。",
+      "problem": "解决 AI 安全审计结果难复核、误报多的问题。",
+      "highlights": [
+        "可以梳理架构、信任边界与输入面",
+        "可以让独立代理验证漏洞候选",
+        "可以生成并校验结构化审计报告"
+      ],
+      "target_users": [
+        "安全工程师",
+        "后端开发者",
+        "AI 代理开发者"
+      ],
+      "why_trending": "今日新增约 2979 Star，连续上榜，源自 Cloudflare 实践。",
+      "caveat": "需沙箱和并行子代理，否则不执行目标代码。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "多阶段安全审计 Agent Skill",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "DietrichGebert/ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
+      "language": "JavaScript",
+      "total_stars": 173794,
+      "forks": 9465,
+      "stars_today": 1948,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1948
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "cursor-rules",
+        "developer-tools",
+        "llm",
+        "prompt-engineering",
+        "yagni"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-12T00:52:37Z",
+      "updated_at": "2026-10-23T05:03:50Z",
+      "pushed_at": "2026-10-18T01:55:14Z",
+      "open_issues": 93,
+      "homepage": "https://ponytail.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/logo-dark.png\">\n    <img src=\"assets/logo.png\" width=\"220\" alt=\"Ponytail, the lazy senior dev\">\n  </picture>\n</p>\n\n<h1 align=\"center\">Ponytail</h1>\n\n<p align=\"center\">\n  <em>He says nothing. He writes one line. It works.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/50668\" alt=\"DietrichGebert%2Fponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/github/stars/DietrichGebert/ponytail?style=flat-square&color=111111&label=stars\" alt=\"Stars\">\n  <img src=\"https://img.shields.io/github/v/release/DietrichGebert/ponytail?style=flat-square&color=111111&label=release\" alt=\"Release\">\n  <img src=\"https://img.shields.io/npm/v/@dietrichgebert/ponytail?style=flat-square&color=111111&label=npm\" alt=\"npm\">\n  <img src=\"https://img.shields.io/badge/works%20with-20%20agents-111111?style=flat-square\" alt=\"Works with 20 agents\">\n  <img src=\"https://img.shields.io/badge/license-MIT-111111?style=flat-square\" alt=\"MIT license\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/stories\"><img src=\"assets/stories-banner.png\" alt=\"Using Ponytail at work? Tell us your story\" width=\"760\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/daily\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/weekly\" alt=\"DietrichGebert/ponytail | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://trendshift.io/repositories/50668?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-50668\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/50668/monthly?language=JavaScript\" alt=\"DietrichGebert%2Fponytail | Trendshift monthly ranking\" width=\"250\" height=\"55\"/></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/v5/hero.jpg\" width=\"880\" alt=\"Ponytail 5, rebuilt from the ground up: -53% code, -41% time, -26% cost, -45% tokens. And yet 98% of risky logic ships with a test, without Ponytail 68%.\">\n</p>\n\n<p align=\"center\">\n  <strong>Ponytail 5: rebuilt from the ground up.</strong><br>\n  <strong>-53% code &middot; -41% time &middot; -26% cost &middot; -45% tokens</strong><br>\n  <strong>And yet: 98% of risky logic ships with a test.</strong> Without Ponytail: 68%.<br>\n  <sub>Benchmarked in Claude Code, the same agent with and without the skill: 39 tasks including a real FastAPI + React repo, Opus 5.5, 5 runs each. <a href=\"#numbers\">Details</a>.</sub>\n</p>\n\n<p align=\"center\">\n  <sub><a href=\"i18n/README.es.md\">Español</a> &middot; <a href=\"i18n/README.ko.md\">한국어</a> &middot; <a href=\"i18n/README.zh-CN.md\">简体中文</a> &middot; <a href=\"i18n/README.ja.md\">日本語</a></sub>\n</p>\n\n---\n\n<p align=\"center\">\n  <a href=\"https://ponytail.dev/soon\"><img src=\"assets/waitlist-banner.png\" alt=\"Something's coming, join the waitlist\" width=\"760\"></a>\n</p>\n\n## Already built with Ponytail\n\n<a href=\"https://theretriever.app\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/retriever-logo-dark.svg\">\n    <img src=\"assets/retriever-logo-light.svg\" height=\"128\" alt=\"Retriever\">\n  </picture>\n</a>\n\n---\n\nYou know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one.\n\nPonytail puts him inside your AI agent.\n\n## Numbers\n\n<p align=\"center\">\n  <img src=\"assets/v5/chart.png\" width=\"880\" alt=\"Share of the no-skill baseline. Lines of code: Ponytail v4.13 52%, Ponytail 5 47%. Output tokens: 57% and 55%. Cost: 84% and 74%. Time: 62% and 59%.\">\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/v5/tests.png\" width=\"880\" alt=\"Half the code, and yet better: 98% of risky logic ships with a test (no skill 68%); the agent's own tests catch 66% of injected bugs (no skill 46%).\">\n</p>\n\nTwo things the chart does not show: in a blind comparison, Ponytail 5's replies beat the previous Ponytail's 110 to 67. And on the six security tasks (SQL injection, path traversal, forged tokens, rate limiting, malformed CSV rows, caching) it passed all 30 runs: less code, no less safe. Method, per-task tables and limits: [benchmarks/results/2026-10-07-agentic.md](benchmarks/results/2026-10-07-agentic.md).\n\n**The rule was never \"fewest tokens.\"** It is: write only what the task needs, and never cut validation, error handling, security, or accessibility. The code ends up small because it is necessary, not golfed. Lower cost and latency are a side effect.\n\n## Before / after\n\n<p align=\"center\">\n  <img src=\"assets/v5/beforeafter.png\" width=\"880\" alt=\"Add a date picker to the frontend. No skill: 335 lines, a calendar and a date picker built by hand. Ponytail 5: one 10-line file that reuses the repo's Input with type date, so the browser brings the calendar.\">\n</p>\n\nYou ask for a date picker. Without Ponytail, the agent installs a date picker library or builds a whole calendar by hand: 335 lines. Ponytail 5 first looks at what is already there: the repo has an `Input` component, and every browser has a date picker. It puts the two together. 10 lines.\n\nMore survivors in [examples/](examples/).\n\n## The review, rebuilt\n\n<p align=\"center\">\n  <img src=\"assets/v5/review.png\" width=\"880\" alt=\"The review, rebuilt. A real /ponytail-review finding from the benchmark: the change renamed a field, and an untouched file, src/routes/feed.js, now crashes. Must fix: the Atom feed now crashes on every request, with what this is, the problem, the fix, and what happens if we skip it. 100% of planted problems found, no skill 87%. 100% of problems outside the diff found, no skill 78%.\">\n</p>\n\n`/ponytail-review` used to look only for code to cut. Now it reviews like the senior dev who gets paged when it breaks: it reads the code your change touches, not just the diff, and checks bugs, security, real load, missing tests, speed, and what to cut. Each finding says what the code does, what goes wrong, how to fix it, and what happens if you don't.\n\n## The audit, rebuilt\n\n<p align=\"center\">\n  <img src=\"assets/v5/audit.png\" width=\"880\" alt=\"Your whole repo, ranked. Fix this first. A real /ponytail-audit from the benchmark on a warehouse stock repo: 1 must fix, office batches with 1,200 fail completely; 2 must fix, the import silently skips bad rows; 3 must fix, a mistyped SKU in an office batch is silently ignored; 4 should fix, the risky code paths have no tests; 5 nice to have, the API crashes on a body that isn't an object. Verdict: fix 1 first.\">\n</p>\n\n`/ponytail-audit` runs the same checks on the whole repo. It maps the code first: entry points, how data moves, what load the project expects. Then it ranks what it finds and tells you what to fix first. The old audit only listed what to delete.\n\n## New in 5.3: the band\n\n<p align=\"center\">\n  <img src=\"assets/band/band.png\" width=\"880\" alt=\"The ponytail band in Claude Code, above the prompt. Detail mode: cost $23.80, last turn $1.14, average $0.72 per turn; 56.7M tokens, 168k output, 33 turns; agent time 52m 14s; reuse 71%, 5 used, 2 new; tests passed after the last change. Compact mode shows the same in one line.\">\n</p>\n\nIn Claude Code, ponytail now shows a band above the prompt: what the current task costs, how many tokens and how much agent time it used, how often it reused existing code instead of writing new code, and whether the tests passed after the last change. Its buttons switch the level, run `/ponytail-review` or `/ponytail-audit`, copy the task as Markdown, and fold the band into one line. Don't want it? `/ponytail band` hides it, the same command brings it back. Needs Claude Code 2.1.290 or later, in the terminal or the desktop app. It does not show in the VS Code chat panel, cloud sessions or `claude -p`.\n\n<p align=\"center\">\n  <img src=\"assets/band/board.png\" width=\"880\" alt=\"The ponytail board, a local page: 61 sessions, 20h 13m agent time, $285.30 and 492.5M tokens in the last 30 days; agent time per project over time; the latest sessions with their tests; active days and streak.\">\n</p>\n\n**Board** opens a local page with every task across your projects: cost, agent time and tokens over time, every session with its tests, and the days you worked. By default, everything stays on your machine, in `~/.config/ponytail/band/`. `/ponytail band import` adds your past Claude Code sessions to it, with their cost, agent time and tokens.\n\n## How it works\n\n<p align=\"center\">\n  <img src=\"assets/v5/ladder.png\" width=\"880\" alt=\"Before writing code, stop at the first rung that holds: 1 does this need to exist, 2 already in this codebase, 3 does the standard library do it, 4 a native platform feature, 5 an installed dependency, 6 can it be one line, 7 only then the minimum that works, plus one small test if it has logic.\">\n</p>\n\nThe ladder runs *after* it understands the problem, not instead of it: it reads the code the change touches and traces the real flow before picking a rung. Lazy about the solution, never about reading.\n\nLazy, not negligent: trust-boundary validation, data-loss handling, security, and accessibility are never on the chopping block.\n\nLogic with a branch, a loop, a parser, money or security leaves one small test behind. Every reply ends with what was skipped or not checked and any risk you should know.\n\n## The prompt\n\nPonytail is one prompt: [`skills/ponytail/SKILL.md`](skills/ponytail/SKILL.md). The compact version, for agents that read a rules file, is [`AGENTS.md`](AGENTS.md). Everything else in this repo loads that prompt into different agents.\n\n## Install\n\n**Claude Code**, as two separate prompts:\n\n```\n/plugin marketplace add DietrichGebert/ponytail\n```\n```\n/plugin install ponytail@ponytail\n```\n\n**Codex:**\n\n```bash\ncodex plugin marketplace add DietrichGebert/ponytail\ncodex plugin add ponytail@ponytail\n```\n\nThen open `/hooks` in Codex, trust its two lifecycle hooks, and start a new thread.\n\n**Any other agent:** copy [`AGENTS.md`](AGENTS.md) into your project, or ask your agent to install [`skills/ponytail/SKILL.md`](skills/ponytail/SKILL.md) as a skill. Step by step for Copilot, Cursor, OpenCode, Gemini and the rest: **[INSTALL.md](INSTALL.md)**.\n\nThat was it. He'd be proud. He won't say it.\n\nActive every session, with a handful of commands (see [Commands](#commands)). `/ponytail ultra` exists for when the codebase has wronged you personally. Startup and mode-change text shows the current mode.\n\nOnly install ponytail from `DietrichGebert/ponytail` on GitHub or `@dietrichgebert/ponytail` on npm. It never ships `.exe` or `.dll` files; a copy that does is not mine.\n\n## Commands\n\n| Command | What it does |\n|---------|--------------|\n| `/ponytail [lite \\| full \\| ultra \\| off]` | Set the intensity, or turn it off. No argument switches ponytail on at the default level if it is off, and otherwise reports the current level. |\n| `/ponytail band [on \\| off]` | Claude Code only: hide or show the band above the prompt. No argument switches it. The level stays. |\n| `/ponytail band import` | Claude Code only: add your past Claude Code sessions to the board, with their cost, agent time and tokens. |\n| `/ponytail-review` | Review the current diff like the senior dev who gets paged when it breaks: bugs, security, real load, risky code without a test, slow paths, and what to cut. Each finding says what the code does, what goes wrong, how to fix it, and what happens if you don't. Name a target in plain words to narrow or widen it: "
+    },
+    "brief": {
+      "summary": "给AI代理装上极简主义资深开发者思维",
+      "problem": "AI写代码常过度实现，增加成本与维护负担",
+      "highlights": [
+        "可以让代理少写代码，优先复用已有组件",
+        "可以用 /ponytail-review 审查改动与隐藏故障",
+        "可以用 /ponytail-audit 给全仓库问题排优先级"
+      ],
+      "target_users": [
+        "AI编程用户",
+        "独立开发者",
+        "技术团队"
+      ],
+      "why_trending": "连续上榜，今日新增1948星，主打降本增效",
+      "caveat": "效果数据来自作者基准，未独立验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "DietrichGebert/ponytail",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码 Agent 的极简技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "anthropics/knowledge-work-plugins",
+      "url": "https://github.com/anthropics/knowledge-work-plugins",
+      "description": "Open source repository of plugins primarily intended for knowledge workers to use in Claude Cowork",
+      "language": "Python",
+      "total_stars": 31729,
+      "forks": 3542,
+      "stars_today": 303,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 303
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-23T20:11:54Z",
+      "updated_at": "2026-10-23T04:59:05Z",
+      "pushed_at": "2026-10-22T07:39:25Z",
+      "open_issues": 133,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Knowledge Work Plugins\n\nPlugins that turn Claude into a specialist for your role, team, and company. Built for [Claude Cowork](https://claude.com/product/cowork), also compatible with [Claude Code](https://claude.com/product/claude-code).\n\n## Why Plugins\n\nCowork lets you set the goal and Claude delivers finished, professional work. Plugins let you go further: tell Claude how you like work done, which tools and data to pull from, how to handle critical workflows, and what slash commands to expose — so your team gets better and more consistent outcomes.\n\nEach plugin bundles the skills, connectors, slash commands, and sub-agents for a specific job function. Out of the box, they give Claude a strong starting point for helping anyone in that role. The real power comes when you customize them for your company — your tools, your terminology, your processes — so Claude works like it was built for your team.\n\n## Plugin Marketplace\n\nWe're open-sourcing 11 plugins built and inspired by our own work:\n\n| Plugin | How it helps | Connectors |\n|--------|-------------|------------|\n| **[productivity](./productivity)** | Manage tasks, calendars, daily workflows, and personal context so you spend less time repeating yourself. | Slack, Notion, Asana, Linear, Jira, Monday, ClickUp, Microsoft 365 |\n| **[sales](./sales)** | Research prospects, prep for calls, review your pipeline, draft outreach, and build competitive battlecards. | Slack, HubSpot, Close, Clay, ZoomInfo, Notion, Jira, Fireflies, Microsoft 365 |\n| **[customer-support](./customer-support)** | Triage tickets, draft responses, package escalations, research customer context, and turn resolved issues into knowledge base articles. | Slack, Intercom, HubSpot, Guru, Jira, Notion, Microsoft 365 |\n| **[product-management](./product-management)** | Write specs, plan roadmaps, synthesize user research, keep stakeholders updated, and track the competitive landscape. | Slack, Linear, Asana, Monday, ClickUp, Jira, Notion, Figma, Amplitude, Pendo, Intercom, Fireflies |\n| **[marketing](./marketing)** | Draft content, plan campaigns, enforce brand voice, brief on competitors, and report on performance across channels. | Slack, Canva, Figma, HubSpot, Amplitude, Notion, Ahrefs, SimilarWeb, Klaviyo |\n| **[legal](./legal)** | Review contracts, triage NDAs, navigate compliance, assess risk, prep for meetings, and draft templated responses. | Slack, Box, Egnyte, Jira, Microsoft 365 |\n| **[finance](./finance)** | Prep journal entries, reconcile accounts, generate financial statements, analyze variances, manage close, and support audits. | Snowflake, Databricks, BigQuery, Slack, Microsoft 365 |\n| **[data](./data)** | Query, visualize, and interpret datasets — write SQL, run statistical analysis, build dashboards, and validate your work before sharing. | Snowflake, Databricks, BigQuery, Definite, Hex, Amplitude, Jira |\n| **[enterprise-search](./enterprise-search)** | Find anything across email, chat, docs, and wikis — one query across all your company's tools. | Slack, Notion, Guru, Jira, Asana, Microsoft 365 |\n| **[bio-research](./bio-research)** | Connect to preclinical research tools and databases (literature search, genomics analysis, target prioritization) to accelerate early-stage life sciences R&D. | PubMed, BioRender, bioRxiv, ClinicalTrials.gov, ChEMBL, Synapse, Wiley, Owkin, Open Targets, Benchling |\n| **[cowork-plugin-management](./cowork-plugin-management)** | Create new plugins or customize existing ones for your organization's specific tools and workflows. | — |\n\nInstall these directly from Cowork, browse the full collection here on GitHub, or build your own.\n\n## Getting Started\n\n### Cowork\n\nInstall plugins from [claude.com/plugins](https://claude.com/plugins/).\n\n### Claude Code\n\n```bash\n# Add the marketplace first\nclaude plugin marketplace add anthropics/knowledge-work-plugins\n\n# Then install a specific plugin\nclaude plugin install sales@knowledge-work-plugins\n```\n\nOnce installed, plugins activate automatically. Skills fire when relevant, and slash commands are available in your session (e.g., `/sales:call-prep`, `/data:write-query`).\n\n## How Plugins Work\n\nEvery plugin follows the same structure:\n\n```\nplugin-name/\n├── .claude-plugin/plugin.json   # Manifest\n├── .mcp.json                    # Tool connections\n├── commands/                    # Slash commands you invoke explicitly\n└── skills/                      # Domain knowledge Claude draws on automatically\n```\n\n- **Skills** encode the domain expertise, best practices, and step-by-step workflows Claude needs to give you useful help. Claude draws on them automatically when relevant.\n- **Commands** are explicit actions you trigger (e.g., `/finance:reconciliation`, `/product-management:write-spec`).\n- **Connectors** wire Claude to the external tools your role depends on — CRMs, project trackers, data warehouses, design tools, and more — via [MCP servers](https://modelcontextprotocol.io/).\n\nEvery component is file-based — markdown and JSON, no code, no infrastructure, no build steps.\n\n## Making Them Yours\n\nThese plugins are generic starting points. They become much more useful when you customize them for how your company actually works:\n\n- **Swap connectors** — Edit `.mcp.json` to point at your specific tool stack.\n- **Add company context** — Drop your terminology, org structure, and processes into skill files so Claude understands your world.\n- **Adjust workflows** — Modify skill instructions to match how your team actually does things, not how a textbook says to.\n- **Build new plugins** — Use the `cowork-plugin-management` plugin or follow the structure above to create plugins for roles and workflows we haven't covered yet.\n\nAs your team builds and shares plugins, Claude becomes a cross-functional expert. The context you define gets baked into every relevant interaction, so leaders and admins can spend less time enforcing processes and more time improving them.\n\n## Contributing\n\nPlugins are just markdown files. Fork the repo, make your changes, and submit a PR.\n"
+    },
+    "brief": {
+      "summary": "把 Claude 变成岗位专家的开源插件集",
+      "problem": "通用助手不熟悉团队工具和流程，输出难保持一致",
+      "highlights": [
+        "可以安装销售插件做客户调研和通话准备",
+        "可以用数据插件写 SQL、做分析并建看板",
+        "可以按公司术语和工具改插件，统一工作方式"
+      ],
+      "target_users": [
+        "知识工作者",
+        "业务团队",
+        "Claude Code 用户"
+      ],
+      "why_trending": "今日新增 303 Star，官方开源 11 个岗位插件",
+      "caveat": "插件是通用起点，需按公司工具和流程定制",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "anthropics/knowledge-work-plugins",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Cowork 插件与技能集合",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 40,
+      "ranking_score": 64.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "Meloong-Git/PCL",
+      "url": "https://github.com/Meloong-Git/PCL",
+      "description": "Minecraft 启动器 Plain Craft Launcher（PCL）。",
+      "language": "Visual Basic .NET",
+      "total_stars": 8759,
+      "forks": 1214,
+      "stars_today": 119,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 119
+    },
+    "details": {
+      "topics": [
+        "launcher",
+        "minecraft",
+        "minecraft-launcher"
+      ],
+      "license_name": "",
+      "created_at": "2022-07-26T15:43:26Z",
+      "updated_at": "2026-10-23T05:02:42Z",
+      "pushed_at": "2026-10-20T07:01:33Z",
+      "open_issues": 281,
+      "homepage": "https://meloong.com/PCL",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Plain Craft Launcher\n\n[![Stars](https://img.shields.io/github/stars/Meloong-Git/PCL?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=Stars&labelColor=444444&color=eac54f)](https://github.com/Meloong-Git/PCL/)\n[![Issues](https://img.shields.io/github/issues/Meloong-Git/PCL?style=flat&label=Issues&labelColor=444444&color=1F883D)](https://github.com/Meloong-Git/PCL/issues)\n[![哔哩哔哩](https://img.shields.io/badge/动态-BiliBili-00A4DB?style=flat&labelColor=444444&logoSize=auto)](https://space.bilibili.com/11343203/dynamic)\n[![爱发电](https://img.shields.io/badge/赞助-爱发电-946ce6?style=flat&labelColor=444444&logoSize=auto)](https://meloong.com/afd/a/LTCat)\n\n包含 PCL 的大部分源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！<br/>\n代码并不是实时更新的，它会在每次 PCL 发布更新时同步一次。<br/>\n非常感谢社区的大力支持！\n\n<br/>\n\n### 相关资源\n- [PCL 下载](https://meloong.com/pcl)：下载可免费使用的正式版 PCL！\n- [PCL 功能投票](https://github.com/Meloong-Git/PCL/discussions/2)：来参加投票吧，开发者会优先处理票数较高的项目！\n- [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 内置帮助文档的存储库\n"
+    },
+    "brief": {
+      "summary": "VB.NET 编写的 Minecraft 启动器，含下载与启动模块。",
+      "problem": "Minecraft 玩家需要方便地下载、管理并启动游戏。",
+      "highlights": [
+        "可以一键下载并启动 Minecraft 游戏",
+        "可以管理不同游戏版本与实例",
+        "可以查看 UI、动画与下载模块源码"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "VB.NET 开发者",
+        "启动器开发者"
+      ],
+      "why_trending": "今日新增 119 Star，本周首次收录，社区关注度上升。",
+      "caveat": "源码随版本发布同步，并非实时更新。",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Meloong-Git/PCL",
+      "score": 70,
+      "category": "ACG 资源 / Mod",
+      "reason": "Minecraft 启动器，服务游戏 Mod 生态",
+      "generated_by_ai": true,
+      "velocity_score": 63,
+      "freshness_score": 20,
+      "ranking_score": 53.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 70144,
+      "forks": 6351,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 2330
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-23T05:03:02Z",
+      "pushed_at": "2026-10-23T05:04:52Z",
+      "open_issues": 397,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 7 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 7 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 7. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` keeps the **core set** fresh (plus whatever is already installed) and never expands a partial install; `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, publish, project history — plus reading its JSON and recovering from build or render failures.                                                                            |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/claude-design) and [Open Design guide](https://hyperframes.heygen.com/guides/open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://hyperframes.heygen.com/showcase) for finished videos you can watch, read, run, and remix.\n\n- Product launch videos and feature announcements\n- PR walkthroughs with animated code diffs, narration, and captions\n- Data visualizations, chart races, and map animations\n- Social videos with kinetic captions, overlays, and music\n- Docs-to-video, PDF-to-video, and site-tour explainers\n- Reusable motion graphics for automated content pipelines\n\n## Frame.md\n\n**frame.md — your design system, ready for video.**\n\nEvery brand has a `design.md`. None of them were written for a camera. `frame.md` is the missing translation layer: it takes your web-context design spec and inverts it for the frame — the same tokens, the same rules, but rewritten so an AI agent can compose a promo video without guessing at scale or reaching for web chrome.\n\nThe output is a `DESIGN.md` superset your whole toolchain can read. Atoms stay sacred. Composition stays free. Numbers come from the script.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/biennale-yellow\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/biennale-yellow.png\" alt=\"Biennale Yellow\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/biennale-yellow\">Biennale Yellow</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blockframe\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blockframe.png\" alt=\"BlockFrame\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blockframe\">BlockFrame</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blue-professional\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blue-professional.png\" alt=\"Blue Professional\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blue-professional\">Blue Professional</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/bold-poster\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/bold-poster.png\" alt=\"Bold Poster\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/bold-poster\">Bold Poster</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/broadside\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/broadside.png\" alt=\"Broadside\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/broadside\">Broadside</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/capsule\"><img sr"
+    },
+    "brief": {
+      "summary": "用 HTML 写动画并渲染成 MP4 的开源框架。",
+      "problem": "让 AI 编码代理不用复杂剪辑软件也能产出视频。",
+      "highlights": [
+        "可以写 HTML/CSS 生成确定性 MP4",
+        "可以让 Claude Code 等代理直接做视频",
+        "可以调用约 450 个预置动效组件"
+      ],
+      "target_users": [
+        "AI 编码代理用户",
+        "前端开发者",
+        "视频创作者"
+      ],
+      "why_trending": "7 万 Star，更新活跃，代理视频工作流受关注。",
+      "caveat": "资料未说明实际渲染速度与画质上限。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "HTML 转视频渲染框架，面向 Agent",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 76.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "storytold/filmcraft",
+      "url": "https://github.com/storytold/filmcraft",
+      "description": "FilmCraft: An open-source, nonlinear video editor written by scratch in pure Rust",
+      "language": "Rust",
+      "total_stars": 15778,
+      "forks": 6624,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "art",
+        "rust",
+        "video",
+        "video-editing",
+        "video-editor",
+        "video-processing"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-09-30T13:41:20Z",
+      "updated_at": "2026-10-23T05:02:58Z",
+      "pushed_at": "2026-10-23T04:56:01Z",
+      "open_issues": 1549,
+      "homepage": "https://getartcraft.com/apps/filmcraft",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://getartcraft.com/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/brand/artcraft-logo-white.svg\">\n      <img alt=\"ArtCraft\" src=\"docs/brand/artcraft-logo.svg\" width=\"200\">\n    </picture>\n  </a>\n</p>\n\n\n<p align=\"center\">\n  <img src=\"assets/app-icon/hicolor/256x256/apps/ai.storyteller.filmcraft.png\" width=\"128\" height=\"128\" alt=\"FilmCraft icon: an engraved owl on a purple tile\">\n</p>\n\n<h1 align=\"center\">FilmCraft</h1>\n\n<p align=\"center\">\n  <b>Video editing, color and sound; an open-source, professional non-linear video editor, built in pure Rust.</b>\n</p>\n\n<p align=\"center\">\n  An open-source, modern non-linear video editing workflow: native on macOS, Windows and Linux, and in the browser via WebAssembly.<br>\n  By the ArtCraft team.\n</p>\n\n<p align=\"center\">\n  <a href=\"#license-and-credits\"><img alt=\"License: MIT OR Apache-2.0\" src=\"https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-8b5cf6?style=flat-square\"></a>\n  <img alt=\"Written in pure Rust\" src=\"https://img.shields.io/badge/pure-Rust-6a3fd6?style=flat-square&logo=rust&logoColor=white\">\n  <img alt=\"Runs on macOS, Windows and Linux\" src=\"https://img.shields.io/badge/runs%20on-macOS%20%7C%20Windows%20%7C%20Linux-8b5cf6?style=flat-square\">\n  <a href=\"#status\"><img alt=\"Status: young and moving fast\" src=\"https://img.shields.io/badge/status-young%20and%20moving%20fast-6a3fd6?style=flat-square\"></a>\n  <br>\n  <a href=\"https://sonarcloud.io/project/overview?id=storytold_filmcraft\"><img alt=\"Scanned by SonarCloud\" src=\"https://img.shields.io/badge/Scanned_by-SonarCloud-4b9fd5?style=flat-square&logo=sonarqubecloud&logoColor=white\"></a>\n  <a href=\"https://coderabbit.ai\"><img alt=\"Reviewed by CodeRabbit\" src=\"https://img.shields.io/coderabbit/prs/github/storytold/filmcraft?style=flat-square&label=Reviewed%20by%20CodeRabbit&logo=coderabbit\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/artcraft\"><img alt=\"Join the ArtCraft community on Discord\" src=\"https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" height=\"40\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://getartcraft.com/apps/filmcraft\"><b>FilmCraft on getartcraft.com</b></a> ·\n  <a href=\"https://getartcraft.com/\">ArtCraft</a> ·\n  <a href=\"https://getartcraft.com/apps\">All Crafting Apps</a>\n</p>\n\n<br>\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-hero.png\" alt=\"FilmCraft in the Color workspace, mid-way through an Apollo 11 documentary cut from NASA footage: the Program monitor on the Saturn V clearing the launch tower with a Launch Complex 39A lower third and an air-to-ground subtitle, Effect Controls with color grading and Scale keyframes on the shot, the color grading panel, bins of NASA selects, and a timeline with 49 picture cuts, B-roll, titles, a caption track, mission audio, a ducked music bed, named markers, a rendered section and live loudness meters\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub><i>Apollo 11 - Tranquility</i>: a three-minute documentary edit of NASA's 1969 launch, landing and moonwalk film, with subtitles from the mission transcript. Every frame in these screenshots comes from public-domain footage, decoded, composited and graded by FilmCraft's own code.</sub></p>\n\n> [!NOTE]\n> **ArtCraft is a community of artists from all walks of life.** Digital, generative, music,\n> games &mdash; if you make things, you're one of us. **[Come say hi on Discord](https://discord.gg/artcraft).**\n\n<p align=\"center\">\n  <a href=\"#edit\">Edit</a> ·\n  <a href=\"#color\">Color</a> ·\n  <a href=\"#effects-and-motion\">Effects</a> ·\n  <a href=\"#audio\">Audio</a> ·\n  <a href=\"#titles-and-captions\">Titles</a> ·\n  <a href=\"#formats-and-codecs\">Formats</a> ·\n  <a href=\"#export\">Export</a> ·\n  <a href=\"#interchange\">Interchange</a> ·\n  <a href=\"#built-for-agents\">Agents</a> ·\n  <a href=\"#get-started\">Get started</a> ·\n  <a href=\"#downloads\">Downloads</a> ·\n  <a href=\"#documentation\">Docs</a> ·\n  <a href=\"#status\">Status</a>\n</p>\n\n<br>\n\nFilmCraft is a professional non-linear editor: familiar panels, workspaces, tools and shortcuts, so your hands already know where everything is. Underneath, it is new from the bitstream up. The H.264, HEVC, ProRes and AAC codecs are our own, written in Rust from the public specifications. A GPU compositor works in linear light. Frame math runs on exact integer time, so edits never drift. And every action in the app is a command that an AI agent can drive as precisely as you can.\n\n<br>\n\n## Edit\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-assembly.png\" alt=\"Assembly workspace: bins of film thumbnails, Carnival of Souls in the Source monitor, a Night of the Living Dead cemetery shot in the Program monitor, and the trailer on a three-track timeline with a Chopin score on A2 and loudness meters\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub>The Assembly workspace, cutting a trailer for <i>Night of the Living Dead</i> (1968) with an insert from <i>Carnival of Souls</i> (1962).</sub></p>\n\n**A timeline you already know.** Source and Program monitors, bins with thumbnails, a multi-track timeline with patch and target buttons, sync locks and linked selection. The Editing, Assembly, Color, Effects and Audio workspaces are all there, and every panel docks wherever you want it.\n\n- **Three-point editing.** Mark In and Out in the Source monitor, then insert (`,`) or overwrite (`.`) onto the patched tracks. Lift (`;`) and extract (`'`) take ranges back out.\n- **Every trim.** Ripple, roll, slip, slide, rate stretch and razor tools. Trim mode selects edit points as ripple, roll or trim, nudges them a frame at a time (`⌥←` `⌥→`, ×5 with `⇧`), toggles the trim type with `⌃T` and extends them to the playhead with `E`. `Q` and `W` ripple-trim to the playhead. The **Trim Monitor** shows both sides of the edit, and **dynamic trimming** trims live while it plays: `L` forward, `J` back, `K` to stop and commit as one undo step.\n- **Exact time.** Every edit is computed on integer ticks: 254,016,000,000 per second, which divides evenly by every common frame rate and sample rate. 23.976, 29.97 drop-frame and 59.94 are exact, not approximate.\n- **The details pros rely on.** Markers with colours, names and durations; export sequence review notes with **Markers ▸ Export Markers as CSV…**; add edit (`⌘K`) on one or all tracks; nesting; copy, paste and paste insert; ripple delete and close gap; snapping; unlimited undo with a History panel.\n- **Your keys.** A Keyboard Shortcuts editor (`⌥⌘K`) with a drawn keyboard, panel-specific shortcuts, conflict warnings and presets for FilmCraft and standard NLE key layouts.\n- **Never lose work.** Saves are atomic, auto-save keeps a rolling set of versions, and a crash-recovery journal written about a second after each edit brings back unsaved changes after a crash or power cut.\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-timeline.png\" alt=\"Timeline close-up: Night of the Living Dead shots with dissolves on V1, a Carnival of Souls insert on V2, the Chopin nocturne as a green waveform on A2, coloured markers along the ruler, and the loudness meter reading momentary, short-term, integrated and true-peak values\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub>Up close: dissolves, an insert on V2, the score on A2, coloured markers, and the loudness meters on the right.</sub></p>\n\n<br>\n\n## Color\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-color.png\" alt=\"Color workspace on Charade (1963): Cary Grant and Audrey Hepburn in the Program monitor, the waveform and vectorscope on the left, and the trailer bins and timeline below\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub>The Color workspace on <i>Charade</i> (1963), with live scopes beside the Program monitor.</sub></p>\n\n**A complete color grading panel**, in the order a colourist works:\n\n- **Basic Correction:** temperature and tint, exposure, contrast, highlights, shadows, whites, blacks, saturation.\n- **Creative:** eight built-in looks with an intensity control, plus faded film, sharpen and vibrance. The looks are colour transforms written in code, not LUT files.\n- **Curves:** an RGB curve editor with monotone-cubic interpolation (no overshoot), and hue vs saturation, hue vs hue, hue vs luma, luma vs saturation and saturation vs saturation.\n- **Color Wheels:** shadow, midtone and highlight wheels, each with its own lightness control.\n- **HSL Secondary:** key a colour by hue, saturation and luma, view the key as a matte, and correct only what you selected.\n- **Vignette:** amount, midpoint, roundness and feather.\n\n<table>\n  <tr>\n    <td width=\"34%\" valign=\"top\" align=\"center\">\n      <img src=\"docs/images/filmcraft-color-panel.png\" alt=\"The color grading panel on Charade (1963): Basic Correction sliders with coloured temperature and tint tracks, collapsed Creative and Curves sections, shadow, midtone and highlight colour wheels, and HSL Secondary and Vignette toggles\"><br>\n      <sub><b>The color grading panel.</b> Basic Correction, Color Wheels and every other section, each with its own on/off switch.</sub>\n    </td>\n    <td width=\"66%\" valign=\"top\" align=\"center\">\n      <img src=\"docs/images/filmcraft-scopes.png\" alt=\"The video scopes: a green luma waveform and a vectorscope of a Charade (1963) frame\"><br>\n      <sub><b>Scopes that tell the truth.</b> The waveform and vectorscope are computed from the graded frame. All grading happens in linear light, in 32-bit float.</sub>\n    </td>\n  </tr>\n</table>\n\n<br>\n\n## Effects and motion\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-effects.png\" alt=\"Effects workspace: Effect Controls with Motion, Opacity, Time Remapping and a colour grade, NASA's Earth Views from the ISS in the Program monitor, and the Effects browser open on the Dissolve transitions\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub>NASA's <i>Earth Views from the ISS</i> with a look applied, and the Effects browser open on the dissolves.</sub></p>\n\n- **A comprehensive Video Effects bin (over 90 effects across 16 categories), legacy effects, plus around 30 transitions.** Blurs (Bokeh, Focus, Compound), keys (Ultra Key, Track Matte), distortions (Corner Pin, Turbulent Displace, Warp Stabilizer), Lights & Glows, Immersive Video (VR) effects on equirectangular footage, Posterize Time, Echo and more. Cross dissolve, dip to black or white, film dissolve, wipes, irises, pushes, slides, zooms, page peel, cube spin and more.\n- **Motion and opacity on every clip:** position, scale, rotation, anchor point and anti-flicker, plus 26 blend modes.\n- **Advanced keyframing:** linear, Bezier, auto and continuous Bezier, hold, ease in and ease out. Effect Controls shows a keyframe lane for every parameter under a time ruler with the playhead's handle, and each animated parameter opens into **value and velocity graphs** with draggable influence handles. Effect Controls and the Properties panel share the keyframe navigator (◀ ◆ ▶): add or remove the keyframe at the playhead, step to the previous or next one.\n- **A GPU compositor** built on wgpu (Metal, Vulkan, DirectX 12, WebGPU). It samples YUV straight from the decoder with footprint supersampling and blends in linear light. A CPU path renders the same frames, and the two are tested against each other.\n\n<p align=\"center\">\n  <img src=\"docs/images/filmcraft-keyframes.png\" alt=\"Effect Controls with the value and velocity graphs of an eased Scale push-in on the Night of the Living Dead title card, the Program monitor showing the title over a country road, and the Properties panel with Transform and Crop\" width=\"100%\">\n</p>\n\n<p align=\"center\"><sub>An eased push-in on the title card: the value graph, the velocity graph and the Bezier influence handle.</sub></p>\n\n<br>\n\n## Audio\n\n- **Loudness meters to broadcast standards.** Momentary, short-term and integrated loudness and true peak to ITU-R BS.1770 and EBU R128, alongside the peak meters. Our integrated reading matches ffmpeg's `ebur128` filter to th"
+    },
+    "brief": {
+      "summary": "纯Rust编写的跨平台开源非线性视频剪辑软件",
+      "problem": "为视频剪辑提供开源、可跨平台且可被AI代理驱动的方案",
+      "highlights": [
+        "可以在 macOS、Windows、Linux 和浏览器中剪辑视频",
+        "可以完成三点编辑、多轨修剪和精确到帧的时间线操作",
+        "可以让AI代理精确调用剪辑命令"
+      ],
+      "target_users": [
+        "视频剪辑师",
+        "独立创作者",
+        "AI视频工具开发者"
+      ],
+      "why_trending": "本周首次收录，项目自研编解码并支持AI代理驱动",
+      "caveat": "项目自述年轻且快速迭代，开放问题1549个",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "storytold/filmcraft",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "开源非线性视频编辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 60.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "GAlbanese09/spritebrew",
+      "url": "https://github.com/GAlbanese09/spritebrew",
+      "description": "AI-powered pixel art sprite sheet generator. Upload or generate characters → animate → export game-ready sheets for Unity, Godot, GameMaker, RPG Maker.",
+      "language": "TypeScript",
+      "total_stars": 68,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-generated-art",
+        "animation",
+        "aseprite",
+        "cloudflare-pages",
+        "game-development",
+        "gamemaker",
+        "godot",
+        "indie-gamedev",
+        "nextjs",
+        "pixel-art",
+        "pixel-art-generator",
+        "pixel-editor",
+        "react",
+        "retro-diffusion",
+        "rpg-maker",
+        "sprite-generator",
+        "sprite-sheet",
+        "tailwindcss",
+        "typescript",
+        "unity"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-03T12:28:01Z",
+      "updated_at": "2026-10-23T05:03:01Z",
+      "pushed_at": "2026-10-23T05:02:56Z",
+      "open_issues": 4,
+      "homepage": "https://spritebrew.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🧪 SpriteBrew\n\n**AI-powered pixel art sprite sheet generator.** Generate characters from text → animate → slice → preview → export game-ready sheets for Unity, Godot, GameMaker, RPG Maker.\n\n> **Status:** Live in production · Active development · Real customers brewing daily\n\n🌐 **[spritebrew.com](https://spritebrew.com)** — Try it now (free account = 5 generation tokens to start)\n\n---\n\n## What is SpriteBrew?\n\nSpriteBrew is a web-based tool for indie game developers that combines traditional sprite sheet workflows with AI-powered generation. Create new characters from text descriptions across 21 visual styles, animate existing pixel art, preview animations with full keyboard controls, and export to every major game engine — all in one place.\n\n**Free tools (no account needed):** Upload & Slice, Animation Preview, Multi-Engine Export, Pixel Editor, Pixel-Perfect Resizer.\n\n**AI features (free account, token-based):** Text-to-Sprite Generation across 21 styles, Animate My Character. Free signup bonus + daily login rewards. Token packs start at $4.99 for users who want more.\n\n---\n\n## Features\n\n### 🎨 AI Sprite Generation\nDescribe a character in plain text and pick from 21 visual styles across 5 categories: characters (Pro Fantasy, Sci-fi, Horror, Painterly, Simple, Default, Top Down, Platformer), tiles (Isometric, Hexagonal, Spritesheet, Dungeon Map), UI elements (Typography, FPS Weapon, Skill / Spell Icon, UI Panel, Inventory Items), and animation styles (4-Angle Walking, Walking & Idle, Small Sprites, VFX Effects, Custom Animation, 8-Direction Rotation). Each style has its own tier (Fast / Plus / Pro / Animation) with token cost scaled to model complexity. Powered by Retro Diffusion's pixel art models via direct API.\n\n### 🖼️ Per-Style Example Lightbox\nTap the ⤢ icon on any style card to open a carousel showing what each style actually produces — 2-5 curated examples per style. Pick what you actually want, not what you think a style means by name. \"Use this style →\" in the lightbox toolbar selects + closes in one click.\n\n### 🌅 Persistent Background Toggle\nThe \"Remove background\" control sits on the sticky generate bar — always visible during the entire generation flow. Defaults intelligently per style category (on for characters, off for tiles). Toggle off to keep environmental detail in your generations.\n\n### 🏃 Animate My Character\nUpload your existing pixel art character and generate animation frames from it. Walk cycles, idle loops, attacks, jumps, crouches, subtle motion, and custom actions — the AI preserves your character's appearance while creating smooth motion. Smart animation padding ensures weapons and motion aren't clipped.\n\n### 🧙 Auto-Prep Character Pipeline\nDrop any character image and SpriteBrew handles the rest: contour-based sprite detection, smart cropping, background removal with adjustable tolerance, and pixel-perfect resize to 64×64. Before/after preview with one-click approval. Edit the prepped image in the built-in pixel editor if auto-detection missed something.\n\n### ✂️ Upload & Slice\nDrop any sprite sheet PNG, configure frame dimensions (auto-detect or manual), and slice it into individual frames. Grid overlay preview, multi-select frames, contour-based detection for non-grid layouts, and smart auto-assignment of animation groups with directional detection.\n\n### 🎮 Animation Preview\nPixiJS-powered interactive demo area with full keyboard controls. Walk your character around with arrow keys, trigger attacks with spacebar, and test animations in real-time. Supports 4-directional movement for top-down RPG sprites. Multiple tiled backgrounds (grid, grass, dungeon, stone).\n\n### 📦 Multi-Engine Export\nExport to six formats in one click:\n- **TexturePacker** JSON Hash (Unity, Godot, general)\n- **Aseprite** JSON (pixel art workflow)\n- **GameMaker** horizontal strips\n- **RPG Maker** MV/MZ 3×4 grid\n- **Godot** SpriteFrames .tres\n- **Raw Frames** ZIP (individual PNGs)\n\n### 🖌️ Pixel Editor\nClick any frame to open a zoomed pixel editor. Fix AI artifacts, touch up details, or make manual adjustments. Pencil, eraser, eyedropper, color palette, undo/redo (50 states, Ctrl+Z). Edit at 8-16× zoom with pixel grid overlay and 1× preview alongside.\n\n### 📸 Generation Gallery\nBrowse all past generations with filtering (Created vs Animated). Download PNGs, send to slicer, or delete. Per-user history — each account sees only their own generations.\n\n### 🪙 Token Economy\nFree users get 5 tokens at signup, +3 tokens every daily login, and a +6 bonus on every 7th consecutive day. Subscribe to the newsletter for +5 more. Token packs start at $4.99 for users who want to brew more. Generation costs: Fast 3 / Plus 10 / Pro 40 / Anim-short 15 / Anim-long 50 tokens.\n\n### 📐 Pixel-Perfect Image Resizer\nBuilt-in nearest-neighbor resizing for preparing pixel art for animation. Upload a high-res character, resize to 64×64 with crisp pixel-perfect scaling — no blurry bilinear interpolation.\n\n### 🔐 Authentication\nSign in with Google or email via Clerk. Free tools work without an account. AI generation requires a free login. Production SSO, bot-signup protection enabled.\n\n---\n\n## Tech Stack\n\n| Layer | Technology |\n|-------|-----------|\n| Framework | Next.js 16 (React 19) |\n| Styling | Tailwind CSS v4 |\n| State | Zustand |\n| Animation | PixiJS 8 |\n| Auth | Clerk (`@clerk/react`) |\n| AI Backend | Retro Diffusion direct API |\n| Async Queue | Cloudflare Queues (producer + consumer Worker) |\n| Storage | Cloudflare KV |\n| Payments | Stripe (live) |\n| Transactional Email | Purelymail SMTP |\n| Audience Email | Resend |\n| Image Carousel | yet-another-react-lightbox |\n| Export | JSZip |\n| Hosting | Cloudflare Pages (Workers Paid plan) |\n| License | AGPL-3.0 |\n\n---\n\n## Architecture Highlights\n\n- **Queue-and-poll architecture** for long-running AI generations. Producer enqueues to Cloudflare Queues, consumer Worker calls Retro Diffusion out-of-band, browser polls `/api/generation-status/{jobId}` every ~2-3 seconds. Sidesteps Cloudflare's 120-second proxy timeout entirely. Tokens auto-refund on generation failure.\n- **Token economy backed by Cloudflare KV** with server-side debiting and idempotency-keyed refunds.\n- **Server-side free-tier caps** (10 Pro / 30 Fast lifetime per non-paying account) — paid accounts uncapped.\n- **Stripe webhooks for payment processing** with signature verification and replay protection.\n- **Contour-based sprite detection** using connected component labeling for non-grid sprite sheets.\n- **Recon-first development methodology** — when wiring up a new API, library, or feature, read existing code paths and verify assumptions before implementation. Caught at least one architectural misconception per major feature so far.\n\n---\n\n## Getting Started (Development)\n\n```bash\n# Clone the repo\ngit clone https://github.com/GAlbanese09/spritebrew.git\ncd spritebrew\n\n# Install dependencies\nnpm install\n\n# Set up environment variables\ncp .env.example .env.local\n```\n\nAdd your API keys to `.env.local`:\n\n```\nNEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...\nCLERK_SECRET_KEY=sk_test_...\nCLERK_WEBHOOK_SECRET=whsec_...\nNEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...\nSTRIPE_SECRET_KEY=sk_test_...\nSTRIPE_WEBHOOK_SECRET=whsec_...\nRETRO_DIFFUSION_API_KEY=rdp_...\nRESEND_API_KEY=re_...\nRESEND_AUDIENCE_ID=...\nAPP_ENV=dev\nQUEUE_KICKOFF_ENABLED=true\nADMIN_USER_IDS=\n```\n\n`ADMIN_USER_IDS` is a comma-separated list of Clerk user ids with admin rights. On Cloudflare Pages it is a Secret, set for both Production and Preview, and it is read server-side only. Unset or empty means no admins.\n\n```bash\n# Run development server\nnpm run dev\n```\n\nOpen [http://localhost:3000](http://localhost:3000) to see the app.\n\n**Note on local dev:** The full app stack (queue-and-poll, Stripe webhooks, KV bindings) requires a Cloudflare Pages preview deployment to fully exercise. Local `npm run dev` is best for UI iteration; for end-to-end testing, push to a dev branch and let Cloudflare deploy a preview.\n\nThe consumer Worker that processes the queue lives in a sibling repo: [spritebrew-rd-consumer](https://github.com/GAlbanese09/spritebrew-rd-consumer).\n\n---\n\n## The Story\n\nSpriteBrew exists because a friend was building a pixel art game and needed sprite sheets. Making them by hand is brutally slow — every frame, every direction, every animation state, hand-drawn. There had to be a better way.\n\nWhat started as a weekend project to help one friend turned into a production tool used by indie game developers worldwide. Pricing kept honest at token-based packs starting at $4.99 (no subscriptions). Real customers, real generations, real games getting made.\n\nBuilt by [George Albanese](https://github.com/GAlbanese09) — an endpoint automation engineer by day, solo indie developer by night. Built with Claude as architect, research partner, and rubber duck through every session.\n\n---\n\n## Roadmap\n\n**Done:**\n- [x] Phase 1: Web shell, sprite slicer, multi-engine export (6 formats)\n- [x] Phase 2: AI integration via Retro Diffusion direct API (21 styles across 5 categories)\n- [x] Phase 3: Production launch — Clerk auth, Stripe payments, token economy\n- [x] Queue-and-poll architecture (replaces SSE streaming)\n- [x] Per-style example lightbox previews\n- [x] Persistent background toggle on sticky bar\n\n**In progress / on the roadmap:**\n- [ ] Animation style example previews (animated WebP)\n- [ ] Client-side download upscaler (1× / 2× / 4× nearest-neighbor)\n- [ ] DIY status page surfacing SpriteBrew + Retro Diffusion upstream health\n- [ ] KV-backed feature kill switch (sub-60-second rollback path)\n- [ ] Privacy Policy / Terms of Service / Refund Policy\n- [ ] Public sprite gallery on landing page\n- [ ] Subscription plans (Pixel Pass)\n- [ ] OpenNext migration (replace deprecated `@cloudflare/next-on-pages`)\n- [ ] Isometric sprite tooling beyond the existing isometric style\n- [ ] Tauri desktop app\n\n---\n\n## Acknowledgments\n\n- **[Retro Diffusion](https://retrodiffusion.ai)** — pixel art image generation models that power SpriteBrew's generation pipeline.\n- **[Clerk](https://clerk.com)** — authentication without the pain\n- **[Stripe](https://stripe.com)** — payments and customer management\n- **[Cloudflare](https://cloudflare.com)** — Pages, Queues, KV, and the infrastructure that keeps this running on a hobby budget\n- **[PixiJS](https://pixijs.com)** — the rendering engine behind the animation preview\n- **[Purelymail](https://purelymail.com)** — transactional email at indie-budget pricing\n- **[Resend](https://resend.com)** — audience and newsletter delivery\n- **Claude (Anthropic)** — architect, research partner, prompt writer, rubber duck\n- **George's friend [@mohammadsalim](https://github.com/mohammadsalim)** — the reason this exists in the first place\n\n---\n\n## License\n\n[AGPL-3.0](LICENSE) — Open source with SaaS protection. You can use, modify, and distribute SpriteBrew, but if you deploy a modified version as a service, you must release your changes under the same license.\n\n---\n\n## Contributing\n\nSpriteBrew is live in production and actively developed. If you're interested in contributing, please open an issue first to discuss what you'd like to work on. A Contributor License Agreement (CLA) will be required before merging PRs.\n\nBug reports, feature suggestions, and feedback are welcome via [GitHub Issues](https://github.com/GAlbanese09/spritebrew/issues) or [the in-app feedback form](https://tally.so/r/Y5oGp6).\n\n---\n\nBuilt with ☕ and Claude · [spritebrew.com](https://spritebrew.com) · [@spritebrew](https://x.com/spritebrew)\n"
+    },
+    "brief": {
+      "summary": "AI 生成像素角色动画并导出游戏引擎精灵表的网页工具",
+      "problem": "独立开发者制作像素精灵表和动画帧耗时，多引擎格式转换也麻烦",
+      "highlights": [
+        "可以用文字描述生成像素角色，覆盖 21 种风格",
+        "可以上传已有角色，自动补走路、攻击等动画帧",
+        "可以切片后一键导出 Unity、Godot 等六种格式"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "像素美术爱好者",
+        "Godot/Unity 用户"
+      ],
+      "why_trending": "本周首次收录，已有线上站点和付费功能，仍在持续更新",
+      "caveat": "AI 生成按代币计费，免费额度有限，需登录使用",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "GAlbanese09/spritebrew",
+      "score": 95,
+      "category": "游戏开发",
+      "reason": "AI 像素精灵表生成，导入游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 53.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "invoke-ai/InvokeAI",
+      "url": "https://github.com/invoke-ai/InvokeAI",
+      "description": "Invoke is a leading creative engine for Stable Diffusion models, empowering professionals, artists, and enthusiasts to generate and create visual media using the latest AI-driven technologies. The solution offers an industry leading WebUI, and serves as the foundation for multiple commercial products.",
+      "language": "TypeScript",
+      "total_stars": 28824,
+      "forks": 3073,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-art",
+        "artificial-intelligence",
+        "generative-art",
+        "image-generation",
+        "img2img",
+        "inpainting",
+        "latent-diffusion",
+        "linux",
+        "macos",
+        "outpainting",
+        "stable-diffusion",
+        "txt2img",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2022-08-17T01:04:27Z",
+      "updated_at": "2026-10-23T04:51:45Z",
+      "pushed_at": "2026-10-23T04:59:36Z",
+      "open_issues": 385,
+      "homepage": "https://invoke-ai.github.io/InvokeAI/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n![project hero](https://github.com/invoke-ai/InvokeAI/assets/31807370/6e3728c7-e90e-4711-905c-3b55844ff5be)\n\n# Invoke - Professional Creative AI Tools for Visual Media\n\n[![discord badge]][discord link] [![latest release badge]][latest release link] [![github stars badge]][github stars link] [![github forks badge]][github forks link] [![latest commit to main badge]][latest commit to main link] [![github open issues badge]][github open issues link] [![github open prs badge]][github open prs link] [![translation status badge]][translation status link]\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\n</div>\n\n\nInvoke is a leading creative engine built to empower professionals and enthusiasts alike. Generate and create stunning visual media using the latest AI-driven technologies. Invoke offers an industry leading web-based UI, and serves as the foundation for multiple commercial products.\n\n- Free to use under a commercially-friendly license\n- Download and install on compatible hardware\n- Generate, refine, iterate on images, and build workflows\n\n![Highlighted Features - Canvas and Workflows](https://github.com/invoke-ai/InvokeAI/assets/31807370/708f7a82-084f-4860-bfbe-e2588c53548d)\n\n# Documentation\n\n| **Quick Links**                                                                                                                                             |\n| ----------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| [Installation and Updates][installation docs] - [Documentation and Tutorials][docs home] - [Bug Reports][github issues] - [Contributing][contributing docs] |\n\n# Installation\n\nTo get started with Invoke, [Download the Launcher](https://github.com/invoke-ai/launcher/releases/latest).\n\n## Troubleshooting, FAQ and Support\n\nPlease review our [FAQ][faq] for solutions to common installation problems and other issues.\n\nFor more help, please join our [Discord][discord link].\n\n## Features\n\nFull details on features can be found in [our documentation][features docs].\n\n### Web Server & UI\n\nInvoke runs a locally hosted web server & React UI with an industry-leading user experience.\n\n### Unified Canvas\n\nThe Unified Canvas is a fully integrated canvas implementation with support for all core generation capabilities, in/out-painting, brush tools, and more. This creative tool unlocks the capability for artists to create with AI as a creative collaborator, and can be used to augment AI-generated imagery, sketches, photography, renders, and more.\n\n### Workflows & Nodes\n\nInvoke offers a fully featured workflow management solution, enabling users to combine the power of node-based workflows with the ease of a UI. This allows for customizable generation pipelines to be developed and shared by users looking to create specific workflows to support their production use-cases.\n\n### Board & Gallery Management\n\nInvoke features an organized gallery system for easily storing, accessing, and remixing your content in the Invoke workspace. Images can be dragged/dropped onto any Image-base UI element in the application, and rich metadata within the Image allows for easy recall of key prompts or settings used in your workflow.\n\n### Model Support\n- SD 1.5\n- SD 2.0\n- SDXL\n- SD 3.5 Medium\n- SD 3.5 Large\n- CogView 4\n- Flux.1 Dev\n- Flux.1 Schnell\n- Flux.1 Kontext\n- Flux.1 Krea\n- Flux Redux\n- Flux Fill\n- Flux.2 Dev\n- Flux.2 Klein 4B\n- Flux.2 Klein 9B\n- Z-Image Turbo\n- Z-Image Base\n- Krea 2 Turbo\n- Krea 2 Raw\n- Anima\n- Qwen Image\n- Qwen Image Edit\n- Ideogram 4\n- ERNIE-Image\n- ERNIE-Image-Turbo\n- Nano Banana (API Only)\n- GPT Image (API Only)\n- Wan (API Only)\n\n### Other features\n\n- Support for ckpt, diffusers, and some gguf models\n- Upscaling Tools\n- Embedding Manager & Support\n- Model Manager & Support\n- Workflow creation & management\n- Node-Based Architecture\n- Object Segmentation & Selection Models (SAM / SAM2)\n\n## Contributing\n\nAnyone who wishes to contribute to this project - whether documentation, features, bug fixes, code cleanup, testing, or code reviews - is very much encouraged to do so.\n\nGet started with contributing by reading our [contribution documentation][contributing docs], joining the [#dev-chat] or the GitHub discussion board.\n\nWe hope you enjoy using Invoke as much as we enjoy creating it, and we hope you will elect to become part of our community.\n\n## Sponsors\n\nInvoke's open-source development is powered by our sponsors. If Invoke is valuable to you or your business, please consider [sponsoring us][sponsor link] — it directly funds maintenance, new features, and community support.\n\n<!-- Sponsor logos can be added below, or automated with a GitHub Action\n     such as `JamesIves/github-sponsors-readme-action` to keep them in sync. -->\n\n[![Sponsor Invoke](https://img.shields.io/badge/Sponsor-Invoke-ea4aaa?logo=githubsponsors&logoColor=white)][sponsor link]\n\nWe very much thank the following sponsors:\n\n### Blacksmith\n\n[![Blacksmith](https://raw.githubusercontent.com/invoke-ai/InvokeAI/main/docs/src/content/docs/assets/blacksmith-logo.png)](https://www.blacksmith.sh/)\n\nBlacksmith provides InvokeAI with virtual machines for continuous\nintegration and continuous deployment.\n\n### Backers ($15/mo)\n\n* [apokolypsse](https://github.com/apokolypsse)\n* [Romeotechguy](https://github.com/Romeotechguy)\n* [Pynshe9](https://github.com/Pynshe9)\n* [CarstenD74](https://github.com/CarstenD74)\n* [zamjoor](https://github.com/zamjoor)\n* [FusionBreak](https://github.com/FusionBreak)\n* and 2 anonymous donors\n\n### Power Users ($50/mo)\n\n* [mickr777](https://github.com/mickr777)\n* [Astroburner](https://github.com/Astroburner)\n* and 2 anonymous donors\n\n## Thanks\n\nInvoke is a combined effort of [passionate and talented people from across the world][contributors]. We thank them for their time, hard work and effort.\n\nCopyright 2022-2026 InvokeAI Contributors. See [NOTICE](NOTICE).\n\n[features docs]: https://invoke.ai/\n[faq]: https://invoke.ai/troubleshooting/faq/\n[contributors]: https://invoke.ai/contributing/contributors/\n[github issues]: https://github.com/invoke-ai/InvokeAI/issues\n[docs home]: https://invoke.ai\n[installation docs]: https://invoke.ai/start-here/installation/\n[sponsor link]: https://github.com/sponsors/invoke-ai\n[#dev-chat]: https://discord.com/channels/1020123559063990373/1049495067846524939\n[contributing docs]: https://invoke.ai/contributing/\n[CI checks on main badge]: https://flat.badgen.net/github/checks/invoke-ai/InvokeAI/main?label=CI%20status%20on%20main&cache=900&icon=github\n[CI checks on main link]: https://github.com/invoke-ai/InvokeAI/actions?query=branch%3Amain\n[discord badge]: https://flat.badgen.net/discord/members/ZmtBAhwWhy?icon=discord\n[discord link]: https://discord.gg/ZmtBAhwWhy\n[github forks badge]: https://flat.badgen.net/github/forks/invoke-ai/InvokeAI?icon=github\n[github forks link]: https://useful-forks.github.io/?repo=invoke-ai%2FInvokeAI\n[github open issues badge]: https://flat.badgen.net/github/open-issues/invoke-ai/InvokeAI?icon=github\n[github open issues link]: https://github.com/invoke-ai/InvokeAI/issues?q=is%3Aissue+is%3Aopen\n[github open prs badge]: https://flat.badgen.net/github/open-prs/invoke-ai/InvokeAI?icon=github\n[github open prs link]: https://github.com/invoke-ai/InvokeAI/pulls?q=is%3Apr+is%3Aopen\n[github stars badge]: https://flat.badgen.net/github/stars/invoke-ai/InvokeAI?icon=github\n[github stars link]: https://github.com/invoke-ai/InvokeAI/stargazers\n[latest commit to main badge]: https://flat.badgen.net/github/last-commit/invoke-ai/InvokeAI/main?icon=github&color=yellow&label=last%20dev%20commit&cache=900\n[latest commit to main link]: https://github.com/invoke-ai/InvokeAI/commits/main\n[latest release badge]: https://flat.badgen.net/github/release/invoke-ai/InvokeAI/development?icon=github\n[latest release link]: https://github.com/invoke-ai/InvokeAI/releases/latest\n[translation status badge]: https://hosted.weblate.org/widgets/invokeai/-/svg-badge.svg\n[translation status link]: https://hosted.weblate.org/engage/invokeai/\n[nvidia docker docs]: https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html\n[amd docker docs]: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html\n"
+    },
+    "brief": {
+      "summary": "开源 Stable Diffusion 视觉创作引擎",
+      "problem": "本地生成和精修图像，并用节点工作流复用流程",
+      "highlights": [
+        "可以在统一画布中做文生图、局部重绘和外扩",
+        "可以用节点工作流搭建并分享生成管线",
+        "可以画廊管理图片并回看生成参数"
+      ],
+      "target_users": [
+        "AI 绘画创作者",
+        "视觉设计师",
+        "工作流搭建者"
+      ],
+      "why_trending": "近 2.9 万 Star，近期仍有更新，本周首次收录",
+      "caveat": "需本地或自建服务部署，资料未说明硬件门槛",
+      "category": "AI 绘画 / 漫画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "invoke-ai/InvokeAI",
+      "score": 95,
+      "category": "AI 绘画 / 漫画",
+      "reason": "Stable Diffusion 创作引擎与 WebUI",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 50.5
+    }
+  }
+]
