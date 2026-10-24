@@ -1,0 +1,538 @@
+[
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "OpenBMB/VoxCPM",
+      "url": "https://github.com/OpenBMB/VoxCPM",
+      "description": "VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation, Creative Voice Design, and True-to-Life Cloning",
+      "language": "Python",
+      "total_stars": 40340,
+      "forks": 4583,
+      "stars_today": 150,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 150
+    },
+    "details": {
+      "topics": [
+        "audio",
+        "deeplearning",
+        "minicpm",
+        "multilingual",
+        "python",
+        "pytorch",
+        "speech",
+        "speech-synthesis",
+        "text-to-speech",
+        "tts",
+        "tts-model",
+        "voice-cloning",
+        "voice-design",
+        "voxcpm"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-09-16T03:41:49Z",
+      "updated_at": "2026-10-24T04:47:07Z",
+      "pushed_at": "2026-10-08T03:26:41Z",
+      "open_issues": 153,
+      "homepage": "https://voxcpm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h2 align=\"center\">VoxCPM2: Tokenizer-Free TTS for Multilingual Speech Generation, Creative Voice Design, and True-to-Life Cloning</h2>\n\n<p align=\"center\">\n  <b>English</b> | <a href=\"./README_zh.md\">中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/OpenBMB/VoxCPM/\"><img src=\"https://img.shields.io/badge/Project%20Page-GitHub-blue\" alt=\"Project Page\"></a>\n  <a href=\"https://huggingface.co/spaces/OpenBMB/VoxCPM-Demo\"><img src=\"https://img.shields.io/badge/Live%20Playground-Demo-orange\" alt=\"Live Playground\"></a>\n  <a href=\"https://voxcpm.readthedocs.io/en/latest/\"><img src=\"https://img.shields.io/badge/Docs-ReadTheDocs-8CA1AF\" alt=\"Documentation\"></a>\n  <a href=\"https://huggingface.co/openbmb/VoxCPM2\"><img src=\"https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-VoxCPM2-yellow\" alt=\"Hugging Face\"></a>\n  <a href=\"https://modelscope.cn/models/OpenBMB/VoxCPM2\"><img src=\"https://img.shields.io/badge/ModelScope-VoxCPM2-purple\" alt=\"ModelScope\"></a>\n  <a href=\"https://openbmb.github.io/voxcpm2-demopage/\"><img src=\"https://img.shields.io/badge/DemoPage-Audio Samples-red\" alt=\"DemoPage\"></a>\n  <a href=\"https://arxiv.org/abs/2606.06928\"><img src=\"https://img.shields.io/badge/arXiv-VoxCPM2%20Technical%20Report-red\" alt=\"VoxCPM2 Technical Report\"></a>\n</p>\n\n<div align=\"center\">\n  <img src=\"assets/voxcpm_logo.png\" alt=\"VoxCPM Logo\" width=\"35%\">\n  <br><br>\n  <a href=\"https://trendshift.io/repositories/17704\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/17704\" alt=\"OpenBMB%2FVoxCPM | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n</div>\n\n<br>\n\n<p align=\"center\">\n  👋 Join our community for discussion and support!\n  <br>\n  <a href=\"./assets/feishu-group.png\" style=\"display:inline-block;vertical-align:middle; margin-left: 10px;\">\n    <img src=\"./assets/feishu-logo.png\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"> Feishu\n  </a>\n  &nbsp;|&nbsp;\n  <a href=\"https://discord.gg/KZUx7tVNwz\" style=\"display:inline-block;vertical-align:middle;\">\n    <img src=\"./assets/discord-logo.png\" width=\"16\" height=\"16\" style=\"vertical-align:middle;\"> Discord\n  </a>\n  &nbsp;|&nbsp;\n  <a href=\"https://modelbest.feishu.cn/wiki/UtWxwcERfiRIpIkBOjuc3h9tn1D?fromScene=spaceOverview\" style=\"display:inline-block;vertical-align:middle;\">\n    📚 MiniCPM Wiki\n  </a>\n</p>\n\nVoxCPM is a **tokenizer-free** Text-to-Speech system that directly generates continuous speech representations via an end-to-end **diffusion autoregressive architecture**, bypassing discrete tokenization to achieve highly natural and expressive synthesis.\n\n**VoxCPM2** is the latest major release — a **2B** parameter model trained on **over 2 million hours** of multilingual speech data, now supporting **30 languages**, **Voice Design**, **Controllable Voice Cloning**, and **48kHz** studio-quality audio output. Built on a [MiniCPM-4](https://github.com/OpenBMB/MiniCPM) backbone.\n\n### ✨ Highlights\n\n- 🌍 **30-Language Multilingual** — Input text in any of the 30 supported languages and synthesize directly, no language tag needed\n- 🎨 **Voice Design** — Create a brand-new voice from a natural-language description alone (gender, age, tone, emotion, pace …), no reference audio required\n- 🎛️ **Controllable Cloning** — Clone any voice from a short reference clip, with optional style guidance to steer emotion, pace, and expression while preserving the original timbre\n- 🎙️ **Ultimate Cloning** — Reproduce every vocal nuance: provide both reference audio and its transcript, and the model continues seamlessly from the reference, faithfully preserving every vocal detail — timbre, rhythm, emotion, and style (same as VoxCPM1.5)\n- 🔊 **48kHz High-Quality Audio** — Accepts 16kHz reference audio and directly outputs 48kHz studio-quality audio via AudioVAE V2's asymmetric encode/decode design, with built-in super-resolution — no external upsampler needed\n- 🧠 **Context-Aware Synthesis** — Automatically infers appropriate prosody and expressiveness from text content\n- ⚡ **Real-Time Streaming** — RTF as low as ~0.3 on NVIDIA RTX 4090, and ~0.13 accelerated by [Nano-vLLM](https://github.com/a710128/nanovllm-voxcpm) or [vLLM-Omni](https://github.com/vllm-project/vllm-omni) — official vLLM omni-modal serving for VoxCPM2 with PagedAttention and an OpenAI-compatible API\n- 📜 **Fully Open-Source & Commercial-Ready** — Weights and code released under the [Apache-2.0](LICENSE) license, free for commercial use\n\n**🌍 Supported Languages (30)**  \nArabic, Burmese, Chinese, Danish, Dutch, English, Finnish, French, German, Greek, Hebrew, Hindi, Indonesian, Italian, Japanese, Khmer, Korean, Lao, Malay, Norwegian, Polish, Portuguese, Russian, Spanish, Swahili, Swedish, Tagalog, Thai, Turkish, Vietnamese\n\nChinese Dialect: 四川话, 粤语, 吴语, 东北话, 河南话, 陕西话, 山东话, 天津话, 闽南话\n\n### News\n\n- **[2026.04]** 🔥 We release **VoxCPM2** — 2B, 30 languages, Voice Design & Controllable Voice Cloning, 48kHz audio output! [Weights](https://huggingface.co/openbmb/VoxCPM2) | [Docs](https://voxcpm.readthedocs.io/en/latest/) | [Playground](https://huggingface.co/spaces/OpenBMB/VoxCPM-Demo) | [Technical Report](https://arxiv.org/abs/2606.06928)\n- **[2025.12]** 🎉 Open-source **VoxCPM1.5** [weights](https://huggingface.co/openbmb/VoxCPM1.5) with SFT & LoRA fine-tuning. (**🏆 #1 GitHub Trending**)\n- **[2025.09]** 🔥 Release VoxCPM [Technical Report](https://arxiv.org/abs/2509.24650).\n- **[2025.09]** 🎉 Open-source **VoxCPM-0.5B** [weights](https://huggingface.co/openbmb/VoxCPM-0.5B) (**🏆 #1 HuggingFace Trending**)\n\n---\n\n## Contents\n\n- [Quick Start](#-quick-start)\n  - [Installation](#installation)\n  - [Python API](#python-api)\n  - [CLI Usage](#cli-usage)\n  - [Web Demo](#web-demo)\n  - [Production Deployment](#-production-deployment-nano-vllm)\n  - [On-Device Inference (llama.cpp-omni)](#-on-device-inference-llamacpp-omni)\n- [Models & Versions](#-models--versions)\n- [Performance](#-performance)\n- [Fine-tuning](#%EF%B8%8F-fine-tuning)\n- [Documentation](#-documentation)\n- [Ecosystem & Community](#-ecosystem--community)\n- [Risks and Limitations](#%EF%B8%8F-risks-and-limitations)\n- [Citation](#-citation)\n\n---\n\n## 🚀 Quick Start\n\n### Installation\n\n```sh\npip install voxcpm\n```\n\n> **Requirements:** Python ≥ 3.10 (<3.13), PyTorch ≥ 2.5.0, CUDA ≥ 12.0. See [Quick Start Docs](https://voxcpm.readthedocs.io/en/latest/quickstart.html) for details.\n\n### Python API\n\n#### 🗣️ Text-to-Speech\n\n```python\nfrom voxcpm import VoxCPM\nimport soundfile as sf\n\nmodel = VoxCPM.from_pretrained(\n  \"openbmb/VoxCPM2\",\n  load_denoiser=False,\n)\n\nwav = model.generate(\n    text=\"VoxCPM2 is the current recommended release for realistic multilingual speech synthesis.\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"demo.wav\", wav, model.tts_model.sample_rate)\nprint(\"saved: demo.wav\")\n```\n\nIf you prefer downloading from ModelScope first, you can use:\n\n```bash\npip install modelscope\n```\n\n```python\nfrom modelscope import snapshot_download\nsnapshot_download(\"OpenBMB/VoxCPM2\", local_dir='./pretrained_models/VoxCPM2') # specify the local directory to save the model\n\nfrom voxcpm import VoxCPM\nimport soundfile as sf\nmodel = VoxCPM.from_pretrained(\"./pretrained_models/VoxCPM2\", load_denoiser=False)\n\nwav = model.generate(\n    text=\"VoxCPM2 is the current recommended release for realistic multilingual speech synthesis.\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"demo.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎨 Voice Design\n\nCreate a voice from a natural-language description — no reference audio needed. **Format:** put the description in parentheses at the start of `text`(e.g. `\"(your voice description)The text to synthesize.\"`):\n\n```python\nwav = model.generate(\n    text=\"(A young woman, gentle and sweet voice)Hello, welcome to VoxCPM2!\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"voice_design.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎛️ Controllable Voice Cloning\n\nUpload a reference audio. The model clones the timbre, and you can still use control instructions to adjust speed, emotion, or style.\n\n```python\nwav = model.generate(\n    text=\"This is a cloned voice generated by VoxCPM2.\",\n    reference_wav_path=\"path/to/voice.wav\",\n)\nsf.write(\"clone.wav\", wav, model.tts_model.sample_rate)\n\nwav = model.generate(\n    text=\"(slightly faster, cheerful tone)This is a cloned voice with style control.\",\n    reference_wav_path=\"path/to/voice.wav\",\n    cfg_value=2.0,\n    inference_timesteps=10,\n    seed=42,\n)\nsf.write(\"controllable_clone.wav\", wav, model.tts_model.sample_rate)\n```\n\n#### 🎙️ Ultimate Cloning\n\nProvide both the reference audio and its exact transcript for audio-continuation-based cloning with every vocal nuance reproduced. For maximum cloning similarity, pass the same reference clip to both `reference_wav_path` and `prompt_wav_path` as shown below:\n\n```python\nwav = model.generate(\n    text=\"This is an ultimate cloning demonstration using VoxCPM2.\",\n    prompt_wav_path=\"path/to/voice.wav\",\n    prompt_text=\"The transcript of the reference audio.\",\n    reference_wav_path=\"path/to/voice.wav\", # optional, for better simliarity \n)\nsf.write(\"hifi_clone.wav\", wav, model.tts_model.sample_rate)\n```\n\n**🔄 Streaming API**\n\n```python\nimport numpy as np\n\nchunks = []\nfor chunk in model.generate_streaming(\n    text=\"Streaming text to speech is easy with VoxCPM!\",\n):\n    chunks.append(chunk)\nwav = np.concatenate(chunks)\nsf.write(\"streaming.wav\", wav, model.tts_model.sample_rate)\n```\n\n\n\n### CLI Usage\n\n```bash\n# Voice design (no reference audio needed)\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --output out.wav\n\n# Controllable voice cloning with style control\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --control \"Young female voice, warm and gentle, slightly smiling\" \\\n  --seed 42 \\\n  --output out.wav\n\n# Voice cloning (reference audio)\nvoxcpm clone \\\n  --text \"This is a voice cloning demo.\" \\\n  --reference-audio path/to/voice.wav \\\n  --output out.wav\n\n# Ultimate cloning (prompt audio + transcript)\nvoxcpm clone \\\n  --text \"This is a voice cloning demo.\" \\\n  --prompt-audio path/to/voice.wav \\\n  --prompt-text \"reference transcript\" \\\n  --reference-audio path/to/voice.wav \\ # optional, for better simliarity\n  --output out.wav\n\n# Batch processing\nvoxcpm batch --input examples/input.txt --output-dir outs\n\n# Optional post-generation timestamps with stable-ts\npip install \"voxcpm[timestamps]\"\nvoxcpm design \\\n  --text \"VoxCPM2 brings studio-quality multilingual speech synthesis.\" \\\n  --output out.wav \\\n  --timestamps \\\n  --timestamp-level word \\\n  --timestamp-language en\n\n# Character timestamps are best-effort and are derived from word alignment\nvoxcpm design \\\n  --text \"欢迎使用 VoxCPM2。\" \\\n  --output out.wav \\\n  --timestamps \\\n  --timestamp-level char \\\n  --timestamp-language zh\n\n# Help\nvoxcpm --help\n```\n\n### Web Demo\n\n```bash\npython app.py --port 8808  # then open in browser: http://localhost:8808\n```\n\nUse `--device` to choose the runtime device:\n\n```bash\npython app.py --device auto\n```\n\nSupported values are `auto`, `cpu`, `mps`, `cuda`, and `cuda:N`. On Apple Silicon Macs, `auto` uses MPS when available.\n\n### 🚢 Production Deployment (Nano-vLLM)\n\nFor high-throughput serving, use **[Nano-vLLM-VoxCPM](https://github.com/a710128/nanovllm-voxcpm)** — a dedicated inference engine built on Nano-vLLM with concurrent request support and an async API.\n\n```bash\npip install nano-vllm-voxcpm\n```\n\n```python\nfrom nanovllm_voxcpm import VoxCPM\nimport numpy as np, soundfile as sf\n\nserver = VoxCPM.from_pretrained(model=\"/path/to/VoxCPM\", devices=[0])\nchunks = list(server.generate(target_text=\"Hello from VoxCPM!\"))\nsf.write(\"out.wav\", np.concatenate(chunks), 48000)\nserver.stop()\n```\n\n> **RTF as low as ~0.13 on NVIDIA RTX 4090** (vs ~0.3 with the standard PyTorch implementation), with support for batched concurrent requests and a FastAPI HTTP server. See the [N"
+    },
+    "brief": {
+      "summary": "开源多语言语音合成模型，支持声音设计与克隆",
+      "problem": "传统语音合成依赖离散分词，音色和表现力容易受限",
+      "highlights": [
+        "可以输入30种语言文本直接合成语音",
+        "可以用一句话描述生成全新音色",
+        "可以克隆短参考音频并控制情绪语速"
+      ],
+      "target_users": [
+        "配音创作者",
+        "语音应用开发者",
+        "多语言内容团队"
+      ],
+      "why_trending": "本周首次收录，总Star超4万，今日新增150",
+      "caveat": "需Python≥3.10、PyTorch≥2.5和CUDA≥12",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "OpenBMB/VoxCPM",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "多语言 TTS 与声音克隆，直接服务配音",
+      "generated_by_ai": true,
+      "velocity_score": 66,
+      "freshness_score": 20,
+      "ranking_score": 67.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "NVIDIA/OpenShell",
+      "url": "https://github.com/NVIDIA/OpenShell",
+      "description": "OpenShell is the safe, private runtime for autonomous AI agents.",
+      "language": "Rust",
+      "total_stars": 18908,
+      "forks": 1888,
+      "stars_today": 1119,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1119
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-24T22:52:22Z",
+      "updated_at": "2026-10-24T04:40:03Z",
+      "pushed_at": "2026-10-24T02:12:45Z",
+      "open_issues": 576,
+      "homepage": "https://docs.nvidia.com/openshell/latest/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- markdownlint-disable MD033 MD041 -->\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/brand/assets/openshell-banner-dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/brand/assets/openshell-banner-light.png\">\n  <img alt=\"OpenShell\" src=\"docs/brand/assets/openshell-banner-light.png\" width=\"430\">\n</picture>\n\n<!-- markdownlint-enable MD033 MD041 -->\n\n[![License](https://img.shields.io/badge/License-Apache_2.0-blue)](https://github.com/NVIDIA/OpenShell/blob/main/LICENSE)\n[![PyPI](https://img.shields.io/badge/PyPI-openshell-orange?logo=pypi)](https://pypi.org/project/openshell/)\n[![Security Policy](https://img.shields.io/badge/Security-Report%20a%20Vulnerability-red)](SECURITY.md)\n[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.nvidia.com/openshell/latest/index.html)\n\n> [!IMPORTANT]\n> **New in OpenShell 0.1.x:** a stable release cadence, new isolation primitives, an expanded extension surface, and new APIs. [Read the 0.1.0 upgrade guide](https://docs.nvidia.com/openshell/latest/upgrade/0-1-0).\n\nOpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unrestricted access to your data, secrets, or network. You declare what each agent can touch in a policy, and OpenShell enforces it.\n\n## How It Works\n\nOpenShell governs what agents can do in two ways: it instruments the kernel to enforce policy on every file access, system call, and network connection at runtime, and it uses formal verification to check what a policy change would allow before it is applied.\n\n- **Kernel-level enforcement.** Each agent runs in an isolated sandbox. Kernel controls confine which files it can access and which system calls it can make, and every network connection passes through a policy check before it leaves the sandbox. Agents never see real credentials; OpenShell adds them only to requests bound for approved endpoints.\n- **Formally verified policy changes.** Before a policy change is approved, OpenShell uses formal verification to flag risky new access it would grant, such as reaching a new host with credentials or calling a new API method, so those changes wait for human review.\n\nSee [Architecture](https://docs.nvidia.com/openshell/latest/about/architecture) for how the gateway, supervisor, and sandbox fit together.\n\n## Quickstart\n\nYou need Linux, macOS on Apple Silicon, or Windows with WSL 2 (experimental), plus Docker, Podman, or host virtualization. See the [Support Matrix](https://docs.nvidia.com/openshell/latest/about/support-matrix) for details.\n\n```shell\ncurl -LsSf https://raw.githubusercontent.com/NVIDIA/OpenShell/main/install.sh | sh\nopenshell sandbox create --name demo\n```\n\nThe installer sets up the CLI and a local gateway. The default sandbox image is minimal Ubuntu with no agent installed. To run a real agent, follow [Run Your First Agent](https://docs.nvidia.com/openshell/latest/about/run-your-first-agent): it runs OpenCode against a free OpenRouter model and shows how to approve new access as the agent needs it.\n\n## Explore Further\n\n- [Sandboxes](https://docs.nvidia.com/openshell/latest/how-it-works/sandboxes/overview): images, runtimes, GPUs, and lifecycle.\n- [Policies](https://docs.nvidia.com/openshell/latest/how-it-works/policies/overview): filesystem, network, and process rules, with the [advisor](https://docs.nvidia.com/openshell/latest/how-it-works/policies/advisor) and [prover](https://docs.nvidia.com/openshell/latest/how-it-works/policies/prover) for reviewing changes.\n- [Providers](https://docs.nvidia.com/openshell/latest/how-it-works/providers/overview): credentials that work only at approved endpoints, including [inference](https://docs.nvidia.com/openshell/latest/how-it-works/inference).\n- [Gateways](https://docs.nvidia.com/openshell/latest/how-it-works/gateways/overview): the control plane for sandboxes, policy, and access.\n- [Kubernetes](https://docs.nvidia.com/openshell/latest/kubernetes/setup): deploy the gateway with Helm. Your CNI must enforce `NetworkPolicy`.\n- [Extensibility](https://docs.nvidia.com/openshell/latest/extensibility/overview): middleware, interceptors, and compute drivers.\n- [Tutorials](https://docs.nvidia.com/openshell/latest/tutorials/first-network-policy): step-by-step policy and agent walkthroughs.\n- [Prerelease and development builds](https://docs.nvidia.com/openshell/latest/about/installation#prerelease-and-development-builds): try an upcoming release or the latest commit on `main`.\n\n## Agent Skills\n\nInstall the public OpenShell skills for your coding agent:\n\n```shell\nnpx skills add NVIDIA/OpenShell\n```\n\nThe skills teach your agent to drive the OpenShell CLI, write sandbox policies, and debug gateways and inference routing. They live in [`skills/`](skills/) and work without an OpenShell source checkout.\n\n## SDKs\n\nSDKs connect applications to an OpenShell gateway. They do not install the CLI. Use the same OpenShell release for the SDK and the gateway when possible.\n\n| Language | Install | Docs |\n|---|---|---|\n| Python | `uv add openshell` | [README](python/openshell/) |\n| TypeScript | `npm install @nvidia/openshell-sdk` (GitHub Packages) | [README](sdk/typescript/README.md) |\n| Go | `go get github.com/NVIDIA/OpenShell/sdk/go@latest` | [README](sdk/go/README.md) |\n| Rust | `cargo add openshell-sdk --git https://github.com/NVIDIA/OpenShell --tag <release-tag>` | [Installation and usage](docs/sdk/rust.mdx) |\n\n## Community\n\n- **Questions and discussion:** [GitHub Discussions](https://github.com/NVIDIA/OpenShell/discussions)\n- **Bug reports and feature requests:** [GitHub Issues](https://github.com/NVIDIA/OpenShell/issues), using the issue templates\n- **Security vulnerabilities:** follow [SECURITY.md](SECURITY.md). Do not open a GitHub issue.\n- **Roadmap:** [OpenShell Roadmap](https://github.com/orgs/NVIDIA/projects/233) and the [RFC board](https://github.com/orgs/NVIDIA/projects/233/views/6)\n- **Try it in the cloud:** [Brev Launchable](https://brev.nvidia.com/launchable/deploy/now?launchableID=env-3Ap3tL55zq4a8kew1AuW0FpSLsg)\n\nOpenShell is built agent-first: it is developed with the same agent-driven workflows it enables. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and the contribution workflow, and [AGENTS.md](AGENTS.md) for repository coding conventions.\n\n## Telemetry\n\nOpenShell collects anonymous telemetry, limited to operational categories and counts, to help improve the project. It does not collect sandbox names, hostnames, file paths, prompts, credentials, provider or model names, or user content. To disable it, set `OPENSHELL_TELEMETRY_ENABLED=false` on the gateway, or `server.telemetryEnabled=false` for Helm installs. You can also compile telemetry out entirely. See [Telemetry](https://docs.nvidia.com/openshell/latest/observability/telemetry) for details and the [community telemetry reports](telemetry/README.md) for published usage trends.\n\n## Notice and Disclaimer\n\nThis software automatically retrieves, accesses or interacts with external materials. Those retrieved materials are not distributed with this software and are governed solely by separate terms, conditions and licenses. You are solely responsible for finding, reviewing and complying with all applicable terms, conditions, and licenses, and for verifying the security, integrity and suitability of any retrieved materials for your specific use case. This software is provided \"AS IS\", without warranty of any kind. The author makes no representations or warranties regarding any retrieved materials, and assumes no liability for any losses, damages, liabilities or legal consequences from your use or inability to use this software or any retrieved materials. Use this software and the retrieved materials at your own risk.\n\n## License\n\nThis project is licensed under the [Apache License 2.0](https://github.com/NVIDIA/OpenShell/blob/main/LICENSE).\n"
+    },
+    "brief": {
+      "summary": "英伟达开源的安全私有 AI 智能体运行环境",
+      "problem": "让智能体读写文件、调用 API，又不放开全部数据和网络权限",
+      "highlights": [
+        "可以按策略限制智能体访问的文件和系统调用",
+        "可以让凭据只在获批端点请求时注入，避免泄露",
+        "可以用形式化验证预审策略变更，标记新增高风险访问"
+      ],
+      "target_users": [
+        "智能体开发者",
+        "安全工程师",
+        "平台运维团队"
+      ],
+      "why_trending": "今日新增 1119 Star，英伟达开源且切中智能体安全运行",
+      "caveat": "需 Linux、Apple Silicon macOS 或 WSL 2，并依赖 Docker 等",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "NVIDIA/OpenShell",
+      "score": 74,
+      "category": "AI Agent / Skills",
+      "reason": "AI Agent 安全运行时，非 ACG 创作",
+      "generated_by_ai": true,
+      "velocity_score": 92,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 42440,
+      "forks": 2652,
+      "stars_today": 2716,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2716
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-10-24T04:48:37Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 83,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "把编程智能体变成多阶段安全审计员的开源技能。",
+      "problem": "让智能体按阶段审计代码，并输出独立验证过的安全发现。",
+      "highlights": [
+        "可以对代码库发起完整安全审计",
+        "可以分阶段侦察、狩猎和验证候选漏洞",
+        "可以生成可校验的 findings.json 与报告"
+      ],
+      "target_users": [
+        "安全工程师",
+        "研发团队",
+        "AI 智能体开发者"
+      ],
+      "why_trending": "今日新增 2716 Star，连续上榜，Cloudflare 开源。",
+      "caveat": "需支持子智能体的代理和受限沙箱，否则不执行目标代码。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "安全审计 Agent Skill，非 ACG 创作但属技能方向",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 65.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "SnailSploit/Claude-Red",
+      "url": "https://github.com/SnailSploit/Claude-Red",
+      "description": "claude-red is a curated library of offensive security skills designed for the Claude skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level methodology for a specific attack surface — from SQLi to shellcode, EDR evasion to exploit development.",
+      "language": "Python",
+      "total_stars": 8604,
+      "forks": 1106,
+      "stars_today": 226,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 226
+    },
+    "details": {
+      "topics": [
+        "claude-ai",
+        "claude-pt",
+        "claude-skills",
+        "redteam",
+        "redteam-tools",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-04T05:52:35Z",
+      "updated_at": "2026-10-24T04:48:24Z",
+      "pushed_at": "2026-10-12T15:02:40Z",
+      "open_issues": 32,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![claude-red banner](/assets/banner.png)\n\n<div align=\"center\">\n\n# claude-red\n\n**Offensive security skills for Claude — drop-in `SKILL.md` files that turn Claude into a context-aware red team operator.**\n\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)\n[![Skills](https://img.shields.io/badge/skills-78-red.svg)](#skill-index)\n[![Categories](https://img.shields.io/badge/categories-23-orange.svg)](#categories)\n[![Stars](https://img.shields.io/github/stars/SnailSploit/claude-red?style=social)](https://github.com/SnailSploit/claude-red)\n[![Forks](https://img.shields.io/github/forks/SnailSploit/claude-red?style=social)](https://github.com/SnailSploit/claude-red/network/members)\n<a href=\"https://trendshift.io/repositories/40579?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-40579\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/40579/weekly?language=Python\" alt=\"SnailSploit%2FClaude-Red | Trendshift\" width=\"250\" height=\"55\"/></a>\n\n[Overview](#overview) &bull; [Quickstart](#quickstart) &bull; [Categories](#categories) &bull; [Skill Index](#skill-index) &bull; [Roadmap](#roadmap) &bull; [Contributing](#contributing)\n\n</div>\n\n---\n\n## Overview\n\n`claude-red` is a curated library of offensive security skills for the [Claude Skills system](https://docs.claude.com). Each skill is a structured `SKILL.md` file that primes Claude with expert-level methodology for a specific attack surface — from SQL injection to shellcode, EDR evasion to ADCS abuse.\n\nDrop a skill into your Claude environment and it behaves like a domain specialist: it knows the techniques, the tooling, the edge cases, and the escalation paths. Skills load on demand based on conversational triggers — you don't pay context for skills you aren't using.\n\n**Use cases:** authorized red team engagements, bug bounty triage, security research, CTF preparation, operator training, and methodical attack surface exploration.\n\n**for our actual research using skills -> https://snailsploit.com**\n---\n\n## Quickstart\n\n### Claude Skills System (Recommended)\n\n```bash\ngit clone https://github.com/SnailSploit/claude-red ~/.claude/skills/claude-red\n```\n\nClaude auto-loads matching skills based on conversational triggers (e.g., mentioning SQL injection loads `offensive-sqli`).\n\nTo install a single category:\n\n```bash\ngit clone --filter=blob:none --sparse https://github.com/SnailSploit/claude-red\ncd claude-red && git sparse-checkout set Skills/web Skills/active-directory\n```\n\n### Claude Code\n\n```bash\ncat Skills/web/offensive-sqli/SKILL.md | claude --system-file -\n\ncat Skills/active-directory/**/SKILL.md | claude --system-file -\n```\n\n### Claude.ai (Manual)\n\nPaste the contents of a `SKILL.md` into a Project's system prompt or prepend it to your conversation.\n\n### Install Script\n\n```bash\n./install.sh                           # interactive\n./install.sh --target ~/.claude/skills # explicit target\n./install.sh --category web            # single category\n```\n\n---\n\n## Categories\n\n| Category | Skills | Focus |\n|---|---:|---|\n| [Web Application](#web-application) | 16 | OWASP Top 10, business logic, advanced web vulnerability classes |\n| [Auth & Identity](#auth--identity) | 2 | JWT exploitation, OAuth/OIDC abuse |\n| [Active Directory](#active-directory) | 1 | On-prem AD attack methodology |\n| [Wireless](#wireless) | 14 | 802.11, WPA2/3, EAP, WPS, evil-twin, BLE, Zigbee, Z-Wave, LoRa, sub-GHz |\n| [Cloud](#cloud) | 1 | AWS, Azure, GCP attack paths |\n| [Mobile](#mobile) | 1 | Android and iOS application testing |\n| [IoT & Embedded](#iot--embedded) | 1 | Hardware, firmware, RTOS, ICS/OT |\n| [Infrastructure & Red Team](#infrastructure--red-team) | 7 | Initial access, EDR evasion, advanced red team operations, Windows internals |\n| [Exploit Development](#exploit-development) | 6 | Stack/heap corruption, ROP, mitigations, crash analysis, TOCTOU |\n| [Fuzzing & Vulnerability Research](#fuzzing--vulnerability-research) | 4 | libFuzzer, AFL++, coverage-guided fuzzing, vulnerability taxonomy |\n| [Reconnaissance](#reconnaissance) | 2 | OSINT tooling and structured intelligence collection |\n| [API Security](#api-security) | 2 | REST/gRPC/WebSocket testing, business logic abuse |\n| [Container & Kubernetes](#container--kubernetes) | 2 | Container escape, Kubernetes cluster exploitation |\n| [CI/CD & Pipeline](#cicd--pipeline) | 2 | Pipeline exploitation, secrets extraction |\n| [Cryptography](#cryptography) | 2 | Cryptographic implementation attacks, TLS/SSL |\n| [Privilege Escalation](#privilege-escalation) | 2 | Linux and Windows privilege escalation |\n| [Post-Exploitation](#post-exploitation) | 3 | Lateral movement, persistence mechanisms, data exfiltration |\n| [Forensics & C2](#forensics--c2) | 2 | Anti-forensics tradecraft, C2 framework operations |\n| [Supply Chain](#supply-chain) | 2 | Supply chain attacks, dependency confusion |\n| [Social Engineering](#social-engineering) | 2 | Phishing campaigns, physical/vishing/smishing |\n| [Network Attacks](#network-attacks) | 1 | Layer 2/3 attacks, MITM, protocol poisoning |\n| [AI Security](#ai-security) | 1 | Prompt injection, jailbreaking, RAG poisoning |\n| [Utility](#utility) | 2 | Fast triage checklists, professional reporting |\n\n---\n\n## Skill Index\n\n### Web Application\n\n`Skills/web/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-sqli`](Skills/web/offensive-sqli/SKILL.md) | SQL injection — error-based, blind, OOB, DB-specific payloads, ORM CVEs |\n| [`offensive-xss`](Skills/web/offensive-xss/SKILL.md) | Cross-site scripting — stored, reflected, DOM-based, mutation XSS |\n| [`offensive-ssrf`](Skills/web/offensive-ssrf/SKILL.md) | Server-side request forgery — cloud metadata pivots, filter bypass |\n| [`offensive-ssti`](Skills/web/offensive-ssti/SKILL.md) | Server-side template injection — engine fingerprinting, RCE chains |\n| [`offensive-xxe`](Skills/web/offensive-xxe/SKILL.md) | XML external entity — OOB exfiltration, blind XXE techniques |\n| [`offensive-idor`](Skills/web/offensive-idor/SKILL.md) | Insecure direct object references — enumeration, authorization bypass |\n| [`offensive-file-upload`](Skills/web/offensive-file-upload/SKILL.md) | File upload — extension bypass, polyglot files, webshell deployment |\n| [`offensive-rce`](Skills/web/offensive-rce/SKILL.md) | Remote code execution — command injection, deserialization chains |\n| [`offensive-deserialization`](Skills/web/offensive-deserialization/SKILL.md) | Insecure deserialization — Java, PHP, .NET gadget chains |\n| [`offensive-race-condition`](Skills/web/offensive-race-condition/SKILL.md) | Race conditions — TOCTOU, single-packet attacks, limit bypass |\n| [`offensive-request-smuggling`](Skills/web/offensive-request-smuggling/SKILL.md) | HTTP request smuggling — CL.TE, TE.CL, H2 desync |\n| [`offensive-open-redirect`](Skills/web/offensive-open-redirect/SKILL.md) | Open redirect — OAuth token theft, phishing, SSRF pivots |\n| [`offensive-parameter-pollution`](Skills/web/offensive-parameter-pollution/SKILL.md) | HTTP parameter pollution — WAF bypass, logic confusion |\n| [`offensive-graphql`](Skills/web/offensive-graphql/SKILL.md) | GraphQL — introspection abuse, batching attacks, alias-based IDOR |\n| [`offensive-waf-bypass`](Skills/web/offensive-waf-bypass/SKILL.md) | WAF bypass — encoding tricks, chunked transfer, case mutation |\n| [`offensive-business-logic`](Skills/web/offensive-business-logic/SKILL.md) | Business logic — workflow bypass, pricing abuse, multi-step chains |\n\n### Auth & Identity\n\n`Skills/auth/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-jwt`](Skills/auth/offensive-jwt/SKILL.md) | JWT attacks — alg:none, key confusion, secret cracking, claim tampering |\n| [`offensive-oauth`](Skills/auth/offensive-oauth/SKILL.md) | OAuth/OIDC — redirect URI abuse, token leakage, PKCE bypass |\n\n### Active Directory\n\n`Skills/active-directory/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-active-directory`](Skills/active-directory/offensive-active-directory/SKILL.md) | AD methodology — Kerberoast, ASREProast, ACL abuse, ADCS ESC1-15, delegation, hybrid AAD |\n\n### Wireless\n\n`Skills/wireless/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-wifi`](Skills/wireless/offensive-wifi/SKILL.md) | 802.11 overview — entrypoint for wireless assessments |\n| [`offensive-wifi-recon`](Skills/wireless/offensive-wifi-recon/SKILL.md) | Adapter configuration, monitor mode, multi-band airspace mapping |\n| [`offensive-wpa2-psk`](Skills/wireless/offensive-wpa2-psk/SKILL.md) | WPA2-PSK — handshake capture, PMKID extraction, hashcat cracking |\n| [`offensive-wpa3-sae`](Skills/wireless/offensive-wpa3-sae/SKILL.md) | WPA3-SAE — transition-mode downgrade, Dragonblood, side-channel attacks |\n| [`offensive-wpa-enterprise`](Skills/wireless/offensive-wpa-enterprise/SKILL.md) | 802.1X/EAP — credential relay, evil-twin RADIUS, certificate abuse |\n| [`offensive-wps`](Skills/wireless/offensive-wps/SKILL.md) | WPS — Pixie Dust offline attack, online PIN brute force, vendor PIN prediction |\n| [`offensive-evil-twin`](Skills/wireless/offensive-evil-twin/SKILL.md) | Evil twin — KARMA, Mana, captive portal credential capture, MITM |\n| [`offensive-krack-fragattacks`](Skills/wireless/offensive-krack-fragattacks/SKILL.md) | KRACK and FragAttacks — supplicant vulnerability testing |\n| [`offensive-deauth-disassoc`](Skills/wireless/offensive-deauth-disassoc/SKILL.md) | Deauthentication — targeted/broadcast frames, PMF awareness |\n| [`offensive-bluetooth-ble`](Skills/wireless/offensive-bluetooth-ble/SKILL.md) | Bluetooth LE — GATT enumeration, pairing downgrade, sniffing, MITM |\n| [`offensive-bluetooth-classic`](Skills/wireless/offensive-bluetooth-classic/SKILL.md) | Bluetooth BR/EDR — SDP probing, KNOB attack, BlueBorne, HID spoofing |\n| [`offensive-zigbee-thread-matter`](Skills/wireless/offensive-zigbee-thread-matter/SKILL.md) | 802.15.4 mesh — KillerBee, Touchlink commissioning abuse, ZCL injection |\n| [`offensive-z-wave`](Skills/wireless/offensive-z-wave/SKILL.md) | Z-Wave — S0 key derivation, S2 commissioning attacks, hub pivots |\n| [`offensive-lorawan-sub-ghz`](Skills/wireless/offensive-lorawan-sub-ghz/SKILL.md) | LoRaWAN and sub-GHz — ABP/OTAA attacks, KeeLoq, fixed-code replay, TPMS |\n\n### Cloud\n\n`Skills/cloud/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-cloud`](Skills/cloud/offensive-cloud/SKILL.md) | Multi-cloud — privilege escalation, IMDS abuse, cross-account pivots, CSPM evasion |\n\n### Mobile\n\n`Skills/mobile/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-mobile`](Skills/mobile/offensive-mobile/SKILL.md) | Android and iOS — Frida hooking, certificate pinning bypass, storage, biometric flaws |\n\n### IoT & Embedded\n\n`Skills/iot/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-iot`](Skills/iot/offensive-iot/SKILL.md) | IoT/OT — hardware interfaces, firmware extraction, RTOS, ICS protocols, MQTT/CoAP |\n\n### Infrastructure & Red Team\n\n`Skills/infrastructure/`\n\n| Skill | Description |\n|---|---|\n| [`offensive-initial-access`](Skills/infrastructure/offensive-initial-access/SKILL.md) | Initial access — phishing payloads, drive-by delivery, supply chain vectors (TA0001) |\n| [`offensive-advanced-redteam`](Skills/infrastructure/offensive-advanced-redteam/SKILL.md) | Full kill chain — C2 infrastructure, OPSEC, lateral movement, persistence |\n| [`offensive-edr-evasion`](Skills/infrastructure/offensive-edr-evasion/SKILL.md) | EDR evasion — userland unhooking, indirect syscalls, PPID spoofing |\n| [`offensive-shellcode`](Skills/infrastructure/offensive-shellcode/SKILL.md) | Shellcode — writing, encoding, injection techniques, position-independent code |\n| [`offensive-keylogger-arch`](Skills/infrastructure/offensive-keylogger-arch/SKILL.md) | Input capture — keylogger architecture, hooking mechanisms |\n| [`offensive-windows-mitigations`](Skills/infrastructure/offensive-windows-mitigations/SKILL.md) | Windows mitigations — ACG, CIG, CFG, CET bypass techniques |\n| [`offensive-windows-boundari"
+    },
+    "brief": {
+      "summary": "面向 Claude 的红队安全技能库，含 78 个 SKILL.md",
+      "problem": "把攻击面方法论组织成 Claude 可按需加载的技能",
+      "highlights": [
+        "可以按 SQLi、XSS 等攻击面加载技能",
+        "可以把单个 SKILL.md 粘贴进 Claude 项目提示词",
+        "可以按 Web、无线等类别稀疏安装技能"
+      ],
+      "target_users": [
+        "红队与渗透测试人员",
+        "安全研究与漏洞挖掘者",
+        "CTF 参赛与安全教学者"
+      ],
+      "why_trending": "今日新增 226 Star，红队技能库受关注",
+      "caveat": "仅限授权测试，误用可能违法",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "SnailSploit/Claude-Red",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "红队安全 Agent Skills，非 ACG 创作",
+      "generated_by_ai": true,
+      "velocity_score": 71,
+      "freshness_score": 40,
+      "ranking_score": 57.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 70914,
+      "forks": 6413,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 770
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-24T04:49:34Z",
+      "pushed_at": "2026-10-24T04:45:12Z",
+      "open_issues": 373,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nEnable auto-update for the **hyperframes** marketplace in `/plugin` → **Marketplaces**,\nthen use `/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 7 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 7 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 7. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, publish, project history — plus reading its JSON and recovering from build or render failures.                                                                            |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/claude-design) and [Open Design guide](https://hyperframes.heygen.com/guides/open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://hyperframes.heygen.com/showcase) for finished videos you can watch, read, run, and remix.\n\n- Product launch videos and feature announcements\n- PR walkthroughs with animated code diffs, narration, and captions\n- Data visualizations, chart races, and map animations\n- Social videos with kinetic captions, overlays, and music\n- Docs-to-video, PDF-to-video, and site-tour explainers\n- Reusable motion graphics for automated content pipelines\n\n## Frame.md\n\n**frame.md — your design system, ready for video.**\n\nEvery brand has a `design.md`. None of them were written for a camera. `frame.md` is the missing translation layer: it takes your web-context design spec and inverts it for the frame — the same tokens, the same rules, but rewritten so an AI agent can compose a promo video without guessing at scale or reaching for web chrome.\n\nThe output is a `DESIGN.md` superset your whole toolchain can read. Atoms stay sacred. Composition stays free. Numbers come from the script.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/biennale-yellow\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/biennale-yellow.png\" alt=\"Biennale Yellow\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/biennale-yellow\">Biennale Yellow</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blockframe\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blockframe.png\" alt=\"BlockFrame\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blockframe\">BlockFrame</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blue-professional\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blue-professional.png\" alt=\"Blue Professional\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blue-professional\">Blue Professional</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/bold-poster\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/bold-poster.png\" alt=\"Bold Poster\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/bold-poster\">Bold Poster</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/broadside\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/broadside.png\" alt=\"Broadside\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/broadside\">Broadside</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n   "
+    },
+    "brief": {
+      "summary": "用 HTML/CSS 写动画，渲染成 MP4 视频的框架",
+      "problem": "AI 或代码生成视频难以精确控制画面，且渲染结果容易不一致",
+      "highlights": [
+        "可以让编码 Agent 按一句提示词产出视频",
+        "可以用约 450 个现成组件做转场、字幕、图表",
+        "可以在本地预览、校验并渲染出 MP4 文件"
+      ],
+      "target_users": [
+        "AI 编程 Agent 用户",
+        "前端开发者",
+        "视频内容创作者"
+      ],
+      "why_trending": "连续上榜，总 Star 约 7 万，适配多家编码 Agent",
+      "caveat": "资料中未说明渲染速度与实际使用体验",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "HTML 转视频与运动图形渲染，服务视频创作",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 75.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "Bingeljell/image-to-3dlab",
+      "url": "https://github.com/Bingeljell/image-to-3dlab",
+      "description": "AssetFurnace: the most complete open-source image-to-3D pipeline (Oct 2026). Prompt or picture → textured, rigged, animated game character, locally on Apple Silicon or NVIDIA. Pixal3D, TRELLIS.2, Hunyuan3D, SF3D, auto-rig and 21 moves. For indie game devs and 3D artists. Free, Apache-2.0.",
+      "language": "Python",
+      "total_stars": 934,
+      "forks": 90,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-generation",
+        "3d-models",
+        "animation",
+        "apple-silicon",
+        "auto-rigging",
+        "blender",
+        "game-assets",
+        "gamedev",
+        "generative-ai",
+        "godot",
+        "hunyuan3d",
+        "image-to-3d",
+        "indie-game-dev",
+        "local-first",
+        "mlx",
+        "pixal3d",
+        "rigging",
+        "text-to-3d",
+        "trellis",
+        "unity"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-08-02T16:36:25Z",
+      "updated_at": "2026-10-24T04:47:49Z",
+      "pushed_at": "2026-10-24T04:47:44Z",
+      "open_issues": 3,
+      "homepage": "https://assetfurnace.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- DRAFT for 0.4.0 (Claude's draft, the user edits before the launch push). Hero image: swap in the reveal GIF. -->\n<h1 align=\"center\">AssetFurnace</h1>\n\n<p align=\"center\"><sub>by Bingeljell</sub></p>\n\n<p align=\"center\"><b>You can just make stuff. For free. Locally.</b><br>\nOne sentence in, a rigged, animated game character out. On your own Apple Silicon Mac or\nNVIDIA PC, with the licence of every asset written down.</p>\n\n<p align=\"center\">\n  <a href=\"https://assetfurnace.com\"><b>assetfurnace.com</b></a> ·\n  <a href=\"https://assetfurnace.com/blog/how-to-use-assetfurnace\"><b>Step-by-step guide</b></a> ·\n  <a href=\"https://discord.gg/3D4bcEhGx\"><b>Join the Discord</b></a> ·\n  <a href=\"https://x.com/bingeljell\">X @bingeljell</a> ·\n  <a href=\"https://github.com/Bingeljell/image-to-3dlab/discussions\">Discussions</a>\n</p>\n\n<p align=\"center\"><sub>Formerly <i>Image to 3D Lab</i>. Same repo, new name.</sub></p>\n\n![Three source images above the textured 3D models generated from them: a photoreal warrior bust, a stylised garden gnome, and a multi-object shoe-house diorama](docs/images/one-image-in-textured-model-out.jpg)\n\nType a sentence, drop a picture, or bring your own model. AssetFurnace makes the picture,\nbuilds the 3D model, cleans it up for games, adds a skeleton and animates it. Nothing is\nuploaded anywhere, there are no credits, and you can try as many times as you like.\n\nApple Silicon deserves more love in the 3D and Image generation community. So this is an attempt at that.\n\n**What you get**\n\n- **Rigged, moving characters.** Describe a humanoid or drop its picture; get back a\n  textured model with a skeleton and moves picked from 21 presets (walk, run, jump, dance, kicks and more), as a GLB\n  for Godot, Unity, Unreal, Blender or three.js. New in 0.4.0.\n- **The studio.** Your Library, one 3D viewer and a Steps panel. **Create** runs every\n  step for you, and you can stop after any of them. Close the tab and the run carries on.\n- **Low poly, high quality.** Pixel Match puts your picture's real pixels back on the\n  model, so text, logos and faces stay sharp even after it is cut to ~5k faces.\n  [More](#finishing-an-asset)\n- **One prompt, nine game-ready props.** Prop sheets turn one picture into a set of\n  separate props with LODs, ready to drop into your game.\n  [More](#prop-sheets-many-props-from-one-image)\n- **Your pick of models, all local.** Pixal3D, TRELLIS.2 and Hunyuan3D behind one studio\n  and one CLI.\n- **Game-size files.** Finish turns a heavy, 30 MB generated model into a light, compressed\n  one. [More](#finishing-an-asset)\n- **Your agent can drive it.** Claude Code, Codex and other MCP clients make, check and\n  tweak assets for you. [More](#use-it-from-your-agent)\n- **Know what you can ship.** Every file carries a record of the licences behind it.\n  [More](#licensing--provenance-non-negotiable)\n\n**Rig and animate, on your machine.** Press **Rig** and SkinTokens fits a skeleton and\nskin weights to your humanoid. Then pick a move: 21 presets, each fitted to your character\nso arms stay out of the body and feet stay on the floor. Download the animated GLB for\nyour engine. Runs on Apple Silicon, NVIDIA and AMD (ROCm) alike — SkinTokens is pure\nPyTorch, so on an AMD card it needs no NVIDIA-only build.\n\n<p align=\"center\">\n  <img src=\"docs/images/auto-rig-then-dance.gif\" width=\"720\"\n       alt=\"Left: a generated anime martial artist, see-through, with the orange skeleton auto-rig gave him. Right: the same character dancing\">\n</p>\n\n**Pixel Match: your picture's real pixels, on the model.** Image-to-3D models redraw your\npicture, so text, logos and faces come back as garbled lookalikes. Pixel Match, in the\n**Finish** step, copies the real pixels from your source image back onto every surface the\nimage can see. \"VANGUARD 07\" on a chest stays \"VANGUARD 07\", even at ~5k faces. On by\ndefault for Pixal3D models; other backends are next.\n\n**Front + back.** Create can now draw the back of your picture too: Pixal3D builds the shape\nfrom both, and Pixel Match paints from both, so the back is your character rather than a\nguess. On by default once its two downloads are in (Setup & Status, Front + back, 6.6 GB).\n\n<p align=\"center\">\n  <img src=\"docs/images/front-back-pixel-match.jpg\" width=\"720\"\n       alt=\"A friar in a wine-red habit from the front, side and back. Top, the generator's own paint: flat, darker, and the hood on his back is gone. Bottom, front + back Pixel Match: the habit's real colour and folds, with the hood on his back\">\n</p>\n[How Pixel Match works](docs/pixel-match.md) · [How Finish works](#finishing-an-asset).\n\n<p align=\"center\">\n  <img src=\"docs/images/pixel-match-lettering-before-after.jpg\" width=\"480\"\n       alt=\"Close-up of a robot's chest: the generated model's lettering is garbled, the Pixel Match model reads VANGUARD 07 exactly like the source picture\">\n</p>\n\n**Prop sheets: one prompt, nine game-ready props.** Making props one at a time means a\npicture, a 3D run and a clean-up for every barrel. Instead, generate one picture holding a\ngrid of props and turn the whole sheet into 3D in a single run. In the studio, **Create → Nine props** splits it\ninto separate, upright, named props, each with three levels of detail (LODs) and compressed\ntextures, ready for a game engine. [How it works](#prop-sheets-many-props-from-one-image).\n\nProp sheets were built and contributed by [@AdrielSantana](https://github.com/AdrielSantana). Thank you!\n\n<p align=\"center\">\n  <img src=\"docs/images/prop-sheet-one-image-nine-props.jpg\" width=\"480\"\n       alt=\"A generated 3x3 sheet of medieval props, and the nine separate game-ready props made from it\">\n</p>\n\n## Install\n\n**Mac (Apple Silicon) or Linux:**\n```bash\ncurl -fsSL https://assetfurnace.com/install.sh | bash\n```\n\n**Windows** (limited testing, more testers wanted: tell us how it goes):\n```powershell\nirm https://assetfurnace.com/install.ps1 | iex\n```\n\nThe installer is short, so [read it](install.sh) before you run it\n([Windows version](install.ps1)). It checks your machine, installs the code and\nPython 3.11, then starts the studio and opens it in your browser (on Windows it prints the\nstart command instead). On a RunPod pod it prints the pod's link; over plain SSH it prints\nthe tunnel command. It downloads **no model weights**: you choose those in\n**Setup & Status**, which states each size and licence and asks first.\n\nThe studio runs in its terminal window. **Ctrl+C** stops it; `./lab` in the install folder\n(`.\\lab` on Windows) starts it again. To update, stop it, run the install line again, then\nstart it.\n\nFor scripts and agents: `curl -fsSL …/install.sh | bash -s -- --yes --dir ~/lab`\n(`--dry-run` shows what it would do).\n\nNew here? The [step-by-step guide](https://assetfurnace.com/blog/how-to-use-assetfurnace) takes you\nfrom one picture to a finished, animated game character.\n\n**No picture to start from?** Press **+ Create** in the studio and type a sentence: it makes\nthe picture first, then carries on to 3D. It runs Qwen-Image 2.1 on your own machine.\n\n![Three creatures generated from text prompts on a laptop, about four and a half minutes each](docs/images/prompt-to-source-image.jpg)\n\nWhat you ask for decides most of the result: see [picking a picture](docs/prompt-guide.md)\n(soft 3D-render look, A-pose, open hands).\n\nBuilt with Qwen. The pictures you make are yours ([Qwen's statement](https://x.com/QwenDevs/status/2101917379785838660)).\n\nSix backends, one studio. Sadly life is full of trade-offs, so pick the tradeoff you want (lol):\n\n| Backend | Best for | Runs on | Setup | License |\n|---|---|---|---|---|\n| **Pixal3D (C++/GGML)** ⭐ | Best results we have; one pass, no repaint needed | Mac, NVIDIA, AMD (Linux + ROCm) | Setup & Status, or `scripts/bootstrap_pixal3d.py` (8.4 GB weights) | MIT (code + flow weights); DINOv3 License (bundled encoder) |\n| **Hunyuan3D-MLX (Xiong, full pipeline)** | Fast, clean results | Mac (NVIDIA: the row below) | Code is in this repo; weights download separately | MIT (code); Tencent Community License (weights) |\n| **Hunyuan3D-MLX (dgrauet shape + Xiong paint)** | The cleanest shapes, at the cost of manual setup | Mac (NVIDIA: the row below) | Cloned separately, manual | Tencent Community License (code + weights) |\n| **Hunyuan3D-2.1 (NVIDIA)** | Tencent's own shape + PBR paint, one run | NVIDIA (Linux; not Windows yet), 24 GB+ | Setup & Status, or `scripts/bootstrap_hunyuan_cuda.py` (~19.5 GB weights) | Tencent Community License (code + weights) |\n| **TRELLIS.2** | Highest fidelity, closest to the official demo | Mac, NVIDIA (Linux; not Windows yet) | Setup & Status (~1h), or `scripts/bootstrap_trellis_cuda.py` on NVIDIA (~15 GB weights) | MIT + DINOv3 License |\n| **Stable Fast 3D** | Fastest, lower fidelity | Mac | Setup & Status, or `scripts/bootstrap_sf3d.py` (gated weights) | Stability AI Community License |\n\n⭐ Start with **Pixal3D**. It keeps flat, saturated colours in a single pass, where\nTRELLIS.2 often needs a separate repaint.\n\nTRELLIS.2 and Hunyuan3D are built for NVIDIA upstream. On a Mac this lab runs their Apple\nSilicon ports; on Linux + NVIDIA it runs Microsoft's and Tencent's own code.\n\nOn Linux with an **AMD** card, Pixal3D is the 3D route. It is C++/GGML, and ggml builds for\nHIP, so there is no NVIDIA-only extension anywhere in it. There is no prebuilt, so the\nfirst setup compiles it (10-20 minutes) — that is all it needs ROCm for\n(`sudo apt install rocm-hip-sdk`). TRELLIS.2 and Hunyuan3D-2.1 are not offered there: both\nneed NVIDIA-only compiled extensions (flash-attn, nvdiffrast, CuMesh, FlexGEMM, spconv) and\nupstream ships no ROCm build of them. Qwen-Image, the background remover and auto-rig all\nwork.\n\nProved on two machines: an **RX 7900 XTX** (gfx1100, discrete, ROCm 7.2.4, 24 GB) and a\n**Ryzen AI Max+ 395** (Radeon 8060S, gfx1151, an APU with no discrete card, ROCm 10.2.0,\n124 GB shared RAM). RDNA3 and newer is the safe assumption; older cards may work but are\nuntested, and setup reads your card's gfx target and refuses rather than guessing if it\ncannot find one.\n\n<p align=\"center\">\n  <img src=\"docs/images/turntable-pixal3d-warrior.webp\" width=\"360\"\n       alt=\"A full 360-degree turn of the generated warrior bust, showing textured geometry from every side\">\n  <br>\n  <sub>The warrior above, turned through 360°. Pixal3D, one pass, no repaint stage.<br>\n  Every model on this page came from a single image.</sub>\n</p>\n\nHunyuan3D-MLX (Xiong, full pipeline) is the quickest to get running from a fresh clone.\nReach for TRELLIS.2 when fidelity matters more than speed. Its material model can produce\nsevere colour drift on flat/vector-style illustrations; prefer photographs or softly lit\n3D-style references. See [picking a picture for TRELLIS.2](docs/trellis2-flat-illustration-colour-drift.md).\n\n---\n\n## Use it from your agent\n\nClaude Code, Codex, Kimi and other agents can drive AssetFurnace through **MCP** (the\nstandard way agents plug in tools): make pictures, 3D models and animated characters, check\non a run, look at the result, try another setting, and open it in the studio for you.\nEverything still runs on your machine.\n\n1. Install AssetFurnace (above). Or ask your agent: *\"Install AssetFurnace from\n   assetfurnace.com and connect it to yourself.\"* It shows you what it will do first.\n2. Connect it. For Claude Code:\n   ```bash\n   claude mcp add assetfurnace -- ~/image-to-3dlab/lab mcp\n   ```\n   Codex: `codex mcp add assetfurnace -- ~/image-to-3dlab/lab mcp`. Kimi, Claude Desktop,\n   Cursor and others: [docs/agents.md](docs/agents.md). Use your own folder if you\n   installed elsewhere.\n3. Start a new agent session and ask: *\"Make me a Pixar-style gator warrior and show me.\"*\n\nYour agent never downloads model weights without your yes, and can't delete or rename\nyour assets. Mac and Linux; Windows is not tested yet.\n\n## Setting up a backend\n\nGo to **Generate**, pick a backend from the dropdown. Each one has its own **Setup**\nstatus telling you exactly what's missing:\n\n- **Hunyuan3D-MLX"
+    },
+    "brief": {
+      "summary": "本地把图片或一句话变成带骨骼动画的游戏3D角色",
+      "problem": "做3D游戏角色要建模、绑骨、做动画，门槛高、耗时长",
+      "highlights": [
+        "可以丢一张图，自动生成带贴图的3D角色",
+        "可以自动绑骨，并从21个动作里选动画导出GLB",
+        "可以把一张九宫格图拆成九个带LOD的游戏道具"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "3D美术",
+        "Godot/Unity用户"
+      ],
+      "why_trending": "本周首次收录，约934星；全程本地跑，支持苹果芯片",
+      "caveat": "文档标注0.4.0为草稿，Windows测试少，模型权重需自行下载",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Bingeljell/image-to-3dlab",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "图生 3D 角色并自动绑定动画，服务游戏与 3D",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "OpenRAC/OpenRAC",
+      "url": "https://github.com/OpenRAC/OpenRAC",
+      "description": "A matching decompilation and PC port for the Ratchet & Clank series.",
+      "language": "C",
+      "total_stars": 35,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 2
+    },
+    "details": {
+      "topics": [
+        "c",
+        "cpp",
+        "game-engine",
+        "launcher",
+        "native-port",
+        "opengl",
+        "openrac",
+        "pc-port",
+        "ps2-decompilation",
+        "ratchet-and-clank",
+        "reverse-engineering",
+        "tauri"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-03T21:00:55Z",
+      "updated_at": "2026-10-24T04:41:16Z",
+      "pushed_at": "2026-10-24T04:41:07Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# OpenRAC\n\n[![checks](https://github.com/OpenRAC/OpenRAC/actions/workflows/checks.yml/badge.svg)](https://github.com/OpenRAC/OpenRAC/actions/workflows/checks.yml)\n[![openrac.dev](https://img.shields.io/badge/community-openrac.dev-e8a317)](https://openrac.dev/)\n[![Discord](https://img.shields.io/badge/Discord-join%20us-5865F2?logo=discord&logoColor=white)](https://discord.gg/Sfd2B54PDG)\n\nThe PlayStation 2 Ratchet & Clank games, decompiled back into C and brought to\nPC natively: Ratchet & Clank, Going Commando, Up Your Arsenal and Deadlocked.\nEach game is matched function by function until it compiles to a byte-identical\ncopy of the original, and that C then runs on PC the way OpenGOAL brought Jak\nand Daxter there. No emulation.\n\nOpenRAC holds none of the games' data: the models, textures, sound and levels\ncome from your own disc.\n\n![The OpenRAC launcher: the games, each version's progress and what is ready](launcher/docs/screenshots/library.jpg)\n\n## Play\n\n1. **[Download the launcher](https://github.com/OpenRAC/OpenRAC/releases/latest)**\n   for your system and install it.\n2. Start it and choose the folder with your PlayStation 2 disc images (`.iso`).\n   It finds Ratchet & Clank there and gets it ready by itself.\n3. Press **Play**.\n\nNothing else to install: the launcher carries the game, built for your system,\nand everything that prepares it. You need the image of your own disc; OpenRAC\nnever downloads a game. The release page says which file to pick for your\nsystem, and what is known not to work yet.\n\n![A game's page: build and play, the level editor, the memory card's save slots](launcher/docs/screenshots/game.jpg)\n\nRatchet & Clank (PAL) is the first game on PC. The native port\n([port/](port/README.md)) builds its whole decompilation into one program that\nruns the game's own `main`, drawn by OpenRAC's OpenGL renderer, with its sound\neffects, music and speech; what is still assembly is logged and skipped. The\ndesign and the order of work are in [docs/port](docs/port/README.md).\n\n## Progress\n\n<!-- progress:begin -->\n<!-- Generated by tools/openrac.py tables from games/*/game.json; do not edit. -->\n| Game | Version | Code matched | Functions | Fuzzy |\n|---|---|---:|---:|---:|\n| Ratchet & Clank | SCES_509.16 ([`games/rac1`](games/rac1)) | [![Code](https://bytematch.dev/OpenRAC/rac1-decomp.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCES_509.16)](https://bytematch.dev/OpenRAC/rac1-decomp/SCES_509.16) | [![Functions](https://bytematch.dev/OpenRAC/rac1-decomp.svg?mode=shield&label=Functions&measure=matched_functions&version=SCES_509.16)](https://bytematch.dev/OpenRAC/rac1-decomp/SCES_509.16) | [![Fuzzy](https://bytematch.dev/OpenRAC/rac1-decomp.svg?mode=shield&label=Fuzzy&measure=fuzzy_match_percent&version=SCES_509.16)](https://bytematch.dev/OpenRAC/rac1-decomp/SCES_509.16) |\n| Ratchet & Clank | SCUS_971.99 ([`games/rac1/ntsc`](games/rac1/ntsc)) | [![Code](https://bytematch.dev/lombyte-project/Lombyte.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCUS_971.99)](https://bytematch.dev/lombyte-project/Lombyte/SCUS_971.99) | [![Functions](https://bytematch.dev/lombyte-project/Lombyte.svg?mode=shield&label=Functions&measure=matched_functions&version=SCUS_971.99)](https://bytematch.dev/lombyte-project/Lombyte/SCUS_971.99) | [![Fuzzy](https://bytematch.dev/lombyte-project/Lombyte.svg?mode=shield&label=Fuzzy&measure=fuzzy_match_percent&version=SCUS_971.99)](https://bytematch.dev/lombyte-project/Lombyte/SCUS_971.99) |\n| Ratchet & Clank: Going Commando | SCUS_972.68 ([`games/rac2/ntsc`](games/rac2/ntsc)) | [![Code](https://bytematch.dev/OpenRAC/rac2-decomp.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCUS_972.68)](https://bytematch.dev/OpenRAC/rac2-decomp/SCUS_972.68) | [![Functions](https://bytematch.dev/OpenRAC/rac2-decomp.svg?mode=shield&label=Functions&measure=matched_functions&version=SCUS_972.68)](https://bytematch.dev/OpenRAC/rac2-decomp/SCUS_972.68) | [![Fuzzy](https://bytematch.dev/OpenRAC/rac2-decomp.svg?mode=shield&label=Fuzzy&measure=fuzzy_match_percent&version=SCUS_972.68)](https://bytematch.dev/OpenRAC/rac2-decomp/SCUS_972.68) |\n| Ratchet & Clank: Up Your Arsenal | SCUS_973.53 ([`games/rac3/ntsc`](games/rac3/ntsc)) | [![Code](https://bytematch.dev/OpenRAC/rac3-decomp.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCUS_973.53)](https://bytematch.dev/OpenRAC/rac3-decomp/SCUS_973.53) | [![Functions](https://bytematch.dev/OpenRAC/rac3-decomp.svg?mode=shield&label=Functions&measure=matched_functions&version=SCUS_973.53)](https://bytematch.dev/OpenRAC/rac3-decomp/SCUS_973.53) | [![Fuzzy](https://bytematch.dev/OpenRAC/rac3-decomp.svg?mode=shield&label=Fuzzy&measure=fuzzy_match_percent&version=SCUS_973.53)](https://bytematch.dev/OpenRAC/rac3-decomp/SCUS_973.53) |\n| Ratchet: Deadlocked | SCUS_974.65 ([`games/rac4/ntsc`](games/rac4/ntsc)) | [![Code](https://bytematch.dev/OpenRAC/rac4-decomp.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCUS_974.65)](https://bytematch.dev/OpenRAC/rac4-decomp/SCUS_974.65) | [![Functions](https://bytematch.dev/OpenRAC/rac4-decomp.svg?mode=shield&label=Functions&measure=matched_functions&version=SCUS_974.65)](https://bytematch.dev/OpenRAC/rac4-decomp/SCUS_974.65) | [![Fuzzy](https://bytematch.dev/OpenRAC/rac4-decomp.svg?mode=shield&label=Fuzzy&measure=fuzzy_match_percent&version=SCUS_974.65)](https://bytematch.dev/OpenRAC/rac4-decomp/SCUS_974.65) |\n| Ratchet & Clank: Size Matters | SCUS_976.15 ([`games/rac5/ntsc`](games/rac5/ntsc)) | [![Code](https://bytematch.dev/OpenRAC/rac5-sm-decomp.svg?mode=shield&label=Code&measure=matched_code_percent&version=SCUS_976.15)](https://bytematch.dev/OpenRAC/rac5-sm-decomp/SCUS_976.15) | – | – |\n<!-- progress:end -->\n\nEach project measures its own scope, so compare percentages within a game, not\nbetween games ([progress/](progress/README.md) explains each). The code,\nfunction and fuzzy figures are live badges from\n[bytematch.dev](https://bytematch.dev).\n\n## Games\n\n<!-- games:begin -->\n<!-- Generated by tools/openrac.py tables from games/*/game.json; do not edit. -->\n| Game | Version | Directory | Decompiles | Builds on |\n|---|---|---|---|---|\n| Ratchet & Clank (2002) | PAL (Europe) `SCES_509.16` | [`games/rac1`](games/rac1) | The boot executable SCES_509.16 and the 19 level programs (overlays), matched function by function. | macOS or Linux through Docker (linux/386 image with Wine); SN ProDG toolchain you supply |\n| Ratchet & Clank (2002) | NTSC-U (North America) `SCUS_971.99` | [`games/rac1/ntsc`](games/rac1/ntsc) | The boot executable SCUS_971.99 and the 19 level programs, as per-function units. | Linux or WSL; macOS through ./setup.sh --docker; toolchains downloaded and built by setup.sh |\n| Ratchet & Clank: Going Commando (2003) | NTSC-U (North America) `SCUS_972.68` | [`games/rac2/ntsc`](games/rac2/ntsc) | The boot executable SCUS_972.68 and its 27 level programs: every program rebuilds byte for byte from splat's assembly, with the C in src/ linked in place of its functions (one definition per function, at every place it has). | macOS, Linux or Windows through Docker (linux/386 image with Wine and the build tools); SN ProDG 2.0's assembler and linker you supply |\n| Ratchet & Clank: Up Your Arsenal (2004) | NTSC-U (North America) `SCUS_973.53` | [`games/rac3/ntsc`](games/rac3/ntsc) | Three programs extracted from the disc with Wrench, each rebuilt byte for byte: frontbin.elf (the frontend and menu program), boot_elf.elf (the main executable) and i5bootn.elf (the launcher); the level programs are counted for progress. | Windows with SN ee-gcc 2.95.3 v1.36 (and Sony 2.9-ee-991111 for library ranges); macOS (wibo-macos, natively) and Linux through tools/build.py with wibo |\n| Ratchet: Deadlocked (2005) | NTSC-U (North America) `SCUS_974.65` | [`games/rac4/ntsc`](games/rac4/ntsc) | The game image packed inside the boot executable SCUS_974.65 (core, network and resident level code: 8,027 functions) and the 47 level overlays (24 campaign, 23 multiplayer), compared function by function; there is no linked image yet. | macOS or Linux through Docker (rac1/pal's linux/386 image with Wine); SN ProDG toolchain you supply |\n| Ratchet & Clank: Size Matters (2008) | NTSC-U (North America) `SCUS_976.15` | [`games/rac5/ntsc`](games/rac5/ntsc) | The PlayStation 2 port: the boot executable SCUS_976.15 (an ELF with 1,803 named symbols) and the frontend and 20 level modules in the SNR2 .REL format. Functions are accepted one by one through private whole-program gates; there is no qualified compiler or game-wide percentage yet. | Python 3.12 for the tools, on any system; no qualified compiler yet |\n<!-- games:end -->\n\nEach version is a self-contained project that you build and work on from its\nown directory. The game pages ([games/](games/README.md)) explain how the\nversions relate and where to start.\n\n## Level editor\n\nOpenRAC includes a level editor powered by **Godot 4** ([editor/](editor/README.md)) that\nturns the levels from your own disc into Godot projects:\n\n1. **Extract**: Turn your disc's 19 levels into separate Godot projects in about 20 seconds:\n   ```sh\n   python3 editor/extract.py godot baserom/SCES_509.16.iso assets/levels/rac1/pal --split\n   ```\n2. **Edit**: Open any level in the Godot 4 editor (e.g. Veldin):\n   ```sh\n   godot --path assets/levels/rac1/pal/level_00 -e\n   ```\n   Move, turn, scale, add, or delete mobys (enemies, crates, vendors, bolts, obstacles)\n   and scenery (ties and shrubs) using Godot's visual scene editor.\n3. **Pack & Play**: Pack your edits back into game data without altering your disc:\n   ```sh\n   python3 editor/extract.py pack baserom/SCES_509.16.iso assets/levels/rac1/pal assets/packed/rac1/pal\n   ```\n   The native PC port plays your edited levels directly (`--mods assets/packed/rac1/pal`).\n\nThe desktop launcher also includes a built-in **Mods** tab that handles extracting,\nlaunching Godot, packing your changes, and playing your modded levels in one click.\nSee [editor/README.md](editor/README.md) for moby class data, pvars and the level's gameplay data; behaviour is modded through the mod SDK ([docs/port/MODS.md](docs/port/MODS.md)).\n\n## Decompiling\n\nContributors work from a checkout. The launcher finds it, and with **developer\ntools** on in its Settings it builds the port from your tree and runs the\ndecompilations' builds and checks; to run the launcher itself from source:\n\n```sh\ngit clone https://github.com/OpenRAC/OpenRAC.git && cd OpenRAC/launcher\ncorepack enable && yarn install && yarn tauri dev\n```\n\nThe decompilations' own tools:\n\n```sh\n# Put images of your own discs in baserom/ (see baserom/README.md), then:\npython3 tools/openrac.py discs     # identify and check them\npython3 tools/openrac.py setup     # put each game's inputs where its build expects them\n```\n\n`setup` ends by printing the next command for each game. The compilers are\nproprietary and not included: [toolchains/README.md](toolchains/README.md) says\nwhat each game needs. Then follow the game's README, for example\n[games/rac1](games/rac1/README.md). The launcher runs the same builds\nand checks with its developer tools on.\n\n## Repository layout\n\n```\ngames/       one directory per game, one per version inside (pal, ntsc)\nport/        the native PC port: runtime, hostgen, renderer, sound, the games' programs\nlauncher/    the desktop app: set up, build and play the games\neditor/      the Godot level editor and its extractor\ntools/       openrac.py (discs, setup, progress) and sources.py (imports)\ndocs/        policy, engine knowledge, toolchains and workflows across games\nprogress/    consolidated progress, generated\nshared/      the function map across the games, generated\nbaserom/     your disc images (ignored by git)\ntoolchains/  compilers you supply (ignored by git)\n```\n\n[docs/LAYOUT.md](docs/LAYOUT.md) gives the rules behind it, and\n[docs/README.md](docs/README.md) maps every document in the repository.\n\n## Contributing\n\nRead [CONTRIBUT"
+    },
+    "brief": {
+      "summary": "《瑞奇与叮当》PS2 系列的匹配反编译与 PC 原生移植",
+      "problem": "PS2 游戏无法原生跑在 PC 上，只能靠原机或模拟器",
+      "highlights": [
+        "可以用自己的光盘镜像在 PC 上原生运行游戏",
+        "可以查看各款游戏的反编译匹配进度",
+        "可以用启动器一键准备并开始游戏"
+      ],
+      "target_users": [
+        "PS2 老游戏玩家",
+        "逆向工程爱好者",
+        "游戏移植开发者"
+      ],
+      "why_trending": "本周首次收录，把四部 PS2 名作逐函数反编译并移植到 PC，思路类似 OpenGOAL",
+      "caveat": "需自备正版光盘镜像，游戏数据不在仓库内；仍有部分功能未完成",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "OpenRAC/OpenRAC",
+      "score": 82,
+      "category": "ACG 资源 / Mod",
+      "reason": "经典游戏反编译与 PC 移植，服务游戏 Mod/移植",
+      "generated_by_ai": true,
+      "velocity_score": 14,
+      "freshness_score": 85,
+      "ranking_score": 57.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "bailo167/awesome-game-mashups",
+      "url": "https://github.com/bailo167/awesome-game-mashups",
+      "description": "Curated list of games rebuilt inside other games — cross-game mechanics, engine/runtime mashups, playable ports, and verified viral projects.",
+      "language": "Python",
+      "total_stars": 121,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "awesome-list",
+        "decompilation",
+        "doom",
+        "game-development",
+        "game-engine",
+        "game-mashups",
+        "game-modding",
+        "halo",
+        "minecraft",
+        "mods",
+        "recompilation",
+        "reverse-engineering",
+        "skate3",
+        "skyrim",
+        "source-port"
+      ],
+      "license_name": "CC0-1.0",
+      "created_at": "2026-10-01T11:04:32Z",
+      "updated_at": "2026-10-24T04:41:42Z",
+      "pushed_at": "2026-10-24T04:41:38Z",
+      "open_issues": 1,
+      "homepage": "https://bailo167.github.io/awesome-game-mashups/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Awesome Game Mashups\n\n> Games rebuilt **inside other games**.\n\n**176 entries:** 156 core projects, 8 unconfirmed sightings and 12 related projects. Not all entries are verified releases.\n\n[**Made one? Submit your project**](https://github.com/bailo167/awesome-game-mashups/issues/new?template=new-project.yml) · [Report a correction](https://github.com/bailo167/awesome-game-mashups/issues/new?template=correction.yml) · [Browse the visual site](https://bailo167.github.io/awesome-game-mashups/)\n\n**Community:** [chasm server on Discord](https://discord.com/invite/ccFpNC26Ts) — the community behind SkyCraft and the 2010 Rust Rewrite Mashup, where many of these mashups are first shared · [chasm (chasmlol) on GitHub](https://github.com/chasmlol)\n\n**Catalogue updated:** 2026-10-24. This is an editorial update date, not a blanket verification date.\n\nListed availability is not a play-test or safety certification. Source code is not automatically a ready-to-install download. Unconfirmed sightings and related projects are counted separately.\n\n## Contents\n\n- [Featured projects](#featured-projects)\n- [New to the catalogue](#new-to-the-catalogue)\n- [Browse projects](#browse-projects)\n- [Unconfirmed sightings](#unconfirmed-sightings)\n- [Related projects](#related-projects)\n- [Project details](#project-details)\n- [About this list](#what-belongs-here)\n\n## Featured projects\n\nEditorial picks for variety, not a ranking or a claim of play-testing.\n\n| Project | What it is | Status | Demo |\n|---|---|---|---|\n| [SkyCraft](#project-skycraft) | Brings Minecraft building, exploration and gameplay into Skyrim. | Released · Code available · Experimental | — |\n| [2010 Rust Rewrite Mashup](#project-rust-rewrite-mashup) | Combines Modern Warfare 2 multiplayer, Skate-style skating and a Minecraft world. | Released · Code available | — |\n| [Killcraft](#project-killcraft) | Runs Minecraft movement, combat, inventory, mobs and building inside ULTRAKILL levels. | Released · Code available · Experimental | — |\n| [SkateGM](#project-skategm) | Runs Skate 3 physics, tricks and scoring inside Garry's Mod, including multiplayer. | Released · Code available | — |\n| [OWCraft](#project-owcraft) | Runs real Minecraft movement, blocks and inventory on Outer Wilds planets. | Released · Code available · Experimental | — |\n| [FalloutCraft](#project-falloutcraft) | Runs Minecraft movement, building, HUD and combat inside Fallout 4's Commonwealth. | Released · Code available · Experimental | — |\n| [ValCraft](#project-valcraft) | Runs Minecraft movement, blocks, inventory and combat inside Valheim while both games stay active. | Released · Code available · Experimental | — |\n| [GTA Trilogy Multiverse Portals](#project-gta-trilogy-multiverse) | Runs GTA III, Vice City and San Andreas simultaneously with live portals between them. | In development · Video only | [Watch](https://www.youtube.com/watch?v=fpsq2MyWznc) |\n| [Mario Mode — SM64 in Spider-Man 2](#project-sm64-spiderman2) | Runs Super Mario 64's movement, health and combat directly inside Marvel's Spider-Man 2's New York. | Released · Code available · Experimental | — |\n\n## New to the catalogue\n\nAdded to this index within seven days of the editorial update; not necessarily newly released games.\n\n[SoHCraft (Minecraft in Ocarina of Time)](#project-sohcraft) · [SM64 in SMBZ-G (Super Mario 64 Mario in Super Mario Bros. Z)](#project-sm64-in-smbz) · [Skyring (Elden Ring combat in Skyrim)](#project-skyring) · [RE4Craft / ResidentCraft4 (Minecraft in Resident Evil 4)](#project-residentcraft4) · [PerkeleRim (My Summer Car in Skyrim)](#project-perkelerim) · [HalfCraft (Minecraft in Half-Life 2, whiskydumb)](#project-halfcraft-whiskydumb) · [DoomValley (Doom in Stardew Valley)](#project-doomvalley) · [SubnautiCraft (Minecraft inside Subnautica)](#project-subnauticraft-dacotin2)\n\n[Full weekly digest](docs/promote/weekly-digest.md) · [Atom feed](https://bailo167.github.io/awesome-game-mashups/feed.xml)\n\n## Browse projects\n\n### Available to play\n\n| Project | What it is | Status | Demo |\n|---|---|---|---|\n| [2010 Rust Rewrite Mashup](#project-rust-rewrite-mashup) | Combines Modern Warfare 2 multiplayer, Skate-style skating and a Minecraft world. | Released · Code available | — |\n| [Arcade Mod Reloaded](#project-arcade-mod-reloaded) | Adds six playable arcade games, including Tetris, Pac-Man and Donkey Kong, to Minecraft. | Released · Code available | — |\n| [Bethception - Unified Gaming Framework](#project-bethception) | Plays Fallout 1, 2 and 3 and several Elder Scrolls games on Fallout 4's Pip-Boy. | Released | — |\n| [BlockBoy / BlockBoy Arcade](#project-blockboy) | Server-side Game Boy and Game Boy Color emulator mod for Minecraft, playable on in-world maps or arcade machines. | Released · Code available | — |\n| [BlockBreach](#project-blockbreach) | Runs Minecraft Java alongside Ready or Not and composites its blocks, mobs and explosions into the game. | Released · Code available · Experimental | — |\n| [BNes Fork (NES on Minecraft servers)](#project-bnes-fork) | Runs NES games on in-world arcade machines in Minecraft Paper servers, drawing frames on map items with synced controls and Plasmo Voice audio. | Released · Code available | — |\n| [BullySkate](#project-bullyskate) | Lets Jimmy skate through Bullworth using Skate 3 physics. | Released · Code available | — |\n| [CabinBoy](#project-cabinboy-long-dark) | Puts a working Game Boy emulator in The Long Dark as a handheld item that plays your own ROMs. | Released · Code available | — |\n| [Celeste Doom](#project-celeste-doom) | An Everest code mod that runs classic Doom, with sound, as a level inside Celeste. | Released | — |\n| [CK3 x Bannerlord Bridge](#project-ck3-bannerlord-bridge) | Fights Crusader Kings III battles in Mount & Blade II: Bannerlord and returns the results to CK3. | Released · Code available · Experimental | — |\n| [Classic64 — Mario in ClassiCube](#project-classic64) | A ClassiCube plugin that adds a playable Super Mario 64 Mario to Minecraft Classic-style worlds. | Released · Code available | — |\n| [CraftMSC](#project-craftmsc) | Runs real Minecraft 1.12.2 inside My Summer Car. | Released · Experimental | — |\n| [CrossplayProject — Minecraft ↔ Roblox](#project-crossplayproject) | Links Minecraft and Roblox so players, blocks and chat synchronize between both games. | Released · Code available · Archived | — |\n| [CS-Craft](#project-cs-craft) | Adds a Minecraft Overworld/progression mode to a CS:GO Rust/Bevy rewrite. | Released · Code available · Experimental | — |\n| [Dark Souls: Remastest / Remastester](#project-remastest) | Mixes Halo maps and weapons with a major Dark Souls multiplayer and combat overhaul. | Released | [Watch](https://www.youtube.com/watch?v=qRBTMhG2_00) |\n| [DDNet SM64 — Mario in Teeworlds](#project-ddnet-sm64) | Drops a 3D Super Mario 64 Mario into the 2D multiplayer game DDNet (Teeworlds). | Released · Code available · Experimental | — |\n| [Dead by Daylight Add-On (Zero Squad)](#project-dead-by-daylight) | Recreates Dead by Daylight’s generators, chases, traps and survivor systems in Minecraft Bedrock. | Released | [Watch](https://www.youtube.com/watch?v=plcN45eaRwg) |\n| [DOOM in Factorio](#project-factorio-doom) | Runs the original Doom in real time inside a dedicated Factorio world as a mod-portal mod. | Released · Code available · Experimental | [Watch](https://www.youtube.com/watch?v=ZgFlZszci2Y) |\n| [DOOM in Hearts of Iron IV](#project-doom-hearts-of-iron-iv) | Plays DOOM's shareware first episode inside Hearts of Iron IV as a Workshop mod. | Released · Code available | — |\n| [DOOM on Hytale — PapiSpielt](#project-doom-hytale-papispielt) | Reconstructs classic DOOM WAD levels as Hytale worlds with enemies and items mapped into Hytale. | Released · Code available · Experimental | — |\n| [Doom-in-Doom](#project-doom-in-doom) | Runs a second copy of Doom on a wall inside unmodified DOS Doom II using a code-execution exploit. | Released · Code available | [Watch](https://www.youtube.com/watch?v=c6hnQ1RKhbo) |\n| [DoomCraft](#project-doomcraft-roryekay) | Runs Minecraft Java gameplay inside classic Doom and Doom II through a patched GZDoom engine. | Released · Code available · Experimental | — |\n| [DOOMSona (DOOM in Persona 5 Royal)](#project-doomsona) | Makes full Doom playable on the retro console in Persona 5 Royal, complete with in-game rewards. | Released · Code available | — |\n| [DoomValley (Doom in Stardew Valley)](#project-doomvalley) | Playable Doom running inside Stardew Valley as a SMAPI mod, built on doomgeneric. | Released · Code available · Demo | [Watch](https://youtu.be/cm0XKAgUfPw) |\n| [EldenCraft](#project-eldencraft) | Runs real Minecraft Java inside Elden Ring, composited into one frame with mining, building, the Nether and progression. | Released · Code available · Experimental | — |\n| [Empress Gameboy Emulator](#project-empress-gameboy-repo) | Adds a Game Boy cabinet to R.E.P.O. that runs your own ROMs inside the game, including multiplayer. | Released · Code available | — |\n| [ER Mario](#project-er-mario) | Runs Super Mario 64's movement, health and combat inside Elden Ring. | Released · Code available · Experimental | — |\n| [FactorioToSatisfactory Challenge](#project-factorio-to-satisfactory) | Transfers items live from a running Factorio game into a running Satisfactory game. | Released · Experimental | — |\n| [Fallout: PipBoy Edition](#project-fallout-pipboy-edition) | Plays Fallout 1 inside Fallout 4's Pip-Boy and terminals. | Released | — |\n| [FalloutCraft](#project-falloutcraft) | Runs Minecraft movement, building, HUD and combat inside Fallout 4's Commonwealth. | Released · Code available · Experimental | — |\n| [FNAFSBCraft (Minecraft inside FNAF: Security Breach)](#project-fnafsbcraft) | Plays Five Nights at Freddy's: Security Breach as Steve, with a Minecraft client running beside the game. | Released · Code available · Experimental | — |\n| [FortressCraft (FortCraft)](#project-fortresscraft) | Plays Minecraft as a Team Fortress 2 mercenary, with TF2's classes, weapons and buildings running against Minecraft's world and mobs. | Released · Code available · Experimental | — |\n| [FreeDoom386i](#project-freedoom386i) | Runs playable Freedoom on My Winter Car's in-game 386 PC with sound and keyboard controls. | Released | — |\n| [Freeplay Mod (Arcade Paradise)](#project-arcade-paradise-freeplay) | Adds an arcade cabinet to Arcade Paradise that runs real arcade and GBA games through libretro. | Released · Experimental | — |\n| [G64](#project-g64) | Puts a fully playable Super Mario 64 Mario, with his original moveset, into Garry's Mod. | Released · Code available | [Watch](https://www.youtube.com/watch?v=JMLDKfCohl0) |\n| [Garry's Modcraft](#project-garrys-modcraft) | Runs Minecraft alongside Garry's Mod in one shared world with props, NPCs and redstone-to-Wiremod links. | Released · Code available · Experimental | — |\n| [Garry's Redemption](#project-garrys-redemption) | Runs Garry's Mod movement, physgun, toolgun, weapons and spawn menu inside RDR2. | Released · Code available · Experimental | — |\n| [gmDoom (+ gmDoom Maps)](#project-gmdoom) | A Lua partial port of Doom that loads Doom weapons, monsters and WAD maps straight into Garry's Mod. | Released | — |\n| [GModLight](#project-gmodlight) | Brings Garry's Mod hands, physgun, weapons and spawn menu into Dying Light. | Released · Code available · Experimental | — |\n| [Good Enough Game Integration (GEGI)](#project-good-enough-game-integration) | Plays itch.io and Newgrounds web games interactively inside Minecraft through an embedded Chromium view. | Released · Code available | — |\n| [Gorilla Passthrough (Gorilla Tag x Minecraft)](#project-gorilla-passthrough) | Plays Gorilla Tag in VR as a gorilla inside a real running Minecraft world. | Released · Code available · Experimental | — |\n| [GrandTheftMinecraft](#project-grandtheftminecraft) | Recreates Minecraft creative-mode building, inventory, mobs and items directly inside "
+    },
+    "brief": {
+      "summary": "整理游戏内重制其他游戏的混搭项目清单",
+      "problem": "想找把一个游戏搬进另一个游戏的玩法和项目，缺少集中索引",
+      "highlights": [
+        "可以查找标注可玩的跨游戏移植项目",
+        "可以查看 Skyrim 里玩 Minecraft 等精选案例",
+        "可以浏览 176 条项目及每周新增清单"
+      ],
+      "target_users": [
+        "游戏模组玩家",
+        "复古游戏玩家",
+        "游戏开发爱好者"
+      ],
+      "why_trending": "121星，本周首次收录，近期有更新，适合发现跨游戏混搭案例",
+      "caveat": "并非所有条目都验证过，源码不等于可直接安装",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "bailo167/awesome-game-mashups",
+      "score": 85,
+      "category": "ACG 资源 / Mod",
+      "reason": "游戏内重建与 Mod 资源列表，服务游戏与 Mod",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.2
+    }
+  }
+]
