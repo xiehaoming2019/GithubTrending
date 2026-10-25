@@ -1,0 +1,554 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "language": "JavaScript",
+      "total_stars": 44984,
+      "forks": 2793,
+      "stars_today": 2264,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2544
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-18T14:08:44Z",
+      "updated_at": "2026-10-25T04:57:33Z",
+      "pushed_at": "2026-09-14T19:29:02Z",
+      "open_issues": 90,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# security-audit\n\nA coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting.\n\nThis is the skill that seeded Cloudflare's vulnerability discovery harness, described in [Build your own vulnerability harness](https://blog.cloudflare.com/build-your-own-vulnerability-harness). The harness grew into a multi-stage, fleet-wide system; this skill is the single-repo starting point it evolved from.\n\n## What it does\n\nThe skill runs a structured audit in six phases:\n\n1. **Reconnaissance** -- map architecture, trust boundaries, input surfaces, prior evidence, and deterministic coverage in `architecture.md` and `coverage-ledger.json`.\n2. **Coverage-led hunting** -- assign isolated hunters from ledger units, record their checks, and use coverage critics to find gaps.\n3. **Candidate validation** -- give every unique candidate to a fresh verifier that tries to disprove it.\n4. **Structured output** -- write `confirmed`, `needs_validation`, and `rejected` records to `findings.json` and validate them against `report-schema.json`.\n5. **Independent record verification** -- fresh agents verify final source claims. Material replacements receive another independent verifier.\n6. **Target-neutral reporting** -- derive `REPORT.md`, `FINDINGS-DETAIL.md`, and `NEEDS-VALIDATION.md` from the verified records and coverage ledger.\n\nThe parent runs `validate-coverage-ledger.cjs` after creating the ledger and after each later ledger update. It runs `validate-findings.cjs` in Phase 4 and again after every Phase 5 replacement.\n\nThe verdicts are distinct: `confirmed` has a complete source trace and bounded observed result, `needs_validation` has an exact unresolved fact and no severity, and `rejected` records a disproved candidate.\n\nMultiple runs against the same repo are additive. The skill uses prior ledgers and findings to target gaps, revalidate changed source, and carry forward current-source evidence without treating stale or unresolved work as covered.\n\n## Files\n\n| File | Purpose |\n|------|---------|\n| `SKILL.md` | Setup, core principles, platform terminology, workflow overview, and audit anti-patterns |\n| `RECONNAISSANCE.md` | Phase 1 reconnaissance prompts and synthesis instructions |\n| `HUNTING.md` | Phase 2 orchestration, hunting methodology, and validation rules |\n| `ATTACK-CLASSES.md` | Core, wildcard, and obvious-things attack prompts |\n| `MEMORY-SAFETY-AND-BINARY.md` | Memory-safety, binary, and kernel hunting classes for native targets |\n| `AI-AND-LLM.md` | Prompt-injection, agent/tool, and output-handling hunting classes for LLM-backed targets |\n| `WEB-PROTOCOL-AND-AUTH.md` | HTTP request-framing, cache, and authentication-protocol hunting classes for HTTP-protocol and auth targets |\n| `CLIENT-SIDE.md` | DOM-injection, messaging-trust, UI-redress, and prototype-pollution hunting classes for client-side/browser targets |\n| `SUPPLY-CHAIN-AND-RELEASE.md` | Dependency, CI, release, signing, update, plugin, and extension hunting classes |\n| `CLOUD-AND-DEPLOYMENT.md` | IAM, infrastructure-as-code, container, serverless, ingress, and runtime-configuration hunting classes |\n| `PROTOCOLS-RPC-AND-MESSAGING.md` | RPC, serialization, queue, broker, webhook, and streaming-protocol hunting classes |\n| `RESOURCE-EXHAUSTION-AND-AVAILABILITY.md` | Shared resource, quota, queue, worker, and operator-spend hunting classes |\n| `DATA-ISOLATION-AND-LIFECYCLE.md` | Tenant isolation, cache, search, export, backup, migration, deletion, and restore hunting classes |\n| `DESKTOP-MOBILE-AND-LOCAL-IPC.md` | Native app, deep-link, webview, exported-component, helper, daemon, and local-IPC hunting classes |\n| `VALIDATION-AND-REPORTING.md` | Phases 3–6 candidate validation, structured output, record verification, and reporting |\n| `report-schema.json` | JSON schema for all three `findings.json` verdicts |\n| `validate-findings.cjs` | Zero-dependency validator for `findings.json` in Phases 4 and 5 |\n| `validate-findings.test.cjs` | Findings-validator tests and producer-compatible fixture checks |\n| `validate-coverage-ledger.cjs` | Zero-dependency validator for `coverage-ledger.json` in Phases 1–5 |\n| `validate-coverage-ledger.test.cjs` | Coverage-ledger validator tests |\n\n## Installation\n\nInstall the skill with the [Skills CLI](https://skills.sh):\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit\n```\n\nUse `--global` for a user-level installation:\n\n```bash\nnpx skills add https://github.com/cloudflare/security-audit-skill \\\n  --skill security-audit \\\n  --global\n```\n\nRun `npx skills --help` for agent-selection and non-interactive options.\n\n## Usage\n\nStart your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:\n\n```\nsecurity audit this codebase\n```\n\n```\nfind security vulnerabilities in ./src\n```\n\n```\ndo a security review, output to ~/audits/my-project\n```\n\nThe skill activates automatically when the request matches its trigger (security audit, find vulnerabilities, pen-test the code, etc.). A direct codebase audit or pen-test request uses full audit mode. Security questions and focused vulnerability work use guidance mode unless you request report artifacts. In full audit mode, an unspecified output directory defaults to `~/security-audit-skill/<repo-name>/run-<N>`. The workflow writes inside the target repository only when you explicitly select a directory that version control ignores.\n\n## Requirements\n\n- A coding agent with a model that supports tool use and parallel sub-agents\n- Node.js for the zero-dependency findings and coverage-ledger validators\n- An OS-enforced sandbox for target-controlled builds, tests, processes, browsers, emulators, fuzzers, and fixtures. It must disable external networking, use a sanitized allowlisted environment, enforce resource limits, and allow writes only to assigned scratch paths. Without these controls, the workflow keeps the lead as `needs_validation` instead of executing target code.\n\n## Design principles\n\n- **Only confirm established boundary failures.** Keep a source-grounded blocked lead as `needs_validation` with its exact unresolved fact.\n- **Adversarial validation.** The agent that checks a finding is never the agent that found it.\n- **Severity requires impact.** Likelihood x impact, not deviation from a checklist.\n- **Defense-in-depth gaps are not vulnerabilities.** If Layer A prevents the attack, the absence of Layer B is a hardening note.\n- **Multiple runs improve coverage.** In our test runs, a single run found roughly half of the vulnerabilities that repeated runs found in total.\n\n## Contact\n\nQuestions, feedback, or comparing notes on AI-driven security tooling: security-ai-research@cloudflare.com\n\n## License\n\nMIT -- see [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "将编码代理变成多阶段安全审计技能。",
+      "problem": "安全审计发现难复核，结果缺少机器可读记录。",
+      "highlights": [
+        "可以对代码库执行六阶段安全审计",
+        "可以生成并校验 findings.json 记录",
+        "可以让独立代理复核候选漏洞"
+      ],
+      "target_users": [
+        "安全工程师",
+        "使用编码代理的开发者",
+        "开源维护者"
+      ],
+      "why_trending": "今日新增2264星，连续上榜，值得安全团队关注。",
+      "caveat": "需支持并行子代理和沙箱，否则不执行目标代码。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cloudflare/security-audit-skill",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "提供编码 Agent 安全审计技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "makecindy/cindy",
+      "url": "https://github.com/makecindy/cindy",
+      "description": "Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。",
+      "language": "TypeScript",
+      "total_stars": 4202,
+      "forks": 604,
+      "stars_today": 477,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 477
+    },
+    "details": {
+      "topics": [
+        "agent",
+        "ai-agent",
+        "ai-assistant",
+        "android",
+        "claude-code",
+        "codex",
+        "electron",
+        "ios",
+        "llm",
+        "macos",
+        "react-native",
+        "typescript",
+        "windows"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-07-22T17:49:34Z",
+      "updated_at": "2026-10-25T04:56:54Z",
+      "pushed_at": "2026-10-25T04:48:40Z",
+      "open_issues": 1892,
+      "homepage": "https://cindy.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://cindy.app\"><img src=\".github/assets/hero-en.webp\" width=\"100%\" alt=\"CINDY — Consider it done. The open-source AI agent that works out of the box, doing real work on your own computer.\"></a>\n</p>\n\n<p align=\"center\">\n  <strong>English</strong> · <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache--2.0-blue.svg\" alt=\"License\" /></a>\n  <a href=\"https://github.com/makecindy/cindy/actions/workflows/ci.yml\"><img src=\"https://github.com/makecindy/cindy/actions/workflows/ci.yml/badge.svg\" alt=\"CI\" /></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-22.x-brightgreen.svg\" alt=\"Node.js 22.x\" /></a>\n  <a href=\"https://pnpm.io\"><img src=\"https://img.shields.io/badge/pnpm-10-orange.svg\" alt=\"pnpm\" /></a>\n</p>\n\n<p align=\"center\">\n  🌐 <a href=\"https://cindy.app\">cindy.app</a> &nbsp;·&nbsp; ⬇️ <a href=\"https://cindy.app/download/\">Download</a>\n</p>\n\n\nCindy is an open-source AI agent that works out of the box. She brings multiple\nharnesses, models and tools into one agent that finishes real work in your\nprojects and apps. Ready from day one, yours to shape over time.\n\nCindy runs locally on your own machine, using your real files and logged-in\napps. The first supported harnesses are **Claude Code** and **Codex** — more are\nbeing added, and a native harness is in the works. Models and harnesses mix\nfreely and can switch mid-task while your workspace, memory, skills and tools\nstay continuous; one task can even be planned, executed in parallel, and\nreviewed by agents on different harness × model combos. She can drive your\nbrowser, computer and phone, and take work from IM and schedules.\n\nThis repository is the open-source **client** for Cindy — the desktop and mobile\napps plus their shared packages, organized as a pnpm monorepo.\n\nThe client is free to use, and its source code is open under Apache-2.0. Bring\nmodels your way: sign in to the official Cindy service (usage deducted\ntransparently), authorize the **Claude Code / Codex Coding Plan** you already\npay for and keep using it inside Cindy — no duplicate bill — connect your own\nAPI keys, or use local models.\nSee [cindy.app](https://cindy.app) for service details,\n[pricing](https://cindy.app/#pricing), and [downloads](https://cindy.app/download/).\n\nLinux users: see the [Ubuntu, Arch Linux and Omarchy installation guide](docs/linux.md)\nfor installation, updates, keyring setup and migration from a manual install.\n\n## Yours to shape\n\nOpen source means more than visible — it means changeable:\n\n- **Memory** — correct her once and she does it right from then on, shared across harnesses.\n- **Skills** — teach a way of working once and reuse it everywhere; handing them to your team is in the making.\n- **Automation** — recurring work schedules itself, runs itself, reports back.\n- **MCP** — wire your internal tools and business systems into her reach.\n- **Plugins** — reshape features, UI and interactions, shared through an open marketplace *(in the making)*.\n- **Source** — audit, fork, extend, and contribute improvements back under Apache-2.0.\n\nReady out of the box, never boxed in — start with\n[`CONTRIBUTING.en.md`](CONTRIBUTING.en.md) and build Cindy with us.\n\n## What's in this repo\n\n| Path | Description |\n| --- | --- |\n| `apps/desktop` | Electron desktop client |\n| `apps/mobile` | Expo / React Native mobile client |\n| `packages/*` | Shared client capabilities (auth, device-link, agent orchestration, model providers, …) |\n| `apps/*-bin` | Tool binaries shipped with the desktop app; none are committed — claude-code, codex, and ripgrep are downloaded per platform by `pnpm install`, and the Android platform-tools binaries are fetched (pinned version, sha256-verified) before Windows packaging |\n\n**Not in this repo:** the backend service lives in a separate\nrepository and is not part of this monorepo.\n\n| Mode | Account requirement | Availability |\n| --- | --- | --- |\n| Hosted service | Cindy cloud account | Use Cindy's full hosted service. See [pricing](https://cindy.app/#pricing). |\n| Skip Sign-In | No Cindy sign-in required | Choose “Skip Sign-In” on the login screen to use local agents; the app then shows the account state as “Not signed in”. Server-backed capabilities are unavailable in this state. |\n\n## Prerequisites\n\n- **Node.js** 22.x\n- **pnpm** 10.x (v11 is not yet supported)\n- **Git LFS**\n\n## Getting started\n\nContributor setup, Git LFS, dependency updates, and access requirements are maintained in\n[`CONTRIBUTING.en.md`](CONTRIBUTING.en.md).\nPlugins are installed through SkillHub or manually.\n\nMinimal entry point:\n\n```bash\ngit clone https://github.com/makecindy/cindy.git\ncd cindy\ngit lfs pull\npnpm install\n```\n\n## Development entry points\n\n```bash\n# Mainland China Cindy account\npnpm restart:desktop:remote --region=cn\n\n# Global Cindy account\npnpm restart:desktop:remote --region=global\n```\n\nRemote development uses your own Cindy cloud account and existing login state, so\nyou can continue existing sessions and work while developing the client. Use `cn`\nfor Mainland China accounts and `global` for everyone else; do not rely\non the internal default. Full desktop, mobile, data-isolation, and validation\nworkflows are in [`CONTRIBUTING.en.md`](CONTRIBUTING.en.md).\n\n“Skip Sign-In” on the login screen runs local agents without a Cindy account\n(shown in the app as “Not signed in”), not a connection to a local server.\nServer-backed capabilities are unavailable in this state.\n\n**About the default servers:** the client connects to Cindy's official cloud\nservices by default (endpoint manifests in\n[`config/endpoint.json`](config/endpoint.json) and\n[`config/endpoint.global.json`](config/endpoint.global.json); desktop\nauto-updates also come from the official CDN). This is intentional — external\ndevelopers don't need to self-host a server: sign in with your own Cindy\naccount in a dev build and develop / test directly against the official\nservers.\n\nSkill Hub migration uses two separate manifest fields: released clients keep\nusing `skillhubApiBaseUrl` (the deprecated XD proxy), while current clients use\n`cindySkillHubApiBaseUrl`. The current client deliberately does not fall back to\nthe legacy field when the new endpoint is absent.\n\n## Architecture\n\n- [`DESIGN.md`](DESIGN.md) — visual design system, color tokens, and UI conventions\n- [`docs/README.md`](docs/README.md) — complete documentation and rules index\n- [`docs/auth-realm-routing.md`](docs/auth-realm-routing.md) — organization SSO region discovery and session endpoint routing\n- [`CONTRIBUTING.en.md`](CONTRIBUTING.en.md) — contributor setup, validation, and submission workflow\n- [`AGENTS.md`](AGENTS.md) — engineering rules, launch/runtime contracts, and module boundaries\n- [`docs/dev-rules/`](docs/dev-rules/) — deep-dive architecture docs (e.g. Orca multi-agent orchestration)\n\n## Contributing\n\nContributions go through pull requests into `main`. Read\n[`CONTRIBUTING.en.md`](CONTRIBUTING.en.md) first, then use\n[`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).\nEvery commit needs a [Developer Certificate of Origin](DCO) sign-off\n(`git commit -s`); a DCO check on each pull request enforces it, and no CLA is\nrequired.\nPlease also follow [`CODE_OF_CONDUCT.en.md`](CODE_OF_CONDUCT.en.md). For ordinary\nusage questions, see [`SUPPORT.en.md`](SUPPORT.en.md); report security issues\nprivately through [`SECURITY.en.md`](SECURITY.en.md).\n\n## Security\n\nNever commit credentials or authorization files to the working tree. If you\ndiscover a security issue, follow [`SECURITY.en.md`](SECURITY.en.md) to report it\nprivately rather than opening a public issue.\n\n## Privacy & telemetry\n\n**Official distribution builds** include [TapDB](https://www.taptap.io/tapdb)\nusage analytics for product-level aggregate statistics (device / OS / app-version\nmetadata; associated with your account ID after sign-in). It does **not** collect\nchat content, file content, or working-directory data. In addition, while signed\nin to a cloud account the client sends an online heartbeat to Cindy services\n(account ID, platform, and version only). Crash dumps stay on the local machine\nand are never uploaded automatically.\n\n**Building from source?** You are not required to keep analytics:\n\n- Mobile is off by default — without TapDB credentials (`clientId` /\n  `clientToken`) injected at build time, `apps/mobile/src/analytics/mobileTapdb.ts`\n  is a no-op;\n- Desktop can be fully stripped by removing the `initTapdb()` call in\n  `apps/desktop/src/renderer/index.tsx` (implementation lives in\n  `apps/desktop/src/renderer/analytics/`).\n\n## License / 许可证\n\nExcept as otherwise noted, the source code in this repository is licensed under\nthe [Apache License, Version 2.0](LICENSE). Individual source files do not\ncarry per-file license headers; the repository-root `LICENSE` governs.\n\nModel weights, datasets, prompts, trademarks, and other separately identified\nmaterials may be subject to their own license terms and are not automatically\ncovered by the repository-level Apache-2.0 grant. Third-party open-source\ncomponents retain their own copyright and license. Their attribution notices and\nSPDX SBOMs are managed under [`docs/legal/`](docs/legal/), with artifact-specific\noutputs in [`docs/legal/notices/`](docs/legal/notices/). See [`NOTICE`](NOTICE)\nfor this project's copyright and attribution information.\n"
+    },
+    "brief": {
+      "summary": "开源 AI Agent 客户端，有桌面和手机版，装好就能用",
+      "problem": "多个 AI 编码工具各管一段，切换麻烦，任务和记忆接不上",
+      "highlights": [
+        "可以让 Claude Code 和 Codex 混用，中途换也不断",
+        "可以纠正一次记忆，之后跨工具沿用",
+        "可以让任务按计划自动运行并回报结果"
+      ],
+      "target_users": [
+        "AI 工具重度用户",
+        "开发者与小团队",
+        "开源折腾爱好者"
+      ],
+      "why_trending": "今日新增约 477 Star，客户端刚开源，上手门槛低",
+      "caveat": "后端不在本仓库，需官方账号；未登录时功能受限",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "makecindy/cindy",
+      "score": 80,
+      "category": "AI Agent / Skills",
+      "reason": "开源开箱即用通用 AI Agent",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 66.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "pbakaus/impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "description": "The design language that makes your AI harness better at design.",
+      "language": "Rust",
+      "total_stars": 86576,
+      "forks": 5168,
+      "stars_today": 619,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 619
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-11-16T01:52:04Z",
+      "updated_at": "2026-10-25T04:57:38Z",
+      "pushed_at": "2026-10-24T06:29:27Z",
+      "open_issues": 39,
+      "homepage": "https://impeccable.style",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Impeccable\n\nDesign guidance for AI coding agents. 1 skill, 24 commands, live browser iteration, and 62 deterministic detector rules for AI-generated frontend design.\n\n> **Quick start:** From your project root, run `npx impeccable install`, then run `/impeccable init` inside your AI coding tool. Full docs: [impeccable.style](https://impeccable.style).\n\n## Why Impeccable?\n\nAnthropic's [frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) was the first widely-used design skill for Claude. Impeccable started from there.\n\nEvery model trained on the same SaaS templates. Skip the guidance and you get the same handful of tells on every project: Inter for everything, purple-to-blue gradients, cards nested in cards, gray text on colored backgrounds, the rounded-square icon tile above every heading.\n\nImpeccable adds:\n- **One setup flow.** `/impeccable init` records durable product truth in `PRODUCT.md`, so later commands know the audience, purpose, operating context, constraints, voice, and evidence without confusing those facts with surface-level visual direction.\n- **24 commands.** A shared design vocabulary with your AI: `polish`, `audit`, `critique`, `distill`, `animate`, `bolder`, `quieter`, and more.\n- **62 deterministic detector rules** plus LLM-only critique checks. The CLI and browser extension run the deterministic rules with no LLM and no API key.\n\n## What's Included\n\n### The Skill: impeccable\n\nThe skill installs as one command:\n\n```bash\n/impeccable <command> <target>\n```\n\nStart every new project with:\n\n```bash\n/impeccable init\n```\n\n`init` inspects the project, asks only for material gaps in durable product truth, and writes `PRODUCT.md`. Visitor mode and visual direction are chosen later for each surface; incumbent or newly built visual systems are recorded separately in `DESIGN.md`.\n\n### 24 Commands\n\nAll commands are accessed through `/impeccable`:\n\n| Command | What it does |\n|---------|--------------|\n| `/impeccable craft` | Full shape-then-build flow with visual iteration |\n| `/impeccable init` | One-time setup: gather durable product context, write PRODUCT.md, configure live mode when applicable, recommend next steps |\n| `/impeccable document` | Generate root DESIGN.md from existing project code |\n| `/impeccable extract` | Pull reusable components and tokens into the design system |\n| `/impeccable shape` | Plan UX/UI before writing code |\n| `/impeccable critique` | UX design review: hierarchy, clarity, emotional resonance |\n| `/impeccable audit` | Run technical quality checks (a11y, performance, responsive) |\n| `/impeccable polish` | Final pass, design system alignment, and shipping readiness |\n| `/impeccable bolder` | Amplify boring designs |\n| `/impeccable quieter` | Tone down overly bold designs |\n| `/impeccable distill` | Strip to essence |\n| `/impeccable harden` | Error handling, i18n, text overflow, edge cases |\n| `/impeccable onboard` | First-run flows, empty states, activation paths |\n| `/impeccable animate` | Add purposeful motion |\n| `/impeccable colorize` | Introduce strategic color |\n| `/impeccable typeset` | Fix font choices, hierarchy, sizing |\n| `/impeccable layout` | Fix layout, spacing, visual rhythm |\n| `/impeccable delight` | Add moments of joy |\n| `/impeccable overdrive` | Add technically extraordinary effects |\n| `/impeccable clarify` | Improve unclear UX copy |\n| `/impeccable adapt` | Adapt for different devices |\n| `/impeccable optimize` | Performance improvements |\n| `/impeccable live` | Visual variant mode: iterate on elements in the browser |\n| `/impeccable generate` | Generate variants of a named element in the live browser, no manual picking |\n\nUse `/impeccable pin <command>` to create standalone shortcuts (e.g., `pin audit` creates `/audit`).\n\n#### Usage Examples\n\n```\n/impeccable audit blog           # Audit blog hub + post pages\n/impeccable critique landing     # UX design review\n/impeccable polish settings      # Final pass before shipping\n/impeccable harden checkout      # Add error handling + edge cases\n```\n\nOr use `/impeccable` directly with a description:\n```\n/impeccable redo this hero section\n```\n\n### Anti-Patterns\n\nThe skill includes explicit guidance on what to avoid:\n\n- Don't use overused fonts (Arial, Inter, system defaults)\n- Don't use gray text on colored backgrounds\n- Don't use pure black/gray (always tint)\n- Don't wrap everything in cards or nest cards inside cards\n- Don't use bounce/elastic easing (feels dated)\n\n## See It In Action\n\nVisit [the Neo Mirai case study](https://impeccable.style/cases/neo-mirai) to see a before/after case study of a real project transformed with Impeccable commands.\n\n## Installation\n\nThe skill needs no runtime of its own. Every skill copy ships a small launcher (`scripts/impeccable`, plus `impeccable.cmd` for Windows) that runs the Impeccable engine, a self-contained binary that either sits next to the launcher or is downloaded once on first run into `~/.impeccable/bin/`. Node is only involved if you use the `npx impeccable` installer, which is a shim around the same binary; the manual and Git options below work without it.\n\n### Option 1: CLI installer (Recommended)\n\nFrom the root of your project, run:\n\n```bash\nnpx impeccable install\n```\n\nThis shows the harness folders or installed CLIs it detected (for example `~/.claude`, `~/.codex`, `~/.grok`, `~/.hermes`, `~/.veto`, or project-local `.cursor`), lets you keep the detected set or customize providers, then asks whether to install into the current project or globally. Use `--providers=claude,codex,cursor,grok,hermes,veto` and `--scope=project|global` to skip those choices in scripts. On Claude Code, Cursor, Codex, GitHub Copilot, and Grok Build, it also installs the provider-native hook manifest for the current project. Veto receives the packaged skill under `~/.veto/skills/` and does not run native Impeccable edit hooks. Works with Cursor, Claude Code, Gemini CLI, Codex CLI, Grok Build, Hermes Agent, Veto, and every other supported tool. Reload your harness afterward.\n\nTo refresh an existing install, run:\n\n```bash\nnpx impeccable update\n```\n\nCodex users should open `/hooks` after install or update and approve the project hook when prompted. Codex tracks trust by hook definition, so updates that change `.codex/hooks.json` can require approval again. Grok Build users need project folder trust (`/hooks-trust` or launch with `--trust`) before `.grok/hooks/` scripts run.\n\nSee [Allow the hook in your harness](https://impeccable.style/docs/hooks#allow-the-hook-in-your-harness) for harness-specific trust and verification steps.\n\n### Option 2: Git Submodule\n\nFor teams that want to keep Impeccable vendored and updated through Git, add this repo as a submodule and link the compiled provider build into your harness folders:\n\n```bash\ngit submodule add https://github.com/pbakaus/impeccable .impeccable\nnpx impeccable link --source=.impeccable --providers=claude,cursor\ngit add .gitmodules .impeccable .claude .cursor\ngit commit -m \"Add Impeccable skills\"\n```\n\nUse the providers your project needs, for example `claude`, `cursor`, `gemini`, `codex`, `github`, `grok`, `hermes`, `opencode`, `pi`, `qoder`, `trae`, `trae-cn`, `rovo-dev`, `vibe`, or `veto`. The command links individual skill folders from `.impeccable/dist/universal/` and leaves existing real skill directories untouched unless you pass `--force`.\n\nTo update later:\n\n```bash\ngit submodule update --remote .impeccable\nnpx impeccable link --source=.impeccable --providers=claude,cursor\n```\n\n### Option 3: Plugin install\n\n**GitHub Copilot in VS Code:**\n\nInstall [Impeccable from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=renaissance-geek.impeccable), or run:\n\n```bash\ncode --install-extension renaissance-geek.impeccable\n```\n\nRequires VS Code 1.109.3+, Copilot Chat access, and a trusted local workspace. Open Chat in Agent mode and try `/impeccable polish`. This skill-only extension does not install automatic hooks; avoid a duplicate Impeccable skill in the same workspace/profile. See [VS Code distribution details](docs/VSCODE-EXTENSION.md).\n\n**Claude Code:**\n```bash\n/plugin marketplace add pbakaus/impeccable\n```\n\n> Claude Code only. After adding the marketplace, open `/plugin` and install Impeccable from the list.\n\n**Grok Build:**\n```bash\ngrok plugin install pbakaus/impeccable#plugin --trust\n```\n\n> Grok Build only. The `#plugin` suffix installs the slim plugin package (skills, agents, and hooks) instead of the full monorepo. Then run `/impeccable init` in a Grok session. Project-scoped installs via `npx impeccable install --providers=grok` also work and write `.grok/skills/` plus `.grok/hooks/impeccable.json`.\n\n### Option 4: Download from Website\n\nVisit [impeccable.style](https://impeccable.style), download the ZIP for your tool, and extract to your project.\n\n### Option 5: Copy from Repository\n\n**Cursor:**\n```bash\ncp -r dist/cursor/.cursor your-project/\n```\n\n> **Note:** Cursor skills require setup:\n> 1. Switch to Nightly channel in Cursor Settings → Beta\n> 2. Enable Agent Skills in Cursor Settings → Rules\n>\n> [Learn more about Cursor skills](https://cursor.com/docs/context/skills)\n\n**Claude Code:**\n```bash\n# Project-specific\ncp -r dist/claude-code/.claude your-project/\n\n# Or global (applies to all projects)\ncp -r dist/claude-code/.claude/* ~/.claude/\n```\n\n**OpenCode:**\n```bash\ncp -r dist/opencode/.opencode your-project/\n```\n\n**DeepSeek Harness:**\n```bash\n# Project-specific\ncp -r dist/dsh/.dsh your-project/\n\n# Or global (applies to all projects)\nmkdir -p \"${DSH_HOME:-$HOME/.dsh}/skills\"\ncp -r dist/dsh/.dsh/skills/* \"${DSH_HOME:-$HOME/.dsh}/skills/\"\n```\n\nThe CLI honors `DSH_HOME` only when it resolves inside your home directory (or to home itself); otherwise it uses `~/.dsh`. An outside-home manual copy is not managed by `impeccable install/update`.\n\n**Hermes Agent:**\n```bash\n# Global (applies to all projects; uses the active profile, or ~/.hermes by default)\ncp -r dist/hermes/.hermes/skills/* \"${HERMES_HOME:-$HOME/.hermes}/skills/\"\n\n# Or project-specific\ncp -r dist/hermes/.hermes your-project/\n```\n\n> **Note:** Hermes gates project-local skills behind a per-repo trust decision\n> (they are procedure documents, so auto-loading them from any cloned repo is\n> treated as a prompt-injection vector). After a project-scoped install, run\n> `hermes skills trust` once from the project root. Global installs into the\n> active `$HERMES_HOME/skills/` (or `~/.hermes/skills/` when unset) load without\n> a trust step. `/impeccable <command>` then\n> routes through the skill's Commands table; the design hook does not install\n> on Hermes (no hook surface).\n>\n> [Learn more about Hermes skills](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills)\n\n**Pi:**\n```bash\ncp -r dist/pi/.pi your-project/\n```\n\n**Gemini CLI:**\n```bash\ncp -r dist/gemini/.gemini your-project/\n```\n\n> **Note:** Gemini CLI skills require setup:\n> 1. Install preview version: `npm i -g @google/gemini-cli@preview`\n> 2. Run `/settings` and enable \"Skills\"\n> 3. Run `/skills list` to verify installation\n>\n> [Learn more about Gemini CLI skills](https://geminicli.com/docs/cli/skills/)\n\n**Codex CLI:**\n```bash\n# Project-local\ncp -r dist/agents/.agents your-project/\nmkdir -p your-project/.codex\ncp dist/codex/.codex/hooks.json your-project/.codex/hooks.json\n\n# Or install the skill user-wide. Copy .codex/hooks.json into each project\n# where you want the design hook to run.\nmkdir -p ~/.agents/skills\ncp -r dist/agents/.agents/skills/* ~/.agents/skills/\n```\n\n> The asset-producer subagent ships nested inside the skill's own `agents/` folder, which Codex auto-discovers. No separate `.codex/agents/` copy is needed. The hook is project-local because Codex discovers hooks from `.codex/hooks.json` next to trusted project config.\n\n**GitHub Copilot:**\n```bash\ncp -r dist/github/.github your-project/\n```\n\n**Trae:**\n```bash\n# Trae China (domestic version)\ncp -r dist/trae/.trae-cn/skills/* ~/.trae-cn/skill"
+    },
+    "brief": {
+      "summary": "为AI编程代理提供设计规则与命令。",
+      "problem": "AI生成的前端设计千篇一律，缺乏辨识度。",
+      "highlights": [
+        "可以一键初始化并记录产品上下文。",
+        "可以用24个命令做设计审查与打磨。",
+        "可以在浏览器中实时迭代视觉方案。"
+      ],
+      "target_users": [
+        "AI编程工具用户",
+        "前端开发者",
+        "产品设计师"
+      ],
+      "why_trending": "今日新增619星，设计指导类AI技能受关注。",
+      "caveat": "需要安装并配置hook，非开箱即用。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pbakaus/impeccable",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "提升 Agent 设计能力的技能包",
+      "generated_by_ai": true,
+      "velocity_score": 85,
+      "freshness_score": 40,
+      "ranking_score": 63.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 85216,
+      "forks": 9431,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 9331
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-10-25T04:57:43Z",
+      "pushed_at": "2026-10-25T04:52:01Z",
+      "open_issues": 246,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <img src=\"docs/logo.png\" alt=\"VoiceStudio\" width=\"88\" />\n  <h1>VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"VoiceStudio ranking on Trendshift\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"docs/readme/README_CN.md\">简体中文</a> ·\n    <a href=\"docs/readme/README_JA.md\">日本語</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\" alt=\"AGPL-3.0\" /></a>\n    <a href=\"https://supermetry.com\"><img src=\"https://app.supermetry.com/px/zfjiv7psp4ed.svg?c=VoiceStudio&style=stats\" alt=\"views\" /></a>\n  </p>\n</div>\n\n![A tour of the Electron app: voice cloning, voice design, dubbing, and model management](docs/media/electron/voicestudio.gif)\n\n## Your voice. Your workflow.\n\n| Create | Produce | Connect |\n| :--- | :--- | :--- |\n| Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |\n| Dictate with a floating widget | Stories, audiobooks & batch jobs | Reusable recipes & watch folders |\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).\n\nLocal workflows run on your hardware. Remote services are optional; usage analytics requires consent.\n\n<details>\n<summary><strong>Explore the workspaces</strong> · Clone, dub, design & models</summary>\n\n<table>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-cloning.png\" alt=\"Electron voice cloning workspace with the bundled demo voice\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/dubbing.png\" alt=\"Electron video dubbing workspace\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice cloning</td><td align=\"center\">Video dubbing</td></tr>\n  <tr>\n    <td><img src=\"docs/media/electron/voice-design.png\" alt=\"Describe a voice in the Electron voice design workspace\" width=\"100%\" /></td>\n    <td><img src=\"docs/media/electron/models.png\" alt=\"Install and manage local speech models\" width=\"100%\" /></td>\n  </tr>\n  <tr><td align=\"center\">Voice design</td><td align=\"center\">Local models</td></tr>\n</table>\n\n<img width=\"2628\" height=\"1950\" alt=\"VoiceStudio desktop workspace\" src=\"https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659\" />\n\n</details>\n\n## Get started\n\n### One-command install (macOS / Linux)\n\n```sh\n# Latest Electron release\ncurl -fsSL https://voicestudio.sh/install | sh\n\n# A specific published Electron release (replace X.Y.Z)\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z\n\n# Build current main and install the desktop app\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --main\n\n# Uninstall the app, keeping your data\ncurl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall\n```\n\nOn Windows, run `irm https://voicestudio.sh/install | iex` in PowerShell.\n\nIf `voicestudio.sh/install` is unreachable or returns 404, run the same script\nstraight from the repository, or clone it and run `scripts/install.sh`:\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh\n```\n\nRelease downloads require curl and a SHA-256 tool. `--main` requires Git,\nNode.js 22+, Bun, Rust/Cargo, and platform build tools; see\n[installer prerequisites and behavior](docs/install/script.md).\nThe installer preserves your settings, projects, and models. Older versions\nmust contain Electron packages; it never falls back to archived Tauri builds.\n\nOr download from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest) (macOS `.dmg`, Windows `.exe`, Linux `.AppImage` or `.deb`) and follow your platform guide:\n\n**[macOS](docs/install/macos.md) · [Windows](docs/install/windows.md) · [Linux](docs/install/linux.md) · [Docker](docs/install/docker.md)**\n\n| Hardware | Support |\n|---|---|\n| NVIDIA GPU (Windows / Linux) | CUDA acceleration |\n| Apple Silicon | Metal (MPS) acceleration |\n| No dedicated GPU (Intel/AMD integrated graphics, older PCs) | Fully usable on the CPU, slower; setup installs the small CPU build of PyTorch (about 5 GB free disk) |\n| Windows on ARM (Snapdragon X etc.) | **Experimental**, validation pending: native ARM64 app, x64 Python backend under emulation, CPU only |\n| Intel Mac | App UI only; connect to a remote backend ([why](docs/install/macos.md)) |\n\nOpen **Voice cloning**, choose a voice or add a clean reference recording, enter your text, and generate. Install the required model when prompted. Hardware needs vary by engine; see [performance](docs/performance.md).\n\n### Install with prompt\n\nPaste into your coding agent (Claude Code, Codex, Cursor, …):\n\n```text\nInstall the VoiceStudio Electron app on this device and verify it works, following\nhttps://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md\n```\n\nThe [agent guide](docs/install/agent.md) covers hardware detection, reusing existing\ndata, asking before model downloads, and a test generation. Agents that support skills\ncan also run `npx skills add debpalash/VoiceStudio`.\n\n<details>\n<summary><strong>Run the Electron preview from source</strong></summary>\n\n```bash\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nbun install\nbun run setup:api  # prepare Python dependencies before starting Electron\nbun run dev\n```\n\nSee [Electron setup](electron/README.md) for prerequisites and backend configuration.\n\nUse `bun run smoke-test` to build and launch an isolated packaged Electron app.\nAdd `-- --install` for the networked managed-runtime installation check.\n\n</details>\n\n> **Electron is the only desktop app and web UI.** Version 0.5.3 was the final Tauri release. Existing Tauri users must [install Electron separately](docs/electron-migration.md). The retired Tauri shell and legacy UI entry points have been removed.\n\n## Documentation\n\n| Need | Start here |\n|---|---|\n| Setup help | [Troubleshooting](docs/install/troubleshooting.md) · [Model downloads](docs/downloading-models.md) |\n| Models & audio quality | [Engine guides](docs/engines/README.md) · [Benchmarks](docs/benchmarks.md) |\n| Integrations | [Local API](docs/speech-platform.md) · [MCP](docs/mcp.md) · [Examples](examples/README.md) |\n| Phone apps (preview, run offline) | [iOS and Android](docs/mobile.md) |\n| Development | [Contributing](.github/CONTRIBUTING.md) ([CLA signing guidance](.github/CONTRIBUTING.md#contribution-licensing) for your first PR) · [Electron](electron/README.md) · [Changelog](CHANGELOG.md) |\n\nAgent skills: `npx skills add debpalash/VoiceStudio` — choose **voicestudio** for audio workflows or **voicestudio-maintainer** for repository maintenance.\n\n## Sponsors\n\nSponsorship funds maintainer time, development tools, release infrastructure and test hardware; it buys recognition, not features.\n\n[GitHub Sponsors](https://github.com/sponsors/debpalash) · [Ko-fi](https://ko-fi.com/debpalash) · [PayPal](https://paypal.me/palashCoder) · [Tiers and recognition](SPONSORS.md) · [Ask for recognition](https://github.com/debpalash/VoiceStudio/issues/new?template=sponsor.yml)\n\n## License & responsible use\n\n[AGPL-3.0](LICENSE) covers the application, including commercial use under its conditions. Model weights, tokenizers, voices and generated-output conditions are separate; a paid app licence does not grant those rights. Clone voices only with permission. Model Manager now shows versioned model-source notices, evidence links and unresolved review gaps from the [shared inventory](docs/licensing/model-inventory.md). Its optional [reviewed-file preview](docs/licensing/model-review-workflow.md) does not enforce ordinary downloads or certify commercial permission. See [license details](LICENSE-NOTICE.md).\n\n"
+    },
+    "brief": {
+      "summary": "本地开源语音克隆与配音工具，支持646种语言。",
+      "problem": "云端语音服务贵且数据外流，想要本地完成克隆配音。",
+      "highlights": [
+        "可以克隆声音并设计新音色",
+        "可以给视频做定时语音配音",
+        "可以转写录音并生成有声书"
+      ],
+      "target_users": [
+        "内容创作者",
+        "配音与音频工作者",
+        "本地隐私敏感用户"
+      ],
+      "why_trending": "总星数超8.5万，近期仍有更新，本地语音方案受关注。",
+      "caveat": "AGPL-3.0 协议，商用和分发需注意合规。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 95,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆与视频配音工具",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 78.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 71581,
+      "forks": 6468,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 667
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-10-25T04:53:38Z",
+      "pushed_at": "2026-10-25T04:56:02Z",
+      "open_issues": 283,
+      "homepage": "https://hyperframes.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://www.hyperframes.dev/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://www.hyperframes.dev/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nTo enable auto-update for the **hyperframes** marketplace, run `claude` in a\nterminal in your project. In Claude Code's terminal UI, run `/plugin`, then select\n**Marketplaces** → **hyperframes** → **Enable auto-update**. Afterward, use\n`/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 7 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nRun project-local installs from your video project's directory. From a HyperFrames\ncheckout, use `npx hyperframes skills update` for a global install instead: a\nproject-local installer target can overlap the tracked `skills/` source and\noverwrite uncommitted edits. See [contributor setup](CONTRIBUTING.md#getting-started).\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 7 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 7. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, publish, project history — plus reading its JSON and recovering from build or render failures.                                                                            |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/claude-design) and [Open Design guide](https://hyperframes.heygen.com/guides/open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://hyperframes.heygen.com/showcase) for finished videos you can watch, read, run, and remix.\n\n- Product launch videos and feature announcements\n- PR walkthroughs with animated code diffs, narration, and captions\n- Data visualizations, chart races, and map animations\n- Social videos with kinetic captions, overlays, and music\n- Docs-to-video, PDF-to-video, and site-tour explainers\n- Reusable motion graphics for automated content pipelines\n\n## Frame.md\n\n**frame.md — your design system, ready for video.**\n\nEvery brand has a `design.md`. None of them were written for a camera. `frame.md` is the missing translation layer: it takes your web-context design spec and inverts it for the frame — the same tokens, the same rules, but rewritten so an AI agent can compose a promo video without guessing at scale or reaching for web chrome.\n\nThe output is a `DESIGN.md` superset your whole toolchain can read. Atoms stay sacred. Composition stays free. Numbers come from the script.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/biennale-yellow\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/biennale-yellow.png\" alt=\"Biennale Yellow\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/biennale-yellow\">Biennale Yellow</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blockframe\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blockframe.png\" alt=\"BlockFrame\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blockframe\">BlockFrame</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/blue-professional\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blue-professional.png\" alt=\"Blue Professional\" width=\"100%\"></a>\n      <br><b><a href=\"https://www.hyperframes.dev/design/blue-professional\">Blue Professional</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://www.hyperframes.dev/design/bold-poster\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/bold-poster.png\" alt=\"Bold Poster\" width=\"100%\"></a>\n      <br><b"
+    },
+    "brief": {
+      "summary": "把 HTML/CSS 动画渲染成确定性 MP4 视频的开源框架。",
+      "problem": "让 AI 编码代理能稳定生成可复现的视频，而不依赖手工剪辑。",
+      "highlights": [
+        "可以用 HTML 写动画，渲染成 MP4",
+        "可以让 Claude Code 等代理按技能做视频",
+        "可以用约 450 个现成块搭转场和字幕"
+      ],
+      "target_users": [
+        "AI 编码代理用户",
+        "前端/动效开发者",
+        "视频自动化团队"
+      ],
+      "why_trending": "连续上榜，HTML 转视频路径对代理友好，总 Star 很高。",
+      "caveat": "资料中未说明渲染质量与复杂动画的兼容边界。",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "HTML 转视频渲染框架，适合动画",
+      "generated_by_ai": true,
+      "velocity_score": 86,
+      "freshness_score": 40,
+      "ranking_score": 72.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "NomaDamas/CozyClay",
+      "url": "https://github.com/NomaDamas/CozyClay",
+      "description": "Open source previs software in the browser: block a scene, pose characters, author camera moves and cuts, then take the same shots to an AI video model.",
+      "language": "JavaScript",
+      "total_stars": 1006,
+      "forks": 113,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "3d-animation",
+        "ai",
+        "ai-video",
+        "animation",
+        "blender",
+        "camera-control",
+        "llm-agent",
+        "motion-generation",
+        "previs",
+        "previsualization",
+        "previz",
+        "python",
+        "react-three-fiber",
+        "storyboard",
+        "threejs",
+        "typescript",
+        "virtual-production",
+        "webgl"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-28T19:57:47Z",
+      "updated_at": "2026-10-25T04:57:44Z",
+      "pushed_at": "2026-10-25T04:57:40Z",
+      "open_issues": 12,
+      "homepage": "https://cozyclay.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/images/cozyclay-logo.png\" alt=\"CozyClay\" width=\"340\">\n</p>\n\n<p align=\"center\">\n  <b>Make the scene first. Then make it a video.</b><br>\n  <em>Open source previs in a browser tab: block the set, move the cast, cut the camera, hand the shot to an AI video model.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img alt=\"License: AGPL-3.0\" src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\"></a>\n  <a href=\"https://www.npmjs.com/package/cozyclay\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/cozyclay\"></a>\n  <img alt=\"Node 22.19+\" src=\"https://img.shields.io/badge/node-22.19%2B-brightgreen\">\n  <a href=\"https://github.com/NomaDamas/CozyClay/stargazers\"><img alt=\"Stars\" src=\"https://img.shields.io/github/stars/NomaDamas/CozyClay?style=flat\"></a>\n  <a href=\"https://discord.gg/Hp9V5wwgjF\"><img alt=\"Discord\" src=\"https://img.shields.io/badge/discord-join-5865F2?logo=discord&logoColor=white\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://cozyclay.org/#try\">Try it in the browser</a> ·\n  <a href=\"#quick-start\">Quick start</a> ·\n  <a href=\"INSTALL_FOR_AGENTS.md\">Guide for AI agents</a> ·\n  <a href=\"#docs\">Docs</a> ·\n  <a href=\"CHANGELOG.md\">Changelog</a> ·\n  <a href=\"https://discord.gg/Hp9V5wwgjF\">Discord</a>\n</p>\n\n<table>\n  <tr>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/00f28c2f-e8e2-43eb-b253-b6c2436e1818\" controls muted width=\"100%\"></video></td>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/4c9b1e29-4803-435c-8305-f2c899fb1c2c\" controls muted width=\"100%\"></video></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><sub>Top: the greybox blocked in CozyClay. Bottom: the AI video made from it.</sub></td>\n    <td align=\"center\"><sub>Same idea, a parkour jump: the blocking holds the timing and the camera.</sub></td>\n  </tr>\n</table>\n\n## Why\n\nAI video costs money per take, and one miss means paying again. A text prompt cannot hold a\nwhole scene: where everyone stands, how they move, where the camera is, when it cuts.\n\nCozyClay lets you make those decisions first, in 3D, where they are cheap to change. Then the video\nmodel gets the shot as a first frame, a greybox reference clip and a prompt that describes the\nreal framing. It follows the blocking instead of guessing.\n\n```mermaid\nflowchart LR\n  S[\"Stage<br/>set + cast\"] --> M[\"Motion<br/>compiled + QA\"] --> C[\"Camera<br/>shots + cuts\"] --> E[\"Export<br/>frame · clip · prompt\"] --> V[\"AI video model\"]\n```\n\n## Quick start\n\n```bash\nnpx cozyclay\n```\n\nThat is the whole install. You need Node.js 22.19 or newer and a Chromium browser. You do not need\na GPU, Python or a model download. The studio opens at `http://127.0.0.1:5180/app/`.\n\n**Updating.** `npx cozyclay` fetches the newest release each time you run it. After\n`npm install -g cozyclay`, the studio shows a small **Update** chip in the top bar when a newer\nrelease is out. **Update now** installs it, and then you restart `cclay`. `cclay update` does the\nsame from the terminal. `--no-update-check` or `COZYCLAY_NO_UPDATE_CHECK=1` turns the check off.\n\n> **Asking an AI agent to set it up?** Give it this repository link. Its instructions are in\n> [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md).\n\n## What you can do\n\n| | |\n| --- | --- |\n| **Stage** | Build the set from primitives. Add rigged characters, or capsule stand-ins when nobody needs to move a limb. Fly the view like a 3D editor. |\n| **Move** | Describe the action. The agent writes a motion spec, and a deterministic compiler in the browser bakes every frame. QA checks collisions, foot slide, reach and hand contact before you see it. |\n| **Shoot** | Put shots on a timeline, draw dolly rails, look through the lens. Each shot knows the limits of the video model you target. |\n| **Export** | Keyframe pack (first and last frame, greybox clip, camera, prompt), mp4, depth and normal passes, contact sheet, OTIO cut list. |\n| **Storyboard** | Prefer stills? A Storyboard project is a row of panels with captions, an animatic and a contact sheet. |\n| **Undo anything** | Every edit, including each change the agent makes, is one undo step. |\n\n## Direct it with AI\n\nThe same scene can be driven from three places, live, while you watch the viewport.\n\n| Surface | Start | For |\n| --- | --- | --- |\n| **Agent panel** | `Cmd/Ctrl+B` in the studio | Chat in the studio. Sign in with ChatGPT or use your own key (Anthropic, OpenAI, Gemini, MiniMax, OpenRouter, CLIProxyAPI). |\n| **MCP server** | `npx -y cozyclay mcp` | Claude Desktop, Claude Code, Cursor or any MCP client. |\n| **Terminal** | `cclay live status --wait` | Coding agents that drive a running studio, JSON in and out. |\n\n```json\n{ \"mcpServers\": { \"cozyclay\": { \"command\": \"npx\", \"args\": [\"-y\", \"cozyclay\", \"mcp\"] } } }\n```\n\n## From source\n\n```bash\ngit clone https://github.com/NomaDamas/CozyClay.git && cd CozyClay\nnpm install\nnpm run dev     # http://127.0.0.1:5180/app/\nnpm test\n```\n\n## Docs\n\n| Read | For |\n| --- | --- |\n| [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md) | Install, run and connect, written for AI agents |\n| [`docs/motion3-agent-guide.md`](docs/motion3-agent-guide.md) | Motion specs, compile and QA |\n| [`docs/agent-cli.md`](docs/agent-cli.md) | `cclay live`, model providers, sessions |\n| [`mcp/README.md`](mcp/README.md) | MCP tools and the live protocol |\n| [`docs/studio-ui-ia.md`](docs/studio-ui-ia.md) | Every control and where it lives |\n| [`docs/privacy.md`](docs/privacy.md) | Anonymous telemetry and how to turn it off (`cclay telemetry off`) |\n| [`AGENTS.md`](AGENTS.md) | Contribution rules |\n\n## Guides\n\n| Read | For |\n| --- | --- |\n| [Greybox to AI video](https://cozyclay.org/greybox-to-video/) | Why a grey blockout is the most reliable input for a video model, and the block-then-generate loop |\n| [Previs software compared](https://cozyclay.org/previs-software/) | Free, open source and browser-based previs tools side by side |\n| [Seedance 2.5 camera control](https://cozyclay.org/seedance-camera-control/) | Getting the same camera on every take with a reference clip |\n| [Camera control for AI video](https://cozyclay.org/ai-camera-control/) | Why camera prompts drift and what the models actually accept |\n\nFound a bug or want a feature? [Open an issue](https://github.com/NomaDamas/CozyClay/issues).\n\n## License\n\nAGPL-3.0-or-later. See [`LICENSE`](LICENSE), [`LICENSING.md`](LICENSING.md) and\n[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Made by [Doyun](https://github.com/HaD0Yun) at\n[NomaDamas](https://github.com/NomaDamas).\n"
+    },
+    "brief": {
+      "summary": "浏览器里的开源预演工具，先摆场景再生成AI视频",
+      "problem": "文字提示难以固定站位、动作和镜头，AI视频反复抽卡费钱",
+      "highlights": [
+        "可以搭建灰盒场景并摆好角色站位",
+        "可以设计运镜、机位和剪辑点",
+        "可以导出首帧、参考片段和提示词给AI视频"
+      ],
+      "target_users": [
+        "预演/分镜师",
+        "AI视频创作者",
+        "独立动画团队"
+      ],
+      "why_trending": "本周雷达首次收录，总星约1006，近期有更新",
+      "caveat": "AI视频生成需另接模型，成片效果受模型限制",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "NomaDamas/CozyClay",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "浏览器 3D 预演与 AI 视频分镜工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "adambenhassen/minimax-music-ui",
+      "url": "https://github.com/adambenhassen/minimax-music-ui",
+      "description": "Suno-style web UI for a self-hosted MiniMax-Music3 inference server",
+      "language": "TypeScript",
+      "total_stars": 98,
+      "forks": 14,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-music",
+        "diffusers",
+        "docker",
+        "express",
+        "minimax",
+        "minimax-music",
+        "music-generation",
+        "react",
+        "self-hosted",
+        "sgl-omni",
+        "suno",
+        "tailwindcss",
+        "text-to-music",
+        "typescript",
+        "vite"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-08-18T22:32:58Z",
+      "updated_at": "2026-10-25T04:47:55Z",
+      "pushed_at": "2026-10-25T04:47:51Z",
+      "open_issues": 0,
+      "homepage": "https://demo-minimax-music.adambh.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/assets/banner.svg\" alt=\"MiniMax Music UI\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  A Suno-style web interface for any self-hosted <a href=\"https://huggingface.co/MiniMaxAI/MiniMax-Music3\">MiniMax-Music3</a> server.<br>\n  Write a style prompt and lyrics, queue takes, watch them render, and keep a local library with a waveform player.<br>\n  Talks the standard <code>POST /v1/audio/speech</code> route, so it works with <code>sgl-omni serve</code> out of the box.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://demo-minimax-music.adambh.dev\"><img alt=\"Live demo\" src=\"https://img.shields.io/badge/live%20demo-demo--minimax--music.adambh.dev-ff5c8a?logo=cloudflare&logoColor=white\"></a>\n  <a href=\"https://github.com/adambenhassen/minimax-music-ui/actions/workflows/ci.yml\"><img alt=\"CI\" src=\"https://github.com/adambenhassen/minimax-music-ui/actions/workflows/ci.yml/badge.svg\"></a>\n  <a href=\"https://github.com/adambenhassen/minimax-music-ui/pkgs/container/minimax-music-ui\"><img alt=\"GHCR\" src=\"https://img.shields.io/badge/ghcr.io-minimax--music--ui-2496ed?logo=docker&logoColor=white\"></a>\n  <a href=\"LICENSE\"><img alt=\"License: MIT\" src=\"https://img.shields.io/badge/license-MIT-ff5c8a.svg\"></a>\n  <img alt=\"Node 20+\" src=\"https://img.shields.io/badge/node-%E2%89%A520-339933?logo=node.js&logoColor=white\">\n  <img alt=\"React 19\" src=\"https://img.shields.io/badge/react-19-149eca?logo=react&logoColor=white\">\n  <img alt=\"Vite 8\" src=\"https://img.shields.io/badge/vite-8-646cff?logo=vite&logoColor=white\">\n  <img alt=\"Tailwind CSS 4\" src=\"https://img.shields.io/badge/tailwind-4-06b6d4?logo=tailwindcss&logoColor=white\">\n</p>\n\n<p align=\"center\">\n  <b>Try it:</b> <a href=\"https://demo-minimax-music.adambh.dev\">demo-minimax-music.adambh.dev</a> — a read-only demo with pre-rendered songs (Create simulates a render).\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/assets/screenshot.png\" alt=\"MiniMax Music UI — create panel, track feed and player\" width=\"100%\">\n</p>\n\n## Features\n\n- **Create panel** — Simple or Custom mode, song title (random name like “Velvet Horizon” if left empty), style description, lyrics editor with `[Verse]` / `[Chorus]` / … tag chips, instrumental toggle, duration 5–360 s, 1–4 takes per submit (each take gets `seed + i`), advanced seed. Output is WAV, as the official route documents (FLAC/MP3 appear in the selector but disabled).\n- **Templates** — a built-in default plus your own saved templates (style, lyrics, duration), stored server-side.\n- **Prompt enhancement** — the magic wand at the top right of the prompt field rewrites your description into a structured MiniMax Music 3 caption (Global Metadata / Vocal Details / Arrangement) using MiniMax's own [`music-caption-rewriter`](https://github.com/MiniMax-AI/MiniMax-Music3/tree/main/skills/music-caption-rewriter) skill. It runs on any OpenAI-compatible chat model with tool calling that you configure in Settings (or `LLM_API` / `LLM_MODEL`); the music server is not involved. Skill files are fetched from GitHub on first use and cached in `data/skill-cache/`. Undo restores your original text.\n- **Lyrics writing** — a second wand on the lyrics field writes original lyrics from the song description with the same LLM, sized to the chosen duration and using the model's section tags (`[Verse]`, `[Chorus]`, …). It replaces the current lyrics; Undo restores them. Hidden for instrumentals.\n- **Render queue** — the UI server renders one track at a time against the blocking `/v1/audio/speech` route and shows queued / rendering / done with elapsed time and an estimated bar (~3× realtime — the official API reports no progress). Cancel while queued or rendering, retry on error. Queued tracks survive a UI-server restart (they are re-queued in order); a render that was in flight is marked as interrupted.\n- **Live progress + play while rendering** — when the server is the bundled `inference/server.py` (it advertises `capabilities: [\"stream\"]` on `/health`), progress is real for every render (Generating → Rendering, ETA from the measured rate). Tick *Play while rendering* under Advanced and the audio is streamed as it's rendered too: press play on a track that is still rendering, the waveform grows as windows arrive, the player buffers when it catches up with the renderer and swaps to the final file seamlessly. Stock `sgl-omni` keeps the estimated bar.\n- **Library** — every finished render is saved into `data/tracks/` with its metadata (prompt, lyrics, seed, format). Cards show duration, seed and how long the render took. Search, download, delete, \"reuse settings\".\n- **Track panel** — click a card to open a Suno-style side panel: big cover with play, status/progress, Download / Reuse / Retry / Delete, full style prompt and lyrics, and details (duration, seed, render time, created/finished). Esc closes it.\n- **Player** — sticky bottom bar with waveform (decoded client-side), seek, prev/next, keyboard space to play/pause.\n- **Health pill** — offline / loading model / idle (· live progress) / rendering · N queued (probes `GET /v1/models` and the optional `GET /health`).\n- **Settings page** — point the app at your inference server (URL + optional API key) from the UI, with a \"Test connection\" button. Environment variables, when set, take precedence and lock those fields. A *Compatibility mode* debug switch makes the UI treat any server as stock `sgl-omni` (no `/health`, no streaming) to check the plain contract still works.\n- Responsive down to phone width. No external services required; everything runs on your machine or tailnet (prompt enhancement is optional and uses the LLM you configure, plus a one-time fetch of the skill from GitHub).\n\n## Architecture\n\n```\nbrowser ──/api/*──▶ server/ (Express 5)  ──POST /v1/audio/speech──▶  MiniMax-Music3 server\n                      │  one render at a time; audio response → disk       sgl-omni serve (:8000)  — blocking WAV\n                      │  or SSE progress + PCM windows when advertised     inference/server.py (:7862) — + stream\n                      └─▶ data/library.json · data/templates.json · data/settings.json · data/tracks/*.wav\n```\n\n| Package | What |\n|---|---|\n| `web/` | Vite + React 19 + TypeScript + Tailwind 4 single-page app. Talks only to `/api/*`. |\n| `server/` | Express 5 + TypeScript. Owns the library, proxies generation, serves the built SPA. |\n| `inference/` | Optional single-GPU MiniMax-Music3 server (Python, diffusers) exposing the same API as `sgl-omni serve`. |\n\n## Requirements\n\n- Node.js 20 or newer for the UI.\n- A MiniMax-Music3 inference server exposing `POST /v1/audio/speech` — the bundled single-GPU one below (Python 3.10+, CUDA GPU with ~24 GB VRAM), or MiniMax's own `sgl-omni serve` (two GPUs). See [Upstream API](#upstream-api).\n\n## Quick start\n\n**1. Start an inference server** (skip if you already have one).\n\n```bash\ngit clone https://github.com/adambenhassen/minimax-music-ui.git\ncd minimax-music-ui\n\n# bundled single-GPU server — same API as sgl-omni, plus live progress\npython -m venv .venv && source .venv/bin/activate      # Windows: .venv\\Scripts\\activate\npip install -r inference/requirements.txt\npython inference/server.py --port 7862                  # first start downloads the weights (tens of GB); /health answers 503 until loaded\n```\n\nOr MiniMax's reference server: `sgl-omni serve --model-path MiniMaxAI/MiniMax-Music3 --port 8000` (see the [model card](https://huggingface.co/MiniMaxAI/MiniMax-Music3)). Details and options for the bundled one: [`inference/README.md`](inference/README.md).\n\n**2. Start the UI** (a second terminal).\n\n```bash\nnpm install\nnpm run build\nnpm start\n# → http://localhost:8787\n```\n\nThe UI talks to `http://127.0.0.1:7862` by default — exactly where the bundled server listens — so it works right away. For any other address open **Settings** in the sidebar and enter the URL (and API key, if the server needs one). Prefer configuring from the environment? `MUSIC_API` / `MUSIC_API_KEY` override Settings and lock the fields — see [Configuration](#configuration).\n\n### Docker\n\nPrebuilt multi-arch images (amd64 + arm64) are published to GitHub Container Registry on every release:\n\n```bash\ndocker run -d -p 8787:8787 -v \"$PWD/data:/data\" ghcr.io/adambenhassen/minimax-music-ui:latest\n# → http://localhost:8787 — then set the inference server URL in Settings\n```\n\nOr build locally:\n\n```bash\ndocker compose up -d --build           # → http://localhost:8787, library persisted in ./data\n# or\ndocker build -t minimax-music-ui .\ndocker run -d -p 8787:8787 -v \"$PWD/data:/data\" minimax-music-ui\n```\n\nOptional: set `MUSIC_API` / `MUSIC_API_KEY` in the environment (`-e MUSIC_API=…`, or a `.env` next to `docker-compose.yml`) to pin the inference server; that locks the fields in Settings. From inside Docker, an inference server on the host is `http://host.docker.internal:7862`.\n\n### Configuration\n\nThe inference server address is resolved in this order:\n\n1. `MUSIC_API` / `MUSIC_API_KEY` environment variables — always win; the Settings page shows them locked\n2. Values saved from the **Settings** page (`data/settings.json`, written with mode `0600`)\n3. Default `http://127.0.0.1:7862`\n\n| Variable | Default | Description |\n|---|---|---|\n| `UI_TOKEN` | – | Optional shared token that protects every `/api/*` route; use a random value of at least 32 characters. The UI does not show a token prompt yet; a follow-up will add one. Scripts should send `Authorization: Bearer $UI_TOKEN`; browser clients can exchange the token at `POST /api/auth` for an HttpOnly session cookie. |\n| `MUSIC_API` | – | Base URL of the inference server, path prefix allowed, e.g. `http://host:8000` (overrides Settings) |\n| `MUSIC_API_KEY` | – | Sent as `Authorization: Bearer …` if the inference server was started with `--api-key` (overrides Settings) |\n| `LLM_API` | – | OpenAI-compatible base URL incl. `/v1` for prompt enhancement, e.g. `https://api.openai.com/v1`, `http://localhost:11434/v1` (overrides Settings) |\n| `LLM_API_KEY` | – | Bearer key for `LLM_API`, if it needs one (overrides Settings) |\n| `LLM_MODEL` | – | Chat model with tool calling, e.g. `gpt-4.1-mini` (overrides Settings) |\n| `UPSTREAM_TIMEOUT_MS` | `0` | Max wait for a render's response (and between its chunks); `0` = no limit. The official route sends nothing until the song is done, so long songs need minutes |\n| `PORT` | `8787` | Port for the UI server |\n| `DATA_DIR` | `./data` | Where `library.json`, `templates.json`, `settings.json` and `tracks/` live |\n| `STATIC_DIR` | `web/dist` (if built) | Directory of the built SPA to serve |\n\nWhen `UI_TOKEN` is unset, the server logs that the UI is unauthenticated. Non-GET/HEAD API requests also require an `Authorization` or `X-Requested-With` header to block cross-site writes; the web client sends `X-Requested-With`. During development, the Vite proxy adds the configured `UI_TOKEN` to safe reads and writes carrying `X-Requested-With`.\n\n## Development\n\n```bash\nnpm run dev          # server on :8787 (tsx watch) + Vite on :5173 with /api proxied\nnpm run dev:fake     # same, plus a fake inference API on :7999 — no GPU needed\nnpm test             # server tests against the fake upstream and web tests\nnpm run typecheck    # both packages\n```\n\nThe fake upstream (`server/test/fakeUpstream.ts`) implements `GET /v1/models` and a blocking `POST /v1/audio/speech`. Options for the standalone runner:\n\n```bash\nFAKE_AUDIO=/path/to/real.wav FAKE_RENDER_MS=8000 npm run fake -w server\nFAKE_LOADING=1 npm run fake -w server   # exposes /health → 503, UI shows \"Loading model…\"\nFAKE_STREAM=1 npm run fake -w server    # advertises streaming; SSE progress + 4 s PCM windows\nFAKE_PORT=7998 npm run fake -w server   # listen elsewhere (default 7999)\n```\n\n## Public demo image (read-only)\n\n`Dockerfile.demo` bakes a showcase library into the normal image and sets `DEMO=1`: the library is read-only, Settings/Templates can't be changed, and **Create simulates a render** (progress bar, then one of the showcase s"
+    },
+    "brief": {
+      "summary": "Suno 风格网页界面，接自托管 MiniMax-Music3 生成歌曲",
+      "problem": "自托管音乐模型缺少好上手的创作和整理界面",
+      "highlights": [
+        "可以填风格和歌词，排队批量生成多条歌曲",
+        "可以在渲染过程中直接播放，波形随进度增长",
+        "可以把成品连歌词种子一起存进本地曲库，支持搜索下载"
+      ],
+      "target_users": [
+        "自托管音乐玩家",
+        "独立音乐爱好者",
+        "折腾本地AI的开发者"
+      ],
+      "why_trending": "本周首次收录，近期仍在推送更新，98 Star 的小众自托管工具",
+      "caveat": "需自备约24GB显存的GPU服务器，首次下载权重数十GB",
+      "category": "音乐 / 音效",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "adambenhassen/minimax-music-ui",
+      "score": 90,
+      "category": "音乐 / 音效",
+      "reason": "自托管 AI 音乐生成 Web UI",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "SummerEngine/summer",
+      "url": "https://github.com/SummerEngine/summer",
+      "description": "The game engine built for AI. Includes MCP server, CLI and skills that let any agent build, test, publish, and grow full games with Summer Engine.",
+      "language": "TypeScript",
+      "total_stars": 88,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "ai-game-development",
+        "ai-game-engine",
+        "claude-code",
+        "claude-code-plugins",
+        "codex",
+        "cursor",
+        "game-development",
+        "game-engine",
+        "gamedev",
+        "gemini-cli-extension",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "multiplayer"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-26T11:57:53Z",
+      "updated_at": "2026-10-25T04:50:17Z",
+      "pushed_at": "2026-10-25T04:50:13Z",
+      "open_issues": 22,
+      "homepage": "https://summerengine.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Summer Engine: MCP server, CLI and skills\n\n<div align=\"center\">\n\n<img src=\"docs/brand/sun.png\" alt=\"\" width=\"128\">\n\n### The game engine built for AI.\n\n**Any agent builds, tests and publishes a full multiplayer game. MCP server · game-dev skills · `summer` CLI, in one npm package: `summer-engine`.**\n\n[![npm](https://img.shields.io/npm/v/summer-engine?label=npm&color=f7b731)](https://www.npmjs.com/package/summer-engine)\n[![downloads](https://img.shields.io/npm/dm/summer-engine?label=downloads&color=f7b731)](https://www.npmjs.com/package/summer-engine)\n[![license](https://img.shields.io/badge/license-MIT-1a1a1a)](LICENSE)\n\n[**Website**](https://www.summerengine.com) · [**Docs**](https://docs.summerengine.com) · [**CLI setup**](https://www.summerengine.com/cli) · [**MCP setup**](https://www.summerengine.com/mcp)\n\n</div>\n\n---\n\n## Install\n\n- **Start a game now** (Node 22+): `npx -y summer-engine@latest dev`. It asks before it installs the Summer Engine app (about 660 MB, free) when it is missing, creates a starter project here (in `./my-game` when this folder has other files) and opens it, ready for your agent. No sign-in needed to build.\n- **Chat apps** (Claude, ChatGPT, Cursor...): add `https://mcp.summerengine.com/mcp`. Nothing to install.\n- **Homebrew:** `brew install summerengine/tap/summer`\n- **npm** (Node 22+): `npm install -g summer-engine`\n\n**CLI only** (summer-engine 4.2.0 or newer), no MCP server: `summer setup --cli`. `summer ops search \"publish my game\"` finds any operation, signed in or not.\n\n## Connect\n\n**Cloud work: `https://mcp.summerengine.com/mcp`.** Nothing to install. Add the URL to your agent and sign in to your Summer account once. Your agent then makes assets (images, 3D models, motion, sound effects, music, voices, video), searches and downloads your Summer asset library, plans games, and runs your projects, the store, publishing, prices, analytics, A/B tests, your team and Studio. It has no engine tools: for those, use the local server below.\n\n| Agent | Add the hosted server |\n|---|---|\n| Claude Code | `claude mcp add --transport http summer-cloud https://mcp.summerengine.com/mcp`, then `/mcp` to sign in |\n| Codex | `codex mcp add summer-cloud --url https://mcp.summerengine.com/mcp`, then `codex mcp login summer-cloud` |\n| Cursor | [Add to Cursor](https://cursor.com/install-mcp?name=summer-cloud&config=eyJ1cmwiOiJodHRwczovL21jcC5zdW1tZXJlbmdpbmUuY29tL21jcCJ9), or add `\"summer-cloud\": {\"url\": \"https://mcp.summerengine.com/mcp\"}` under `mcpServers` in `~/.cursor/mcp.json` |\n| VS Code | [Add to VS Code](https://vscode.dev/redirect/mcp/install?name=summer-cloud&config=%7B%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fmcp.summerengine.com%2Fmcp%22%7D), or `code --add-mcp '{\"name\":\"summer-cloud\",\"type\":\"http\",\"url\":\"https://mcp.summerengine.com/mcp\"}'` |\n| Devin Desktop (formerly Windsurf) | add `\"summer-cloud\": {\"serverUrl\": \"https://mcp.summerengine.com/mcp\"}` under `mcpServers` in `~/.config/devin/mcp_config.json` (Windows `%APPDATA%\\devin\\mcp_config.json`) |\n| Claude Desktop, claude.ai | Settings > Connectors > Add custom connector, then paste the URL |\n\n**Engine work: `npx -y summer-engine@latest setup <agent> --yes`** (needs Node 22+). It writes the local server (`summer mcp`) into your agent's config with the skills. The local server drives the Summer Engine app on your machine: build scenes, write scripts, play the game, take screenshots, read errors. After `summer login` it also runs every cloud operation, so your agent needs one server. Or paste the prompt in [Get started](#get-started-one-prompt) and your agent does every step.\n\n**CLI only (summer-engine 4.2.0 or newer): `npx -y summer-engine@latest setup <agent> --cli --yes`.** No MCP server: your agent runs Summer as commands in its shell. Setup installs the skills for your agent, with `summer-cli`, the guide to the commands, and writes no MCP entry. Your agent signs you in with `summer login`, finds an operation with `summer ops search \"<what you want>\"` and runs it as `summer <area> <action> --<field> <value>`, with `--dry-run`, `--wait` and `--json`. Engine commands (`summer engine …`) drive the Summer Engine app on your machine. Each skill ends with a table of the command for every tool it names. Add `--assets-only` for only the asset skills. `--no-mcp` is the same as `--cli`.\n\n**ChatGPT and Claude's connector directory** use two reviewed store versions with a fixed tool list: `https://mcp.summerengine.com/chatgpt` (games, assets and generation; no publishing, no billing links) and `https://mcp.summerengine.com/directory` (the store, publishing and Grow reads; no image, 3D, audio or video generation). They keep their 3.x tool names and have no `summer_search` or `summer_call`. For everything else, use `/mcp`.\n\n## What this is\n\n[Summer Engine](https://www.summerengine.com) is the game engine built for AI. This repo connects your AI coding agent (Claude Code, Cursor, Codex, Copilot and many more) to it: the agent builds a whole game in the engine, tests it, publishes it to [summer.games](https://summer.games) and reads how players play it.\n\n| Part | What it does |\n|---|---|\n| **MCP server** (`summer mcp`) | Tools your agent calls to drive the running editor: build scenes, write scripts, play the game, take screenshots, read errors. After `summer login` it also runs the cloud operations: assets, plans, the store, publishing, prices and analytics. |\n| **Skills** | Game-dev know-how your agent loads: movement, combat, multiplayer, VFX, audio, UI, level design and more. |\n| **CLI** (`summer`) | Installs the engine, signs you in, sets up your agent, creates projects from templates and publishes games. |\n\nThis repo is not the engine itself. The CLI downloads the Summer Engine app for you.\n\nWith Summer installed, your agent can:\n\n- **Build real games**: scenes, scripts, physics and UI, through live MCP tools.\n- **Build multiplayer games** on Summer's own networking: matchmaking, parties, leaderboards, player data and world saves.\n- **Add analytics** to the game and read it back: store page views, launches, play sessions, play time and your own events.\n- **Publish games** to the [summer.games](https://summer.games) store: the store page, art, the build, a private preview link and the release. Summer's automatic checks run before anything goes live; staff review games afterwards.\n- **Use proven recipes**: skills, templates and references, all searchable through one index.\n- **Check its own work**: play the game, take screenshots, read the debugger, press real keys.\n- **Resume any project**: `.summer/` project memory lets a fresh agent pick up where the last one stopped.\n\n### You decide what your agent may do\n\nStudio > Settings > Agent permissions has six switches. They apply to every app you connect, like Claude or ChatGPT. These defaults apply now. You can change them soon. Until then, Summer Games still asks the game's owner before an agent publishes, and price, A/B test and member changes ask you first.\n\n| Switch | Default | What the agent may do without asking |\n|---|---|---|\n| Make and build | on | Edit drafts, scenes, plans and uploads, and start builds. |\n| Spend credits | on | Generate assets and run paid builds, within your credits and your auto top-up limit. |\n| Publish | on | Publish store pages, versions and releases. Summer's automatic checks still run first. |\n| Prices and live changes | on | Change prices and sales, start or stop A/B tests, change member roles. |\n| Delete for good | off: asks | Delete games, assets, pages and releases. |\n| Contact people | off: asks | Send invites and other emails to real people. |\n\nWhen a switch is off, the agent asks you first. It gives you a link (`https://www.summerengine.com/studio/approvals/<id>`), and an open Studio tab shows the request with Approve and Decline. Nothing changes until you approve. The agent always asks before it changes agent permissions or auto top-up, enters a jam, or changes the analytics event limit. Studio > Settings > Agent activity lists what agents changed or asked for, newest first, with Undo for prices, sales, country prices, member roles, team names and the event limit.\n\nGeneration and paid builds spend your Summer credits. Turn on auto top-up in Studio Billing: when your credits fall below an amount you pick, Summer adds the amount you choose, up to a monthly limit you set. Agents can never change auto top-up on their own. When credits run out, your agent gets the error `no_credits` with one link: https://www.summerengine.com/studio/credits.\n\nSummer never installs software without your explicit confirmation. Library entries are structurally prevented (by a capability lint in CI) from instructing agents to touch the network, credentials, or package managers.\n\n## Get started: one prompt\n\nOpen your AI agent (Claude Code, Cursor, Codex, Copilot, Devin Desktop, etc.) and paste:\n\n> Install Summer Engine and let's make a game. Read github.com/summerengine/summer, check what I already have installed, install whatever is missing, and open a starter project so we can start building.\n\nThe agent reads this README, checks what is already on your machine, and runs only the missing steps in its shell.\n\nThe first run will:\n1. Fetch the `summer-engine` npm package (~2 MB) through npx.\n2. Install Summer's game-dev skills into `~/.claude/skills/` (or your agent's user-skill directory) so the agent loads them next session.\n3. Run `npx -y summer-engine@latest dev`: download the Summer Engine app (about 660 MB) if it's not installed, create a starter project and open it in the engine.\n\nBuilding needs no sign-in. Your agent asks you to sign in only when you first use Summer's cloud (generating assets, publishing).\n\nAgents with no shell (Claude Desktop, chat apps with the local server) do the same through the MCP: `summer_projects_create_local` writes the starter project and `summer_projects_open_local` opens it, after you say yes to installing the engine.\n\nIn most agents (Claude Code, Codex, Cursor, GitHub Copilot (VS Code, CLI, JetBrains), Zed, Cline, Kilo Code, OpenCode, Devin Desktop, Antigravity, Kiro, Trae, Warp, Goose, Hermes, Crush, Amp, Factory, Junie, Qwen Code, Kimi Code, Grok Build and Mistral Vibe), setup also connects Summer Games (`summer-games`), so the agent can see your friends, start parties and send messages as you. You sign in once; setup prints the step for your agent (Claude Code: `/mcp`, choose `summer-games`; Codex: `/mcp login summer-games`; Cursor: Connect next to `summer-games` in its MCP settings). A summer.games page opens in your browser; sign in and choose Allow.\n\nThen ask the agent to build something.\n\n### Claude Code: the Summer plugin\n\nIn Claude Code, type:\n\n```text\n/plugin install summer --marketplace summerengine/summer\n```\n\nThen type `/summer:start`. It gets a first game playing in about five minutes, with one OK from you and no sign-in: from a template that already plays, or from a plan of concept art Summer draws for your idea right in the chat, built in the Summer Engine desktop app. The plugin brings Summer's skills and two MCP servers: `summer-engine` drives the desktop app (needs Node), and `summer-cloud` is Summer's hosted server (sign in once with `/mcp`). Use the plugin or `summer setup claude-code`, not both: they install the same skills.\n\n### Only want assets?\n\nSound effects, music, voices, images, 3D models, motion and video are made on Summer's servers, so you do not need the Summer Engine app for them. The quickest way is the hosted server in [Connect](#connect): no Node, no install. To get the asset skills too, paste this instead:\n\n> Connect Summer to this agent so I can make game assets. Read github.com/summerengine/summer, connect yourself to Summer and log me in. Skip the Summer Engine app and the starter project, I only want assets.\n\nThe agent installs the asset skills and the MCP config (summer-engine 4.0.0 or newer) and signs you in. It does not download the engine. Each a"
+    },
+    "brief": {
+      "summary": "把 AI 编码助手接入 Summer 引擎，从建游戏到发布一条龙",
+      "problem": "AI 助手会写代码，却进不了游戏引擎，建场景、试玩、发布都得手动做",
+      "highlights": [
+        "可以让助手直接建场景、写脚本、试玩并截图",
+        "可以用内置技能做多人联机、战斗、UI 和关卡",
+        "可以让助手发布到 summer.games 并回读玩家数据"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "用 AI 编程的游戏团队",
+        "AI 编程工具用户"
+      ],
+      "why_trending": "本周首次收录，让 AI 完整做游戏并上架的思路少见，但 Star 仍少",
+      "caveat": "仓库只是连接层，引擎本体需另下载约 660MB 并登录",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "SummerEngine/summer",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "面向 AI Agent 的游戏引擎与 MCP",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  }
+]
