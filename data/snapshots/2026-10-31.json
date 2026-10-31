@@ -1,0 +1,538 @@
+[
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "pingdotgg/t3code",
+      "url": "https://github.com/pingdotgg/t3code",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 32991,
+      "forks": 8677,
+      "stars_today": 930,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 930
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-08T23:46:22Z",
+      "updated_at": "2026-10-31T05:57:50Z",
+      "pushed_at": "2026-10-31T05:56:48Z",
+      "open_issues": 3916,
+      "homepage": "https://t3.codes",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# T3 Code\n\nT3 Code is an \"agent harness control surface\". It enables control of the agents on your machine with a best-in-class mobile app ([iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824), [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code)), [web app](https://app.t3.codes) and [Electron-based desktop app](https://t3.codes).\n\nWorks with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them.\n\n## \"Wait, what are you selling me?\"\n\nNothing. We built T3 Code because we wanted the best possible development experience with agents. We were inspired by existing solutions like the Codex desktop app, Conductor, Claude Desktop and Cursor Glass, but none met our bar.\n\nWe wanted something performant, remote-ready, and truly open. If we ever go the wrong direction, we want you to have everything you need to fork and build the editor that you want.\n\n## Installation\n\n> [!WARNING]\n> T3 Code currently supports Codex, Claude, Cursor, Grok Build, OpenCode, and Antigravity. Install and authenticate at least one provider before use:\n>\n> - Codex: install [Codex CLI](https://developers.openai.com/codex/cli) and run `codex login`\n> - Claude: install [Claude Code](https://claude.com/product/claude-code) and run `claude auth login`\n> - Cursor: install [Cursor CLI](https://cursor.com/cli) and run `agent login`\n> - Grok Build: install [Grok Build CLI](https://x.ai/cli) and run `grok login`\n> - OpenCode: install [OpenCode](https://opencode.ai) and run `opencode auth login`\n> - Antigravity: enable it in Settings, then use **Install Antigravity** and **Sign in with Google**. No CLI is required.\n\n### Command line\n\n```bash\ncurl -fsSL https://t3.codes/install.sh | sh\n```\n\nOn Windows, in PowerShell:\n\n```powershell\nirm https://t3.codes/install.ps1 | iex\n```\n\nThen run `t3` to start the server and open the local web app. `t3 service install` keeps it running in the background, `t3 update` moves to a newer release, and `t3 --help` has the full reference.\n\nTo try it once without installing, run `npx t3@latest` instead.\n\n### Desktop app\n\nInstall the latest version of the desktop app from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), or from your favorite package registry:\n\n#### Windows (`winget`)\n\n```bash\nwinget install T3Tools.T3Code\n```\n\n#### Windows (`scoop`)\n\n```bash\nscoop install extras/t3code\n```\n\n#### macOS (Homebrew)\n\n```bash\nbrew install --cask t3-code\n```\n\n#### Debian, Ubuntu (`.deb`)\n\nDownload the `.deb` from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), then:\n\n```bash\nsudo apt install ./T3-Code-*.deb\n```\n\n#### Arch Linux (AUR)\n\nStable:\n\n```bash\nyay -S t3code-bin\n```\n\nNightly:\n\n```bash\nyay -S t3code-nightly-bin\n```\n\nThe AUR packaging is maintained in this repository under [`packaging/aur`](./packaging/aur).\n\n#### Nix (nixpkgs)\n\n```bash\nnix profile add github:NixOS/nixpkgs/nixos-unstable#t3code\n```\n\nThe package is maintained in [nixpkgs](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/t3/t3code)\nand includes the desktop app (`t3code-desktop`) and the `t3` command.\nSee [Nix installation](./docs/user/install.md#nix-nixpkgs) for NixOS configuration and updates.\n\n## Some notes\n\nWe are very very early in this project. Expect bugs.\n\nWe are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be.\n\n## Documentation\n\nFull docs live in [docs/](./docs). There's no docs site yet.\n\n- [FAQ](./docs/user/faq.md)\n- [Install and first run](./docs/user/install.md)\n- [Permission modes](./docs/user/permission-modes.md)\n- [Keyboard shortcuts](./docs/user/keybindings.md)\n- [Project settings](./docs/user/project-settings.md)\n- [Appearance preferences](./docs/user/appearance.md)\n- [Remote access from a phone or another machine](./docs/user/remote-access.md)\n- [Connect Claude Code, Codex, ChatGPT and other agents over MCP](./docs/user/outside-agents.md)\n- [Keeping app and server in sync](./docs/user/updating.md)\n- [Source control integrations](./docs/user/source-control.md)\n- Multiple accounts: [Codex](./docs/user/providers-codex.md) · [Claude](./docs/user/providers-claude.md)\n- [Run T3 Code as a background service](./docs/user/background-service.md)\n\nBuilding from source? Start at [docs/internals/overview.md](./docs/internals/overview.md).\n\n## If you REALLY want to contribute still.... read this first\n\n### Install `vp`\n\nT3 Code uses Vite+ so you'll need to install the global `vp` command-line tool.\n\n#### macOS / Linux\n\n```bash\ncurl -fsSL https://vite.plus | bash\n```\n\n#### Windows\n\n```bash\nirm https://vite.plus/ps1 | iex\n```\n\nCheckout their getting started guide for more information: https://viteplus.dev/guide/\n\n### Install dependencies\n\n```bash\nvp i\n```\n\nRead [CONTRIBUTING.md](./CONTRIBUTING.md) before reporting a bug or opening a PR.\n\nHave a feature request? Start an [Ideas discussion](https://github.com/pingdotgg/t3code/discussions/categories/ideas).\n\nNeed support? Join the [Discord](https://discord.gg/jn4EGJjrvv).\n"
+    },
+    "brief": {
+      "summary": "远程控制本机 AI 编码代理的开源控制台",
+      "problem": "各家编码代理界面分散，离开电脑就难查看和接管进度",
+      "highlights": [
+        "可以用手机查看并操作电脑上的编码代理",
+        "可以接入 Claude Code、Codex、Cursor 等六种代理",
+        "可以装成桌面应用、网页或后台常驻服务"
+      ],
+      "target_users": [
+        "AI 编码代理用户",
+        "需要远程办公的开发者",
+        "开源工具爱好者"
+      ],
+      "why_trending": "今日新增约 930 Star，开源可自托管，兼容多种代理",
+      "caveat": "作者称项目非常早期，Bug 较多，暂不收大功能贡献",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pingdotgg/t3code",
+      "score": 72,
+      "category": "Harness / Jev",
+      "reason": "Agent Harness 控制台，多端远程操控编码 Agent",
+      "generated_by_ai": true,
+      "velocity_score": 90,
+      "freshness_score": 40,
+      "ranking_score": 64.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "milind-soni/OpenMausBot",
+      "url": "https://github.com/milind-soni/OpenMausBot",
+      "description": "Open-source Grok Bot alternative with a virtual machine that bots can use",
+      "language": "TypeScript",
+      "total_stars": 8901,
+      "forks": 1224,
+      "stars_today": 895,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1240
+    },
+    "details": {
+      "topics": [
+        "ai-agents",
+        "claude-code",
+        "codex",
+        "computer-use",
+        "docker",
+        "electron",
+        "expo",
+        "grok",
+        "grok-bot",
+        "grok-bot-alternative",
+        "self-hosted",
+        "typescript"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-08-11T18:58:55Z",
+      "updated_at": "2026-10-31T05:57:55Z",
+      "pushed_at": "2026-10-30T22:54:18Z",
+      "open_issues": 616,
+      "homepage": "https://www.openmausbot.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# OpenMausBot\n\n**The open-source Grok Bot alternative: your own team of AI bots, in a chat app.**\n\n[**openmausbot.com**](https://www.openmausbot.com) &nbsp;·&nbsp; [Download](https://www.openmausbot.com/download) &nbsp;·&nbsp; [Open source Grok Bot alternative, compared](https://www.openmausbot.com/blog/grok-bot-vs-openmausbot)\n\n<sub>OpenMausBot is an open-source Grok Bot alternative: an independent project inspired by **Grok Bot**, and the open-source alternative to **Meta Muse**, **OpenAI dots** and **Cue by Manus** — bring-your-own-agent, local-first, on the models you already have. Also known as **MausBot**; formerly **OpenGrokBot**. Not affiliated with xAI, Meta, OpenAI or Manus.</sub>\n\nEvery bot in the sidebar is a real agent — Claude or Codex running locally under the hood — with its own\npersonality, its own model, its own cloud computer, and its own connected apps.\nTalk to them like contacts. Watch them work. Approve what matters.\n\n![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)\n![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)\n![Electron](https://img.shields.io/badge/Electron-macOS%20%C2%B7%20Windows%20%C2%B7%20Ubuntu-2B2E3A?logo=electron&logoColor=9FEAF9)\n![Agents](https://img.shields.io/badge/agents-Claude%20·%20Codex-d97757)\n[![Release](https://img.shields.io/github/v/release/milind-soni/OpenMausBot?label=release&color=1084fe&cacheSeconds=300)](https://github.com/milind-soni/OpenMausBot/releases/latest)\n![PRs](https://img.shields.io/badge/PRs-welcome-38d591)\n\n<br>\n\n<a href=\"https://github.com/milind-soni/OpenMausBot/releases/latest/download/OpenMausBot.dmg\">\n  <img src=\"https://img.shields.io/github/v/release/milind-soni/OpenMausBot?style=for-the-badge&label=%E2%AC%87%EF%B8%8F%20%20Download%20for%20Mac%20%28Apple%20silicon%29&labelColor=070707&color=1084fe&cacheSeconds=300\" alt=\"Download the latest OpenMausBot for Mac with Apple silicon (.dmg)\" height=\"40\">\n</a>\n&nbsp;\n<a href=\"https://github.com/milind-soni/OpenMausBot/releases/latest/download/OpenMausBot-intel.dmg\">\n  <img src=\"https://img.shields.io/github/v/release/milind-soni/OpenMausBot?style=for-the-badge&label=%E2%AC%87%EF%B8%8F%20%20Download%20for%20Mac%20%28Intel%29&labelColor=070707&color=2a9d8f&cacheSeconds=300\" alt=\"Download the latest OpenMausBot for Intel Macs (.dmg)\" height=\"40\">\n</a>\n&nbsp;\n<a href=\"https://github.com/milind-soni/OpenMausBot/releases/latest/download/OpenMausBot-setup.exe\">\n  <img src=\"https://img.shields.io/github/v/release/milind-soni/OpenMausBot?style=for-the-badge&label=%E2%AC%87%EF%B8%8F%20%20Download%20for%20Windows&labelColor=070707&color=4cc2ff&cacheSeconds=300\" alt=\"Download the latest OpenMausBot for Windows (.exe)\" height=\"40\">\n</a>\n&nbsp;\n<a href=\"https://github.com/milind-soni/OpenMausBot/releases/latest/download/OpenMausBot-amd64.deb\">\n  <img src=\"https://img.shields.io/github/v/release/milind-soni/OpenMausBot?style=for-the-badge&label=%E2%AC%87%EF%B8%8F%20%20Download%20for%20Ubuntu&labelColor=070707&color=e95420&cacheSeconds=300\" alt=\"Download the latest OpenMausBot for Ubuntu (.deb)\" height=\"40\">\n</a>\n\n<sub>[latest release](https://github.com/milind-soni/OpenMausBot/releases/latest) &nbsp;·&nbsp; macOS: Apple silicon & Intel · signed & notarized .dmg &nbsp;·&nbsp; Windows: x64 installer &nbsp;·&nbsp; Ubuntu 24.04 x64: .deb or AppImage beta &nbsp;·&nbsp; [all releases](https://github.com/milind-soni/OpenMausBot/releases)</sub>\n\n<br>\n\n<a href=\"https://github.com/sponsors/milind-soni\">\n  <img src=\"https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F%20%20Support%20OpenMausBot-GitHub%20Sponsors-38d591?style=for-the-badge&labelColor=070707\" alt=\"Support OpenMausBot via GitHub Sponsors\" height=\"40\">\n</a>\n\n<br>\n<br>\n\n<sub>Powered by <a href=\"https://boat.dev\">boat.dev</a></sub>\n<br>\n<a href=\"https://boat.dev\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/assets/sponsors/boat-logo-white.svg\">\n    <img src=\"docs/assets/sponsors/boat-logo.svg\" alt=\"Boat (boat.dev)\" height=\"34\">\n  </picture>\n</a>\n\n<br>\n<br>\n\n<img src=\"docs/screenshots/hero.png\" alt=\"OpenMausBot — a Telegram-style chat app where every chat is a real AI agent\" width=\"900\">\n\n</div>\n\n---\n\n> ⚠️ **No affiliation with any cryptocurrency.** OpenMausBot has no token. Any coin using the OpenMausBot, Maus, or SupaMaus name is not created, endorsed, or affiliated with this project or its maintainer. I have received no tokens, payment, or allocation from anyone, and I will not be endorsing any token.\n\n## Why\n\nOne assistant in one box is the wrong shape for agents. OpenMausBot is an independent, open-source project inspired by **Grok Bot** —\nit keeps the idea (AI as a *messaging app*: a roster of bots you chat with, each with its own personality,\nmemory of its thread, model, computer, and apps) and rebuilds it open, local-first, and on the agents you\nalready have:\n\n- **Bring your own agents.** Bots run on the `claude`, `codex`, and `grok` CLIs installed on your own machine\n  — your existing logins and subscriptions, no new accounts, no proxy in the middle. Point any engine at a\n  custom CLI binary (a versioned build or wrapper) in **Settings → Engines**.\n- **Local first.** One small harness server on `127.0.0.1` owns every agent process. Transcripts, keys, and\n  events live in `~/.openmausbot`, not a cloud.\n- **Agents with hands.** Each bot can use a cloud Linux desktop, an isolated Local VM, or—where the platform\n  safety boundary is currently certified—your own computer, plus 500+ apps through Composio. Host control is\n  available on macOS and Ubuntu Xorg after explicit opt-in. Ubuntu Wayland host control remains disabled while\n  issue #345 is resolved.\n\n## The open-source alternative to Grok Bot, Muse, dots and Cue\n\nFour closed personal-agent products shipped in seven weeks of 2026, and each one keeps the model, the\ncomputer and your data on its maker's side of the line. OpenMausBot is the open-source version of that\nshape: a team of agents in a chat app, each with its own model, its own computer and its own connected\napps, running on your machine under Apache 2.0. If you searched for an *open Muse*, *open dots*, an\n*open-source Grok Bot*, an *open Instinct* or an *open Cue*, this is the repository.\n\n| Looking for | What it is | How OpenMausBot differs | Read more |\n| --- | --- | --- | --- |\n| **Open source Grok Bot** | xAI's roster of bots on one shared cloud computer, Grok only, from a SuperGrok or Cursor plan | Same roster shape; any model per bot; your own machine; approval cards | [Grok Bot vs OpenMausBot](https://www.openmausbot.com/blog/grok-bot-vs-openmausbot) |\n| **Open Muse** | Meta's single personal agent in a Meta cloud VM, US and Canada only | A team instead of one agent; runs anywhere; data in `~/.openmausbot` | [Meta Muse alternative](https://www.openmausbot.com/blog/open-source-alternative-to-meta-muse) |\n| **Open dots** | OpenAI's always-on agent inside ChatGPT, GPT only, Pro and Business Premium plans | Several agents; your Claude, ChatGPT or Grok login; no plan required | [OpenAI dots alternative](https://www.openmausbot.com/blog/openai-dots-alternative) |\n| **Open Cue** | Manus's invite-only agents with their own phone, email and wallet | No invite; OAuth instead of passwords; open source | [Cue by Manus alternative](https://www.openmausbot.com/blog/open-source-alternative-to-cue-by-manus) |\n| **Open Instinct** | Spear Street's invite-only agent that holds your passwords on a cloud computer | Ask for approval when you want it; signs in over OAuth; your machine | [Instinct AI alternative](https://www.openmausbot.com/blog/instinct-ai-alternative) |\n\nAll five side by side: [Muse vs Grok Bot vs Dots vs Cue](https://www.openmausbot.com/blog/muse-vs-grok-bot-vs-dots-vs-cue),\nand a decision guide in five questions: [Which AI agent should I use?](https://www.openmausbot.com/blog/which-ai-agent-should-i-use)\n\n## Features\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"top\">\n\n### 🧠 Pick a brain per bot\n\nA model picker with a provider rail — Claude and Codex models side by side, defaults marked, unavailable\nproviders dimmed with the reason. Switch a bot's model mid-conversation.\n\n<img src=\"docs/screenshots/model-picker.png\" alt=\"Model picker with provider rail\" width=\"100%\">\n\n</td>\n<td width=\"50%\" valign=\"top\">\n\n### 🖥️ Every bot gets a computer\n\nOpen the Computer panel and the bot's cloud desktop spins up on its own — live screen preview while it\nworks, \"Open desktop\" to take over in your browser, or point the bot at *this Mac* instead.\n\n<img src=\"docs/screenshots/computer-panel.png\" alt=\"Computer panel with live screen preview\" width=\"100%\">\n\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n\n### 🙋 Bots ask before they act\n\nShell commands, file edits, and questions surface as inline cards — Allow / Deny / answer in chat. A\npermission broker turns every risky action into a decision you make, for cloud and local computers alike.\n\n<img src=\"docs/screenshots/approval-card.png\" alt=\"Approval and question cards in chat\" width=\"100%\">\n\n</td>\n<td width=\"50%\" valign=\"top\">\n\n### 🔌 Connected apps\n\nA one-click marketplace over Composio Sessions: Gmail, Slack, GitHub, Notion, Linear and hundreds more.\nOAuth once, and every bot can use them as tools.\n\n<img src=\"docs/screenshots/marketplace.png\" alt=\"Connected apps marketplace\" width=\"100%\">\n\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n\n### 🗂 Manage bots like chats\n\nRight-click any bot: pin, mark unread, edit profile, duplicate, copy conversation ID, hide, delete. It's a\nmessaging app — your agents behave like contacts.\n\n<img src=\"docs/screenshots/context-menu.png\" alt=\"Bot context menu\" width=\"100%\">\n\n</td>\n<td width=\"50%\" valign=\"top\">\n\n### 🔑 Keys once, everything lights up\n\nPaste credentials in App Settings — they persist locally and the provider fleet hot-reloads instantly.\nSecrets are write-only: the UI only ever sees \"configured\" flags.\n\n<img src=\"docs/screenshots/app-settings.png\" alt=\"App-level settings with API keys\" width=\"100%\">\n\n</td>\n</tr>\n</table>\n\n### #️⃣ Channels for every context\n\nKeep Work, Personal, and each project in separate channels without cloning your bots. Every channel has\nits own transcript, shared instructions, working folder, responder rules, and editable bot roster. File a\nchannel and its bots under a named context, then rename it or change its members whenever the team changes.\n\n### ⚡ Fast decisions with Jev\n\nAdd a TypeSafe Jev key, or an OpenRouter key and model, in **Settings → Decision model** and rooms set to **Auto** pick the bot\nthat fits each un-mentioned message in a few hundred milliseconds, falling back to the room's lead whenever the decision model is off or unsure.\nSee [docs/decision-model.md](docs/decision-model.md).\n\n### 📦 Install a complete team from one Markdown file\n\nBrowse outcome-driven teams on [BotMRR](https://botmrr.io), then choose **Add to OpenMausBot**. The app\nopens a review screen before creating the bots, Chief of Staff, channels, playbooks, connector checklist,\nand suggested routines. You can also import the same `.md` file from disk or paste its public GitHub URL\nin **Teams → Import**.\n\nThe format stays portable: OpenMausBot reads the structured YAML frontmatter for a reliable one-click\ninstall, while Grok, Claude, ChatGPT, and people can follow the ordinary Markdown playbook. Connections\nremain off until you approve them, routines arrive paused, and packages never carry credentials,\nconversations, permissions, memory, or computer access. Browse the\n[open-source playbook repository](https://github.com/milind-soni/openmausbot-teams) or read its\n[portable format](https://github.com/milind-soni/openmausbot-teams/blob/main/FORMAT.md).\n\n### 🤝 Share a whole department\n\nRight-click a department and choose **Share department…** (or use **Templates → Share**) to save the whole department as one\nfile: its bots with their instructions, pictures and skills, group chats, routines, shared instructions,\nC"
+    },
+    "brief": {
+      "summary": "开源版 Grok Bot：在聊天应用里管理一支本地 AI 智能体队伍",
+      "problem": "闭源个人智能体把模型、电脑和数据都留在厂商云端",
+      "highlights": [
+        "可以给每个机器人配不同模型和独立人格",
+        "可以让机器人在隔离虚拟机里操作桌面和应用",
+        "可以在本机自托管，对话记录和密钥留在本地"
+      ],
+      "target_users": [
+        "自托管爱好者",
+        "AI 智能体开发者",
+        "注重隐私的技术用户"
+      ],
+      "why_trending": "今日新增 895 Star，聊天式多智能体形态正受关注",
+      "caveat": "616 个未关闭 issue，Ubuntu Wayland 主机控制仍禁用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "milind-soni/OpenMausBot",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "本地多 Agent 助手，带虚拟机执行环境",
+      "generated_by_ai": true,
+      "velocity_score": 94,
+      "freshness_score": 70,
+      "ranking_score": 64.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "pbakaus/impeccable",
+      "url": "https://github.com/pbakaus/impeccable",
+      "description": "The design vocabulary for your coding agent. Steer with polish and bolder, review with critique and audit, catch AI slop before it ships.",
+      "language": "Rust",
+      "total_stars": 97322,
+      "forks": 5732,
+      "stars_today": 2300,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2300
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "anti-slop",
+        "design",
+        "slop"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-11-16T01:52:04Z",
+      "updated_at": "2026-10-31T05:55:21Z",
+      "pushed_at": "2026-10-30T17:36:40Z",
+      "open_issues": 66,
+      "homepage": "https://impeccable.style",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Impeccable\n\nThe design vocabulary for your coding agent. Steer with `polish` and `bolder`, review with `critique` and `audit`, and catch AI slop before it ships.\n\nFrom your project root:\n\n```bash\nnpx impeccable install\n```\n\nReload your coding tool, then run `/impeccable init` in your agent (`$impeccable init` on Codex).\n\nWorks with Claude Code, Cursor, Codex CLI, GitHub Copilot, Devin, Replit Agent, Gemini CLI, Grok Build, OpenCode, Google Antigravity, Kiro, Trae, Rovo Dev, Qoder, Mistral Vibe, Pi, Hermes Agent, DeepSeek Harness, and Veto. Full docs live at [impeccable.style/docs](https://impeccable.style/docs).\n\n| Without Impeccable | With Impeccable |\n|---|---|\n| ![Villa Castagneto built without Impeccable: cream background, a thin serif headline with an italic accent, two pill buttons, and flat vector illustrations in rounded cards](https://github.com/pbakaus/impeccable/raw/main/docs/images/readme-without.webp) | ![Villa Castagneto built with Impeccable: a full-bleed engraved night scene of the villa on its cliff above the sea, a condensed cream and vermilion headline, and a month strip along the bottom](https://github.com/pbakaus/impeccable/raw/main/docs/images/readme-with.webp) |\n\nSame model (Fable 5.1), same brief: a fourteen-room family guesthouse on the Ligurian coast. Without Impeccable, it builds the tasteful default: cream page, thin serif, italic accent, pill buttons. With it, the page is built around one picture: the house at night, seen from the water.\n\nFor a full project, see the [Neo Mirai case study](https://impeccable.style/cases/neo-mirai): a conference site taken from mockup to shipped page.\n\n## Why\n\nInter for everything. Purple-to-blue gradients. Cards nested in cards, gray text on colored backgrounds, a rounded-square icon tile above every heading. Ask an agent for a page with no other guidance and these show up again and again, across models and projects.\n\n- **Words for what you want.** \"Make it pop\" leaves your agent to guess. `/impeccable bolder the pricing cards` loads a playbook written for that one move and points it at one target.\n- **A reviewer.** `critique` scores the design against usability heuristics and ranks what to fix first. `audit` checks accessibility, performance, theming, and responsive behavior, with findings ranked P0 (blocking) to P3 (polish).\n- **A slop detector.** 62 deterministic rules flag the tells above, plus quality problems like cramped padding and skipped headings. No LLM, no API key.\n\nImpeccable is strongest on interfaces that already exist: point it at a page or a component and iterate. It builds new pages too; see [Build something new](https://impeccable.style/docs/new-work) for how to get the most out of that harder mode. To start, pick one component:\n\n```\n/impeccable critique the pricing cards\n```\n\n## How it works\n\nRun `/impeccable init` once per project. It reads your code, asks only what it can't infer (who the product is for, what it needs to do, the constraints), and writes `PRODUCT.md`. Every later command reads it. Run `/impeccable document` to capture your existing visual system in `DESIGN.md`, so changes stay on-brand. [More on context files](https://impeccable.style/docs/context).\n\nThen name a command and a target:\n\n```\n/impeccable critique the onboarding flow\n/impeccable quieter the landing page\n/impeccable polish settings\n/impeccable harden checkout\n```\n\nOr just describe what you want: `/impeccable redo this hero section`. Narrow targets get better results; a single section reviewed closely beats a whole page at a glance. Pin a command you use often with `/impeccable pin audit` to get `/audit` as its own shortcut.\n\n### 24 commands\n\n| | Commands |\n|---|---|\n| **Steer** | `bolder` amplifies safe designs · `quieter` tones down loud ones · `distill` removes what the page doesn't need · `colorize` brings color to a gray interface · `typeset` fixes fonts, hierarchy, and sizing · `layout` fixes spacing and rhythm · `animate` adds transitions and interaction feedback · `delight` adds personality · `overdrive` goes for shaders, spring physics, and scroll-driven effects |\n| **Review** | `critique` is a scored UX review · `audit` is a technical quality report |\n| **Finish** | `polish` is the final pass before shipping · `harden` covers errors, i18n, overflow, and edge cases · `clarify` rewrites unclear copy · `adapt` handles screen sizes and devices · `optimize` fixes loading and rendering performance · `onboard` designs first-run flows and empty states |\n| **Iterate live** | `live` lets you pick an element in the browser and cycle through variants · `generate` produces variants of a named element without manual picking |\n| **Plan and set up** | `shape` plans UX before code · `init` writes `PRODUCT.md` · `document` writes `DESIGN.md` · `extract` pulls repeated patterns into your design system |\n\nThe 24th, `craft`, is a deprecated alias for a plain build request. Type `/impeccable` alone to see the list in your agent. Each command has its own page: [impeccable.style/docs](https://impeccable.style/docs).\n\nOn Codex, open `/skills` or type `$impeccable` instead of the slash command.\n\n### Live mode\n\n`/impeccable live` opens your running dev server with an overlay. Select an element, pick a direction, and Impeccable hot-swaps variants in place. Accept one and it is written back to your source. It works with Vite, Next, SvelteKit, Astro, Nuxt, and plain HTML. [Iterate in the browser](https://impeccable.style/tutorials/iterate-live).\n\nLive mode edits a local checkout only; don't inject it into a deployed site or weaken a production CSP to make it work. Applying copy edits runs your `package.json`'s optional `impeccable:manual-edit-validate` script with your permissions, so review it before using live mode in an unfamiliar repo.\n\n## Three ways to run the detector\n\n**In your agent.** The design hook scans every UI file your agent edits and hands the findings back before the agent calls the work done. This is where most slop gets caught: without the hook, the detector only runs when someone remembers to run it. It's available on Claude Code, Cursor, Codex, GitHub Copilot, Grok Build, and Hermes Agent, and the installer sets it up. Say yes. [Automatic design checks](https://impeccable.style/docs/hooks).\n\n**In CI or your terminal.** The CLI needs no agent:\n\n```bash\nnpx impeccable detect src/                   # scan a directory\nnpx impeccable detect https://example.com    # scan a rendered page (uses your installed Chrome or Edge)\nnpx impeccable detect --json .               # machine-readable output\nnpx impeccable detect --github src/          # GitHub Actions annotations\nnpx impeccable detect --list-rules           # every rule with its id and description\n```\n\nSource files like JSX and TSX get the pattern rules only. Rules that need a rendered page, such as low contrast and tiny text, run when you scan a URL, so point the CLI at your dev server too: `npx impeccable detect http://localhost:5173`.\n\nExit code `2` means findings, `1` means a target couldn't be scanned. To allow your brand font everywhere, run `npx impeccable ignores add-value overused-font Inter --reason \"Brand font\"`. To turn a rule off for one file, add a comment: `<!-- impeccable-disable overused-font: exported brand doc -->`. [Run a detector scan](https://impeccable.style/docs/detector) · [Configuration and ignores](https://impeccable.style/docs/config).\n\n**In your browser.** The [Chrome extension](https://chromewebstore.google.com/detail/impeccable/bdkgmiklpdmaojlpflclinlofgjfpabf) overlays the same findings on any live page, yours or anyone else's. [Review with a visual overlay](https://impeccable.style/tutorials/critique-with-overlay).\n\n## Installation\n\n```bash\nnpx impeccable install\n```\n\nThe installer detects your coding tools, asks whether to install for this project or globally, and offers the design hook where your tool supports one. Accept the hook. Reload your tool afterward. `npx impeccable update` refreshes an existing install. For scripts, pass `--providers=claude,codex,cursor` and `--scope=project|global`.\n\nThree tools need one more step before the hook runs. In Codex, open `/hooks` and approve the project hook (again after an update that changes it). In Grok Build, run `/hooks-trust` or launch with `--trust`. In Hermes Agent, the hook is a plugin: run `hermes plugins enable impeccable-design-hook` once. [Allow the hook in your harness](https://impeccable.style/docs/hooks#allow-the-hook-in-your-harness).\n\nNode is only needed for `npx`. The skill itself runs a self-contained engine binary that ships next to it or downloads once into `~/.impeccable/bin/`.\n\n<details>\n<summary><b>Claude Code, Copilot, and Grok plugins</b></summary>\n\n**Claude Code:** `/plugin marketplace add pbakaus/impeccable`, then open `/plugin` and install Impeccable.\n\n**GitHub Copilot in VS Code:** install [Impeccable from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=renaissance-geek.impeccable) or run `code --install-extension renaissance-geek.impeccable`. Needs VS Code 1.109.3+, Copilot Chat, and a trusted workspace. It installs the skill without the hook. [Details](docs/VSCODE-EXTENSION.md).\n\n**Grok Build:** `grok plugin install pbakaus/impeccable#plugin --trust` installs the skill, agents, and hook.\n\n</details>\n\n<details>\n<summary><b>Git submodule (a pinned version for the whole team)</b></summary>\n\n```bash\ngit submodule add https://github.com/pbakaus/impeccable vendor/impeccable\nnpx impeccable link --source=vendor/impeccable --providers=claude,cursor\n```\n\nCommit `.gitmodules`, the submodule, and the generated links. Teammates run `git submodule update --init --recursive`. To upgrade, run `git submodule update --remote vendor/impeccable`, rerun the `link` command, and commit. Linking installs skills, not hooks. Existing skill folders stay put unless you pass `--force`.\n\n</details>\n\n<details>\n<summary><b>Manual copy, no Node required</b></summary>\n\nDownload the ZIP for your tool from [impeccable.style](https://impeccable.style), or clone this repo: each tool's build is committed at the repo root. Copy `skills/impeccable` from the folder below into the same place in your project, or into the global folder.\n\n| Tool | Repo folder | Global skills folder |\n|---|---|---|\n| Claude Code | `.claude/` | `~/.claude/skills/` |\n| Cursor | `.cursor/` | |\n| Codex CLI, Replit Agent | `.agents/` | `~/.agents/skills/` |\n| Devin | `.devin/` | `${XDG_CONFIG_HOME:-$HOME/.config}/devin/skills/` |\n| GitHub Copilot | `.github/` | |\n| Gemini CLI | `.gemini/` | |\n| Google Antigravity | `.agent/` | `~/.gemini/config/skills/` |\n| OpenCode | `.opencode/` | |\n| Grok Build | `.grok/` | `~/.grok/skills/` |\n| Hermes Agent | `.hermes/` | `${HERMES_HOME:-$HOME/.hermes}/skills/` |\n| DeepSeek Harness | `.dsh/` | `${DSH_HOME:-$HOME/.dsh}/skills/` |\n| Pi | `.pi/` | |\n| Qoder | `.qoder/` | `~/.qoder/skills/` |\n| Rovo Dev | `.rovodev/` | `~/.rovodev/skills/` |\n| Mistral Vibe | `.vibe/` | `~/.vibe/skills/` |\n| Trae | `.trae/` | `~/.trae/skills/` |\n| Trae China | `.trae-cn/` | `~/.trae-cn/skills/` |\n\nFor example: `mkdir -p your-project/.claude/skills && cp -r .claude/skills/impeccable your-project/.claude/skills/`.\n\nNotes:\n- A manual copy skips the design hook and subagents. Run `npx impeccable install` to get them; it writes each tool's hook pointing at the right skill path.\n- OpenCode also needs `.opencode/commands/impeccable.md` copied into your project's `.opencode/commands/` to provide `/impeccable`.\n- Hermes asks you to trust project-local skills once: run `hermes skills trust` from the project root. Global installs need no trust step.\n- Cursor and Gemini CLI may need Agent Skills enabled in settings. See the [Cursor](https://cursor.com/docs/context/skills) and [Gemini CLI](https://geminicli.com/docs/cli/skills/) skills docs.\n- Restart Trae after copying.\n- `impeccable install` and `update` manage a DeepSeek Harness global copy only when `DSH_HOME` is inside your home di"
+    },
+    "brief": {
+      "summary": "给编码代理加设计词汇，用命令和检测防止AI低质设计",
+      "problem": "AI代理做界面时缺乏设计判断，容易产出俗套的AI slop",
+      "highlights": [
+        "可以装到Claude Code等工具，用命令调设计",
+        "可以用critique对页面评分并排序修复",
+        "可以用detect在终端或CI扫描UI问题"
+      ],
+      "target_users": [
+        "前端开发者",
+        "UI设计师",
+        "AI编码工具用户"
+      ],
+      "why_trending": "今日新增2300星，连续上榜，直击AI设计俗套痛点",
+      "caveat": "实时模式会运行项目脚本，陌生仓库先审查",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pbakaus/impeccable",
+      "score": 64,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码 Agent 的设计类 Skill 词表",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 63.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "horizon-rust/horizon",
+      "url": "https://github.com/horizon-rust/horizon",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "language": "Rust",
+      "total_stars": 4990,
+      "forks": 516,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 576
+    },
+    "details": {
+      "topics": [
+        "differential-testing",
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-10-31T05:57:58Z",
+      "pushed_at": "2026-10-31T05:55:37Z",
+      "open_issues": 501,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/banner.webp\" alt=\"The Horizon website: the game you know, rebuilt in Rust\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml\"><img src=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml/badge.svg?branch=main\" alt=\"CI\"></a>\n  <img src=\"https://img.shields.io/badge/Minecraft-Java%2026.3-5D9C3F\" alt=\"Minecraft Java 26.3\">\n  <img src=\"https://img.shields.io/badge/Rust-stable-B7410E?logo=rust&logoColor=white\" alt=\"Rust\">\n  <img src=\"https://img.shields.io/badge/vanilla%20parity-100%25-F0795A\" alt=\"Vanilla parity 100%\">\n  <a href=\"#project-status\"><img src=\"https://img.shields.io/badge/player--visible%20gaps-833%20open-F0795A\" alt=\"Player-visible gaps open\"></a>\n  <img src=\"https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-2A2470\" alt=\"Linux, macOS and Windows\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-3B2F7E\" alt=\"MIT license\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev\"><b>Website</b></a> ·\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://playhorizon.dev/docs/\"><b>Documentation</b></a> ·\n  <a href=\"https://github.com/horizon-rust/horizon/releases\"><b>Release notes</b></a> ·\n  <a href=\"ROADMAP.md\"><b>Roadmap</b></a> ·\n  <a href=\"#project-status\"><b>Project status</b></a> ·\n  <a href=\"#contributing\"><b>Contributing</b></a>\n</p>\n\n# Horizon\n\nMinecraft: Java Edition 26.3, rewritten in Rust. Same worlds, same rules, same terrain, checked against the Java game by more than 300 differential harnesses. Free, open source and unofficial.\n\n> Not an official Minecraft product, nor approved by or associated with Mojang or Microsoft. Horizon contains no Minecraft code, assets or data: you need your own copy of Java Edition 26.3.\n\n## Download\n\nGet **the Horizon launcher** from [playhorizon.dev](https://playhorizon.dev) or [the launcher releases](https://github.com/horizon-rust/horizon/releases?q=launcher-v&expanded=true) (Linux x86-64, macOS on Apple Silicon, Windows x64). It installs and updates the game, prepares its files from your copy of Minecraft, and updates itself.\n\n**You need** a Microsoft account that owns Java Edition ([why](docs/microsoft-account.md)) and a GPU with Vulkan or OpenGL 3.3 (Linux), Vulkan or DirectX 12 (Windows), or an Apple Silicon Mac. An existing Minecraft install (official launcher, Prism, MultiMC...) is reused; without one, Play downloads 26.3 from Mojang for your account. Step by step: [Install and first launch](https://playhorizon.dev/docs/install).\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/launcher-play.webp\" alt=\"The launcher's Home page: the selected instance ready to play, the version picker, Join a friend and the instance's tabs\"></td>\n    <td width=\"50%\"><img src=\"docs/media/launcher-settings.webp\" alt=\"The launcher's Settings page: Microsoft account, offline name, updates, appearance and accent colour\"></td>\n  </tr>\n</table>\n\n## What works today\n\n- **The game:** vanilla world generation, mobs, villagers, raids, redstone, every command, the HUD and the recipe book, on vanilla saves. Worlds from 1.8 to 26.2 are upgraded. [Status](#project-status).\n- **Extras:** new menus, graphics presets, distant terrain up to 1024 chunks, controllers, zoom, minimap and more, off by default where they change the vanilla look. [Settings](https://playhorizon.dev/docs/settings).\n- **Packs:** resource packs, and data packs with functions, predicates, item modifiers and world generation.\n- **Multiplayer:** invite friends with a code, Open to LAN, join servers (online mode included). [Multiplayer](https://playhorizon.dev/docs/multiplayer).\n- **Mods:** content mods (blocks, items, data) and native Rust mods, built by the launcher with nothing to install. Java mod jars do not run. [Mods](https://playhorizon.dev/docs/mods).\n\nIn the Rust client, with vanilla assets and no mods or shaders:\n\n<table>\n  <tr>\n    <td colspan=\"2\"><img src=\"docs/media/sunset.webp\" alt=\"Sunset over a savanna river valley and a plains village\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/survival.webp\" alt=\"Survival at dusk: a zombie walks up, with the hotbar, health, hunger and experience\"></td>\n    <td width=\"50%\"><img src=\"docs/media/settings.webp\" alt=\"Vanilla's Video Settings screen with Horizon's own buttons at the top: Horizon Graphics and Advanced Graphics\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/village.webp\" alt=\"A plains village among savanna hills, with farms, villagers and an iron golem\"></td>\n    <td width=\"50%\"><img src=\"docs/media/nether.webp\" alt=\"A crimson forest in the Nether with a zombified piglin\"></td>\n  </tr>\n</table>\n\n## Host a server\n\nThe launcher's **Servers** page creates, starts, backs up and updates a server, and invites friends over Tailscale. On a VPS, `horizon-server` installs with one command and needs no Java. [Host a server](https://playhorizon.dev/docs/hosting) ([reference](docs/hosting.md)).\n\n## Modpacks\n\nThe launcher imports Modrinth and CurseForge packs and plays the mods Horizon can carry over: today, content mods made of data and assets, not Java code. [Modpacks](https://playhorizon.dev/docs/modpacks).\n\n## Agent control\n\nAI agents and scripts can play Horizon. `horizon-ctl`, shipped with the game, reads its state as JSON and acts like a player; `horizon-ctl mcp` serves the same commands over MCP.\n\n```sh\nhorizon-ctl launch --world Survival --seed 5 --wait   # finds the version the launcher installed\nhorizon-ctl state                                       # position, health, food, target, screen...\nhorizon-ctl find-block birch_log                        # the nearest logs\nhorizon-ctl goto -0.5 65 -2.5 --near 2.5                # walks there along a path\nhorizon-ctl break -1 65 -3                              # mines it; replies with the drops\nhorizon-ctl open-inventory && horizon-ctl click-slot 0  # menus: slots, buttons by label, text fields\n```\n\nCommands block until done and reply with the result; `horizon-ctl help` lists them all. [Agent control](docs/native-client.md#agent-control-horizon-ctl-and-mcp).\n\n## Build from source\n\nNeeds Rust 1.90+, Python 3.10+, JDK 25, and on Linux `libasound2-dev libudev-dev`. `horizon-prepare` builds the game's resources from **your own copy** of Java Edition 26.3 (checked against `research-lock.json`) and never downloads it:\n\n1. **Client:** play 26.3 once in the official launcher. Horizon reads `~/.minecraft` (or `--minecraft-dir` / `HORIZON_MINECRAFT_DIR`).\n2. **Server jar:** the 26.3 server jar (`downloads.server.url` in `versions/26.3/26.3.json`), passed once with `--server-jar` or `HORIZON_SERVER_JAR`.\n\n```sh\ngit clone https://github.com/horizon-rust/horizon.git\ncd horizon\ncargo run --release -p horizon-prepare -- --prepare --server-jar ~/Downloads/server.jar   # needs JDK 25\ncargo run --release -p horizon-prepare -- sounds   # optional: sounds from your launcher install\ncargo run --release -p horizon-client\n```\n\nPrepared files land in the gitignored `.local/`: never commit or share them. Options, controls and architecture: [the native client guide](docs/native-client.md); all developer docs: [docs/README.md](docs/README.md).\n\n## Roadmap\n\nWhat is in progress, what comes next and where to help: [ROADMAP.md](ROADMAP.md), or [playhorizon.dev/hub](https://playhorizon.dev/hub) with the work board and what shipped.\n\n## Contributing\n\nIssues and pull requests are welcome: read [CONTRIBUTING.md](CONTRIBUTING.md) (vanilla first, small pull requests). Questions: [Discord](https://discord.gg/HcTeMZxe5E). Before a pull request, run the self-check and paste its output:\n\n```sh\ngit config core.hooksPath .githooks\npython3 tools/pr_ready.py\n```\n\nIt runs rustfmt, clippy, the touched crates' tests, the Python tests, the public-tree check and the vanilla harnesses your change affects. Never commit game files, decompiled source or prepared resources.\n\n## Project status\n\n**Player-visible gaps: 833 open** of the 833 the [port ledger](tools/port_ledger.py) found, reading every vanilla 26.3 method against Horizon's code: vanilla behaviour a player would notice that Horizon doesn't have yet. By area: Screens, HUD and client packets [197](https://github.com/horizon-rust/horizon/issues/3518); Entity and block rendering, models [129](https://github.com/horizon-rust/horizon/issues/3519); Animals [110](https://github.com/horizon-rust/horizon/issues/3512); Server and players on the server [106](https://github.com/horizon-rust/horizon/issues/3520); Blocks, redstone and fluids [86](https://github.com/horizon-rust/horizon/issues/3516); Entities, projectiles, vehicles and decorations [64](https://github.com/horizon-rust/horizon/issues/3514); Monsters and bosses [53](https://github.com/horizon-rust/horizon/issues/3513); Mob AI, villagers and raids [35](https://github.com/horizon-rust/horizon/issues/3521); World, world generation and saves [32](https://github.com/horizon-rust/horizon/issues/3517); Items, enchantments and inventories [21](https://github.com/horizon-rust/horizon/issues/3515). This number goes down as gaps close (`tools/parity_gaps.py`); the harness results below say that what is tested matches.\n\nThe table is the project's own audit: every subsystem matches vanilla in every harness that compares it. 100% means 100% of what the harnesses compare, not that nothing else differs.\n\n### Java parity: 100%\n\nScores: 0 (absent), 0.25 (started), 0.5 (playable, major features missing), 0.75 (mostly complete) or 1 (complete and verified by differential tests); the percentage is their average. Last audited 2026-10-13: all 281 harnesses pass on Linux and macOS. The [port ledger](tools/port_ledger.py) adds a method-by-method view of what is ported.\n\n| Subsystem | Score | Main gaps |\n| --- | ---: | --- |\n| Window, input and game loop | 1 | None: game loop, options, camera, auto-jump, toggle sprint/sneak and frame limiter match |\n| Assets and resources | 1 | None: item models match over 196,290 stacks; the resource pack screen over 3,000 sessions |\n| Network protocol and multiplayer | 1 | None: joins vanilla servers; the dedicated server matches vanilla's files, login, configuration, play and command tree; LAN discovery over 462 cases (offline mode only) |\n| Chunk storage and palettes | 1 | None: client and saves share paletted containers, identical to vanilla over 266 scenarios |\n| Section meshing | 1 | None: 112 scenes and over a million quads identical to vanilla |\n| Rendering | 1 | None: entity models, block entity renderers (407 cases) and animations (296), HUD overlays (2,200 states), the recipe book (600), player list, subtitles and world border match |\n| Lighting | 1 | None: saved and relit light matches vanilla, slabs and stairs included |\n| World generation | 1 | None: 2,352 whole chunks over 225 structure sites, in all three dimensions, identical to vanilla |\n| Region files and saves | 1 | None: saves round-trip with vanilla; worlds from 1.8 to 26.2 upgrade as vanilla's DataFixers do |\n| Entities and physics | 1 | None: attributes, spawn rules, natural spawning (15,500 cases), raids and patrols (1,900), `finalizeSpawn` (24,000) and mob AI (92 scenarios) match |\n| Interaction and inventory | 1 | None: menu clicks over 8,000 sequences; recipe book placement (6,000), buttons (1,200), saved book (1,500), loom and crafter screens (1,600) |\n| Menus, HUD and chat | 1 | None: every command (758 over 39,685 inputs), scoreboards (81,000 operations), the player list (872,000 draw calls), chat and its suggestions (3,000 sessions) match |\n| Audio | 1 | None: the sound engine, sound events, music, situational music, ambience and subtitles match vanilla |\n| Block behaviours and ticking | 1 | None: block updates, random ticks, redstone, dispensers (6,000 cases), crafters (4,000), container spills (4,000), copper golems and the sculk family (435 scenarios) match |\n\n### Known issues\n\nSkins served over https show t"
+    },
+    "brief": {
+      "summary": "用 Rust 重写 Minecraft Java 版，靠差分测试对齐原版。",
+      "problem": "原版依赖 Java，难以做原生重写并保证行为一致。",
+      "highlights": [
+        "可以导入原版存档并升级到 26.3",
+        "可以用 horizon-ctl 让脚本或 AI 代理游玩",
+        "可以一键架设服务器并邀请朋友"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "Rust 游戏开发者",
+        "AI 代理开发者"
+      ],
+      "why_trending": "连续上榜，总 Star 近五千，近期持续更新。",
+      "caveat": "需自备正版游戏，且 Java mod 不能直接运行。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "horizon-rust/horizon",
+      "score": 74,
+      "category": "游戏开发",
+      "reason": "Rust 重写 Minecraft 服务端，游戏引擎实践",
+      "generated_by_ai": true,
+      "velocity_score": 84,
+      "freshness_score": 85,
+      "ranking_score": 70.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "sonlovinbot-team/Muse-animated-short-film",
+      "url": "https://github.com/sonlovinbot-team/Muse-animated-short-film",
+      "description": "Skill làm phim hoạt hình ngắn trên Muse AI — từ ý tưởng đến MP4: nhân vật, kịch bản, keyframes, mega prompt, video, thuyết minh, dựng phim. Phim mẫu: The Last Lantern.",
+      "language": "",
+      "total_stars": 43,
+      "forks": 24,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video",
+        "animated-short-film",
+        "animation",
+        "claude-skill",
+        "muse-ai",
+        "storyboard",
+        "text-to-video",
+        "vietnamese"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T02:38:57Z",
+      "updated_at": "2026-10-31T05:45:42Z",
+      "pushed_at": "2026-10-31T05:45:38Z",
+      "open_issues": 0,
+      "homepage": "https://studio.danghuuson.com/Muse-animated-short-film/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# 🎬 Muse Animated Short Film\n\n[![GitHub stars](https://img.shields.io/github/stars/sonlovinbot/Muse-animated-short-film?style=social)](https://github.com/sonlovinbot/Muse-animated-short-film/stargazers)\n&nbsp;🌐 **Trang giới thiệu: https://app.danghuuson.com/Muse-animated-short-film/**\n\n![The Last Lantern — phim mẫu làm bằng skill này](docs/assets/poster.jpg)\n\n**Tác giả:** Đặng Hữu Sơn ([sonlovinbot](https://github.com/sonlovinbot)) — CEO & Co-Founder LovinBot AI\n\nSkill dựng phim hoạt hình ngắn **từ đầu đến cuối trên Muse AI** — từ một ý tưởng thô thành file MP4 hoàn chỉnh: nhân vật, kịch bản, hình ảnh, video, thuyết minh và dựng phim.\n\n*An end-to-end skill for producing animated short films on Muse AI — from a raw idea to a finished MP4.*\n\n> [!TIP]\n> Thấy skill có ích? Bấm **⭐ Star** ở góc trên repo — giúp nhiều người làm phim tìm thấy skill này hơn.\n\n## 🎥 Video giới thiệu\n\n[![Video giới thiệu Muse AI](docs/assets/video-thumbnail.jpg)](https://youtu.be/kysOeBo5Qtw)\n\nMuse AI — tạo ảnh, video, audio — có cảnh từ phim mẫu \"The Last Lantern\". Xem trên YouTube: https://youtu.be/kysOeBo5Qtw\n\n## Skill này làm gì?\n\n![Quy trình 8 bước](docs/assets/pipeline.svg)\n\nPipeline đã kiểm chứng qua dự án thật \"The Last Lantern\" (8 cảnh, 2D Disney/Pixar):\n\n| # | Giai đoạn | Kết quả |\n|---|-----------|---------|\n| 0 | Thu thập đầu vào | Thời lượng → số cảnh, ngôn ngữ, tỷ lệ 16:9/9:16 |\n| 1 | Character sheets | Khóa nhân vật (nhiều góc + biểu cảm) |\n| 2 | Story bible | Chốt kịch bản: logline, character lock, từng cảnh |\n| 3 | Keyframes | K1..K(N+1), luật match-cut |\n| 4 | Mega prompt | 1 prompt copy-paste cho mỗi cảnh |\n| 5 | Generate video | Từng clip first-frame → last-frame |\n| 6 | Làm VO | Kịch bản thuyết minh kiểu kể chuyện |\n| 7 | Dựng phim | ffmpeg: normalize, nối, mix VO |\n\nKèm theo: **luật realism** (hành động vật lý phải đúng thực tế), **STRICT ASPECT RATIO LOCK** (ref đầu vào phải cùng tỷ lệ với output), và **10+ bài học xương máu**.\n\n## 🏮 Tác phẩm mẫu: \"The Last Lantern\"\n\nBộ file thật của dự án — mở ra là thấy mỗi giai đoạn trông như thế nào: [`examples/the-last-lantern/`](examples/the-last-lantern/)\n\n| Milo | Lyra | Ember |\n|---|---|---|\n| ![Milo](docs/assets/characters/milo-sheet.jpg) | ![Lyra](docs/assets/characters/lyra-sheet.jpg) | ![Ember](docs/assets/characters/ember-sheet.jpg) |\n\n| K1 · mở đầu | K2 | K3 | K7 |\n|---|---|---|---|\n| ![K1](docs/assets/keyframes/k1-city-dusk.jpg) | ![K2](docs/assets/keyframes/k2-spark-falls.jpg) | ![K3](docs/assets/keyframes/k3-ember-sneeze.jpg) | ![K7](docs/assets/keyframes/k7-door-light.jpg) |\n\n| File | Nội dung |\n|---|---|\n| [`STORY.md`](examples/the-last-lantern/STORY.md) | Story bible: logline, thế giới, character lock, 8 nhịp cảnh, mô-típ nhạc |\n| [`MEGA_PROMPTS.md`](examples/the-last-lantern/MEGA_PROMPTS.md) | 8 mega prompt copy-paste + thứ tự nạp ref + ghi chú dựng |\n| [`VO_SCRIPT.md`](examples/the-last-lantern/VO_SCRIPT.md) | Thuyết minh Anh – Việt, mốc thời gian |\n| [`FLOW.md`](examples/the-last-lantern/FLOW.md) | Dự án đi qua 8 giai đoạn: việc làm, file ra, điểm chốt, chuỗi keyframe |\n\n## Cách dùng (cho người mới)\n\n1. **Cài skill:** copy cả folder này vào thư mục skills của Muse AI, VD: `~/workspace/skills/animated-short-film/`\n   - Hoặc: dán link repo này vào chat Muse, Muse sẽ tự cài.\n2. **Mở chat và nói:** \"Tôi muốn làm phim hoạt hình ngắn.\"\n3. **Trả lời 3 câu hỏi đầu tiên:** phim dài bao lâu? ngôn ngữ nào? tỷ lệ 16:9 hay 9:16?\n4. **Duyệt ở các điểm chốt:** mô tả nhân vật → story bible → keyframes → từng video → VO → phim cuối. Bạn chỉ việc xem và nói \"ok\" hoặc \"sửa chỗ này\".\n\nBạn không cần đọc các file reference — Muse tự đọc khi cần. Mọi prompt kỹ thuật, câu lệnh generate và dựng phim đã nằm trong skill.\n\n## Cấu trúc\n\n```\n├── SKILL.md                  # Quy trình + luật vận hành (Muse đọc)\n├── README.md                 # File này (người đọc)\n├── references/               # Hướng dẫn chi tiết từng giai đoạn\n│   ├── 01-character-sheets.md\n│   ├── 02-story-and-script.md\n│   ├── 03-keyframes.md\n│   ├── 04-mega-prompts.md\n│   ├── 05-video-generation.md\n│   ├── 06-vo-production.md\n│   ├── 07-assembly.md\n│   └── 08-lessons.md\n├── examples/\n│   └── the-last-lantern/     # Tác phẩm mẫu: STORY, MEGA_PROMPTS, VO_SCRIPT, FLOW\n└── docs/                     # Trang giới thiệu (GitHub Pages) + ảnh minh hoạ\n    └── assets/\n```\n\n## ⭐ Ủng hộ\n\nNếu skill giúp bạn làm được bộ phim đầu tiên, hãy **[star repo](https://github.com/sonlovinbot/Muse-animated-short-film)** và chia sẻ phim của bạn. Các phần mềm, game 3D và tài liệu AI miễn phí khác: **[app.danghuuson.com](https://app.danghuuson.com)**\n\n## Giấy phép\n\nMIT — dùng tự do, ghi credit tác giả khi chia sẻ lại. Xem [LICENSE](LICENSE).\n"
+    },
+    "brief": {
+      "summary": "Muse AI 动画短片制作技能，从创意到 MP4。",
+      "problem": "解决动画短片从角色、分镜到配音剪辑的流程组织问题。",
+      "highlights": [
+        "可以按 8 步流程制作角色设定和分镜",
+        "可以为每个场景生成 mega prompt 并生成视频",
+        "可以用 ffmpeg 拼接片段并混合旁白"
+      ],
+      "target_users": [
+        "动画短片创作者",
+        "AI 视频制作新手",
+        "独立导演/编剧"
+      ],
+      "why_trending": "本周首次收录，提供完整动画短片制作流程和示例项目。",
+      "caveat": "主要面向 Muse AI 和越南语资料，其他平台需自行适配。",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "sonlovinbot-team/Muse-animated-short-film",
+      "score": 84,
+      "category": "动画",
+      "reason": "Claude Skill 全流程制作动画短片",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 54.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "aqm857886159/Nomi",
+      "url": "https://github.com/aqm857886159/Nomi",
+      "description": "Open-source AI video workbench. Bring any model or your local ComfyUI, and let Claude Code / Codex / Cursor direct it over MCP — storyboard, references, generation, editable first cut on a real timeline. Local-first: projects, prompts, and keys stay on your machine. No account, no telemetry.",
+      "language": "TypeScript",
+      "total_stars": 618,
+      "forks": 138,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agent",
+        "ai-video",
+        "ai-video-generator",
+        "bring-your-own-key",
+        "comfyui",
+        "creative-tools",
+        "desktop-app",
+        "electron",
+        "image-generation",
+        "local-first",
+        "mcp",
+        "offline",
+        "react",
+        "storyboard",
+        "text-to-image",
+        "text-to-video",
+        "timeline-editor",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-05-04T13:38:29Z",
+      "updated_at": "2026-10-31T05:56:11Z",
+      "pushed_at": "2026-10-31T05:56:50Z",
+      "open_issues": 23,
+      "homepage": "https://nomiaqm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://nomiaqm.com/en/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"marketing/assets/promo-0.22/cover-en-dark.jpg\" />\n      <img src=\"marketing/assets/promo-0.22/cover-en-light.jpg\" alt=\"Nomi — Pro-grade AI video. Models at their real price.\" width=\"100%\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>Nomi is an open-source, local-first AI video studio.</strong><br />\n  Tell its agent what you want to make. It plans the shots, generates keyframes and video, and lays them on your timeline —<br />\n  with the models <em>you</em> connect, at the price <em>your provider</em> charges.\n</p>\n\n<p align=\"center\">\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://nomiaqm.com/en/\">Website</a> ·\n  <a href=\"https://atomgit.com/aqm857886159/Nomi\">AtomGit mirror</a> ·\n  <a href=\"#watch-the-film\">Watch the 90-second film</a> ·\n  <a href=\"https://nomiaqm.com/en/quickstart\">Quick start</a> ·\n  <a href=\"docs/integrate-with-your-agent-en.md\">Let your AI connect it</a> ·\n  <a href=\"#community\">Community</a> ·\n  <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/aqm857886159/Nomi/releases/latest\"><img src=\"https://img.shields.io/github/v/release/aqm857886159/Nomi?label=release&color=1a1816\" alt=\"Latest release\" /></a>\n  <img src=\"https://img.shields.io/badge/platform-macOS%20%7C%20Windows-1a1816\" alt=\"Platform\" />\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0--only-1a1816\" alt=\"License\" /></a>\n</p>\n\n## Sponsors\n\nSponsors help keep Nomi free and open source. A sponsor never becomes a default or a built-in route: you connect only what you choose, with your own key, and pay them directly at their price. [Want to appear here?](#community)\n\n<table>\n<tr>\n<td width=\"128\" align=\"center\"><a href=\"https://gway.dev/sign-up?aff=8j8f\"><img src=\"docs/media/sponsors/gway-logo.png\" alt=\"Gway\" width=\"96\" /></a></td>\n<td><b><a href=\"https://gway.dev/sign-up?aff=8j8f\">Gway</a></b> — an API platform focused on AI video and multi-image reference generation: Seedance 2.0 / 2.5, Wan 3, MiniMax and other mainstream models, OpenAI-compatible, pay-as-you-go. Nomi has no built-in preset for it yet; click <b>Let AI connect it for me</b> and Claude Code or Codex wires it in with your key. Thanks to Gway for sponsoring Nomi! <i>(The Gway links carry a referral code.)</i></td>\n</tr>\n</table>\n\n## Why Nomi\n\nRelays, official APIs, ComfyUI, and local models are cheap. Commercial AI video products often run the very same models and charge several times more.\n\nNomi gives you a pro-grade workflow on top of **your own** models. You pay your provider directly, at their price. Even the agent runs on the model you pick — no subscription, no markup.\n\n## Watch the film\n\n[![Watch the 90-second Nomi 0.22 film](marketing/assets/promo-0.22/film-poster-en.jpg)](https://github.com/aqm857886159/Nomi/blob/main/marketing/assets/video/nomi-0.22-film.mp4)\n\nEvery screen in the film is Nomi's real UI, and every image and clip in it was generated with Nomi.\n\n## What you can do\n\n### Just ask — the agent works on your canvas\n\n<img src=\"marketing/assets/promo-0.22/still-agent.jpg\" alt=\"The Nomi agent turning one request into four keyframes on the canvas\" width=\"100%\" />\n\nDescribe the film you want. The agent reads your canvas, splits the story into shots, generates keyframes, turns them into video, and arranges the timeline. Everything it makes lands on the canvas, where you can see it and change it.\n\nYou decide how much it asks: **Ask each step**, **Auto-edit** (paid generation still asks), or **Full auto**.\n\n### Direct every shot\n\n<img src=\"marketing/assets/promo-0.22/still-storyboard.jpg\" alt=\"Storyboard with all four shots generated and the character reference card locked\" width=\"100%\" />\n\nThe storyboard puts each shot on one row — prompt, first frame, model, duration. Lock a reference card for a character or a place, and every shot that uses it keeps the same face.\n\n### A 3D director you can hold in your hand\n\n<img src=\"marketing/assets/promo-0.22/still-director.jpg\" alt=\"The 3D director with the phone viewfinder page\" width=\"100%\" />\n\nPose characters, place cameras, and use your phone as the viewfinder. The frames you capture go straight back onto the canvas.\n\n### Any model, per shot\n\n<img src=\"marketing/assets/promo-0.22/still-model.jpg\" alt=\"The same video card generated again with a different model\" width=\"100%\" />\n\nSeedance, Kling, Wan, Hailuo, Nano Banana, GPT Image and more — through APIMart, Kie.ai, Volcengine, ModelScope, a Dreamina membership, any OpenAI-compatible relay, or your local ComfyUI. Swap the model on a single shot and generate another take.\n\n### New model today, in Nomi today\n\nWhen a new model ships, click **Let AI connect it for me** and let Claude Code or Codex wire it in. It looks up the endpoint, parameters and model IDs, has you paste your key on Nomi's own page (the assistant never sees it), runs one real test, and lists the model once it works.\n\n### Yours\n\nA project is a plain folder on your disk: canvas, storyboard, timeline, every generated file, and the exported film. No account. Nothing is sent by default; anonymous usage statistics are opt-in (Settings → Privacy & diagnostics) and can be turned off any time. The code is AGPL-3.0.\n\n**Next up: AI editing.** Nomi is heading toward one studio for everything you make with AI — come build it with us.\n\n## Download\n\n| System | Build | Download |\n|---|---|---|\n| macOS | Apple Silicon | [Nomi-mac-arm64.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-arm64.dmg) |\n| macOS | Intel | [Nomi-mac-intel.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-intel.dmg) |\n| Windows | Windows 10 / 11 x64 | [Nomi-windows-setup.exe](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-windows-setup.exe) |\n\nSupported release targets are macOS arm64/x64 and Windows x64. Linux, Windows arm64, and macOS universal installers are not currently published.\n\n<details>\n<summary><b>First launch on macOS</b></summary>\n\nThe current macOS build is **not Apple Developer ID signed or notarized**, so macOS may block it on first launch. Only use the direct downloads above or links from the official Nomi website and GitHub repository.\n\n1. Download the matching DMG, open it, and drag **Nomi** onto **Applications** in the window.\n2. Open Nomi from Applications. If macOS says **“Nomi” Not Opened**, click **Done**, then open **System Settings → Privacy & Security**, scroll down to **Security**, click **Open Anyway** next to the Nomi message, and confirm. Since macOS 15, right-clicking the app and choosing **Open** no longer gets past this prompt; on macOS 14 and earlier it still works.\n\nOnly if macOS says Nomi is “damaged”, first confirm the installer came from an official Nomi link, then run:\n\n```bash\nxattr -dr com.apple.quarantine \"/Applications/Nomi.app\"\n```\n\nDo not disable Gatekeeper globally. To update, download the matching DMG, quit Nomi, then drag the new Nomi onto Applications and choose **Replace**.\n</details>\n\n<details>\n<summary><b>First launch on Windows</b></summary>\n\nThe installer has no Authenticode signature. In the SmartScreen prompt, choose **More info** → **Run anyway**.\n</details>\n\n## Quick start\n\n1. **Connect a model.** Pick APIMart or Kie.ai and paste one key — or add your own relay, OpenAI-compatible endpoint, or local ComfyUI. Rather not do it yourself? Hand [Let your AI connect Nomi](docs/integrate-with-your-agent-en.md) to Claude Code or Codex.\n2. **Say what you want to make.** Type it into the agent panel, or start from a story in the storyboard.\n3. **Direct and export.** Keep the takes you like, arrange the timeline, export MP4.\n\n> **Disclosure:** the APIMart link carries a referral code. You always pay providers directly with your own key at their price. Nomi never proxies or resells inference, and every provider can be swapped for your own endpoint.\n\nMore: [quick start](https://nomiaqm.com/en/quickstart) · [connect your first model (English)](docs/guide/model-connection-en.md) · [user guide](docs/user-guide.md) · [providers](docs/provider-integration.md) · [CLI + MCP](docs/guide/capability-core-cli-mcp.md)\n\n## Use Nomi from your own agent\n\nNomi ships an MCP server with 24 MCP tools, so Claude Code, Codex, or Cursor can drive it — generate, arrange, and edit — while reusing the credits that come with your agent subscription. See [Let your AI connect Nomi](docs/integrate-with-your-agent-en.md).\n\n## Community\n\n- Questions, workflows, what's next: [GitHub Discussions](https://github.com/aqm857886159/Nomi/discussions)\n- Bugs and feature requests: [GitHub Issues](https://github.com/aqm857886159/Nomi/issues)\n- Release notes and short demos: [X / Twitter](https://x.com/sdf297417627618) · [Bilibili](https://www.bilibili.com/video/BV1Lf8b6nEjf/)\n\nWeChat users can scan to join the user group (left). If the group code has expired, add the maintainer (right) at **TZ857886159**.\n\n<p align=\"center\">\n  <a href=\"docs/media/nomi-canvas-group-wechat-2026-11-03.jpg\"><img src=\"docs/media/nomi-canvas-group-wechat-2026-11-03.jpg\" alt=\"Nomi user group WeChat QR\" width=\"220\" /></a>\n  &nbsp;&nbsp;\n  <a href=\"docs/media/qingyang-wechat.jpg\"><img src=\"docs/media/qingyang-wechat.jpg\" alt=\"Nomi maintainer WeChat QR\" width=\"180\" /></a>\n</p>\n\nHit a bug? The code is open — send the error and the [issue-fix prompt](docs/guide/codex-issue-fix-prompt-en.md) to Claude Code or Codex, and it can often patch it for you. Anything everyone runs into, tell us and it goes into the mainline.\n\n## For Teams\n\n**Custom builds**, **Integrations**, **AGPL-compliant deployment**, and **Ongoing iteration** for teams that want Nomi inside a real production workflow. [Discuss a project](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml) — the form is public, so share only a non-confidential summary and never post credentials, private contact details, budget details, or NDA-protected information.\n\n## Developers\n\nRequires Node.js 20+ and pnpm.\n\n```bash\ngit clone https://github.com/aqm857886159/Nomi.git\ncd Nomi\ncorepack enable\npnpm install\npnpm dev\n```\n\n```text\nelectron/    Electron main process, local runtime, storage, and model calls\nsrc/         React + Vite + Tailwind workbench\nskills/      Skill Pack v2; see docs/skill-pack-format.md\n```\n\nUseful checks: `pnpm run test` · `pnpm run typecheck` · `pnpm run gates`\n\nResearch tooling (searching what creators say on Douyin / Xiaohongshu / Bilibili / X) reads its key only from the `TIKHUB_API_KEY` environment variable — see [`docs/research/tikhub-api-notes.md`](docs/research/tikhub-api-notes.md).\n\n## Contributing\n\nBug reports, feature proposals, documentation, and code contributions are welcome. Contributors do not need to sign a CLA; contributions are accepted under AGPL-3.0-only.\n\n- [Report a bug](https://github.com/aqm857886159/Nomi/issues/new?template=bug_report.yml)\n- [Request a feature](https://github.com/aqm857886159/Nomi/issues/new?template=feature_request.yml)\n- [Ask a question or share an idea](https://github.com/aqm857886159/Nomi/discussions)\n\n## License\n\nCurrent releases are licensed under AGPL-3.0-only; historical releases published under Apache-2.0 keep their original license.\n\nSee [LICENSE](LICENSE). Paid services can include AGPL-compliant custom development, integration, deployment, training, and ongoing iteration. Nomi does not offer a closed-source distribution that withholds the corresponding source code.\n"
+    },
+    "brief": {
+      "summary": "本地优先的开源 AI 视频工作台，由代理编排分镜与生成",
+      "problem": "商业 AI 视频产品用同样的模型却加价收费，用户难以自己控制成本",
+      "highlights": [
+        "可以让代理拆分镜、生成关键帧并排上时间线",
+        "可以逐镜头换模型、锁定人物参考保持同一张脸",
+        "可以接入自己的模型或本地 ComfyUI，按原价付费"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "独立短片制作者",
+        "ComfyUI 用户"
+      ],
+      "why_trending": "本周首次收录，618 Star；主打本地优先、自带模型和 MCP 接入代理",
+      "caveat": "macOS 版未签名公证，首次启动需手动放行；仅发布 mac 与 Windows 版",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "aqm857886159/Nomi",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "AI 视频工作台，分镜生成与时间线初剪",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "ColinGPT9/clips-studio",
+      "url": "https://github.com/ColinGPT9/clips-studio",
+      "description": "Clips Kitty: Free open-source AI video clipper. Local Opus Clip alternative (also Klap & Vizard) that turns Twitch, Kick & YouTube streams into auto-captioned Shorts, Reels, and TikToks, and can auto-post them 24/7 from a mini PC. Local AI (Ollama, Whisper): no usage or subscription fees. Or OpenRouter: a 2-hour VOD cost 11 cents in my testing.",
+      "language": "Python",
+      "total_stars": 188,
+      "forks": 40,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "clip-generator",
+        "clips",
+        "creator-tools",
+        "gemma",
+        "instagram-reels",
+        "openrouter",
+        "opus-clip-alternative",
+        "rea",
+        "shorts",
+        "social-media-automation",
+        "sports",
+        "streamer-tools",
+        "tiktok",
+        "twitch",
+        "twitch-clips",
+        "vertical-video",
+        "video-editing",
+        "video-editor",
+        "youtube",
+        "youtube-shorts"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-06-11T00:43:41Z",
+      "updated_at": "2026-10-31T05:46:40Z",
+      "pushed_at": "2026-10-31T05:46:35Z",
+      "open_issues": 42,
+      "homepage": "https://colingpt9.github.io/clips-studio/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n**English** · [简体中文](docs/readme/README_zh.md) · [日本語](docs/readme/README_ja.md) · [한국어](docs/readme/README_ko.md) · [Türkçe](docs/readme/README_tr.md) · [Русский](docs/readme/README_ru.md) · [Tiếng Việt](docs/readme/README_vi.md) · [ไทย](docs/readme/README_th.md) · [Deutsch](docs/readme/README_de.md) · [Español](docs/readme/README_es.md) · [Français](docs/readme/README_fr.md) · [Português (Brasil)](docs/readme/README_pt-BR.md) · [العربية](docs/readme/README_ar.md) · [Bahasa Indonesia](docs/readme/README_id.md) · [Italiano](docs/readme/README_it.md) · [हिन्दी](docs/readme/README_hi.md) · [বাংলা](docs/readme/README_bn.md) · [Filipino](docs/readme/README_tl.md) · [اردو](docs/readme/README_ur.md)\n\n</div>\n\n# Clips Kitty: the free, open-source Opus Clip alternative for chatting, gaming and sports, on your own PC\n\n<a href=\"https://apps.microsoft.com/detail/9NB6XT7DSQZZ\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://get.microsoft.com/images/en-us%20dark.svg\">\n    <img alt=\"Get Clips Kitty from the Microsoft Store\" src=\"https://get.microsoft.com/images/en-us%20light.svg\" height=\"52\">\n  </picture>\n</a>\n\n[![Latest release](https://badgen.net/github/tag/ColinGPT9/clips-studio?label=release)](https://github.com/ColinGPT9/clips-studio/releases)\n[![Downloads](https://img.shields.io/github/downloads/ColinGPT9/clips-studio/total?label=downloads)](https://github.com/ColinGPT9/clips-studio/releases)\n[![Licence](https://img.shields.io/github/license/ColinGPT9/clips-studio)](LICENSE)\n[![Stars](https://badgen.net/github/stars/ColinGPT9/clips-studio?label=stars)](https://github.com/ColinGPT9/clips-studio/stargazers)\n[![Open source](https://img.shields.io/badge/open%20source-yes-brightgreen)](https://github.com/ColinGPT9/clips-studio)\n[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)\n[![Docker](https://img.shields.io/badge/docker-compose%20up-2496ED?logo=docker&logoColor=white)](docs/DOCKER.md)\n\n<a href=\"https://youtu.be/g1dMqrq-YaI\"><img src=\"https://github.com/user-attachments/assets/2a1bdd85-723e-46d6-b74b-00579c71b6a7\" alt=\"Clips Kitty turning an NBA broadcast into a 9:16 clip that follows the ball\" width=\"100%\"></a>\n\n### Star and share Clips Kitty ⭐ Goal: 200\n\n[![Stars so far](https://badgen.net/github/stars/ColinGPT9/clips-studio?label=stars%20so%20far&color=0969da&scale=1.6)](https://github.com/ColinGPT9/clips-studio/stargazers) **of 200**\n\n**Please star the repo and share it.** It costs you nothing, and there is no\nmarketing budget behind this, so word of mouth is the only way the next small\nYouTuber or streamer finds out a free option exists.\n\n**I made it for small YouTubers and streamers** who cannot afford the other\noptions or an editor. It is a free Opus Clip, Vizard and Klap alternative that\nruns **Google Gemma** on your own PC: no server cost, no per-clip fee, no AI\nusage fee.\n\n> **Clips Kitty was called Clips Studio until version 1.1.3**, renamed to meet\n> Microsoft Store naming requirements. Same app, same repository, same data.\n\n<img src=\"docs/brand/mascot.png\" alt=\"\" width=\"150\" align=\"right\">\n\n**Turn long streams and videos into ready-to-post Shorts, Reels, and TikToks,\nentirely on your own machine.** Clips Kitty is a free, open-source AI clip generator\nand video editor for creators: paste a YouTube, Twitch, or Kick link and it finds the\nbest moments, crops them to 9:16 with the speaker kept centred, burns in word-synced\ncaptions, and writes titles, descriptions, and hashtags.\n\nNo cloud AI by default. No subscription. No per-clip fees. Your footage never leaves\nyour computer, unless you ask it to publish a clip to your own YouTube channel.\n\nLocal first, cloud when you need it: if your PC is too old to run the AI, a cloud\nprovider runs it instead, billed to your own account.\n**OpenRouter is the recommended cloud path**: sign in with your OpenRouter account\n(OAuth, no key to copy) for many models (Claude, GPT, Gemini, Muse Spark and more).\nIn my testing, a 2-hour video cost about 11 cents on OpenRouter, with Gemma\n(Gemma 4 26B-A4B) picking the clips and Whisper (large-v3-turbo) transcribing; what you\npay depends on the models you pick and the length of the video.\nOpenAI, Claude, Gemini, xAI, Meta, DeepSeek and Qwen also work directly, on your own API\nkey.\nSee [docs/AI-BACKENDS.md](docs/AI-BACKENDS.md).\n\n**Why it exists:** most creators growing a channel are doing all of it themselves:\nfilming, streaming, editing, posting. Clipping is how people find you and it is usually\nthe first thing that gets dropped: an editor is a cost most channels cannot justify yet,\nclipping tools charge per video or per month, and cutting them by hand takes a day you\nneeded elsewhere. This runs on hardware you already own, so it costs nothing to use and\nthere is no cap on how many clips you make.\n\n<img src=\"docs/store-screenshots/fs-dashboard-202754.png\" width=\"100%\"\n     alt=\"The Clips Kitty dashboard: paste a YouTube, Twitch or Kick URL, pick caption and\n          format options, and a finished video row showing 38 clips produced in 19m 38s,\n          with live CPU, RAM, GPU and storage readouts beside it.\">\n\n<sub>38 clips from one video in 19 minutes, on one PC, with nothing uploaded.</sub>\n\n---\n\n## Contents\n\n- [What it does](#what-it-does)\n- [How it compares to Opus Clip, Klap, Vizard and CapCut](#how-it-compares-to-opus-clip-klap-vizard-and-capcut)\n- [How it works](#how-it-works)\n- [Features](#features)\n- [What it's built for](#what-its-built-for)\n- [Requirements](#requirements)\n- [Install and run](#install-and-run)\n- [Pick your AI model](#pick-your-ai-model)\n- [Tested hardware and performance](#tested-hardware-and-performance)\n- [Supported platforms](#supported-platforms)\n- [Supported languages](#supported-languages)\n- [Publish to YouTube](#publish-to-youtube)\n- [Publish to every platform at once](#publish-to-every-platform-at-once)\n- [GPU acceleration](#gpu-acceleration)\n- [Command line use](#command-line-use)\n- [Write a plugin](#write-a-plugin)\n- [Build on it](#build-on-it)\n- [Architecture](#architecture)\n- [Contributing](#contributing)\n- [Roadmap](#roadmap-detail)\n- [License](#license)\n\n---\n\n## What it does\n\nYou give Clips Kitty a long video. It gives you back a folder of finished vertical\nclips you can post, plus a studio to review and fix them before you do.\n\nIt is built for the content most clipping tools handle worst: **live streams, IRL and\ntalking-head footage, podcasts, and gym/fitness content**: long, loosely structured\nvideos where the good moments are buried and a transcript alone won't find them.\n\n## How it compares to Opus Clip, Klap, Vizard and CapCut\n\nClips Kitty is an open-source alternative to cloud clipping tools. The difference that\nmatters is where the work happens: your video is never uploaded, so there is nothing to\nmeter and nothing to charge for.\n\n| Tool | Price, billed monthly | Free tier | Finds the clips for you | Watermark | Uploads your video | Open source |\n| ---- | --------------------- | --------- | ----------------------- | --------- | ------------------ | ----------- |\n| **Clips Kitty** | Free, no paid tier | The whole app | Yes | Never | No, runs on your PC | Yes, AGPL-3.0 |\n| Opus Clip | $15 Starter, $29 Pro | 1080p, watermarked, expires in 3 days | Yes | On the free tier | Yes | No |\n| Klap | $29 Pro, $14 Basic billed yearly | One video | Yes | Not stated | Yes | No |\n| Vizard | $29 Creator, $14.50 billed yearly | 60 credits a month, 720p | Yes | On the free tier | Yes | No |\n| quso.ai | $29 to $49 | 75 credits a month, 720p | Yes | Not stated | Yes | No |\n| Ssemble | $15 to $60, $6 to $24 billed yearly | None listed | Yes | Not stated | Yes | No |\n| Descript | $16, $24, $50 | 60 minutes a month, 720p | Partly, it is a transcript editor | On Free and Hobbyist | Yes | No |\n| CapCut | Free to use, paid tiers at capcut.com | The whole editor | **No, you cut by hand** | Varies by feature | No on the desktop app | No |\n\n**CapCut is the one worth understanding**, because it is the free answer everyone gives.\nIt is a good editor and it costs nothing, but you find every moment and crop every clip\nyourself. Clips Kitty is also free, and that first pass is the part it does for you.\n\n**Opus Clip, Klap or Vizard are the better choice** if you don't have a Windows PC with a\ngraphics card, you clip occasionally, or you need to work from a phone. Clips Kitty is\nbuilt for clipping at volume on hardware you already own.\n\n**[Full comparison of all seven, with what each one is best at](https://colingpt9.github.io/clips-studio/alternatives.html)**\n\n<sub>Prices checked on each company's own pricing page, 17 September 2026. CapCut\npublishes no pricing page we could read, so no price is quoted for it. Plans change; this\ntable won't update itself.</sub>\n\n## How it works\n\n```mermaid\nflowchart TD\n    W[\"Watched channel<br/>YouTube's RSS feed spots a new video\"] --> I\n    I[\"Video input<br/>YouTube · Twitch VOD · Kick VOD · local file\"] --> T\n    T[\"Transcription<br/>faster-whisper, word-level timestamps<br/>local, or OpenRouter, signed in with OAuth\"] --> A\n    A[\"AI video analysis<br/>audio · visual · reaction signals in 1-second bins\"] --> S\n    S[\"Clip detection and scoring<br/>an LLM scores the transcript with those signals<br/>local (Ollama) by default, or OpenRouter, signed in with OAuth\"] --> E\n    E[\"Video editing<br/>9:16 crop on whoever is speaking (YOLOv8 + TalkNet),<br/>on the ball for a match, webcam + game for Gaming / Reaction\"] --> C\n    C[\"Captions<br/>word-synced, burned in, fully editable\"] --> M\n    M[\"Multilingual<br/>translate, subtitle or dub into 19 languages\"] --> X\n    X[\"Export<br/>organized folders, clean filenames, metadata\"] --> P\n    P[\"Publishing<br/>YouTube, TikTok, Instagram: now, on a schedule,<br/>or hands-off for a watched channel\"]\n```\n\n**Every stage runs on your computer unless you choose otherwise:** OpenRouter, signed\nin with your account, for the AI or the transcription, and publishing, which uploads only the\nclips you send. Otherwise the only thing that touches the network in a normal run is\ndownloading the source video.\n\n### The stages in detail\n\n**Transcription: faster-whisper.** Word-level timestamps, running on CUDA where\navailable and falling back to CPU. Word timing is what makes captions land on the\nright syllable and clips start on a real sentence boundary.\n\n**AI clip scoring.** The transcript is one signal among five. Audio gives loudness\nspikes, burst density (what laughter and applause look like), and silence→explosion\npayoff shapes. Visual gives scene cuts, motion, and face-area changes. A reaction\nsignal fuses those. Each is normalized *within that video*, so a quiet podcast and a\nscreaming stream both produce meaningful peaks. Where real audience data exists\n(Twitch chat replay measured by unique chatters, YouTube's most-replayed heatmap), it\nadds a small capped bonus.\n\nThe local LLM sees the transcript **plus a timeline of those events**, so it can weigh\n\"the words are mild but the room exploded\" correctly. Because small models score\neverything in a narrow band, the finalists then get compared head-to-head in one\nrerank call: relative judgment is much easier for a 7B model than absolute scoring.\n\n**Creator Profiles.** The app builds a knowledge base per creator across their videos:\nrecurring topics, series, collaborators, running jokes, and ongoing storylines. That\ncontext helps it write accurate titles and spot callbacks. It is deliberately\nconservative: a catchphrase has to actually repeat before it counts, knowledge that\nstops being mentioned goes dormant, and every score contribution from it is additive,\ncapped, and can be switched off.\n\n**Video editor.** Non-destructive: trims, internal cuts, mutes, muted words, volume,\nfades, speed, hook text, music, and watermark are stored as operations and applied at\nrender time. There's an AI edit chat too (*\"make it 5 seconds longer\"*, *\"the caption\nsays gost, it should say ghost\"*), where"
+    },
+    "brief": {
+      "summary": "免费开源的本地AI视频切片工具，可把长直播转成竖屏短片",
+      "problem": "小创作者请不起剪辑，切片工具又按月收费",
+      "highlights": [
+        "可以把YouTube、Twitch或Kick链接转成竖屏短片",
+        "可以自动找出精彩片段并裁成9:16竖屏",
+        "可以给短片加逐词字幕并生成标题和标签"
+      ],
+      "target_users": [
+        "小YouTuber",
+        "主播",
+        "短视频创作者"
+      ],
+      "why_trending": "免费替代Opus Clip，本周首次收录，已有188星",
+      "caveat": "本地AI依赖硬件，云端按API用量自付",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ColinGPT9/clips-studio",
+      "score": 88,
+      "category": "视频剪辑",
+      "reason": "直播切片自动剪辑，生成竖屏短视频",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "renpy/renpy",
+      "url": "https://github.com/renpy/renpy",
+      "description": "The Ren'Py Visual Novel Engine",
+      "language": "Ren'Py",
+      "total_stars": 6955,
+      "forks": 959,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "python",
+        "renpy",
+        "visual-novel",
+        "visual-novel-engine"
+      ],
+      "license_name": "",
+      "created_at": "2012-06-28T01:21:22Z",
+      "updated_at": "2026-10-31T05:57:57Z",
+      "pushed_at": "2026-10-31T05:57:50Z",
+      "open_issues": 295,
+      "homepage": "http://www.renpy.org/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "==============================\nThe Ren'Py Visual Novel Engine\n==============================\n\nhttps://www.renpy.org\n\n\nBranches\n========\n\nThe following branches are the most interesting.\n\n``fix``\n    The fix branch is used for fixes to the current version of Ren'Py that do\n    not require dangerous changes. The fix branch is also the source of the\n    documentation on https://www.renpy.org/. This branch is automatically\n    merged into master on a regular basis.\n\n    Pull requests that contain fixes or documentation improvements should be\n    made to the fix branch. When a feature release is made (for example, going from 8.6.x to 8.7.0),\n    the master branch is copied to the fix branch. Fix releases are made from this branch.\n\n``master``\n    The master branch is where the main focus of development is. This branch\n    will eventually become the next release of Ren'Py.\n\n    Pull requests that contain new features, that require incompatible changes,\n    or major changes to Ren'Py's internals should be targeted at the master\n    branch.\n\n    Feature releases are made from this branch.\n\n``work/``\n    Work branches contain work that that is intended to be merged into master or fix - pull requests, or pull requests\n    to be. These branches should start with work/<username>/ , or work/shared/ for work shared equally between multiple\n    contributors.\n\n    A github rule enforces that new branches much start  with work/.\n\n``history/``\n    Branches beginning with history/ contain commits that for various reasons are not included in the github interface.\n\n\nGetting Started\n===============\n\nRen'Py depends on a number of Python modules written in Cython and C. For\nchanges to Ren'Py that only involve Python modules, you can use the modules\nfound in the latest nightly build. Otherwise, you'll have to compile the\nmodules yourself.\n\nThe development scripts run on Linux, macOS, and Windows.\n\nNightly Build\n-------------\n\nNightly builds can be downloaded from:\n\n   https://nightly.renpy.org\n\nNote that the latest nightly build is at the bottom of the list. Once you've\nunpacked the nightly, change into this repository, and run::\n\n    ./after_checkout.sh <path-to-nightly>\n\nOnce this script completes, you should be able to run Ren'Py using renpy.sh,\nrenpy.app, or renpy.exe, as appropriate for your platform.\n\nIf the current nightly build doesn't work, please wait 24 hours for a new\nbuild to occur. If that build still doesn't work, contact Tom (`pytom at bishoujo.us`,\nor @renpytom on Twitter/X) to find out what's wrong.\n\nThe ``doc`` symlink will dangle until documentation is built, as described\nbelow.\n\nCompiling the Modules\n----------------------\n\nBuilding the modules requires you to have the dependencies installed on your\nsystem. On Ubuntu and Debian, these dependencies can be installed with the\ncommand::\n\n    sudo apt install python3-dev libassimp-dev libavcodec-dev libavformat-dev libavutil-dev \\\n        libswresample-dev libswscale-dev libharfbuzz-dev libfreetype-dev libfribidi-dev \\\n        libsdl3-dev libsdl3-image-dev libpng-dev pkg-config\n\nWe strongly suggest using a package manager to create virtual environment and\nmanage dependencies. We have tested with `uv <https://docs.astral.sh/uv/>`_ but\nother package managers should work as well. To create a virtual environment and\ninstall dependencies, open a new terminal and run::\n\n    uv sync\n\nAfter that, compile extension modules and run Ren'Py using the command::\n\n    ./run.sh\n\nWindows\n-------\n\nOn Windows, ``run.ps1`` does the same job as ``run.sh``. Before you use it,\nyou'll need llvm-mingw. Download an ``llvm-mingw-*-ucrt`` ZIP from the\n`llvm-mingw releases <https://github.com/mstorsjo/llvm-mingw/releases>`_,\nextract it, and add its ``bin`` directory to ``PATH``.\n\nYou'll also need a windev directory. If you don't have one, download\n``renpy-*-windev.zip`` from `the current-8 nightly builds\n<https://nightly.renpy.org/current-8>`_ and extract it to\n``lib\\py3-windows-x86_64\\dev``. When working on the ``fix`` branch, use\n`the current-8-fix nightly builds <https://nightly.renpy.org/current-8-fix/>`_\ninstead. Don't mix archives from master and fix. If compilation fails,\ndownload the latest windev archive for your branch and extract it again.\n\nThen, from PowerShell, run::\n\n    .\\run.ps1\n\n\nOther Platforms\n---------------\n\nWhere supported, Ren'Py will attempt to find include directories and library paths\nusing pkg-config. If pkg-config is not present, include and library paths can be\nspecified using CFLAGS and LDFLAGS.\n\nIf RENPY_CFLAGS is present in the environment and CFLAGS is not, setup.py\nwill set CFLAGS to RENPY_CFLAGS. The same is true for RENPY_LDFLAGS,\nRENPY_CC, RENPY_CXX, and RENPY_LD.\n\nSetup.py does not support cross-compiling. See https://github.com/renpy/renpy-build\nfor software that cross-compiles Ren'Py for many platforms. The renpy-build system\nalso include some runtime components for Android, iOS, and web.\n\n\nDocumentation\n=============\n\nBuilding\n--------\n\nBuilding the documentation requires Ren'Py to work. You'll either need to\nlink in a nightly build, or compile the modules as described above. You'll\nalso need the `Sphinx <https://www.sphinx-doc.org>`_ documentation generator.\nIf you have pip working, install Sphinx using::\n\n    pip install -U sphinx sphinx_rtd_theme sphinx_rtd_dark_mode sphinx-tabs\n\nOnce Sphinx is installed, change into the ``sphinx`` directory inside the\nRen'Py checkout and run::\n\n    ./build.sh\n\nFormat\n------\n\nRen'Py's documentation consists of reStructuredText files found in sphinx/source, and\ngenerated documentation found in function docstrings scattered throughout the code. Do\nnot edit the files in the ``sphinx/source/inc`` folder directly, as they will be\noverwritten.\n\nDocstrings may include tags on the first few lines:\n\n\\:doc: `section` `kind`\n    Indicates that this function should be documented. `section` gives\n    the name of the include file the function will be documented in, while\n    `kind` indicates the kind of object to be documented (one of ``function``,\n    ``method`` or ``class``. If omitted, `kind` will be auto-detected.\n\\:name: `name`\n    The name of the function to be documented. Function names are usually\n    detected, so this is only necessary when a function has multiple aliases.\n\\:args: `args`\n    This overrides the detected argument list. It can be used if some arguments\n    to the function are deprecated.\n\nFor example::\n\n    def warp_speed(factor, transwarp=False):\n        \"\"\"\n        :doc: warp\n        :name: renpy.warp_speed\n        :args: (factor)\n\n        Exceeds the speed of light.\n\n        `factor`\n            The warp factor. See Sternbach (1991) for details.\n\n        `transwarp`\n            If True, use transwarp. This does not work on all platforms.\n        \"\"\"\n\n        renpy.engine.warp_drive.engage(factor)\n\n\nTranslating\n===========\n\nFor best practices when it comes to translating the launcher and template\ngame, please read:\n\nhttps://lemmasoft.renai.us/forums/viewtopic.php?p=321603#p321603\n\n\nContributing\n============\n\nFor bug fixes, documentation improvements, and simple changes, just make a pull request. For nontrivial changes,\nplease file an issue first so we can discuss the planned change.\n\n\nEfficiency Tools (including Language Models)\n============================================\n\nThe goal of Ren'Py is to provide tools that enable human creativity in the form of visual novels and similar styles\nof games. In service of this goal, developers may use tools that increase their efficiency, including tools that use\nlanguage models.\n\nEvery change to Ren'Py must be created by a human that understands both the change, the\nportions of Ren'Py affected by this change, and the copyright implications of the change. Examples of uses of\nefficiency tools that we consider appropriate include completion where the human only accepts suggestions that\nthey understand and that are correct, and prompts that cause changes that can be immediately\nreviewed by a human for correctness. Larger changes may be created by prompting for smaller changes with reviews\nat each step.\n\nWe do not accept changes where a human does not fully understand the change and how it affects Ren'Py. Large changes\nmade with minimal human review (\"vibe coding\") are not acceptable. If you'd like to make such a change, it's better to\njust bring the idea to us on GitHub and let us make the change. Changes made by agents without human review are not\nacceptable.\n\nOur use of AI is intended to not require disclosure in the\n`Steam Content Survey <https://partner.steamgames.com/doc/gettingstarted/contentsurvey#5>`_. Specifically, we\ndon't use diffusion models or other techniques to generate game content consumed by players, and we do not require\ncreators to use any AI tools, or provide any such tools for creators to use.\n\nAs a special case, we allow machine translation of system messages when there is no human translator for the language.\nWhen a human translator becomes available, their work takes precedence. This exception allows system messages to be\ntranslated to improve accessibility.\n\nLicense\n=======\n\nFor the complete licensing terms, please read:\n\nhttps://www.renpy.org/doc/html/license.html\n\nBy contributing to Ren'Py, you agree to license your contributions under the MIT license. When contributing, you may\nchoose to:\n\n* Retain copyright in your contribution. If you choose this, please \"Copyright (year) Your Name <your email>\" in the\n  copyright notice for any file you change.\n* Assign copyright in your contribution to Tom Rothamel <pytom@bishoujo.us>. This is assumed to be the default if\n  you don't specify otherwise.\n"
+    },
+    "brief": {
+      "summary": "Ren'Py 是视觉小说引擎，使用 Python 编写。",
+      "problem": "让创作者用脚本和 Python 制作视觉小说，不必从零搭引擎。",
+      "highlights": [
+        "可以编写视觉小说剧情与分支",
+        "可以用 Python 扩展游戏逻辑",
+        "可以跨平台构建游戏"
+      ],
+      "target_users": [
+        "视觉小说作者",
+        "独立游戏开发者",
+        "Python 开发者"
+      ],
+      "why_trending": "本周首次收录，总 Star 近 7 千，仓库近期有更新。",
+      "caveat": "资料未说明许可证，使用前需自行确认授权。",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "renpy/renpy",
+      "score": 93,
+      "category": "互动叙事",
+      "reason": "成熟视觉小说引擎，互动叙事核心工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.5
+    }
+  }
+]
