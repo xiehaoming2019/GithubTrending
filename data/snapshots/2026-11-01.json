@@ -1,0 +1,570 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "language": "Shell",
+      "total_stars": 308617,
+      "forks": 25978,
+      "stars_today": 883,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 984
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-03T11:15:53Z",
+      "updated_at": "2026-11-01T06:24:22Z",
+      "pushed_at": "2026-10-31T14:23:44Z",
+      "open_issues": 195,
+      "homepage": "https://aihero.dev/skills",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p>\n  <a href=\"https://www.aihero.dev/s/skills-newsletter\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skills-repo-dark_2x.png\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\">\n      <img alt=\"Skills\" src=\"https://res.cloudinary.com/total-typescript/image/upload/v1777382277/skill-repo-light_2x.png\" width=\"369\">\n    </picture>\n  </a>\n</p>\n\n# Skills For Real Engineers\n\n[![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)\n\nMy agent skills that I use every day to do real engineering - not vibe coding.\n\nDeveloping real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve.\n\nThese skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on decades of engineering experience. Hack around with them. Make them your own. Enjoy.\n\nIf you want to keep up with changes to these skills, and any new ones I create, you can join ~60,000 other devs on my newsletter:\n\n[Sign Up To The Newsletter](https://www.aihero.dev/s/skills-newsletter)\n\n## Installation (30-second setup)\n\nA plugin updates itself. [skills.sh](https://skills.sh/mattpocock/skills) copies editable files into your project, and you update them by hand. Pick one per agent, because installing both gives you every skill twice.\n\n### 1. Get the skills\n\n<details>\n<summary><strong>Claude Code</strong></summary>\n\n```bash\nclaude plugin install mattpocock-skills@claude-plugins-official\n```\n\nUpdates itself by default.\n\n</details>\n\n<details>\n<summary><strong>Codex</strong></summary>\n\n```bash\ncodex plugin marketplace add mattpocock/skills\ncodex plugin add mattpocock-skills@mattpocock\n```\n\nUpdates itself at startup.\n\n</details>\n\n<details>\n<summary><strong>GitHub Copilot</strong> (CLI and VS Code)</summary>\n\n```bash\ncopilot plugin marketplace add mattpocock/skills\ncopilot plugin install mattpocock-skills@mattpocock\n```\n\nThen, once, add to `~/.copilot/settings.json`:\n\n```json\n{\n  \"extraKnownMarketplaces\": {\n    \"mattpocock\": { \"source\": { \"source\": \"github\", \"repo\": \"mattpocock/skills\" }, \"autoUpdate\": true }\n  }\n}\n```\n\nIn VS Code, run **Chat: Install Plugin From Source** and enter `https://github.com/mattpocock/skills`. It updates daily.\n\n</details>\n\n<details>\n<summary><strong>Gemini CLI</strong> (manual updates)</summary>\n\n```bash\ngemini skills install https://github.com/mattpocock/skills.git --path skills/engineering\ngemini skills install https://github.com/mattpocock/skills.git --path skills/productivity\n```\n\nRe-run both commands to update.\n\n</details>\n\n<details>\n<summary><strong>Any other agent, or editable files</strong> (manual updates)</summary>\n\n```bash\nnpx skills@latest add mattpocock/skills -a <agent>  # cursor, opencode, devin, windsurf, amp, pi; omit -a to choose\n```\n\nWhen the installer asks which skills to take, include `setup-matt-pocock-skills`. To update, run `npx skills@latest update`, and re-run `add` to pick up new skills.\n\n</details>\n\n### 2. Run `/setup-matt-pocock-skills`\n\nIn your agent, run it once per repo. It will:\n\n- Ask you which issue tracker you want to use (GitHub, GitLab, local files, or anything else you describe)\n- Ask you what labels you apply to tickets when you triage them (`/triage` uses labels)\n- Ask you where you want to save any docs we create\n\n### 3. Bam - you're ready to go.\n\n## Why These Skills Exist\n\nI built these skills as a way to fix common failure modes I see with Claude Code, Codex, and other coding agents.\n\n### #1: The Agent Didn't Do What I Want\n\n> \"No-one knows exactly what they want\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all.\n\nThis is just the same in the AI age. There is a communication gap between you and the agent. The fix for this is a **grilling session** - getting the agent to ask you detailed questions about what you're building.\n\n**The Fix** is to use:\n\n- [`/grill-me`](./skills/productivity/grill-me/SKILL.md) - for non-code uses\n- [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) - same as [`/grill-me`](./skills/productivity/grill-me/SKILL.md), but adds more goodies (see below)\n\nThese are my most popular skills. They help you align with the agent before you get started, and think deeply about the change you're making. Use them _every_ time you want to make a change.\n\n### #2: The Agent Is Way Too Verbose\n\n> With a ubiquitous language, conversations among developers and expressions of the code are all derived from the same domain model.\n>\n> Eric Evans, [Domain-Driven-Design](https://www.amazon.co.uk/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)\n\n**The Problem**: At the start of a project, devs and the people they're building the software for (the domain experts) are usually speaking different languages.\n\nI felt the same tension with my agents. Agents are usually dropped into a project and asked to figure out the jargon as they go. So they use 20 words where 1 will do.\n\n**The Fix** for this is a shared language. It's a document that helps agents decode the jargon used in the project.\n\n<details>\n<summary>\nExample\n</summary>\n\nHere's an example [glossary](https://github.com/mattpocock/course-video-manager/blob/076a5a7a182db0fe1e62971dd7a68bcadf010f1c/CONTEXT.md) (still named `CONTEXT.md` at that pinned commit, from before the skills renamed the convention), from my `course-video-manager` repo. Which one is easier to read?\n\n- **BEFORE**: \"There's a problem when a lesson inside a section of a course is made 'real' (i.e. given a spot in the file system)\"\n- **AFTER**: \"There's a problem with the materialization cascade\"\n\nThis concision pays off session after session.\n\n</details>\n\nThis is built into [`/grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md). It's a grilling session, but that helps you build a shared language with the AI, and document hard-to-explain decisions in ADR's.\n\nIt's hard to explain how powerful this is. It might be the single coolest technique in this repo. Try it, and see.\n\n> [!TIP]\n> A shared language has many other benefits than reducing verbosity:\n>\n> - **Variables, functions and files are named consistently**, using the shared language\n> - As a result, the **codebase is easier to navigate** for the agent\n> - The agent also **spends fewer tokens on thinking**, because it has access to a more concise language\n\n### #3: The Code Doesn't Work\n\n> \"Always take small, deliberate steps. The rate of feedback is your speed limit. Never take on a task that’s too big.\"\n>\n> David Thomas & Andrew Hunt, [The Pragmatic Programmer](https://www.amazon.co.uk/Pragmatic-Programmer-Anniversary-Journey-Mastery/dp/B0833F1T3V)\n\n**The Problem**: Let's say that you and the agent are aligned on what to build. What happens when the agent _still_ produces crap?\n\nIt's time to look at your feedback loops. Without feedback on how the code it produces actually runs, the agent will be flying blind.\n\n**The Fix**: You need the usual tranche of feedback loops: static types, browser access, and automated tests.\n\nFor automated tests, a red-green-refactor loop is critical. This is where the agent writes a failing test first, then fixes the test. This helps give the agent a consistent level of feedback that results in far better code.\n\nI've built a **[`/tdd`](./skills/engineering/tdd/SKILL.md) skill** you can slot into any project. It encourages red-green-refactor and gives the agent plenty of guidance on what makes good and bad tests.\n\nFor debugging, I've also built a **[`/diagnosing-bugs`](./skills/engineering/diagnosing-bugs/SKILL.md)** skill that wraps best debugging practices into a disciplined loop, gated phase by phase.\n\n### #4: We Built A Ball Of Mud\n\n> \"Invest in the design of the system _every day_.\"\n>\n> Kent Beck, [Extreme Programming Explained](https://www.amazon.co.uk/Extreme-Programming-Explained-Embrace-Change/dp/0321278658)\n\n> \"The best modules are deep. They allow a lot of functionality to be accessed through a simple interface.\"\n>\n> John Ousterhout, [A Philosophy Of Software Design](https://www.amazon.co.uk/Philosophy-Software-Design-2nd/dp/173210221X)\n\n**The Problem**: Most apps built with agents are complex and hard to change. Because agents can radically speed up coding, they also accelerate software entropy. Codebases get more complex at an unprecedented rate.\n\n**The Fix** for this is a radical new approach to AI-powered development: caring about the design of the code.\n\nThis is built in to every layer of these skills:\n\n- [`/to-spec`](./skills/engineering/to-spec/SKILL.md) quizzes you about which modules you're touching before creating a spec\n\nAnd crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) surveys a codebase for deepening opportunities and hands you the candidates. I recommend running it on your codebase once every few days. It is a survey, not a rescue: on a genuinely old codebase it will find real candidates, but it won't untangle the mud for you.\n\n### Summary\n\nSoftware engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.\n\n## Reference\n\nThese split on one axis: who can invoke them. **User-invoked** skills are reachable only when you type them (e.g. `/grill-me`); their job is to orchestrate. **Model-invoked** skills can be invoked by you _or_ reached for automatically by the agent when the task fits; they hold the reusable discipline. A user-invoked skill may invoke model-invoked skills, but never another user-invoked one.\n\n### Engineering\n\nSkills I use daily for code work.\n\n**User-invoked**\n\n- **[ask-matt](./skills/engineering/ask-matt/SKILL.md)**: Ask which skill or flow fits your situation. A router over the user-invoked skills in this repo.\n- **[grill-with-docs](./skills/engineering/grill-with-docs/SKILL.md)**: Grilling session that also builds your project's domain model, sharpening terminology and updating `GLOSSARY.md` and ADRs inline.\n- **[triage](./skills/engineering/triage/SKILL.md)**: Move issues through a state machine of triage roles.\n- **[improve-codebase-architecture](./skills/engineering/improve-codebase-architecture/SKILL.md)**: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.\n- **[setup-matt-pocock-skills](./skills/engineering/setup-matt-pocock-skills/SKILL.md)**: Configure this repo for the engineering skills (issue tracker, triage labels, domain doc layout). Run once per repo before using the other engineering skills.\n- **[to-spec](./skills/engineering/to-spec/SKILL.md)**: Turn the current conversation into a spec and publish it to the issue tracker. No interview, just synthesizes what you've already discussed.\n- **[to-tickets](./skills/engineering/to-tickets/SKILL.md)**: Break any plan, spec, or conversation into a set of tracer-bullet tickets, each declaring its blocking edges, written as text in a local file, or as native blocking links on a real tracker.\n- **[implement](./skills/engineering/implement/SKILL.md)**: Build the work described by a spec or set of tickets, driving `/tdd` at pre-agreed seams and closing out with `/code-review` before committing.\n- **[implement-spec](./skills/engineering/implement-spec/SKILL.md)**: Implement a whole spec on one integration branch. Works the tickets as a task graph, runni"
+    },
+    "brief": {
+      "summary": "面向真实工程的AI编码代理技能集，小而可组合。",
+      "problem": "AI代理常偏离开发者意图、输出冗长、代码不可靠。",
+      "highlights": [
+        "可以用 /grill-me 让代理先追问需求，减少误解。",
+        "可以用 /grill-with-docs 建立共享词表和决策记录。",
+        "可以用 /tdd 让代理先写失败测试再修代码。"
+      ],
+      "target_users": [
+        "AI编码代理用户",
+        "工程团队",
+        "想规范代理流程的开发者"
+      ],
+      "why_trending": "今日新增883 Star，本周首次收录，编码代理技能受关注。",
+      "caveat": "需要已有编码代理，不同代理安装方式不同。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mattpocock/skills",
+      "score": 88,
+      "category": "AI Agent / Skills",
+      "reason": "可直接复用的工程化Agent Skills集合",
+      "generated_by_ai": true,
+      "velocity_score": 91,
+      "freshness_score": 40,
+      "ranking_score": 72.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "Orkas-AI/Orkas",
+      "url": "https://github.com/Orkas-AI/Orkas",
+      "description": "Orkas is an open-source (MIT), local-first AI team for your desktop: a Commander turns your goal into to-dos and coordinates 16 built-in specialist agents plus Claude Code, Codex, OpenCode, OpenClaw and Hermes, with projects, scheduled automations and connectors. Free app for macOS & Windows; built-in models or your own keys.",
+      "language": "JavaScript",
+      "total_stars": 6836,
+      "forks": 417,
+      "stars_today": 1044,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1044
+    },
+    "details": {
+      "topics": [
+        "agent-collaboration",
+        "agent-harness",
+        "agent-orchestration",
+        "agent-team",
+        "agent-workflow",
+        "ai-assistant",
+        "ai-automation",
+        "ai-employee",
+        "ai-productivity",
+        "ai-team",
+        "ai-workflow",
+        "autonomous-agents",
+        "claude-code-gui",
+        "claude-cowork",
+        "desktop-agent",
+        "local-first",
+        "multi-agent",
+        "multi-agent-system",
+        "self-evolving-agents",
+        "task-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-04-29T12:19:08Z",
+      "updated_at": "2026-11-01T06:26:48Z",
+      "pushed_at": "2026-11-01T01:24:48Z",
+      "open_issues": 7,
+      "homepage": "https://orkas.ai?source=gh-orkas",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Orkas\n\n**An open-source team of AI agents on your desktop — it turns your goals into finished work and keeps it moving.**\n\nOrkas is an open-source (MIT), local-first multi-agent desktop app — an AI assistant that works as a team. Tell the **Commander** what you need: it finishes many tasks on its own, and for bigger work it plans the steps and brings in specialist agents along with the coding and personal agents you already use — **Claude Code, Codex, OpenCode, OpenClaw and Hermes-Agent** — to work on it together.\n\nOrkas is built to keep a project moving, not just answer one prompt. A **project** holds the goal, rules, memory and files, so every new conversation picks up where the last one left off. **To-dos** split the work between people and agents, **Auto-advance** lets the team take on the next to-do by itself, and **scheduled automations** repeat routine work hourly, daily, weekly or monthly. All your data stays on your computer, and finished work comes back for your review — so you can trust Orkas with the ongoing work of your business.\n\n**[⬇ Download Orkas for macOS & Windows](https://orkas.ai/download/?source=gh-orkas&entry_point=github_readme&download=1)** — free, with 500 credits for the built-in Orkas model, so you don't need an API key to start. Prefer your own keys? Claude · OpenAI · Gemini · DeepSeek · Kimi · GLM · Qwen · MiniMax · Doubao, or a local OpenAI-compatible endpoint.\n\n[![Download for macOS & Windows](https://img.shields.io/badge/Download-macOS%20%26%20Windows-5b57d6?style=for-the-badge)](https://orkas.ai/download/?source=gh-orkas&entry_point=github_readme&download=1)\n\n[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)\n[![GitHub stars](https://img.shields.io/github/stars/Orkas-AI/Orkas?style=flat&logo=github&label=Stars&color=yellow)](https://github.com/Orkas-AI/Orkas/stargazers)\n[![Release](https://img.shields.io/github/v/release/Orkas-AI/Orkas?color=blue)](https://github.com/Orkas-AI/Orkas/releases)\n[![X: @leochenpm](https://img.shields.io/badge/X-%40leochenpm-black?logo=x)](https://x.com/leochenpm)\n[![Website: orkas.ai](https://img.shields.io/badge/Website-orkas.ai-5b57d6)](https://orkas.ai/?source=gh-orkas)\n\n[English](./README.md) · [简体中文](./README.zh-CN.md)\n\n---\n\nhttps://github.com/user-attachments/assets/4f8b16c8-a192-45a4-b19f-80e8d02c3dab\n\n![Orkas desktop — task conversation and deliverables](./resources/app-ui/task-en.png)\n\n---\n\n## What the team delivers\n\n- **Videos, voice-overs and images** — VideoStudio, VoiceStudio, ImageStudio\n- **Research reports, SEO audits and market analysis** — DeepResearcher, SeoGeoAgent, StockAnalyser\n- **Posts, articles, newsletters and slide decks** — ContentWriter, PptMaker\n- **Websites, UI and code** — UIDesigner, ProductDeveloper\n- **Word, Excel, PowerPoint and PDF files** — OfficeWorker\n- **E-commerce work** — product research, listings, review analysis, sales analysis and catalog changes, from five e-commerce agents\n- **Complex work that takes several agents** — the Commander splits it up, hands each part to the right agent and combines the results; for example, market research that becomes a report, a slide deck and a launch video\n\n16 specialists ship with the app, each with its own skills, memory and tools. Browse 30+ agents in the [agent marketplace](https://orkas.ai/views/marketplace/gs/agents/?source=gh-orkas), or describe the role you need and the Commander builds a custom agent for you.\n\n<details>\n<summary><b>All 16 built-in agents</b></summary>\n\n| Area | Agent | What it delivers |\n| --- | --- | --- |\n| Research & analysis | **DeepResearcher** | Evidence-grounded research with verified sources, flagged contradictions and an auditable report |\n| | **SeoGeoAgent** | Give it a URL — technical audit, content quality, Core Web Vitals, AI-answer (GEO) citability, ranked fix list |\n| | **StockAnalyser** | Equity research, factor screens, backtests and portfolio risk checks, with traceable dashboards |\n| Content & media | **ContentWriter** | Publish-ready posts, articles, newsletters and case studies from a goal, sources or a rough draft |\n| | **PptMaker** | Editable, reviewable PPTX decks from a topic, outline or document |\n| | **ImageStudio** | Posters, covers, social images and infographics |\n| | **VideoStudio** | Narration, AI presenters, captions and dubbing, highlight clips, localization, and reference-video recreation with your own content and footage |\n| | **VoiceStudio** | Narration, multi-voice audio, transcripts and subtitles, audio editing and mixing |\n| | **UIDesigner** | Editable, HTML-first UI from product goals, PRDs, screenshots or Figma material |\n| Build & office | **ProductDeveloper** | Repo-aware engineering — implement a PRD, fix bugs, refactor, review, with verifiable results |\n| | **OfficeWorker** | Create, edit, check and deliver Word / Excel / PowerPoint / PDF files, one at a time or in batches |\n| E-commerce | **ECommerceResearcher** | Product selection by budget, market and sourcing limits — candidates, rejection reasons, validation plans |\n| | **ECommerceWriter** | Titles, detail pages, FAQs, image copy and video scripts in your brand voice |\n| | **ECommerceReviewer** | Review and reputation analysis — customer themes, root causes of bad reviews, priorities |\n| | **ECommerceAnalyzer** | Sales, profit, ads, refunds and inventory from your exports — reconciled metrics and decisions |\n| | **ECommerceOperator** | Plans catalog, price, promotion and inventory changes; executes only through tools you connect |\n\nMore on each agent → [orkas.ai/agents](https://orkas.ai/agents/?source=gh-orkas)\n\n</details>\n\n### Recreate a reference video with your own content\n\n**VideoStudio** can recreate a viral video's narrative structure, visual style and editing pace using your own product, script and footage. Supply a reference video file and your assets: the agent analyzes the hook, information order, visual beats and call to action, then proposes what to preserve and what to replace before production.\n\nThis works best for motion-graphic explainers, SaaS or app demos, and product ads built from your existing footage. Locally authored text, captions, narration and clips can be revised separately; text baked into AI-generated footage requires changing that footage.\n\n> \"Use reference.mp4 as a reference for a 30-second vertical promo. Keep its hook, typography and pacing, replace the content with my product and screen recordings, and show me the breakdown and plan first.\"\n\nStart with a video file the agent can read; social-platform share-link downloading is not built in. Exact camera moves, human performances and frame-by-frame matching are not guaranteed. See the [reference-recreation workflow](./resources/builtin/marketplace/agents/79df9cc89f5f/skills/video-craft/references/reference-recreation.md).\n\n---\n\n## Keep the work moving\n\nOne task is a good start. Orkas is built for the work that keeps going.\n\n- **Projects** — goals & rules, memory and files that every conversation in the project starts from, so you never brief from scratch.\n- **To-dos and Auto-advance** — every project has a to-do list for people and agents; with Auto-advance on, the team picks up the next item on its own and brings finished work back for your review.\n- **Scheduled automations** — run any task hourly, daily, weekly or monthly. Orkas runs on your computer. From v1.9, each automation catches up its most recent missed run within 12 hours when the computer wakes or Orkas starts.\n- **Connectors** — Gmail, Google Calendar, Sheets and Drive, Notion, Slack, Shopify, Stripe and many more. By default, Orkas asks before it sends, posts or deletes anything.\n- **Apps** — describe a tool and Orkas builds it as a local app inside the desktop app. In the packaged app, paid plans can also publish it as a web app with a public link.\n- **Shared projects** *(packaged app)* — invite a teammate or VA, and give each to-do to a person or an agent.\n\n> [!NOTE]\n> Shared projects, cloud sync and web-app publishing are only in the packaged app — the open-source build doesn't support them yet. To use them, **[download Orkas for macOS & Windows](https://orkas.ai/download/?source=gh-orkas&entry_point=github_readme&download=1)** (free, with 500 credits to start).\n\nVoice input also works in the source build. Configure an **Orkas API Key** in **Settings → Models**, then click the microphone beside a composer. Allow microphone access when prompted. Audio is sent to Orkas for recognition and uses the key owner’s Orkas credits. Click again to stop, review the text, and send it yourself. If access was denied, enable the microphone in your system settings.\n\n---\n\n## Run Claude Code, Codex, OpenCode, OpenClaw and Hermes-Agent together\n\nOrkas runs the CLI agents you already have installed as local sessions, next to its own specialists — the coding agents **Claude Code, Codex and OpenCode**, and the personal agents **OpenClaw and Hermes-Agent**. The Commander hands each one the part it's best at and keeps one plan across all of them, so a single chat can fix the bug, review the change and draft the release note. Open-source tools such as HyperFrames plug in the same way.\n\n[Using Claude Code and Codex together →](https://orkas.ai/blog/claude-code-codex-together/?source=gh-orkas)\n\n---\n\n## Why Orkas\n\n- **A Commander that plans, delegates and does the rest** — it breaks down goals, picks the right agents, skills, connectors and tools, and handles analysis, writing, research and file work itself when no specialist is a better fit.\n- **Local-first by design** — conversations, files, knowledge bases and custom agents stay on your disk by default. Cloud sync is optional in the packaged app. With your own keys, model calls go straight from your machine to the provider; the built-in Orkas model runs through Orkas's managed model service.\n- **Any model, switch any time** — the Commander and built-in agents share one model setting: the built-in Orkas model, your own provider, or a local endpoint. External CLI agents keep their own model settings.\n- **Agents that get better** — each agent keeps private skills and memory. Background reviews examine new activity when the app is idle and can refine self-assessment, reusable methods and learned skills.\n- **Open source, no black box** — MIT licensed. Read exactly what Orkas and every agent and skill do.\n\n> ⭐ If Orkas is useful to you, a star helps more people find the project.\n\n---\n\n## Download\n\n| | Packaged app (recommended) | Run from source |\n| --- | --- | --- |\n| Platforms | macOS 12+ (Apple Silicon & Intel), Windows 10+ | macOS, Windows, glibc 2.34+ Linux x64/arm64 |\n| Account | Sign in — 500 free credits | None |\n| Models | Built-in Orkas model, or your own keys | Your own keys or a local endpoint |\n| Also includes | Project collaboration, app publishing, cloud sync, and more | — |\n| Get it | **[Download Orkas](https://orkas.ai/download/?source=gh-orkas&entry_point=github_readme&download=1)** | [Quick start](#quick-start) |\n\nThe download link detects your system and starts the right installer.\n\n---\n\n## What people use it for\n\n- **Marketing content** — launch videos, product pages, posts and newsletters in your voice. [Content writing](https://orkas.ai/use/content-writing/?source=gh-orkas) · [Videos](https://orkas.ai/use/make-videos/?source=gh-orkas)\n- **Store operations** — weekly sales briefs, review replies, listings and competitor checks. [E-commerce](https://orkas.ai/use/ecommerce/?source=gh-orkas)\n- **Research and reports** — sourced reports and decks, on demand or every week. [Research](https://orkas.ai/use/researchers/?source=gh-orkas) · [Data analysis](https://orkas.ai/use/data-analysis/?source=gh-orkas)\n- **Chat with your documents** — answers grounded in your own files, with citations back to the source passages. [Chat with documents](https://orkas.ai/use/chat-with-documents/?source=gh-orkas)\n- **Client work** — meeting briefs, monthly client reports and update decks in your template. ["
+    },
+    "brief": {
+      "summary": "本地优先的开源多智能体桌面团队，指挥官拆解目标并协调16个专家代理。",
+      "problem": "单个AI助手只能回答一次提问，难以持续推进多步骤项目。",
+      "highlights": [
+        "可以把大目标拆成待办并自动推进下一步",
+        "可以调用Claude Code、Codex等代理一起写代码",
+        "可以定时运行报告、视频等日常任务"
+      ],
+      "target_users": [
+        "独立开发者",
+        "小团队负责人",
+        "内容运营人员"
+      ],
+      "why_trending": "今日新增1044 Star，多代理桌面协作方向受关注",
+      "caveat": "部分功能仅打包版提供，开源版能力边界需确认",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Orkas-AI/Orkas",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "本地多Agent编排桌面端，含Harness能力",
+      "generated_by_ai": true,
+      "velocity_score": 91,
+      "freshness_score": 40,
+      "ranking_score": 67.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "thedotmack/claude-mem",
+      "url": "https://github.com/thedotmack/claude-mem",
+      "description": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+      "language": "TypeScript",
+      "total_stars": 108161,
+      "forks": 9491,
+      "stars_today": 1723,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1723
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "ai-memory",
+        "anthropic",
+        "artificial-intelligence",
+        "chromadb",
+        "claude",
+        "claude-agent-sdk",
+        "claude-agents",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "embeddings",
+        "long-term-memory",
+        "mem0",
+        "memory-engine",
+        "openmemory",
+        "rag",
+        "sqlite",
+        "supermemory"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-08-31T20:50:03Z",
+      "updated_at": "2026-11-01T06:25:32Z",
+      "pushed_at": "2026-11-01T05:21:17Z",
+      "open_issues": 157,
+      "homepage": "https://claude-mem.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">\n  <br>\n  <a href=\"https://github.com/thedotmack/claude-mem\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/public/claude-mem-logo-for-dark-mode.webp\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/public/claude-mem-logo-for-light-mode.webp\">\n      <img src=\"docs/public/claude-mem-logo-for-light-mode.webp\" alt=\"Claude-Mem\" width=\"400\">\n    </picture>\n  </a>\n</h1>\n\n<p align=\"center\">\n  <img alt=\"Vercel OSS Program\" src=\"https://vercel.com/oss/program-badge-2026.svg\" height=\"24\" />\n  &nbsp;&nbsp;&nbsp;\n  <img alt=\"Greptile\" src=\"docs/public/greptile-wordmark-green.svg\" height=\"24\" />\n  &nbsp;&nbsp;&nbsp;\n  <img alt=\"SerpApi\" src=\"docs/public/serpapi-logo-with-wordmark-gradient.svg\" height=\"24\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"docs/i18n/README.zh.md\">🇨🇳 中文</a> •\n  <a href=\"docs/i18n/README.zh-tw.md\">🇹🇼 繁體中文</a> •\n  <a href=\"docs/i18n/README.ja.md\">🇯🇵 日本語</a> •\n  <a href=\"docs/i18n/README.pt.md\">🇵🇹 Português</a> •\n  <a href=\"docs/i18n/README.pt-br.md\">🇧🇷 Português</a> •\n  <a href=\"docs/i18n/README.ko.md\">🇰🇷 한국어</a> •\n  <a href=\"docs/i18n/README.es.md\">🇪🇸 Español</a> •\n  <a href=\"docs/i18n/README.de.md\">🇩🇪 Deutsch</a> •\n  <a href=\"docs/i18n/README.fr.md\">🇫🇷 Français</a> •\n  <a href=\"docs/i18n/README.he.md\">🇮🇱 עברית</a> •\n  <a href=\"docs/i18n/README.ar.md\">🇸🇦 العربية</a> •\n  <a href=\"docs/i18n/README.ru.md\">🇷🇺 Русский</a> •\n  <a href=\"docs/i18n/README.pl.md\">🇵🇱 Polski</a> •\n  <a href=\"docs/i18n/README.cs.md\">🇨🇿 Čeština</a> •\n  <a href=\"docs/i18n/README.nl.md\">🇳🇱 Nederlands</a> •\n  <a href=\"docs/i18n/README.tr.md\">🇹🇷 Türkçe</a> •\n  <a href=\"docs/i18n/README.uk.md\">🇺🇦 Українська</a> •\n  <a href=\"docs/i18n/README.vi.md\">🇻🇳 Tiếng Việt</a> •\n  <a href=\"docs/i18n/README.tl.md\">🇵🇭 Tagalog</a> •\n  <a href=\"docs/i18n/README.id.md\">🇮🇩 Indonesia</a> •\n  <a href=\"docs/i18n/README.th.md\">🇹🇭 ไทย</a> •\n  <a href=\"docs/i18n/README.hi.md\">🇮🇳 हिन्दी</a> •\n  <a href=\"docs/i18n/README.bn.md\">🇧🇩 বাংলা</a> •\n  <a href=\"docs/i18n/README.ur.md\">🇵🇰 اردو</a> •\n  <a href=\"docs/i18n/README.ro.md\">🇷🇴 Română</a> •\n  <a href=\"docs/i18n/README.sv.md\">🇸🇪 Svenska</a> •\n  <a href=\"docs/i18n/README.it.md\">🇮🇹 Italiano</a> •\n  <a href=\"docs/i18n/README.el.md\">🇬🇷 Ελληνικά</a> •\n  <a href=\"docs/i18n/README.hu.md\">🇭🇺 Magyar</a> •\n  <a href=\"docs/i18n/README.fi.md\">🇫🇮 Suomi</a> •\n  <a href=\"docs/i18n/README.da.md\">🇩🇰 Dansk</a> •\n  <a href=\"docs/i18n/README.no.md\">🇳🇴 Norsk</a>\n</p>\n\n<h4 align=\"center\">Persistent memory compression system built for <a href=\"https://claude.com/claude-code\" target=\"_blank\">Claude Code</a>.</h4>\n\n<p align=\"center\">\n  <a href=\"LICENSE\">\n    <img src=\"https://img.shields.io/badge/License-Apache%202.0-blue.svg\" alt=\"License\">\n  </a>\n  <a href=\"package.json\">\n    <img src=\"https://img.shields.io/badge/version-15.8.0-green.svg\" alt=\"Version\">\n  </a>\n  <a href=\"package.json\">\n    <img src=\"https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg\" alt=\"Node\">\n  </a>\n  <a href=\"https://github.com/thedotmack/awesome-claude-code\">\n    <img src=\"https://awesome.re/mentioned-badge.svg\" alt=\"Mentioned in Awesome Claude Code\">\n  </a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/15496\" target=\"_blank\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/thedotmack/claude-mem/main/docs/public/trendshift-badge-dark.svg\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/thedotmack/claude-mem/main/docs/public/trendshift-badge.svg\">\n      <img src=\"https://raw.githubusercontent.com/thedotmack/claude-mem/main/docs/public/trendshift-badge.svg\" alt=\"thedotmack/claude-mem | Trendshift\" width=\"250\" height=\"55\"/>\n    </picture>\n  </a>\n</p>\n\n<br>\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\">\n      <a href=\"https://github.com/thedotmack/claude-mem\">\n        <picture>\n          <img\n            src=\"https://raw.githubusercontent.com/thedotmack/claude-mem/main/docs/public/cm-preview.gif\"\n            alt=\"Claude-Mem Preview\"\n            width=\"500\"\n          >\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\">\n      <a href=\"https://www.star-history.com/#thedotmack/claude-mem&Date\">\n        <picture>\n          <source\n            media=\"(prefers-color-scheme: dark)\"\n            srcset=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&theme=dark&legend=top-left\"\n          />\n          <source\n            media=\"(prefers-color-scheme: light)\"\n            srcset=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&legend=top-left\"\n          />\n          <img\n            alt=\"Star History Chart\"\n            src=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&legend=top-left\"\n            width=\"500\"\n          />\n        </picture>\n      </a>\n    </td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"#quick-start\">Quick Start</a> •\n  <a href=\"#how-it-works\">How It Works</a> •\n  <a href=\"#mcp-search-tools\">Search Tools</a> •\n  <a href=\"#documentation\">Documentation</a> •\n  <a href=\"#configuration\">Configuration</a> •\n  <a href=\"#troubleshooting\">Troubleshooting</a> •\n  <a href=\"#license\">License</a>\n</p>\n\n<p align=\"center\">\n  Claude-Mem seamlessly preserves context across sessions by automatically capturing tool usage observations, generating semantic summaries, and making them available to future sessions. This enables Claude to maintain continuity of knowledge about projects even after sessions end or reconnect.\n</p>\n\n---\n\n## Quick Start\n\nInstall claude-mem for Grok Bot:\n\n```bash\nnpx claude-mem install --ide grok-bot\n```\n\nGrok Bot has no host hooks, so we watch the chat log files. Default is CMEM Pro, the hosted memory. Local observer is opt-in: `--provider host`. Installing this plugin does not install Cursor.\n\n**Awareness push pilot (LFG + Orifice):** needle observations (`decision`, `bugfix`, `security_alert`, `sensitive`) are appended as dated `- YYYY-MM-DD [awareness] …` lines into that bot's `memory/log/YYYY-MM.md`. Grok Bot already re-reads the log from disk. This does not write `profile.md`, user-memory, or project memory. Disable with `CLAUDE_MEM_GROK_BOT_AWARENESS_ENABLED=false`.\n\nInstall with a single command:\n\n```bash\nnpx claude-mem install\n```\n\nThe installer sets everything up first, then asks you to sign in to claude-mem in your browser (email magic link — no card required). Signing in provisions a memory key for your account and unlocks the **claude-mem observer** with a **30 Day Free Trial**: memory runs off-plan, so you get up to 100% more usage from your plan. When the free trial ends, memory automatically falls back to your Anthropic plan unless you subscribe. After sign-in you pick your memory provider — the claude-mem observer, your own OpenRouter or Gemini key, or your Anthropic plan.\n\nPrefer to skip the sign-in? Pass an explicit `--provider` flag, set `CLAUDE_MEM_ONLINE_OPTIN=false`, or run in CI/non-interactive shells — the installer completes without any account interaction.\n\nOr install for OpenCode:\n\n```bash\nnpx claude-mem install --ide opencode\n```\n\nThis works with OpenCode 1.3.4 or later, including OpenCode 2. Restart OpenCode after installing.\n\nOr install for **T3 Code** (Codex and Claude Code providers):\n\n```bash\nnpx claude-mem install --ide t3code\n```\n\nThe installer discovers T3 Code's enabled providers, registers native Claude-Mem plugins in their configured homes, and supports T3-managed Codex. Restart T3 Code, trust the provider's hooks when prompted, and start a new thread. See the [T3 Code integration guide](https://docs.claude-mem.ai/t3code-integration) for custom server settings, status, and removal.\n\nOr install for Antigravity CLI ([setup guide](https://docs.claude-mem.ai/antigravity-cli/setup)):\n\n```bash\nnpx claude-mem install --ide antigravity\n```\n\nOr install for OMP (Oh My Pi):\n\n```bash\nnpx claude-mem install --ide omp\n```\n\nOr install the native Pi extension or DeepSeek Harness plugin:\n\n```bash\nnpx claude-mem install --ide pi\nnpx claude-mem install --ide dsh --dsh-profile tui\n```\n\nPi and DeepSeek Harness use the worker runtime. See [native harness setup](docs/native-harness-integrations.md) for capture, recall, and troubleshooting.\n\nOr install from the plugin marketplace inside Claude Code:\n\n```bash\n/plugin marketplace add thedotmack/claude-mem\n\n/plugin install claude-mem\n```\n\nRestart Claude Code. Context from previous sessions will automatically appear in new sessions.\n\n> **Note:** Claude-Mem is also published on npm, but `npm install -g claude-mem` installs the **SDK/library only** — it does not register the plugin hooks or set up the worker service. Always install via `npx claude-mem install` or the `/plugin` commands above.\n\n### 🦞 OpenClaw Gateway\n\nInstall claude-mem as a persistent memory plugin on [OpenClaw](https://openclaw.ai) gateways with a single command:\n\n```bash\ncurl -fsSL https://install.cmem.ai/openclaw.sh | bash\n```\n\nThe installer handles dependencies, plugin setup, AI provider configuration, worker startup, and optional real-time observation feeds to Telegram, Discord, Slack, and more. See the [OpenClaw Integration Guide](https://docs.claude-mem.ai/openclaw-integration) for details.\n\n**Key Features:**\n\n- 🧠 **Persistent Memory** - Context survives across sessions\n- 📊 **Progressive Disclosure** - Layered memory retrieval with token cost visibility\n- 🔍 **Smart Search (Default)** - Query your project history with the three-step mem-search skill\n- 🖥️ **Local My Work** - Live requests, progress, human handoffs and a saved review queue at the worker URL printed on startup. [Guide](https://docs.claude-mem.ai/usage/my-work). Memory, sessions and settings remain at `/viewer`.\n- 👥 **TeamBrain** - An optional shared workspace beside My Work, with real team work lists, member attribution and linked findings. Each person chooses what to share; personal requests and review notes stay separate. [Set up a team](https://cmem.ai/teambrain/start).\n- 💻 **Claude Desktop Skill** - Search memory from Claude Desktop conversations\n- 🔒 **Privacy Control** - Use `<private>` tags to exclude sensitive content from storage\n- 🖼️ **Screenshots (opt-in, off by default)** - Keep converted copies of tool screenshots under `~/.claude-mem/media-v1/`, upload them to cmem.ai only when Cloud Sync is on, and send them to the observer model only when image inference is separately enabled ([details](https://docs.claude-mem.ai/configuration#screenshots-and-images-opt-in))\n- ⚙️ **Context Configuration** - Fine-grained control over what context gets injected\n- 🤖 **Automatic Operation** - No manual intervention required\n- 🔗 **Citations** - Reference past observations with IDs through the worker API or view all in the web viewer\n\n---\n\n## Documentation\n\n📚 **[View Full Documentation](https://docs.claude-mem.ai/)** - Browse on official website\n\n### Getting Started\n\n- **[Installation Guide](https://docs.claude-mem.ai/installation)** - Quick start & advanced installation\n- **[Usage Guide](https://docs.claude-mem.ai/usage/getting-started)** - How Claude-Mem works automatically\n- **[Search Tools](https://docs.claude-mem.ai/usage/search-tools)** - Query your project history with natural language\n- **[Cloud Sync](https://docs.claude-mem.ai/cloud-sync)** - Back up your memories to cmem.ai — no daemon, the worker syncs on write\n\n### Best Practices\n\n- **[Context Engineering](https://docs.claude-mem.ai/context-engineering)** - AI agent context optimization principles\n- **[Progressive Disclosure](https://docs.claude-mem.ai/progressive-disclosure)** - Philosophy behind Claude-Mem's context priming strategy\n\n### Architecture\n\n- **[Overview](https://docs.claude-mem.ai/architecture/overview)** - System components & data flow\n- **[Architecture Evolution](https://docs.claude-mem.ai/architecture-evolution)** - The journey from v3 to v5\n- **[Hooks Architecture](https://docs.claude-mem.ai/hooks-architecture)** - How Claude-Mem uses lifecycle "
+    },
+    "brief": {
+      "summary": "为AI代理提供跨会话持久记忆与上下文压缩",
+      "problem": "代理结束会话后丢失项目上下文，需要反复交代",
+      "highlights": [
+        "可以自动捕获代理会话中的工具操作",
+        "可以把压缩摘要注入未来会话",
+        "可以检索历史决策、修复与安全提醒"
+      ],
+      "target_users": [
+        "AI 代理开发者",
+        "Claude Code 用户",
+        "长期项目维护者"
+      ],
+      "why_trending": "今日新增 1723 Star，本周首次收录",
+      "caveat": "安装默认引导登录，可跳过但需选提供商",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "thedotmack/claude-mem",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "面向Agent的跨会话持久记忆与上下文注入",
+      "generated_by_ai": true,
+      "velocity_score": 98,
+      "freshness_score": 20,
+      "ranking_score": 63.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 76677,
+      "forks": 7014,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 1086
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-01T06:24:50Z",
+      "pushed_at": "2026-11-01T06:26:54Z",
+      "open_issues": 205,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://hyperframes.studio/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\n<p align=\"center\">\n  <b>Download the desktop app:</b>\n  <a href=\"https://hyperframes.studio/studio/download?os=mac&src=github-readme&utm_source=github&utm_medium=readme\">macOS</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=windows&src=github-readme&utm_source=github&utm_medium=readme\">Windows</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=deb&src=github-readme&utm_source=github&utm_medium=readme\">Linux (.deb)</a>\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nTo enable auto-update for the **hyperframes** marketplace, run `claude` in a\nterminal in your project. In Claude Code's terminal UI, run `/plugin`, then select\n**Marketplaces** → **hyperframes** → **Enable auto-update**. Afterward, use\n`/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 7 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nRun project-local installs from your video project's directory. From a HyperFrames\ncheckout, use `npx hyperframes skills update` for a global install instead: a\nproject-local installer target can overlap the tracked `skills/` source and\noverwrite uncommitted edits. See [contributor setup](CONTRIBUTING.md#getting-started).\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 7 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 7. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, publish, project history — plus reading its JSON and recovering from build or render failures.                                                                            |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/claude-design) and [Open Design guide](https://hyperframes.heygen.com/guides/open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://hyperframes.heygen.com/showcase) for finished videos you can watch, read, run, and remix.\n\n- Product launch videos and feature announcements\n- PR walkthroughs with animated code diffs, narration, and captions\n- Data visualizations, chart races, and map animations\n- Social videos with kinetic captions, overlays, and music\n- Docs-to-video, PDF-to-video, and site-tour explainers\n- Reusable motion graphics for automated content pipelines\n\n## Frame.md\n\n**frame.md — your design system, ready for video.**\n\nEvery brand has a `design.md`. None of them were written for a camera. `frame.md` is the missing translation layer: it takes your web-context design spec and inverts it for the frame — the same tokens, the same rules, but rewritten so an AI agent can compose a promo video without guessing at scale or reaching for web chrome.\n\nThe output is a `DESIGN.md` superset your whole toolchain can read. Atoms stay sacred. Composition stays free. Numbers come from the script.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://hyperframes.studio/design/biennale-yellow\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/biennale-yellow.png\" alt=\"Biennale Yellow\" width=\"100%\"></a>\n      <br><b><a href=\"https://hyperframes.studio/design/biennale-yellow\">Biennale Yellow</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://hyperframes.studio/design/blockframe\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blockframe.png\" alt=\"BlockFrame\" width=\"100%\"></a>\n      <br><b><a href=\"https://hyperframes.studio/design/blockframe\">BlockFrame</a></b>\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://hyperframes.studio/design/blue-professional\"><img src=\"https://static.heygen.ai/hyperframes-oss/do"
+    },
+    "brief": {
+      "summary": "用 HTML 和 CSS 写页面，再渲染成稳定的 MP4 视频",
+      "problem": "做视频要学复杂剪辑软件，AI 代理也难以稳定产出可复现的成片",
+      "highlights": [
+        "可以让 AI 编程代理按一句提示词生成视频",
+        "可以把现成的 HTML 动画直接导出为 MP4",
+        "可以在本地用命令行预览、检查并渲染成片"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端开发者",
+        "短视频创作者"
+      ],
+      "why_trending": "总 Star 超 7.6 万，仓库近日仍有更新，热度回升",
+      "caveat": "需要 Node.js 22 及以上；渲染速度资料中未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 88,
+      "category": "视频剪辑",
+      "reason": "HTML写动画渲染为视频，面向Agent出片",
+      "generated_by_ai": true,
+      "velocity_score": 92,
+      "freshness_score": 40,
+      "ranking_score": 73.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "NomaDamas/CozyClay",
+      "url": "https://github.com/NomaDamas/CozyClay",
+      "description": "Open source previs software in the browser: block a scene, pose characters, author camera moves and cuts, then take the same shots to an AI video model.",
+      "language": "JavaScript",
+      "total_stars": 1311,
+      "forks": 153,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 305
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "3d-animation",
+        "ai",
+        "ai-video",
+        "animation",
+        "blender",
+        "camera-control",
+        "llm-agent",
+        "motion-generation",
+        "previs",
+        "previsualization",
+        "previz",
+        "python",
+        "react-three-fiber",
+        "storyboard",
+        "threejs",
+        "typescript",
+        "virtual-production",
+        "webgl"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-28T19:57:47Z",
+      "updated_at": "2026-11-01T06:18:38Z",
+      "pushed_at": "2026-11-01T06:21:09Z",
+      "open_issues": 15,
+      "homepage": "https://cozyclay.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/images/cozyclay-logo.png\" alt=\"CozyClay\" width=\"340\">\n</p>\n\n<p align=\"center\">\n  <b>Make the scene first. Then make it a video.</b><br>\n  <em>Open source previs in a browser tab: block the set, move the cast, cut the camera, hand the shot to an AI video model.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img alt=\"License: AGPL-3.0\" src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\"></a>\n  <a href=\"https://www.npmjs.com/package/cozyclay\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/cozyclay\"></a>\n  <img alt=\"Node 22.19+\" src=\"https://img.shields.io/badge/node-22.19%2B-brightgreen\">\n  <a href=\"https://github.com/NomaDamas/CozyClay/stargazers\"><img alt=\"Stars\" src=\"https://img.shields.io/github/stars/NomaDamas/CozyClay?style=flat\"></a>\n  <a href=\"https://discord.gg/Hp9V5wwgjF\"><img alt=\"Discord\" src=\"https://img.shields.io/badge/discord-join-5865F2?logo=discord&logoColor=white\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://cozyclay.org/#try\">Try it in the browser</a> ·\n  <a href=\"#quick-start\">Quick start</a> ·\n  <a href=\"INSTALL_FOR_AGENTS.md\">Guide for AI agents</a> ·\n  <a href=\"#docs\">Docs</a> ·\n  <a href=\"CHANGELOG.md\">Changelog</a> ·\n  <a href=\"https://discord.gg/Hp9V5wwgjF\">Discord</a>\n</p>\n\n<table>\n  <tr>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/00f28c2f-e8e2-43eb-b253-b6c2436e1818\" controls muted width=\"100%\"></video></td>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/4c9b1e29-4803-435c-8305-f2c899fb1c2c\" controls muted width=\"100%\"></video></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><sub>Top: the greybox blocked in CozyClay. Bottom: the AI video made from it.</sub></td>\n    <td align=\"center\"><sub>Same idea, a parkour jump: the blocking holds the timing and the camera.</sub></td>\n  </tr>\n</table>\n\n## Why\n\nAI video costs money per take, and one miss means paying again. A text prompt cannot hold a\nwhole scene: where everyone stands, how they move, where the camera is, when it cuts.\n\nCozyClay lets you make those decisions first, in 3D, where they are cheap to change. Then the video\nmodel gets the shot as a first frame, a greybox reference clip and a prompt that describes the\nreal framing. It follows the blocking instead of guessing.\n\n```mermaid\nflowchart LR\n  S[\"Stage<br/>set + cast\"] --> M[\"Motion<br/>compiled + QA\"] --> C[\"Camera<br/>shots + cuts\"] --> E[\"Export<br/>frame · clip · prompt\"] --> V[\"AI video model\"]\n```\n\n## Quick start\n\n```bash\nnpx cozyclay\n```\n\nThat is the whole install. You need Node.js 22.19 or newer and a Chromium browser. You do not need\na GPU, Python or a model download. The studio opens at `http://127.0.0.1:5180/app/`.\n\n**Updating.** `npx cozyclay` fetches the newest release each time you run it. After\n`npm install -g cozyclay`, the studio shows a small **Update** chip in the top bar when a newer\nrelease is out. **Update now** installs it, and **Restart now** starts the new version in the same\nterminal; the studio reloads once your project is saved. On Windows the chip gives you the command to\ncopy instead: one-click stays off there by design. `cclay update` does the same from the terminal. `--no-update-check` or `COZYCLAY_NO_UPDATE_CHECK=1` turns the check off\nfor one launch; `cclay update --off` turns it off for good, and `cclay update --on` brings it back.\n\n> **Asking an AI agent to set it up?** Give it this repository link. Its instructions are in\n> [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md).\n\n## What you can do\n\n| | |\n| --- | --- |\n| **Stage** | Build the set from primitives. Add rigged characters, or capsule stand-ins when nobody needs to move a limb. Fly the view like a 3D editor. |\n| **Move** | Describe the action. The agent writes a motion spec, and a deterministic compiler in the browser bakes every frame. QA checks collisions, foot slide, reach and hand contact before you see it. |\n| **Shoot** | Put shots on a timeline, draw dolly rails, look through the lens. Each shot knows the limits of the video model you target. |\n| **Export** | Keyframe pack (first and last frame, greybox clip, camera, prompt), mp4, depth and normal passes, contact sheet, OTIO cut list. |\n| **Storyboard** | Prefer stills? A Storyboard project is a row of panels with captions, an animatic and a contact sheet. |\n| **Undo anything** | Every edit, including each change the agent makes, is one undo step. |\n\n## Direct it with AI\n\nThe same scene can be driven from three places, live, while you watch the viewport.\n\n| Surface | Start | For |\n| --- | --- | --- |\n| **Agent panel** | `Cmd/Ctrl+B` in the studio | Chat in the studio. Sign in with ChatGPT or use your own key (Anthropic, OpenAI, Gemini, MiniMax, OpenRouter, CLIProxyAPI). |\n| **MCP server** | `npx -y cozyclay mcp` | Claude Desktop, Claude Code, Cursor or any MCP client. |\n| **Terminal** | `cclay live status --wait` | Coding agents that drive a running studio, JSON in and out. |\n\n```json\n{ \"mcpServers\": { \"cozyclay\": { \"command\": \"npx\", \"args\": [\"-y\", \"cozyclay\", \"mcp\"] } } }\n```\n\n## From source\n\n```bash\ngit clone https://github.com/NomaDamas/CozyClay.git && cd CozyClay\nnpm install\nnpm run dev     # http://127.0.0.1:5180/app/\nnpm test\n```\n\n## Docs\n\n| Read | For |\n| --- | --- |\n| [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md) | Install, run and connect, written for AI agents |\n| [`docs/motion3-agent-guide.md`](docs/motion3-agent-guide.md) | Motion specs, compile and QA |\n| [`docs/agent-cli.md`](docs/agent-cli.md) | `cclay live`, model providers, sessions |\n| [`mcp/README.md`](mcp/README.md) | MCP tools and the live protocol |\n| [`docs/studio-ui-ia.md`](docs/studio-ui-ia.md) | Every control and where it lives |\n| [`docs/privacy.md`](docs/privacy.md) | Anonymous telemetry and how to turn it off (`cclay telemetry off`) |\n| [`AGENTS.md`](AGENTS.md) | Contribution rules |\n\n## Guides\n\n| Read | For |\n| --- | --- |\n| [Greybox to AI video](https://cozyclay.org/greybox-to-video/) | Why a grey blockout is the most reliable input for a video model, and the block-then-generate loop |\n| [Previs software compared](https://cozyclay.org/previs-software/) | Free, open source and browser-based previs tools side by side |\n| [Seedance 2.5 camera control](https://cozyclay.org/seedance-camera-control/) | Getting the same camera on every take with a reference clip |\n| [Camera control for AI video](https://cozyclay.org/ai-camera-control/) | Why camera prompts drift and what the models actually accept |\n\nFound a bug or want a feature? [Open an issue](https://github.com/NomaDamas/CozyClay/issues).\n\n## License\n\nAGPL-3.0-or-later. See [`LICENSE`](LICENSE), [`LICENSING.md`](LICENSING.md) and\n[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Made by [Doyun](https://github.com/HaD0Yun) at\n[NomaDamas](https://github.com/NomaDamas).\n"
+    },
+    "brief": {
+      "summary": "浏览器里的开源预演工具，先摆好场景再交给AI视频模型",
+      "problem": "AI视频按次收费，纯文字提示难以控制走位、运镜和剪辑点，重拍成本高",
+      "highlights": [
+        "可以在浏览器搭场景、摆角色、画运镜轨道",
+        "可以导出首尾帧、灰模参考片段和提示词给视频模型",
+        "可以用AI对话或MCP让代理改动作，每步可撤销"
+      ],
+      "target_users": [
+        "AI视频创作者",
+        "分镜预演美术",
+        "独立动画团队"
+      ],
+      "why_trending": "总星约1.3k，近期仍在频繁更新，把三维预演和AI出片串成一条流程",
+      "caveat": "需Node 22.19以上和Chromium，实际出片仍靠外部视频模型",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "NomaDamas/CozyClay",
+      "score": 86,
+      "category": "动画",
+      "reason": "浏览器预演分镜与镜头编排，接AI视频",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 40,
+      "ranking_score": 67.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "horizon-rust/horizon",
+      "url": "https://github.com/horizon-rust/horizon",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "language": "Rust",
+      "total_stars": 5431,
+      "forks": 636,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 441
+    },
+    "details": {
+      "topics": [
+        "differential-testing",
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-11-01T06:26:01Z",
+      "pushed_at": "2026-11-01T06:17:47Z",
+      "open_issues": 315,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/banner.webp\" alt=\"The Horizon website: the game you know, rebuilt in Rust\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml\"><img src=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml/badge.svg?branch=main\" alt=\"CI\"></a>\n  <img src=\"https://img.shields.io/badge/Minecraft-Java%2026.3-5D9C3F\" alt=\"Minecraft Java 26.3\">\n  <img src=\"https://img.shields.io/badge/Rust-stable-B7410E?logo=rust&logoColor=white\" alt=\"Rust\">\n  <img src=\"https://img.shields.io/badge/vanilla%20parity-100%25-F0795A\" alt=\"Vanilla parity 100%\">\n  <a href=\"#project-status\"><img src=\"https://img.shields.io/badge/player--visible%20gaps-833%20open-F0795A\" alt=\"Player-visible gaps open\"></a>\n  <img src=\"https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-2A2470\" alt=\"Linux, macOS and Windows\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-3B2F7E\" alt=\"MIT license\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev\"><b>Website</b></a> ·\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://playhorizon.dev/docs/\"><b>Documentation</b></a> ·\n  <a href=\"https://github.com/horizon-rust/horizon/releases\"><b>Release notes</b></a> ·\n  <a href=\"ROADMAP.md\"><b>Roadmap</b></a> ·\n  <a href=\"#project-status\"><b>Project status</b></a> ·\n  <a href=\"#contributing\"><b>Contributing</b></a>\n</p>\n\n# Horizon\n\nMinecraft: Java Edition 26.3, rewritten in Rust. Same worlds, same rules, same terrain, checked against the Java game by more than 300 differential harnesses. Free, open source and unofficial.\n\n> Not an official Minecraft product, nor approved by or associated with Mojang or Microsoft. Horizon contains no Minecraft code, assets or data: you need your own copy of Java Edition 26.3.\n\n## Download\n\nGet **the Horizon launcher** from [playhorizon.dev](https://playhorizon.dev) or [the launcher releases](https://github.com/horizon-rust/horizon/releases?q=launcher-v&expanded=true) (Linux x86-64, macOS on Apple Silicon, macOS on Intel from the next Nightly, Windows x64). It installs and updates the game, prepares its files from your copy of Minecraft, and updates itself.\n\n**You need** a Microsoft account that owns Java Edition ([why](docs/microsoft-account.md)) and a GPU with Vulkan or OpenGL 3.3 (Linux), Vulkan or DirectX 12 (Windows), or a Mac (Apple Silicon, or Intel from the next Nightly). An existing Minecraft install (official launcher, Prism, MultiMC...) is reused; without one, Play downloads 26.3 from Mojang for your account. Step by step: [Install and first launch](https://playhorizon.dev/docs/install).\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/launcher-play.webp\" alt=\"The launcher's Home page: the selected instance ready to play, the version picker, Join a friend and the instance's tabs\"></td>\n    <td width=\"50%\"><img src=\"docs/media/launcher-settings.webp\" alt=\"The launcher's Settings page: Microsoft account, offline name, updates, appearance and accent colour\"></td>\n  </tr>\n</table>\n\n## What works today\n\n- **The game:** vanilla world generation, mobs, villagers, raids, redstone, every command, the HUD and the recipe book, on vanilla saves. Worlds from 1.8 to 26.2 are upgraded. [Status](#project-status).\n- **Extras:** new menus, graphics presets, distant terrain up to 1024 chunks, controllers, zoom, minimap and more, off by default where they change the vanilla look. [Settings](https://playhorizon.dev/docs/settings).\n- **Packs:** resource packs, and data packs with functions, predicates, item modifiers and world generation.\n- **Multiplayer:** invite friends with a code, Open to LAN, join servers (online mode included). [Multiplayer](https://playhorizon.dev/docs/multiplayer).\n- **Mods:** content mods (blocks, items, data) and native Rust mods, built by the launcher with nothing to install. Java mod jars do not run. [Mods](https://playhorizon.dev/docs/mods).\n\nIn the Rust client, with vanilla assets and no mods or shaders:\n\n<table>\n  <tr>\n    <td colspan=\"2\"><img src=\"docs/media/sunset.webp\" alt=\"Sunset over a savanna river valley and a plains village\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/survival.webp\" alt=\"Survival at dusk: a zombie walks up, with the hotbar, health, hunger and experience\"></td>\n    <td width=\"50%\"><img src=\"docs/media/settings.webp\" alt=\"Vanilla's Video Settings screen with Horizon's own buttons at the top: Horizon Graphics and Advanced Graphics\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/village.webp\" alt=\"A plains village among savanna hills, with farms, villagers and an iron golem\"></td>\n    <td width=\"50%\"><img src=\"docs/media/nether.webp\" alt=\"A crimson forest in the Nether with a zombified piglin\"></td>\n  </tr>\n</table>\n\n## Host a server\n\nThe launcher's **Servers** page creates, starts, backs up and updates a server, and invites friends over Tailscale. On a VPS, `horizon-server` installs with one command and needs no Java. [Host a server](https://playhorizon.dev/docs/hosting) ([reference](docs/hosting.md)).\n\n## Modpacks\n\nThe launcher imports Modrinth and CurseForge packs and plays the mods Horizon can carry over: today, content mods made of data and assets, not Java code. [Modpacks](https://playhorizon.dev/docs/modpacks).\n\n## Agent control\n\nAI agents and scripts can play Horizon. `horizon-ctl`, shipped with the game, reads its state as JSON and acts like a player; `horizon-ctl mcp` serves the same commands over MCP.\n\n```sh\nhorizon-ctl launch --world Survival --seed 5 --wait   # finds the version the launcher installed\nhorizon-ctl state                                       # position, health, food, target, screen...\nhorizon-ctl find-block birch_log                        # the nearest logs\nhorizon-ctl goto -0.5 65 -2.5 --near 2.5                # walks there along a path\nhorizon-ctl break -1 65 -3                              # mines it; replies with the drops\nhorizon-ctl open-inventory && horizon-ctl click-slot 0  # menus: slots, buttons by label, text fields\n```\n\nCommands block until done and reply with the result; `horizon-ctl help` lists them all. [Agent control](docs/native-client.md#agent-control-horizon-ctl-and-mcp).\n\n## Build from source\n\nNeeds Rust 1.90+, Python 3.10+, JDK 25, and on Linux `libasound2-dev libudev-dev`. `horizon-prepare` builds the game's resources from **your own copy** of Java Edition 26.3 (checked against `research-lock.json`) and never downloads it:\n\n1. **Client:** play 26.3 once in the official launcher. Horizon reads `~/.minecraft` (or `--minecraft-dir` / `HORIZON_MINECRAFT_DIR`).\n2. **Server jar:** the 26.3 server jar (`downloads.server.url` in `versions/26.3/26.3.json`), passed once with `--server-jar` or `HORIZON_SERVER_JAR`.\n\n```sh\ngit clone https://github.com/horizon-rust/horizon.git\ncd horizon\ncargo run --release -p horizon-prepare -- --prepare --server-jar ~/Downloads/server.jar   # needs JDK 25\ncargo run --release -p horizon-prepare -- sounds   # optional: sounds from your launcher install\ncargo run --release -p horizon-client\n```\n\nPrepared files land in the gitignored `.local/`: never commit or share them. Options, controls and architecture: [the native client guide](docs/native-client.md); all developer docs: [docs/README.md](docs/README.md).\n\n## Roadmap\n\nWhat is in progress, what comes next and where to help: [ROADMAP.md](ROADMAP.md), or [playhorizon.dev/hub](https://playhorizon.dev/hub) with the work board and what shipped.\n\n## Contributing\n\nIssues and pull requests are welcome: read [CONTRIBUTING.md](CONTRIBUTING.md) (vanilla first, small pull requests). Questions: [Discord](https://discord.gg/playhorizon). Before a pull request, run the self-check and paste its output:\n\n```sh\ngit config core.hooksPath .githooks\npython3 tools/pr_ready.py\n```\n\nIt runs rustfmt, clippy, the touched crates' tests, the Python tests, the public-tree check and the vanilla harnesses your change affects. Never commit game files, decompiled source or prepared resources.\n\n## Project status\n\n**Player-visible gaps: 833 open** of the 833 the [port ledger](tools/port_ledger.py) found, reading every vanilla 26.3 method against Horizon's code: vanilla behaviour a player would notice that Horizon doesn't have yet. By area: Screens, HUD and client packets [197](https://github.com/horizon-rust/horizon/issues/3518); Entity and block rendering, models [129](https://github.com/horizon-rust/horizon/issues/3519); Animals [110](https://github.com/horizon-rust/horizon/issues/3512); Server and players on the server [106](https://github.com/horizon-rust/horizon/issues/3520); Blocks, redstone and fluids [86](https://github.com/horizon-rust/horizon/issues/3516); Entities, projectiles, vehicles and decorations [64](https://github.com/horizon-rust/horizon/issues/3514); Monsters and bosses [53](https://github.com/horizon-rust/horizon/issues/3513); Mob AI, villagers and raids [35](https://github.com/horizon-rust/horizon/issues/3521); World, world generation and saves [32](https://github.com/horizon-rust/horizon/issues/3517); Items, enchantments and inventories [21](https://github.com/horizon-rust/horizon/issues/3515). This number goes down as gaps close (`tools/parity_gaps.py`); the harness results below say that what is tested matches.\n\nThe table is the project's own audit: every subsystem matches vanilla in every harness that compares it. 100% means 100% of what the harnesses compare, not that nothing else differs.\n\n### Java parity: 100%\n\nScores: 0 (absent), 0.25 (started), 0.5 (playable, major features missing), 0.75 (mostly complete) or 1 (complete and verified by differential tests); the percentage is their average. Last audited 2026-10-13: all 281 harnesses pass on Linux and macOS. The [port ledger](tools/port_ledger.py) adds a method-by-method view of what is ported.\n\n| Subsystem | Score | Main gaps |\n| --- | ---: | --- |\n| Window, input and game loop | 1 | None: game loop, options, camera, auto-jump, toggle sprint/sneak and frame limiter match |\n| Assets and resources | 1 | None: item models match over 196,290 stacks; the resource pack screen over 3,000 sessions |\n| Network protocol and multiplayer | 1 | None: joins vanilla servers; the dedicated server matches vanilla's files, login, configuration, play and command tree; LAN discovery over 462 cases (offline mode only) |\n| Chunk storage and palettes | 1 | None: client and saves share paletted containers, identical to vanilla over 266 scenarios |\n| Section meshing | 1 | None: 112 scenes and over a million quads identical to vanilla |\n| Rendering | 1 | None: entity models, block entity renderers (407 cases) and animations (296), HUD overlays (2,200 states), the recipe book (600), player list, subtitles and world border match |\n| Lighting | 1 | None: saved and relit light matches vanilla, slabs and stairs included |\n| World generation | 1 | None: 2,352 whole chunks over 225 structure sites, in all three dimensions, identical to vanilla |\n| Region files and saves | 1 | None: saves round-trip with vanilla; worlds from 1.8 to 26.2 upgrade as vanilla's DataFixers do |\n| Entities and physics | 1 | None: attributes, spawn rules, natural spawning (15,500 cases), raids and patrols (1,900), `finalizeSpawn` (24,000) and mob AI (92 scenarios) match |\n| Interaction and inventory | 1 | None: menu clicks over 8,000 sequences; recipe book placement (6,000), buttons (1,200), saved book (1,500), loom and crafter screens (1,600) |\n| Menus, HUD and chat | 1 | None: every command (758 over 39,685 inputs), scoreboards (81,000 operations), the player list (872,000 draw calls), chat and its suggestions (3,000 sessions) match |\n| Audio | 1 | None: the sound engine, sound events, music, situational music, ambience and subtitles match vanilla |\n| Block behaviours and ticking | 1 | None: block updates, random ticks, redstone, dispensers (6,000 cases), crafters (4,000), container spills (4,000), copper golems and the sculk family ("
+    },
+    "brief": {
+      "summary": "Rust 重写 Minecraft，差分测试保真",
+      "problem": "官方客户端闭源且仅 Java，提供开源 Rust 实现",
+      "highlights": [
+        "可以游玩原版存档，支持1.8到26.2升级",
+        "可以用 horizon-ctl 让 AI 代理自动操作角色",
+        "可以邀请好友联机或加入服务器"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "Rust 开发者",
+        "AI 代理研究者"
+      ],
+      "why_trending": "连续上榜，用300+差分测试保证原版兼容",
+      "caveat": "仍需正版账号，Java mod 无法运行",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "horizon-rust/horizon",
+      "score": 62,
+      "category": "游戏开发",
+      "reason": "Rust重写Minecraft，体素游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 85,
+      "ranking_score": 63.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "hehehai/AudioSmith",
+      "url": "https://github.com/hehehai/AudioSmith",
+      "description": "Speech, voices, stories, audiobooks, dubbing and transcription, made on your Mac. Free and open source.",
+      "language": "Go",
+      "total_stars": 185,
+      "forks": 17,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "speaker-diarization",
+        "speech-synthesis",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "tts",
+        "voice-cloning",
+        "voice-design"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-10-13T14:23:48Z",
+      "updated_at": "2026-11-01T06:17:31Z",
+      "pushed_at": "2026-11-01T06:17:27Z",
+      "open_issues": 0,
+      "homepage": "https://actnow.dev/audiosmith",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/images/hero.webp\" alt=\"AudioSmith's Studio window: a script, the model and voice, and a finished take\" width=\"100%\">\n</p>\n\n<h1 align=\"center\">AudioSmith</h1>\n\n<p align=\"center\">\n  <b>A voice studio that runs on your Mac.</b><br>\n  Speech, voices, stories, audiobooks, dubbing, transcription and dictation, on Apple silicon.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://actnow.dev/download/audiosmith\"><img alt=\"Download\" src=\"https://img.shields.io/badge/download-actnow.dev-0d9384\"></a>\n  <img alt=\"macOS 15 or later\" src=\"https://img.shields.io/badge/macOS-15%2B-0d9384\">\n  <img alt=\"Apple silicon\" src=\"https://img.shields.io/badge/Apple%20silicon-M1%20or%20later-0d9384\">\n  <a href=\"LICENSE\"><img alt=\"AGPL-3.0\" src=\"https://img.shields.io/badge/licence-AGPL--3.0-0d9384\"></a>\n</p>\n\n<p align=\"center\"><a href=\"https://actnow.dev/audiosmith\">Website</a> · <a href=\"https://actnow.dev/download/audiosmith\">Download</a> · <a href=\"https://actnow.dev/audiosmith/changelog\">Changelog</a></p>\n\n<p align=\"center\"><b>English</b> · <a href=\"README.zh-CN.md\">简体中文</a></p>\n\nAudioSmith turns text into speech, clones and designs voices, gives a story a cast, reads a book into an M4B, dubs a video into another language, transcribes a recording with who said what, and types what you say into any app. Every model runs on your Mac's GPU with [MLX](https://github.com/ml-explore/mlx): no account, no cloud service, no Python. It runs on your Mac, and once its models are downloaded it works offline.\n\n[Features](#features) · [Install](#install) · [Models](#models) · [Privacy](#privacy) · [Build from source](#build-from-source) · [Licence](#licence-and-credits)\n\n> **The current version, 0.4.0-beta.7, is a beta.** Releases are signed with a Developer ID, notarized by Apple and update themselves. Expect rough edges; see [Known limits](#known-limits) and [the changelog](https://actnow.dev/audiosmith/changelog).\n\n## Features\n\n### Studio\n\n<img src=\"docs/images/studio-generate.webp\" alt=\"Generating a take in the Studio\" width=\"100%\">\n\n- **Write or import** a script (TXT, MD, DOCX, EPUB, SRT, VTT). Markup adds pauses (`[pause 400ms]`), pace (`[slow]`, `[fast]`), emphasis, spelling and one-off pronunciations (`[[word|say]]`).\n- **Pick a model by what it is for:** Standard voices, Fast clone, High-fidelity clone, Voice design, Fast English voices, English clone or Multilingual all-rounder. The technical name is one click away.\n- **Few controls:** the model, one Voice list and the speed. Everything else is under Advanced, filled with settings measured for each model.\n- **Long scripts** render in chunks and play while they render. Text you did not change comes from a cache.\n- **Export audio:** WAV or M4A, and MP3, FLAC or Opus with ffmpeg. Even out the loudness to −16, −18 or −23 LUFS, trim the silence, add tags, save the script and subtitles beside it.\n\n<img src=\"docs/images/model-picker.webp\" alt=\"The model picker: friendly names, tags and search\" width=\"100%\">\n\n### Voices\n\n<img src=\"docs/images/design-type.webp\" alt=\"Designing a voice: the description is read into gender, age and style as you type\" width=\"100%\">\n\n| Discover voices | My voices |\n|---|---|\n| <img src=\"docs/images/discover.webp\" alt=\"Discover voices: chosen voices to preview\"> | <img src=\"docs/images/voices.webp\" alt=\"My voices: saved, designed and cloned voices\"> |\n\n- **Discover** 37 chosen voices, mostly Chinese and English: designed voices whose reference ships with the app, ready to speak at once, and the best built-in speakers. Preview them and save the ones you like.\n- **Clone** a voice from a recording or from any audio or video file. AudioSmith picks the best stretch and transcribes it. A recorded consent statement marks a voice as your own.\n- **Checked references:** every reference is rated (good, fine, needs work) with a tip or two, and cleaned: noise removed only when there is some, silence trimmed, loudness evened out. The original is kept.\n- **Design** a voice from a sentence in English or Chinese (\"a warm narrator in her thirties, calm and clear\"), or start from one of eight presets.\n- **Hear before you pick:** every voice list (Studio, Stories, Audiobook, Dub) has a ▶ on each voice: built-in speakers play a short bundled sample, even before their model is downloaded; your own voices play their sample.\n- **Portable voices:** a model's built-in speaker or a designed voice can be turned into a clone that every cloning model can speak with. It sounds close to the original, not the same, and says so.\n- **Deleting a voice** says where it is used, and Undo in the toast brings it back for about 10 seconds.\n- Voices are `.asvoice` files you can share. VoiceStudio's `.ovsvoice` files import too.\n\n### Stories\n\n<img src=\"docs/images/stories.webp\" alt=\"A story with its cast, scene and line directions\" width=\"100%\">\n\n- **Write `Name: line`** and AudioSmith casts the characters. Stage directions such as `MOM (softly):` become the line's direction instead of being read out.\n- **Dialogue that flows:** the gaps follow the conversation (Dialogue, Reading or Relaxed). A character's consecutive lines are said in one go, and each voice is brought to one loudness.\n- **AI director:** the writing assistant (Qwen3 4B, on this Mac) reads the whole story and gives each line one of 13 emotions with a strength, kept coherent across the scene; you can change any of them. Models that take instructions hear them; the others read the lines as written, and the page says so.\n- **Whole dialogue:** a dialogue model speaks the characters' lines a scene at a time, so each line answers the one before it. *Dialogue · Light* (SoulX-Podcast) needs 16 GB of memory, *Dialogue · One take* (MOSS-TTSD) 24 GB. Narration stays on the story's model.\n- Export a WAV, an M4B, or one stem per character.\n\n### Audiobook\n\n<img src=\"docs/images/audiobook.webp\" alt=\"An audiobook with chapters and a cover\" width=\"100%\">\n\n- **Import** an EPUB, TXT, Markdown or DOCX book. Chapters come from its headings.\n- **Dialogue passages:** mark a scene with `[dialogue]` … `[/dialogue]` (`[对话]` in Chinese) and one `Name: line` per turn, and a dialogue model speaks it with the characters answering each other. Without the model the passage is read line by line.\n- **Loudness** per chapter for ACX (Audible) or podcasts. A read-along player follows the text.\n- **Export** an M4B with chapters, cover and tags, a cue sheet, or one file per chapter.\n- **Resume** after quitting. After an edit, only the changed lines are rendered again.\n\n### Dub\n\n<img src=\"docs/images/dub-steps.webp\" alt=\"A dub of an English video into Chinese and Spanish, step by step: source, transcript, translation, cast, voices, export\" width=\"100%\">\n\n- **Drop in a video or audio file,** or paste a link (yt-dlp, which you turn on). Before anything downloads, the page shows the cover, the site, the title and the length, then the download's real progress. New dubs are made in Chinese; when the video is already Chinese they switch to English. Add more languages as you like.\n- **Four steps:**\n  1. Separate the voices from the background (HTDemucs).\n  2. Transcribe and tell the speakers apart (Transcription with speakers, or Qwen3-ASR with Sortformer).\n  3. Translate with the local writing assistant, Ollama, a cloud model, DeepL, Google or Microsoft. A glossary keeps names right.\n  4. Speak each line in its speaker's cloned voice, fitted to the original timing, also from another language (a Japanese speaker speaking Chinese). Such lines are heard again: one in the wrong language or with the wrong words is made again, or marked Listen.\n- **Conversations recorded together:** for dubs into Chinese or English with two speakers or more, *Dialogue · Light* records each conversation as a whole, so answers sound like answers, then fits every line to its time. On by default for new dubs; needs 16 GB of memory.\n- **Edit** lines on a timeline (pinch or ⌘ with the wheel to zoom, swipe to pan), compare A/B, preview the video, and re-dub only what changed. A 2-hour video with 2,000 lines stays quick.\n- **Export** an MP4 with one audio track per language and soft subtitles, or M4A, WAV, SRT, VTT, ASS and stems. Batch dubs a whole folder, and can watch one.\n\n### Transcribe and dictation\n\n<img src=\"docs/images/transcribe.webp\" alt=\"A transcript with its speakers named\" width=\"100%\">\n\n- **Transcribe** recordings and videos with word timings. Qwen3-ASR handles Chinese, English and 28 more languages; Whisper covers the rest and translates speech into English.\n- **Transcription with speakers** says who says what (S1, S2…) in one pass; click a speaker to name it. Copy, TXT, SRT, VTT and JSON exports carry the names.\n- **Dictation anywhere:** press ⌘⇧Space in any app, speak, and the text is typed where your cursor is, about 0.2–0.3 s after you stop. Your clipboard is kept. A menu bar icon, a small pill and sounds you can choose show when it listens.\n\n### Workflows and batch\n\n<img src=\"docs/images/workflows.webp\" alt=\"A workflow on the canvas\" width=\"100%\">\n\n- **Workflows:** chain steps on a canvas (sources, speak, transcribe, translate, convert, even out, condition, export), start from a template, and run them over up to 50 inputs. A run continues after a restart.\n- **Batch** queues dubs and watches a folder.\n\n### For agents and scripts\n\n<img src=\"docs/images/integrations.webp\" alt=\"The Integrations page with a setup prompt for Claude Code\" width=\"100%\">\n\n- **OpenAI-compatible API** on `http://127.0.0.1:3901/v1`: speech, transcriptions, translations, models and voices. Point any OpenAI SDK at it.\n- **AudioSmith's own API** (`/api`) drives every page: voices, stories, audiobooks, dubs, batch, workflows, exports. Jobs report progress over SSE, and `/ws/tts` streams speech.\n- **MCP server** over HTTP (`/mcp`) and stdio (`AudioSmith --mcp-stdio`), with 33 tools. Deleting needs `confirm: true`; cloning needs consent and works only from this Mac (or with the API key).\n- **Integrations page:** one prompt sets up Claude Code, Codex or Cursor (server and agent skill); there are snippets for n8n, curl, Python, JavaScript and the OpenAI Agents SDK.\n\n```sh\ncurl http://127.0.0.1:3901/v1/audio/speech \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"model\": \"tts-1\", \"voice\": \"alloy\", \"input\": \"Build finished. All tests passed.\"}' \\\n  -o speech.wav\n```\n\nThe full reference is [docs/local-api.md](docs/local-api.md), and `/docs` in the running app.\n\n### And more\n\n<img src=\"docs/images/dark.webp\" alt=\"The Dub page in dark mode\" width=\"100%\">\n\n- **Tools:** compare voices A/B, speak a recording again in another voice, fit text to a duration, probe a file, check a watermark.\n- **Invisible watermark:** generated audio carries an AudioSeal mark, on by default (Settings → Privacy), and Tools can detect it.\n- **Calls:** an AI phone agent on your own Twilio account. It always says it is an AI, and uses only designed or consented voices. Off until you set it up.\n- **The app:** a sidebar with search (⌘F) and sections that fold; what is running shows as cards at its foot, and the Tasks page lists every job. Projects and History libraries, one job queue that resumes after a restart, the command palette (⌘K), ⌘1–9 for the main pages, light and dark themes, English and 简体中文.\n- **Memory:** models you have not used for 30 minutes are unloaded (Settings → Models & network → Memory) and load again when needed.\n\n## Install\n\n**Requirements**\n- macOS 15 or later, on Apple silicon (M1 or later).\n- Memory: 8 GB runs the Fast pack; 16 GB is recommended, and needed for *Dialogue · Light*; 24 GB runs the Quality pack (high-fidelity cloning, voice design, dubbing and the writing assistant) and *Dialogue · One take*.\n- Disk: 1.3–17 GB for models, depending on the pack; the dialogue models add 2.4 GB and 10.9 GB.\n\n**Steps**\n1. Download the DMG from [actnow.dev/download/audiosmith](https://actnow.dev/download/audiosmith), AudioSmith's page on our website. AudioSmith is free; the download ne"
+    },
+    "brief": {
+      "summary": "开源 Mac 本地语音工作室，可合成、克隆、配音和转写，模型离线跑",
+      "problem": "云端语音服务要账号、要上传素材、还按量收费；想在本地做配音和有声书缺一个整合工具",
+      "highlights": [
+        "可以把文稿或 EPUB 直接变成带章节和封面的 M4B 有声书",
+        "可以给视频分轨、转写、翻译，再用克隆音色配成另一种语言",
+        "可以用一句话描述设计音色，或从录音克隆自己的声音"
+      ],
+      "target_users": [
+        "有声书与播客制作者",
+        "视频本地化译者",
+        "注重隐私的内容创作者"
+      ],
+      "why_trending": "本周首次收录，185 Star；把语音合成、克隆、配音、转写放进一个本地 Mac 应用，功能面少见",
+      "caveat": "仅支持 Apple silicon 的 macOS 15+，仍处 0.4.0 beta，作者说明会有粗糙之处",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "hehehai/AudioSmith",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地TTS、配音、音色克隆与转写全套",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 58.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 18,
+      "full_name": "blixvip/html-anime",
+      "url": "https://github.com/blixvip/html-anime",
+      "description": "Turn a scene prompt into a shot sheet, then have a coding agent draw the film in HTML. No video model.",
+      "language": "JavaScript",
+      "total_stars": 211,
+      "forks": 43,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-animation",
+        "ai-video",
+        "animation",
+        "anime",
+        "claude-code",
+        "codex",
+        "creative-coding",
+        "css-animation",
+        "generative-art",
+        "good-first-issue",
+        "help-wanted",
+        "html-animation",
+        "html-video",
+        "no-video-model",
+        "prompt-to-video",
+        "shot-list",
+        "storyboard",
+        "svg-animation",
+        "text-to-video"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-27T04:12:58Z",
+      "updated_at": "2026-11-01T06:15:48Z",
+      "pushed_at": "2026-11-01T06:05:46Z",
+      "open_issues": 14,
+      "homepage": "https://blixvip.github.io/html-anime/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">html-anime</h1>\n\n<p align=\"center\">\n  <b>Prompt an anime. Your coding agent draws it in code.</b>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/blixvip/html-anime/stargazers\"><img src=\"https://img.shields.io/github/stars/blixvip/html-anime?style=flat-square&color=e8434b\" alt=\"GitHub stars\"></a>\n  <a href=\"https://blixvip.github.io/html-anime/\"><img src=\"https://img.shields.io/badge/site-blixvip.github.io%2Fhtml--anime-111?style=flat-square\" alt=\"Site\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-111?style=flat-square\" alt=\"MIT license\"></a>\n  <img src=\"https://img.shields.io/badge/render-HyperFrames-111?style=flat-square\" alt=\"HyperFrames\">\n  <img src=\"https://img.shields.io/badge/agents-Claude%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Grok-111?style=flat-square\" alt=\"Claude, Codex, Cursor, Grok\">\n  <a href=\"https://discord.gg/zEB4VjmfSb\"><img src=\"https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://blixvip.github.io/html-anime/\"><img src=\"media/city.jpg\" width=\"860\" alt=\"A moon over the night city, a still from Kokuyō\"></a>\n</p>\n\n<p align=\"center\">\n  <sub>A still from <i>Kokuyō</i>, drawn entirely in HTML. <a href=\"https://blixvip.github.io/html-anime/\">Watch it on the site</a> · <a href=\"media/film.mp4\">media/film.mp4</a></sub>\n</p>\n\nAn anime, written as HTML. You write a scene. [The site](https://blixvip.github.io/html-anime/) turns it into a shot sheet: holds, one expensive shot, a closed color script. Paste that sheet into Claude, Codex, Cursor, or Grok. The agent draws the frames.\n\nThe pictures are HTML, timed for [HyperFrames](https://github.com/heygen-com/hyperframes). Nothing here calls a video model.\n\n## The film\n\nKokuyō. Watch it on [the site](https://blixvip.github.io/html-anime/) or open [media/film.mp4](media/film.mp4).\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"media/moon.jpg\" alt=\"A cracked moon falling through rain\"></td>\n    <td width=\"50%\"><img src=\"media/fight.jpg\" alt=\"Two figures crossing blades in front of the moon\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"media/helm.jpg\" alt=\"A dark helm with a red crescent\"></td>\n    <td width=\"50%\"><img src=\"media/ren.jpg\" alt=\"A close-up washed in white light\"></td>\n  </tr>\n</table>\n\n## Start\n\n```\ngit clone https://github.com/blixvip/html-anime.git\ncd html-anime\n```\n\nOpen the folder in the agent you already use and paste a sheet as the first message. The site builds the sheet in the browser. `harness/compile.js` builds the same sheet in Node.\n\nServe the site from this folder, then open the address it prints:\n\n```\npython -m http.server\n```\n\nOpening `index.html` as a file shows that same instruction. The sheet will not run until the folder is served.\n\nOr build a sheet in Node (no dependencies):\n\n```js\nimport { compileBrief } from \"./harness/compile.js\";\n\nconst sheet = compileBrief({\n  logline: \"On a roof in the rain, a red moon opens and a line of light falls.\",\n  seconds: 8,          // 8, 12, or 20\n  aspect: \"16:9\",      // or \"9:16\"\n  script: \"indigo\",    // indigo, eclipse, noon, or festival\n  dialogue: \"The rain hid the sound of the blade.\",\n});\nconsole.log(sheet.ok ? sheet.markdown : sheet.error);\n```\n\n| Agent | What it reads | Open |\n| --- | --- | --- |\n| Claude Code | `CLAUDE.md` | `claude` |\n| Codex | `AGENTS.md` | `codex` |\n| Cursor | `.cursor/rules/html-anime.mdc` | `cursor .` |\n| Grok | `AGENTS.md` | `grok` |\n\n## What is in the repo\n\n- `index.html` — the site\n- `skills/html-anime-direct/SKILL.md` — which shots exist\n- `skills/html-anime-cel/SKILL.md` — how a frame is painted\n- `skills/html-anime-timing/SKILL.md` — twos, holds, the smear\n- `skills/html-anime-camera/SKILL.md` — the cut and the frame\n- `skills/html-anime-render/SKILL.md` — the HyperFrames file\n- `harness/compile.js` — logline to sheet\n- `media/film.mp4` — Kokuyō, the film\n- `media/city.jpg`, `media/moon.jpg`, `media/fight.jpg`, `media/helm.jpg`, `media/ren.jpg` — stills from it\n- `films/roof/` — an 8 second reference. File shape and the color-dip cut, not a film to remix\n- `AGENTS.md` — the contract\n\n## Test\n\n```\nnpm test\n```\n\nChecks that every runtime sums exactly and has one sakuga shot, and that the sheet carries the size, frame count, and dialogue.\n\n## Render the reference\n\n```\ncd films/roof\nnpx hyperframes preview\n```\n\nLint before you trust a new film:\n\n```\nnpx hyperframes lint\nnpx hyperframes validate\n```\n\n## Sheet rules the agent is not allowed to break\n\n- Shot times sum to 8, 12, or 20 seconds\n- One sakuga shot. The others stay on three drawings\n- Acting on twos. Rain and a blade on ones\n- Only the hexes printed on the sheet\n- The line you wrote, verbatim, or no dialogue at all\n\n## Community\n\n💬 [Join the Discord](https://discord.gg/zEB4VjmfSb) for questions, help, feedback, and updates.\n\n<!-- more-from-blixvip:start -->\n## More from blixvip\n\n| Project | What it does |\n| --- | --- |\n| **[GenMotion](https://github.com/blixvip/GenMotion)** | Type an idea, get a finished motion-graphics video. Top Western + Chinese image models, your own API keys. |\n| **[NullMotion](https://github.com/blixvip/NullMotion)** | Play a finished motion-graphics ad in sync with the rough drafts it grew from. Export the breakdown as MP4. |\n| **[MotionClone](https://github.com/blixvip/MotionClone)** | Rebuild any reference video as an editable HyperFrames project and compare it against the original. |\n| **[easyedit](https://github.com/blixvip/easyedit)** | Type a movie name, get a fan edit: captioned speech cut, then a montage cut to the beat. |\n| **[stick](https://github.com/blixvip/stick)** | Free, open-source stick figure animation software for Windows, Linux and the web. |\n| **[thumbnail-studio](https://github.com/blixvip/thumbnail-studio)** | A minimal Windows workspace for YouTube thumbnails: ChatGPT beside your references. |\n| **[blixtrade](https://github.com/blixvip/blixtrade)** | Open-source core of BLIX, the AI memecoin terminal for Solana, with a public API and MCP server. |\n\n<sub>If one of these helped you, a ⭐ helps other people find it. Follow [@waselyyy](https://x.com/waselyyy) for new drops.</sub>\n<!-- more-from-blixvip:end -->\n\n## License\n\n[MIT](LICENSE). The reference film's font keeps its own license: see [films/roof/fonts/NOTICE.txt](films/roof/fonts/NOTICE.txt).\n"
+    },
+    "brief": {
+      "summary": "把场景提示转成镜头表，由编码 Agent 用 HTML 绘制动画。",
+      "problem": "想生成动画但不想调用视频模型，或缺少可复现的分镜与制作约束。",
+      "highlights": [
+        "可以把一句场景描述编译成 8/12/20 秒分镜表",
+        "可以把分镜表交给 Claude Code 等 Agent 画帧",
+        "可以用 Node 脚本生成分镜并检查镜头时长规则"
+      ],
+      "target_users": [
+        "动画创作者",
+        "前端创意开发者",
+        "AI 编码工具用户"
+      ],
+      "why_trending": "本周首次收录，用 HTML 替代视频模型做动画，方向较新。",
+      "caveat": "需本地起 HTTP 服务，直接打开 index.html 无法运行。",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "blixvip/html-anime",
+      "score": 86,
+      "category": "动画",
+      "reason": "提示词生成分镜表，用HTML绘制动画",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 53.5
+    }
+  }
+]
