@@ -1,0 +1,529 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "pingdotgg/t3code",
+      "url": "https://github.com/pingdotgg/t3code",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 38710,
+      "forks": 8953,
+      "stars_today": 3094,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 5719
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-08T23:46:22Z",
+      "updated_at": "2026-11-02T06:28:17Z",
+      "pushed_at": "2026-11-02T06:25:42Z",
+      "open_issues": 3985,
+      "homepage": "https://t3.codes",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# T3 Code\n\nT3 Code is an \"agent harness control surface\". It enables control of the agents on your machine with a best-in-class mobile app ([iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824), [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code)), [web app](https://app.t3.codes) and [Electron-based desktop app](https://t3.codes).\n\nWorks with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, Google Antigravity, and fx. If they're set up on your computer, T3 Code can control them.\n\n## \"Wait, what are you selling me?\"\n\nNothing. We built T3 Code because we wanted the best possible development experience with agents. We were inspired by existing solutions like the Codex desktop app, Conductor, Claude Desktop and Cursor Glass, but none met our bar.\n\nWe wanted something performant, remote-ready, and truly open. If we ever go the wrong direction, we want you to have everything you need to fork and build the editor that you want.\n\n## Installation\n\n> [!WARNING]\n> T3 Code currently supports Codex, Claude, Cursor, Grok Build, OpenCode, Antigravity, and fx. Install and authenticate at least one provider before use:\n>\n> - Codex: install [Codex CLI](https://developers.openai.com/codex/cli) and run `codex login`\n> - Claude: install [Claude Code](https://claude.com/product/claude-code) and run `claude auth login`\n> - Cursor: install [Cursor CLI](https://cursor.com/cli) and run `agent login`\n> - Grok Build: install [Grok Build CLI](https://x.ai/cli) and run `grok login`\n> - OpenCode: install [OpenCode](https://opencode.ai) and run `opencode auth login`\n> - Antigravity: enable it in Settings, then use **Install Antigravity** and **Sign in with Google**. No CLI is required.\n> - fx: install [fx](https://fx.sh) and run `fx login` on the machine running the T3 Code server ([setup guide](./docs/user/providers-fx.md))\n\n### Command line\n\n```bash\ncurl -fsSL https://t3.codes/install.sh | sh\n```\n\nOn Windows, in PowerShell:\n\n```powershell\nirm https://t3.codes/install.ps1 | iex\n```\n\nThen run `t3` to start the server and open the local web app. `t3 service install` keeps it running in the background, `t3 update` moves to a newer release, and `t3 --help` has the full reference.\n\nTo try it once without installing, run `npx t3@latest` instead.\n\n### Desktop app\n\nInstall the latest version of the desktop app from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), or from your favorite package registry:\n\n#### Windows (`winget`)\n\n```bash\nwinget install T3Tools.T3Code\n```\n\n#### Windows (`scoop`)\n\n```bash\nscoop install extras/t3code\n```\n\n#### macOS (Homebrew)\n\n```bash\nbrew install --cask t3-code\n```\n\n#### Debian, Ubuntu (`.deb`)\n\nDownload the `.deb` from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), then:\n\n```bash\nsudo apt install ./T3-Code-*.deb\n```\n\n#### Arch Linux (AUR)\n\nStable:\n\n```bash\nyay -S t3code-bin\n```\n\nNightly:\n\n```bash\nyay -S t3code-nightly-bin\n```\n\nThe AUR packaging is maintained in this repository under [`packaging/aur`](./packaging/aur).\n\n#### Nix (nixpkgs)\n\n```bash\nnix profile add github:NixOS/nixpkgs/nixos-unstable#t3code\n```\n\nThe package is maintained in [nixpkgs](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/t3/t3code)\nand includes the desktop app (`t3code-desktop`) and the `t3` command.\nSee [Nix installation](./docs/user/install.md#nix-nixpkgs) for NixOS configuration and updates.\n\n## Some notes\n\nWe are very very early in this project. Expect bugs.\n\nWe are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be.\n\n## Documentation\n\nFull docs live in [docs/](./docs). There's no docs site yet.\n\n- [FAQ](./docs/user/faq.md)\n- [Install and first run](./docs/user/install.md)\n- [Permission modes](./docs/user/permission-modes.md)\n- [Keyboard shortcuts](./docs/user/keybindings.md)\n- [Project settings](./docs/user/project-settings.md)\n- [Appearance preferences](./docs/user/appearance.md)\n- [Remote access from a phone or another machine](./docs/user/remote-access.md)\n- [Connect Claude Code, Codex, ChatGPT and other agents over MCP](./docs/user/outside-agents.md)\n- [Keeping app and server in sync](./docs/user/updating.md)\n- [Source control integrations](./docs/user/source-control.md)\n- Multiple accounts: [Codex](./docs/user/providers-codex.md) · [Claude](./docs/user/providers-claude.md)\n- [Run T3 Code as a background service](./docs/user/background-service.md)\n\nBuilding from source? Start at [docs/internals/overview.md](./docs/internals/overview.md).\n\n## If you REALLY want to contribute still.... read this first\n\n### Install `vp`\n\nT3 Code uses Vite+ so you'll need to install the global `vp` command-line tool.\n\n#### macOS / Linux\n\n```bash\ncurl -fsSL https://vite.plus | bash\n```\n\n#### Windows\n\n```bash\nirm https://vite.plus/ps1 | iex\n```\n\nCheckout their getting started guide for more information: https://viteplus.dev/guide/\n\n### Install dependencies\n\n```bash\nvp i\n```\n\nRead [CONTRIBUTING.md](./CONTRIBUTING.md) before reporting a bug or opening a PR.\n\nHave a feature request? Start an [Ideas discussion](https://github.com/pingdotgg/t3code/discussions/categories/ideas).\n\nNeed support? Join the [Discord](https://discord.gg/jn4EGJjrvv).\n"
+    },
+    "brief": {
+      "summary": "多端遥控本机 AI 编码代理的控制台",
+      "problem": "在手机、网页和桌面统一管理本机多种 AI 编码代理",
+      "highlights": [
+        "可以在手机或网页远程操作电脑上的编码代理",
+        "可以统一接入 Claude Code、Codex、Cursor 等代理",
+        "可以安装桌面端或用命令行启动本地服务"
+      ],
+      "target_users": [
+        "AI 编码代理用户",
+        "需要远程开发的人",
+        "多代理重度用户"
+      ],
+      "why_trending": "今日新增 3094 Star，热度再升",
+      "caveat": "项目很早期，可能遇到 bug，暂不接大功能贡献",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pingdotgg/t3code",
+      "score": 90,
+      "category": "Harness / Jev",
+      "reason": "智能体Harness控制台，支持多代理",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 76.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "CopilotKit/OpenBot",
+      "url": "https://github.com/CopilotKit/OpenBot",
+      "description": "Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after. Bring any AG-UI agent.",
+      "language": "TypeScript",
+      "total_stars": 9682,
+      "forks": 1196,
+      "stars_today": 175,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 175
+    },
+    "details": {
+      "topics": [
+        "ag-ui",
+        "agent-governance",
+        "ai-agents",
+        "browser-automation",
+        "copilotkit",
+        "generative-ui",
+        "mcp"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-08-17T00:44:59Z",
+      "updated_at": "2026-11-02T06:28:06Z",
+      "pushed_at": "2026-11-01T18:47:13Z",
+      "open_issues": 90,
+      "homepage": "https://www.copilotkit.ai/openbot",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# OpenBot\n\n**The AI assistant your company can actually own.** Same shape as ChatGPT, Claude or Grok, with one difference that matters: it runs on your infrastructure and you can change anything about it. Any agent stack, through AG-UI.\n\nEach coworker gets a real browser with its own logins, its own files, and only the tools you grant. Every action decided before it happens and recorded after.\n\n[**Talk to an engineer**](https://copilotkit.ai/talk-to-an-engineer?ref=openbot_readme) · [**Have us build it with you**](https://copilotkit.ai/talk-to-an-engineer?ref=openbot_readme) · [**copilotkit.ai/openbot**](https://copilotkit.ai/openbot) · [**Quick start**](#quick-start) · [**Docs**](docs/README.md)\n\n[![CI](https://github.com/CopilotKit/openbot/actions/workflows/ci.yml/badge.svg)](https://github.com/CopilotKit/openbot/actions/workflows/ci.yml)\n[![security](https://github.com/CopilotKit/openbot/actions/workflows/security_zizmor.yml/badge.svg)](https://github.com/CopilotKit/openbot/actions/workflows/security_zizmor.yml)\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)\n![Beta](https://img.shields.io/badge/status-beta-yellow.svg)\n\n[![GitHub Trending: #5 Repository Of The Day](https://trendshift.io/api/badge/repositories/175080)](https://trendshift.io/repositories/175080)\n[![Trendshift: #3 Repository Of The Day](https://trendshift.io/api/badge/trendshift/repositories/175080/daily)](https://trendshift.io/repositories/175080)\n\n</div>\n\nhttps://github.com/user-attachments/assets/535ef7ee-1631-4a69-b839-564c56cf90b4\n\n<div align=\"center\">\n\nBring any AG-UI agent, written on a framework or by hand, and it arrives as a\ncoworker with a channel of its own. Watch it work on its own screen, take the\nwheel when it reaches something it should not do alone, then hand it back. It\nanswers with components rather than only prose, and the whole thing runs on\nyour own machine.\n\n</div>\n\n> **A template, not a product.** OpenBot is meant to be cloned and made your own. There is no hosted version to sign up for, and nothing here is published as a package to depend on: every workspace in this repository is private. You take the repository, replace the example tenant package under `examples/` with your own coworkers, channels and skills, and run it. Everything below describes a starting point, not a finished thing somebody operates for you.\n\n> **Beta, and under active development.** OpenBot is early. Expect rough edges and bugs, and expect things to move. Issues and pull requests are welcome.\n\n> **Runs on your machine.** Everything below is written for a laptop. `.env.example` carries `OPENBOT_SINGLE_USER=true`, which admits every request as one administrator, so a fresh clone reaches the product without registering an OAuth client first. [Sign-in](#sign-in) turns that off, and is required before anybody else can reach the deployment.\n\n> **We can build this for you, or with you, at your company.** Our engineers will stand OpenBot up\n> inside your infrastructure, customize it into something that looks like your own product, and hand it\n> back to you to keep changing. [**Start the conversation**](https://copilotkit.ai/talk-to-an-engineer?ref=openbot_readme).\n>\n> In the meantime, run all of it on your laptop, Intelligence included: CopilotKit's free Developer plan\n> covers [running Intelligence locally](#intelligence-on-your-own-machine) in Docker on a Mac.\n\n## What it is\n\nAn agent platform that runs inside your own infrastructure. Docker Compose brings up every part of it, the data sits in your PostgreSQL, and the model is yours to choose: no model ships in the box, and an administrator supplies the credential, which is encrypted at rest and never logged.\n\nA deployment starts with two coworkers, and they are configuration rather than code: **General Assistant** for everyday work and **Knowledge** for company questions. A **Risk Analyst** joins them once its endpoint is configured, and ten more wait in `examples/fintech/catalog/`, each doing one job — reading an expense claim against the policy as written, turning a meeting note into the follow-ups actually in it, drafting release notes from what shipped, triaging a ticket, answering a new starter from the handbook, writing a brief that names what it could not find, writing up an interview, handing an on-call shift over, assembling what is known before a renewal, and grouping customer feedback into themes it can cite. Copy one into `examples/fintech/agents/` to add it, write your own there or in `agents.yaml`, or make one from `/bots` in the UI.\n\nAnything a Bot does to a computer, a file, an MCP server or a component goes through one gateway that decides and records it. That is the difference between an agent that can use your tools and an agent you can let near them.\n\nMore at [copilotkit.ai/openbot](https://copilotkit.ai/openbot).\n\n## Built on AG-UI\n\nA Bot is any endpoint speaking [AG-UI](https://github.com/ag-ui-protocol/ag-ui), the open protocol for agent-to-user interaction, so OpenBot is not tied to a framework and neither are you. Agents built with LangGraph, Mastra, CrewAI, Pydantic AI, Google ADK or written by hand all arrive the same way, and the governance rides the protocol rather than the framework.\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/architecture-dark.svg\">\n  <img src=\"assets/architecture-light.svg\" alt=\"You talk to the server, which sends the turn to a Bot over AG-UI. Every tool call the Bot makes comes back through the gateway, which resolves the target, decides it against your policy, records an audit row, and only then acts, or refuses and names the rule. Allowed browser and file actions reach that Bot's own computer, one container each with its own Chromium, logins and workspace, built by the supervisor. Decisions land in PostgreSQL and threads in CopilotKit Intelligence.\">\n</picture>\n\n## Requirements\n\n- Docker, for PostgreSQL and the shipped Bots.\n- [Bun](https://bun.sh) 1.4+, for the app, the API server and the tests (some tests fail on 1.3).\n- A CopilotKit Intelligence project and license. A free plan is available, and Intelligence can be self-hosted.\n- A model key. The proof-of-concept Bot uses OpenAI; the LangGraph Bot can use OpenAI, Anthropic, or Google.\n\n## Quick start\n\n> **Setting up with an AI assistant?** Paste [`prompt.txt`](prompt.txt) into it first. It carries the\n> same steps as below plus the things that are easy to get wrong: which of the blank keys in\n> `.env.example` are actually yours to fill (the CopilotKit key and a model key), which the start\n> script fills for you, and what each start-up refusal means. Every claim in it is checked against\n> this repository.\n\n1. Create `.env`:\n\n   ```sh\n   cp .env.example .env\n   bun install\n   ```\n\n2. Connect a fresh managed Intelligence project:\n\n   ```sh\n   npx --yes copilotkit@latest login\n   npx --yes copilotkit@latest project select\n   bun scripts/setup-learning.ts\n   ```\n\n   The helper provisions the selected project's runtime key, creates or reuses its\n   `openbot` Learning container, then writes both settings to `.env`. It preserves\n   custom container assignments and never replaces an existing OpenBot key; with one\n   set, it only creates `openbot` in that key's project if it is missing.\n   For fresh self-hosted setup, set `INTELLIGENCE_API_URL` to that deployment's\n   HTTPS API origin (or `http://localhost` for a local one) and run the helper\n   without the two `npx` commands. It opens an isolated Chrome or Edge window for\n   your usual sign-in and project choice; install either browser first. For CLI-managed\n   local evaluation installs, it discovers the matching dashboard with the newest installed or\n   cached CopilotKit CLI and uses that dashboard for login and session requests. Discovery\n   runs offline with Bun, without downloading the CLI or requiring `npx` on your PATH.\n   If no CLI is available, manually hosted deployments use their API origin for sign-in. Complete the local auth\n   approval shown in the browser when prompted. The runtime API URL stays unchanged. It writes\n   the API URL, the key and the container, not `INTELLIGENCE_GATEWAY_WS_URL`, so\n   set that one to the same deployment yourself. Once `openbot` exists, the server assigns it\n   as the default by itself unless [Admin → Automatic Learning](docs/automatic-learning.md)\n   has a saved setting.\n   Managed Intelligence needs no separate licence token.\n\n3. Fill the remaining required values:\n\n   - `OPENAI_API_KEY`\n\n   Keep the managed Intelligence URLs from `.env.example` unless you run Intelligence yourself. The example `KEY_ENCRYPTION_KEY` is public and fine locally; generate your own with:\n\n   ```sh\n   openssl rand -base64 32\n   ```\n\n4. Run:\n\n   ```sh\n   bash scripts/start.sh\n   ```\n\n5. Open <http://localhost:3010>.\n\n`scripts/start.sh` starts Docker services, applies migrations, starts the API server on port 3001, starts the routine worker, starts the app on port 3010, and checks that the services answer their own health routes before printing next steps.\n\n`scripts/stop.sh` takes the same things down, including each Bot's computer, which compose does not own; `--keep-computers` leaves the computers running. Nothing is deleted: the database, the Bots' files and their browser profiles are volumes.\n\n### Intelligence on your own machine\n\nTo try Intelligence on one Mac instead of the managed service, follow\n[Evaluate Intelligence locally](https://docs.copilotkit.ai/intelligence/self-hosting-local). The free\n[Developer plan](https://www.copilotkit.ai/pricing) qualifies. The local licence lasts 30 days and\n`npx copilotkit@latest local renew` renews it as often as you need, while your account is in good\nstanding. It is a preview for macOS with Docker Desktop,\nnot a production installation. Run its\n`npx copilotkit@latest local connect` from the OpenBot root, where `.env` is.\n\nThat command writes `INTELLIGENCE_API_URL`, `INTELLIGENCE_GATEWAY_WS_URL` and\n`CPK_INTELLIGENCE_API_KEY` to `.env`. OpenBot reads those settings directly; no key\ncopying or renaming is needed. `INTELLIGENCE_API_KEY` remains supported for older\nconfigurations. When both are set, the non-empty CLI key takes precedence so\nreconnecting uses the new project's key.\n\nTo give the Bots a Learning container on that stack, see\n[Automatic Learning](docs/automatic-learning.md).\n\n## Deploy it\n\nOne image carries the app, the API, the browser the Bots drive, and optionally PostgreSQL. Same\n`.env`, no Kubernetes.\n\n```sh\n# The published image. Nothing to clone and nothing to build.\ndocker run -p 3001:3001 --env-file .env \\\n  -e EMBEDDED_POSTGRES=on -v openbot-data:/var/lib/postgresql \\\n  ghcr.io/copilotkit/openbot:latest\n\n# Or the tree you have in front of you.\ndocker build -t openbot .\ndocker run -p 3001:3001 --env-file .env \\\n  -e EMBEDDED_POSTGRES=on -v openbot-data:/var/lib/postgresql openbot\n```\n\nEverything is on 3001 here, the app included, rather than the 3010 the clone uses. `latest` is the\nmost recent release and a version tag such as `:v0.0.9` pins one.\n\nLeave `EMBEDDED_POSTGRES` off and set `DATABASE_URL` to point at a database you already run.\n[docs/deployment.md](docs/deployment.md) has the minimum sizes, the platform notes, and how it behaves behind more than one replica.\n\n## Try it\n\n- Open `/bot` and ask: `Open news.ycombinator.com and tell me the top story.`\n- Ask the Bot to fill out <https://httpbin.org/forms/post>, then inspect `/admin/audit`.\n- Open `/admin/boundaries`, add a deny rule or preset, and retry the same browser action.\n- Create a Bot from `/bots`, give it a standing role, and start a channel with it.\n\n## Main surfaces\n\n| Route                       | Purpose                                                            |\n| --------------------------- | ------------------------------------------------------------------ |\n| `/`                         | Start and browse channels.                                         |\n| `/channel/new`     "
+    },
+    "brief": {
+      "summary": "开源 AI 同事平台，每人独享浏览器与文件",
+      "problem": "让 AI 同事安全使用工具，并留下可审计记录",
+      "highlights": [
+        "可以给每个 AI 同事分配独立浏览器和文件",
+        "可以接入任意 AG-UI 智能体作为同事",
+        "可以在执行前审批高风险操作并审计"
+      ],
+      "target_users": [
+        "企业内部平台团队",
+        "AI 应用开发者",
+        "自动化运维团队"
+      ],
+      "why_trending": "今日新增 175 Star，登上 GitHub Trending",
+      "caveat": "仍是 Beta 模板，需自行部署且依赖较多",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "CopilotKit/OpenBot",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "可自托管AI代理同事，含浏览器工具",
+      "generated_by_ai": true,
+      "velocity_score": 68,
+      "freshness_score": 70,
+      "ranking_score": 70.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "thedotmack/claude-mem",
+      "url": "https://github.com/thedotmack/claude-mem",
+      "description": "Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More",
+      "language": "TypeScript",
+      "total_stars": 109751,
+      "forks": 9586,
+      "stars_today": 1526,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 1590
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "ai-memory",
+        "anthropic",
+        "artificial-intelligence",
+        "chromadb",
+        "claude",
+        "claude-agent-sdk",
+        "claude-agents",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "embeddings",
+        "long-term-memory",
+        "mem0",
+        "memory-engine",
+        "openmemory",
+        "rag",
+        "sqlite",
+        "supermemory"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2025-08-31T20:50:03Z",
+      "updated_at": "2026-11-02T06:27:11Z",
+      "pushed_at": "2026-11-02T06:26:37Z",
+      "open_issues": 175,
+      "homepage": "https://claude-mem.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\">\n  <br>\n  <a href=\"https://github.com/thedotmack/claude-mem\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/public/claude-mem-logo-for-dark-mode.webp\">\n      <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/public/claude-mem-logo-for-light-mode.webp\">\n      <img src=\"docs/public/claude-mem-logo-for-light-mode.webp\" alt=\"Claude-Mem\" width=\"400\">\n    </picture>\n  </a>\n</h1>\n\n<p align=\"center\">\n  <img alt=\"Vercel OSS Program\" src=\"https://vercel.com/oss/program-badge-2026.svg\" height=\"24\" />\n  &nbsp;&nbsp;&nbsp;\n  <img alt=\"Greptile\" src=\"docs/public/greptile-wordmark-green.svg\" height=\"24\" />\n  &nbsp;&nbsp;&nbsp;\n  <img alt=\"SerpApi\" src=\"docs/public/serpapi-logo-with-wordmark-gradient.svg\" height=\"24\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"docs/i18n/README.zh.md\">🇨🇳 中文</a> •\n  <a href=\"docs/i18n/README.zh-tw.md\">🇹🇼 繁體中文</a> •\n  <a href=\"docs/i18n/README.ja.md\">🇯🇵 日本語</a> •\n  <a href=\"docs/i18n/README.pt.md\">🇵🇹 Português</a> •\n  <a href=\"docs/i18n/README.pt-br.md\">🇧🇷 Português</a> •\n  <a href=\"docs/i18n/README.ko.md\">🇰🇷 한국어</a> •\n  <a href=\"docs/i18n/README.es.md\">🇪🇸 Español</a> •\n  <a href=\"docs/i18n/README.de.md\">🇩🇪 Deutsch</a> •\n  <a href=\"docs/i18n/README.fr.md\">🇫🇷 Français</a> •\n  <a href=\"docs/i18n/README.he.md\">🇮🇱 עברית</a> •\n  <a href=\"docs/i18n/README.ar.md\">🇸🇦 العربية</a> •\n  <a href=\"docs/i18n/README.ru.md\">🇷🇺 Русский</a> •\n  <a href=\"docs/i18n/README.pl.md\">🇵🇱 Polski</a> •\n  <a href=\"docs/i18n/README.cs.md\">🇨🇿 Čeština</a> •\n  <a href=\"docs/i18n/README.nl.md\">🇳🇱 Nederlands</a> •\n  <a href=\"docs/i18n/README.tr.md\">🇹🇷 Türkçe</a> •\n  <a href=\"docs/i18n/README.uk.md\">🇺🇦 Українська</a> •\n  <a href=\"docs/i18n/README.vi.md\">🇻🇳 Tiếng Việt</a> •\n  <a href=\"docs/i18n/README.tl.md\">🇵🇭 Tagalog</a> •\n  <a href=\"docs/i18n/README.id.md\">🇮🇩 Indonesia</a> •\n  <a href=\"docs/i18n/README.th.md\">🇹🇭 ไทย</a> •\n  <a href=\"docs/i18n/README.hi.md\">🇮🇳 हिन्दी</a> •\n  <a href=\"docs/i18n/README.bn.md\">🇧🇩 বাংলা</a> •\n  <a href=\"docs/i18n/README.ur.md\">🇵🇰 اردو</a> •\n  <a href=\"docs/i18n/README.ro.md\">🇷🇴 Română</a> •\n  <a href=\"docs/i18n/README.sv.md\">🇸🇪 Svenska</a> •\n  <a href=\"docs/i18n/README.it.md\">🇮🇹 Italiano</a> •\n  <a href=\"docs/i18n/README.el.md\">🇬🇷 Ελληνικά</a> •\n  <a href=\"docs/i18n/README.hu.md\">🇭🇺 Magyar</a> •\n  <a href=\"docs/i18n/README.fi.md\">🇫🇮 Suomi</a> •\n  <a href=\"docs/i18n/README.da.md\">🇩🇰 Dansk</a> •\n  <a href=\"docs/i18n/README.no.md\">🇳🇴 Norsk</a>\n</p>\n\n<h4 align=\"center\">Persistent memory compression system built for <a href=\"https://claude.com/claude-code\" target=\"_blank\">Claude Code</a>.</h4>\n\n<p align=\"center\">\n  <a href=\"LICENSE\">\n    <img src=\"https://img.shields.io/badge/License-Apache%202.0-blue.svg\" alt=\"License\">\n  </a>\n  <a href=\"package.json\">\n    <img src=\"https://img.shields.io/badge/version-15.8.3-green.svg\" alt=\"Version\">\n  </a>\n  <a href=\"package.json\">\n    <img src=\"https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg\" alt=\"Node\">\n  </a>\n  <a href=\"https://github.com/thedotmack/awesome-claude-code\">\n    <img src=\"https://awesome.re/mentioned-badge.svg\" alt=\"Mentioned in Awesome Claude Code\">\n  </a>\n</p>\n\n<p align=\"center\">\n <a href=\"https://www.star-history.com/thedotmack/claude-mem\">\n  <picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=rank&theme=dark\" /><source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=rank\" /><img alt=\"Star History Rank\" src=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=rank\" /></picture> <picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=trending&theme=dark\" /><source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=trending\" /><img alt=\"GitHub Trending Repository of the Day\" src=\"https://api.star-history.com/badge?repo=thedotmack/claude-mem&type=trending\" /></picture>\n </a>\n</p>\n\n<br>\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\">\n      <a href=\"https://github.com/thedotmack/claude-mem\">\n        <picture>\n          <img\n            src=\"https://raw.githubusercontent.com/thedotmack/claude-mem/main/docs/public/cm-preview.gif\"\n            alt=\"Claude-Mem Preview\"\n            width=\"500\"\n          >\n        </picture>\n      </a>\n    </td>\n    <td align=\"center\">\n      <a href=\"https://www.star-history.com/#thedotmack/claude-mem&Date\">\n        <picture>\n          <source\n            media=\"(prefers-color-scheme: dark)\"\n            srcset=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&theme=dark&legend=top-left\"\n          />\n          <source\n            media=\"(prefers-color-scheme: light)\"\n            srcset=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&legend=top-left\"\n          />\n          <img\n            alt=\"Star History Chart\"\n            src=\"https://api.star-history.com/image?repos=thedotmack/claude-mem&type=date&legend=top-left\"\n            width=\"500\"\n          />\n        </picture>\n      </a>\n    </td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"#quick-start\">Quick Start</a> •\n  <a href=\"#how-it-works\">How It Works</a> •\n  <a href=\"#mcp-search-tools\">Search Tools</a> •\n  <a href=\"#documentation\">Documentation</a> •\n  <a href=\"#configuration\">Configuration</a> •\n  <a href=\"#troubleshooting\">Troubleshooting</a> •\n  <a href=\"#license\">License</a>\n</p>\n\n<p align=\"center\">\n  Claude-Mem seamlessly preserves context across sessions by automatically capturing tool usage observations, generating semantic summaries, and making them available to future sessions. This enables Claude to maintain continuity of knowledge about projects even after sessions end or reconnect.\n</p>\n\n---\n\n## Quick Start\n\nInstall claude-mem for Grok Bot:\n\n```bash\nnpx claude-mem install --ide grok-bot\n```\n\nGrok Bot has no host hooks, so we watch the chat log files. Default is CMEM Pro, the hosted memory. Local observer is opt-in: `--provider host`. Installing this plugin does not install Cursor.\n\n**Awareness push pilot (LFG + Orifice):** needle observations (`decision`, `bugfix`, `security_alert`, `sensitive`) are appended as dated `- YYYY-MM-DD [awareness] …` lines into that bot's `memory/log/YYYY-MM.md`. Grok Bot already re-reads the log from disk. This does not write `profile.md`, user-memory, or project memory. Disable with `CLAUDE_MEM_GROK_BOT_AWARENESS_ENABLED=false`.\n\nInstall with a single command:\n\n```bash\nnpx claude-mem install\n```\n\nThe installer sets everything up first, then asks you to sign in to claude-mem in your browser (email magic link — no card required). Signing in provisions a memory key for your account and unlocks the **claude-mem observer** with a **30 Day Free Trial**: memory runs off-plan, so you get up to 100% more usage from your plan. When the free trial ends, memory automatically falls back to your Anthropic plan unless you subscribe. After sign-in you pick your memory provider — the claude-mem observer, your own OpenRouter or Gemini key, or your Anthropic plan.\n\nPrefer to skip the sign-in? Pass an explicit `--provider` flag, set `CLAUDE_MEM_ONLINE_OPTIN=false`, or run in CI/non-interactive shells — the installer completes without any account interaction.\n\nOr install for OpenCode:\n\n```bash\nnpx claude-mem install --ide opencode\n```\n\nThis works with OpenCode 1.3.4 or later, including OpenCode 2. Restart OpenCode after installing.\n\nOr install for **T3 Code** (Codex and Claude Code providers):\n\n```bash\nnpx claude-mem install --ide t3code\n```\n\nThe installer discovers T3 Code's enabled providers, registers native Claude-Mem plugins in their configured homes, and supports T3-managed Codex. Restart T3 Code, trust the provider's hooks when prompted, and start a new thread. See the [T3 Code integration guide](https://docs.claude-mem.ai/t3code-integration) for custom server settings, status, and removal.\n\nOr install for Antigravity CLI ([setup guide](https://docs.claude-mem.ai/antigravity-cli/setup)):\n\n```bash\nnpx claude-mem install --ide antigravity\n```\n\nOr install for OMP (Oh My Pi):\n\n```bash\nnpx claude-mem install --ide omp\n```\n\nOr install the native Pi extension or DeepSeek Harness plugin:\n\n```bash\nnpx claude-mem install --ide pi\nnpx claude-mem install --ide dsh --dsh-profile tui\n```\n\nPi and DeepSeek Harness use the worker runtime. See [native harness setup](docs/native-harness-integrations.md) for capture, recall, and troubleshooting.\n\nOr install from the plugin marketplace inside Claude Code:\n\n```bash\n/plugin marketplace add thedotmack/claude-mem\n\n/plugin install claude-mem\n```\n\nRestart Claude Code. Context from previous sessions will automatically appear in new sessions.\n\n> **Note:** Claude-Mem is also published on npm, but `npm install -g claude-mem` installs the **SDK/library only** — it does not register the plugin hooks or set up the worker service. Always install via `npx claude-mem install` or the `/plugin` commands above.\n\n### 🦞 OpenClaw Gateway\n\nInstall claude-mem as a persistent memory plugin on [OpenClaw](https://openclaw.ai) gateways with a single command:\n\n```bash\ncurl -fsSL https://install.cmem.ai/openclaw.sh | bash\n```\n\nThe installer handles dependencies, plugin setup, AI provider configuration, worker startup, and optional real-time observation feeds to Telegram, Discord, Slack, and more. See the [OpenClaw Integration Guide](https://docs.claude-mem.ai/openclaw-integration) for details.\n\n**Key Features:**\n\n- 🧠 **Persistent Memory** - Context survives across sessions\n- 📊 **Progressive Disclosure** - Layered memory retrieval with token cost visibility\n- 🔍 **Smart Search (Default)** - Query your project history with the three-step mem-search skill\n- 🖥️ **Local My Work** - Live requests, progress, human handoffs and a saved review queue at the worker URL printed on startup. [Guide](https://docs.claude-mem.ai/usage/my-work). Memory, sessions and settings remain at `/viewer`.\n- 👥 **TeamBrain** - An optional shared workspace beside My Work, with real team work lists, member attribution and linked findings. Each person chooses what to share; personal requests and review notes stay separate. [Set up a team](https://cmem.ai/teambrain/start).\n- 💻 **Claude Desktop Skill** - Search memory from Claude Desktop conversations\n- 🔒 **Privacy Control** - Use `<private>` tags to exclude sensitive content from storage\n- 🖼️ **Screenshots (opt-in, off by default)** - Keep converted copies of tool screenshots under `~/.claude-mem/media-v1/`, upload them to cmem.ai only when Cloud Sync is on, and send them to the observer model only when image inference is separately enabled ([details](https://docs.claude-mem.ai/configuration#screenshots-and-images-opt-in))\n- ⚙️ **Context Configuration** - Fine-grained control over what context gets injected\n- 🤖 **Automatic Operation** - No manual intervention required\n- 🔗 **Citations** - Reference past observations with IDs through the worker API or view all in the web viewer\n\n---\n\n## Documentation\n\n📚 **[View Full Documentation](https://docs.claude-mem.ai/)** - Browse on official website\n\n### Getting Started\n\n- **[Installation Guide](https://docs.claude-mem.ai/installation)** - Quick start & advanced installation\n- **[Usage Guide](https://docs.claude-mem.ai/usage/getting-started)** - How Claude-Mem works automatically\n- **[Search Tools](https://docs.claude-mem.ai/usage/search-tools)** - Query your project history with natural language\n- **[Cloud Sync](https://docs.claude-mem.ai/cloud-sync)** - Back up your memories to cmem.ai — no daemon, the worker syncs on write\n\n### Best Practices\n\n- **[Context Engineering](https://docs.claude-mem.ai/context-engineering)** - AI agent context optimization principles\n- **[Progressive Disclosure](https://docs.claude-mem.ai/progressive-disclosure)** - Philosophy behind Claude-Mem's context priming strategy\n\n### Architecture\n\n- **[Overview](htt"
+    },
+    "brief": {
+      "summary": "为AI编码代理提供跨会话持久记忆",
+      "problem": "代理每次新会话会丢失上下文，需反复说明项目背景",
+      "highlights": [
+        "可以自动记录代理会话中的操作",
+        "可以压缩历史并注入后续会话",
+        "可接入Claude Code、Codex等代理"
+      ],
+      "target_users": [
+        "AI编码代理用户",
+        "独立开发者",
+        "多代理工作流团队"
+      ],
+      "why_trending": "今日新增1526 Star，连续上榜，跨会话记忆需求升温",
+      "caveat": "默认安装引导登录，托管记忆需注意数据与费用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "thedotmack/claude-mem",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "智能体持久记忆，服务Agent工作流",
+      "generated_by_ai": true,
+      "velocity_score": 97,
+      "freshness_score": 20,
+      "ranking_score": 64.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "anomalyco/hex",
+      "url": "https://github.com/anomalyco/hex",
+      "description": "Local voice dictation for mac, windows and linux",
+      "language": "Rust",
+      "total_stars": 3562,
+      "forks": 207,
+      "stars_today": 1179,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 1179
+    },
+    "details": {
+      "topics": [
+        "dictation",
+        "linux",
+        "local-first",
+        "macos",
+        "rust",
+        "speech-recognition",
+        "speech-to-text",
+        "voice-control"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-07-17T23:48:56Z",
+      "updated_at": "2026-11-02T06:27:55Z",
+      "pushed_at": "2026-11-02T05:49:42Z",
+      "open_issues": 75,
+      "homepage": "https://anoma.ly/hex",
+      "archived": false,
+      "default_branch": "dev",
+      "readme": "# Hex\n\nHex is local voice dictation for Mac, Windows and Linux. Hold a key, speak, and\nit pastes.\n\n## How it works\n\n- hold the shortcut, speak, then let go\n- Hex transcribes on your device and pastes into whatever app you're in\n- the first run downloads a speech model; after that nothing leaves your machine\n- experimental features live in Labs, at the bottom of the sidebar\n\n## Downloads\n\nStable is the current release. Dev is the newest build of `dev` and updates\nitself from the dev channel.\n\n| Platform | Stable | Dev |\n| --- | --- | --- |\n| macOS (Apple silicon) | [DMG](https://anoma.ly/hex/download/macos-arm64-dmg) | [DMG](https://anoma.ly/hex/download/dev/macos-arm64-dmg) |\n| Windows x64 | [Installer](https://anoma.ly/hex/download/windows-x64-setup) | [Installer](https://anoma.ly/hex/download/dev/windows-x64-setup) |\n| Windows ARM64 | [Installer](https://anoma.ly/hex/download/windows-arm64-setup) | [Installer](https://anoma.ly/hex/download/dev/windows-arm64-setup) |\n| Linux x86_64 | [Executable](https://anoma.ly/hex/download/linux-x64) | [Executable](https://anoma.ly/hex/download/dev/linux-x64) |\n| Linux x86_64 (Debian, Ubuntu) | [.deb](https://anoma.ly/hex/download/linux-x64-deb) | [.deb](https://anoma.ly/hex/download/dev/linux-x64-deb) |\n| Linux x86_64 (Fedora, openSUSE) | [.rpm](https://anoma.ly/hex/download/linux-x64-rpm) | [.rpm](https://anoma.ly/hex/download/dev/linux-x64-rpm) |\n| Linux ARM64 | [Executable](https://anoma.ly/hex/download/linux-arm64) | [Executable](https://anoma.ly/hex/download/dev/linux-arm64) |\n| Linux ARM64 (Debian, Ubuntu) | [.deb](https://anoma.ly/hex/download/linux-arm64-deb) | [.deb](https://anoma.ly/hex/download/dev/linux-arm64-deb) |\n| Linux ARM64 (Fedora, openSUSE) | [.rpm](https://anoma.ly/hex/download/linux-arm64-rpm) | [.rpm](https://anoma.ly/hex/download/dev/linux-arm64-rpm) |\n\nOr install with:\n\n- Homebrew: `brew install --cask anomalyco/tap/hex`\n- AUR: `yay -S hex-bin`\n- install script (Linux): `curl -fsSL https://anoma.ly/hex/install-linux.sh | sh`\n- Nix: `nix profile install github:anomalyco/hex`\n\nMore docs are in [`docs/`](docs/README.md).\n\n## Contributing\n\nWe don't take pull requests. [Open an issue](https://github.com/anomalyco/hex/issues)\ndescribing the bug or idea, and our agents usually turn it around fast.\n\nMIT licensed.\n"
+    },
+    "brief": {
+      "summary": "本地语音听写工具，按住键说话，松开即粘贴文字",
+      "problem": "云端语音输入有隐私顾虑，跨平台的本地听写工具选择很少",
+      "highlights": [
+        "可以在任意应用里按住快捷键说话，松开后自动粘贴文字",
+        "可以离线转写，首次下载模型后音频不出本机",
+        "可以在 macOS、Windows、Linux 上安装使用"
+      ],
+      "target_users": [
+        "注重隐私的用户",
+        "常写长文的开发者",
+        "多平台办公人群"
+      ],
+      "why_trending": "今日新增约 1179 星，本地转写切中隐私需求",
+      "caveat": "首次运行需下载语音模型；项目不收 PR，只接受 issue",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "anomalyco/hex",
+      "score": 70,
+      "category": "语音 / 配音",
+      "reason": "本地语音听写，服务语音转写",
+      "generated_by_ai": true,
+      "velocity_score": 93,
+      "freshness_score": 40,
+      "ranking_score": 64.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "cjpais/Handy",
+      "url": "https://github.com/cjpais/Handy",
+      "description": "A free, open source, and extensible speech-to-text application that works completely offline.",
+      "language": "Rust",
+      "total_stars": 36804,
+      "forks": 3465,
+      "stars_today": 339,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 339
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "cross-platform",
+        "speech-to-text",
+        "tauri-v2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-02-13T02:42:29Z",
+      "updated_at": "2026-11-02T06:28:11Z",
+      "pushed_at": "2026-11-02T06:14:09Z",
+      "open_issues": 201,
+      "homepage": "https://handy.computer",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Handy\n\n[![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/WVBeWsNXK4)\n\n**A free, open source, and extensible speech-to-text application that works completely offline.**\n\nHandy is a cross-platform desktop application that provides simple, privacy-focused speech transcription. Press a shortcut, speak, and have your words appear in any text field. This happens on your own computer without sending any information to the cloud.\n\n## Why Handy?\n\nHandy was created to fill the gap for a truly open source, extensible speech-to-text tool. As stated on [handy.computer](https://handy.computer):\n\n- **Free**: Accessibility tooling belongs in everyone's hands, not behind a paywall\n- **Open Source**: Together we can build further. Extend Handy for yourself and contribute to something bigger\n- **Private**: Your voice stays on your computer. Get transcriptions without sending audio to the cloud\n- **Simple**: One tool, one job. Transcribe what you say and put it into a text box\n\n## How It Works\n\n1. **Press** a configurable keyboard shortcut: hold it to record and release to stop, or tap it to toggle recording on and off (Hold-only and Toggle-only modes are also available)\n2. **Speak** your words while the shortcut is active\n3. **Release** and Handy processes your speech using Whisper\n4. **Get** your transcribed text pasted directly into whatever app you're using\n\nThe process is entirely local:\n\n- Silence is filtered using VAD (Voice Activity Detection) with Silero\n- Transcription uses your choice of models:\n  - **Whisper models** (Small/Medium/Turbo/Large) with GPU acceleration when available\n  - **Parakeet V3** - CPU-optimized model with excellent performance and automatic language detection\n- Works on Windows, macOS, and Linux\n\n## Quick Start\n\n### Installation\n\n1. Download the latest release from the [releases page](https://github.com/cjpais/Handy/releases) or the [website](https://handy.computer)\n   - **macOS**: Also available via [Homebrew cask](https://formulae.brew.sh/cask/handy): `brew install --cask handy`\n   - **Windows**: Also available via [winget](https://github.com/microsoft/winget-pkgs): `winget install cjpais.Handy` \\\n     **Note:** The Homebrew cask and winget package are not maintained by the Handy developers.\n   - **Debian/Ubuntu**: Install the downloaded `.deb` with APT so required dependencies are installed automatically:\n     ```bash\n     sudo apt install ./Handy_*.deb\n     ```\n     Do not use `dpkg -i` unless the dependencies are already installed. If you already used it, run `sudo apt --fix-broken install`.\n2. Install the application\n3. Launch Handy and grant necessary system permissions (microphone, accessibility)\n4. Configure your preferred keyboard shortcuts in Settings\n5. Start transcribing!\n\n### Development Setup\n\nFor detailed build instructions including platform-specific requirements, see [BUILD.md](BUILD.md).\n\n## Sponsors\n\n<div align=\"center\">\n  We're grateful for the support of our sponsors who help make Handy possible:\n  <br><br>\n  <a href=\"https://wordcab.com\">\n    <img src=\"sponsor-images/wordcab.png\" alt=\"Wordcab\" width=\"120\" height=\"120\">\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://github.com/epicenter-so/epicenter\">\n    <img src=\"sponsor-images/epicenter.png\" alt=\"Epicenter\" width=\"120\" height=\"120\">\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://boltai.com?utm_source=handy\">\n    <img src=\"sponsor-images/boltai.jpg\" alt=\"Bolt AI\" width=\"120\" height=\"120\">\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://cantydigital.com.au/\">\n    <img src=\"sponsor-images/cantydigital.png\" alt=\"Canty Digital\" width=\"120\" height=\"120\">\n  </a>\n</div>\n\n## Integrations\n\n<a href=\"https://www.raycast.com/mattiacolombomc/handy\" title=\"Install Handy Raycast Extension\"><img src=\"https://www.raycast.com/mattiacolombomc/handy/install_button@2x.png?v=1.1\" height=\"64\" style=\"height: 64px;\" alt=\"Install handy Raycast Extension\" /></a>\n\nControl Handy from [Raycast](https://www.raycast.com) — start/stop recording, browse transcript history, manage dictionary, switch models and languages.\n\n[Source](https://github.com/mattiacolombomc/raycast-handy) · by [@mattiacolombomc](https://github.com/mattiacolombomc)\n\n### Debug Mode\n\nHandy includes an advanced debug mode for development and troubleshooting. Access it by pressing:\n\n- **macOS**: `Cmd+Shift+D`\n- **Windows/Linux**: `Ctrl+Shift+D`\n\n### CLI Parameters\n\nHandy supports command-line flags for controlling a running instance and customizing startup behavior. These work on all platforms (macOS, Windows, Linux). Largely this is a beta feature.\n\n**Remote control flags** (sent to an already-running instance via the single-instance plugin):\n\n```bash\nhandy --toggle-transcription    # Toggle recording on/off\nhandy --toggle-post-process     # Toggle recording with post-processing on/off\nhandy --cancel                  # Cancel the current operation\n```\n\n**Startup flags:**\n\n```bash\nhandy --start-hidden            # Start without showing the main window\nhandy --no-tray                 # Start without the system tray icon\nhandy --debug                   # Enable debug mode with verbose logging\nhandy --help                    # Show all available flags\n```\n\nFlags can be combined for autostart scenarios:\n\n```bash\nhandy --start-hidden --no-tray\n```\n\n> **macOS tip:** When Handy is installed as an app bundle, invoke the binary directly:\n>\n> ```bash\n> /Applications/Handy.app/Contents/MacOS/Handy --toggle-transcription\n> ```\n\n## Known Issues & Current Limitations\n\nThis project is actively being developed and has some [known issues](https://github.com/cjpais/Handy/issues). We believe in transparency about the current state:\n\n### Bluetooth Headset Microphones (macOS)\n\nUsing a Bluetooth headset microphone on macOS may temporarily reduce playback quality or volume while recording because Bluetooth switches to bidirectional audio. Keep your headphones as the output device and select your Mac's built-in or an external microphone in Handy to avoid this.\n\n### fn and Globe Key Shortcuts (macOS)\n\nShortcuts that include the `fn` (Globe) key **only work on Apple keyboards** — your Mac's built-in keyboard or an Apple external keyboard. They will never trigger on a third-party keyboard, even while it is connected to the same Mac.\n\nThis is a hardware limitation rather than a Handy bug. `fn` is not part of the standard USB HID keyboard specification: Apple reports it through a vendor-specific usage that macOS honors only from Apple devices, while third-party keyboards handle their `Fn` key entirely in firmware and send nothing to the computer. There is no event for Handy to listen for.\n\nIf you switch between a MacBook keyboard and an external one, pick a shortcut built from standard modifiers (`ctrl`, `option`, `shift`, `command`) or a regular key instead.\n\n### Linux Notes\n\n**Text Input Tools:**\n\nFor reliable text input on Linux, install the appropriate tool for your display server:\n\n| Display Server | Recommended Tool | Install Command                                    |\n| -------------- | ---------------- | -------------------------------------------------- |\n| X11            | `xdotool`        | `sudo apt install xdotool`                         |\n| Wayland        | `wtype`          | `sudo apt install wtype`                           |\n| Both           | `dotool`         | `sudo apt install dotool` (requires `input` group) |\n\n- **X11**: Install `xdotool` for both direct typing and clipboard paste shortcuts\n- **Ubuntu 26.04**: Has Wayland display server by default. `wtype` does not work, you need to install `ydotool` and configure systemd as described [here](https://github.com/cjpais/Handy/pull/557#issuecomment-3781249267).\n- **Wayland**: Install `wtype` (preferred) or `dotool` for text input to work correctly\n- **dotool setup**: Requires adding your user to the `input` group: `sudo usermod -aG input $USER` (then log out and back in)\n\nWithout these tools, Handy falls back to enigo which may have limited compatibility, especially on Wayland.\n\n**Wayland Support (Linux):**\n\n- Limited support for Wayland display server\n- Requires [`wtype`](https://github.com/atx/wtype) or [`dotool`](https://sr.ht/~geb/dotool/) for text input to work correctly (see [Linux Notes](#linux-notes) below for installation)\n\n**Other Notes:**\n\n- **Runtime library dependency (`libgtk-layer-shell.so.0`)**:\n  - Handy links `gtk-layer-shell` on Linux. If startup fails with `error while loading shared libraries: libgtk-layer-shell.so.0`, install the runtime package for your distro:\n\n    | Distro        | Package to install    | Example command                        |\n    | ------------- | --------------------- | -------------------------------------- |\n    | Ubuntu/Debian | `libgtk-layer-shell0` | `sudo apt install libgtk-layer-shell0` |\n    | Fedora/RHEL   | `gtk-layer-shell`     | `sudo dnf install gtk-layer-shell`     |\n    | Arch Linux    | `gtk-layer-shell`     | `sudo pacman -S gtk-layer-shell`       |\n\n  - For building from source on Ubuntu/Debian, you may also need `libgtk-layer-shell-dev`.\n\n- The recording overlay is disabled by default on Linux (`Overlay Position: None`) because certain compositors treat it as the active window. When the overlay is visible it can steal focus, which prevents Handy from pasting back into the application that triggered transcription. If you enable the overlay anyway, be aware that clipboard-based pasting might fail or end up in the wrong window.\n- Handy disables the WebKit DMA-BUF renderer by default on Linux, but preserves explicit `WEBKIT_DISABLE_DMABUF_RENDERER` values. For rendering workarounds, see [Troubleshooting → Linux Startup Crashes or Instability](#linux-startup-crashes-or-instability).\n- If Handy fails to start reliably on Linux, see [Troubleshooting → Linux Startup Crashes or Instability](#linux-startup-crashes-or-instability).\n- **Global keyboard shortcuts (Wayland):** On Wayland, system-level shortcuts must be configured through your desktop environment or window manager. Use the [CLI flags](#cli-parameters) as the command for your custom shortcut.\n\n  **GNOME:**\n  1. Open **Settings > Keyboard > Keyboard Shortcuts > Custom Shortcuts**\n  2. Click the **+** button to add a new shortcut\n  3. Set the **Name** to `Toggle Handy Transcription`\n  4. Set the **Command** to `handy --toggle-transcription`\n  5. Click **Set Shortcut** and press your desired key combination (e.g., `Super+O`)\n\n  **KDE Plasma:**\n  1. Open **System Settings > Shortcuts > Custom Shortcuts**\n  2. Click **Edit > New > Global Shortcut > Command/URL**\n  3. Name it `Toggle Handy Transcription`\n  4. In the **Trigger** tab, set your desired key combination\n  5. In the **Action** tab, set the command to `handy --toggle-transcription`\n\n  **Sway / i3:**\n\n  Add to your config file (`~/.config/sway/config` or `~/.config/i3/config`):\n\n  ```ini\n  bindsym $mod+o exec handy --toggle-transcription\n  ```\n\n  **Hyprland:**\n\n  Add to your config file (`~/.config/hypr/hyprland.conf`):\n\n  ```ini\n  bind = $mainMod, O, exec, handy --toggle-transcription\n  ```\n\n- You can also trigger Handy externally via Unix signals or the CLI flags, which lets Wayland window managers or other hotkey daemons keep ownership of keybindings:\n\n  | Action                                    | Trigger                                                  |\n  | ----------------------------------------- | -------------------------------------------------------- |\n  | Toggle transcription                      | `pkill -USR2 -n handy` or `handy --toggle-transcription` |\n  | Toggle transcription with post-processing | `handy --toggle-post-process`                            |\n\n  Example Sway config:\n\n  ```ini\n  bindsym $mod+o exec pkill -USR2 -n handy\n  bindsym $mod+p exec handy --toggle-post-process\n  ```\n\n  `pkill` here simply delivers the signal—it does not terminate the process.\n\n  > **Behavio"
+    },
+    "brief": {
+      "summary": "完全离线的开源语音转文字桌面应用，按快捷键说话即可上屏",
+      "problem": "云端听写要付费、上传录音有隐私顾虑，跨平台免费替代少",
+      "highlights": [
+        "可以按住快捷键说话，文字自动粘贴到任意输入框",
+        "可以用 Whisper 或 Parakeet 模型本地转写，支持 GPU 加速",
+        "可以用命令行参数或 Raycast 插件远程控制录音与历史"
+      ],
+      "target_users": [
+        "注重隐私的写作者",
+        "常口述输入的开发者",
+        "无障碍需求用户"
+      ],
+      "why_trending": "今日新增约 339 Star，本周首次收录，离线转写需求旺",
+      "caveat": "Linux 需另装 xdotool/wtype；macOS fn 键仅苹果键盘可用",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "cjpais/Handy",
+      "score": 70,
+      "category": "语音 / 配音",
+      "reason": "离线语音转文字，可用于配音",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 20,
+      "ranking_score": 57.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "horizon-rust/horizon",
+      "url": "https://github.com/horizon-rust/horizon",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "language": "Rust",
+      "total_stars": 5738,
+      "forks": 738,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 307
+    },
+    "details": {
+      "topics": [
+        "differential-testing",
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-11-02T06:27:07Z",
+      "pushed_at": "2026-11-02T06:27:05Z",
+      "open_issues": 439,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/banner.webp\" alt=\"The Horizon website: the game you know, rebuilt in Rust\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml\"><img src=\"https://github.com/horizon-rust/horizon/actions/workflows/ci.yml/badge.svg?branch=main\" alt=\"CI\"></a>\n  <img src=\"https://img.shields.io/badge/Minecraft-Java%2026.3-5D9C3F\" alt=\"Minecraft Java 26.3\">\n  <img src=\"https://img.shields.io/badge/Rust-stable-B7410E?logo=rust&logoColor=white\" alt=\"Rust\">\n  <img src=\"https://img.shields.io/badge/vanilla%20parity-100%25-F0795A\" alt=\"Vanilla parity 100%\">\n  <a href=\"#project-status\"><img src=\"https://img.shields.io/badge/player--visible%20gaps-833%20open-F0795A\" alt=\"Player-visible gaps open\"></a>\n  <img src=\"https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-2A2470\" alt=\"Linux, macOS and Windows\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-3B2F7E\" alt=\"MIT license\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev\"><b>Website</b></a> ·\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://playhorizon.dev/docs/\"><b>Documentation</b></a> ·\n  <a href=\"https://github.com/horizon-rust/horizon/releases\"><b>Release notes</b></a> ·\n  <a href=\"ROADMAP.md\"><b>Roadmap</b></a> ·\n  <a href=\"#project-status\"><b>Project status</b></a> ·\n  <a href=\"#contributing\"><b>Contributing</b></a>\n</p>\n\n# Horizon\n\nMinecraft: Java Edition 26.3, rewritten in Rust. Same worlds, same rules, same terrain, checked against the Java game by more than 300 differential harnesses. Free, open source and unofficial.\n\n> Not an official Minecraft product, nor approved by or associated with Mojang or Microsoft. Horizon contains no Minecraft code, assets or data: you need your own copy of Java Edition 26.3.\n\n## Download\n\nGet **the Horizon launcher** from [playhorizon.dev](https://playhorizon.dev) or [the launcher releases](https://github.com/horizon-rust/horizon/releases?q=launcher-v&expanded=true) (Linux x86-64, macOS on Apple Silicon, macOS on Intel from the next Nightly, Windows x64). It installs and updates the game, prepares its files from your copy of Minecraft, and updates itself.\n\n**You need** a Microsoft account that owns Java Edition ([why](docs/microsoft-account.md)) and a GPU with Vulkan or OpenGL 3.3 (Linux), Vulkan or DirectX 12 (Windows), or a Mac (Apple Silicon, or Intel from the next Nightly). An existing Minecraft install (official launcher, Prism, MultiMC...) is reused; without one, Play downloads 26.3 from Mojang for your account. Step by step: [Install and first launch](https://playhorizon.dev/docs/install).\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/launcher-play.webp\" alt=\"The launcher's Home page: the selected instance ready to play, the version picker, Join a friend and the instance's tabs\"></td>\n    <td width=\"50%\"><img src=\"docs/media/launcher-settings.webp\" alt=\"The launcher's Settings page: Microsoft account, offline name, updates, appearance and accent colour\"></td>\n  </tr>\n</table>\n\n## What works today\n\n- **The game:** vanilla world generation, mobs, villagers, raids, redstone, every command, the HUD and the recipe book, on vanilla saves. Worlds from 1.8 to 26.2 are upgraded. [Status](#project-status).\n- **Extras:** new menus, graphics presets, distant terrain up to 1024 chunks, controllers, zoom, minimap and more, off by default where they change the vanilla look. [Settings](https://playhorizon.dev/docs/settings).\n- **Packs:** resource packs, and data packs with functions, predicates, item modifiers and world generation.\n- **Multiplayer:** invite friends with a code, Open to LAN, join servers (online mode included). [Multiplayer](https://playhorizon.dev/docs/multiplayer).\n- **Mods:** content mods (blocks, items, data) and native Rust mods, built by the launcher with nothing to install. Java mod jars do not run. [Mods](https://playhorizon.dev/docs/mods).\n\nIn the Rust client, with vanilla assets and no mods or shaders:\n\n<table>\n  <tr>\n    <td colspan=\"2\"><img src=\"docs/media/sunset.webp\" alt=\"Sunset over a savanna river valley and a plains village\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/survival.webp\" alt=\"Survival at dusk: a zombie walks up, with the hotbar, health, hunger and experience\"></td>\n    <td width=\"50%\"><img src=\"docs/media/settings.webp\" alt=\"Vanilla's Video Settings screen with Horizon's own buttons at the top: Horizon Graphics and Advanced Graphics\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/village.webp\" alt=\"A plains village among savanna hills, with farms, villagers and an iron golem\"></td>\n    <td width=\"50%\"><img src=\"docs/media/nether.webp\" alt=\"A crimson forest in the Nether with a zombified piglin\"></td>\n  </tr>\n</table>\n\n## Host a server\n\nThe launcher's **Servers** page creates, starts, backs up and updates a server, and invites friends over Tailscale. On a VPS, `horizon-server` installs with one command and needs no Java. [Host a server](https://playhorizon.dev/docs/hosting) ([reference](docs/hosting.md)).\n\n## Modpacks\n\nThe launcher imports Modrinth and CurseForge packs and plays the mods Horizon can carry over: today, content mods made of data and assets, not Java code. [Modpacks](https://playhorizon.dev/docs/modpacks).\n\n## Agent control\n\nAI agents and scripts can play Horizon. `horizon-ctl`, shipped with the game, reads its state as JSON and acts like a player; `horizon-ctl mcp` serves the same commands over MCP.\n\n```sh\nhorizon-ctl launch --world Survival --seed 5 --wait   # finds the version the launcher installed\nhorizon-ctl state                                       # position, health, food, target, screen...\nhorizon-ctl find-block birch_log                        # the nearest logs\nhorizon-ctl goto -0.5 65 -2.5 --near 2.5                # walks there along a path\nhorizon-ctl break -1 65 -3                              # mines it; replies with the drops\nhorizon-ctl open-inventory && horizon-ctl click-slot 0  # menus: slots, buttons by label, text fields\n```\n\nCommands block until done and reply with the result; `horizon-ctl help` lists them all. [Agent control](docs/native-client.md#agent-control-horizon-ctl-and-mcp).\n\n## Build from source\n\nNeeds Rust 1.90+, Python 3.10+, JDK 25, and on Linux `libasound2-dev libudev-dev`. `horizon-prepare` builds the game's resources from **your own copy** of Java Edition 26.3 (checked against `research-lock.json`) and never downloads it:\n\n1. **Client:** play 26.3 once in the official launcher. Horizon reads `~/.minecraft` (or `--minecraft-dir` / `HORIZON_MINECRAFT_DIR`).\n2. **Server jar:** the 26.3 server jar (`downloads.server.url` in `versions/26.3/26.3.json`), passed once with `--server-jar` or `HORIZON_SERVER_JAR`.\n\n```sh\ngit clone https://github.com/horizon-rust/horizon.git\ncd horizon\ncargo run --release -p horizon-prepare -- --prepare --server-jar ~/Downloads/server.jar   # needs JDK 25\ncargo run --release -p horizon-prepare -- sounds   # optional: sounds from your launcher install\ncargo run --release -p horizon-client\n```\n\nPrepared files land in the gitignored `.local/`: never commit or share them. Options, controls and architecture: [the native client guide](docs/native-client.md); all developer docs: [docs/README.md](docs/README.md).\n\n## Roadmap\n\nWhat is in progress, what comes next and where to help: [ROADMAP.md](ROADMAP.md), or [playhorizon.dev/hub](https://playhorizon.dev/hub) with the work board and what shipped.\n\n## Contributing\n\nIssues and pull requests are welcome: read [CONTRIBUTING.md](CONTRIBUTING.md) (vanilla first, small pull requests). Questions: [Discord](https://discord.gg/playhorizon). Before a pull request, run the self-check and paste its output:\n\n```sh\ngit config core.hooksPath .githooks\npython3 tools/pr_ready.py\n```\n\nIt runs rustfmt, clippy, the touched crates' tests, the Python tests, the public-tree check and the vanilla harnesses your change affects. Never commit game files, decompiled source or prepared resources.\n\n## Project status\n\n**Player-visible gaps: 833 open** of the 833 the [port ledger](tools/port_ledger.py) found, reading every vanilla 26.3 method against Horizon's code: vanilla behaviour a player would notice that Horizon doesn't have yet. By area: Screens, HUD and client packets [197](https://github.com/horizon-rust/horizon/issues/3518); Entity and block rendering, models [129](https://github.com/horizon-rust/horizon/issues/3519); Animals [110](https://github.com/horizon-rust/horizon/issues/3512); Server and players on the server [106](https://github.com/horizon-rust/horizon/issues/3520); Blocks, redstone and fluids [86](https://github.com/horizon-rust/horizon/issues/3516); Entities, projectiles, vehicles and decorations [64](https://github.com/horizon-rust/horizon/issues/3514); Monsters and bosses [53](https://github.com/horizon-rust/horizon/issues/3513); Mob AI, villagers and raids [35](https://github.com/horizon-rust/horizon/issues/3521); World, world generation and saves [32](https://github.com/horizon-rust/horizon/issues/3517); Items, enchantments and inventories [21](https://github.com/horizon-rust/horizon/issues/3515). This number goes down as gaps close (`tools/parity_gaps.py`); the harness results below say that what is tested matches.\n\nThe table is the project's own audit: every subsystem matches vanilla in every harness that compares it. 100% means 100% of what the harnesses compare, not that nothing else differs.\n\n### Java parity: 100%\n\nScores: 0 (absent), 0.25 (started), 0.5 (playable, major features missing), 0.75 (mostly complete) or 1 (complete and verified by differential tests); the percentage is their average. Last audited 2026-10-13: all 281 harnesses pass on Linux and macOS. The [port ledger](tools/port_ledger.py) adds a method-by-method view of what is ported.\n\n| Subsystem | Score | Main gaps |\n| --- | ---: | --- |\n| Window, input and game loop | 1 | None: game loop, options, camera, auto-jump, toggle sprint/sneak and frame limiter match |\n| Assets and resources | 1 | None: item models match over 196,290 stacks; the resource pack screen over 3,000 sessions |\n| Network protocol and multiplayer | 1 | None: joins vanilla servers; the dedicated server matches vanilla's files, login, configuration, play and command tree; LAN discovery over 462 cases (offline mode only) |\n| Chunk storage and palettes | 1 | None: client and saves share paletted containers, identical to vanilla over 266 scenarios |\n| Section meshing | 1 | None: 112 scenes and over a million quads identical to vanilla |\n| Rendering | 1 | None: entity models, block entity renderers (407 cases) and animations (296), HUD overlays (2,200 states), the recipe book (600), player list, subtitles and world border match |\n| Lighting | 1 | None: saved and relit light matches vanilla, slabs and stairs included |\n| World generation | 1 | None: 2,352 whole chunks over 225 structure sites, in all three dimensions, identical to vanilla |\n| Region files and saves | 1 | None: saves round-trip with vanilla; worlds from 1.8 to 26.2 upgrade as vanilla's DataFixers do |\n| Entities and physics | 1 | None: attributes, spawn rules, natural spawning (15,500 cases), raids and patrols (1,900), `finalizeSpawn` (24,000) and mob AI (92 scenarios) match |\n| Interaction and inventory | 1 | None: menu clicks over 8,000 sequences; recipe book placement (6,000), buttons (1,200), saved book (1,500), loom and crafter screens (1,600) |\n| Menus, HUD and chat | 1 | None: every command (758 over 39,685 inputs), scoreboards (81,000 operations), the player list (872,000 draw calls), chat and its suggestions (3,000 sessions) match |\n| Audio | 1 | None: the sound engine, sound events, music, situational music, ambience and subtitles match vanilla |\n| Block behaviours and ticking | 1 | None: block updates, random ticks, redstone, dispensers (6,000 cases), crafters (4,000), container spills (4,000), copper golems and the sculk family ("
+    },
+    "brief": {
+      "summary": "用 Rust 重写 Minecraft Java 版，追求原版一致",
+      "problem": "让玩家在非官方 Rust 客户端体验接近原版的 Minecraft",
+      "highlights": [
+        "可以导入原版存档并继续游玩",
+        "可用 horizon-ctl 让 AI 代理操作角色",
+        "可以在启动器中邀请好友联机"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "Rust 开发者",
+        "AI 代理研究者"
+      ],
+      "why_trending": "连续上榜且总 Star 超五千，项目近期仍活跃",
+      "caveat": "需自备 Minecraft 正版，Java 模组不能直接运行",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "horizon-rust/horizon",
+      "score": 78,
+      "category": "游戏开发",
+      "reason": "Minecraft重实现，游戏引擎项目",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 85,
+      "ranking_score": 70.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "hyhy111/game-assets-maker",
+      "url": "https://github.com/hyhy111/game-assets-maker",
+      "description": "Turn videos into game-ready animation frames. Extract, remove backgrounds, align & trim locally; optional AI generation and Godot 4 skills.",
+      "language": "Python",
+      "total_stars": 49,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-tools",
+        "animation",
+        "background-removal",
+        "game-asset-generator",
+        "game-assets",
+        "game-development",
+        "godot",
+        "godot4",
+        "indie-game-dev",
+        "seedance",
+        "sprite",
+        "sprite-animation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-26T06:57:04Z",
+      "updated_at": "2026-11-02T06:28:04Z",
+      "pushed_at": "2026-11-02T06:27:58Z",
+      "open_issues": 0,
+      "homepage": "https://forfunerai.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# Game Assets Maker\n\n**视频 → 透明游戏动画，三步搞定。**\n\n**Video → game-ready animation, in three steps.**\n\n[![Latest release](https://img.shields.io/github/v/release/hyhy111/game-assets-maker?label=Download)](https://github.com/hyhy111/game-assets-maker/releases/latest) [![License: MIT](https://img.shields.io/github/license/hyhy111/game-assets-maker)](LICENSE) [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS-ffbf5e)](https://github.com/hyhy111/game-assets-maker/releases/latest)\n\n[下载 / Download](https://github.com/hyhy111/game-assets-maker/releases/latest) · [官网 / Website](https://forfunerai.com) · [GAM Skills](https://github.com/hyhy111/gam-skills) · [反馈 / Issues](https://github.com/hyhy111/game-assets-maker/issues)\n\n[中文](#中文) · [English](#english)\n\n</div>\n\n![Game Assets Maker：绿底视频帧与透明动画帧同步播放 / Synchronized source and transparent animation frames](.github/media/workflow.gif)\n\n*同一组真实动画帧，去背景前后同步播放，10 FPS 循环预览。 / The same animation frames before and after background removal, playing in sync at 10 FPS.*\n\n---\n\n## 中文\n\nGame Assets Maker（GAM）是一款开源桌面工具，面向独立游戏开发者，将视频处理为透明 PNG 动画帧序列。已有视频可以直接开始；需要创作新角色或动作时，也可以使用内置的 AI 图片 / 视频生成。\n\n**本地抽帧、去背景、对齐和裁剪免费，无需登录或购买积分。AI 生成按所选服务计费。**\n\n[下载安装](#下载安装) · [使用说明](#使用说明) · [Agent 与 Godot](#agent-与-godot) · [常见问题](#常见问题) · [开发与部署](#开发与部署)\n\n### 实际能做什么\n\n- **视频变动画帧**：抽帧 → 去背景 → 挖孔与对齐，逐步预览结果。\n- **批量裁剪**：统一包围盒，或逐帧紧致裁剪并保存偏移 JSON。\n- **细节修整**：描边、孤立像素清理、边缘优化、颜色替换；支持隐藏异常帧。\n- **角色与动作管理**：按角色整理待机、行走、跳跃、攻击等动画，保存每步参数。\n- **可选 AI 创作**：Seedream 图片生成与 Seedance 视频生成，支持 ForFuner AI 或自定义火山方舟 Key。\n- **Agent 协作与 Godot 4**：通过 GAM Skills 编写提示词、操作客户端，并将帧序列、偏移和音效导入 Godot 4。\n\n### 下载安装\n\n普通用户下载安装包即可，**不需要安装 Python、Node.js 或克隆源码**。\n\n当前安装包：**v1.0.2**。后续版本请查看 [最新 Release](https://github.com/hyhy111/game-assets-maker/releases/latest)。\n\n| 系统 | 下载 | 安装方式 |\n| --- | --- | --- |\n| Windows x64 | [EXE 安装包](https://github.com/hyhy111/game-assets-maker/releases/download/v1.0.2/GameAssetsMaker-1.0.2-windows-x64-Setup.exe) | 运行安装器；缺少 WebView2 时按提示联网安装。 |\n| macOS Apple Silicon（ARM64） | [DMG 安装包](https://github.com/hyhy111/game-assets-maker/releases/download/v1.0.2/GameAssetsMaker-1.0.2-macos-arm64.dmg) | 打开 DMG，将应用拖入 Applications。 |\n\n目前未提供 Intel Mac 或 Linux 安装包。macOS 包尚未签名或公证；若系统阻止打开，请按包内安装说明，在“系统设置 → 隐私与安全性”中选择“仍要打开”。校验文件 `.sha256` 见 [Release 附件](https://github.com/hyhy111/game-assets-maker/releases/latest)。\n\n### 使用说明\n\n#### 1. 准备素材\n\n打开 GAM，在动画库创建角色 / 动作项目并导入视频。建议第一次先用一段短动作，走通流程后再批量制作。\n\n**去背流程支持以任意单一底色为主的背景，并容忍轻微不均匀。** 背景颜色从原始帧边缘自动采样；角色用色应与背景明显区分，相近颜色仍可能被误删。先检查素材背景、角色轮廓和动作完整性。\n\n没有视频时，可先在“图片生成”准备角色图，再在“视频生成”中以角色图为首帧生成动作视频；AI 配置见下方说明。\n\n#### 2. 三步处理\n\n| 步骤 | 怎么操作 | 重点检查 |\n| --- | --- | --- |\n| **01 帧提取** | 选择起止帧、帧提取间隔，点击“开始提取”。 | 起势和收招是否完整，循环是否顺畅。 |\n| **02 背景移除** | 首次按提示选择来源并下载 U2Net 模型（约 176 MB），再运行去背景。 | 头发、武器、细线和半透明边缘。 |\n| **03 挖孔与对齐** | 清理手臂、武器之间的残留背景色；按动作需要启用水平居中或底部对齐。 | 是否误删主体绿色、跳跃高度或有意位移是否被改变。 |\n\n每步完成后先播放检查。步骤 02 / 03 可隐藏异常帧，也可恢复；重新抽帧会使下游旧处理结果失效。模型就绪后，本地处理可以离线进行。\n\n步骤 03 完成后，点击 **预览右下角的魔棒或橡皮擦**，自动暂停并在当前预览中修整；顶部显示工具参数，预览窗内显示简要操作提示。魔棒点击选区、Shift 点击追加、Delete 删除；橡皮擦用左键拖动擦除。滚轮缩放、中键拖动画布，空格仍控制播放。保留当前预览背景、缩放和平移，背景仍可切换。点击“保存当前帧”后保持工具选中，撤销记录以此次保存为起点；切回浏览工具保留未保存修改。播放、切帧、切步骤或离开页面前，未保存修改会提示保存、放弃或留在当前帧。取消丢弃本次未保存修改。修整只修改步骤 03 的这一帧，重新运行步骤 03 会覆盖修整。W / E / V 分别切换魔棒、橡皮擦和移动工具；+ / - 调整当前工具的颜色容差或橡皮擦大小。橡皮擦默认大小 5px、羽化 0px；魔棒删除会完全清除选区，并向选区外侧羽化；羽化为 0 时仅清除选区。工具栏的“恢复初始版本”会恢复本轮步骤 03 处理后、人工修整前的当前帧，跨保存和重启保留；恢复可撤销，点击保存才写入结果。旧备份没有步骤标记、无法确认初始版本时，恢复按钮会禁用并提示重新处理步骤 03。\n\n#### 3. 裁剪与导出\n\n在“批量裁剪”中选择动画：\n\n- **统一包围盒**：各帧使用相同画布尺寸，便于直接播放帧序列。\n- **逐帧紧致裁剪**：缩小每帧透明边缘，同时保存 `_frame_data.json`；导入引擎时应保留偏移，避免角色抖动。\n\n完成后从结果页打开输出目录，取得 PNG 帧序列及相关 JSON。有音效时间线时一并保留 `_audio_timeline.json` 与音频文件。Godot 4 导入可使用下方的 `gam-export` Skill；其他引擎需自行配置帧序列与偏移。\n\n#### 可选：配置 AI 生成\n\n| 方式 | 准备 | 费用来源 |\n| --- | --- | --- |\n| **ForFuner AI** | 在 GAM 注册并登录，在生成页面选择 ForFuner AI。 | 平台积分；提交前查看当前预计消耗。 |\n| **自定义 Key** | 在火山方舟开通对应模型，在 GAM 设置中填写并保存自己的 API Key。 | 自己的火山账户，以官方用量和账单为准。 |\n\n两种方式分别鉴权和结算。仅做本地处理无需配置；Key 连接检查通过不代表每个模型都已开通。模型、规格和费用以当前生成页面及服务方信息为准。\n\n### Agent 与 Godot\n\n六个 [GAM Skills](https://github.com/hyhy111/gam-skills) 可帮助 Agent 编写提示词、操作客户端、处理素材，并将动画导入 Godot 4。安装工具需要 Node.js/npm；选择对应命令安装全部六个 Skills：\n\n```bash\n# Codex\nnpx skills add hyhy111/gam-skills -g -a codex --skill \"*\"\n\n# Claude Code\nnpx skills add hyhy111/gam-skills -g -a claude-code --skill \"*\"\n\n# 自动检测并选择其他 Agent\nnpx skills add hyhy111/gam-skills -g --skill \"*\"\n```\n\n| Skill | 用途 |\n| --- | --- |\n| `gam-pic-prompt` | 编写角色图片提示词，明确视角与画风。 |\n| `gam-video-prompt` | 根据角色图编写待机、行走、攻击等动作提示词。 |\n| `gam-workflow` | 安排素材制作步骤，检查结果并继续处理。 |\n| `gam-guide` | 查询功能、参数及账号与 API Key 配置。 |\n| `gam-cli` | 通过 `gam-agent` 填写草稿、查询任务和操作客户端。 |\n| `gam-export` | 将 PNG 动画帧、裁剪偏移和音效导入 Godot 4。 |\n\n安装后可直接描述需求，例如“用 gam-pic-prompt，帮我写一个侧视剑士的图片提示词”，或“用 gam-export，把这个素材目录导入我的 Godot 4 项目”。\n\n操作客户端前请先安装并打开 GAM，并允许 Agent 访问本地文件和执行命令。安装包自带 `gam-agent`，固定入口见 [开发与打包](DEVELOPMENT.md#打包发行)。`gam-export` 另需 Python 3.10+，仅依赖标准库；导出时提供素材目录和 Godot 4 项目目录。本地素材处理无需登录，在线 AI 生成使用客户端中的账号或自定义 Key 配置。更多 Agent 的安装选项见 [Skills CLI 支持列表](https://github.com/vercel-labs/skills#supported-agents)。\n\n### 常见问题\n\n**必须使用 AI 或登录吗？** 不需要。已有视频可直接进入本地流程，下载好背景模型后可离线处理。\n\n**项目和模型存在哪里？** 安装版默认使用用户目录 `~/.gam`（Windows 为 `%USERPROFILE%\\.gam`）；项目和 AI 缓存目录可在设置中调整。更新前退出应用，再覆盖安装。\n\n**能直接导出 Godot 场景吗？** 通过独立的 `gam-export` Skill 导入 Godot 4。它读取 GAM 的裁剪结果、逐帧偏移与音效，并生成资源和预览场景；这一步需要 Agent 与 Godot 项目目录。\n\n**去背后有残绿、缺边或动画抖动？** 先检查源素材是否为单色背景、主体用色是否与背景分离，再检查背景色容差、去背景参数和对齐开关。逐帧裁剪结果导入引擎时应应用偏移，不能只加载 PNG。\n\n重命名、默认模型和更新提示的详细行为见 [使用参考](USAGE.md)。模型下载与路径见 [MODELS.md](MODELS.md)。遇到问题请到 [Issues](https://github.com/hyhy111/game-assets-maker/issues) 提供应用版本、系统 / 架构、操作步骤与脱敏截图。\n\n### 开发与部署\n\n源码开发、测试、模型准备、CLI、安装包构建和 Skills 子模块维护见 [DEVELOPMENT.md](DEVELOPMENT.md#中文)，贡献规范见 [CONTRIBUTING.md](CONTRIBUTING.md)。\n\n---\n\n## English\n\nGame Assets Maker (GAM) is an open-source desktop tool for indie game developers. Turn videos into transparent PNG animation frames, or create new characters and motion with the optional built-in AI image / video generation.\n\n**Local extraction, background removal, alignment, and trimming are free and require no login or credits. AI generation is billed by the selected service.**\n\n[Download](#download) · [Usage](#usage) · [Agents and Godot](#agents-and-godot) · [FAQ](#faq) · [Development](#development)\n\n### What you can make\n\n- **Video to animation frames**: extract → remove backgrounds → clean holes and align, with previews at each step.\n- **Batch trim**: use a shared bounding box, or tight per-frame crops with offset JSON.\n- **Clean up details**: outlines, isolated-pixel cleanup, edge optimization, color replacement, and reversible frame hiding.\n- **Organize characters and actions**: keep idle, walk, jump, and attack animations together with per-step settings.\n- **Optional AI creation**: Seedream images and Seedance videos, using ForFuner AI or your own Volcengine Ark key.\n- **Agents and Godot 4**: use GAM Skills for prompting, client control, and importing frames, offsets, and audio into Godot 4.\n\n### Download\n\nInstall the desktop app. **No Python, Node.js, or source checkout is needed for normal use.**\n\nCurrent installers: **v1.0.2**. Check the [latest release](https://github.com/hyhy111/game-assets-maker/releases/latest) for updates.\n\n| Platform | Download | Installation |\n| --- | --- | --- |\n| Windows x64 | [EXE installer](https://github.com/hyhy111/game-assets-maker/releases/download/v1.0.2/GameAssetsMaker-1.0.2-windows-x64-Setup.exe) | Run Setup; install WebView2 online if prompted. |\n| macOS Apple Silicon (ARM64) | [DMG installer](https://github.com/hyhy111/game-assets-maker/releases/download/v1.0.2/GameAssetsMaker-1.0.2-macos-arm64.dmg) | Open the DMG and drag the app into Applications. |\n\nIntel Mac and Linux installers are not currently provided. The macOS package is unsigned and not notarized; if blocked, follow the included instructions in System Settings → Privacy & Security → Open Anyway. SHA-256 checksum files are available in the [release assets](https://github.com/hyhy111/game-assets-maker/releases/latest).\n\n### Usage\n\n#### 1. Prepare a video\n\nOpen GAM, create a character / action project in the animation library, and import a video. Start with one short action before processing a larger set.\n\n**The workflow supports any single background color with slight unevenness.** Background colors are sampled automatically from original-frame edges; subject colors must remain distinct to avoid accidental removal. Check the source silhouette and motion first.\n\nIf you need source material, create a character in Image Generation, then use that image as the first frame in Video Generation. See the AI setup options below.\n\n#### 2. Process in three steps\n\n| Step | Action | Check |\n| --- | --- | --- |\n| **01 Extract frames** | Choose the start, end, and extraction interval, then start extraction. | Complete motion and a clean loop. |\n| **02 Remove background** | On first use, select a source and download U2Net (~176 MB), then process the frames. | Hair, weapons, thin lines, and soft edges. |\n| **03 Clean holes and align** | Remove residual background colors between limbs and weapons; enable horizontal centering or bottom alignment when needed. | Green character details, jump height, and intentional movement. |\n\nPlay the result after each step. You can hide and restore unwanted frames in steps 02 / 03. Re-extracting frames invalidates older downstream results. Once the model is ready, local processing works offline.\n\nAfter Step 03, choose the **magic wand or eraser at the preview’s bottom right** to pause and retouch the current frame in place. Tool settings appear at the top, with brief instructions inside the preview. Click to select, Shift-click to add, and Delete to remove; left-drag to erase. Scroll to zoom, middle-drag to pan, and use Space for playback. The preview keeps its background, zoom and pan; background switching remains available. Saving keeps the tool selected and starts a new undo history. Browse mode keeps unsaved edits. Before playback, frame/step navigation or leaving the page, choose to save, discard or stay. Cancel discards unsaved changes. Edits affect only this frame in Step 03. Re-running Step 03 replaces manual edits. W / E / V select the wand, eraser and pan tools; + / - adjust the active tool’s color tolerance or eraser size. The eraser defaults to 5px with 0px feathering. Wand deletion fully clears the selection and feathers outward into neighboring pixels; with feathering set to 0, only selected pixels are cleared. Restore Initial Version returns the current frame to this processing run’s Step 03 output before manual edits, across saves and restarts. Restoration can be undone and requires Save to update the output. If older backups do not identify their processing step, restoration stays disabled until Step 03 is reprocessed to establish a verified baseline.\n\n#### 3. Trim and export\n\nSelect animations in Batch Trim:\n\n- **Shared bounding box**: all frames keep the same canvas size for straightforward sequence playback.\n- **Tight per-frame crops**: save space and retain offsets in `_frame_data.json`; apply them in your engine to prevent jitter.\n\nOpen the output directory from the results to get the PNG sequence and related JSON. Keep `_audio_timeline.json` and audio files when present. Use the `gam-export` Skill below for Godot 4; configure frame sequences and offsets yourself in other engines.\n\n#### Optional: AI setup\n\n| Source | Setup | Billing |\n| --- | --- | --- |\n| **ForFuner AI** | Register and sign in inside GAM, then select ForFuner AI on the generation page. | Platform credits; review the current estimate before submitting. |\n| **Custom key** | Enable the required models in Volcengine Ark, then save your API key in GAM settings. | Your own Volcengine account and provider bill. |\n\nThe two sources have separate authentication and billing. Neither is required for local processing. A successful key check does not prove access to every model. Available models, options, and costs follow the current generation page and provider information.\n\n### Agents and G"
+    },
+    "brief": {
+      "summary": "把视频转成透明游戏动画帧的本地桌面工具",
+      "problem": "独立开发者做 2D 动画时，手动抠帧和对齐很费时",
+      "highlights": [
+        "可以把视频抽帧并去背景，输出透明 PNG 序列",
+        "可以批量裁剪、对齐动画帧并保存偏移 JSON",
+        "可以用 Agent 技能把帧序列和音效导入 Godot 4"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "2D 动画美术",
+        "Godot 4 用户"
+      ],
+      "why_trending": "本周首次收录，本地去背免费且可离线，降低 2D 素材门槛",
+      "caveat": "去背依赖单一底色，复杂背景可能残留或误删主体",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "hyhy111/game-assets-maker",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "视频转游戏动画帧，Godot素材",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "tigin-backwards/oni-moono",
+      "url": "https://github.com/tigin-backwards/oni-moono",
+      "description": "Oxygen Not Included's Unity layer on the BRUTAL framework, .NET 10 CoreCLR. On a late-game colony the game runs at about 8× the original's frame rate",
+      "language": "C#",
+      "total_stars": 82,
+      "forks": 4,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "brutal",
+        "coreclr",
+        "dotnet",
+        "game-engine",
+        "harmony",
+        "klei",
+        "modding",
+        "oni",
+        "oxygen-not-included",
+        "performance"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-16T00:50:02Z",
+      "updated_at": "2026-11-02T06:26:37Z",
+      "pushed_at": "2026-11-02T06:26:35Z",
+      "open_issues": 3,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# Moono\n\n[English](README.md) | [简体中文](README.zh-CN.md)\n\nAn unofficial, super fast, super sussy replacement for the Unity layer of Oxygen Not Included,\nartisanally crafted by Claude. On a late-game colony the game runs at about 8× the original's\nframe rate ([Performance](#performance)).\n\n<p align=\"center\"><img src=\"docs/images/moo-comet.webp\" alt=\"A Gassy Moo falling as a comet\" height=\"240\"></p>\n\nI did this mostly for fun, to see how far Oxygen Not Included's performance can go on a modern\n.NET runtime (CoreCLR). I've had the idea for a while, but none of the existing C# renderers\nsparked joy. When [BRUTAL](https://github.com/ahwootech/BRUTAL) went open source, it seemed like\na good excuse to try a sexy new toy.\n\nMoono runs Klei's original DLLs, patched at load where Mono and .NET\n[differ](docs/ARCHITECTURE.md). Everything they need from Unity is reimplemented here.\n\n## Setup\n\nYou need your own copy of the game on Steam, on Linux or Windows (no macOS). Epic Games Store\nand WeGame (China) are not currently supported. Because this replaces\nthe engine rather than patching the game, it can't ship as an ordinary Harmony mod. Instead, a\nsetup script hooks it into the game's Steam launch options, so you still start the game from\nSteam as usual.\n\n### Easy installation\n\n1. Download the latest release from the\n   [releases page](https://github.com/tigin-backwards/oni-moono/releases/latest):\n   `oni-moono-…-windows-x64.zip` or `oni-moono-…-linux-x64.tar.gz`, and extract it anywhere.\n   (Or clone this repository; the setup then builds the player itself, installing the .NET SDK\n   for your user if you don't have it.)\n2. Run the setup script in the extracted `oni-moono` folder:\n   - Windows: double-click `setup.cmd` (it runs `setup.ps1` and keeps the window open)\n   - Linux: `./setup.sh`\n\n   It finds your Oxygen Not Included install through Steam, and prints one line for the game's\n   launch options, and puts it on your clipboard where it can.\n3. In Steam, right-click Oxygen Not Included → Properties → Launch Options, and paste that line.\n\n   ![Steam's Properties dialog with the Launch Options box](docs/images/steam-launch-options.png)\n\nThen press Play in Steam as usual. The optional tweaks (below) are chosen in the game: **Moono\nTweaks** on the main menu, under Mods. To update, get the new version and run the setup again; the\nlaunch options stay the same, and so do your tweak choices. To go back to the original game, clear\nthe launch options.\n\nOn Linux, Steam installed as a Flatpak or a snap runs games in a sandbox that can't see most of\nyour home folder; the setup notices and installs the player inside the sandbox's own folder.\n(Snap is tested; Flatpak isn't yet.)\n\nYou'll need an OpenGL 4.5 graphics driver. The game uses your normal Steam account, DLCs, saves,\nsettings and mods.\n\n### Manual installation\n\nThe setup script (see above) is the easiest installation on most systems. If you want more\ncontrol, need to customize the installation, or run a sandboxed environment and prefer not to run\na script outside of that, follow these manual steps. They don't include instructions on how to\nbuild the player from scratch; see the setup scripts for the build steps, or\n[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).\n\n<details>\n<summary>Linux</summary>\n\nThe example paths match those used by `setup.sh`, with `~/Downloads/oni-moono/` as the location\nof the downloaded and extracted files. You can choose different paths, but update them\nconsistently in the commands and Steam launch options below.\n\n1. **Locate the game folder.** It must contain `OxygenNotIncluded` and\n   `OxygenNotIncluded_Data/Managed`. Common Steam library locations include:\n\n   - Default Steam: `~/.steam/steam/steamapps/common/OxygenNotIncluded` or\n     `~/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n   - Snap Steam: `~/snap/steam/common/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n   - Flatpak Steam:\n     `~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n\n   If the game is in another Steam library, use that library's `steamapps/common/OxygenNotIncluded`\n   folder instead. Confirm that `OxygenNotIncluded` is the Linux executable; a Windows installation\n   via compatibility tools (Proton) will not work.\n\n2. **Place the player where Steam can access it.** In the downloaded archive, the `player` folder\n   should contain the `OniMoono` executable and its accompanying files.\n\n   (The `rm -rf` commands in the following examples remove a previous `player` folder, in case you\n   are updating. Check the path before running them, or use your file manager instead.)\n\n   For a regular Steam installation, you can leave the `player` folder where you extracted the\n   archive (`setup.sh` does so), or copy it somewhere convenient:\n\n   ```bash\n   # Default Steam\n   mkdir -p \"$HOME/.local/bin/oni-moono\"\n   rm -rf \"$HOME/.local/bin/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \"$HOME/.local/bin/oni-moono/player\"\n   ```\n\n   Snap and Flatpak Steam run in sandboxes and may not be able to access files elsewhere in your\n   home folder. Copy the player into Steam's sandbox-visible location:\n\n   ```bash\n   # Snap Steam\n   mkdir -p \"$HOME/snap/steam/common/oni-moono\"\n   rm -rf \"$HOME/snap/steam/common/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \"$HOME/snap/steam/common/oni-moono/player\"\n   ```\n\n   ```bash\n   # Flatpak Steam\n   mkdir -p \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono\"\n   rm -rf \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \\\n     \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono/player\"\n   ```\n\n3. **Check the executable bit.** The player binary `OniMoono` must be executable. Set it if needed,\n   using the path where you placed the player:\n\n   ```bash\n   chmod +x \"$HOME/.local/bin/oni-moono/player/OniMoono\"\n   ```\n\n   For Snap or Flatpak, use the corresponding paths above. Check that the file exists and is\n   executable with `ls -l`.\n\n4. **Set Steam's launch options.** In Steam, right-click Oxygen Not Included → Properties → Launch\n   Options. Enter one line, replacing the example path with the full path to your player:\n\n   ```text\n   \"/home/your-username/.local/bin/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   For Snap, the executable path is typically:\n\n   ```text\n   \"/home/your-username/snap/steam/common/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   For Flatpak, it is typically:\n\n   ```text\n   \"/home/your-username/.var/app/com.valvesoftware.Steam/data/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   Replace `/home/your-username` with your actual home folder path. Do not use a literal `~` or\n   `$HOME` in the launch options. Keep the quotes around the executable path, especially if it\n   contains spaces.\n\nPress Play in Steam. If the game does not start, check that the launch options path matches the\nplayer's actual location, `OniMoono` has its execute bit set, and the game folder contains the\nLinux build. If that doesn't help, launch Steam from a terminal and watch the output for a hint\nafter clicking Play.\n\nFor updates, download the new release archive and repeat the steps, replacing the `player` folder.\n\nTo remove Moono and return to the original game, remove the `player` folder from where you put\nit, and clear the launch options in Steam.\n\n</details>\n\n<details>\n<summary>Windows</summary>\n\n1. **Place the player.** In the downloaded archive, the `player` folder contains `OniMoono.exe`\n   and its accompanying files. Copy it to `%LOCALAPPDATA%\\oni-moono\\player`, the location\n   `setup.ps1` uses (paste `%LOCALAPPDATA%` into Explorer's address bar to open it). You can\n   choose a different folder, but with this one, running the setup later keeps the same launch\n   options. In case you are updating, remove the previous `player` folder first.\n\n2. **Set Steam's launch options.** In Steam, right-click Oxygen Not Included → Properties → Launch\n   Options. Enter one line, replacing the example path with the full path to your player:\n\n   ```text\n   \"C:\\Users\\your-username\\AppData\\Local\\oni-moono\\player\\OniMoono.exe\" -- %command%\n   ```\n\n   Replace `C:\\Users\\your-username` with your actual user folder path. Do not use\n   `%LOCALAPPDATA%` in the launch options. Keep the quotes around the executable path.\n\nPress Play in Steam. If the game does not start, check that the launch options path matches the\nplayer's actual location.\n\nFor updates, download the new release archive and repeat the steps, replacing the `player` folder.\n\nTo remove Moono and return to the original game, remove the `player` folder, and clear the launch\noptions in Steam.\n\n</details>\n\n## Performance\n\nThe biggest change is swapping the very garbage Mono runtime that Unity ships for CoreCLR. On\ntop of that there are optimizations tuned to the way Oxygen Not Included uses the engine.\n\nOn a late-game save (U57: Spaced Out with every DLC, cycle 17,000+), on Windows, on the same machine, back to back:\n\n| | Original | Moono | |\n|---|---|---|---|\n| Frame rate at speed&nbsp;3 (default tweaks) | about 11&nbsp;fps | about 88&nbsp;fps | about 8× |\n| Loading the save | 2&nbsp;min&nbsp;22&nbsp;s | about 35&nbsp;s | about 4× faster |\n| Autosave freeze | about 26&nbsp;s | about 2.3&nbsp;s | about 11× shorter |\n| Starting the game, to the main menu (every DLC, second launch) | about 17.4&nbsp;s | about 9.8&nbsp;s | about 1.8× faster |\n\nHow much faster it runs depends on your hardware. Moono removes the runtime's overhead, so the\nfaster your CPU, the more of the gain you see. On slower machines, you'll get bottlenecked by other\nthings sooner: running out of memory, or the game's C++ simulation itself, which Moono doesn't\nspeed up (particularly on very large custom maps).\n\nGarbage-collection hitches are mostly gone: collections now run in the background, spread\nacross every core, and their pauses are about a quarter as long.\n\n**Note:** This uses more memory compared to the original. On a mid-game colony, memory peaked at\naround 11GB resident compared to 7GB in the original. This is expected behavior for faster,\nparallel collection.\n\nU57 at speed 3: about 11 fps in the original, about 88 in Moono.\n\nhttps://github.com/user-attachments/assets/9d54b5ac-8583-442c-b6ad-8ddaa31e6d6d\n\nStarting the game to the main menu, every DLC, second launch: 17.6 s in the original, 10.0 s in\nMoono.\n\nhttps://github.com/user-attachments/assets/cb1bf869-b031-4090-86b8-1714535f36e4\n\nAn autosave on U57: the original freezes for about 26 s, Moono for about 4 s.\n\nhttps://github.com/user-attachments/assets/a0534ae4-115f-4b17-b9bb-2f8c28868b89\n\nThe temperature overlay on U57, panning: about 8 fps in the original, about 50 in Moono.\n\nhttps://github.com/user-attachments/assets/e0054f3c-0462-4333-955b-9ab5c8888810\n\n2minnow, a mid-game colony, at speed 3: about 35 fps in the original, about 110 in Moono.\n\nhttps://github.com/user-attachments/assets/3106d24d-67d3-4bf3-ba23-8f8dc78910f8\n\nFor a more detailed breakdown, see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).\n\n### Tweaks\n\nMoono also speeds up some of the game's own code. Most tweaks don't change gameplay and are on by\ndefault; four do, and are off. Toggle them in **Moono Tweaks** on the main menu. Full list:\n[docs/TWEAKS.md](docs/TWEAKS.md).\n\n![The main menu with the Moono Tweaks button under Mods](docs/images/main-menu.png)\n\n<p align=\"center\"><img src=\"docs/images/moono-tweaks.png\" alt=\"The Moono Tweaks screen, a list of tweaks with checkboxes\"></p>\n\n## Save compatibility\n\nSaves from the original game should load, and saves made here should still load in the\noriginal game (including ones written with the `fast-save-compression` tweak).\n\nSaves come out about 14% larger: the `fast-save-compression` tweak compresses them faster but a\nlittle less tightly, which takes seconds off every save.\n\n## Mod compatibility\n\nMost mods should work, since the game's code and its Harmony load as shipped. See\n[docs/MOD_COMPATIB"
+    },
+    "brief": {
+      "summary": "《缺氧》Unity 层替代，后期帧率约 8 倍",
+      "problem": "原版后期殖民地帧率低，Unity 层性能受限",
+      "highlights": [
+        "可以在后期殖民地获得约 8 倍帧率",
+        "可以通过 Steam 启动选项安装并启动",
+        "可以继续使用原有存档、DLC 和 mod"
+      ],
+      "target_users": [
+        "《缺氧》后期玩家",
+        "性能优化爱好者",
+        "C# 游戏 mod 开发者"
+      ],
+      "why_trending": "本周首次收录，用现代 .NET 重写 Unity 层较罕见",
+      "caveat": "需自备 Steam 正版，且要改启动选项",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "tigin-backwards/oni-moono",
+      "score": 85,
+      "category": "ACG 资源 / Mod",
+      "reason": "缺氧游戏Unity层与Mod改造",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.2
+    }
+  }
+]
