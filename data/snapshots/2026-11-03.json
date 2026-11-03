@@ -1,0 +1,560 @@
+[
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "pingdotgg/t3code",
+      "url": "https://github.com/pingdotgg/t3code",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 42534,
+      "forks": 9135,
+      "stars_today": 3229,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3824
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-02-08T23:46:22Z",
+      "updated_at": "2026-11-03T07:00:05Z",
+      "pushed_at": "2026-11-03T07:00:13Z",
+      "open_issues": 4458,
+      "homepage": "https://t3.codes",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# T3 Code\n\nT3 Code is an \"agent harness control surface\". It enables control of the agents on your machine with a best-in-class mobile app ([iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824), [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code)), [web app](https://app.t3.codes) and [Electron-based desktop app](https://t3.codes).\n\nWorks with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, Google Antigravity, and fx. If they're set up on your computer, T3 Code can control them.\n\n## \"Wait, what are you selling me?\"\n\nNothing. We built T3 Code because we wanted the best possible development experience with agents. We were inspired by existing solutions like the Codex desktop app, Conductor, Claude Desktop and Cursor Glass, but none met our bar.\n\nWe wanted something performant, remote-ready, and truly open. If we ever go the wrong direction, we want you to have everything you need to fork and build the editor that you want.\n\n## Installation\n\n> [!WARNING]\n> T3 Code currently supports Codex, Claude, Cursor, Grok Build, OpenCode, Antigravity, and fx. Install and authenticate at least one provider before use:\n>\n> - Codex: install [Codex CLI](https://developers.openai.com/codex/cli) and run `codex login`\n> - Claude: install [Claude Code](https://claude.com/product/claude-code) and run `claude auth login`\n> - Cursor: install [Cursor CLI](https://cursor.com/cli) and run `agent login`\n> - Grok Build: install [Grok Build CLI](https://x.ai/cli) and run `grok login`\n> - OpenCode: install [OpenCode](https://opencode.ai) and run `opencode auth login`\n> - Antigravity: enable it in Settings, then use **Install Antigravity** and **Sign in with Google**. No CLI is required.\n> - fx: install [fx](https://fx.sh) and run `fx login` on the machine running the T3 Code server ([setup guide](./docs/user/providers-fx.md))\n\n### Command line\n\n```bash\ncurl -fsSL https://t3.codes/install.sh | sh\n```\n\nOn Windows, in PowerShell:\n\n```powershell\nirm https://t3.codes/install.ps1 | iex\n```\n\nThen run `t3` to start the server and open the local web app. `t3 service install` keeps it running in the background, `t3 update` moves to a newer release, and `t3 --help` has the full reference.\n\nTo try it once without installing, run `npx t3@latest` instead.\n\n### Desktop app\n\nInstall the latest version of the desktop app from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), or from your favorite package registry:\n\n#### Windows (`winget`)\n\n```bash\nwinget install T3Tools.T3Code\n```\n\n#### Windows (`scoop`)\n\n```bash\nscoop install extras/t3code\n```\n\n#### macOS (Homebrew)\n\n```bash\nbrew install --cask t3-code\n```\n\n#### Debian, Ubuntu (`.deb`)\n\nDownload the `.deb` from [GitHub Releases](https://github.com/pingdotgg/t3code/releases), then:\n\n```bash\nsudo apt install ./T3-Code-*.deb\n```\n\n#### Arch Linux (AUR)\n\nStable:\n\n```bash\nyay -S t3code-bin\n```\n\nNightly:\n\n```bash\nyay -S t3code-nightly-bin\n```\n\nThe AUR packaging is maintained in this repository under [`packaging/aur`](./packaging/aur).\n\n#### Nix (nixpkgs)\n\n```bash\nnix profile add github:NixOS/nixpkgs/nixos-unstable#t3code\n```\n\nThe package is maintained in [nixpkgs](https://github.com/NixOS/nixpkgs/tree/nixos-unstable/pkgs/by-name/t3/t3code)\nand includes the desktop app (`t3code-desktop`) and the `t3` command.\nSee [Nix installation](./docs/user/install.md#nix-nixpkgs) for NixOS configuration and updates.\n\n## Some notes\n\nWe are very very early in this project. Expect bugs.\n\nWe are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be.\n\n## Documentation\n\nFull docs live in [docs/](./docs). There's no docs site yet.\n\n- [FAQ](./docs/user/faq.md)\n- [Install and first run](./docs/user/install.md)\n- [Permission modes](./docs/user/permission-modes.md)\n- [Keyboard shortcuts](./docs/user/keybindings.md)\n- [Project settings](./docs/user/project-settings.md)\n- [Appearance preferences](./docs/user/appearance.md)\n- [Remote access from a phone or another machine](./docs/user/remote-access.md)\n- [Connect Claude Code, Codex, ChatGPT and other agents over MCP](./docs/user/outside-agents.md)\n- [Keeping app and server in sync](./docs/user/updating.md)\n- [Source control integrations](./docs/user/source-control.md)\n- Multiple accounts: [Codex](./docs/user/providers-codex.md) · [Claude](./docs/user/providers-claude.md)\n- [Run T3 Code as a background service](./docs/user/background-service.md)\n\nBuilding from source? Start at [docs/internals/overview.md](./docs/internals/overview.md).\n\n## If you REALLY want to contribute still.... read this first\n\n### Install `vp`\n\nT3 Code uses Vite+ so you'll need to install the global `vp` command-line tool.\n\n#### macOS / Linux\n\n```bash\ncurl -fsSL https://vite.plus | bash\n```\n\n#### Windows\n\n```bash\nirm https://vite.plus/ps1 | iex\n```\n\nCheckout their getting started guide for more information: https://viteplus.dev/guide/\n\n### Install dependencies\n\n```bash\nvp i\n```\n\nRead [CONTRIBUTING.md](./CONTRIBUTING.md) before reporting a bug or opening a PR.\n\nHave a feature request? Start an [Ideas discussion](https://github.com/pingdotgg/t3code/discussions/categories/ideas).\n\nNeed support? Join the [Discord](https://discord.gg/jn4EGJjrvv).\n"
+    },
+    "brief": {
+      "summary": "统一控制本机多个 AI 编程代理的跨端应用",
+      "problem": "各家编程代理界面割裂，手机上无法远程操作",
+      "highlights": [
+        "可以在手机上远程接管电脑上的编程代理",
+        "可以用桌面、网页、手机三端切换使用",
+        "可以同时连接 Claude Code、Codex 等多个代理"
+      ],
+      "target_users": [
+        "AI 编程重度用户",
+        "多代理并行开发者",
+        "需要远程写代码的人"
+      ],
+      "why_trending": "今日新增约 3229 Star，且为连续上榜项目",
+      "caveat": "项目自述很早期，有 bug，暂不收大型功能 PR",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "pingdotgg/t3code",
+      "score": 88,
+      "category": "Harness / Jev",
+      "reason": "面向多编码Agent的harness控制台，含移动与桌面端",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 75.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "vercel-labs/agent-desktop",
+      "url": "https://github.com/vercel-labs/agent-desktop",
+      "description": "Computer use CLI for AI agents",
+      "language": "Rust",
+      "total_stars": 10820,
+      "forks": 723,
+      "stars_today": 2275,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 2275
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "accessibility-api",
+        "ai-agents",
+        "automation",
+        "cli",
+        "computer-use",
+        "computer-use-agent",
+        "computer-use-agents",
+        "desktop-automation",
+        "macos",
+        "mcp",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-19T18:00:49Z",
+      "updated_at": "2026-11-03T07:00:12Z",
+      "pushed_at": "2026-11-03T05:51:54Z",
+      "open_issues": 127,
+      "homepage": "https://agent-browser.dev/desktop",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# agent-desktop\n\nComputer use for AI agents: read and operate desktop apps through the OS accessibility tree.\n\n<p>\n  <a href=\"https://vercel.com/labs#labs-products\"><img alt=\"Vercel Labs Product\" src=\"https://img.shields.io/badge/LABS-PRODUCT-0a0a0a.svg?style=for-the-badge&amp;logo=Vercel&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-desktop\"><img alt=\"npm version: agent-desktop\" src=\"https://img.shields.io/npm/v/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://github.com/vercel-labs/agent-desktop/blob/main/LICENSE\"><img alt=\"License: Apache-2.0\" src=\"https://img.shields.io/github/license/vercel-labs/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-desktop\"><img alt=\"npm downloads per month: agent-desktop\" src=\"https://img.shields.io/npm/dm/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000&amp;label=npm%20downloads\" height=\"28\"></a>\n</p>\n\nA CLI and C library for macOS, Windows and Linux. A snapshot returns JSON with a ref for every element an agent can act on. The agent acts on a ref and snapshots again to check, with no pixel matching; the loop stays in your agent.\n\nEvery CLI call runs in its own process. Headless calls still prohibit foreground activation and synthesized input.\n\nSnapshots, clipboard reads, screenshots, command output and debug artifacts can contain private desktop content. Keep them out of public logs and uploads. The optional [JEV helper](skills/jev-desktop/SKILL.md) sends screen descriptions to a configured model provider; it is separate from the native CLI. See [privacy and data handling](docs/faq.md#what-data-can-contain-private-information).\n\n## Installation\n\nInstall on macOS, Windows or Linux with npm:\n\n```bash\nnpm install -g agent-desktop\nagent-desktop version\n```\n\nBun, Yarn and pnpm can install the same package. It includes native binaries and platform helpers for x64 and ARM64.\nFor direct execution without a JavaScript launcher, download the matching native archive from\n[GitHub Releases](https://github.com/vercel-labs/agent-desktop/releases) and keep its helper beside the executable.\n\nOfficial Homebrew and Scoop packages are being submitted; they are not yet available in the default catalogs.\nThe repository no longer maintains a custom Homebrew tap or Scoop bucket.\n\n- **macOS** needs Accessibility permission: `agent-desktop permissions --guide`.\n- **Windows** needs no grant for apps at your terminal's integrity level.\n- **Linux** needs the user's graphical session with `at-spi2-core`.\n\nSee [installation and permissions](docs/install.md) for package-manager behavior, release archives, and building from source.\n\n## Quick start\n\nObserve, act on a ref, observe again. Any app name from `agent-desktop list-apps` works; Finder is the macOS example.\nEach command prints one JSON envelope; a trimmed snapshot follows the commands.\n\n```bash\nagent-desktop snapshot --app Finder -i      # interactive elements, each with a ref\nagent-desktop click @s8f3k2p9:e8            # act on a ref from that snapshot\nagent-desktop snapshot --app Finder -i      # observe again to verify\n```\n\n```json\n{\n  \"version\": \"2.6\",\n  \"ok\": true,\n  \"command\": \"snapshot\",\n  \"data\": {\n    \"app\": \"Finder\",\n    \"window\": { \"id\": \"w-204749\", \"title\": \"Downloads\" },\n    \"snapshot_id\": \"s8f3k2p9\",\n    \"ref_count\": 59,\n    \"complete\": true,\n    \"tree\": {\n      \"role\": \"window\",\n      \"name\": \"Downloads\",\n      \"children\": [\n        { \"role\": \"treeitem\", \"name\": \"Documents\", \"ref_id\": \"@s8f3k2p9:e8\", \"available_actions\": [\"Click\"] }\n      ]\n    }\n  }\n}\n```\n\n- **Refs belong to their snapshot.** A bare `@e8` is rejected with `INVALID_ARGS`. When the UI changes, an action\n  returns `STALE_REF` or `AMBIGUOUS_TARGET`: take a new snapshot and use its refs.\n- **Several windows** give `AMBIGUOUS_TARGET`; `snapshot` lists the candidate window ids in `error.details`. Pass one\n  with `--window-id`.\n- **Dense apps:** map first with `snapshot --skeleton --app Slack -i --compact`, then drill into one region with\n  `snapshot --root @s8f3k2p9:e3 -i --compact`.\n- **Headless by default.** Ref actions go through the accessibility API without moving the pointer or taking focus.\n  The global `--headed` flag allows physical input.\n- **PowerShell.** Quote every ref (`'@s8f3k2p9:e8'`), because a bare `@token` is the splatting operator.\n\n## For AI agents\n\nThe binary carries its own docs, matched to its version:\n\n```bash\nagent-desktop skills get desktop      # the loop, refs, verification and retry rules\nagent-desktop skills get platform     # what differs on the OS you run on\nagent-desktop <command> --help        # flags for one command\n```\n\nInstall the skill into an agent harness from [skills.sh](https://skills.sh/vercel-labs/agent-desktop/agent-desktop):\n\n```bash\nnpx skills add https://github.com/vercel-labs/agent-desktop --skill agent-desktop\n```\n\nOr add this to your `AGENTS.md`:\n\n```markdown\nUse `agent-desktop` to see and operate desktop apps. Before the first use, run\n`agent-desktop skills get desktop` and `agent-desktop skills get platform`, and follow them.\n```\n\nEvery command prints one envelope with `ok` and either `data` or `error`. An error carries a `code`, a `disposition` and usually a `suggestion`; retry only when `error.disposition.retry` is `safe`. The contract, error codes and exit codes are in [docs/json-output.md](docs/json-output.md).\n\n## Commands\n\nIt ships 60 command names, 56 operational commands. The other four (`key-down`, `key-up`, `mouse-down`, `mouse-up`) refuse to run until a daemon can release a held key or button.\n\n| Group | Commands |\n|---|---|\n| Observe | `snapshot`, `find`, `get`, `is`, `screenshot`, `list-surfaces` |\n| Act on a ref | `click`, `double-click`, `triple-click`, `right-click`, `type`, `set-value`, `clear`, `focus`, `select`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll`, `scroll-to` |\n| Keyboard and mouse | `press`, `hover`, `drag`, `mouse-move`, `mouse-click`, `mouse-wheel`, `key-down`, `key-up`, `mouse-down`, `mouse-up` |\n| Apps and windows | `launch`, `close-app`, `list-apps`, `list-windows`, `list-displays`, `focus-window`, `resize-window`, `move-window`, `minimize`, `maximize`, `restore`, `open-system-surface` |\n| Notifications | `list-notifications`, `dismiss-notification`, `dismiss-all-notifications`, `notification-action` |\n| Clipboard | `clipboard-get`, `clipboard-set`, `clipboard-clear` |\n| Wait | `wait` |\n| Sessions | `session`, `trace`, `cursor-overlay` |\n| System | `status`, `permissions`, `version`, `batch`, `skills` |\n\n## Platform support\n\n| | macOS | Windows | Linux |\n|---|:---:|:---:|:---:|\n| Accessibility tree | Yes | Yes | Yes (AT-SPI) |\n| Click / type / keyboard | Yes | Yes | AT-SPI; X11 / GNOME keys |\n| Mouse input | Yes | Yes | X11, `--headed` |\n| Screenshot | Yes | Yes | X11 windows; Wayland portal |\n| Clipboard | Yes | Yes | Yes; Wayland needs `wl-clipboard` |\n| App & window management | Yes | Yes | Launch/list; X11 window control |\n| Notifications | Yes | Yes | GNOME Shell |\n| Shell surfaces (`open-system-surface`) | Dock, menu bar extras | Yes | GNOME tray, Action Center |\n\nThe Windows surface and `launch` notes and the Linux X11 and Wayland notes are in [docs/install.md](docs/install.md#platform-notes).\n\n`agent-desktop skills get platform` prints the full capability table for the OS you run on.\n\n## Language bindings\n\nEach release also ships `libagent_desktop_ffi` for macOS, Linux and Windows, so a program can call the tool in process instead of starting the CLI for each command. `agent-desktop skills get ffi` covers the entry points, memory ownership and threading rules.\n\n```python\nimport ctypes\nlib = ctypes.CDLL(\"./lib/libagent_desktop_ffi.dylib\")\nlib.ad_adapter_create.restype = ctypes.c_void_p\nlib.ad_adapter_destroy.argtypes = [ctypes.c_void_p]\nassert lib.ad_init(7) == 0  # AD_RESULT_OK when the header's AD_ABI_VERSION_MAJOR matches the library\nadapter = lib.ad_adapter_create()\nlib.ad_adapter_destroy(adapter)\n```\n\n## Development\n\nEach platform adapter builds only on its own OS, so scope cargo to the host's packages. On macOS:\n\n```bash\nHOST_PKGS=(-p agent-desktop-core -p agent-desktop-macos -p agent-desktop -p agent-desktop-ffi)\ncargo test \"${HOST_PKGS[@]}\"\ncargo clippy \"${HOST_PKGS[@]}\" --all-targets -- -D warnings\n```\n\nOn Windows, replace `agent-desktop-macos` in that list with `agent-desktop-windows`; on Linux, with `agent-desktop-linux`.\n[CONTRIBUTING.md](CONTRIBUTING.md) lists every gate. Build from source: [docs/install.md](docs/install.md#from-source).\n\n## Documentation\n\n| I want to... | Read |\n|---|---|\n| Fix an install problem, grant permissions, verify a download or build from source | [docs/install.md](docs/install.md) |\n| Parse the JSON envelope, error codes and exit codes | [docs/json-output.md](docs/json-output.md) |\n| Drive the tool as an AI agent | `agent-desktop skills get desktop` ([skills/agent-desktop/](skills/agent-desktop/)) |\n| Learn what differs on one OS | [macOS](skills/agent-desktop-macos/), [Windows](skills/agent-desktop-windows/), [Linux](skills/agent-desktop-linux/) |\n| Call the C library | [skills/agent-desktop-ffi/](skills/agent-desktop-ffi/) |\n| Look up the vocabulary: refs, snapshots, sessions | [CONCEPTS.md](CONCEPTS.md) |\n| Contribute and pass the gates | [CONTRIBUTING.md](CONTRIBUTING.md) |\n| Read the engineering rules | [AGENTS.md](AGENTS.md) |\n| Learn from past bugs and lessons | [docs/solutions/](docs/solutions/) |\n| Find answers to common questions | [docs/faq.md](docs/faq.md) |\n| Report a vulnerability | [SECURITY.md](SECURITY.md) |\n| Get help | [SUPPORT.md](SUPPORT.md) |\n\n## License\n\nApache-2.0\n"
+    },
+    "brief": {
+      "summary": "让 AI 智能体通过系统无障碍树读取并操作桌面应用",
+      "problem": "智能体操作桌面软件时，不必依赖像素识别和坐标点击",
+      "highlights": [
+        "可以先对窗口做快照，再按元素引用点击",
+        "可以在不抢焦点时操作应用并再次快照验证",
+        "可以把内置技能装进智能体，让它自己查用法"
+      ],
+      "target_users": [
+        "AI 智能体开发者",
+        "桌面自动化工程师",
+        "做电脑操作类产品的人"
+      ],
+      "why_trending": "今日新增约 2275 Star，Vercel Labs 出品且刚开源不久",
+      "caveat": "快照、截图和剪贴板可能含隐私内容，勿传公开日志",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vercel-labs/agent-desktop",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "通过无障碍树让Agent操作桌面应用的CLI与库",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 72.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "paperclipai/paperclip",
+      "url": "https://github.com/paperclipai/paperclip",
+      "description": "The open-source app everyone uses to manage agents at work",
+      "language": "TypeScript",
+      "total_stars": 110579,
+      "forks": 18299,
+      "stars_today": 412,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 412
+    },
+    "details": {
+      "topics": [
+        "acpx",
+        "agent-orchestration",
+        "agent-skills",
+        "agentic-ai",
+        "ai-agents",
+        "ai-engineering",
+        "ai-governance",
+        "ai-tools",
+        "autonomous-agents",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "hermes",
+        "llm",
+        "mcp",
+        "multi-agent",
+        "openclaw",
+        "project-management",
+        "workflow-automation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-03-02T15:01:51Z",
+      "updated_at": "2026-11-03T06:57:44Z",
+      "pushed_at": "2026-11-03T07:00:02Z",
+      "open_issues": 6632,
+      "homepage": "https://paperclip.ing",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <img src=\"doc/assets/banner.jpg\" alt=\"Paperclip is the app people use to manage AI agents for work.\" width=\"720\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"#quickstart\"><strong>Quickstart</strong></a> &middot;\n  <a href=\"https://docs.paperclip.ing\"><strong>Docs</strong></a> &middot;\n  <a href=\"https://github.com/paperclipai/paperclip\"><strong>GitHub</strong></a> &middot;\n  <a href=\"https://discord.gg/paperclipai\"><strong>Discord</strong></a> &middot;\n  <a href=\"https://x.com/papercliping\"><strong>Twitter</strong></a> &middot;\n  <a href=\"https://paperclip.ing\"><strong>Website</strong></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/paperclipai/paperclip/blob/master/LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue\" alt=\"MIT License\" /></a>\n  <a href=\"https://github.com/paperclipai/paperclip/stargazers\"><img src=\"https://img.shields.io/github/stars/paperclipai/paperclip?style=flat\" alt=\"Stars\" /></a>\n  <a href=\"https://discord.gg/paperclipai\"><img src=\"https://img.shields.io/badge/discord-join-7289da\" alt=\"Discord\" /></a>\n  <a href=\"https://superagent.sh\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://www.superagent.sh/api/badge/paperclipai/paperclip/shield.svg?theme=dark&accent=teal&variant=scanned\" /><img src=\"https://www.superagent.sh/api/badge/paperclipai/paperclip/shield.svg?theme=light&accent=teal&variant=scanned\" alt=\"Security posture verified by Superagent\" /></picture></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/paperclipai/paperclip\"><img src=\"https://api.star-history.com/badge?repo=paperclipai/paperclip\" alt=\"Star History Rank\" /></a>\n</p>\n\n<br/>\n\n<div align=\"center\">\n  <video src=\"https://github.com/user-attachments/assets/773bdfb2-6d1e-4e30-8c5f-3487d5b70c8f\" width=\"600\" controls></video>\n</div>\n\n<p align=\"center\">\n  <a href=\"https://paperclip.ing/waitlist/\"><strong>Sign up for the Paperclip Cloud waitlist →</strong></a>\n</p>\n\n<br/>\n\n# Paperclip is the app people use to manage AI agents for work.\n\nOpen-source orchestration for teams of AI agents.\n\n**If OpenClaw is an _employee_, Paperclip is the _company_.**\n\nPaperclip is a Node.js server and React UI that orchestrates a team of AI agents to run a business. Bring your own agents, assign goals, and track work and costs from one dashboard. Choose models and harnesses per agent while keeping your team's tasks, skills, permissions, and history in one place.\n\nIt looks like a task manager. Under the hood: org charts, budgets, governance, goal alignment, and agent coordination.\n\n**Manage business goals, not pull requests.**\n\n|        | Step            | Example                                                            |\n| ------ | --------------- | ------------------------------------------------------------------ |\n| **01** | Define the goal | _\"Build the #1 AI note-taking app to $1M MRR.\"_                    |\n| **02** | Hire the team   | CEO, CTO, engineers, designers, marketers — any bot, any provider. |\n| **03** | Approve and run | Review strategy. Set budgets. Hit go. Monitor from the dashboard.  |\n\n<br/>\n\n<div align=\"center\">\n<table>\n  <tr>\n    <td align=\"center\" rowspan=\"2\"><strong>Works<br/>with</strong></td>\n    <td align=\"center\" valign=\"top\"><img src=\"doc/assets/logos/openclaw.svg\" width=\"32\" height=\"32\" alt=\"OpenClaw\" /><br/><sub>OpenClaw</sub></td>\n    <td align=\"center\" valign=\"top\"><img src=\"doc/assets/logos/claude.svg\" width=\"32\" height=\"32\" alt=\"Claude Code\" /><br/><sub>Claude Code</sub></td>\n    <td align=\"center\" valign=\"top\"><img src=\"ui/public/brands/codex-color.svg\" width=\"32\" height=\"32\" alt=\"Codex\" /><br/><sub>Codex</sub></td>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/adapters/cursor-dark.svg\" /><img src=\"ui/public/brands/adapters/cursor.svg\" width=\"32\" height=\"32\" alt=\"Cursor and Cursor Cloud\" /></picture><br/><sub>Cursor<br/>+ Cloud</sub></td>\n    <td align=\"center\" valign=\"top\"><img src=\"ui/public/brands/adapters/gemini-color.svg\" width=\"32\" height=\"32\" alt=\"Gemini CLI\" /><br/><sub>Gemini CLI</sub></td>\n  </tr>\n  <tr>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/opencode-logo-dark-square.svg\" /><img src=\"ui/public/brands/opencode-logo-light-square.svg\" width=\"32\" height=\"32\" alt=\"OpenCode\" /></picture><br/><sub>OpenCode</sub></td>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/adapters/pi-dark.svg\" /><img src=\"ui/public/brands/adapters/pi.svg\" width=\"32\" height=\"32\" alt=\"Pi\" /></picture><br/><sub>Pi</sub></td>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/adapters/hermesagent-dark.svg\" /><img src=\"ui/public/brands/adapters/hermesagent.svg\" width=\"32\" height=\"32\" alt=\"Hermes and Hermes Gateway\" /></picture><br/><sub>Hermes<br/>+ Gateway</sub></td>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/adapters/grok-dark.svg\" /><img src=\"ui/public/brands/adapters/grok.svg\" width=\"32\" height=\"32\" alt=\"Grok Build\" /></picture><br/><sub>Grok Build</sub></td>\n    <td align=\"center\" valign=\"top\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"ui/public/brands/adapters/kimi-color.svg\" /><img src=\"ui/public/brands/adapters/kimi-color-light.svg\" width=\"32\" height=\"32\" alt=\"Kimi Code\" /></picture><br/><sub>Kimi Code</sub></td>\n  </tr>\n</table>\n\n<em>If it can receive a heartbeat, it's hired.</em>\n\n</div>\n\nCustom processes, HTTP endpoints, and external adapter packages extend the roster. See the [adapter overview](https://docs.paperclip.ing/reference/adapters/overview/) for setup and capabilities.\n\n<br/>\n\n## Paperclip is right for you if\n\n- ✅ You want to build **autonomous AI organizations**\n- ✅ You **coordinate many different agents** (OpenClaw, Codex, Claude, Cursor) toward a common goal\n- ✅ You have **20 simultaneous Claude Code terminals** open and lose track of what everyone is doing\n- ✅ You want agents running **autonomously 24/7**, but still want to audit work and chime in when needed\n- ✅ You want to **monitor costs** and enforce budgets\n- ✅ You want a process for managing agents that **feels like using a task manager**\n- ✅ You want to manage your autonomous businesses **from your phone**\n\n<br/>\n\n## The four pillars\n\nFour things have to work for an organization of AI agents to actually produce: the tasks, the org, the training, and the infrastructure. Paperclip is built around exactly those four pillars.\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-dark.png\">\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\">\n  <img src=\"https://raw.githubusercontent.com/paperclipai/paperclip/1ec33ffd8b597f7e36aac3e2fbb4665b8c42dc3c/doc/assets/four-pillars-light.png\" alt=\"The four pillars of Paperclip\">\n</picture>\n\n| Pillar | Built for | What it covers |\n| --- | --- | --- |\n| **Agentic Task Manager** — Declare intent. Agents work. You verify the output. | Everyone, daily | Tasks, approvals & review gates · proactive agent coworkers · auditable routines & workflows · verify from diffs, screenshots & tests |\n| **Org Chart for Agents** — Roles, permissions & boundaries for humans and agents. | Managers | Mixed human + agent org chart · responsibilities, delegation, specialization · governance: who can do what · scoped secrets & company boundaries · connection permissions & responsible-user identities |\n| **Agent Employee Training** — Design, train & evaluate your AI employees. | Enablers | Skill Studio & shared org-wide skills · evals & saved test runs · active learning loops & quality metrics · performance reviews for agents · saved test inputs · skill version history & restore · reusable team templates |\n| **Agentic OS** — The infrastructure that makes the work run. | IT & platform | Cross-provider runtime: any model, any agent · sandboxing, integrations & MCP servers · SSO, GRC, RBAC & cost controls · data privacy, internal trace collection, compounding data value · personal & shared app connections · run history & opt-in tracing |\n\n<br/>\n\n## Features\n\n<table>\n<tr>\n<td align=\"center\" width=\"33%\">\n<h3>🔌 Bring Your Own Agent</h3>\nAny agent, any runtime, one org chart. If it can receive a heartbeat, it's hired.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>🎯 Goal Alignment</h3>\nLink tasks and projects to your organization goals. Agents receive the goal context behind their work.\n</td>\n<td align=\"center\" width=\"33%\">\n<h3>💓 Heartbeats</h3>\nAgents wake for assigned work, follow-up messages, or configured schedules. Delegation flows up and down the org chart.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>💰 Cost Control</h3>\nCompany, agent, and project <a href=\"https://docs.paperclip.ing/guides/day-to-day/costs/\">budgets</a>. Track reported spend, get threshold alerts, and pause work at configured limits.\n</td>\n<td align=\"center\">\n<h3>🏢 Multi-Organization</h3>\nOne deployment, many organizations. Separate tasks, agents, permissions, and activity histories for each.\n</td>\n<td align=\"center\">\n<h3>🎫 Task Threads</h3>\nKeep conversations, plans, blockers, files, and run history attached to the work. Assign tasks to agents or people.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>🛡️ Governance</h3>\nConfigure <a href=\"https://docs.paperclip.ing/guides/day-to-day/approvals/\">review and approval stages</a>, approve hires, and pause, reassign, or stop work when needed.\n</td>\n<td align=\"center\">\n<h3>📊 Org Chart</h3>\nHierarchies, roles, reporting lines. Your agents have a boss, a title, and a job description.\n</td>\n<td align=\"center\">\n<h3>📱 Mobile Ready</h3>\nMonitor and manage your autonomous businesses from anywhere.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>🔗 Apps & Connections</h3>\n<a href=\"https://docs.paperclip.ing/connectors/\">Connect services</a> such as GitHub, Notion, and Railway, or your own MCP server. Set gateway actions to Allowed, Ask first, or Off.\n</td>\n<td align=\"center\">\n<h3>👥 Shared Agents, Personal Accounts</h3>\nChoose <a href=\"https://docs.paperclip.ing/connectors/access-model/\">who can use a connection and which agents can access it</a>. Managed GitHub operations can use the account of the person directing the work.\n</td>\n<td align=\"center\">\n<h3>🧠 Skills & Skill Studio</h3>\nInstall or write <a href=\"https://docs.paperclip.ing/guides/org/skills/\">shared skills</a>, test them with saved inputs, inspect results, and restore earlier versions.\n</td>\n</tr>\n<tr>\n<td align=\"center\">\n<h3>📅 Scheduled Routines</h3>\nRun <a href=\"https://docs.paperclip.ing/guides/projects-workflow/routines/\">recurring work</a> on a schedule or trigger it through an API or webhook. Each run has a task, an owner, and a history.\n</td>\n<td align=\"center\">\n<h3>📎 Artifacts & Feedback</h3>\nFind the <a href=\"https://docs.paperclip.ing/guides/day-to-day/artifacts/\">files and documents agents produce</a>. Preview supported formats and leave comments on specific passages in documents.\n</td>\n<td align=\"center\">\n<h3>📦 Ready-Made Teams</h3>\nPreview and install <a href=\"https://docs.paperclip.ing/guides/org/team-catalog/\">teams</a> with roles, skills, projects, and routines. Choose their runtimes and make the setup your own.\n</td>\n</tr>\n</table>\n\nExperimental **Agent Chat** and **chat/email connectors** add conversations with agents in Paperclip and through configured services such as Slack, Discord, Telegram, and AgentMail. Enable the relevant instance settings to try them.\n\n<br/>\n\n## Problems Paperclip solves\n\n| Without Paperclip                                                                                                                     | With Paper"
+    },
+    "brief": {
+      "summary": "开源的多 AI 代理团队管理台，像任务管理器一样派活、审批和看成本。",
+      "problem": "同时开一堆编码代理终端，任务、权限和花费容易失控，缺少统一看板。",
+      "highlights": [
+        "可以给代理派目标、设预算，并在看板上审批产出",
+        "可以接入 Claude Code、Codex、Cursor 等多种代理",
+        "可以用组织架构图分配角色、权限和密钥范围"
+      ],
+      "target_users": [
+        "多代理开发者",
+        "技术团队负责人",
+        "独立创业者"
+      ],
+      "why_trending": "今日新增 412 Star，多代理协作正热，它把代理当员工来管",
+      "caveat": "Star 数极高但开放 issue 超六千，稳定性资料中未说明。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "paperclipai/paperclip",
+      "score": 86,
+      "category": "AI Agent / Skills",
+      "reason": "多Agent编排与技能管理的开源工作管理应用",
+      "generated_by_ai": true,
+      "velocity_score": 79,
+      "freshness_score": 40,
+      "ranking_score": 68.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 99351,
+      "forks": 11020,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 9654
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-11-03T06:59:44Z",
+      "pushed_at": "2026-11-03T06:59:44Z",
+      "open_issues": 125,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <h1><sub><img src=\"docs/logo.png\" alt=\"\" width=\"36\" height=\"36\" /></sub> VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"Trendshift badge showing where VoiceStudio ranks among trending repositories\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <h2>AI voice studio. On your device.</h2>\n  <h3>Clone, design, dub, dictate, transcribe and narrate in 646 languages.</h3>\n  <p>Runs on your laptop, desktop, servers, phone, tablets and more</p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://discord.gg/bzQavDfVV9\">Discord</a> ·\n    <a href=\"docs/readme/README_CN.md\">简体中文</a> · <a href=\"docs/readme/README_JA.md\">日本語</a> · <a href=\"docs/readme/README_KO.md\">한국어</a> · <a href=\"docs/readme/README_RU.md\">Русский</a>\n  </p>\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&amp;style=flat-square&amp;label=build&amp;labelColor=27272a\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&amp;labelColor=27272a&amp;color=52525b\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-52525b?style=flat-square&amp;labelColor=27272a\" alt=\"AGPL-3.0\" /></a>\n    <a href=\"https://supermetry.com\"><img src=\"https://app.supermetry.com/px/zfjiv7psp4ed.svg?c=VoiceStudio\" alt=\"views\" /></a>\n  </p>\n  <p>\n    <sub>Strategic sponsors</sub><br />\n    <a href=\"https://github.com/debpalash/OpenGTM?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/opengtm-dark.svg\" /><img src=\"docs/sponsors/opengtm.svg\" alt=\"OpenGTM\" height=\"32\" align=\"middle\" /></picture></a>\n    <a href=\"https://github.com/debpalash/Opal?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/opal-dark.svg\" /><img src=\"docs/sponsors/opal.svg\" alt=\"Opal\" height=\"32\" align=\"middle\" /></picture></a>\n    <a href=\"https://github.com/velixio/supermetry?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/supermetry-dark.svg\" /><img src=\"docs/sponsors/supermetry.svg\" alt=\"Supermetry\" height=\"32\" align=\"middle\" /></picture></a>\n  </p>\n  <p>\n    <sub>Special sponsor</sub><br />\n    <a href=\"https://app.spicrawl.com/signup?utm_source=voicestudio&amp;utm_medium=github_readme&amp;utm_campaign=special_sponsor&amp;utm_content=logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/spicrawl-dark.svg\" /><img src=\"docs/sponsors/spicrawl.svg\" alt=\"Spicrawl\" height=\"32\" align=\"middle\" /></picture></a>\n  </p>\n</div>\n\n<p align=\"center\">\n  <a href=\"docs/media/electron/voicestudio.mp4\">\n    <picture>\n      <source media=\"(prefers-reduced-motion: reduce) and (max-width: 768px)\" srcset=\"docs/media/electron/voice-cloning.webp\" />\n      <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/media/electron/voice-cloning.png\" />\n      <img src=\"docs/media/electron/voicestudio.gif\" alt=\"A tour of the app: voice cloning, voice design, dubbing, and model management\" width=\"100%\" />\n    </picture>\n  </a><br />\n  <sub>Demo workspace · Default dark theme · <a href=\"docs/media/electron/voicestudio.mp4\">Watch the HD tour</a></sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-993f61?style=for-the-badge&amp;logo=github&amp;logoColor=ffffff\" alt=\"Download\" height=\"24\" /></a>\n  <a href=\"#get-started\"><img src=\"https://img.shields.io/badge/Get%20started-27272a?style=for-the-badge\" alt=\"Get started\" height=\"24\" /></a>\n</p>\n\n## What you can do\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/voice-cloning.png\"><img src=\"docs/media/electron/voice-cloning.webp\" alt=\"Voice cloning workspace with the bundled demo voice\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/audio-quality.md\">Voice cloning</a></strong><br />\n      Turn a clean reference recording into speech in a familiar voice.\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/dubbing.png\"><img src=\"docs/media/electron/dubbing.webp\" alt=\"Video dubbing workspace\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/electron-dubbing.md\">Video dubbing</a></strong><br />\n      Translate and dub videos with speech timed to the original.\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/voice-design.png\"><img src=\"docs/media/electron/voice-design.webp\" alt=\"Describe a voice in the voice design workspace\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/electron-voice-design.md\">Voice design</a></strong><br />\n      Describe a voice in words and generate it.\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/models.png\"><img src=\"docs/media/electron/models.webp\" alt=\"Install and manage local speech models\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/downloading-models.md\">Local models</a></strong><br />\n      Choose your engines and download only the models you need.\n    </td>\n  </tr>\n</table>\n\n<details>\n<summary><strong>More screenshots</strong></summary>\n\n<table>\n  <tr>\n    <td width=\"50%\"><a href=\"docs/media/electron/overview.png\"><img src=\"docs/media/electron/overview.webp\" alt=\"Workspace overview\" width=\"100%\" /></a><br /><strong>Workspace overview</strong></td>\n    <td width=\"50%\"><a href=\"docs/media/electron/model-packs.png\"><img src=\"docs/media/electron/model-packs.webp\" alt=\"Model packs\" width=\"100%\" /></a><br /><strong>Model packs</strong></td>\n  </tr>\n</table>\n\n</details>\n\n- **Dictate & transcribe** — A floating dictation widget and local transcription\n- **Narrate & batch** — Stories, audiobooks and queued jobs\n- **Connect & automate** — Local API, MCP, reusable recipes and watch folders\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or pick from dozens of other engines in the Model Manager. See the [features & engine catalog](docs/feature-catalog.md).\n\n## Platforms\n\nChoose your system, then expand an installation method.\n\n<a id=\"install-macos\"></a>\n\n<details>\n<summary><img src=\"docs/assets/platforms/apple.svg\" alt=\"\" width=\"20\" height=\"20\" /> <strong>macOS</strong> · Homebrew · DMG · installer</summary>\n\n<blockquote>\n\n**Stable · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: local engines with Metal (MPS).\n\n<a href=\"https://github.com/debpalash/homebrew-tap\"><img src=\"https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff\" alt=\"Homebrew\" height=\"20\" /></a>\n\n```sh\nbrew tap debpalash/tap\nbrew trust --cask debpalash/tap/voicestudio\nbrew install --cask debpalash/tap/voicestudio\n```\n\n<details>\n<summary>DMG</summary>\n\nDownload the DMG for your Mac, open it and drag VoiceStudio into Applications.\n\n[Download](https://github.com/debpalash/VoiceStudio/releases/latest) · [Guide](docs/install/macos.md)\n\n</details>\n\n<details>\n<summary>One-command installer</summary>\n\n```sh\ncurl -fsSL https://voicestudio.sh/install | sh\n```\n\n</details>\n\n<details>\n<summary>Intel Mac · remote backend · Limited</summary>\n\nThe app UI runs on Intel; connect it to a VoiceStudio backend on another computer.\n\n[Guide](docs/install/macos.md)\n\n</details>\n\n> [!NOTE]\n> On macOS, \"VoiceStudio is damaged and can't be opened\" means Gatekeeper blocked the app, not that the download is broken. See the [Gatekeeper fix](docs/install/macos.md#gatekeeper-quarantine).\n\n</blockquote>\n\n</details>\n\n<a id=\"install-windows\"></a>\n\n<details>\n<summary><img src=\"docs/assets/platforms/windows.svg\" alt=\"\" width=\"20\" height=\"20\" /> <strong>Windows</strong> · PowerShell · EXE</summary>\n\n<blockquote>\n\n**Stable · x64**<br />Windows 10/11 x64 · NVIDIA CUDA · AMD ROCm (opt-in) · CPU.\n\n```powershell\nirm https://voicestudio.sh/install.ps1 | iex\n```\n\n[Download the Windows installer](https://github.com/debpalash/VoiceStudio/releases/latest) · [Guide](docs/install/windows.md) · [AMD ROCm](docs/install/windows-rocm.md)\n\n<details>\n<summary>Windows on ARM · experimental</summary>\n\nNative app UI; the x64 Python backend runs under emulation on the CPU.\n\n[Download](https://github.com/debpalash/VoiceStudio/releases/latest) · [Guide](docs/install/windows.md)\n\n</details>\n\n</blockquote>\n\n</details>\n\n<a id=\"install-linux\"></a>\n\n<details open>\n<summary><img src=\"docs/assets/platforms/linux.svg\" alt=\"\" width=\"20\" height=\"20\" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>\n\n<blockquote>\n\n**Stable · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Vulkan for supported GGUF engines.\n\n<details>\n<summary>One-command installer</summary>\n\n```sh\ncurl -fsSL https://voicestudio.sh/install | sh\n```\n\n</details>\n\n<details>\n<summary>Arch / Manjaro / EndeavourOS · AUR</summary>\n\n<a href=\"https://aur.archlinux.org/packages/voicestudio-bin\"><img src=\"https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff\" alt=\"AUR\" height=\"20\" /></a>\n\n```sh\nyay -S voicestudio-bin\n```\n\nAlso available through `paru -S voicestudio-bin`.\n\n[Development sources](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`\n\n<details>\n<summary>Build from AUR and install with pacman</summary>\n\n```sh\nsudo pacman -S --needed base-devel git\ngit clone https://aur.archlinux.org/voicestudio-bin.git\ncd voicestudio-bin\nmakepkg -s\nsudo pacman -U ./voicestudio-bin-*.pkg.tar.zst\n```\n\n</details>\n\n</details>\n\n<details>\n<summary>Ubuntu / Debian / Linux Mint · DEB</summary>\n\nDownload the `.deb` into the current folder, then install it:\n\n[Download](https://github.com/debpalash/VoiceStudio/releases/latest)\n\n```sh\nsudo apt install ./VoiceStudio-*-linux-x64.deb\n```\n\n</details>\n\n<details>\n<summary>Snap · Ubuntu, Fedora, openSUSE and more</summary>\n\n<a href=\"https://snapcraft.io/voicestudio\"><img src=\"https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff\" alt=\"Snap Store\" height=\"20\" /></a>\n\nWith [snapd installed](https://snapcraft.io/docs/installing-snapd):\n\n```sh\nsudo snap install voicestudio\n```\n\nTo enable microphone access:\n\n```sh\nsudo snap connect voicestudio:audio-record\n```\n\n</details>\n\n<details>\n<summary>Any Linux distribution · AppImage</summary>\n\nDownload the AppImage into the current folder, then launch it:\n\n[Download](https://github.com/debpalash/VoiceStudio/releases/latest)\n\n```sh\nchmod +x VoiceStudio-*-linux-x64.AppImage\n./VoiceStudio-*-linux-x64.AppImage\n```\n\n</details>\n\n<details>\n<summary>Nix / NixOS · source environment</summary>\n\nEnter the repository’s FHS development environment, then run from source:\n\n```sh\ngit clone https://github.com/debpalash/VoiceStudio.git\ncd VoiceStudio\nnix develop .#fhs\nbun run dev\n```\n\n[Guide](docs/install/nix.md)\n\n</details>\n\n[Guide](docs/install/linux.md)\n\n</blockquote>\n\n</details>\n\n<a id=\"install-docker\"></a>\n\n<details>\n<summary><img src=\"docs/assets/platforms/docker.svg\" alt=\"\" width=\"20\" height=\"20\" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>\n\n<blockquote>\n\nStable images · CPU · NVIDIA CUDA · AMD ROCm.\n\n<a href=\"https://github.com/debpalash/VoiceStudio/pkgs/container/v"
+    },
+    "brief": {
+      "summary": "本地开源语音工作室，可克隆、配音和转写",
+      "problem": "替代云端 ElevenLabs，让语音处理留在本地",
+      "highlights": [
+        "可以克隆参考录音生成熟悉声音",
+        "可以翻译并给视频配音，对齐原时序",
+        "可以听写转写、批量制作有声书"
+      ],
+      "target_users": [
+        "语音创作者",
+        "视频译者",
+        "有声书制作者"
+      ],
+      "why_trending": "总 Star 近十万且近期活跃，热度再升",
+      "caveat": "AGPL-3.0，商业集成需评估许可证",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、设计、视频配音与有声书制作",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 77.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 77891,
+      "forks": 7168,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 1214
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-03T06:58:33Z",
+      "pushed_at": "2026-11-03T06:50:44Z",
+      "open_issues": 225,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/EbK98HBPdk\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/showcase\">Showcase</a> |\n  <a href=\"https://hyperframes.studio/\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction\">Docs</a> |\n  <a href=\"https://discord.gg/EbK98HBPdk\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"HyperFrames app opening from the Dock: native Mac and Linux app now available\" width=\"800\">\n</p>\n\n<p align=\"center\">\n  <b>Download the desktop app:</b>\n  <a href=\"https://hyperframes.studio/studio/download?os=mac&src=github-readme&utm_source=github&utm_medium=readme\">macOS</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=windows&src=github-readme&utm_source=github&utm_medium=readme\">Windows</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=deb&src=github-readme&utm_source=github&utm_medium=readme\">Linux (.deb)</a>\n</p>\n\nHyperFrames is an open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nTo enable auto-update for the **hyperframes** marketplace, run `claude` in a\nterminal in your project. In Claude Code's terminal UI, run `/plugin`, then select\n**Marketplaces** → **hyperframes** → **Enable auto-update**. Afterward, use\n`/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes`, `/reverse-any-video` and `/figma` install on demand. Agents and non-interactive runs should use `npx hyperframes skills update` instead — it installs exactly the core set, whereas `skills add --all` installs all 8 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs from the current `main`, so reach for it when you need the newest copy of a skill.\n\nRun project-local installs from your video project's directory. From a HyperFrames\ncheckout, use `npx hyperframes skills update` for a global install instead: a\nproject-local installer target can overlap the tracked `skills/` source and\noverwrite uncommitted edits. See [contributor setup](CONTRIBUTING.md#getting-started).\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 8 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 8. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow`, `/remotion-to-hyperframes` and `/reverse-any-video` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, publish, project history — plus reading its JSON and recovering from build or render failures.                                                                            |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n| `/reverse-any-video`       | Rebuilding any video file as an editable HyperFrames project (motion graphics, talking heads, live action, AI-generated footage), checked frame by frame against the original. HyperFrames Pro.       |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/claude-design) and [Open Design guide](https://hyperframes.heygen.com/guides/open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://hyperframes.heygen.com/showcase) for finished videos you can watch, read, run, and remix.\n\n- Product launch videos and feature announcements\n- PR walkthroughs with animated code diffs, narration, and captions\n- Data visualizations, chart races, and map animations\n- Social videos with kinetic captions, overlays, and music\n- Docs-to-video, PDF-to-video, and site-tour explainers\n- Reusable motion graphics for automated content pipelines\n\n## Frame.md\n\n**frame.md — your design system, ready for video.**\n\nEvery brand has a `design.md`. None of them were written for a camera. `frame.md` is the missing translation layer: it takes your web-context design spec and inverts it for the frame — the same tokens, the same rules, but rewritten so an AI agent can compose a promo video without guessing at scale or reaching for web chrome.\n\nThe output is a `DESIGN.md` superset your whole toolchain can read. Atoms stay sacred. Composition stays free. Numbers come from the script.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://hyperframes.studio/design/biennale-yellow\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/biennale-yellow.png\" alt=\"Biennale Yellow\" width=\"100%\"></a>\n      <br><b><a href=\"https://hyperframes.studio/design/biennale-yellow\">Biennale Yellow</a></b>\n    </td>\n    <td width=\"50%\" align=\"center\">\n      <a href=\"https://hyperframes.studio/design/blockframe\"><img src=\"https://static.heygen.ai/hyperframes-oss/docs/images/design-templates/blockframe.png\" alt=\"BlockFrame\" width=\"100%\""
+    },
+    "brief": {
+      "summary": "用HTML和CSS写动画，渲染成MP4视频。",
+      "problem": "想让AI代理稳定产出视频，却难把网页动画变成可复现的MP4。",
+      "highlights": [
+        "可以让AI代理按提示生成产品介绍视频",
+        "可以把HTML动画渲染为确定性MP4",
+        "可以在本地CLI预览、检查和渲染视频"
+      ],
+      "target_users": [
+        "AI编程代理用户",
+        "前端动画开发者",
+        "短视频创作者"
+      ],
+      "why_trending": "总星约7.8万，近日仍有提交，热度再升。",
+      "caveat": "需Node.js 22以上；资料未说明渲染性能。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 86,
+      "category": "AI 视频",
+      "reason": "写HTML渲染视频，面向Agent的动态图形框架",
+      "generated_by_ai": true,
+      "velocity_score": 93,
+      "freshness_score": 40,
+      "ranking_score": 72.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "timoncool/speech-studio",
+      "url": "https://github.com/timoncool/speech-studio",
+      "description": "Free offline AI voice studio for Windows — text-to-speech with cloned and built-in voices, and speech recognition with speakers. Russian done right. 100% local, one native .exe, zero Python.",
+      "language": "Rust",
+      "total_stars": 195,
+      "forks": 17,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "asr",
+        "local-ai",
+        "offline",
+        "portable",
+        "qwen3-tts",
+        "russian",
+        "rust",
+        "speech-recognition",
+        "tauri",
+        "text-to-speech",
+        "tts",
+        "voice-cloning",
+        "whisper",
+        "windows"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-15T03:29:07Z",
+      "updated_at": "2026-11-03T06:59:10Z",
+      "pushed_at": "2026-11-03T06:59:01Z",
+      "open_issues": 1,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"frontend/public/favicon.svg\" width=\"72\" alt=\"Speech Studio logo\"/>\n\n# Speech Studio\n\n**Free, offline AI voice studio for Windows, macOS (Apple silicon) and Linux — voice any text with cloned and built-in voices, and turn recordings into text with the speakers. Russian done right: numbers in their cases, stress marks, «ё» and homographs. 100% local, zero Python: one native app (Rust + C++ on CUDA, Vulkan or Metal); every model and engine downloads with a button.**\n\n[![License](https://img.shields.io/github/license/timoncool/speech-studio?style=flat-square)](LICENSE)\n[![Stars](https://img.shields.io/github/stars/timoncool/speech-studio?style=flat-square)](https://github.com/timoncool/speech-studio/stargazers)\n[![Latest release](https://img.shields.io/github/v/release/timoncool/speech-studio?include_prereleases&style=flat-square)](https://github.com/timoncool/speech-studio/releases)\n[![Downloads](https://img.shields.io/github/downloads/timoncool/speech-studio/total?style=flat-square)](https://github.com/timoncool/speech-studio/releases)\n[![Last commit](https://img.shields.io/github/last-commit/timoncool/speech-studio?style=flat-square)](https://github.com/timoncool/speech-studio/commits)\n\n**English** · [Русский](README.ru.md) · [中文](README.zh.md) · [Español](README.es.md) · [Português](README.pt.md) · [Français](README.fr.md)\n\n![Speech Studio — a voiced dialog with a voice per character](docs/screenshots/en-01-speech.webp)\n\n</div>\n\n## What it is\n\n**Speech Studio** has three modes. **Speech** voices text: a line, a dialog with a voice per character, a podcast the director writes for you, or a whole book from EPUB, FB2, PDF or DOCX. **Listening** turns a recording, a video or a link into text with who said what and when, cuts it by its words, checks a voicing against the text it should say and makes library voices from its speakers. **Live** is a voice conversation with an AI agent connected over MCP: it says each phrase as soon as it writes it and hears you through the microphone.\n\nEverything runs **locally on your machine** — no cloud, no subscription; your texts, recordings and voiceprints never leave your computer. If you want a voice your card can't run, the cloud voices of **OpenRouter**, **Google Gemini**, **fal.ai** and **Runware** are there too, each behind its own key and a confirmation before the first call; they are off by default.\n\nIt's a **fully native app**: no embeddable Python, no torch, no CUDA wheels. The whole studio is **Rust + native C++ engines (GGUF/ONNX) on CUDA, Vulkan or Metal**. Models, engines, the CUDA and VC++ runtimes and ffmpeg are **downloaded by the app itself** on first run, and a model another of the author's studios already has is taken from it instead of downloaded again. **An NVIDIA GPU is what the app is built and tested for**; see *What runs where* for the rest.\n\n## For AI agents\n\nWhile Speech Studio is open it serves MCP at `http://127.0.0.1:8797/mcp`: an agent such as Claude Code, Claude Desktop, Cursor or Codex does everything the window does, through the same code — voices a text into a file in one call, makes and edits projects block by block, casts voices to characters, designs a voice from a description, transcribes and checks recordings, exports audiobooks with chapters and subtitles. Settings, **Agent (MCP)** shows whether an agent is connected and what to paste into the client. The one thing an agent cannot do is turn the microphone on: Live, a recording and the microphone test start only on your own click or key.\n\n1. Install the studio from the [latest release](https://github.com/timoncool/speech-studio/releases/latest) and start it.\n2. Connect to its MCP server:\n   ```bash\n   claude mcp add --transport http speech-studio http://127.0.0.1:8797/mcp\n   ```\n   Other clients: `{ \"mcpServers\": { \"speech-studio\": { \"type\": \"streamable-http\", \"url\": \"http://127.0.0.1:8797/mcp\" } } }`\n3. Read the skill the server serves (resource `studio://skill`), the same text as [docs/mcp-skill.md](docs/mcp-skill.md), and start with the tool `studio_status`.\n\nThe studio also speaks the OpenAI audio API on the same port — `POST /v1/audio/speech`, `POST /v1/audio/transcriptions`, `GET /v1/models` — so tools written for OpenAI voice and transcribe through it, with a library voice's name as `voice`. [llms.txt](llms.txt) says the same for tools that look for it. Only programs on this computer may connect.\n\n## What you can make with it\n\n- **An audiobook** — drop an EPUB or FB2: chapters, characters with their own voices, an M4B with chapters and cover, ACX loudness checked.\n- **A podcast or a dialog** — the director writes a podcast on a topic for two or three speakers, or paste lines like «Anna: …»; the timeline shows every overlap.\n- **A voice-over for a video** — voice a script or subtitles into their cues, lay music and sounds under it in the track editor, export at the video's loudness.\n- **A transcript of an interview or a lecture** — who said what and when, word times, subtitles by broadcasters' rules, the recording cut by its text.\n- **A check of a dubbing** — lay the script over the recording and see every word said wrong or skipped.\n- **Your own voice library** — record or import voices, clean them, make voices from the speakers of a recording.\n- **A voice for your AI agent** — talk with Claude Code or any MCP agent in Live, or let it voice and transcribe files through MCP or the OpenAI-compatible API.\n\nExamples of every engine and voice, with Russian stress before and after, are on the [project page](https://timoncool.github.io/speech-studio/).\n\n## Three modes\n\n| Mode | What it does |\n|------|--------------|\n| 🔊 **Speech** | Text, dialog, podcast or book → voiced blocks with takes, checked by ear, exported as WAV, FLAC, MP3, OGG, M4A or M4B with chapters, subtitles and synced text |\n| 👂 **Listening** | Audio, video or a link → a transcript with speakers and word times, a karaoke player, cut-by-text, export to SRT, VTT, ASS, TXT or JSON, a check against a reference text |\n| 🎙️ **Live** | A voice conversation with an AI agent: the agent connected over MCP speaks each phrase as it writes it, you answer into the microphone and are recognised phrase by phrase, a phrase said over it stops it; only you turn the microphone on, pause with M or Ctrl+Shift+Space, a widget over every window |\n\n## Features\n\n**Voices and engines**\n\n- **Five local engines** — [Higgs Audio v3](https://huggingface.co/bosonai) (cloning, emotions and sounds), **Fish Audio Drama 3** (the strongest open voice; the whole model on a 24 GB card, from 6 GB with its experts in RAM), **Supertonic 3** (fast, ten built-in voices), **Qwen3-TTS 1.7B** (nine built-in voices, cloning, an instruction per block) and **Qwen3-TTS with Russian stress**, siriusfreak's LoRA applied at run time.\n- **Engine per character and per block** over the project's own; an engine that can't speak the voice in use says which of its voices it takes.\n- **Voice library** — a voice pack in one click, 743 Russian voices from the cloud catalogue, recording from the microphone, import of files and ZIPs, photo, gender, age, language, tags and consent; the reference transcript is recognised once and kept.\n- **Clean a reference** — Mel-Band Roformer takes the voice from music, **DPDFNet** takes noise away with a strength control so speech stays alive; the original is kept.\n- **Best piece of a reference** — windows at pauses between recognised words, each with its length, signal-to-noise, clipping and longest pause.\n- **Voice by description** — Qwen3-TTS VoiceDesign makes a voice from \"an elderly woman with a soft, slightly hoarse voice…\": hear several candidates, keep one in the library.\n\n- **Cloud voices** — OpenRouter, Google Gemini (parallel requests or Batch at half the price), fal.ai and Runware, each behind its own key and a confirmation before the first call.\n\n**Text that sounds right**\n\n- **Russian normaliser** — numbers in the right case and gender, dates, times, money, units, Roman numerals, Latin brand names and abbreviations.\n- **Stress, «ё» and homographs** by RUAccent — the large homograph model (big_poetry in int8, the same choices as fp32) picks замо́к or за́мок by the sentence; doubtful ones are highlighted for you, your own `+` marks stay.\n- **Pronunciation dictionary** — replace, regex and phonemes, scoped to the project, a language, a voice or an engine, Balabolka `.rex`/`.dic`/`.bxd` import, and a check by ear right from the dictionary.\n- **SpeechKit-compatible markup** — `+` stress, `sil<[300]>` and `[pause 500ms]` pauses, `[rate:1.2]` tempo, `**accent**`; what an engine ignores is marked, never silently dropped.\n\n- **More of the text read right** — an SSML subset, prosody hints coloured word by word, phone numbers, e-mail addresses and codes, a passage in another language in the same voice, and a check of the script before voicing.\n\n**Projects**\n\n- **Text as the timeline** — blocks with speakers, takes (up to five), stale tracking, undo and redo, drag to reorder, search and replace with regex, notes and markers.\n- **Quality control** — every take recognised back and compared word by word, plus checks for clipping, silence, cut-off, a click at the end, a repeated phrase, a long tail, music or noise instead of speech, and similarity to the reference voice; several takes with the best one picked.\n- **Dialog and podcasts** — `Anna:` and `[Anna]` lines become characters, the director writes a podcast on a topic for N speakers, negative pauses make interruptions, and the **timeline** shows every overlap with cut, join or keep.\n- **Audiobooks** — EPUB, FB2, PDF, DOCX, HTML, Markdown and TXT with chapter preview, cast by the director, M4B with chapters and cover, parts for long books, ACX loudness check.\n- **Subtitles as a project** — SRT, VTT and ASS lines voiced into their cues: the tempo raised ahead, a retry when a take doesn't fit, then stretching and borrowing the silence before the line.\n- **Export check** — blocks missing, stale, failed, with a changed file or too long for their cue are listed before export; only the length may be allowed through.\n- **Loudness** — video (−14 LUFS), podcast (−16 LUFS) and ACX presets with a true-peak limiter, room tone and breaths between blocks.\n- **Project file** — `.speechproj` with text, voices and audio carries a project to another computer.\n\n- **Montage** — a track editor under the text: move, trim, fade and level each clip, music and sound tracks from files or folders, or a song made right there in YuE2, MiniMax Music3 or ACE-Step Studio.\n- **Export for every use** — a file per chapter, a track per character in a ZIP, a CSV table of lines, voice effects (radio, phone, loudspeaker), even loudness of pieces, sample rate and bit depth, file name templates, a SHA-256 manifest and a note on how it was made.\n- **Compare and approve** — A/B of takes, a blind comparison of engines on the same text, approved blocks a re-voicing leaves alone, a quality traffic light and a project report.\n- **Books and plays** — direct speech apart from the author's, a cast of characters with voices picked for them, footnotes cleaned out, the book's names into the dictionary, a project updated from a corrected book without losing what is voiced, and an HTML player of the book.\n\n**Listening**\n\n- **Parakeet-TDT v3, Nemotron 3.5 (28 languages with punctuation) and CrisperWhisper 2.0 turbo (99 languages with word times) on audio.cpp, Parakeet Ultra on transcribe.cpp**, up to eight speakers by Nemotron 3 Diarization, a long recording cut at pauses by **Silero VAD v6**, noise removed by DPDFNet, music removed by Roformer.\n- **A hint for CrisperWhisper** — topic and spellings, plus the corrections you add.\n- **Batch** — drop several files at once; each becomes a recording queued for recognition.\n- **Lay a known text over the recording** — the reference text takes the time of each heard word, sentence by sentence.\n- **Voices from speakers** — a library voice f"
+    },
+    "brief": {
+      "summary": "免费离线的本地语音工作室，支持克隆音色与语音识别。",
+      "problem": "云端语音工具需联网、付费，文本和录音还可能外泄。",
+      "highlights": [
+        "可以克隆音色并逐角色分配声音",
+        "可以把整本书合成为有声书",
+        "可以把录音转写成带说话人和时间轴的文本"
+      ],
+      "target_users": [
+        "视频创作者",
+        "播客与有声书作者",
+        "AI应用开发者"
+      ],
+      "why_trending": "本周首次收录，195星且近期有更新，适合关注。",
+      "caveat": "主打俄语优化，其他语言效果资料未说明。",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "timoncool/speech-studio",
+      "score": 86,
+      "category": "语音 / 配音",
+      "reason": "Windows本地TTS配音与语音识别工作室",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "jub0t/Concat",
+      "url": "https://github.com/jub0t/Concat",
+      "description": "The truly free, open-source, local-first, cross-platform CapCut replacement. Scriptable through a JSON-RPC API & MCP.",
+      "language": "Rust",
+      "total_stars": 13874,
+      "forks": 1713,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ffmpeg",
+        "free-video-editor",
+        "model-context-protocol",
+        "non-linear-editor",
+        "offline-first",
+        "open-source-video-editor",
+        "self-hosted",
+        "video-editing",
+        "video-editing-automation",
+        "video-editing-software",
+        "video-editing-tools",
+        "video-editor",
+        "voice-cloning",
+        "youtube-automation",
+        "youtube-shorts"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-08-25T18:34:47Z",
+      "updated_at": "2026-11-03T06:50:40Z",
+      "pushed_at": "2026-11-03T06:49:20Z",
+      "open_issues": 216,
+      "homepage": "https://concat.standalones.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"https://cdn.jsdelivr.net/gh/jub0t/Concat@main/assets/concat-mark-dark.png\" alt=\"Concat\" width=\"100\" />\n</p>\n\n<h1 align=\"center\">Concat</h1>\n<h3 align=\"center\">The free, open-source, cross-platform CapCut replacement.</h3>\n\n<div align=\"center\">\n\n<img src=\"https://cdn.jsdelivr.net/gh/jub0t/Concat@main/assets/editor.png\" alt=\"Concat editor\" width=\"100%\" />\n\n<p align=\"center\">\n  <a href=\"https://github.com/jub0t/Concat/releases\"><img src=\"https://img.shields.io/github/downloads/jub0t/concat/total?style=flat&logo=github&logoColor=F8F8F8&label=Downloads&labelColor=212123&color=0568FD\" alt=\"Total Downloads\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/jub0t/Concat/ci.yml?style=flat&logo=githubactions&logoColor=F8F8F8&label=Build&labelColor=000000\" alt=\"Build Status\" /></a>\n  <a href=\"https://github.com/jub0t/Concat/releases\"><img src=\"https://img.shields.io/badge/Version-0.2.8-0568FD?style=flat&logo=semver&logoColor=F8F8F8&labelColor=212123\" alt=\"Concat Version 0.2.8\" /></a>\n  <a href=\"https://discord.gg/DVuPfpXfqP\"><img src=\"https://img.shields.io/badge/Discord-Join%20the%20server-5865F2?style=flat&logo=discord&logoColor=F8F8F8&labelColor=000000\" alt=\"Join Concat Discord\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL%20v3-0568FD?style=flat&logo=gnu&logoColor=F8F8F8&labelColor=212123\" alt=\"License: AGPL-3.0-or-later\" /></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://www.star-history.com/jub0t/concat\"><img src=\"https://api.star-history.com/badge?repo=jub0t/concat&type=rank\" alt=\"Star History Rank\" height=\"62\" /></a>\n  <a href=\"https://trendshift.io/repositories/191379?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-191379\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/191379/daily?language=Rust\" alt=\"jub0t%2FConcat | Trendshift\" width=\"250\" height=\"55\"/></a>\n  <a href=\"https://concat.standalones.org/#download\"><img src=\"assets/download_button.svg\" alt=\"Download Concat\" width=\"251\" /></a>\n</p>\n\n**🇬🇧 English** · [🇩🇪 Deutsch](docs/README.de.md) · [🇪🇸 Español](docs/README.es.md) · [🇫🇷 Français](docs/README.fr.md) · [🇮🇹 Italiano](docs/README.it.md) · [🇳🇱 Nederlands](docs/README.nl.md) · [🇵🇱 Polski](docs/README.pl.md) · [🇧🇷 Português (Brasil)](docs/README.pt-BR.md) · [🇷🇺 Русский](docs/README.ru.md) · [🇺🇦 Українська](docs/README.uk.md) · [🇹🇷 Türkçe](docs/README.tr.md) · [🇦🇿 Azərbaycanca](docs/README.az.md) · [🇭🇷 Hrvatski](docs/README.hr.md) · [🇮🇩 Bahasa Indonesia](docs/README.id.md) · [🇻🇳 Tiếng Việt](docs/README.vi.md) · [🇹🇭 ไทย](docs/README.th.md) · [🇯🇵 日本語](docs/README.ja.md) · [🇰🇷 한국어](docs/README.ko.md) · [🇨🇳 简体中文](docs/README.zh-Hans.md) · [🇹🇼 繁體中文](docs/README.zh-TW.md) · [🇸🇦 العربية](docs/README.ar.md) · [🇮🇱 עברית](docs/README.he.md) · [🇮🇷 فارسی](docs/README.fa.md) · [🇮🇳 हिन्दी](docs/README.hi.md) · [🇵🇰 اردو](docs/README.ur.md) · [🇧🇩 বাংলা](docs/README.bn.md)\n\n## Paid Sponsors\n\n<table width=\"100%\">\n  <tr>\n    <td align=\"center\">\n      <a href=\"https://proxyon.io/?ref=concat\"><img src=\"https://cdn.jsdelivr.net/gh/jub0t/Concat@main/assets/proxyon_sponsor_logo.png\" alt=\"Proxyon\" width=\"80\" /></a><br />\n      <a href=\"https://proxyon.io/?ref=concat\"><b>Proxyon</b></a><br />\n      <sub>Pay-as-you-go proxies for developers<br />Use code <code>JUB0T</code> for 20% off</sub>\n    </td>\n      <td align=\"center\">\n      <a href=\"https://www.patreon.com/cw/jub0t\"><b>Support Concat</b></a><br />\n      <sub>Concat needs your donations to continue development,<br/>we have come too far to back down now 😢</sub>\n    </td>\n  </tr>\n</table>\n\n</div>\n\n\n## About\n\nConcat is a free, open-source video editor and a CapCut alternative for macOS, Windows, Linux and Android. It covers what people actually open CapCut for: auto-captions, text-to-speech, background removal, keyframe animation, effects and titles, multi-track cutting, 4K export. With none of the catches: no watermark, no account, no subscription, no upload.\n\nEverything runs locally on a native Rust engine with a GPU compositor. Install it, drop in footage, cut. The AI models for captions, voices and cutout download once from Settings and work offline after that. Your footage never leaves your disk.\n\n**Good for:** TikTok, Reels and Shorts, YouTube videos, tutorials and screen recordings, podcast clips, memes.\n\n**Also for machines:** a built-in MCP server for AI agents (`concat --mcp`, [set up](docs/MCP.md)) and a JSON-RPC API for scripts, so they can cut video with it too.\n\n## Highlights\n\n- 🚫 **No watermarks. No account. No paywall.** Ever.\n- 🔒 **100% local.** Nothing uploads. Works offline.\n- 💬 **Auto-captions.** Local Whisper. Pick a model size, get styled captions on the timeline.\n- 🗣️ **Text-to-speech + voice cloning.** Free local voices, or any voice from a few seconds of a recording.\n- 🧍 **Background removal.** People, objects, or paint the mask yourself.\n- 🎞️ **Keyframes.** Position, scale, rotation, opacity, volume, effect parameters. Curve editor built in.\n- ✨ **100 effects, filters and transitions.** GPU-rendered, live in the preview.\n- ✂️ **Cut fast.** Split, trim, ripple, merge, freeze frame, speed. Magnetic timeline if you want it.\n- 🎚️ **Multi-track, multi-timeline.** Overlays and picture-in-picture: stack video, stills and titles on as many tracks as you like. Several cuts in one project. Blend modes (screen, add, multiply…), crop, flips.\n- 📝 **Titles.** Fonts, stroke, shadow, background plate. Presets to start from.\n- 🎙️ **One-switch voice cleanup.** Denoise, enhance voice, level the loudness. Plus chipmunk, robot, telephone and friends.\n- 📤 **Export.** H.264, HEVC, AV1. Up to 4K 60, 10-bit colour.\n- 🦀 **Native Rust engine.** GPU compositor, proxies, hardware decode. 4K scrubs smoothly.\n- 🤖 **Scriptable.** An MCP server built in, so Claude and other AI agents can edit with it ([one line to set up](docs/MCP.md)), and a JSON-RPC API for scripts. A build from source adds gRPC and a command-line tool.\n- 🖥️ **macOS, Windows, Linux, Android.** 26 languages. Same app, same project files.\n\n## Download\n\nTwo ways in:\n\n1. **[The website](https://concat.standalones.org/#download)** hands you the right build for your machine. Start here.\n2. **[GitHub Releases](https://github.com/jub0t/Concat/releases)** has every build for every platform, with installers, packages and checksums. For when you want to pick.\n\nConcat is in **beta**: it works, and it still has edges. [Say so](https://github.com/jub0t/Concat/issues) when you find one.\n\n**Platforms**\n\n- ✅ **Windows** · x86_64 (ARM builds are paused, see [#326](https://github.com/jub0t/Concat/issues/326)). A setup and an `.msi`. If SmartScreen stops an unsigned build: **More info** › **Run anyway**\n- ✅ **macOS** · Intel and Apple silicon. If macOS refuses to open an unsigned build: `xattr -dr com.apple.quarantine /Applications/Concat.app`\n- ✅ **Linux** · x86_64 and ARM. `.deb`, `.rpm`, `.AppImage` and an Arch package. Also a Flatpak on **[Flatpark](https://flatpark.org/apps/app.concat.editor/)**, a community Flatpak remote that wraps the x86_64 `.deb` of each release and updates with it\n- ✅ **Android** · phones and tablets\n- ✅ **iOS / iPadOS** · iPhone and iPad, sideloaded\n\n✅ Supported · 🚧 Work in progress · 🧪 To be tested\n\n**System requirements** and the optional model sizes are on [the website](https://concat.standalones.org/guides/system-requirements).\n\n**[Code signing policy](CODE_SIGNING.md)**: why the Windows builds are not signed yet, and what Concat sends over the network (nothing you did not ask for).\n\n## Build from source\n\nYou need Rust 1.93 or newer (see `rust-version` in `src/Cargo.toml`), the FFmpeg 7+ development libraries, cmake and a C++ compiler.\n\n- **macOS:** `brew install ffmpeg`\n- **Windows:** from [FFmpeg's Windows downloads](https://ffmpeg.org/download.html#build-windows), take BtbN's `win64-gpl-shared` build (the one CI uses), unpack it and point `FFMPEG_DIR` at it\n- **Linux:** use your distro's FFmpeg if it is version 7 or newer, otherwise use a BtbN `shared` build with `FFMPEG_DIR` like on Windows\n\nThen:\n\n```sh\ncd src\ncargo run -p concat          # the editor window\n```\n\nOther useful commands:\n\n```sh\ncargo build --profile app -p concat   # the shipping binary (fat LTO, stripped)\ncargo test                            # run the test suite\ncargo fmt --check && cargo clippy --all-targets -- -D warnings   # what CI checks\n```\n\nIf you change text the interface shows, run `python3 scripts/locales.py` from the repo root so the string inventory stays in sync. Full details live in [CONTRIBUTING.md](CONTRIBUTING.md).\n\n## How to Contribute\n\n> [!IMPORTANT]\n> The best way to contribute is to grab a build from the [Releases](https://github.com/jub0t/Concat/releases) page and use it: find where it breaks, and say where it could be better.\n>\n> Ready to write code? [CONTRIBUTING.md](./CONTRIBUTING.md) covers setup, the layout of the tree, the checks to run, and how contributions are licensed. Driving Concat from a script, a service or an agent? [The developer docs](https://concat.standalones.org/docs) cover the Concat API and its transports: JSON-RPC and gRPC; [docs/MCP.md](docs/MCP.md) connects an AI agent over MCP. [This Discussion](https://github.com/jub0t/Concat/discussions/3) is where the project was announced.\n> \n> Contributors can claim a `@Contributor` role in the Discord server: just ask.\n\n## Star History\n\n<a href=\"https://www.star-history.com/?repos=jub0t%2Fconcat&type=date&releases=&legend=bottom-right\">\n <img alt=\"Star History Chart\" src=\"https://api.star-history.com/chart?repos=jub0t/concat&type=date&legend=bottom-right\" />\n</a>\n\n## Contributors\n\n<a href=\"https://github.com/jub0t/Concat/graphs/contributors\">\n  <img alt=\"Contributors\" src=\"https://contrib.rocks/image?repo=jub0t/concat\">\n</a>\n\n## Licence\n\nConcat is free software under [AGPL-3.0-or-later](LICENSE). A commercial licence is available for closed-source use; see [LICENSING.md](LICENSING.md).\n\n## DMCA\n\nIf you believe something in this repository, its releases, or a package or model it distributes infringes your copyright, email [jub0trd@gmail.com](mailto:jub0trd@gmail.com) with a description of the work you own, a link to where the infringing material appears here, your contact details, a statement that you believe in good faith the use is not authorised by you, your agent, or the law, and a statement, under penalty of perjury, that the notice is accurate and that you are the owner or authorised to act for the owner, signed with your physical or electronic signature; valid notices are acted on promptly, and anyone whose material is removed may send a counter-notice to the same address.\n"
+    },
+    "brief": {
+      "summary": "开源本地视频剪辑器，对标 CapCut，无水印无账号",
+      "problem": "CapCut 收费、加水印、要账号，剪辑还得上传素材",
+      "highlights": [
+        "可以本地自动生成字幕和配音，离线可用",
+        "可以用 MCP 或 JSON-RPC 让 AI 代理剪片",
+        "可以多轨剪辑并导出 4K 无水印视频"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "独立开发者",
+        "AI 代理开发者"
+      ],
+      "why_trending": "本周首次收录，1.3 万 Star 且近日仍在更新",
+      "caveat": "仍处 beta 阶段，Windows 构建未签名",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "jub0t/Concat",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "开源本地CapCut替代的非线性视频剪辑器",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "kitao/playload",
+      "url": "https://github.com/kitao/playload",
+      "description": "A tiny game engine that lets you share games as URLs",
+      "language": "JavaScript",
+      "total_stars": 99,
+      "forks": 3,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "browser-game",
+        "chiptune",
+        "creative-coding",
+        "game-engine",
+        "gamedev",
+        "javascript",
+        "pixel-art",
+        "retro-gaming"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-06T23:31:43Z",
+      "updated_at": "2026-11-03T06:59:34Z",
+      "pushed_at": "2026-11-03T06:59:30Z",
+      "open_issues": 0,
+      "homepage": "https://kitao.dev/playload/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://kitao.dev/playload/\"><img src=\"assets/logo.svg\" alt=\"Playload\" width=\"384\"></a>\n</p>\n\n<p align=\"center\">\n  A tiny game engine that lets you share games as URLs\n</p>\n\n<p class=\"badges\" align=\"center\">\n  <a href=\"https://github.com/kitao/playload\"><img src=\"https://img.shields.io/github/stars/kitao/playload?style=social&amp;label=Star%20on%20GitHub\" alt=\"GitHub stars\" height=\"20\" loading=\"lazy\" decoding=\"async\"></a>\n  <a href=\"https://github.com/sponsors/kitao\"><img src=\"https://img.shields.io/github/sponsors/kitao?label=Sponsor%20on%20GitHub&amp;logo=github%20sponsors&amp;style=social\" alt=\"GitHub Sponsors\" height=\"20\" loading=\"lazy\" decoding=\"async\"></a>\n  <a href=\"https://www.patreon.com/tkitao\"><img src=\"https://img.shields.io/badge/Support%20on%20Patreon-000000?style=social&amp;logo=patreon\" alt=\"Patreon\" height=\"20\" loading=\"lazy\" decoding=\"async\"></a>\n  <a href=\"https://ko-fi.com/H2H27VDKD\"><img src=\"https://ko-fi.com/img/githubbutton_sm.svg\" alt=\"Support me on Ko-fi\" height=\"20\" loading=\"lazy\" decoding=\"async\"></a>\n</p>\n\n<h3 align=\"center\"><a href=\"https://kitao.dev/playload/\">Website</a></h3>\n\n<p class=\"screenshots\" align=\"center\">\n  <a href=\"https://kitao.dev/playload/\"><img src=\"assets/images/example-glyph-quest.png\" alt=\"The code editor beside a running Glyph Quest game\" width=\"400\"></a>\n  <a href=\"https://kitao.dev/playload/\"><img src=\"assets/images/info-api.png\" alt=\"The complete game API and ZX 128 PLAY sound cheat sheets\" width=\"400\"></a><br>\n  <a href=\"https://kitao.dev/playload/\"><img src=\"assets/images/info-emoji.png\" alt=\"Emoji alongside their built-in 8 by 8 pixel artwork\" width=\"400\"></a>\n  <a href=\"https://kitao.dev/playload/\"><img src=\"assets/images/info-examples.png\" alt=\"Playable game and sound examples with their source inside the URL\" width=\"400\"></a>\n</p>\n\n4-direction and 2-button input (⬆ ⬇ ⬅ ➡ Ⓐ Ⓑ)\n"
+    },
+    "brief": {
+      "summary": "轻量游戏引擎，把游戏存进URL分享",
+      "problem": "分享小游戏通常需打包上线，流程较繁琐",
+      "highlights": [
+        "可以在浏览器里写小游戏并生成分享链接",
+        "可以用方向键和两个按钮操作复古小游戏",
+        "可以制作芯片音乐音效，甚至把源码放进URL"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "创意编程爱好者",
+        "复古游戏玩家"
+      ],
+      "why_trending": "本周首次收录，星数不多但近期活跃，适合尝鲜",
+      "caveat": "项目较新、社区小，功能与稳定性待验证",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "kitao/playload",
+      "score": 84,
+      "category": "游戏开发",
+      "reason": "可用URL分享的微型浏览器游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 54.8
+    }
+  }
+]
