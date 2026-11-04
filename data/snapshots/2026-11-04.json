@@ -1,0 +1,567 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "vercel-labs/agent-desktop",
+      "url": "https://github.com/vercel-labs/agent-desktop",
+      "description": "Computer use CLI for AI agents",
+      "language": "Rust",
+      "total_stars": 13380,
+      "forks": 923,
+      "stars_today": 3791,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 3791
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "accessibility-api",
+        "ai-agents",
+        "automation",
+        "cli",
+        "computer-use",
+        "computer-use-agent",
+        "computer-use-agents",
+        "desktop-automation",
+        "macos",
+        "mcp",
+        "rust"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-02-19T18:00:49Z",
+      "updated_at": "2026-11-04T06:43:37Z",
+      "pushed_at": "2026-11-03T23:16:15Z",
+      "open_issues": 149,
+      "homepage": "https://agent-browser.dev/desktop",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# agent-desktop\n\nComputer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree.\n\n<p>\n  <a href=\"https://vercel.com/labs#labs-products\"><img alt=\"Vercel Labs Product\" src=\"https://img.shields.io/badge/LABS-PRODUCT-0a0a0a.svg?style=for-the-badge&amp;logo=Vercel&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-desktop\"><img alt=\"npm version: agent-desktop\" src=\"https://img.shields.io/npm/v/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://github.com/vercel-labs/agent-desktop/blob/main/LICENSE\"><img alt=\"License: Apache-2.0\" src=\"https://img.shields.io/github/license/vercel-labs/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-desktop\"><img alt=\"npm downloads per month: agent-desktop\" src=\"https://img.shields.io/npm/dm/agent-desktop.svg?style=for-the-badge&amp;labelColor=000000&amp;label=npm%20downloads\" height=\"28\"></a>\n</p>\n\nagent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every element the agent can act on. The agent clicks or types on a ref, reads the UI again to check the result, and repeats. The loop lives in your agent; agent-desktop has no model inside. It ships as a CLI and a C library.\n\nSnapshots, clipboard reads, screenshots, command output, and debug artifacts can contain private desktop content. Keep them out of public logs and uploads.\n\n## Install\n\n```bash\nnpm install -g agent-desktop\nagent-desktop status                # platform, permissions, supported surfaces\nagent-desktop permissions --guide   # macOS: walks you through the Accessibility grant\n```\n\nBun, Yarn and pnpm can install the same package. It includes native binaries and platform helpers for x64 and ARM64.\nFor direct execution without a JavaScript launcher, download the matching native archive from\n[GitHub Releases](https://github.com/vercel-labs/agent-desktop/releases) and keep its helper beside the executable.\n\nOn macOS and Linux, Homebrew also works: `brew install agent-desktop`. There is no official Scoop package yet.\nThe repository no longer maintains a custom Homebrew tap or Scoop bucket.\n\nRelease archives and building from source are covered in [Installation](https://agent-browser.dev/desktop/installation).\n\n## Quick start\n\n```bash\nagent-desktop snapshot --app Finder -i      # interactive elements, each with a ref\nagent-desktop click @s8f3k2p9:e8            # act on a ref from that snapshot\nagent-desktop snapshot --app Finder -i      # observe again to verify\n```\n\nEach command prints one JSON envelope. A trimmed snapshot:\n\n```json\n{\n  \"version\": \"2.6\",\n  \"ok\": true,\n  \"command\": \"snapshot\",\n  \"data\": {\n    \"app\": \"Finder\",\n    \"snapshot_id\": \"s8f3k2p9\",\n    \"ref_count\": 59,\n    \"complete\": true,\n    \"tree\": {\n      \"role\": \"window\",\n      \"name\": \"Downloads\",\n      \"children\": [\n        { \"role\": \"treeitem\", \"name\": \"Documents\", \"ref_id\": \"@s8f3k2p9:e8\", \"available_actions\": [\"Click\"] }\n      ]\n    }\n  }\n}\n```\n\n- Refs carry their snapshot id. A bare `@e8` fails with `INVALID_ARGS`.\n- If the UI changed, an action returns `STALE_REF` or `AMBIGUOUS_TARGET`. Take a new snapshot and use its refs.\n- Actions are headless by default: no pointer movement, no focus change. Pass `--headed` for physical input.\n- In PowerShell, quote every ref (`'@s8f3k2p9:e8'`), because a bare `@token` is the splatting operator.\n\nThe full walkthrough is in the [quick start](https://agent-browser.dev/desktop/quick-start).\n\n## How it works\n\n<picture>\n  <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/architecture-dark.png\">\n  <img alt=\"The calling agent runs the agent-desktop CLI or the C library. Both go through agent-desktop-core and the PlatformAdapter trait to one platform crate, chosen at compile time, which reads the target app through the AX API on macOS, UI Automation on Windows, or AT-SPI on Linux.\" src=\"assets/architecture-light.png\" width=\"720\">\n</picture>\n\nYour agent calls the CLI, or the C library in process. Both run the same core, which reaches the OS only through `PlatformAdapter`. Each binary is built for one OS and talks to that OS's accessibility API.\n\n## For AI agents\n\nThe binary carries guides that match its version:\n\n```bash\nagent-desktop skills get desktop      # the loop, refs, verification and retry rules\nagent-desktop skills get platform     # what differs on the OS you run on\nagent-desktop <command> --help        # flags for one command\n```\n\nInstall the skill into an agent harness from [skills.sh](https://skills.sh/vercel-labs/agent-desktop/agent-desktop):\n\n```bash\nnpx skills add https://github.com/vercel-labs/agent-desktop --skill agent-desktop\n```\n\nOr add this to your `AGENTS.md`:\n\n```markdown\nUse `agent-desktop` to see and operate desktop apps. Before the first use, run\n`agent-desktop skills get desktop` and `agent-desktop skills get platform`, and follow them.\n```\n\nRetry a failed command only when `error.disposition.retry` is `safe`. See [JSON output](https://agent-browser.dev/desktop/json-output) for the envelope, error codes, and exit codes.\n\n### MCP\n\n`agent-desktop mcp` serves every command as an MCP tool over stdio. A tool is named after its command (`desktop_snapshot`, `desktop_click`, `desktop_session_start`), takes that command's arguments, and returns its JSON envelope:\n\n```json\n{ \"mcpServers\": { \"agent-desktop\": { \"command\": \"agent-desktop\", \"args\": [\"mcp\"] } } }\n```\n\nGlobal flags given to `mcp`, such as `--session`, `--headed` or `--trace`, apply to every call.\n\n## Commands\n\nagent-desktop has 60 command names, 56 operational commands. The other four (`key-down`, `key-up`, `mouse-down`, `mouse-up`) refuse to run until a daemon can release a held key or button. [Commands](https://agent-browser.dev/desktop/commands) documents each one.\n\n| Group | Commands |\n|---|---|\n| Observe | `snapshot`, `find`, `get`, `is`, `screenshot`, `list-surfaces` |\n| Act on a ref | `click`, `double-click`, `triple-click`, `right-click`, `type`, `set-value`, `clear`, `focus`, `select`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll`, `scroll-to` |\n| Keyboard and mouse | `press`, `hover`, `drag`, `mouse-move`, `mouse-click`, `mouse-wheel`, `key-down`, `key-up`, `mouse-down`, `mouse-up` |\n| Apps and windows | `launch`, `close-app`, `list-apps`, `list-windows`, `list-displays`, `focus-window`, `resize-window`, `move-window`, `minimize`, `maximize`, `restore`, `open-system-surface` |\n| Notifications | `list-notifications`, `dismiss-notification`, `dismiss-all-notifications`, `notification-action` |\n| Clipboard | `clipboard-get`, `clipboard-set`, `clipboard-clear` |\n| Wait | `wait` |\n| Sessions | `session`, `trace`, `cursor-overlay` |\n| System | `status`, `permissions`, `version`, `batch`, `skills` |\n\n## Platform support\n\n| Platform | Requirement | Accessibility API |\n|---|---|---|\n| [macOS](https://agent-browser.dev/desktop/platforms/macos) | macOS 13 or later, Intel or Apple Silicon | AX API |\n| [Windows](https://agent-browser.dev/desktop/platforms/windows) | Windows 10 1809 or later, x64 or ARM64 | UI Automation |\n| [Linux](https://agent-browser.dev/desktop/platforms/linux) | Ubuntu 24.04 or later, x86_64 or aarch64, X11 or Wayland | AT-SPI |\n\nEach platform page lists what works headless, what needs `--headed`, and what refuses.\n\n## C library\n\nEach release ships `libagent_desktop_ffi`, so a program can call agent-desktop in process. See the [C library docs](https://agent-browser.dev/desktop/ffi).\n\n```python\nimport ctypes\nlib = ctypes.CDLL(\"./lib/libagent_desktop_ffi.dylib\")\nlib.ad_adapter_create.restype = ctypes.c_void_p\nlib.ad_adapter_destroy.argtypes = [ctypes.c_void_p]\nassert lib.ad_init(7) == 0  # AD_RESULT_OK when the header's AD_ABI_VERSION_MAJOR matches the library\nadapter = lib.ad_adapter_create()\nlib.ad_adapter_destroy(adapter)\n```\n\n## Development\n\nEach platform adapter builds only on its own OS, so scope cargo to the host's packages. On macOS:\n\n```bash\nHOST_PKGS=(-p agent-desktop-core -p agent-desktop-macos -p agent-desktop -p agent-desktop-ffi)\ncargo test \"${HOST_PKGS[@]}\"\ncargo clippy \"${HOST_PKGS[@]}\" --all-targets -- -D warnings\n```\n\nOn Windows, use `agent-desktop-windows` instead of `agent-desktop-macos`; on Linux, `agent-desktop-linux`. [CONTRIBUTING.md](CONTRIBUTING.md) lists every gate.\n\n## Documentation\n\n- [Introduction](https://agent-browser.dev/desktop): what it is and how it works\n- [Snapshots and refs](https://agent-browser.dev/desktop/snapshots-and-refs)\n- [Errors and recovery](https://agent-browser.dev/desktop/errors-and-recovery)\n- [Skills](https://agent-browser.dev/desktop/skills)\n- [CONCEPTS.md](CONCEPTS.md): vocabulary\n- [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [SUPPORT.md](SUPPORT.md)\n\n## License\n\nApache-2.0\n"
+    },
+    "brief": {
+      "summary": "让 AI 代理读取桌面应用无障碍树并点击操作的命令行工具",
+      "problem": "截图加像素匹配操作桌面太脆弱，代理需要稳定的界面结构",
+      "highlights": [
+        "可以让代理按 ref 点击、输入并复查界面",
+        "可以把 60 个命令挂成 MCP 工具给代理调用",
+        "可以用 C 库在进程内直接调用，不经过 JS"
+      ],
+      "target_users": [
+        "AI 代理开发者",
+        "桌面自动化工程师",
+        "MCP 工具作者"
+      ],
+      "why_trending": "单日新增约 3.8k Star 且连续上榜，桌面操作方向关注度高",
+      "caveat": "快照和截图可能含隐私内容，别上传公开日志；部分操作需 --headed",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vercel-labs/agent-desktop",
+      "score": 86,
+      "category": "AI Agent / Skills",
+      "reason": "AI Agent 桌面操作 CLI，支持 MCP",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 74.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "max-sixty/worktrunk",
+      "url": "https://github.com/max-sixty/worktrunk",
+      "description": "Worktrunk is a CLI for Git worktree management, designed for parallel AI agent workflows",
+      "language": "Rust",
+      "total_stars": 10644,
+      "forks": 388,
+      "stars_today": 438,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 488
+    },
+    "details": {
+      "topics": [
+        "agents",
+        "claude-code",
+        "codex",
+        "developer-tools",
+        "git",
+        "worktrees"
+      ],
+      "license_name": "",
+      "created_at": "2025-10-17T22:13:14Z",
+      "updated_at": "2026-11-04T06:41:33Z",
+      "pushed_at": "2026-11-04T06:36:39Z",
+      "open_issues": 70,
+      "homepage": "https://worktrunk.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- markdownlint-disable MD033 -->\n\n<h1><img src=\"docs/public/logo.png\" alt=\"Worktrunk logo\" width=\"50\" align=\"absmiddle\">&nbsp;&nbsp;Worktrunk</h1>\n\n<!-- Crates.io badge below disabled while shields.io is rate-limited by crates.io\n     (renders \"CRATES.IO: INVALID\"). Tracking: badges/shields#11879. Restore once fixed.\n     [![Crates.io](https://img.shields.io/crates/v/worktrunk?style=for-the-badge&logo=rust)](https://crates.io/crates/worktrunk)\n-->\n[![Docs](https://img.shields.io/badge/docs-worktrunk.dev-blue?style=for-the-badge&logo=gitbook)](https://worktrunk.dev)\n[![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue?style=for-the-badge)](https://opensource.org/licenses/MIT)\n[![CI](https://img.shields.io/github/actions/workflow/status/max-sixty/worktrunk/ci.yaml?event=push&branch=main&style=for-the-badge&logo=github)](https://github.com/max-sixty/worktrunk/actions?query=branch%3Amain+workflow%3Aci)\n[![Codecov](https://img.shields.io/codecov/c/github/max-sixty/worktrunk?style=for-the-badge&logo=codecov)](https://codecov.io/gh/max-sixty/worktrunk)\n[![Stars](https://img.shields.io/github/stars/max-sixty/worktrunk?style=for-the-badge&logo=github)](https://github.com/max-sixty/worktrunk/stargazers)\n[![maintained with tend](https://img.shields.io/badge/maintained_with-tend-bba580?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwxNikgc2NhbGUoMC4wMTI1LC0wLjAxMjUpIiBmaWxsPSIjZmZmIiBzdHJva2U9Im5vbmUiPjxwYXRoIGQ9Ik02ODAgMTEyOCBjNjIgLTk2IDY5IC0xNzggMjAgLTI0MSAtMTcgLTIyIC0yMCAtNDAgLTIwIC0xMzQgbDEgLTEwOCAyMSAyOCBjMTEgMTYgMzAgNDcgNDIgNzAgMTIgMjIgMzIgNDkgNDYgNTkgMzcgMjcgMTE0IDM4IDE4NCAyNyA5MyAtMTUgOTQgLTE4IDQ0IC03OSAtNzIgLTg4IC0xMDkgLTExMyAtMTc2IC0xMTcgLTMxIC0yIC02NCAxIC03MiA2IC0yMyAxNSAyMSA1NiAxMDcgOTggNDAgMjAgNzEgMzggNjkgNDAgLTYgNyAtODggLTE3IC0xMjYgLTM3IC00OSAtMjUgLTEwMCAtNzggLTEyMSAtMTI1IC0xNSAtMzMgLTE5IC02NiAtMTkgLTE4OCAwIC0xNTcgOCAtMTk1IDUwIC0yMzIgMTcgLTE2IDM2IC0yMCA4NSAtMTkgNjIgMSA2MyAxIDczIC0zMiA5IC0zMiA5IC0zMyAtMjIgLTQwIC01MCAtMTIgLTEzMiAtNyAtMTY0IDEwIC00MCAyMSAtNzkgNjkgLTkyIDExNCAtNSAyMCAtMTAgMTAyIC0xMCAxODIgMCA4MCAtNSAxNjIgLTExIDE4NCAtMjIgNzkgLTEzNSAxNjYgLTIzNCAxODEgLTM3IDYgLTM1IDMgMzAgLTI4IDc4IC0zOSAxNDQgLTkxIDEzMiAtMTA0IC01IC00IC0zNyAtOCAtNzEgLTggLTc3IDAgLTExNyAyNCAtMTgyIDEwOSAtNTIgNjggLTUxIDcwIDQyIDg1IDcxIDExIDE0MyAwIDE4MyAtMjkgMTYgLTExIDQwIC00MyA1NCAtNzMgMTMgLTI5IDMyIC01OSA0MSAtNjYgMTQgLTEyIDE2IC03IDE2IDU4IDAgNTkgNCA3NyAyMyAxMDIgMTkgMjYgMjMgNDYgMjUgMTMwIDMgNjcgMCA5OSAtNyA5OSAtNyAwIC0xMSAtMjMgLTEyIC01NyAwIC0zMiAtNiAtNzYgLTEyIC05NyBsLTEyIC00MCAtMjcgMzIgYy0zNCA0MSAtNDMgOTYgLTI0IDE1MSAxNCA0MSA3NSAxNDEgODYgMTQxIDMgMCAyMSAtMjQgNDAgLTUyeiIvPjwvZz48L3N2Zz4K)](https://github.com/max-sixty/tend)\n\n> **November 2026**: Worktrunk was [released](https://x.com/max_sixty/status/2006077845391724739?s=20) at the start of the year, and has quickly become the most popular git worktree manager. It's built with love (there's no slop!). Please let me know any frictions at all; I'm intensely focused on continuing to make Worktrunk excellent, and the biggest help is folks posting problems they perceive.\n\nWorktrunk is a CLI for git worktree management, designed for running AI agents in parallel.\n\nWorktrunk's three core commands make worktrees as easy as branches. Plus, Worktrunk has a bunch of quality-of-life features to simplify working with many parallel changes, including hooks to automate local workflows & copy-on-write build caches.\n\nA quick demo:\n\n![Worktrunk Demo](https://cdn.jsdelivr.net/gh/max-sixty/worktrunk-assets@main/assets/docs/light/wt-core.gif)\n\n> ### 📚 Full documentation at [worktrunk.dev](https://worktrunk.dev) 📚\n\n<!-- ⚠️ AUTO-GENERATED from docs/src/content/docs/worktrunk.md#context-git-worktrees..worktrunk-makes-git-worktrees-as-easy-as-branches — edit source to update -->\n\n## Context: git worktrees\n\nAI agents like Claude Code and Codex can handle longer tasks without\nsupervision, such that it's possible to manage 5-10+ in parallel. Git's native\nworktree feature gives each agent its own working directory, so they don't step\non each other's changes.\n\nBut the git worktree UX is clunky. Even a task as small as starting a new\nworktree requires typing the branch name three times: `git worktree add -b feat\n../repo.feat`, then `cd ../repo.feat`.\n\n## Worktrunk makes git worktrees as easy as branches\n\nWorktrees are addressed by branch name; paths are computed from a configurable template. Commands that take a branch also accept the path of the worktree it is checked out in.\n\n<p class=\"workflow-stage\">Start with the core commands</p>\n\n**Core commands:**\n\n<table class=\"cmd-compare\">\n  <thead>\n    <tr>\n      <th>Task</th>\n      <th>Worktrunk</th>\n      <th>Plain git</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Switch worktrees</td>\n      <td data-label=\"Worktrunk\"><code>wt switch feat</code></td>\n      <td data-label=\"Plain git\"><code>cd ../repo.feat</code></td>\n    </tr>\n    <tr>\n      <td>Create + start Claude</td>\n      <td data-label=\"Worktrunk\"><code>wt switch -c -x claude feat</code></td>\n      <td data-label=\"Plain git\"><pre><code>git worktree add -b feat ../repo.feat && \\\ncd ../repo.feat && \\\nclaude</code></pre></td>\n    </tr>\n    <tr>\n      <td>Clean up</td>\n      <td data-label=\"Worktrunk\"><code>wt remove</code></td>\n      <td data-label=\"Plain git\"><pre><code>cd ../repo && \\\ngit worktree remove ../repo.feat && \\\ngit branch -d feat</code></pre></td>\n    </tr>\n    <tr>\n      <td>List with status</td>\n      <td data-label=\"Worktrunk\"><code>wt list</code></td>\n      <td data-label=\"Plain git\"><span class=\"cmd-compare-value\"><code>git worktree list</code> (paths only)</span></td>\n    </tr>\n  </tbody>\n</table>\n\n<p class=\"workflow-stage\">Expand into the more advanced commands as needed</p>\n\n<p class=\"workflow-heading\"><strong>Workflow automation:</strong></p>\n\n- **[Hooks](https://worktrunk.dev/hook/)** — run commands on create, pre-merge, post-merge, etc\n- **[LLM commit messages](https://worktrunk.dev/llm-commits/)** — generate commit messages from diffs\n- **[Merge workflow](https://worktrunk.dev/merge/)** — squash, rebase, merge, clean up in one command\n- **[Interactive picker](https://worktrunk.dev/switch/#interactive-picker)** — browse worktrees with streaming CI status and diff, log, PR and comment previews\n- **[Share build caches](https://worktrunk.dev/step/#wt-step-copy-ignored)** — ten worktrees get `target/`, `node_modules/`, etc without building or copying them (on APFS, btrfs, and XFS)\n- **[`wt list --full`](https://worktrunk.dev/list/#full-mode)** — [CI status](https://worktrunk.dev/list/#ci-status) and [AI-generated summaries](https://worktrunk.dev/list/#llm-summaries) per branch\n- **[PR checkout](https://worktrunk.dev/switch/#pull-requests-and-merge-requests)** — `wt switch pr:123` to jump straight to a PR's branch\n- **[Dev server per worktree](https://worktrunk.dev/tips-patterns/#dev-server-per-worktree)** — `hash_port` template filter gives each worktree a unique port\n- **[Aliases](https://worktrunk.dev/extending/#aliases) & [per-branch variables](https://worktrunk.dev/config/#wt-config-state-vars)** — custom `wt <name>` commands and branch-scoped state for hook templates\n- ...and **[lots more](#next-steps)**\n\nMultiple parallel agents, same simple commands:\n\n![Worktrunk omnibus demo: multiple Claude agents in Zellij tabs with hooks, LLM commits, and merge workflow](https://raw.githubusercontent.com/max-sixty/worktrunk-assets/main/assets/docs/light/wt-zellij-omnibus.gif)\n\n<!-- END AUTO-GENERATED -->\n\n<!-- ⚠️ AUTO-GENERATED from docs/src/content/docs/worktrunk.md#install..next-steps — edit source to update -->\n\n## Install\n\n**Homebrew (macOS & Linux):**\n\n```bash\nbrew install worktrunk && wt config shell install\n```\n\nShell integration allows commands to change directories.\n\n**Cargo:**\n\n```bash\ncargo install worktrunk && wt config shell install\n```\n\n<details>\n<summary><strong>Windows & other</strong></summary>\n\n**Windows.** `wt` defaults to Windows Terminal's command, so Winget additionally installs Worktrunk as `git-wt` to avoid the conflict:\n\n```bash\nwinget install max-sixty.worktrunk\ngit-wt config shell install\n```\n\nAlternatively, disable Windows Terminal's alias (Settings → Apps → Advanced app settings → App execution aliases → \"Terminal\"/\"Terminal Preview\") to use `wt` directly.\n\n> Free code signing provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/) — [policy](https://worktrunk.dev/code-signing/).\n\n**Arch Linux:**\n\n```bash\nsudo pacman -S worktrunk && wt config shell install\n```\n\n**Conda / Pixi** (community-maintained [feedstock](https://github.com/conda-forge/worktrunk-feedstock)):\n\n```bash\nconda install -c conda-forge worktrunk && wt config shell install\n```\n\nOr with [Pixi](https://pixi.sh): `pixi global install worktrunk && wt config shell install`.\n\n</details>\n\n## Quick start\n\nCreate a worktree for a new feature:\n\n```console\n$ wt switch --create feature-auth\n✓ Created branch feature-auth from main and worktree @ ~/repo.feature-auth\n```\n\nThis creates a new branch and worktree, then switches to it. Do your work, then check all worktrees with [`wt list`](https://worktrunk.dev/list/):\n\n```console\n$ wt list\n  Branch        Status      HEAD±     main↕    main…±    Remote⇅  Commit    Age  Message\n@ feature-auth  +   ↑      +27   -8   ↑1       +31                4bc72dc    2h  Add authenticatio…\n^ main              ^⇡                                    ⇡1      0e631ad    1d  Initial commit\n\n○ Showing 2 worktrees, 1 with changes, 1 ahead, hidden: Path\n```\n\nThe `@` marks the current worktree. `+` means staged changes, `↑1` means 1 commit ahead of main, `⇡` means unpushed commits.\n\nWhen done, either:\n\n**PR workflow** — commit, push, open a PR, merge via GitHub/GitLab, then clean up:\n\n```bash\nwt step commit                    # commit staged changes\ngh pr create                      # or glab mr create\nwt remove                         # after PR is merged\n```\n\n**Local merge** — squash, rebase onto main, fast-forward merge, clean up:\n\n```console\n$ wt merge main\n◎ Generating commit message and committing changes... (2 files, +53, no squashing needed)\n  Add authentication module\n✓ Committed changes @ a1b2c3d\n◎ Merging 1 commit to main @ a1b2c3d (no rebase needed)\n  * a1b2c3d Add authentication module\n   auth.rs | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++\n   lib.rs  |  2 ++\n   2 files changed, 53 insertions(+)\n✓ Merged to main (1 commit, 2 files, +53)\n◎ Removing feature-auth worktree & branch in background (same commit as main, _)\n○ Switched to worktree for main @ ~/repo\n```\n\nFor parallel agents, create multiple worktrees and launch an agent in each:\n\n```bash\nwt switch -x claude -c feature-a -- 'Add user authentication'\nwt switch -x claude -c feature-b -- 'Fix the pagination bug'\nwt switch -x claude -c feature-c -- 'Write tests for the API'\n```\n\nThe `-x` flag runs a command after switching; arguments after `--` are passed to it. Configure [post-start hooks](https://worktrunk.dev/hook/#hook-types) to automate setup (install deps, start dev servers).\n\n## Next steps\n\n- Learn the core commands: [`wt switch`](https://worktrunk.dev/switch/), [`wt list`](https://worktrunk.dev/list/), [`wt merge`](https://worktrunk.dev/merge/), [`wt remove`](https://worktrunk.dev/remove/)\n- Set up [hooks](https://worktrunk.dev/hook/) for automated setup\n- Explore [LLM commit messages](https://worktrunk.dev/llm-commits/), [interactive\n  picker](https://worktrunk.dev/switch/#interactive-picker), [Claude Code integration](https://worktrunk.dev/claude-code/), [CI\n  status & PR links](https://worktrunk.dev/list/#ci-status)\n- Browse [tips & patterns](https://worktrunk.dev/tips-patterns/) for recipes: aliases, dev servers, databases, agent handoffs, and more\n- [Extending Worktrunk](https://worktrunk.dev/extending/) — customize workflows with hooks & aliases\n- Watch [@DevOp"
+    },
+    "brief": {
+      "summary": "Worktrunk 管理 Git worktree，专为并行 AI 代理设计。",
+      "problem": "Git worktree 使用繁琐，并行 AI 代理时切换和管理不便。",
+      "highlights": [
+        "可以一键创建 worktree 并启动 Claude",
+        "可以共享构建缓存，多个 worktree 不重复构建",
+        "可以自动生成 LLM 提交信息"
+      ],
+      "target_users": [
+        "并行AI代理开发者",
+        "多分支管理的开发者",
+        "Claude Code 用户"
+      ],
+      "why_trending": "今日新增 438 星，AI 代理并行工作流受关注。",
+      "caveat": "需安装 shell 集成才能切换目录。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "max-sixty/worktrunk",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "并行 Agent 工作流的 Git worktree 管理",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 20,
+      "ranking_score": 58.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "spotify/portal-ai-plugins",
+      "url": "https://github.com/spotify/portal-ai-plugins",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 3096,
+      "forks": 240,
+      "stars_today": 91,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 91
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-07-23T21:17:21Z",
+      "updated_at": "2026-11-04T06:41:57Z",
+      "pushed_at": "2026-10-23T07:08:57Z",
+      "open_issues": 13,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Spotify Portal AI Plugins\n\nBring [Spotify Portal](https://portal.spotify.com) into Claude Code, Codex, Cursor, and pi.\n\nThis plugin provides focused workflows for the\n[Portal CLI](https://www.npmjs.com/package/@spotify/portal-cli): set up\nauthentication, search your software catalog, build service briefings, run\ndiagnostics, and invoke Portal actions.\n\n## Highlights\n\n- Set up the Portal CLI for your current coding-agent environment.\n- Run read-only diagnostics to verify plugin, CLI, authentication, and action readiness.\n- Search the software catalog and technical documentation using natural language queries.\n- Generate concise service briefings with available ownership, health, incident, and documentation details.\n- Discover and safely invoke Portal actions with built-in help, dry-run, and confirmation safeguards.\n- Create, run, check, and troubleshoot Fleetshift shifts, open PRs from completed runs, and stop a run on request.\n\nThe marketplace also ships **shunt** (Claude Code only for now): a plugin that routes I/O-heavy agent work — bulk file reads and boilerplate generation — to AiKA modes running cheaper worker models, via the Portal CLI actions registry. See [`plugins/shunt/README.md`](plugins/shunt/README.md).\n\n## Installation\n\n### Claude Code\n\n```bash\nclaude plugin marketplace add spotify/portal-ai-plugins\nclaude plugin install portal@portal\nclaude plugin install shunt@portal   # optional: token-saving AiKA delegation\n```\n\nStart a new session and run:\n\n```text\n/portal:setup\n```\n\n### Codex\n\n```bash\ncodex plugin marketplace add spotify/portal-ai-plugins\ncodex\n```\n\nOpen `/plugins`, install Spotify Portal, start a new task, and ask:\n\n```text\nSet up Spotify Portal for me.\n```\n\n### Cursor\n\nRegister the [spotify/portal-ai-plugins](https://github.com/spotify/portal-ai-plugins)\nrepository in your Cursor team marketplace, then install Spotify Portal from\n**Cursor Settings → Plugins**.\n\n### pi\n\n```bash\npi install git:github.com/spotify/portal-ai-plugins\n```\n\nStart a new session and run:\n\n```text\n/skill:setup\n```\n\n## Workflows\n\n| Workflow | Purpose |\n| --- | --- |\n| `setup` | Configure Portal CLI authentication |\n| `doctor` | Run read-only readiness diagnostics |\n| `search` | Search the software catalog and technical documentation |\n| `service` | Produce a concise operational service briefing |\n| `actions` | Discover, inspect, preview, and safely invoke Portal actions |\n| `feedback` | Submit feedback about the Portal CLI to the Portal team |\n| `fleetshift-create-shift` | Draft and create a Fleetshift shift from a goal, with a dry-run preview |\n| `fleetshift-run-shift` | Trigger a shift, monitor it with a bounded wait, and stop it on request |\n| `fleetshift-check-shift` | Report a shift's progress, targets, and PRs (read-only) |\n| `fleetshift-troubleshoot-shift` | Diagnose failed shift jobs from their status and logs (read-only) |\n| `fleetshift-create-prs` | Open PRs for completed shift targets after confirmation |\n\n## Portal CLI\n\nThe workflows invoke the upstream CLI through:\n\n```bash\nnpx @spotify/portal-cli <command>\n```\n\nSetup verifies the required `auth`, `actions`, `owner`, `search`, and `service`\ncommands before proceeding.\n"
+    },
+    "brief": {
+      "summary": "Spotify Portal 的编码 Agent 插件集",
+      "problem": "在编码助手里直接查软件目录、跑诊断和调 Portal 操作",
+      "highlights": [
+        "可以用自然语言搜索软件目录和技术文档",
+        "可以生成服务简报，查看负责人和健康状态",
+        "可以创建、运行并检查 Fleetshift 任务"
+      ],
+      "target_users": [
+        "平台工程师",
+        "SRE/运维",
+        "编码 Agent 用户"
+      ],
+      "why_trending": "今日新增 91 Star，本周首次收录，接入多个编码 Agent",
+      "caveat": "需配置 Portal CLI 认证；shunt 仅支持 Claude Code",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "spotify/portal-ai-plugins",
+      "score": 75,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Code/Codex 插件，含 Agent 工作流",
+      "generated_by_ai": true,
+      "velocity_score": 59,
+      "freshness_score": 40,
+      "ranking_score": 58.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "JuneYaooo/rea-video",
+      "url": "https://github.com/JuneYaooo/rea-video",
+      "description": "逆向一切视频：实拍口播、桌拍、AI 视频、3D、代码动效、混剪，逐镜拆出画面、花字、剪辑和声音是怎么做的，并给出复刻方案。Reverse-engineer any video, shot by shot.",
+      "language": "Python",
+      "total_stars": 235,
+      "forks": 48,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-video",
+        "aigc-detection",
+        "claude-code",
+        "codex",
+        "douyin",
+        "ffmpeg",
+        "prompt-engineering",
+        "remotion",
+        "reverse-engineering",
+        "short-video",
+        "shot-detection",
+        "subtitles",
+        "tiktok",
+        "video-analysis",
+        "video-breakdown",
+        "video-editing",
+        "video-generation",
+        "vlm"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-29T16:15:01Z",
+      "updated_at": "2026-11-04T06:43:44Z",
+      "pushed_at": "2026-11-04T06:37:14Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# rea-video\n\n逆向一切视频。\n\n实拍口播、桌拍、AI 视频、3D、代码动效、混剪都能拆，<br>\n逐个镜头告诉你画面、花字、剪辑和声音是怎么做的，再告诉你怎么照着做一条。\n\n中文 | [English](README_en.md) | [日本語](README_ja.md)\n\n[![Stars](https://img.shields.io/github/stars/JuneYaooo/rea-video?style=flat)](https://github.com/JuneYaooo/rea-video/stargazers)\n![Python](https://img.shields.io/badge/python-%E2%89%A53.10-blue)\n![Agent](https://img.shields.io/badge/runs%20in-Claude%20Code%20%7C%20Codex-8A2BE2)\n\n<img src=\"docs/cases/demo.gif\" width=\"440\" alt=\"左：TikTok 手机实拍原片；右：别人用 AI 换产品重做的版本\">\n\n左边是 TikTok 上的手机实拍原片，右边是别人用 AI 换了产品重做的版本。<br>\nrea-video 判断：左边全部实拍，一个场景、两个机位就能拍完；右边全部 AI 生成，8 个镜头可以合并成 3 次生成。\n\n</div>\n\n## 能拆哪些视频\n\n| 视频类型 | 常见例子 | 拆出什么 |\n|---|---|---|\n| 实拍 | 口播、桌拍、手持带货、vlog、探店 | 拍摄场次和机位，景别、运镜、布光（12 种方案附器材）、调色 |\n| AI 视频 | 文生 / 图生视频、AI 短剧、AI MV | 判断依据，每镜反推的提示词，合并成几次生成、用哪个模型 |\n| 数字人 | 人像被声音驱动说话、对口型 | 哪些镜头是数字人，需要的人像和音频 |\n| 3D / 动画 | Blender / C4D 科普、产品动画、2D 动画、定格动画 | 用视频模型生成还是写 3D 代码渲染 |\n| 代码 / 模板 | 文字动效、UI 演示、图表、PPT 式卡片 | 文字、版式、动效节奏，可以写成 Remotion 工程 |\n| 录屏 / 截图 | 软件教程、网页演示 | 哪些是真实素材，复刻时要你自己录 |\n| 混合 / 混剪 | AI 人物 + 代码界面 + 真实录屏，实拍 + AI 加工 | 每一镜分开判断，再按原时间线拼回 |\n\n除了画面怎么做的，每条视频还会拆：\n\n- 字幕和花字：每句字幕的起止时间（可导出 SRT / ASS），花字用什么颜色、描边、怎么出场\n- 贴纸、表情包、画中画：放在哪、停多久\n- 剪辑：在哪切、节奏多快、有没有卡节拍\n- 声音：真人还是 AI 配音，配乐是 AI 做的还是曲库的、多少 BPM，音效落在哪一下\n- 要你自己准备的素材：录屏、截图、产品图\n\n## 快速开始\n\nrea-video 是给 AI 助手用的。在 Claude Code、Codex 这类能运行命令的 agent 里说：\n\n```text\n安装 https://github.com/JuneYaooo/rea-video ，然后拆解这条视频：/path/to/video.mp4\n```\n\nagent 会自己装好命令行工具、读完拆解流程，然后从头跑完。电脑上需要有 ffmpeg 和 Python 3.10 以上。\n\n跑完你会拿到：\n\n- 一句话结论，比如「AI 视频 41% + 代码界面 59%，有 8 秒真实录屏，曲库配乐 122 BPM」\n- 复刻方案，按实拍、AI 生成、代码分开写\n- 完整报告 `report.html`：逐镜头截图、判断依据、提示词、拍法和声音拆解\n\n配一个看视频的模型，Gemini 豆包都行，把接口地址和密钥告诉 agent 就行。配上之后实拍、AI、3D 分得更准，每个镜头还会反推出提示词。不配也能用，agent 自己能看图的话，会补看没把握的镜头。\n\n## 案例\n\n<table>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<a href=\"docs/cases.md#2-混合片ai-人物对话--代码界面--真实录屏\"><img src=\"docs/cases/dual_role/storyboard.jpg\"></a><br>\n<b>混合片</b> · 19 秒 · 10 镜<br>\nAI 人物对话 + 代码界面 + 8 秒真实录屏。5 个对话镜头被界面隔开，但同一个场景，一次生成就够。<br>\n<a href=\"docs/cases/videos/dual_role.mp4\">视频</a> · <a href=\"docs/cases/dual_role/report.md\">报告</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<a href=\"docs/cases.md#3-3d-科普片咸鸭蛋为什么会流油\"><img src=\"docs/cases/salted_egg/storyboard.jpg\"></a><br>\n<b>3D 科普片</b> · 67 秒 · 21 镜<br>\n全部 3D 渲染，AI 旁白。可以合并成 10 次视频生成，也可以让大模型写 Blender / Three.js 代码。<br>\n<a href=\"docs/cases/videos/salted_egg.mp4\">视频</a> · <a href=\"docs/cases/salted_egg/report.md\">报告</a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<a href=\"docs/cases.md#4-代码-ui-动效产品宣传片\"><img src=\"docs/cases/v10/storyboard.jpg\"></a><br>\n<b>产品宣传片</b> · 70 秒 · 12 镜<br>\n83% 是代码动效，12% 录屏。不需要视频模型，写一个 Remotion 工程就能做。<br>\n<a href=\"docs/cases/videos/v10_oiioii_gen_coding_first.mp4\">视频</a> · <a href=\"docs/cases/v10/report.md\">报告</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<a href=\"docs/cases.md#5-ai-音乐-mv歌是-ai-写的还是曲库的\"><img src=\"docs/cases/qing_mv/preview.jpg\"></a><br>\n<b>AI 音乐 MV</b> · 165 秒 · 86 镜<br>\n判出歌是 AI 生成的（实际是 Suno）。看图模型说是「影视剧实拍」的镜头，agent 从奏折上的伪汉字认出是 AI。<br>\n<a href=\"docs/cases/videos/qing_mv.mp4\">视频</a> · <a href=\"docs/cases/qing_mv/report.md\">报告</a>\n</td>\n</tr>\n</table>\n\n## 复刻效果\n\nrea-video 拆完，交给 [cheap-claude-video](https://github.com/JuneYaooo/cheap-claude-video) 的复刻配方生成：运镜、动作、节奏、转场跟着原片走，只换你指定的元素。\n目前的效果是用自己部署的 MiniMax H3 生成的：原镜头当动作参考，换好元素的关键帧（gpt-image-2）定长相和场景。\n下面是公众号文章里 OiiOii 做过的三组复刻，每组我们做了两版：和 OiiOii 同样的换法，以及把主体、场景、道具一起换掉。\n每个动图里四格同步播放：原片、OiiOii 复刻、我们的复刻、换元素版。\n\n<table>\n<tr><td>\n<b>俯拍换装</b> · 12 秒<br>\n同款：女生换成男生，三套衣服换成对应男装。换元素：古风少女、三套汉服、中式书房，遥控器换成团扇。<br>\n<img src=\"docs/cases/remake/outfit.gif\"><br>\n<a href=\"docs/cases/remake/outfit_compare.mp4\">高清对比视频（带声音）</a> · <a href=\"docs/cases/remake/outfit_sheet.jpg\">同一时刻抽帧</a>\n</td></tr>\n<tr><td>\n<b>纸艺 / 水彩动画</b> · 30 秒<br>\n同款：主角换成黏土小女孩。换元素：主角换成小狐狸，森林换成海底，云端换成星空，晚霞换成极光。<br>\n<img src=\"docs/cases/remake/paper.gif\"><br>\n<a href=\"docs/cases/remake/paper_compare.mp4\">高清对比视频（带声音）</a> · <a href=\"docs/cases/remake/paper_sheet.jpg\">同一时刻抽帧</a>\n</td></tr>\n<tr><td>\n<b>实拍带货</b> · 21 秒 · 11 镜<br>\n同款：产品换成原创新款，英文贴字换成中文。换元素：樱花粉产品，厨房换成户外露营，食材换成草莓、燕麦奶、猕猴桃。<br>\n<img src=\"docs/cases/remake/juicer.gif\"><br>\n<a href=\"docs/cases/remake/juicer_compare.mp4\">高清对比视频（带声音）</a> · <a href=\"docs/cases/remake/juicer_sheet.jpg\">同一时刻抽帧</a>\n</td></tr>\n</table>\n\n高清对比视频的声音用原片。原片和 OiiOii 版取自公众号文章，仅用于对比展示。\n\n## 准不准\n\n按镜头时长算的「制作方式」准确率：\n\n| | 调参集（15 条） | 留出集（16 条） | 公众号转码视频（10 条） |\n|---|---|---|---|\n| 只用工具（离线、免费） | 98.3% | 99.6% / 98.9% | 88.6% |\n| + 看图模型（Gemini） | — | 99.6% / 99.8% | 99.6% |\n| + agent 看图复核 | — | 99.6% / 99.8% | 100% |\n\n原始文件只用工具基本够。从平台下载的视频压缩过，噪点证据没了，要靠看图才能回到 99% 以上。真实素材识别 97–99%，镜头切点全对。明细和复现方法在 [eval/RESULTS.md](eval/RESULTS.md)。\n\n## 怎么判断的\n\n![rea-video 流程](docs/rea-flow.svg)\n\n1. 切镜头：把视频按镜头切开，声音拆成人声、配乐、音效。\n2. 取证据：测画面（帧率规律、噪点、是不是整张图在推拉、文件里有没有 AIGC 标识）；看图（手指、文字、物理细节对不对）；听声音（BPM、调性、是唱还是说）。\n3. 综合判断：AIGC 标识、帧率这类硬证据优先于「看起来像」。几方意见冲突时标出来，交给 agent 看图复核。\n4. 出复刻方案：按目标视频模型的实际能力分批，比如单次能生成多长、能不能一次出多个镜头、能吃几张参考图。\n\n## 常见问题\n\n<details>\n<summary>和 Hypit 这类一键复刻工具有什么区别？</summary>\n\n[Hypit](https://github.com/hypit-ai/hypit) 拿一条参考视频直接做一条新片：agent 看抽帧理解原片，再用它接入的模型（Seedance、PixVerse、MiniMax、Wan 等）生成画面，字幕和动效用 HTML 渲染出来。\n\n它不区分原片是怎么做的。原片是实拍的，它照样按自己的流程重做，不会告诉你原片几个机位、怎么打光。AI 视频能做到什么程度，取决于它接了哪些模型：没有可灵、Veo，也没有专门的数字人和 3D；不生成 AI 配乐，配乐要自己准备。它最顺手的是口播、播客、采访这类跟着台词走的视频，纯音乐卡点、产品动效、电影感短片要弱一些。\n\nrea-video 不直接出片。它先逐个镜头判断是拍的、AI 生成的还是代码做的，再分别给拍摄方案、提示词或代码思路。想马上做一条同款，用 Hypit 更快；想弄清原片怎么做、怎么少花钱做出来，用 rea-video。两个可以一起用。\n\n</details>\n\n<details>\n<summary>一定要配看视频的模型吗？要花多少钱？</summary>\n\n不一定。只用工具是离线、免费的，原始文件的准确率已经很高。从平台下载、压缩过的视频建议配一个能看视频的模型（Gemini、豆包都行），或者用本身能看图的 agent。模型按你用的服务计费。自动生成视频（capsule-cinema）会先免费试跑一遍，你确认后才会正式调用模型。\n\n</details>\n\n<details>\n<summary>能自动把整条视频复刻出来吗？</summary>\n\n可以做「换元素复刻」：用 [cheap-claude-video](https://github.com/JuneYaooo/cheap-claude-video) 的复刻配方，原片的运镜、动作、节奏和声音不变，把人物、产品、服装、场景换掉，整条自动生成并拼回原时间线（见上面的「复刻效果」）。\n想按原样重做：AI 镜头可以自动生成；实拍镜头要你按拍摄方案去拍；代码镜头要 agent 写 Remotion 工程。详见 [docs/replicate.md](docs/replicate.md)。\n\n</details>\n\n<details>\n<summary>可以拿别人的视频直接搬运吗？</summary>\n\n不可以。rea-video 用来学习视频的结构、节奏和做法，再用你有权使用的素材重新制作。请勿直接搬运他人的画面、音乐、角色或肖像。投放时请遵守平台规则和当地的 AI 生成内容标识要求。\n\n</details>\n\n## 文档\n\n- [docs/what-it-detects.md](docs/what-it-detects.md)：能拆出什么（10 类画面、拍法、打光、调色、声音）\n- [docs/replicate.md](docs/replicate.md)：拿到报告后怎么复刻\n- [docs/cases.md](docs/cases.md)：案例详情\n- [docs/decompose.md](docs/decompose.md)：判断规则\n- [docs/cli.md](docs/cli.md)：命令行用法、和 capsule-cinema 的对接\n- [rea_video/capabilities/](rea_video/capabilities/README.md)：各家视频 / 图像 / 音频模型的能力表，复刻方案按它选模型\n- [eval/RESULTS.md](eval/RESULTS.md)：评测结果\n\n## 社区\n\n欢迎来 [linux.do](https://linux.do/) 交流使用体验、拆解案例和复刻思路。\n\n## 致谢\n\n思路来自 [REA（Reverse Engineer Anything）](https://github.com/morluto/rea)：从现象追到实现，结论附证据，用可测量的方式验证。\n"
+    },
+    "brief": {
+      "summary": "逐镜头拆解视频，判断是实拍、AI还是代码做的",
+      "problem": "想模仿一条视频，却看不出每个镜头是怎么做出来的",
+      "highlights": [
+        "可以拆出每个镜头的拍法、布光和机位",
+        "可以导出每句字幕的 SRT / ASS 时间轴",
+        "可以按报告给出实拍、AI、代码复刻方案"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "AI 视频制作者",
+        "剪辑学习者"
+      ],
+      "why_trending": "本周首次收录，235 星，可在 Claude Code、Codex 里直接调用",
+      "caveat": "它不直接出片，实拍镜头仍需自己拍；需 ffmpeg 与 Python 3.10+",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "JuneYaooo/rea-video",
+      "score": 92,
+      "category": "视频剪辑",
+      "reason": "逐镜拆解视频并给复刻方案，含剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 61.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "timoncool/YuE2-Studio",
+      "url": "https://github.com/timoncool/YuE2-Studio",
+      "description": "Local AI song generator with an editable score — YuE2 on your GPU: full songs with vocals, sheet music, covers, exact replay. Native Windows app, no Python, installer with auto-update.",
+      "language": "TypeScript",
+      "total_stars": 1857,
+      "forks": 218,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "abc-notation",
+        "ai-music",
+        "covers",
+        "cuda",
+        "ggml",
+        "local-ai",
+        "music-generation",
+        "offline",
+        "rust",
+        "sheet-music",
+        "tauri",
+        "text-to-music",
+        "vocals",
+        "windows",
+        "yue2"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-22T23:06:11Z",
+      "updated_at": "2026-11-04T06:42:49Z",
+      "pushed_at": "2026-11-04T06:40:27Z",
+      "open_issues": 28,
+      "homepage": "https://timoncool.github.io/YuE2-Studio/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<!-- studio family tabs -->\n[![YuE2 Studio](https://img.shields.io/badge/YuE2_Studio-songs_with_a_score-ec4899?style=for-the-badge)](https://github.com/timoncool/YuE2-Studio) [![MiniMax Music3 Studio](https://img.shields.io/badge/MiniMax_Music3_Studio-full--length_tracks-3f3f46?style=for-the-badge)](https://github.com/timoncool/MiniMax-Music3-Studio) [![ACE-Step Studio](https://img.shields.io/badge/ACE--Step_Studio-Suno_at_home-3f3f46?style=for-the-badge)](https://github.com/timoncool/ACE-Step-Studio)\n\n<img src=\"docs/logo.png\" alt=\"\" width=\"112\" height=\"112\" />\n\n# YuE2 Studio\n\n**Full songs with an editable score, generated on your own GPU. One executable — no Python, no Node.js, no launcher.**\n\n[![Project page](https://img.shields.io/badge/Project_page-timoncool.github.io-7c3aed?style=for-the-badge)](https://timoncool.github.io/YuE2-Studio/)\n[![Download](https://img.shields.io/badge/Download-Windows_x64-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/timoncool/YuE2-Studio/releases/latest)\n[![Donate](https://img.shields.io/badge/Support-Donate-ff69b4?style=for-the-badge)](DONATE.md)\n\n[![License](https://img.shields.io/github/license/timoncool/YuE2-Studio?style=flat-square)](LICENSE)\n[![Stars](https://img.shields.io/github/stars/timoncool/YuE2-Studio?style=flat-square)](https://github.com/timoncool/YuE2-Studio/stargazers)\n[![Last commit](https://img.shields.io/github/last-commit/timoncool/YuE2-Studio?style=flat-square)](https://github.com/timoncool/YuE2-Studio/commits/main)\n[![Downloads](https://img.shields.io/github/downloads/timoncool/YuE2-Studio/total?style=flat-square)](https://github.com/timoncool/YuE2-Studio/releases)\n\n**English** · [Русский](https://timoncool.github.io/YuE2-Studio/ru.html) · [中文](https://timoncool.github.io/YuE2-Studio/zh.html) · [日本語](https://timoncool.github.io/YuE2-Studio/ja.html) · [한국어](https://timoncool.github.io/YuE2-Studio/ko.html)\n\n![YuE2 Studio](docs/screenshots/en-01-create.png)\n\n</div>\n\nYuE2 Studio is a desktop studio for **YuE2**, the open song model from M-A-P that writes a\nscore before it sings. Describe a style, write the lyrics, and the model composes a melody\nwith chords as sheet music, then performs it as a full song with vocals. The score comes\nback with the track: read it, edit it, and render the same composition again with a\ndifferent sound. Windows installer with auto-update or a portable folder, runs offline on\nan NVIDIA card with 6 GB of VRAM or more; AMD and Intel cards through Vulkan are experimental.\n\nIt is built on [yue2.cpp](https://github.com/ServeurpersoCom/yue2.cpp), the native C++/CUDA\nport of YuE2. The studio around it is Rust and React in a Tauri window — nothing in the\nruntime path is Python.\n\n## For AI agents\n\nGiven this repository, an agent can set everything up and drive the studio by itself:\n\n1. Install the studio from the [latest release](https://github.com/timoncool/YuE2-Studio/releases/latest) and start it.\n2. Connect to its MCP server at `http://127.0.0.1:8791/mcp`:\n   `claude mcp add --transport http yue2-studio http://127.0.0.1:8791/mcp`\n3. Read the skill it serves (resource `studio://skill`, prompt `studio`), the same text as\n   [docs/mcp-skill.md](docs/mcp-skill.md), and start with the tool `studio_status`.\n\n[llms.txt](llms.txt) says the same for tools that look for it. To keep the skill in Claude\nCode, save [docs/mcp-skill.md](docs/mcp-skill.md) as `~/.claude/skills/yue2-studio/SKILL.md`.\n\n## What you can do\n\n- **A player of its own** — a ten-band equalizer on Winamp's frequencies with its presets,\n  your own and .EQF files; a MilkDrop visualiser with hundreds of presets or a spectrum in ten\n  looks, over the studio, fullscreen or in its own window; and a Winamp mode that turns the whole\n  window into a skinned Winamp 2 whose windows move apart, dock and resize — the original skin\n  and ten more included, sharp at any scale, the Winamp Skin Museum one click away,\n  Ctrl+M to switch. The song, its place and the equalizer carry over both ways.\n- **Save as, and a Files panel** — songs, stems, MIDI, lyric sheets, scores and videos are\n  saved where you say, in Windows' own Save dialog, and the Files panel shows each save.\n- **A proxy for the whole studio** — HTTP, HTTPS, SOCKS5 or SOCKS4, with a login: model\n  downloads, Hugging Face, OpenRouter and updates go through it.\n- **Full songs from a style and lyrics** — up to ten minutes, in the languages the model\n  sings. In Russian a stress mark (the combining acute U+0301, Alt+0769 on Windows) after a\n  vowel moves the sung stress to it, as Ruach Studio documents. On an RTX 4090 with the Q8_0 set a 3:38 song renders in about 46 seconds.\n- **Read and edit the score** — the model writes its composition in ABC notation first; the\n  studio engraves it as sheet music. Edit the notes, tempo or key and create again: the\n  composition stays, the performance changes. Or switch to melody-only, or no score at all.\n- **Compose the score first** — write only the score from the style and lyrics, without\n  singing it (the studio's take on yue2.cpp's `yue-plan`), read and fix it, then create.\n- **Covers** — SheetSage2 listens to a recording and writes its melody as a score; YuE2\n  then sings that melody in your style. The words have to fit the melody: the original\n  lyrics work best, new ones need the same syllables line by line with the stresses on\n  the same notes, or the singing drifts off the tune — lines stretch, pause and slide into\n  the wrong section. Transcription mistakes carry into the cover too. A track from your\n  library can be transcribed from its menu.\n- **Exact replay** — every track keeps its request and its audio codes, so it can be\n  re-rendered bit for bit, or re-rendered with other steps, a new sound seed, several\n  variations, or another output format, without composing again.\n- **110 ready examples** — the style/lyrics/score sets that ship with yue2.cpp, covers\n  included, one click to load.\n- **Every engine setting** — all seven sampling knobs (temperature, top-p, top-k,\n  repetition penalty and its window, minimum and maximum tokens) for the score and for the\n  audio codes, flow-matching steps, guidance, both seeds, lossless FLAC or MP3. Prompts open and save as JSON or YAML in the engine's own request\n  format, so they move freely between the studio, the yue2.cpp WebUI and `yue-synth`.\n- **Structured song writing** — build a style from its musical fields and arrange lyrics in editable sections, while keeping the plain text editable. Give the writing assistant a language, a target of 8–32 lines and additional instructions.\n- **Song and render controls** — voice and tempo fields; section, line/stanza and text-case tools; Keep/Words lyric preservation and exact checkpoint tokens; batch score-plan selection and chord mirroring in repeated sections. Edit scores with MIDI grid and octave controls. Transpose generation by −24 to +24 semitones, render vocals only through native HT-Demucs as MP3 or 32-bit WAV, and switch each LoRA on or off with weights from −10 to +10.\n- **A writing assistant** — a local Gemma model or OpenRouter writes the style and lyrics\n  from an idea and edits the score on request; or pick your connected agent (MCP) and it\n  writes instead. Lyrics you wrote yourself get their section tags with one button, the\n  words exactly as you wrote them.\n- **Word-level karaoke** — enhanced LRC with a timestamp on every word, aligned by Parakeet\n  or Whisper. Your lyrics are kept; only the timing is borrowed.\n- **Six stems on the GPU** — drums, bass, other, vocals, guitar and piano with HT-Demucs.\n- **Any track to MIDI** — a song, a stem or a processed take becomes multi-instrument MIDI\n  (34 instrument groups and drums) with MuScriptor on the GPU, through HOT-Step's native\n  port. A piano roll fills in while it listens; play it against the original, mute or solo\n  an instrument, save the .mid. Downloaded the first time it is used.\n- **A MIDI editor** — a piano roll with tracks, instruments and drums: play a song in from a\n  MIDI keyboard or the computer's keys, record or draw it, edit a track's MIDI, save it to the\n  library as a track and send it to a cover, or open the create form's score in it. A .mid\n  file becomes the score: the voice and instrument chosen, chords read or guessed, karaoke\n  words offered for the lyrics.\n- **Every result is a track** — stems, a processed take, a re-render and a cover land in the\n  library as tracks of their own, each marked with the one it was made from and keeping the\n  settings it was made with.\n- **LoRA** — LoRA and LoKr files for either half of the model, the composition or the\n  sound, each with its own strength, picked in the create form. A catalogue of ready ones\n  with their authors credited, and a search on Hugging Face that downloads what you pick.\n- **Train your own LoRA** — an optional tab on the LoRA page: songs of one artist or\n  style become a LoRA on your own card with HOT-Step's trainer and its tuned recipe (LoKr,\n  Prodigy, lyric timing from a forced aligner that also reads Cyrillic). Every setting of\n  the recipe is editable. Datasets move between this studio and MiniMax Music3 Studio as a\n  folder, and each saved checkpoint goes into the LoRA library in one click.\n  - **A three-step wizard** — drop a folder of songs, check them, train. Albums with a\n    cue sheet are cut into songs; titles and artists come from the tags, the file name and\n    the folders.\n  - **Preparation on its own** — lyrics come from the lyric databases players use (LRCLIB,\n    QQ Music, Kugou), word for word; only a song none of them knows has its vocals\n    separated and is heard by Whisper, with its usual hallucinations filtered out. The\n    assistant lays the lyrics out in sections. MOSS-Music listens to every song and the\n    assistant writes its style, with the tempo measured by Beat This! on the card.\n  - **Every song shows where it is** — the lyrics and styles appear as each song is done,\n    one model on the card at a time, each loaded once for the whole batch. A song that\n    failed or was stopped has a button that finishes just that song.\n  - **Picks up after a restart** — each song keeps what it has; a preparation cut off by a\n    crash or a restart carries on by itself and redoes nothing.\n  - **Stop by drift or by epochs** — stop when the composition half drifts too far from\n    the base, or after a set number of passes over the songs.\n  - **A trigger word from the start** — every dataset gets a rare word made from its name,\n    which you can change.\n  - **Train further** — not there yet at 750 steps? Set 1000 and the run goes on from its\n    latest checkpoint with the same recipe and songs; the loss chart and the checkpoints\n    continue instead of starting over.\n- **Audio processing** — noise reduction, the Spectral Lifter, a vocal naturaliser, your\n  own VST3 plugins in a chain, and mastering to a reference track. Compare before and\n  after while it plays, then keep the result as a version of the track or throw it away.\n- **The sound as the model made it** — the engine renders 32-bit float and the studio encodes\n  it once, changing nothing on the way: lossless 24-bit FLAC by default (libFLAC, the reference\n  encoder), MP3 with LAME when you choose it. Normalisation is a stage under Process, after\n  mastering, never part of generation.\n- **A library of plain files** — search, playlists, cover art from prompt templates, tracks\n  exported with title, lyrics and cover in their own tags (Vorbis comments in a FLAC, ID3 in an\n  MP3). Interface in English, Russian,\n  Chinese, Japanese and Korean.\n- **A cover for every track** — a track without one wears a free (CC0) Wikimedia Commons\n  photograph that fits the genres, moods and instruments of its style, a pattern in one of 21\n  DiceBear styles, or a cover OpenRouter generates for every new track. It is chosen by the\n  track's seed, so it stays the same, a stem wears its song's, and it is written into the f"
+    },
+    "brief": {
+      "summary": "在自己显卡上生成带曲谱完整歌曲的桌面工作室",
+      "problem": "在线AI音乐服务要订阅、难离线，改谱和重录也不自由",
+      "highlights": [
+        "可以写风格和歌词，在本机GPU生成带人声的整首歌",
+        "可以先看和改ABC曲谱，再换个声音重唱同一首曲子",
+        "可以把已有录音转成曲谱做翻唱，或把歌曲转成MIDI"
+      ],
+      "target_users": [
+        "本地AI音乐玩家",
+        "独立音乐创作者",
+        "Windows普通用户"
+      ],
+      "why_trending": "本周首次收录，约1800星，装好即用、离线可跑",
+      "caveat": "仅支持Windows；N卡需6GB显存，A卡和I卡仍属实验",
+      "category": "音乐 / 音效",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "timoncool/YuE2-Studio",
+      "score": 92,
+      "category": "音乐 / 音效",
+      "reason": "本地 AI 歌曲生成，含人声与乐谱编辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 56.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "mehbul/chopify",
+      "url": "https://github.com/mehbul/chopify",
+      "description": "Free local AI video clipper for Shorts, Reels and TikTok. Browser dashboard and CLI with resumable batch projects, editable captions/SRT, brand presets, semantic search and podcast split-screen. Open source; no subscription or cloud upload.",
+      "language": "Python",
+      "total_stars": 54,
+      "forks": 12,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-video",
+        "captions",
+        "content-creation",
+        "faster-whisper",
+        "ffmpeg",
+        "opencv",
+        "opus-clip-alternative",
+        "podcast-clips",
+        "python",
+        "reels",
+        "self-hosted",
+        "semantic-search",
+        "shorts",
+        "subtitles",
+        "tiktok",
+        "video-editing",
+        "video-processing",
+        "whisper",
+        "youtube",
+        "youtube-to-shorts"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-06-22T16:28:15Z",
+      "updated_at": "2026-11-04T06:36:14Z",
+      "pushed_at": "2026-11-04T06:36:09Z",
+      "open_issues": 1,
+      "homepage": "https://mehbul.github.io/chopify/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"assets/banner.svg\" alt=\"Chopify — local video clipping and captions\" width=\"880\"></p>\n\n# Chopify — free, local AI video clipper\n\n**Turn long videos into captioned clips for YouTube Shorts, Instagram Reels, and TikTok, on your own computer.** Chopify is an open-source Python app with a local browser dashboard and a CLI. Import a recording or a video URL, find moments, correct captions, review drafts, and export MP4 clips with SRT subtitles. No subscription, API key, cloud upload, or watermark.\n\n[Get started](#install-and-open-the-dashboard) · [Workflow guide](docs/WORKFLOWS.md) · [Agent/API reference](docs/AGENT-API.md) · [Troubleshooting](docs/TROUBLESHOOTING.md) · [Changelog](CHANGELOG.md)\n\n## What can Chopify do?\n\n| Feature | How it helps |\n| --- | --- |\n| **Local browser dashboard** | Queue videos, watch job progress, review candidates, edit words and timestamps, and download exports. |\n| **Local video input** | Use MP4, MOV, MKV, WebM, M4V, or AVI recordings directly, or download a yt-dlp-supported URL. |\n| **Any-length sources** | Podcasts, movies, streams, and gameplay VODs work without a duration setting. Long sources switch to a resumable audio-first path automatically. |\n| **Audio and visual discovery** | A local 1 Hz audio timeline boosts reactions, laughs, impacts, and gameplay events, while cached 2 fps visual analysis catches motion spikes, scene/UI changes, faces, and action arcs. Speech-sparse and action-only sources can still produce clips. |\n| **Resumable projects** | Reuse matching downloads, transcripts, and completed renders. Retry a failed job without discarding successful clips. |\n| **Batch queue** | Add one source per line in Studio or use a JSON list in the CLI. Each video has an isolated project folder. |\n| **Caption Studio** | Choose from 13 caption looks, then tune font, size, colors, outline, shadow, cue length, position, box background, and word motion. A live overlay follows the source; automatic emphasis and emoji are optional. |\n| **Caption editor and SRT export** | Fix transcription mistakes before rendering. Burnt captions and SRT files share the same timeline, including tightened cuts. |\n| **Reusable brand presets** | Save a caption look and optional logo in JSON. A named preset, brand preset, and project override layer in that order. |\n| **Semantic clip search** | Search for a concept such as “handling rejection” using optional local Ollama embeddings, even if those exact words are absent. |\n| **Podcast split-screen** | Stack two adjustable horizontal crops in a vertical clip for fixed-camera two-person footage. |\n| **Clip selection and review** | Absolute 0–10 scoring returns every clip at 8.0+ by default, with an engine-chosen length, optional local LLM reranking, keyword or semantic search, editable times, and fast draft previews. |\n| **Social video exports** | 16:9, 9:16, or 1:1; H.264 video, AAC when source audio exists; SRT, poster, title/description/hashtag JSON. |\n| **Face tracking and cleanup** | Single-frame vertical crops follow a detected face; optional filler/silence removal and audio loudness normalization. |\n\nClip selection favors sentence endings with punctuation. Scores are editing suggestions, **not predictions or guarantees of virality**. Review the results before publishing.\n\n## Install and open the dashboard\n\nWindows is the primary target. Use **Python 3.11+** and **ffmpeg/ffprobe with libx264, AAC, and subtitle rendering support**. Linux CI also checks the Python and ffmpeg workflows.\n\n```powershell\ngit clone https://github.com/mehbul/chopify.git\ncd chopify\nwinget install Gyan.FFmpeg\npython -m venv .venv\n.venv\\Scripts\\python -m pip install -r requirements.txt\n.venv\\Scripts\\python dashboard.py\n```\n\nStudio opens at **http://127.0.0.1:8765**. Paste a local video path or URL, then click **Find clips**. Add multiple sources on separate lines to queue them. After processing, review candidates, edit captions, style them in the **Captions** tab, save your settings, and export selected clips. Stop the server with Ctrl+C. To change the port:\n\n```powershell\n.venv\\Scripts\\python dashboard.py --port 8766 --projects-dir projects\n```\n\nThe dashboard has no extra web framework or JavaScript installation step. It binds to loopback and is intended for one trusted user on the same computer, not as a public server.\n\nYouTube downloads may also require Deno: `winget install DenoLand.Deno`. A preflight check reports missing Python packages and encoders. Restart your terminal after installing tools so PATH changes take effect.\n\n## CLI: long video to short clips\n\nAfter installing dependencies, run with the virtual environment's Python (or activate it and use `python`):\n\n```powershell\n# Local recording or online video\npython chopify.py \"C:\\Videos\\podcast.mp4\" --aspect 9:16\npython chopify.py \"https://youtube.com/watch?v=VIDEO_ID\"\n\n# Prepare once, inspect candidates, then render selected clips\npython chopify.py \"C:\\Videos\\podcast.mp4\" --workdir work --action prepare\npython chopify.py --project work --action render --clips 1,3 --preview\npython chopify.py --project work --action render --clips 1,3\n\n# Search the transcript using keywords or meaning\npython chopify.py \"recording.mp4\" --search \"pricing\"\npython chopify.py \"recording.mp4\" --semantic \"advice about handling rejection\"\n\n# Brand and podcast framing\npython chopify.py \"podcast.mp4\" --brand examples/brand.json --tighten --loudnorm\npython chopify.py \"podcast.mp4\" --aspect 9:16 --layout split --centers 0.25 0.75\n\n# Caption Studio from the CLI\npython chopify.py \"recording.mp4\" --style bold --words-per-cue 2 --caption-position top --emoji --emphasis\npython chopify.py \"recording.mp4\" --caption-json my-caption-style.json\n\n# Process a queue of videos into separate projects\npython chopify.py --batch examples/batch.json --projects-dir projects\n```\n\nCLI single-video runs save state under `work/` and copy the latest exports to `clips/`. Set `--out DIR` or `CHOPIFY_OUT` to change the export folder. Dashboard and batch jobs save outputs inside `projects/<id>/clips/` and drafts inside `previews/`. **Replace the batch sample's sources with your own paths or URLs.**\n\nSuccessful stages resume by default. Use `--no-resume` to reprocess, or `--project projects/<id> --action render` to retry a batch project. Use `--action render` after manual caption/clip edits; `--action prepare` recalculates candidates when selection inputs change. A failed batch job does not prevent later videos from processing; the CLI exits nonzero if any job fails.\n\n## How clips are chosen\n\nChopify evaluates every sentence as a possible start, builds overlapping\ncandidate windows, and keeps the best natural endpoint for each start. The\nduration is chosen by the engine from a ladder that runs from 15 seconds to five\nminutes, so a strong moment is not forced into a fixed length.\n\n- The default minimum score is **8.0 on an absolute 0–10 scale**. A clip at\n  exactly 8.0 passes and is shown as **8.0+**.\n- Every passing clip is returned by default. Use `--max-clips N` only when you\n  want a safety cap.\n- `--preferred-len` is a soft preference, not a hard cut. The engine can pick a\n  shorter or longer natural ending when it scores better.\n- The default clip range is **15–300 seconds** (`--min-len` / `--max-len`).\n- Interactive runs ask for the minimum score and preferred length once. Pass\n  `--min-score` or `--preferred-len` to skip either question, or `--no-input` to\n  skip both for scripts and CI.\n- Zero passing clips is a real result. Chopify writes an empty selection, reports\n  the candidate score range, and does not invent a fallback clip.\n\n```powershell\n# Accept only stronger clips, prefer 45-second cuts, and never prompt\npython chopify.py \"recording.mp4\" --min-score 8.5 --preferred-len 45s --no-input\n\n# Interactive --action all prepares first, shows the range, and confirms\n# before rendering more than ten clips.\npython chopify.py \"podcast.mp4\" --action all\n```\n\n`--explain` prints each candidate's score parts and reason. Prepare writes\n`candidates.json` (everything discovered) and `selection.json` (threshold and\nrange diagnostics); `segments.json` stays the editable render contract used by\nthe CLI and Studio.\n\n### Audio and visual evidence for sparse sources\n\nClip discovery also listens to and watches the source. A single local ffmpeg\npass builds a 1 Hz audio timeline (loudness, peaks, spectral flux, and\ntransients), caches it as `audio_features.npz` beside the transcript, and reuses\nit on later prepares. Only candidate ranges are scored against that timeline; no\naudio is uploaded.\n\nThe engine derives an internal profile (`talk`, `mixed`, or `gameplay/action`)\nfrom speech density, audio variation, and visual activity. The profile changes\nduration tie-breaks, evidence weights, and evidence floors. It never changes your\nminimum score.\n\n- Speech-sparse clips use a 7.0 text floor and stronger evidence weighting. This\n  covers gameplay, streams, and videos with little commentary.\n- A source with no transcript words uses detected audio peaks as event seeds,\n  with evenly spaced action seeds as a fallback when the track varies without a\n  sharp peak. Hooks say `event at 42s`, never a guessed semantic event.\n- A source with no words, no audio signal, and a varying picture uses evenly\n  spaced visual seeds and is scored from visual evidence alone.\n- A flat source with no words and no usable audio or visual evidence fails with\n  `No speech and no media evidence; this source cannot be scored.`\n- Missing or unreadable video files still fall back to transcript-only scoring,\n  so existing projects keep working.\n\n### Visual evidence and silent gameplay\n\nVisual evidence runs locally. A cached ffmpeg decode samples 2 frames per\nsecond at 160x90, and OpenCV measures motion, scene and UI changes, face\npresence, event arcs, and boundary quiet. Only the sparse baseline samples (up\nto 12 five-second windows) and shortlisted padded candidate ranges are decoded;\nresults are cached by source identity and range under `visual_sections/`. The\nwhole-source baseline is cached as `visual_baseline.json`. No frames are\nuploaded, and later prepares reuse the cache.\n\n- Visual scoring rewards a motion spike, a scene or UI change, a visible\n  facecam, a complete action arc, and quiet boundaries.\n- A window whose action arc stays below 0.30 is capped at 6.0, so a static\n  screen cannot pass on motion noise alone.\n- Facecam stays neutral when the source has no consistent face region.\n- Spoken clips keep sentence boundaries. For wordless clips, each boundary can\n  move up to 1.5 seconds to the nearest action onset or quiet resolution, and\n  only when the combined evidence improves.\n- Silent audio is treated as unavailable, not as a zero. Silent gameplay and\n  no-commentary PC-game footage can pass from visual evidence alone.\n- With both modalities usable, evidence blends 60% audio and 40% visual. A\n  single modality is pulled toward neutral. Visual failure falls back to audio,\n  then text; if neither modality is usable, scoring uses text alone.\n\nThe score is still an editing suggestion, not a prediction of virality.\n\n### Very long sources and gameplay VODs\n\nThere is no long-video toggle and no fixed duration ceiling. A source uses the\nlong path when it is at least **2 hours**, its estimated download is at least\n**8 GB**, or its duration cannot be determined. Everything else keeps the\noriginal short-source behavior.\n\n- Long URLs download audio only. If the source has no audio, or its audio track\n  contains no speech, Chopify downloads the lowest-resolution video instead and\n  scores it from visual evidence.\n- Transcription runs in 30-minute chunks with a 30-second overlap. Completed\n  chunks are saved as `transcript.partNNN.json`, so an interrupted job resumes\n  instead of restarting.\n- Discovery scans 30-minute ownership blocks and reads up to `--max-len` of\n  context across each boundary. Completed blocks cache as\n  `candidates.partNNN.json`.\n- Ren"
+    },
+    "brief": {
+      "summary": "本地开源AI视频切片工具，自动生成带字幕短片",
+      "problem": "把长视频剪成适合短视频平台的片段并配字幕",
+      "highlights": [
+        "可以导入本地视频或链接，批量找出候选片段",
+        "可以编辑字幕并导出MP4和SRT",
+        "可以用品牌预设和分屏处理播客片段"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "播客剪辑者",
+        "自托管用户"
+      ],
+      "why_trending": "本周首次收录，支持本地批量切片，但Star较少",
+      "caveat": "需要本地安装Python和ffmpeg，非公开服务",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mehbul/chopify",
+      "score": 88,
+      "category": "视频剪辑",
+      "reason": "本地 AI 视频切片，字幕与短视频处理",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 50.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "nodetool-ai/nodetool",
+      "url": "https://github.com/nodetool-ai/nodetool",
+      "description": "Agent-first Creative Workspace",
+      "language": "TypeScript",
+      "total_stars": 608,
+      "forks": 88,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "anthropic",
+        "claude",
+        "fal",
+        "gemini",
+        "huggingface",
+        "image-generation",
+        "image-processing",
+        "kie",
+        "motion-graphics",
+        "ollama",
+        "openai",
+        "openrouter",
+        "replicate",
+        "video-editing",
+        "video-generation",
+        "video-processing",
+        "weave",
+        "xai"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2024-03-25T13:09:15Z",
+      "updated_at": "2026-11-04T06:43:50Z",
+      "pushed_at": "2026-11-04T06:43:47Z",
+      "open_issues": 37,
+      "homepage": "https://nodetool.ai/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# NodeTool\n\n[![Stars](https://img.shields.io/github/stars/nodetool-ai/nodetool?style=social)](https://github.com/nodetool-ai/nodetool/stargazers)\n[![Downloads](https://img.shields.io/github/downloads/nodetool-ai/nodetool/total?color=3fb950)](https://github.com/nodetool-ai/nodetool/releases)\n[![Latest Release](https://img.shields.io/github/v/release/nodetool-ai/nodetool?display_name=tag&sort=semver)](https://github.com/nodetool-ai/nodetool/releases/latest)\n[![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/WmQTWZRcYE)\n[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE.txt)\n[![Powered by Atlas Cloud](https://www.atlascloud.ai/oss-program/powered-by-atlas-cloud.svg)](https://www.atlascloud.ai/?ref=PW9AD2)\n\n**Agent-first creative workspace**\n\nCreate images, video, audio, and text with agents that work alongside you.\nDescribe what you want, let the agent build it, then take over whenever you\nlike.\n\n**Stop prompting slot machines. Direct the agent.** Most AI video apps charge\nyou to roll the dice, then hand back a flat MP4 you can't edit. In NodeTool the\nagent writes the script, boards the shots, and cuts a multi-track timeline.\nEvery shot, voice line, and node stays open for you to change by hand.\n\n**[Download NodeTool Studio](https://github.com/nodetool-ai/nodetool/releases/latest)** ·\n**[Quick start](#first-run-in-studio)** ·\n**[Documentation](https://docs.nodetool.ai/)** · **[MCP setup](#mcp)** ·\n**[Contribute](#contributing)**\n\n![NodeTool: one sentence becomes a beat sheet, entities, a storyboard of stills and clips, and a finished cut](marketing/public/hero-flow-readme.gif)\n\n## Every model you need, on your own keys\n\nRun local models or connect cloud providers with your own API keys. NodeTool\ncalls the provider with your key, at their price, with no billing unit in\nbetween. When a better model ships, add it the day it ships.\n\n[Models and Providers](docs/models-and-providers.md) lists what runs where.\n\n## Run it on the AI plan you already pay for\n\nSign in with ChatGPT or Claude in Studio and the agent runs on that $20\nsubscription instead of a metered API bill. ChatGPT and Gemini plans also\ngenerate images, and Gemini generates video. Those runs count against your\nplan's own limits.\n\n| Plan | Chat and agent | Images | Video |\n| :--- | :---: | :---: | :---: |\n| ChatGPT | Yes | Yes | No |\n| Claude | Yes | No | No |\n| Gemini | Yes | Yes | Yes |\n\nSubscriptions run in Studio, the desktop app, not in Cloud. Gemini also needs\nthe [NodeTool Chrome extension](https://docs.nodetool.ai/chrome-extension) in\nthe browser where you are signed in.\n\n## Why NodeTool\n\n- Agents drive the real editors. They wire the graph and run it. You take the\n  wheel at any point.\n- Inspect intermediate results, swap a model, and rerun only what changed.\n- The graph, inputs, assets, and edits stay together in your project.\n- Run the same workflow from the studio, the CLI, or an external agent over\n  [MCP](#mcp).\n\nStudio is free and runs on macOS, Windows, and Linux. Local models have\nhardware requirements that depend on the model, and offline work needs the\nmodels and assets on your machine. [NodeTool Cloud](https://nodetool.ai/cloud)\nis in alpha and runs on hosted storage and cloud providers.\n\n## First run in Studio\n\n1. Download the [latest release](https://github.com/nodetool-ai/nodetool/releases/latest)\n   for your operating system and install it. See the\n   [installation guide](docs/installation.md) for requirements and per-OS steps.\n2. Connect providers through **Settings → Models & Providers** to enable agents and media generation.\n3. Start a new project and follow along.\n\n\n## One workspace, brief through final cut\n\nWrite a brief and ask the agent for a storyboard. Approve the stills before\nspending on video, then assemble the clips on a timeline. Trim the cut, add\nnarration, and export an MP4. Revise one shot without regenerating the film.\nThe [film quick start](docs/getting-started.md) walks through each step.\n\nSeven editors share one project, so a piece never leaves the studio to be\nfinished. Each editor exposes its actions to the agent as tools, so the agent\nworks in all of them.\n\n### Storyboard\n\n<img src=\"marketing/public/surface-storyboard-poster.webp\" alt=\"NodeTool storyboard\" width=\"640\">\n\nBoard the film shot by shot. Pitch a concept, a style, and a shot count, and\nyou get back a screenplay: one shot per card with action, camera, motion, and\nduration, plus the logline, style bible, narration, and music direction.\n\n- **Cheap stages first.** A Seedream 5 Lite still costs $0.03 on Kie.ai. Five\n  seconds of Seedance 2 costs $1.03 (list prices via genspend.io, August 2026).\n  Generate stills until one looks right, then animate that one.\n- **Revise one shot, not the reel.** \"Make it darker, add rain\" runs\n  video-to-video on that clip alone and returns a new take. You decide whether\n  it replaces the old one.\n- **Entities keep the cast steady.** Characters, locations, styles, and props\n  paste the same descriptor into every prompt that names them.\n- **Assemble the cut.** One click lays the shots onto a timeline with narration\n  and music, each clip still linked to its shot.\n\nThe agent works the same board, with or without the editor open.\n[Creative agent guide →](https://docs.nodetool.ai/creative-agent)\n\n### Script and voice\n\n<img src=\"marketing/public/surface-script-poster.webp\" alt=\"NodeTool script editor: the transcript panel beside the sequence it assembles into\" width=\"640\">\n\nDraft the dialogue, cast a provider, model, and voice per character, and\naudition alternate readings. Each voicing saves its own take with word timings,\nand changing the words flags that take stale. The current takes assemble into a\nsequence, the timings riding along as captions. Ask the agent and it voices\nevery line that still needs it, then cuts the sequence for you.\n\n### Timeline\n\n<img src=\"marketing/public/surface-timeline-poster.webp\" alt=\"NodeTool timeline\" width=\"640\">\n\nArrange, trim, and layer video and audio across tracks, down to the frame and\nthe stem. Drop in your own footage, or bind a workflow to a clip and generate\nin place: change a parameter and the clip regenerates, tweak the workflow and\nthe clip flags itself stale. Export to MP4. The agent edits the same document\nwhen you ask it to tighten the opening.\n[Video editor guide →](https://docs.nodetool.ai/video-editor)\n\n### Sketch\n\n<img src=\"marketing/public/screen_sketch_editor.webp\" alt=\"NodeTool sketch editor\" width=\"640\">\n\nBuild a composition in layers with blend modes and masks, then bind a layer to\na model or a workflow and generate where you are painting. Change a prompt or\nan upstream input and the layer flags itself stale. The rest of the workflow\nreceives the flattened image, the mask, and each layer on its own.\n[Sketch editor guide →](https://docs.nodetool.ai/sketch-editor)\n\n### 3D\n\n<img src=\"marketing/public/surface-3d-poster.webp\" alt=\"NodeTool 3D scene editor\" width=\"640\">\n\nPlace primitives and lights in a scene by hand or by asking, then capture a\nview as a depth or composition reference for an image or video model. The same\nscene builds and renders with no editor open, so it comes back the same way\nevery time.\n[3D editor guide →](https://docs.nodetool.ai/3d-editor)\n\n### Game\n\n<img src=\"marketing/public/surface-game-poster.webp\" alt=\"NodeTool game editor\" width=\"640\">\n\nBuild a 2D or 3D game in a workspace tab and play it without leaving the\neditor. Place entities, give them behaviors or JavaScript, and bind generated\nsprites, sounds, and models to their slots. Ask the agent for a new enemy or a\ndarker level and it edits the same draft. Publish a revision, then export it as\na standalone web player that runs without NodeTool.\n[Game editor guide →](https://docs.nodetool.ai/game-editor)\n\n## The node editor\n\n<img src=\"marketing/public/surface-nodes-poster.webp\" alt=\"NodeTool node editor\" width=\"640\">\n\nEvery project is a graph you can open. Drag nodes in, connect typed ports, and\nread the live output at each step. Double-click the canvas to search for a\nnode, or drag a connection into empty space to see what fits. The editor\nrefuses a mismatch, so an image cannot land in a text field.\n\nEvery editor above sits on this canvas.\n\n## Example timelines\n\nEach film below is a timeline document that ships with NodeTool, rendered to MP4.\nSelect a poster to watch the film. Open the example in the app to edit every\nclip, track, and effect.\n\n<table>\n<tr>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/serein/film.mp4\"><img src=\"marketing/public/timelines/serein/poster.webp\" alt=\"Serein, the inbox that sorts itself\" width=\"360\"></a><br>\n<b>Serein, the inbox that sorts itself</b><br>\nA 26-second product launch film built from editable scene clips, text, motion, and effects. <a href=\"marketing/public/timelines/serein/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/serein/timeline.webp\">timeline layout</a>.\n</td>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/kite/film.mp4\"><img src=\"marketing/public/timelines/kite/poster.webp\" alt=\"Kite, savings on autopilot\" width=\"360\"></a><br>\n<b>Kite, savings on autopilot</b><br>\nA 15-second app ad made from motion graphics alone: kinetic type, a drawn-on chart, a filling goal ring, and a logo reveal. <a href=\"marketing/public/timelines/kite/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/kite/timeline.webp\">timeline layout</a>.\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/voltra/film.mp4\"><img src=\"marketing/public/timelines/voltra/poster.webp\" alt=\"Voltra, silent and violent\" width=\"360\"></a><br>\n<b>Voltra, silent and violent</b><br>\nA 23-second motorcycle launch ad cut to a 120 BPM beat, with generated stills, parallax plates, mattes, and spec gauges. <a href=\"marketing/public/timelines/voltra/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/voltra/timeline.webp\">timeline layout</a>.\n</td>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/prism/film.mp4\"><img src=\"marketing/public/timelines/prism/poster.webp\" alt=\"Prism, run in every colour\" width=\"360\"></a><br>\n<b>Prism, run in every colour</b><br>\nAn 18-second running-shoe ad on a 120 BPM grid, with green-screen stills keyed in the timeline and a prism that splits light. <a href=\"marketing/public/timelines/prism/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/prism/timeline.webp\">timeline layout</a>.\n</td>\n</tr>\n<tr>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/tidewater/film.mp4\"><img src=\"marketing/public/timelines/tidewater/poster.webp\" alt=\"Tidewater, summer jazz on the pier\" width=\"200\"></a><br>\n<b>Tidewater, summer jazz on the pier</b><br>\nA 16-second 4:5 risograph poster that moves, on stepped 12 fps time with a swing score. <a href=\"marketing/public/timelines/tidewater/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/tidewater/timeline.webp\">timeline layout</a>.\n</td>\n<td valign=\"top\" width=\"50%\">\n<a href=\"marketing/public/timelines/cadence/film.mp4\"><img src=\"marketing/public/timelines/cadence/poster.webp\" alt=\"Cadence, a year on two wheels\" width=\"140\"></a><br>\n<b>Cadence, a year on two wheels</b><br>\nA vertical year-in-review data story with a route that rides itself, counted stat cards, and animated charts. <a href=\"marketing/public/timelines/cadence/film.mp4\">Watch the film</a> or see the <a href=\"marketing/public/timelines/cadence/timeline.webp\">timeline layout</a>.\n</td>\n</tr>\n</table>\n\nThe [showcase](https://nodetool.ai/showcase) and\n[template gallery](https://nodetool.ai/templates) hold the single workflows\nthese films chain.\n\n## How NodeTool compares\n\nThe comparison is against the closed AI studios, because that is what a\nproduction team chooses between.\n\n| | NodeTool | Closed AI studios |\n| :--- | :--- | :--- |\n| "
+    },
+    "brief": {
+      "summary": "用代理驱动图像、视频、音频创作的节点式工作台",
+      "problem": "AI 视频工具只给不能二次编辑的成片，改一处就得整段重做",
+      "highlights": [
+        "可以让代理写分镜、出剧照再拼成时间线",
+        "可以只重做单个镜头，不必重生成整片",
+        "可以用自己的 Key 或订阅跑本地与云端模型"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "独立短片团队",
+        "节点工作流玩家"
+      ],
+      "why_trending": "本周首次收录，608 星，把代理接进分镜到剪辑全流程",
+      "caveat": "AGPL-3.0，商用需留意；订阅登录仅限桌面端",
+      "category": "创作者自动化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nodetool-ai/nodetool",
+      "score": 92,
+      "category": "创作者自动化",
+      "reason": "Agent 创作工作台，含图像/视频生成剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "dobyte/due",
+      "url": "https://github.com/dobyte/due",
+      "description": "A High-Performance Distributed Game Server Framework in Go",
+      "language": "Go",
+      "total_stars": 981,
+      "forks": 178,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "actor",
+        "actor-framework",
+        "consul",
+        "distributed-framework",
+        "distributed-game-framework",
+        "distributed-systems",
+        "due",
+        "etcd",
+        "game",
+        "game-engine",
+        "game-framework",
+        "game-server",
+        "go",
+        "go-framework",
+        "grpc",
+        "kcp",
+        "nacos",
+        "rpcx",
+        "tcp",
+        "websocket"
+      ],
+      "license_name": "MIT",
+      "created_at": "2022-08-26T06:05:04Z",
+      "updated_at": "2026-11-04T06:41:42Z",
+      "pushed_at": "2026-11-04T06:41:38Z",
+      "open_issues": 22,
+      "homepage": "https://dobyte.github.io/due-docs/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# due — A High-Performance Distributed Game Server Framework in Go\n\nEnglish | [简体中文](README-ZH.md)\n\n[![Build Status](https://github.com/dobyte/due/workflows/Go/badge.svg)](https://github.com/dobyte/due/actions)\n[![Go Version](https://img.shields.io/github/go-mod/go-version/dobyte/due)](https://github.com/dobyte/due)\n[![Go Reference](https://pkg.go.dev/badge/github.com/dobyte/due/v2.svg)](https://pkg.go.dev/github.com/dobyte/due/v2)\n[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)\n[![Go Report Card](https://goreportcard.com/badge/github.com/dobyte/due)](https://goreportcard.com/report/github.com/dobyte/due)\n[![codecov](https://codecov.io/gh/dobyte/due/branch/main/graph/badge.svg)](https://codecov.io/gh/dobyte/due)\n[![Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)\n\n[![Release](https://img.shields.io/github/v/release/dobyte/due?style=flat)](https://github.com/dobyte/due/releases)\n![Stars](https://img.shields.io/github/stars/dobyte/due?style=flat)\n![Forks](https://img.shields.io/github/forks/dobyte/due?style=flat)\n[![GitHub pull requests](https://img.shields.io/github/issues-pr/dobyte/due?style=flat)](https://github.com/dobyte/due/pulls)\n[![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/dobyte/due?style=flat)](https://github.com/dobyte/due/pulls?q=is%3Apr+is%3Aclosed)\n[![GitHub issues](https://img.shields.io/github/issues/dobyte/due?style=flat)](https://github.com/dobyte/due/issues)\n[![GitHub closed issues](https://img.shields.io/github/issues-closed/dobyte/due?style=flat)](https://github.com/dobyte/due/issues?q=is%3Aissue+is%3Aclosed)\n\n### 1. Introduction\n\n[due](https://dobyte.github.io/) is an out-of-the-box, lightweight and high-performance distributed game server framework developed in Go, built on a complete native cluster solution that easily exceeds 430K+ TPS over the Gate->Node path with 500 concurrent connections on a single thread — battle-proven in multiple enterprise-level game projects, with stability fully guaranteed.\nIts module design draws on the modular design philosophy of [kratos](https://github.com/go-kratos/kratos), aiming to provide a complete, efficient, elegant, and standardized solution for game server development.\n\n![Architecture](assets/architecture.jpg)\n\n### 2. Advantages\n\n* 💰 Free: The framework follows the MIT license and is fully open-source and free.\n* 💡 Simplicity: Simple architecture with concise, easy-to-understand source code.\n* 🚠 Convenience: Only the necessary APIs are exposed, reducing the mental burden on developers.\n* 🚀 High performance: The framework natively implements a cluster communication solution; a single thread on an ordinary machine can easily achieve 430K TPS.\n* 🧊 Standardization: The framework natively provides standardized development conventions, making even the most complex projects easy to handle.\n* ✈️ Efficiency: The framework natively provides tcp, kcp, ws, quic and other servers, making it easy for developers to quickly build various types of gateway servers.\n* ⚖️ Stability: All official releases have passed rigorous testing in real internal business scenarios, offering high stability.\n* 🎟️ Extensibility: Well-designed interfaces make it easy for developers to design and implement their own features.\n* 🔑 Smoothness: Semaphores are introduced to enable graceful rolling updates by controlling the service registry.\n* 🔩 Scalability: A graceful route-dispatch mechanism theoretically enables unlimited horizontal scaling.\n* 🔧 Easy debugging: The framework natively provides tcp, kcp, ws, quic and other clients, making it easy for developers to perform independent end-to-end debugging.\n* 🧰 Manageability: Complete admin APIs make it easy for developers to quickly build custom admin functionality.\n\n### 3. Features\n\n* Gateway: Gateway servers supporting protocols such as tcp, kcp, ws, and quic.\n* Logging: Multiple logging components such as console, file, aliyun, and tencent.\n* Registry: Multiple service registries such as etcd, consul, nacos, and polaris.\n* Protocol: Multiple communication protocols such as json, protobuf, msgpack, xml, yaml, and toml.\n* Configuration: Multiple config centers such as file, etcd, consul, nacos, and polaris; also supports file formats such as json, yaml, toml, and xml.\n* Communication: Multiple high-performance communication solutions such as grpc and rpcx.\n* Restart: Graceful restart of servers.\n* Event: Event bus implementations such as process, redis, nats, and kafka.\n* Encryption: Multiple encryption and signature schemes such as rsa and ecc.\n* Service: Multiple microservice solutions such as grpc and rpcx.\n* Flexible: Multiple architecture options such as monolithic and distributed.\n* Web: Provides a fiber server for the http protocol and a swagger documentation solution.\n* Tooling: Provides the [due-cli](https://github.com/dobyte/due-cli) scaffolding toolbox to quickly build cluster projects.\n* Cache: Multiple commonly used caching solutions such as redis and memcache.\n* Actor: Provides a complete actor model solution.\n* Distributed lock: Multiple distributed lock solutions such as redis and memcache.\n* Network: Servers and clients supporting the four protocols tcp, kcp, ws, and quic, with unified heartbeat, authorization, graceful shutdown, and connection management capabilities.\n\n> Next up: a distributed task scheduling system.\n\n### 4. Architecture and Core Concepts\n\n#### 4.1 Components and Container\n\ndue adopts a modular \"container + component\" design. The framework abstracts the gate, node, mesh, cluster client, as well as logging, HTTP, pprof and other capabilities into components (Component), whose lifecycle is orchestrated uniformly by the container (Container):\n\n```go\ntype Component interface {\n    Name() string // component name\n    Init()        // initialize the component\n    Start()       // start the component\n    Close()       // close the component\n    Destroy()     // destroy the component\n}\n\nfunc main() {\n    container := due.NewContainer() // create a container\n    container.Add(component)        // add a component; can be called multiple times\n    container.Serve()               // start the container and wait for system signals\n}\n```\n\nThe execution order of `Serve` is: print framework information → `Init` each component in order → `Start` each component in order → write the PID file → wait for system signals → `Close` components concurrently → `Destroy` components concurrently → clean up the PID and global modules.\n\n* Signal handling: Windows listens for `os.Interrupt`; other systems listen for `SIGINT`, `SIGQUIT`, `SIGABRT`, and `SIGTERM`.\n* Shutdown timeout: the `Close` phase is controlled by `etc.shutdownMaxWaitTime`; the `Destroy` phase has a fixed 5-second timeout.\n* Graceful restart: during the `Close` phase, Gate/Node/Mesh set their own state to `hang` and refresh the instance state in the registry, so that new traffic no longer enters the instance, while waiting for existing sessions and messages to be fully processed. The actual deregistration happens in the `Destroy` phase. Combined with semaphores, this enables rolling updates.\n\n#### 4.2 Instance Kind\n\n| Constant | Value | String | Description |\n| --- | --- | --- | --- |\n| `cluster.Gate` | 1 | gate | Gateway server |\n| `cluster.Node` | 2 | node | Node server |\n| `cluster.Mesh` | 3 | mesh | Microservice |\n| `cluster.Master` | 4 | master | Admin server |\n\n#### 4.3 Instance State\n\n| Constant | Value | String | Description |\n| --- | --- | --- | --- |\n| `cluster.Shut` | 0 | shut | Shut down |\n| `cluster.Work` | 1 | work | Working |\n| `cluster.Busy` | 2 | busy | Busy |\n| `cluster.Hang` | 3 | hang | Hanging |\n\n> The gateway accepts new client connections only in the `work` and `busy` states; in all other states it closes the connection immediately.\n\n#### 4.4 Lifecycle Hook\n\n| Constant | Value | Description |\n| --- | --- | --- |\n| `cluster.Init` | 0 | Initialize the component |\n| `cluster.Start` | 1 | Start the component |\n| `cluster.Close` | 2 | Close the component |\n| `cluster.Destroy` | 3 | Destroy the component |\n\nThe node, mesh, and cluster client components can listen to their own lifecycle via `Proxy.AddHookListener(hook, handler)`, which is commonly used for initialization work such as establishing connections after the component starts.\n\n#### 4.5 Event Type\n\n| Constant | Value | Description |\n| --- | --- | --- |\n| `cluster.Connect` | 1 | Connection opened |\n| `cluster.Reconnect` | 2 | Reconnected after disconnection |\n| `cluster.Disconnect` | 3 | Connection closed |\n\n#### 4.6 Dispatch Strategy\n\nLoad dispatch strategies between cluster instances:\n\n| Constant | Value | Description |\n| --- | --- | --- |\n| `cluster.Random` | random | Random |\n| `cluster.RoundRobin` | rr | Round robin |\n| `cluster.WeightedRoundRobin` | wrr | Weighted round robin |\n\nThe cluster's internal transport layer (grpc/rpcx) additionally supports a consistent-hash strategy (`ch`), which pins calls with the same request characteristics to the same instance.\n\n#### 4.7 Gate, Node, Mesh, and Client\n\n> Members of the due community frequently ask about the relationship among Gate, Node, and Mesh, so here is a unified explanation.\n\n* Gate: The gateway server, mainly used to manage client connections, receive routed messages from clients, and dispatch routed messages to different Node servers.\n* Node: The node server, the core component of the entire cluster system, mainly used to write core business logic. Node services can be stateful or stateless as needed. As a stateless node, a Node is essentially no different from a Mesh microservice; but as a stateful node, a Node cannot be updated and restarted freely. This is where the value of separating Node from Mesh comes in.\n* Mesh: The microservice, mainly used to write stateless business logic. Anything Mesh can do, Node can do as well; the choice depends entirely on your own business scenario, and developers can combine them flexibly.\n* Client: The cluster client component, which can dial the gateway directly. It is convenient for writing automated tests, stress-test programs, or bot logic within a server project, enabling independent end-to-end debugging.\n\n### 5. Project Structure\n\n```text\ndue/\n├── container.go            Container entry (the only source file in the root package)\n├── cluster/                Cluster components\n│   ├── cluster.go          Cluster model: Kind/State/Event/Hook/Dispatch and cluster message structures\n│   ├── gate/               Gateway component\n│   ├── node/               Node component (routing, events, actor model)\n│   ├── mesh/               Microservice component\n│   └── client/             Cluster client component\n├── network/                Network module: tcp, kcp, ws, quic\n├── session/                Gateway session management: connection sessions, user sessions, and channel subscriptions\n├── packet/                 Communication protocol packing: Packer and Message\n├── internal/               Internal implementation: cluster linker, instance dispatcher, intranet RPC protocol\n├── registry/               Registries: etcd, consul, nacos, polaris\n├── config/                 Config centers: file, etcd, consul, nacos, polaris\n├── locate/                 User location: redis\n├── transport/              Internal cluster transport: grpc, rpcx\n├── eventbus/               Event buses: process, redis, nats, kafka\n├── cache/                  Caches: redis, memcache\n├── lock/                   Distributed locks: redis, memcache\n├── crypto/                 Encryption/decryption and signatures: rsa, ecc\n├── encoding/               Codecs: json, proto, msgpack, xml, yaml, toml\n├── log/                    Logging: console, file, aliyun, tencent\n├── component/              Built-in components: http, mqtt, pprof\n├── core/                   Core foundation library: buffer, queue, value, stack, limiter, etc.\n├── utils/                  Utility libr"
+    },
+    "brief": {
+      "summary": "Go 编写的高性能分布式游戏服务器框架",
+      "problem": "帮助开发者快速搭建可扩展的游戏服务端",
+      "highlights": [
+        "可以用 due-cli 快速生成集群项目骨架",
+        "可以基于 tcp、kcp、ws、quic 搭建网关",
+        "可以接入 etcd、consul 等注册中心"
+      ],
+      "target_users": [
+        "游戏服务端开发者",
+        "Go 后端工程师",
+        "分布式系统学习者"
+      ],
+      "why_trending": "总星近千、近期有更新，本周首次收录",
+      "caveat": "性能数字来自项目自述，需自行验证",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "dobyte/due",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "高性能分布式游戏服务器框架",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 47.0
+    }
+  }
+]
