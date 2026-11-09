@@ -1,0 +1,518 @@
+[
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "vercel-labs/agent-browser",
+      "url": "https://github.com/vercel-labs/agent-browser",
+      "description": "Browser automation CLI for AI agents",
+      "language": "Rust",
+      "total_stars": 47897,
+      "forks": 3271,
+      "stars_today": 815,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 889
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-11T05:38:15Z",
+      "updated_at": "2026-11-09T06:54:05Z",
+      "pushed_at": "2026-11-09T06:47:44Z",
+      "open_issues": 525,
+      "homepage": "https://agent-browser.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# agent-browser\n\nBrowser automation for AI agents: open pages, read them as an accessibility tree, and act on elements from the shell.\n\n<p>\n  <a href=\"https://vercel.com/labs#labs-products\"><img alt=\"Vercel Labs Product\" src=\"https://img.shields.io/badge/LABS-PRODUCT-0a0a0a.svg?style=for-the-badge&amp;logo=Vercel&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-browser\"><img alt=\"npm version: agent-browser\" src=\"https://img.shields.io/npm/v/agent-browser.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://github.com/vercel-labs/agent-browser/blob/main/LICENSE\"><img alt=\"License: Apache-2.0\" src=\"https://img.shields.io/github/license/vercel-labs/agent-browser.svg?style=for-the-badge&amp;labelColor=000000\" height=\"28\"></a>\n  <a href=\"https://www.npmjs.com/package/agent-browser\"><img alt=\"npm downloads per month: agent-browser\" src=\"https://img.shields.io/npm/dm/agent-browser.svg?style=for-the-badge&amp;labelColor=000000&amp;label=npm%20downloads\" height=\"28\"></a>\n  <a href=\"https://skills.sh/vercel-labs/agent-browser\"><img alt=\"skills.sh\" src=\"https://skills.sh/b/vercel-labs/agent-browser?style=for-the-badge\" height=\"28\"></a>\n</p>\n\nagent-browser is a native Rust CLI that gives an AI agent a browser it can drive one command at a time. `snapshot` returns the page as compact text with a ref such as `@e1` for each element. The agent acts on a ref, reads the page again to check the result, and repeats. The browser stays open between commands, so each step is one short shell call.\n\n## Install\n\n```bash\nnpm install -g agent-browser\nagent-browser install           # download Chrome for Testing (first time only)\n```\n\n- **Homebrew:** `brew install agent-browser`, then `agent-browser install`.\n- **Linux:** `agent-browser install --with-deps` also installs the browser's system libraries.\n- **No install:** `npx agent-browser open example.com`.\n\nProject installs, building from source, `upgrade`, and `doctor` are covered in [Installation](https://agent-browser.dev/installation).\n\n## Quick start\n\n```bash\nagent-browser open example.com\nagent-browser snapshot -i       # interactive elements, each with a ref\nagent-browser click @e1         # act on a ref from that snapshot\nagent-browser get url           # check the result\nagent-browser close\n```\n\nThe snapshot for `example.com`:\n\n```\n- link \"Learn more\" [ref=e1]\n```\n\n- Refs describe the page at the time of the snapshot. After navigation or a DOM change, take a new snapshot before using refs again.\n- CSS selectors, text, XPath, and semantic locators also work, for example `agent-browser find role button click --name \"Submit\"`. See [Selectors](https://agent-browser.dev/selectors).\n- A click fails, instead of reporting success, when the target is hidden, disabled, outside the viewport, or covered by another element such as a consent banner. Dismiss the covering element, take a new snapshot, and retry.\n\nThe full walkthrough is in the [quick start](https://agent-browser.dev/quick-start).\n\n## How it works\n\nThe CLI sends each command to a background daemon that starts on the first command and controls the browser over the Chrome DevTools Protocol. Each `--session` gets its own daemon and browser. By default, the daemon closes a headless browser and exits after one hour without commands, saving state first when [session persistence](https://agent-browser.dev/sessions) is configured.\n\nChrome for Testing is the default browser. You can also attach to a running Chrome with `--cdp` or `--auto-connect` ([CDP mode](https://agent-browser.dev/cdp-mode)), select the [Lightpanda](https://agent-browser.dev/engines/lightpanda) or [Obscura](https://agent-browser.dev/engines/obscura) engine with `--engine`, drive Mobile Safari in the [iOS Simulator](https://agent-browser.dev/ios), or use a cloud browser provider such as [Browserbase](https://agent-browser.dev/providers/browserbase), [Browserless](https://agent-browser.dev/providers/browserless), [Browser Use](https://agent-browser.dev/providers/browser-use), [Kernel](https://agent-browser.dev/providers/kernel), or [AgentCore](https://agent-browser.dev/providers/agentcore).\n\n## For AI agents\n\nThe CLI ships skills that match its version:\n\n```bash\nagent-browser skills get core                 # the core loop, refs, waiting, and common workflows\nagent-browser skills get core --ref commands  # one reference, such as the full command list\nagent-browser skills get core --full          # adds the full command reference and templates\nagent-browser skills list                     # specialized skills: electron, slack, dogfood, and more\n```\n\nInstall the discovery skill into an agent harness from [skills.sh](https://skills.sh/vercel-labs/agent-browser):\n\n```bash\nnpx skills add vercel-labs/agent-browser\n```\n\nThe installed skill is a thin stub that tells the agent to load `agent-browser skills get core`, so its instructions always match the installed CLI. Or add this to your `AGENTS.md`:\n\n```markdown\nUse `agent-browser` for browser automation. Before the first use, run\n`agent-browser skills get core` and follow it.\n```\n\nFor MCP clients, `agent-browser mcp` starts an MCP server over stdio. See [MCP server](https://agent-browser.dev/commands#mcp-server).\n\n## Commands\n\nRun `agent-browser --help` for the full list, or `agent-browser <command> --help` for one command.\n\n| Group | Commands | Docs |\n|---|---|---|\n| Navigate and read | `open`, `back`, `forward`, `reload`, `read`, `snapshot`, `get`, `is` | [Core](https://agent-browser.dev/commands#core), [Snapshots](https://agent-browser.dev/snapshots) |\n| Interact | `click`, `dblclick`, `fill`, `type`, `press`, `keyboard`, `hover`, `focus`, `select`, `check`, `uncheck`, `scroll`, `drag`, `upload`, `mouse`, `find` | [Core](https://agent-browser.dev/commands#core), [Find elements](https://agent-browser.dev/commands#find-elements) |\n| Wait | `wait` | [Wait](https://agent-browser.dev/commands#wait) |\n| Capture | `screenshot`, `pdf`, `record`, `download`, `diff` | [Recording](https://agent-browser.dev/recording), [Diffing](https://agent-browser.dev/diffing), [Files](https://agent-browser.dev/files) |\n| Page and network state | `cookies`, `storage`, `network`, `set`, `clipboard`, `eval`, `pushstate` | [Network](https://agent-browser.dev/network), [Settings](https://agent-browser.dev/commands#settings) |\n| Tabs, frames, and dialogs | `tab`, `frame`, `dialog` | [Tabs and frames](https://agent-browser.dev/commands#tabs-frames) |\n| Debug and performance | `console`, `errors`, `highlight`, `inspect`, `trace`, `profiler`, `vitals`, `react`, `a11y` | [Debugging](https://agent-browser.dev/debugging), [Profiler](https://agent-browser.dev/profiler), [React](https://agent-browser.dev/react) |\n| Sessions and auth | `session`, `state`, `auth`, `profiles`, `confirm`, `deny` | [Sessions](https://agent-browser.dev/sessions), [Security](https://agent-browser.dev/security) |\n| Agents and integrations | `skills`, `mcp`, `webmcp`, `flow`, `chat`, `batch`, `plugin` | [Skills](https://agent-browser.dev/skills), [WebMCP](https://agent-browser.dev/webmcp), [Plugins](https://agent-browser.dev/plugins) |\n| Observe | `stream`, `dashboard` | [Streaming](https://agent-browser.dev/streaming), [Dashboard](https://agent-browser.dev/dashboard) |\n| Setup | `install`, `upgrade`, `doctor`, `connect`, `close` | [Installation](https://agent-browser.dev/installation) |\n\nFlags, environment variables, and `agent-browser.json` are documented in [Configuration](https://agent-browser.dev/configuration).\n\n## Platforms\n\nNative binaries ship for macOS (ARM64, x64), Linux (ARM64, x64, glibc and musl), and Windows (x64). The npm package picks the right binary for the host.\n\n## Development\n\nBuilding from source requires Node.js 24 or later, pnpm 11 or later, and Rust:\n\n```bash\npnpm install\npnpm build:source               # builds the dashboard and the native CLI\npnpm link --global\nagent-browser install\n```\n\nRun the Rust checks from `cli/`:\n\n```bash\ncargo fmt -- --check\ncargo clippy\ncargo test\ncargo test e2e -- --ignored --test-threads=1   # launches real headless Chrome\n```\n\n[AGENTS.md](AGENTS.md) lists the files to update with each change, the docs checks, and the release process.\n\n## Documentation\n\n- [agent-browser.dev](https://agent-browser.dev): introduction, guides, and reference\n- [Commands](https://agent-browser.dev/commands) and [Configuration](https://agent-browser.dev/configuration)\n- [Security](https://agent-browser.dev/security): the auth vault, domain allowlists, action policies, and content boundaries\n- [Next.js and Vercel](https://agent-browser.dev/next) and [eve](https://agent-browser.dev/eve): running agent-browser in Vercel Sandbox and eve agents\n- [Changelog](CHANGELOG.md)\n\n## License\n\nApache-2.0\n"
+    },
+    "brief": {
+      "summary": "给 AI 代理用的浏览器自动化 CLI",
+      "problem": "让 AI 代理能打开网页、读取元素并逐步操作",
+      "highlights": [
+        "可以用 snapshot 读取页面元素引用",
+        "可以用 click/fill 按引用操作页面",
+        "可以用 screenshot/pdf 捕获页面结果"
+      ],
+      "target_users": [
+        "AI 代理开发者",
+        "自动化测试工程师",
+        "浏览器自动化用户"
+      ],
+      "why_trending": "今日新增 815 星，Vercel Labs 出品，Agent 浏览器工具",
+      "caveat": "页面变化后元素引用失效，需重新快照",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "vercel-labs/agent-browser",
+      "score": 72,
+      "category": "AI Agent / Skills",
+      "reason": "Agent浏览器自动化CLI，推动Agent工作流",
+      "generated_by_ai": true,
+      "velocity_score": 89,
+      "freshness_score": 40,
+      "ranking_score": 64.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "ranxianglei/billion-context",
+      "url": "https://github.com/ranxianglei/billion-context",
+      "description": "A context-compression plugin for month-long single sessions (billions of tokens) ,small context windows (a 100K context is enough) and token savings (5x fewer tokens) .上下文压缩插件，月级长会话会话， 兼顾小窗口(100k上下文足矣)省token(省5倍token) . billion-context is all you need",
+      "language": "TypeScript",
+      "total_stars": 5395,
+      "forks": 416,
+      "stars_today": 460,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 676
+    },
+    "details": {
+      "topics": [
+        "dsh-plugin"
+      ],
+      "license_name": "",
+      "created_at": "2026-08-06T08:27:34Z",
+      "updated_at": "2026-11-09T06:52:19Z",
+      "pushed_at": "2026-11-09T06:49:33Z",
+      "open_issues": 920,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# billion-context\n\n<p align=\"center\"><a href=\"./README.md\">English</a> | <a href=\"./README.zh-CN.md\">中文</a></p>\n\n<p align=\"center\"><strong>Context-compression plugin</strong> — <em>billion-context is all you need.</em></p>\n\n<p align=\"center\"><sub>small context windows (100K is enough) · <em>5× fewer tokens</em> · month-long single sessions (billions of tokens) · high compression quality</sub></p>\n\n<p align=\"center\">\n<a href=\"https://www.npmjs.com/package/billion-context\"><img src=\"https://img.shields.io/npm/v/billion-context.svg?style=flat-square\" alt=\"npm\"></a>\n<a href=\"https://github.com/ranxianglei/billion-context/blob/master/LICENSE\"><img src=\"https://img.shields.io/npm/l/billion-context.svg?style=flat-square\" alt=\"license\"></a>\n<a href=\"https://github.com/ranxianglei/billion-context\"><img src=\"https://img.shields.io/badge/GitHub-ranxianglei%2Fbillion--context-181717?style=flat-square&logo=github\" alt=\"GitHub\"></a>\n</p>\n\n<p align=\"center\">\n<code>npm install -g billion-context --prefix=~/.local</code>\n</p>\n\n<p align=\"center\">\n<a href=\"https://claude.com/product/claude-code\" title=\"Claude Code\"><img src=\"https://cdn.simpleicons.org/claude/D97757\" height=\"26\" alt=\"Claude Code\"></a>&nbsp;\n<a href=\"https://github.com/openai/codex\" title=\"Codex\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.iconify.design/simple-icons/openai.svg?color=white\"><img src=\"https://api.iconify.design/simple-icons/openai.svg\" height=\"26\" alt=\"Codex\"></picture></a>&nbsp;\n<a href=\"https://opencode.ai\" title=\"OpenCode\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.simpleicons.org/opencode/FFFFFF\"><img src=\"https://cdn.simpleicons.org/opencode/000000\" height=\"26\" alt=\"OpenCode\"></picture></a>&nbsp;\n<a href=\"https://pi.dev\" title=\"pi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.simpleicons.org/pi/FFFFFF\"><img src=\"https://cdn.simpleicons.org/pi/000000\" height=\"26\" alt=\"pi\"></picture></a>&nbsp;\n<a href=\"https://github.com/google-gemini/gemini-cli\" title=\"Gemini CLI\"><img src=\"https://cdn.simpleicons.org/googlegemini/8E75B2\" height=\"26\" alt=\"Gemini CLI\"></a>&nbsp;\n<a href=\"https://www.kimi.com\" title=\"Kimi\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.simpleicons.org/kimi/FFFFFF\"><img src=\"https://cdn.simpleicons.org/kimi/000000\" height=\"26\" alt=\"Kimi\"></picture></a>&nbsp;\n<a href=\"https://github.com/QwenLM/qwen-code\" title=\"Qwen Code\"><img src=\"https://cdn.simpleicons.org/qwen/6950EF\" height=\"26\" alt=\"Qwen Code\"></a>&nbsp;\n<a href=\"https://github.com/github/copilot-cli\" title=\"GitHub Copilot CLI\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://cdn.simpleicons.org/githubcopilot/FFFFFF\"><img src=\"https://cdn.simpleicons.org/githubcopilot/000000\" height=\"26\" alt=\"GitHub Copilot CLI\"></picture></a>&nbsp;\n<a href=\"https://www.trae.ai\" title=\"TRAE\"><img src=\"https://cdn.simpleicons.org/trae/32F08C\" height=\"26\" alt=\"TRAE\"></a>&nbsp;\n<a href=\"https://www.codebuddy.cn\" title=\"CodeBuddy\"><img src=\"https://cdn.simpleicons.org/codebuddy/6C4DFF\" height=\"26\" alt=\"CodeBuddy\"></a>&nbsp;\n<a href=\"https://qoder.com\" title=\"Qoder\"><img src=\"https://icons.duckduckgo.com/ip3/qoder.com.ico\" height=\"26\" alt=\"Qoder\"></a>&nbsp;\n<a href=\"https://iflow.cn\" title=\"iFlow CLI\"><img src=\"https://img.alicdn.com/imgextra/i4/O1CN01yBfg3x1iNi4YggwIt_!!6000000004401-2-tps-72-72.png\" height=\"26\" alt=\"iFlow CLI\"></a>&nbsp;\n<a href=\"https://www.minimax.io\" title=\"MiniMax Code (mcode)\"><img src=\"https://cdn.simpleicons.org/minimax/E73562\" height=\"26\" alt=\"MiniMax Code\"></a>&nbsp;\n<a href=\"https://www.deepseek.com\" title=\"deepseek-harness (dsh)\"><img src=\"https://cdn.simpleicons.org/deepseek/5786FE\" height=\"26\" alt=\"deepseek-harness\"></a>&nbsp;\n<a href=\"https://ampcode.com\" title=\"Amp\"><img src=\"https://icons.duckduckgo.com/ip3/ampcode.com.ico\" height=\"26\" alt=\"Amp\"></a>&nbsp;\n<a href=\"https://charm.land/crush\" title=\"Crush\"><img src=\"https://icons.duckduckgo.com/ip3/charm.land.ico\" height=\"26\" alt=\"Crush\"></a>&nbsp;\n<a href=\"https://zed.dev\" title=\"Zed\"><img src=\"https://icons.duckduckgo.com/ip3/zed.dev.ico\" height=\"26\" alt=\"Zed\"></a>&nbsp;\n<a href=\"https://aider.chat\" title=\"aider\"><img src=\"https://raw.githubusercontent.com/Aider-AI/aider/main/aider/website/assets/icons/favicon-32x32.png\" height=\"26\" alt=\"aider\"></a>&nbsp;\n<a href=\"https://github.com/aaif-goose/goose\" title=\"goose\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://raw.githubusercontent.com/aaif-goose/goose/main/documentation/static/img/logo_dark.png\"><img src=\"https://raw.githubusercontent.com/aaif-goose/goose/main/documentation/static/img/logo_light.png\" height=\"26\" alt=\"goose\"></picture></a>&nbsp;\n<a href=\"https://github.com/NousResearch/hermes-agent\" title=\"hermes\"><img src=\"https://raw.githubusercontent.com/NousResearch/hermes-agent/main/apps/bootstrap-installer/src-tauri/icons/128x128.png\" height=\"26\" alt=\"hermes\"></a>&nbsp;\n<a href=\"https://z.ai\" title=\"zcode (Z.ai)\"><img src=\"https://z-cdn.chatglm.cn/z-ai/static/logo.svg\" height=\"26\" alt=\"zcode\"></a>&nbsp;\n<a href=\"https://omp.sh\" title=\"omp (oh-my-pi, Stencil Labs)\"><img src=\"https://omp.sh/favicon.svg\" height=\"26\" alt=\"omp\"></a>&nbsp;\n<a href=\"https://github.com/1jehuang/jcode\" title=\"jcode\"><img src=\"https://github.com/1jehuang.png\" height=\"26\" alt=\"jcode\"></a>\n</p>\n\n---\n\n> **Cache health at a glance:** a healthy session keeps a **95–97%** prefix-cache hit rate — compression itself costs ≤2%. Sustained lower? Check attribution with `/acp` or `/acp-cache` (see [FAQ](#faq)); usual causes, in order: upstream cache TTL expiry · model switch · a bili bug (please report) · other/unknown.\n\n## Community\n\nQQ Group:\n1056132097 (full)\n1108730198 (full)\n1129868472 (open)\n\n---\n\n## 📄 Paper / Preprint\n\n- **[Model-Driven Incremental Hierarchical Compression: Training-Free Multi-Generational Context Management for Long-Lived Coding Agents](./paper/model-driven-incremental-hierarchical-compression-training-free-multi-generational-context-management-for-long-lived-coding-agents.md)** (English, v0.2)\n\n> 📝 **The paper itself is open-sourced under the MIT License as part of the codebase (`paper/`). It is a living document — anyone may edit it; improvements are welcome via pull request.**\n\nA production-scale longitudinal study: 4.5 months, three hosts, 174,327 model calls, 18.76B cumulative input tokens (~24.7B across all hosts), zero window violations on 204,800-token models, marathon sessions of 8,584–12,049 calls.\n\n### 📊 Independent Third-Party Benchmarks\n\n- **[1,500-Item Cross-Benchmark Evaluation (`LongMemEval-S` · `ContextBench` · `MemoryAgentBench`)](./benchmarks/third-party-1500/README.md)** ([中文版](./benchmarks/third-party-1500/README.zh-CN.md)) — head-to-head comparison of `billion-context` (`v0.1.202`) against `full` context and 3 RAG arms (`bm25`, `embedding`, `embedding-rerank`) with `DeepSeek V4.1 Flash`, `Qwen3-Embedding-8B`, `Qwen3-Reranker-4B`, and `Pi Agent`: **#1 on ContextBench** (`0.3097` Utilized F1, `-58.3%` cost vs `full`), **+16.6% over best RAG on LongMemEval-S** (`79.20%` vs `62.60%`, `-71.1%` independent-session cost vs `full`), and **100% survival on 1.48M-token MemoryAgentBench TTL** (`30×` steady-state compression where `full` fails `199/199`).\n\n---\n\n`billion-context` sits between **any** agent and its model API, rewriting Anthropic/OpenAI streams with [acp-kernel](https://github.com/ranxianglei/acp-kernel) compression. The model decides **when** and **what** to compress into high-fidelity summaries — not a hard truncation limit.\n\n## Why\n\nLong coding sessions blow up context. Each provider charges per token, and once you pass the context window the session degrades or dies. `billion-context` compresses consumed conversation into layered summaries so you can run a single session for days — billions of tokens through one context window.\n\nUnlike a host's built-in summarizer, compression here is **incremental, reversible, and prefix-cache friendly**: summaries are written in small ranges, can be decompressed on demand, and the cache prefix stays intact.\n\n## How it works\n\n![How it works](docs/how-it-works.en.svg)\n\n### Context-management tools\n\nThe proxy injects four context-management tools into the conversation; the model calls them itself as context grows, and the proxy executes `compress` server-side so folded ranges stay summarized in history until restored:\n\n- **`compress`** — fold a message range into a detailed summary.\n- **`decompress`** — restore a compressed range when exact details are needed again.\n- **`search_context`** — keyword search over compressed summaries and visible messages.\n- **`acp_status`** — context-usage overview plus which ranges are still compressible.\n\n## Which do I need?\n\nPick by your client:\n\n| Client | Use |\n|---|---|\n| **pi** | [`billion-context`](https://github.com/ranxianglei/billion-context) — `bili pi` (launcher) or `bili plugin install pi` (native); standalone [`billion-context-pi`](https://github.com/ranxianglei/billion-context-pi) remains usable — details: [docs/clients.md](docs/clients.md#pi-pidev-coding-agent) |\n| **opencode** (1.x / 2.x) | [`billion-context`](https://github.com/ranxianglei/billion-context) — `bili opencode` (launcher) or `bili plugin install opencode` (native); standalone [`opencode-acp`](https://github.com/ranxianglei/opencode-acp) remains usable on 1.x — full guide: [OpenCode](docs/clients.md#opencode) |\n| **omp** | [`billion-context`](https://github.com/ranxianglei/billion-context) via `bili omp` (built-in plugin) or `bili plugin install omp` (self-spawning native plugin, no launcher) |\n| **dsh** | `bili dsh` (launcher — full native plugin via `--patch`) or `bili plugin install dsh` ≡ `dsh plugin --profile <name> add billion-context` (one unified lane) — details: [docs/clients.md](docs/clients.md) |\n| **kimi** | `bili plugin install kimi` (self-spawning native, Kimi Code ≥ 2.0.0) or `bili kimi` (cert-MITM) or `/bili/` prefix — details: [docs/clients.md](docs/clients.md) |\n| **hermes** | `bili plugin install hermes` (self-spawning native, Python plugin #958) or `bili hermes` (cert-MITM) |\n| **zcode** (Z.ai / bigmodel coding plan) | `bili plugin install zcode` (self-spawning native, #1145) or cert-MITM via the GUI's Settings → Network or `/bili/` prefix — details: [docs/clients.md](docs/clients.md) |\n| **claude** | `bili claude` (launcher) or `bili plugin install claude` (native posture, #964 — managed settings block + session-owned proxy; see the notes below) |\n| **codex** | `bili codex` (launcher — the full zero-config posture) or `bili plugin install codex` (MCP-shell tools companion: **start bili first** — the shell never spawns a proxy and never routes codex's own traffic) — details: [docs/clients.md](docs/clients.md#codex-openai-codex-cli) |\n| **jcode** | [`billion-context`](https://github.com/ranxianglei/billion-context) via `bili jcode` (cert-MITM) or `/bili/` prefix — no native mode (compiled Rust binary, no plugin seam, [#962](https://github.com/ranxianglei/billion-context/issues/962)) |\n| **gemini** (Gemini CLI) | `bili gemini` (launcher, `GOOGLE_GEMINI_BASE_URL` `/bili/` rewrite) or `/bili/` prefix — launcher-only (no in-loop tool seam, #1043) |\n| **iflow** (iFlow CLI) | `bili iflow` (launcher, `IFLOW_BASE_URL` `/bili/` rewrite) or `/bili/` prefix |\n| **qwen** (Qwen Code) | `bili qwen` (launcher, cert-MITM) or `/bili/` prefix |\n| **antigravity** (Antigravity CLI / agy, Google) | `bili antigravity` (launcher, `CLOUD_CODE_URL` `/bili/` rewrite of daily-cloudcode-pa.googleapis.com — Antigravity's real default upstream, #3129) or `/bili/` prefix — no plugin seam (closed Go language_server; its user-plugin surface is additive-only, #2115) — details: [docs/clients.md](docs/clients.md) |\n| **mcode** (MiniMax Code) | [`billion-context`](https://github.com/ranxianglei/billion-context) via `bili mcode` (cert-MITM) or `/bili/` prefix — no native mode (event hooks only, no model-request seam, [#"
+    },
+    "brief": {
+      "summary": "给编码 Agent 做上下文压缩的插件，省 token 跑长会话",
+      "problem": "长会话塞爆上下文窗口，超限后会话中断或变差，token 成本高",
+      "highlights": [
+        "可以装到 Claude Code、Codex 等 CLI 里直接用",
+        "可以把已聊内容压成分层摘要，单会话跑数月",
+        "可以用 100K 小窗口处理上亿 token 的会话"
+      ],
+      "target_users": [
+        "长时间编码的开发者",
+        "AI 编程工具重度用户",
+        "Agent 工具开发者"
+      ],
+      "why_trending": "今日新增 460 Star，省 token 与长会话痛点受关注",
+      "caveat": "开放 issue 积压约 920 条，压缩效果建议自行验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ranxianglei/billion-context",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "Agent上下文压缩插件，非ACG专用",
+      "generated_by_ai": true,
+      "velocity_score": 86,
+      "freshness_score": 40,
+      "ranking_score": 61.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "google-deepmind/mujoco",
+      "url": "https://github.com/google-deepmind/mujoco",
+      "description": "Multi-Joint dynamics with Contact. A general purpose physics simulator.",
+      "language": "C++",
+      "total_stars": 16578,
+      "forks": 1960,
+      "stars_today": 41,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 41
+    },
+    "details": {
+      "topics": [
+        "mujoco",
+        "physics",
+        "robotics"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2021-08-27T12:25:48Z",
+      "updated_at": "2026-11-09T06:50:57Z",
+      "pushed_at": "2026-11-08T23:35:03Z",
+      "open_issues": 308,
+      "homepage": "https://mujoco.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1>\n  <a href=\"https://mujoco.org\"><img alt=\"MuJoCo\" src=\"banner.png\" width=\"100%\"/></a>\n</h1>\n\n<p>\n  <a href=\"https://mujoco.org\" alt=\"Website\">\n    <img src=\"https://img.shields.io/badge/website-mujoco.org-0053d6\">\n  </a>\n  <a href=\"https://github.com/google-deepmind/mujoco/actions/workflows/build.yml?query=branch%3Amain\" alt=\"GitHub Actions\">\n    <img src=\"https://img.shields.io/github/actions/workflow/status/google-deepmind/mujoco/build.yml?branch=main\">\n  </a>\n  <a href=\"https://mujoco.readthedocs.io/\" alt=\"Documentation\">\n    <img src=\"https://readthedocs.org/projects/mujoco/badge/?version=latest\">\n  </a>\n  <a href=\"https://github.com/google-deepmind/mujoco/blob/main/LICENSE\" alt=\"License\">\n    <img src=\"https://img.shields.io/github/license/google-deepmind/mujoco\">\n  </a>\n</p>\n\n**MuJoCo** stands for **Mu**lti-**Jo**int dynamics with **Co**ntact. It is a\ngeneral purpose physics engine that aims to facilitate research and development\nin robotics, biomechanics, graphics and animation, machine learning, and other\nareas which demand fast and accurate simulation of articulated structures\ninteracting with their environment.\n\nThis repository is maintained by [Google DeepMind](https://www.deepmind.com/).\n\nMuJoCo has a C API and is intended for researchers and developers. The runtime\nsimulation module is tuned to maximize performance and operates on low-level\ndata structures that are preallocated by the built-in XML compiler. The library\nincludes interactive visualization in native desktop windows and web browsers.\nMuJoCo further exposes a large number of utility functions for computing\nphysics-related quantities.\n\nWe also provide [Python bindings] and a plug-in for the [Unity] game engine.\n\n## Documentation\n\nMuJoCo's documentation can be found at [mujoco.readthedocs.io]. Upcoming\nfeatures due for the next release can be found in the [changelog] in the\n\"latest\" branch.\n\n## Getting Started\n\n1. **Try MuJoCo in your browser.**\nVisit [mujoco.org](https://mujoco.org) to explore MuJoCo on desktop or mobile\nwith nothing to install, or open [live.mujoco.org](https://live.mujoco.org) to\ninspect and drag and drop your own models in the WebAssembly version of the\n[MuJoCo Studio] app (slower than native C, since it runs in WebAssembly).\n\n2. **Run a viewer on your machine.**\nFollow the [Getting Started] guide in the documentation to download a prebuilt\nrelease and run the [MuJoCo Studio] app or the classic `simulate` viewer (shown\nin [this video](https://www.youtube.com/watch?v=P83tKA1iz2Y)) on your machine.\n\n3. **Explore our online IPython notebooks.**\nIf you are a Python user, you might want to start with our tutorial notebooks\nrunning on Google Colab:\n\n - The **introductory** tutorial teaches MuJoCo basics:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/python/tutorial.ipynb)\n - The **Model Editing** tutorial shows how to create and edit models procedurally:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/python/mjspec.ipynb)\n - The **rollout** tutorial shows how to use the multithreaded `rollout` module:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/python/rollout.ipynb)\n - The **LQR** tutorial synthesizes a linear-quadratic controller, balancing a\n   humanoid on one leg:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/python/LQR.ipynb)\n - The **least-squares** tutorial explains how to use the Python-based nonlinear\n   least-squares solver:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/python/least_squares.ipynb)\n - The **MJX** tutorial provides usage examples of\n   [MuJoCo XLA](https://mujoco.readthedocs.io/en/stable/mjx.html), a branch of MuJoCo written in JAX:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/mjx/tutorial.ipynb)\n - The **differentiable physics** tutorial trains locomotion policies with\n   analytical gradients automatically derived from MuJoCo's physics step:\n   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/google-deepmind/mujoco/blob/main/mjx/training_apg.ipynb)\n\n## Installation\n\n### Prebuilt binaries\n\nVersioned releases are available as precompiled binaries from the GitHub\n[releases page], built for Linux (x86-64 and AArch64), Windows (x86-64 only),\nand macOS (universal). This is the recommended way to use the software.\n\n### Building from source\n\nUsers who wish to build MuJoCo from source should consult the [build from\nsource] section of the documentation. However, note that the commit at\nthe tip of the `main` branch may be unstable.\n\n### Python (>= 3.11)\n\nThe native Python bindings, which come pre-packaged with a copy of MuJoCo, can\nbe installed from [PyPI] via:\n\n```bash\npip install mujoco\n```\n\nNote that Pre-built Linux wheels target `manylinux2014`, see\n[here](https://github.com/pypa/manylinux) for compatible distributions. For more\ninformation such as building the bindings from source, see the [Python bindings]\nsection of the documentation.\n\n## Versioning\n\nWe aim to release MuJoCo in the first week of each month. Our versioning\nstandards changed to modified Semantic Versioning in 3.5.0,\nsee [versioning](VERSIONING.md) for details.\n\n## Contributing\n\nWe welcome community engagement: questions, requests for help, bug reports and\nfeature requests. To read more about bug reports, feature requests and more\nambitious contributions, please see our [contributors guide](CONTRIBUTING.md)\nand [style guide](STYLEGUIDE.md).\n\n## Asking Questions\n\nQuestions and requests for help are welcome as a GitHub\n[\"Asking for Help\" Discussion](https://github.com/google-deepmind/mujoco/discussions/categories/asking-for-help)\nand should focus on a specific problem or question.\n\n## Bug reports and feature requests\n\nGitHub [Issues](https://github.com/google-deepmind/mujoco/issues) are reserved\nfor bug reports, feature requests and other development-related subjects.\n\n## Related software\nMuJoCo is the backbone for numerous environment packages. Below we list several\nbindings and converters.\n\n### Bindings\n\nThese packages give users of various languages access to MuJoCo functionality:\n\n#### First-party bindings:\n\n- [Python bindings](https://mujoco.readthedocs.io/en/stable/python.html)\n  - [dm_control](https://github.com/google-deepmind/dm_control), Google\n    DeepMind's related environment stack, includes\n    [PyMJCF](https://github.com/google-deepmind/dm_control/blob/main/dm_control/mjcf/README.md),\n    a module for procedural manipulation of MuJoCo models.\n- [JavaScript bindings and WebAssembly support](/wasm/README.md) (inspired [stillonearth](https://github.com/stillonearth) and [zalo](https://github.com/zalo)'s community projects; [mjswan](https://github.com/ttktjmt/mjswan) extends these with real-time policy control, interactive force\napplication, and more).\n- [C# bindings and Unity plug-in](https://mujoco.readthedocs.io/en/stable/unity.html)\n\n#### Third-party bindings:\n\n- **MATLAB Simulink**: [Simulink Blockset for MuJoCo Simulator](https://github.com/mathworks-robotics/mujoco-simulink-blockset)\n  by [Manoj Velmurugan](https://github.com/vmanoj1996).\n- **Swift**: [swift-mujoco](https://github.com/liuliu/swift-mujoco)\n- **Java**: [mujoco-java](https://github.com/CommonWealthRobotics/mujoco-java)\n- **Julia**: [MuJoCo.jl](https://github.com/JamieMair/MuJoCo.jl)\n- **Rust**: [MuJoCo-rs](https://github.com/davidhozic/mujoco-rs)\n\n### Converters\n\n- **OpenSim**: [MyoConverter](https://github.com/MyoHub/myoconverter) converts\n  OpenSim models to MJCF.\n- **SDFormat**: [gz-mujoco](https://github.com/gazebosim/gz-mujoco/) is a\n  two-way SDFormat <-> MJCF conversion tool.\n- **OBJ**: [obj2mjcf](https://github.com/kevinzakka/obj2mjcf)\n  a script for converting composite OBJ files into a loadable MJCF model.\n- **onshape**: [Onshape to Robot](https://github.com/rhoban/onshape-to-robot)\n  Converts [onshape](https://www.onshape.com/en/) CAD assemblies to MJCF.\n\n## Citation\n\nIf you use MuJoCo for published research, please cite:\n\n```\n@inproceedings{todorov2012mujoco,\n  title={MuJoCo: A physics engine for model-based control},\n  author={Todorov, Emanuel and Erez, Tom and Tassa, Yuval},\n  booktitle={2012 IEEE/RSJ International Conference on Intelligent Robots and Systems},\n  pages={5026--5033},\n  year={2012},\n  organization={IEEE},\n  doi={10.1109/IROS.2012.6386109}\n}\n```\n\n## License and Disclaimer\n\nCopyright 2021 DeepMind Technologies Limited.\n\nBox collision code ([`engine_collision_box.c`](https://github.com/google-deepmind/mujoco/blob/main/src/engine/engine_collision_box.c))\nis Copyright 2016 Svetoslav Kolev.\n\nReStructuredText documents, images, and videos in the `doc` directory are made\navailable under the terms of the Creative Commons Attribution 4.0 (CC BY 4.0)\nlicense. You may obtain a copy of the License at\nhttps://creativecommons.org/licenses/by/4.0/legalcode.\n\nSource code is licensed under the Apache License, Version 2.0. You may obtain a\ncopy of the License at https://www.apache.org/licenses/LICENSE-2.0.\n\nThis is not an officially supported Google product.\n\n[build from source]: https://mujoco.readthedocs.io/en/latest/programming#building-from-source\n[Getting Started]: https://mujoco.readthedocs.io/en/latest/programming#getting-started\n[MuJoCo Studio]: https://mujoco.readthedocs.io/en/latest/studio/\n[Unity]: https://unity.com/\n[releases page]: https://github.com/google-deepmind/mujoco/releases\n[mujoco.readthedocs.io]: https://mujoco.readthedocs.io\n[changelog]: https://mujoco.readthedocs.io/en/latest/changelog.html\n[Python bindings]: https://mujoco.readthedocs.io/en/stable/python.html#python-bindings\n[PyPI]: https://pypi.org/project/mujoco/\n"
+    },
+    "brief": {
+      "summary": "谷歌 DeepMind 开源的多关节物理仿真引擎。",
+      "problem": "为机器人、生物力学和动画提供快速准确的铰接结构仿真。",
+      "highlights": [
+        "可以用 Python 绑定快速搭建机器人仿真实验",
+        "可以在浏览器里查看和拖拽物理模型",
+        "可以结合 Unity 做交互式物理场景"
+      ],
+      "target_users": [
+        "机器人研究者",
+        "物理仿真开发者",
+        "动画技术美术"
+      ],
+      "why_trending": "今日新增 41 Star，本周首次收录，机器人仿真需求持续。",
+      "caveat": "资料未说明游戏引擎集成成熟度，需自行验证。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "google-deepmind/mujoco",
+      "score": 65,
+      "category": "游戏开发",
+      "reason": "通用物理引擎，可用于游戏与动画模拟",
+      "generated_by_ai": true,
+      "velocity_score": 49,
+      "freshness_score": 20,
+      "ranking_score": 47.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "anthropics/claude-quickstarts",
+      "url": "https://github.com/anthropics/claude-quickstarts",
+      "description": "A collection of projects designed to help developers quickly get started with building deployable applications using the Claude API",
+      "language": "Python",
+      "total_stars": 19601,
+      "forks": 3286,
+      "stars_today": 32,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 32
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2024-08-29T19:52:32Z",
+      "updated_at": "2026-11-09T06:51:43Z",
+      "pushed_at": "2026-11-06T19:37:57Z",
+      "open_issues": 234,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Claude Quickstarts\n\nClaude Quickstarts is a collection of projects designed to help developers quickly get started with building  applications using the Claude API. Each quickstart provides a foundation that you can easily build upon and customize for your specific needs.\n\n## Getting Started\n\nTo use these quickstarts, you'll need an Claude API key. If you don't have one yet, you can sign up for free at [console.anthropic.com](https://console.anthropic.com).\n\n## Available Quickstarts\n\n### Customer Support Agent\n\nA customer support agent powered by Claude. This project demonstrates how to leverage Claude's natural language understanding and generation capabilities to create an AI-assisted customer support system with access to a knowledge base.\n\n[Go to Customer Support Agent Quickstart](./customer-support-agent)\n\n### Financial Data Analyst\n\nA financial data analyst powered by Claude. This project demonstrates how to leverage Claude's capabilities with interactive data visualization to analyze financial data via chat.\n\n[Go to Financial Data Analyst Quickstart](./financial-data-analyst)\n\n### Computer Use Demo\n\nAn environment and tools that Claude can use to control a desktop computer. This project demonstrates how to leverage the computer use capabilities of Claude, including support for the latest `computer_toolset_20260801` toolset shape, where each computer action is a member tool the model calls by name.\n\n[Go to Computer Use Demo Quickstart](./computer-use-demo)\n\n### Computer Use Best Practices\n\nA pedagogical, native-macOS reference implementation of a computer-use agent. Unlike the containerized Computer Use Demo, this project runs directly against the macOS desktop (run it in a VM!) and demonstrates common patterns for building more reliable and cost-effective computer-use agents: explicit tool definitions, correct image sizing and pruning, prompt caching, server-side compaction, batched tool calls, a sandboxed shell, and trajectory recording. It pairs with Anthropic's [computer-use best-practices guide](https://claude.com/blog/best-practices-for-computer-and-browser-use-with-claude).\n\n[Go to Computer Use Best Practices Quickstart](./computer-use-best-practices)\n\n### Browser Use Demo\n\nA complete reference implementation for browser automation powered by Claude. This project demonstrates how to give Claude the ability to navigate websites, inspect and interact with DOM elements, extract content, and fill forms using a custom Playwright-backed browser tool.\n\n[Go to Browser Use Demo Quickstart](./browser-use-demo)\n\n### Browser Toolset Quickstart\n\nThe minimal CDP example of Claude's browser toolset (`browser_toolset_20260801`), in Python and TypeScript. It has a small driver for one Chromium tab over the Chrome DevTools Protocol, a script that runs the driver with the tool runner, and a script that exercises it without a model. It shows the interface and is not production code.\n\n[Go to Browser Toolset Quickstart](./browser-toolset)\n\n### Computer Toolset Quickstart\n\nThe minimal VNC example of Claude's computer toolset (`computer_toolset_20260801`), in Python and TypeScript. It has a small driver for one desktop over VNC (the RFB protocol, no VNC library), a script that runs the driver with the tool runner, and a script that exercises it without a model. It shows the interface and is not production code.\n\n[Go to Computer Toolset Quickstart](./computer-toolset)\n\n### Autonomous Coding Agent\n\nAn autonomous coding agent powered by the Claude Agent SDK. This project demonstrates a two-agent pattern (initializer + coding agent) that can build complete applications over multiple sessions, with progress persisted via git and a feature list that the agent works through incrementally.\n\n[Go to Autonomous Coding Agent Quickstart](./autonomous-coding)\n\n### Managed Agents: Chat SDK\n\nA browser chat app powered by Claude Managed Agents and Vercel's Chat SDK. This project demonstrates how to pair a persistent Managed Agents session per conversation with a chat surface: a research analyst researches with web search and streams its brief token by token while a live feed shows the tool calls. The same handler runs on Slack, Teams, Discord, Telegram, or WhatsApp by swapping the Chat SDK adapter.\n\n[Go to Managed Agents Chat SDK Quickstart](./managed-agents/chat-sdk)\n\n### Managed Agents with CopilotKit and AG-UI\n\nA personal finance assistant chat app built on a Claude Managed Agent and rendered with CopilotKit. This project demonstrates how to bridge a managed-agent session to the AG-UI protocol, stream replies token by token with event deltas, and render agent tool calls as interactive generative UI components in the chat.\n\n[Go to Managed Agents with CopilotKit Quickstart](./managed-agents/copilot-kit-ag-ui)\n\n### Managed Agents: Daily Brief\n\nA scheduled agent that reads your Slack channels and GitHub pull requests each weekday and posts one short brief to Slack, built on Claude Managed Agents. This project demonstrates a deployment defined entirely as files applied with `ant apply` (agent, environment, two memory stores, vault, cron deployment), a read-only preferences store next to a read-write state store, and run steps designed to fail well unattended: per-source bookmarks, a ledger against repeats, and a source that could not be read reported as unreadable rather than as a quiet day.\n\n[Go to Managed Agents Daily Brief Quickstart](./managed-agents/daily-brief)\n\n### Managed Agents: Knowledge Wiki\n\nA deal-room knowledge wiki built with Claude Managed Agents. This project demonstrates how to distill a document corpus once into a versioned memory-store knowledge wiki — using one dynamic workflow run that extracts, resolves, and consolidates — then answer repeated analyst questions from the wiki with provenance on every fact and a lower per-question cost than raw-document search. The worked example is a real M&A data room fetched from public SEC EDGAR filings.\n\n[Go to Managed Agents Knowledge Wiki Quickstart](./managed-agents/knowledge-wiki)\n\n### Managed Agents: Linear\n\nAn agent you can @mention or assign in Linear, backed by a Claude Managed Agent. This project demonstrates a stateless webhook bridge on Linear's Agent Platform: an `AgentSessionEvent` creates a Managed Agents session with the Linear session and organization IDs stored in session metadata, and the `session.status_idled` webhook reads that metadata back to post the reply as a comment. It installs through Linear OAuth with `actor=app`.\n\n[Go to Managed Agents Linear Quickstart](./managed-agents/linear)\n\n### Managed Agents: MCP Server (TypeScript)\n\nAn MCP server that exposes the Claude Managed Agents Sessions API as nine tools. This project demonstrates how to let Claude Desktop, Claude Code, or claude.ai drive the agents already in your workspace: list them, start a session, send a message, and wait for the reply, over stdio or Streamable HTTP. One tool, `wait_for_idle`, turns the session's event stream into a single request/response call, and an agent allowlist limits what a bearer-token holder can reach.\n\n[Go to Managed Agents MCP Server (TypeScript) Quickstart](./managed-agents/mcp-server-typescript)\n\n### Managed Agents: Road Trip Planner\n\nA national-park road trip planner built directly on a Claude Managed Agents session, in Next.js with no chat framework and no database. This project demonstrates four API features on one screen: token-by-token streaming with `event_deltas` on the session event stream, vault credentials injected at a specific request location (`injection_location`), a per-session model override with `agent_with_overrides`, and a `multiagent` coordinator that hands its draft to a reviewer agent in a session thread.\n\n[Go to Managed Agents Road Trip Planner Quickstart](./managed-agents/roadtrip-planner)\n\n### Managed Agents: Sentry\n\nA scheduled Sentry triage agent built on Claude Managed Agents. This project demonstrates a deployment that starts a session on a cron schedule with no host process, Sentry's Agent Plugin for guided setup, and a refreshable MCP OAuth credential persisted in a vault for issue triage and Seer root-cause analysis.\n\n[Go to Managed Agents Sentry Quickstart](./managed-agents/sentry)\n\n### Managed Agents: Sentry Autofix\n\nA production error fixed by pull request, with Claude Managed Agents and the Sentry MCP server. This project demonstrates a webhook-driven session per Sentry issue: the agent reads the stack trace and Seer's root cause analysis, reproduces the bug with a failing test in a mounted GitHub repository, and pushes a branch, and the host opens the pull request through a custom tool so a person reviews every fix. Setup runs in Claude Code with Sentry's Agent Plugin. Credentials stay in a vault outside the sandbox, the sandbox has no route to the open internet, and each session has a hard spend cap.\n\n[Go to Managed Agents Sentry Autofix Quickstart](./managed-agents/sentry-autofix)\n\n### Managed Agents: Slack\n\nA Slack bot backed by a Claude Managed Agent. This project demonstrates a stateless webhook bridge: an `@mention` creates a Managed Agents session with the channel and thread stored in session metadata, and the `session.status_idled` webhook reads that metadata back to post the reply in-thread. There is no database and no long-lived connection.\n\n[Go to Managed Agents Slack Quickstart](./managed-agents/slack)\n\n## General Usage\n\nEach quickstart project comes with its own README and setup instructions. Generally, you'll follow these steps:\n\n1. Clone this repository\n2. Navigate to the specific quickstart directory\n3. Install the required dependencies\n4. Set up your Claude API key as an environment variable\n5. Run the quickstart application\n\n## Explore Further\n\nTo deepen your understanding of working with Claude and the Claude API, check out these resources:\n\n- [Claude API Documentation](https://docs.claude.com)\n- [Claude Cookbooks](https://github.com/anthropics/claude-cookbooks) - A collection of code snippets and guides for common tasks\n- [Claude API Fundamentals Course](https://github.com/anthropics/courses/tree/master/anthropic_api_fundamentals)\n\n## Contributing\n\nWe welcome contributions to the Claude Quickstarts repository! If you have ideas for new quickstart projects or improvements to existing ones, please open an issue or submit a pull request.\n\n## Community and Support\n\n- Join our [Anthropic Discord community](https://www.anthropic.com/discord) for discussions and support\n- Check out the [Anthropic support documentation](https://support.anthropic.com) for additional help\n\n## License\n\nThis project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.\n"
+    },
+    "brief": {
+      "summary": "Claude API 官方快速上手示例合集",
+      "problem": "帮助开发者快速搭建可部署的 Claude 应用，减少从零起步成本",
+      "highlights": [
+        "可以照着示例搭建客服与财务分析应用",
+        "可以运行浏览器与桌面自动化示例",
+        "可以基于双智能体模板开发编码助手"
+      ],
+      "target_users": [
+        "Claude API 开发者",
+        "AI 应用初学者",
+        "原型开发者"
+      ],
+      "why_trending": "官方维护且今日新增 32 Star，本周首次收录",
+      "caveat": "部分示例非生产代码，且有 234 个开放 issue",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "anthropics/claude-quickstarts",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Agent快速启动集合，非ACG专用",
+      "generated_by_ai": true,
+      "velocity_score": 46,
+      "freshness_score": 20,
+      "ranking_score": 45.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "horizon-rust/horizon",
+      "url": "https://github.com/horizon-rust/horizon",
+      "description": "Minecraft: Java Edition 26.3 rewritten from scratch in Rust, checked against vanilla with 281 differential harnesses. Get it with the Horizon launcher.",
+      "language": "Rust",
+      "total_stars": 8202,
+      "forks": 1286,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 289
+    },
+    "details": {
+      "topics": [
+        "differential-testing",
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-11-09T06:54:25Z",
+      "pushed_at": "2026-11-09T06:54:17Z",
+      "open_issues": 589,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/banner.webp\" alt=\"Horizon: the game you know, rebuilt in Rust\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev\"><b>Website</b></a> ·\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://playhorizon.dev/docs/\"><b>Docs</b></a> ·\n  <a href=\"https://discord.gg/playhorizon\"><b>Discord</b></a> ·\n  <a href=\"ROADMAP.md\"><b>Roadmap</b></a> ·\n  <a href=\"#contributing\"><b>Contributing</b></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#project-status\"><img src=\"https://img.shields.io/badge/player--visible%20gaps-0%20open-F0795A\" alt=\"Player-visible gaps open\"></a>\n</p>\n\n# Horizon\n\n**Minecraft: Java Edition 26.3, rewritten in Rust.** Your worlds, the same rules and the same terrain as the Java game, checked against it by hundreds of differential tests, in one native program with no Java. Free, open source (MIT) and unofficial: you play it with your own copy of Java Edition.\n\n<p align=\"center\">\n  <img src=\"docs/media/readme/valley.webp\" alt=\"A river valley with a plains village, savanna hills and a cherry grove, seen from above with a long view distance\" width=\"100%\">\n</p>\n\n## What works today\n\nEverything below is in the current release.\n\n- **The game.** Survival, creative, hardcore and spectator; vanilla world generation in all three dimensions, mobs, villagers, raids, redstone, every command, the HUD and the recipe book. Vanilla saves open as they are, and worlds from 1.8 to 26.2 are upgraded.\n- **Multiplayer.** Join vanilla and Horizon servers (online mode included), open a world to LAN, or invite friends with a code from the launcher's Home page.\n- **Graphics.** Distant terrain up to 1,024 chunks, graphics presets, HDR and controllers, all off by default where they would change the vanilla look ([settings](https://playhorizon.dev/docs/settings)).\n- **Packs.** Resource packs, data packs and shader packs ([below](#mods-and-shader-packs)).\n- **Mods.** Content mods and native Rust mods, installed from the launcher ([below](#mods-and-shader-packs)).\n- **Servers.** Host one from the launcher, or run `horizon-server` on a VPS ([below](#host-a-server)).\n- **The launcher.** It installs and updates the game, prepares its files from your copy of Minecraft, and updates itself.\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/readme/sunset.webp\" alt=\"Sunset behind a cherry grove on a hill, with a river below\"></td>\n    <td width=\"50%\"><img src=\"docs/media/readme/nether.webp\" alt=\"A crimson forest in the Nether, with a piglin among the fungi\"></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/readme/survival.webp\" alt=\"Survival in a village square: two villagers, flowers, the hotbar, health and hunger\"></td>\n    <td width=\"50%\"><img src=\"docs/media/readme/multiplayer.webp\" alt=\"Two players in a LAN world: the other player's name tag and the player list\"></td>\n  </tr>\n</table>\n\n<sub>Nightly 2026-11-05 on a Mac mini (Apple M4 Pro, Metal): vanilla's textures, no mods or shader packs, render distance 32 with distant terrain on.</sub>\n\n## Performance\n\n**Horizon draws more frames per second than Java Edition, and loads faster, on the same machine, world and path.** `tools/perf_bench.py` runs each game in turn, from a fresh world (seed 1234), waiting for the terrain and then flying it over a village, a forest, an ocean and a mountain. Measured on 2026-10-29/30 on an idle Windows 11 machine (Ryzen 7 9800X3D, RTX 5080), Horizon v0.2.97 as the launcher installs it, 1280x720 in a window, VSync off, three games per figure. Frames per second, mean of the four scenes, with the slowest 1% of frames in brackets:\n\n| Render distance | Horizon v0.2.97 | Vanilla 26.3 | Vanilla + mods |\n| --- | --- | --- | --- |\n| 8 chunks | 3,289 (1,327) | 2,437 (640) | 2,375 (709) |\n| 16 chunks | 2,074 (598) | 1,661 (375) | 1,586 (432) |\n| 32 chunks | 1,207 (333) | 1,031 (176) | 879 (264) |\n\n\"Vanilla + mods\" is Sodium, Lithium, FerriteCore and ImmediatelyFast. Horizon reaches the title screen in 2.9–3.2 s against vanilla's 7.5–7.7 s (the modded client's 10.8–11.1 s), loads a scene's chunks 2.9–3.8 times faster, and playing holds a steady working set of 1.1–1.7 GB against 1.9–2.9 GB. Every scene with its confidence interval and the run's load log: [the 2026-10-29 reports](benchmarks/perf/windows-9800x3d-5080-2026-10-29.md). Method, and how to measure your own machine: [docs/benchmark.md](docs/benchmark.md). [playhorizon.dev/benchmarks](https://playhorizon.dev/benchmarks) puts these runs beside a 2016 laptop, a Mac mini and a gaming desktop.\n\n## Download\n\nGet **the Horizon launcher** from [playhorizon.dev](https://playhorizon.dev), or from [the launcher releases](https://github.com/horizon-rust/horizon/releases?q=launcher&expanded=true):\n\n| Platform | File | Needs |\n| --- | --- | --- |\n| Windows x64 | `horizon-launcher-setup.exe` | Windows 10 or 11, a GPU with Vulkan or DirectX 12 |\n| Windows on Arm | `horizon-launcher-setup-arm64.exe` | Windows 11 on Arm |\n| macOS, Apple Silicon | `horizon-launcher-macos-arm64.dmg` | macOS 12 or later |\n| macOS, Intel | `horizon-launcher-macos-x64.dmg` | macOS 12 or later |\n| Linux x86-64 | `horizon-launcher-linux-x86_64.AppImage` or `.tar.gz` | a glibc distribution, X11 or Wayland, a GPU with Vulkan or OpenGL 3.3 |\n\n**You also need a Microsoft account that owns Minecraft: Java Edition.** You sign in with it in the launcher, which plays only with an account that owns the game ([why](docs/microsoft-account.md)). Horizon contains no Minecraft code or assets: an existing install (official launcher, Prism, MultiMC...) is reused, and without one the launcher downloads 26.3 from Mojang for your account. Step by step: [Install and first launch](https://playhorizon.dev/docs/install).\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/media/readme/launcher-home.webp\" alt=\"The launcher's Home page: the Horizon instance, Play, the version picker, the friend invite field, screenshots and the patch log\"></td>\n    <td width=\"50%\"><img src=\"docs/media/readme/launcher-mods.webp\" alt=\"The launcher's Mods page: Horizon's mod registry with Zoom selected, and tabs for modpacks, resource packs, shader packs and data packs\"></td>\n  </tr>\n</table>\n\n## Mods and shader packs\n\n- **Content mods** (`.hmod`): blocks, items, recipes, loot, models and textures, with no code.\n- **Native mods** (`.hnmod`): Rust that the launcher compiles into the game for you, with nothing to install.\n- **Java mods** (Fabric, NeoForge, Forge) don't run: Horizon has no Java. The launcher carries over the data and assets inside their jars, and imports modpacks (`.mrpack`, CurseForge zips, Prism instances) the same way ([modpacks](https://playhorizon.dev/docs/modpacks)).\n- **Shader packs**: Iris/OptiFine-format packs (`shaders/` folders) and Horizon's own WGSL packs, under Video Settings → Shader Packs ([pack format](docs/shaders.md)).\n\nMods are off by default: a fresh install plays exactly like vanilla 26.3. The launcher's Mods page browses Horizon's registry and Modrinth. [Mods](https://playhorizon.dev/docs/mods) · [make a mod](docs/mods.md).\n\n## Host a server\n\nThe launcher's **Servers** page creates, starts, backs up and updates a server, and invites friends. On a VPS, `horizon-server` installs with one command, needs no Java, and takes vanilla 26.3 and Horizon players alike. [Host a server](https://playhorizon.dev/docs/hosting) ([reference](docs/hosting.md)).\n\n## Agent control\n\nAI agents and scripts can play Horizon. `horizon-ctl`, shipped with the game, reads its state as JSON and acts like a player; `horizon-ctl mcp` serves the same commands over MCP.\n\n```sh\nhorizon-ctl launch --world Survival --seed 5 --wait   # finds the version the launcher installed\nhorizon-ctl state                                       # position, health, food, target, screen...\nhorizon-ctl goto -0.5 65 -2.5 --near 2.5                # walks there along a path\nhorizon-ctl break -1 65 -3                              # mines it; replies with the drops\n```\n\n`horizon-ctl help` lists every command. [Agent control](docs/native-client.md#agent-control-horizon-ctl-and-mcp).\n\n## Build from source\n\nNeeds Rust 1.90+, Python 3.10+, JDK 25, and on Linux `libasound2-dev libudev-dev`. `horizon-prepare` builds the game's resources from **your own copy** of Java Edition 26.3 (checked against `research-lock.json`) and never downloads it:\n\n1. **Client:** play 26.3 once in the official launcher. Horizon reads `~/.minecraft` (or `--minecraft-dir` / `HORIZON_MINECRAFT_DIR`).\n2. **Server jar:** the 26.3 server jar (`downloads.server.url` in `versions/26.3/26.3.json`), passed once with `--server-jar` or `HORIZON_SERVER_JAR`.\n\n```sh\ngit clone https://github.com/horizon-rust/horizon.git\ncd horizon\ncargo run --release -p horizon-prepare -- --prepare --server-jar ~/Downloads/server.jar   # needs JDK 25\ncargo run --release -p horizon-prepare -- sounds   # optional: sounds from your launcher install\ncargo run --release -p horizon-client\n```\n\nPrepared files land in the gitignored `.local/`: never commit or share them. Options, controls and architecture: [the native client guide](docs/native-client.md); all developer docs: [docs/README.md](docs/README.md).\n\n## Contributing\n\nIssues and pull requests are welcome: read [CONTRIBUTING.md](CONTRIBUTING.md) (vanilla first, small pull requests), and see [ROADMAP.md](ROADMAP.md) or [playhorizon.dev/hub](https://playhorizon.dev/hub) for what's next. Questions: [Discord](https://discord.gg/playhorizon). Before a pull request, run the self-check and paste its output:\n\n```sh\ngit config core.hooksPath .githooks\npython3 tools/pr_ready.py\n```\n\nIt runs rustfmt, clippy, the touched crates' tests, the Python tests, the public-tree check and the vanilla harnesses your change affects. Never commit game files, decompiled source or prepared resources.\n\n## Project status\n\n**Player-visible gaps: 0 open** of the 833 the [port ledger](tools/port_ledger.py) found, reading every vanilla 26.3 method against Horizon's code: vanilla behaviour a player would notice that Horizon doesn't have yet. By area: Animals [0](https://github.com/horizon-rust/horizon/issues/3512); Monsters and bosses [0](https://github.com/horizon-rust/horizon/issues/3513); Entities, projectiles, vehicles and decorations [0](https://github.com/horizon-rust/horizon/issues/3514); Items, enchantments and inventories [0](https://github.com/horizon-rust/horizon/issues/3515); Blocks, redstone and fluids [0](https://github.com/horizon-rust/horizon/issues/3516); World, world generation and saves [0](https://github.com/horizon-rust/horizon/issues/3517); Screens, HUD and client packets [0](https://github.com/horizon-rust/horizon/issues/3518); Entity and block rendering, models [0](https://github.com/horizon-rust/horizon/issues/3519); Server and players on the server [0](https://github.com/horizon-rust/horizon/issues/3520); Mob AI, villagers and raids [0](https://github.com/horizon-rust/horizon/issues/3521). This number goes down as gaps close (`tools/parity_gaps.py`); the table below says what the harnesses compare.\n\nThe table is the project's own audit of what the harnesses compare, subsystem by subsystem: a score says how much of that subsystem the harnesses cover and pass, not that nothing else differs from vanilla. What players still run into: [known issues](docs/known-issues.md).\n\n### What the harnesses compare\n\nScores: 0 (absent), 0.25 (started), 0.5 (playable, major features missing), 0.75 (mostly complete) or 1 (its harnesses cover the subsystem and pass). Last audited 2026-10-13: the harnesses pass on Linux and macOS. The [port ledger](tools/port_ledger.py) adds a method-by-method view of what is ported.\n\n| Subsystem | Score | Main gaps |\n| --- | ---: | --- |\n| Window, input and game loop | 1 | None: game loop, options, camera, auto-jump, toggle sprint/sneak and frame limiter match |\n| Assets and resources | 1 | None: item models match over 196,290 stacks; the resource pack screen over 3,000 sessions |\n| Network protocol an"
+    },
+    "brief": {
+      "summary": "Rust 重写《我的世界》Java 版，用差分测试对齐原版。",
+      "problem": "让玩家无需 Java 运行游戏，同时保持与原版一致的规则和地形。",
+      "highlights": [
+        "可以打开原版存档，游玩生存、创造等模式",
+        "可以加入原版服务器，或开 LAN 世界联机",
+        "可以用 horizon-ctl 让脚本或 AI 代理操作游戏"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "Rust 游戏开发者",
+        "服务器管理员"
+      ],
+      "why_trending": "连续上榜，总 Star 超 8000，差分测试覆盖较细。",
+      "caveat": "需自有正版 Minecraft Java 账号，Java 模组不能直接运行。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "horizon-rust/horizon",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "Minecraft Rust重实现，游戏引擎项目",
+      "generated_by_ai": true,
+      "velocity_score": 75,
+      "freshness_score": 70,
+      "ranking_score": 73.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "shinyobjectz/raea",
+      "url": "https://github.com/shinyobjectz/raea",
+      "description": "Render Anything Engine: tell your AI what to make. Videos, motion graphics, 3D and games as React and TypeScript, rendered on your own GPU. Rust + Bevy, macOS, Linux and Windows.",
+      "language": "Rust",
+      "total_stars": 836,
+      "forks": 59,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "agent-skills",
+        "ai-agents",
+        "ai-video",
+        "bevy",
+        "claude-code",
+        "game-engine",
+        "gpu",
+        "linux",
+        "macos",
+        "motion-design",
+        "motion-graphics",
+        "react",
+        "rust",
+        "typescript",
+        "video-editing",
+        "video-rendering",
+        "wgpu",
+        "windows"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-18T18:08:48Z",
+      "updated_at": "2026-11-09T06:54:33Z",
+      "pushed_at": "2026-11-09T06:47:22Z",
+      "open_issues": 10,
+      "homepage": "https://raea.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/cat-white.svg\">\n    <img src=\"docs/logo/cat-black.svg\" width=\"72\" alt=\"raea's cat\">\n  </picture>\n</p>\n\n<h1 align=\"center\">raea</h1>\n\n<p align=\"center\"><b>Render Anything Engine</b> <i>(for Anyone)</i></p>\n\n<p align=\"center\">\n  Tell your AI what to make. Videos, motion graphics, 3D and games, written as React and TypeScript<br>\n  (the code your AI already writes) and rendered on your own GPU, faster than they play.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://raea.io\">raea.io</a> ·\n  <a href=\"https://raea.io/made/\">Made in raea</a> ·\n  <a href=\"https://raea.io/why/\">Why raea</a> ·\n  <a href=\"https://raea.io/learn/\">Docs</a> ·\n  <a href=\"https://github.com/shinyobjectz/raea/releases\">Releases</a>\n</p>\n\n<p align=\"center\">\n  <img alt=\"licence FSL-1.1-ALv2\" src=\"https://img.shields.io/badge/licence-FSL--1.1--ALv2-black\">\n  <img alt=\"status canary\" src=\"https://img.shields.io/badge/status-canary-black\">\n  <img alt=\"macOS, Apple Silicon\" src=\"https://img.shields.io/badge/macOS-Apple%20Silicon-black\">\n  <img alt=\"Linux x86_64\" src=\"https://img.shields.io/badge/Linux-x86__64-black\">\n  <img alt=\"Windows x86_64\" src=\"https://img.shields.io/badge/Windows-x86__64-black\">\n</p>\n\n---\n\n> **Canary.** raea changes daily. Releases run on macOS (Apple Silicon), Linux (x86_64) and, new and least tested,\n> Windows (x86_64). Expect breaking changes, rough edges and gaps in the docs.\n\n## Install\n\n```sh\ncurl -fsSL https://raea.io/install | sh\n```\n\nThe installer puts the `raea` command under `~/.raea`, links it into `~/.local/bin`, and adds raea's agent skills to\n`~/.claude/skills`, so Claude Code (or any agent that reads that folder) knows how to write, render and check raea\nwork. Run it again to update. The engine is free and needs no account. Tarballs and checksums are on the\n[releases page](https://github.com/shinyobjectz/raea/releases).\n\nOn Windows 10 or 11, in PowerShell:\n\n```powershell\nirm https://raea.io/install.ps1 | iex\n```\n\nIt does the same under `~\\.raea` and adds raea to your PATH. raea needs the Microsoft Visual C++ Redistributable\n(x64), which most machines already have, and a DirectX 12 or Vulkan GPU driver.\n\n## Hello\n\nA composition is a React component that draws a frame for a given moment:\n\n```tsx\nimport { AbsoluteFill, Composition, interpolate, registerRoot, useCurrentFrame } from \"raea\";\n\nfunction Hello() {\n  const f = useCurrentFrame();\n  return <AbsoluteFill style={{ background: \"#000\", color: \"#fff\", fontSize: 120, opacity: interpolate(f, [0, 20], [0, 1]) }}>Hello</AbsoluteFill>;\n}\n\nregisterRoot(() => <Composition id=\"hello\" component={Hello} width={1920} height={1080} fps={30} durationInFrames={90} />);\n```\n\n```sh\nraea render hello.tsx -o hello.mp4\n```\n\nOn an Apple Silicon Mac those 90 frames render in about a second. The same file can play live as a game\n(`raea play`), render one frame for an agent to look at (`-o frame.png --frame 45`), or be checked against a quality\nfloor (`raea check hello.mp4`). `raea init` starts a project, and `raea --help` lists every verb.\n\n## What it does\n\n- **Video and motion graphics.** Layout, text, Tailwind, SVG and animation, composited on the GPU and encoded in\n  hardware where the machine has it. Footage is cut by what's said in it (`raea cut`), and `raea check` catches clipped\n  text, low contrast, unsafe areas, freezes and loudness problems before anyone watches.\n- **Games.** Input, physics, sound and 3D, played live with `raea play`, and exported as a program of their own\n  (`raea export-game`).\n- **3D.** Scenes in TypeScript drawn by [Bevy](https://bevyengine.org) 0.20: cameras, lights, materials, glTF models,\n  Gaussian splats, and Bevy plugins compiled into the engine.\n- **Sound.** One mixer for live play and offline render, instruments and effects, and local models for foley and\n  instrument notes (`raea sao`, `raea tokensynth`).\n- **Built for agents.** Everything it draws stays queryable as data, so an agent can render a frame, look at it, and\n  fix what's wrong without a person in the loop.\n\n## Use it from your agent\n\n- **Agent skills.** They live in [raea-skills](https://github.com/shinyobjectz/raea-skills), pinned here as\n  [`skills/`](skills): `raea` teaches an agent to write, render and check raea compositions, 3D and games\n  included. The installer adds it to `~/.claude/skills`, and `raea skills install --agent NAME` to other agents.\n- **Claude Code plugin.** `/plugin marketplace add shinyobjectz/raea`, then `/plugin install raea@raea`.\n- **Craft guides.** `raea guide` prints the floor every edit is held to and the guides for pitches, explainers, stories,\n  games, motion, music and layout. `raea context PROJECT` says what to read before working on a project.\n\n## Build from source\n\nRequirements: [Rust](https://rustup.rs) (rustup reads the pinned version from rust-toolchain.toml), [bun](https://bun.sh)\nand CMake. On macOS, Xcode's command-line tools; on Linux, the ALSA, fontconfig, udev, xkbcommon (with its X11\npart, which the app targets' windows also load at run time) and Vulkan libraries and NASM (Ubuntu: `cmake ninja-build\nnasm libasound2-dev libfontconfig1-dev libudev-dev libvulkan-dev libxkbcommon-dev libxkbcommon-x11-dev`), as public CI\ninstalls them.\n\n```sh\ngit clone https://github.com/shinyobjectz/raea && cd raea\ncargo build --release -p raea-cli --no-default-features\nfor d in sdk/raea sdk/react/js sdk/react/tw; do (cd $d && bun install); done\ntarget/release/raea render sdk/react/bench/games/pong/edit.tsx -o pong.mp4\n```\n\n`--no-default-features` builds the public engine, as the releases are. The default features add one hosted service,\nContent Credentials signed by raea's signing server, which isn't part of this repository. raea sends nothing on its\nown: no telemetry, crash reports or update checks. What reaches the network is what you ask for (a remote URL in a\ncomposition, a model downloaded on first use, a `raea gen` step on a provider you hold a key for), and `RAEA_OFFLINE=1`\nrefuses all of it. [docs/settings.md](docs/settings.md) lists the settings raea reads.\n\n## What's in here\n\nThe workspace is layered, from pure building blocks up to the command.\n\n| Folder | What |\n|---|---|\n| [`core/`](core) | Pure building blocks: the kernel language (K, interpreted on the CPU and compiled to WGSL), easing and animation, shapes, fonts, the scene and wire formats |\n| [`gpu/`](gpu) | The one shared GPU device and its telemetry |\n| [`io/`](io) | Decode and encode (VideoToolbox, software codecs, AV1, a muxer), files, network, npm packages, traces |\n| [`systems/`](systems) | Engine systems: layout, canvas, compositing, filters, mixing, speech, ML on ONNX Runtime, footage reading, lighting, contact checks for 3D parts, splats |\n| [`runtime/`](runtime) | Running a composition: the JavaScript engine seam (JavaScriptCore on macOS, QuickJS elsewhere), React and HTML on Bevy, baking, encode, live play |\n| [`engine/`](engine) | The renderer (`engine/render`), the in-process TypeScript bundler, the Bevy plugin catalog, and the `raea` command itself (`engine/cli`) |\n| [`apps/`](apps) | The crates behind the CLI's verbs: check, play, games, media |\n| [`sdk/`](sdk) | `raea`, the TypeScript SDK (`sdk/raea`), its 3D, physics, audio, video and UI packages, the craft guides, and the agent skills |\n| [`vendor/`](vendor) | Patched upstream crates, under their own licences ([`vendor/vendor.toml`](vendor/vendor.toml) says why each is patched) |\n| [`tools/`](tools) | Build and release helpers |\n\nBehaviour specs written in Gherkin (`.feature`) sit beside the code they describe.\n\n## Licence\n\nraea is under the [Functional Source License 1.1, ALv2 Future License](LICENSE) (FSL-1.1-ALv2), copyright Shane\nMurphy. Use it, change it, build on it and pass it on for anything except a product that competes with raea. Each\nversion becomes Apache-2.0 two years after its release. Third-party parts keep their own licences; see\n[NOTICE](NOTICE).\n"
+    },
+    "brief": {
+      "summary": "让 AI 用 React/TS 写画面，在本机 GPU 渲染视频、3D 和游戏。",
+      "problem": "AI 做视频、3D 和游戏时，缺少本地可渲染、可检查的代码管线。",
+      "highlights": [
+        "可以写 React 组件渲染 MP4，并导出单帧给 AI 检查",
+        "可以用 raea play 实时试玩小游戏，再导出为独立程序",
+        "可以用 raea cut 按台词切素材，用 raea check 查画面问题"
+      ],
+      "target_users": [
+        "AI 视频创作者",
+        "React 开发者",
+        "独立游戏作者"
+      ],
+      "why_trending": "本周首次收录，已有 836 Star；AI 写码到本机 GPU 渲染的闭环值得关注。",
+      "caveat": "项目仍标为 Canary，更新频繁，可能有破坏性变更和文档缺口。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "shinyobjectz/raea",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "AI驱动视频/3D/游戏渲染引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 57.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 17,
+      "full_name": "100yenadmin/fish-audio-hermes",
+      "url": "https://github.com/100yenadmin/fish-audio-hermes",
+      "description": "Official Fish Audio plugin for Hermes Agent: expressive text-to-speech, speech-to-text, voice library, cloning and voice design.",
+      "language": "Python",
+      "total_stars": 67,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "fish-audio",
+        "hermes-agent",
+        "hermes-plugin",
+        "speech-to-text",
+        "stt",
+        "text-to-speech",
+        "tts",
+        "voice-cloning"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-10-05T05:15:59Z",
+      "updated_at": "2026-11-09T06:44:47Z",
+      "pushed_at": "2026-11-09T06:45:11Z",
+      "open_issues": 4,
+      "homepage": "https://fish.audio",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![Fish Audio for Hermes](docs/media/banner.png)\n\n# Fish Audio for Hermes\n\n**The official [Fish Audio](https://fish.audio) plugin for [Hermes Agent](https://github.com/NousResearch/hermes-agent),\nmaintained by Electric Sheep.**\n\nGive your agent a voice: expressive speech in 80+ languages, Fish Audio's library of community voices, your own\ncloned or designed voices, and accurate speech-to-text. It works in the Hermes CLI, every messaging app Hermes\nsupports and the Desktop app.\n\n```bash\nhermes plugins install fish-audio --enable\nhermes fish login        # paste your key from https://fish.audio/app/api-keys\n```\n\nThis installs the reviewed release pinned in the Hermes plugin catalog. To follow the repository's latest `main` instead:\n\n```bash\nhermes plugins install https://github.com/100yenadmin/fish-audio-hermes --enable\n```\n\nOn Hermes 0.21.6 and newer, Hermes asks before installing the plugin's Python dependencies; in a script, add\n`--yes-deps`. Hermes 0.21.5 installs them without asking and has no `--yes-deps` flag. On either version,\n`hermes plugins enable fish-audio` afterwards also installs them.\n\n`hermes fish login` checks the key against your Fish account and saves it to the active profile. It makes Fish\nAudio the speech and transcription provider where none is set, and replaces another provider only if you confirm\nat the prompt or pass `--yes`. Once Fish Audio is the provider, voice replies,\nread-aloud and voice notes go through it.\n\n## What you get\n\n| | |\n|---|---|\n| **Expressive speech** | Fish Audio S2 models follow emotion and delivery cues such as `[excited]`, `[whispering]` and `[laughing]`. Drama 3 (`drama-3`) takes plain-language direction and word-level tags such as `<whisper>…</whisper>`. Multi-speaker dialogue and custom pronunciations are supported too. |\n| **Streaming voice** | CLI voice mode and Desktop voice replies stream each sentence as it is ready. In our tests the first audio bytes arrived 0.24–0.38 s after a sentence was sent (see [Streaming voice](#configuration) for how this was measured). |\n| **Voice library** | Search Fish Audio's community voices from chat (`/fish voices narrator`) and switch with `/fish use <id>`. |\n| **Voice names** | Save a voice under a short name (`/fish alias add narrator <id>`), then use the name wherever a voice id goes: `/fish use narrator`, `/fish preview narrator` or `fish_speak`. |\n| **Your own voices** | Clone a voice from a short sample, or describe one in words and pick from the candidates. Cloning and deleting from chat go through Hermes's approval gate, so by default Hermes asks you first. |\n| **Speech-to-text** | Voice notes use `transcribe-1-pro`. Live dictation uses native realtime (Preview) for word-by-word captions without sound or speaker tags in CLI voice mode, TUI and Desktop (Hermes 0.21.6+). `fish_transcribe` adds speaker turns, timestamps and SRT subtitles. |\n| **Desktop Voices page** | In Hermes Desktop: browse and preview voices, pick one for the agent, clone or design your own, and check your credit. |\n| **Account at a glance** | `/fish balance` shows your API credit and plan. When credits run out, tools and `/fish` commands reply with a top-up link; for voice replies, `/fish status` shows the last error. |\n\n## Setup\n\n1. **Get a key** at <https://fish.audio/app/api-keys>. New accounts can start on Fish's free `s2.1-pro-free` model, free through 30 November 2026;\n   after that, add API credit.\n2. **Add it** with `hermes fish login` on the machine running Hermes, or in Desktop: **Voices ▸ Enter API key** opens\n   the key field in Settings ▸ Plugins ▸ Fish Audio ▸ Agent settings (on older Desktop, open it with the gear on the\n   fish-audio row in Capabilities ▸ Plugins). Or use\n   `hermes tools` ▸ Text-to-Speech ▸ Fish Audio. `login` checks the key against your Fish wallet and saves it to the\n   active profile. It makes Fish Audio the speech and transcription provider where none is set; it replaces another\n   provider only if you confirm at the prompt or pass `--yes`. `--key-stdin` reads the key from standard input.\n3. **Check it** with `hermes fish doctor`, which makes one short billed synthesis (`--no-synth` skips it). Restart a\n   running gateway or the Desktop app to pick up a new key.\n\nNever paste API keys into a chat. `/fish` refuses them and tells you to rotate the key.\n\n![hermes fish doctor: key, wallet, providers, Hermes version, a billed TTS round trip and STT all pass](docs/media/screenshot-setup.png)\n\n## Use\n\n**In conversation:** just ask.\n- \"Read that back to me in an excited voice.\"\n- \"Find me a deep British narrator voice and use it.\"\n- \"Design a voice for our support agent and let me pick.\"\n- \"Transcribe meeting.m4a with speakers and give me subtitles.\"\n\n**Commands**\n\n| Command | What it does |\n|---|---|\n| `/fish status` | Key, providers, voice, model and why it was chosen, credit, last error |\n| `/fish voices [query]` | Search the voice library |\n| `/fish use <voice-id, name or own title>` | Use a voice for this profile; a unique title of your own voice works too |\n| `/fish model <id>` | Pick a model (`s2.1-pro`, `s2.1-pro-free`, `s2-pro`, `s1`, `drama-3`) |\n| `/fish preview <voice-id, name or own title> [text]` | Hear a voice (a billed synthesis); use a single-word title for previews |\n| `/fish alias` | List your saved voice names |\n| `/fish alias add <name> <voice-id>` | Save a name for a voice: 2–32 letters, digits, `-` or `_`, starting with a letter |\n| `/fish alias remove <name>` | Delete a saved name |\n| `/fish balance` | API credit and plan |\n| `hermes fish login [--key-stdin] [--yes]` | Save and check a key, offer to switch providers |\n| `hermes fish status` · `hermes fish use <voice-id, name or own title>` | Status and voice choice from your terminal |\n| `hermes fish doctor [--no-synth]` | Check the setup with one billed synthesis, or without it |\n\n**Model tools** (toolset `fish_audio`; calls are billed to your Fish Audio account)\n\n| Tool | What it does |\n|---|---|\n| `fish_speak` | Expressive or multi-speaker speech; with `timestamps: true`, word timings plus SRT and WebVTT subtitles |\n| `fish_voices` | Search, list and inspect voices; clone, design, save, update and delete them |\n| `fish_transcribe` | Rich transcription with speakers, timestamps and SRT |\n\nPlain read-aloud uses Hermes's own `text_to_speech` tool, with Fish Audio as the provider. Include the\n`media_tag` that `fish_speak` returns in the reply to deliver its audio; the plugin also appends missing audio tags\nthrough its output hook. Plugin skills: `fish-audio:fish-audio-setup`, `fish-audio:fish-audio-expressive-speech`,\n`fish-audio:fish-audio-voice-studio` and `fish-audio:fish-audio-report-problem` (drafts a bug report and files it with\n`gh` only after you approve the draft).\n\n## Hermes Desktop\n\n![The Voices page in Hermes Desktop: the Fish Audio voice library searched for \"narrator\", with Preview, Use and favourite on each voice](docs/media/screenshot-desktop-library.png)\n\nThe Voices page follows Hermes Desktop's display language: English, Simplified Chinese (`zh`), Traditional Chinese\n(`zh-hant`), Japanese (`ja`), Arabic (`ar`), Russian (`ru`), French (`fr`), German (`de`) and Spanish (`es`).\nChanging the display language updates the page, sidebar, status bar and command palette without a reload.\nFish Audio errors and the page's own messages are translated too, keeping the request id and Fish trace; numbers\nand amounts use the language's own formats.\nThe translations are machine-authored and checked against Hermes Desktop's own wording; native-speaker corrections\nare welcome as pull requests to `devtools/src/desktop/locales/`.\n\nThe plugin adds a **Voices** page to Hermes Desktop for the selected agent:\n\n- **Library:** search Fish Audio's voices by name and language, preview them (a short billed sample), star\n  favourites, and choose **Use** to make a voice the agent's voice.\n- **My voices:** the voices you cloned or designed; delete one by typing its name.\n- **Create:** clone a voice from 1–3 recordings (up to 10 MB each, with the speaker's permission), or describe a\n  voice and save the candidate you like.\n- **Account:** API credit, plan credits and top-up links. The status bar shows your API credit, in orange when it\n  runs low.\n\n| Create | Account |\n|---|---|\n| ![Create: design a voice from a description and save a candidate, or clone one from recordings with the speaker's consent](docs/media/screenshot-desktop-create.png) | ![Account: API credit, plan credits, top-up and plan links](docs/media/screenshot-desktop-account.png) |\n\nThe page has two halves in one package: routes that run **on the agent's gateway** and screens that run **in\nHermes Desktop**. On the same computer, where Desktop and the agent share a Hermes home (the usual local install),\nDesktop picks up the desktop half by itself after the CLI install. Open **Capabilities → Plugins → Fish Audio**,\nswitch on **Desktop**, and restart the gateway once.\n\nFor Desktop connected to an agent on another machine, install from Desktop:\n\n1. Open **Capabilities → Plugins → Install from Git**, enter `https://github.com/100yenadmin/fish-audio-hermes`,\n   choose **Review repository**, then **Install**. Desktop installs the agent half into the connected agent and\n   the desktop half on this computer.\n2. On Desktop 0.21.7 and newer, **Install** with **Enable after install** also switches on the desktop half. On\n   older Desktop, open **Fish Audio** in **Capabilities → Plugins** and switch on **Desktop**.\n3. **Restart the agent's gateway** once. Hermes mounts plugin routes only at startup.\n\nThe **Voices** row appears only\nfor agents whose gateway has the plugin; an agent without a Fish Audio key shows a card that links to the key page\nand the plugin's settings.\n\n### Settings page (Hermes Desktop 0.21.6 and newer)\n\n**Settings ▸ Plugins ▸ Fish Audio** shows the selected agent's voice, speech model and saved voice names, and lets you\nchange them. **Change** opens the Voices page to pick a voice. The plugin's own options (API key, server address,\nstreaming and transport) sit under the same entry as **Agent settings**.\n\nThe page acts on the agent selected in Desktop. Its header names that agent, or says \"this agent\" for the default\nprofile. Desktop's own **Settings ▸ Voice** doesn't list plugin speech providers or their voices yet\n(NousResearch/hermes-agent#136485), so pick Fish voices here or on the Voices page. Desktop 0.21.5 has no plugin\nsettings pages; use the Voices page and `/fish` there.\n\n## Configuration\n\nAll settings are per profile. Set `tts.fish-audio.language: es-MX` (or pass `language` to `fish_speak`) for number, date and unit spelling and word timestamps; it never changes the voice, accent or audio quality.\n\n```yaml\ntts:\n  provider: fish-audio\n  fish-audio:\n    voice: 933563129e564b19a115bedd57b7406a   # any Fish voice id (this one: \"Sarah\", a conversational narrator)\n    model: s2.1-pro                           # optional; see \"Which model?\"\n    latency: balanced                         # normal | balanced | low\n    temperature: 0.7\nstt:\n  provider: fish-audio\n  streaming: true              # live dictation on Hermes 0.21.6+\n  fish-audio:\n    model: transcribe-1-pro\nplugins:\n  entries:\n    fish-audio:\n      settings:\n        streaming: auto        # auto | \"off\"\n        live_transcription: realtime # realtime (Preview) | compat\n        allow_free_model: true # false = never use s2.1-pro-free\n```\n\nThe `plugins.entries.fish-audio.settings` keys (`base_url`, `streaming`, `transport`, `allow_free_model`,\n`live_transcription`, `operator_account`) and the API key also appear in Desktop ▸ Settings ▸ Plugins ▸ Fish Audio ▸ Agent settings (on\nolder Desktop, the gear on the fish-audio row in Capabilities ▸ Plugins). Set the voice and model from the Fish Audio settings page, the Voices page, `/fish use` or\n`/fish model`. Saved voice names live in `tts.fish-audio.aliases` (name → voice id). On a managed agent, when the\noperator sets the voice, model or names"
+    },
+    "brief": {
+      "summary": "Fish Audio 官方 Hermes 插件，提供语音合成与转写",
+      "problem": "让 Hermes 智能体在对话、命令行和桌面端获得语音输出与语音转文字能力",
+      "highlights": [
+        "可以让智能体用带情绪标签的声音朗读回复",
+        "可以搜索社区音色、克隆或文字设计音色",
+        "可以把录音转成带说话人和字幕的文本"
+      ],
+      "target_users": [
+        "AI 智能体开发者",
+        "Hermes 用户",
+        "语音应用创作者"
+      ],
+      "why_trending": "本周首次收录，67 星且近期仍在更新，属小众官方插件",
+      "caveat": "依赖 Fish Audio API，合成和克隆会产生费用，需 API Key",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "100yenadmin/fish-audio-hermes",
+      "score": 85,
+      "category": "语音 / 配音",
+      "reason": "Fish Audio语音合成/克隆Agent插件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "aqm857886159/Nomi",
+      "url": "https://github.com/aqm857886159/Nomi",
+      "description": "Open-source AI video workbench. Bring any model or your local ComfyUI, and let Claude Code / Codex / Cursor direct it over MCP — storyboard, references, generation, editable first cut on a real timeline. Local-first: projects, prompts, and keys stay on your machine. No account, no telemetry.",
+      "language": "TypeScript",
+      "total_stars": 636,
+      "forks": 140,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-agent",
+        "ai-filmmaking",
+        "ai-video",
+        "ai-video-generator",
+        "bring-your-own-key",
+        "claude-code",
+        "comfyui",
+        "creative-tools",
+        "desktop-app",
+        "image-generation",
+        "local-first",
+        "mcp",
+        "offline",
+        "seedance",
+        "storyboard",
+        "text-to-image",
+        "text-to-video",
+        "timeline-editor",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-05-04T13:38:29Z",
+      "updated_at": "2026-11-09T06:54:13Z",
+      "pushed_at": "2026-11-09T06:55:04Z",
+      "open_issues": 27,
+      "homepage": "https://nomiaqm.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://nomiaqm.com/en/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"marketing/assets/promo-0.22/cover-en-dark.jpg\" />\n      <img src=\"marketing/assets/promo-0.22/cover-en-light.jpg\" alt=\"Nomi — Pro-grade AI video. Models at their real price.\" width=\"100%\" />\n    </picture>\n  </a>\n</p>\n\n<p align=\"center\">\n  <strong>Nomi is an open-source, local-first AI video studio.</strong><br />\n  Tell its agent what you want to make. It plans the shots, generates keyframes and video, and lays them on your timeline —<br />\n  with the models <em>you</em> connect, at the price <em>your provider</em> charges.\n</p>\n\n<p align=\"center\">\n  <a href=\"#download\"><b>Download</b></a> ·\n  <a href=\"https://nomiaqm.com/en/\">Website</a> ·\n  <a href=\"https://atomgit.com/aqm857886159/Nomi\">AtomGit mirror</a> ·\n  <a href=\"#watch-the-film\">Watch the 90-second film</a> ·\n  <a href=\"https://nomiaqm.com/en/quickstart\">Quick start</a> ·\n  <a href=\"docs/integrate-with-your-agent-en.md\">Let your AI connect it</a> ·\n  <a href=\"#community\">Community</a> ·\n  <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/aqm857886159/Nomi/releases/latest\"><img src=\"https://img.shields.io/github/v/release/aqm857886159/Nomi?label=release&color=1a1816\" alt=\"Latest release\" /></a>\n  <img src=\"https://img.shields.io/badge/platform-macOS%20%7C%20Windows-1a1816\" alt=\"Platform\" />\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0--only-1a1816\" alt=\"License\" /></a>\n</p>\n\n## Sponsors\n\nSponsors help keep Nomi free and open source. A sponsor never becomes a default or a built-in route: you connect only what you choose, with your own key, and pay them directly at their price. [Want to appear here?](#community)\n\n<table>\n<tr>\n<td width=\"128\" align=\"center\"><a href=\"https://gway.dev/sign-up?aff=8j8f\"><img src=\"docs/media/sponsors/gway-logo.png\" alt=\"Gway\" width=\"96\" /></a></td>\n<td><b><a href=\"https://gway.dev/sign-up?aff=8j8f\">Gway</a></b> — an API platform focused on AI video and multi-image reference generation: Seedance 2.0 / 2.5, Wan 3, MiniMax and other mainstream models, OpenAI-compatible, pay-as-you-go. Nomi has no built-in preset for it yet; click <b>Let AI connect it for me</b> and Claude Code or Codex wires it in with your key. Thanks to Gway for sponsoring Nomi! <i>(The Gway links carry a referral code.)</i></td>\n</tr>\n</table>\n\n## Why Nomi\n\nRelays, official APIs, ComfyUI, and local models are cheap. Commercial AI video products often run the very same models and charge several times more.\n\nNomi gives you a pro-grade workflow on top of **your own** models. You pay your provider directly, at their price. Even the agent runs on the model you pick — no subscription, no markup.\n\n## Watch the film\n\n[![Watch the 90-second Nomi 0.22 film](marketing/assets/promo-0.22/film-poster-en.jpg)](https://github.com/aqm857886159/Nomi/blob/main/marketing/assets/video/nomi-0.22-film.mp4)\n\nEvery screen in the film is Nomi's real UI, and every image and clip in it was generated with Nomi.\n\n## What you can do\n\n### Just ask — the agent works on your canvas\n\n<img src=\"marketing/assets/promo-0.22/still-agent.jpg\" alt=\"The Nomi agent turning one request into four keyframes on the canvas\" width=\"100%\" />\n\nDescribe the film you want. The agent reads your canvas, splits the story into shots, generates keyframes, turns them into video, and arranges the timeline. Everything it makes lands on the canvas, where you can see it and change it.\n\nYou decide how much it asks: **Ask each step**, **Auto-edit** (paid generation still asks), or **Full auto**.\n\n### Direct every shot\n\n<img src=\"marketing/assets/promo-0.22/still-storyboard.jpg\" alt=\"Storyboard with all four shots generated and the character reference card locked\" width=\"100%\" />\n\nThe storyboard puts each shot on one row — prompt, first frame, model, duration. Lock a reference card for a character or a place, and every shot that uses it keeps the same face.\n\n### A 3D director you can hold in your hand\n\n<img src=\"marketing/assets/promo-0.22/still-director.jpg\" alt=\"The 3D director with the phone viewfinder page\" width=\"100%\" />\n\nPose characters, place cameras, and use your phone as the viewfinder. The frames you capture go straight back onto the canvas.\n\n### Any model, per shot\n\n<img src=\"marketing/assets/promo-0.22/still-model.jpg\" alt=\"The same video card generated again with a different model\" width=\"100%\" />\n\nSeedance, Kling, Wan, Hailuo, Nano Banana, GPT Image and more — through APIMart, Kie.ai, Volcengine, ModelScope, a Dreamina membership, any OpenAI-compatible relay, or your local ComfyUI. Swap the model on a single shot and generate another take.\n\n### New model today, in Nomi today\n\nWhen a new model ships, click **Let AI connect it for me** and let Claude Code or Codex wire it in. It looks up the endpoint, parameters and model IDs, has you paste your key on Nomi's own page (the assistant never sees it), runs one real test, and lists the model once it works.\n\n### Yours\n\nA project is a plain folder on your disk: canvas, storyboard, timeline, every generated file, and the exported film. No account. Nothing is sent by default; anonymous usage statistics are opt-in (Settings → Privacy & diagnostics) and can be turned off any time. The code is AGPL-3.0.\n\n**Next up: AI editing.** Nomi is heading toward one studio for everything you make with AI — come build it with us.\n\n## Download\n\n| System | Build | Download |\n|---|---|---|\n| macOS | Apple Silicon | [Nomi-mac-arm64.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-arm64.dmg) |\n| macOS | Intel | [Nomi-mac-intel.dmg](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-mac-intel.dmg) |\n| Windows | Windows 10 / 11 x64 | [Nomi-windows-setup.exe](https://github.com/aqm857886159/Nomi/releases/latest/download/Nomi-windows-setup.exe) |\n\nSupported release targets are macOS arm64/x64 and Windows x64. Linux, Windows arm64, and macOS universal installers are not currently published.\n\n<details>\n<summary><b>First launch on macOS</b></summary>\n\nThe current macOS build is **not Apple Developer ID signed or notarized**, so macOS may block it on first launch. Only use the direct downloads above or links from the official Nomi website and GitHub repository.\n\n1. Download the matching DMG, open it, and drag **Nomi** onto **Applications** in the window.\n2. Open Nomi from Applications. If macOS says **“Nomi” Not Opened**, click **Done**, then open **System Settings → Privacy & Security**, scroll down to **Security**, click **Open Anyway** next to the Nomi message, and confirm. Since macOS 15, right-clicking the app and choosing **Open** no longer gets past this prompt; on macOS 14 and earlier it still works.\n\nOnly if macOS says Nomi is “damaged”, first confirm the installer came from an official Nomi link, then run:\n\n```bash\nxattr -dr com.apple.quarantine \"/Applications/Nomi.app\"\n```\n\nDo not disable Gatekeeper globally. To update, download the matching DMG, quit Nomi, then drag the new Nomi onto Applications and choose **Replace**.\n</details>\n\n<details>\n<summary><b>First launch on Windows</b></summary>\n\nThe installer has no Authenticode signature. In the SmartScreen prompt, choose **More info** → **Run anyway**.\n</details>\n\n## Quick start\n\n1. **Connect a model.** Pick APIMart or Kie.ai and paste one key — or add your own relay, OpenAI-compatible endpoint, or local ComfyUI. Rather not do it yourself? Hand [Let your AI connect Nomi](docs/integrate-with-your-agent-en.md) to Claude Code or Codex.\n2. **Say what you want to make.** Type it into the agent panel, or start from a story in the storyboard.\n3. **Direct and export.** Keep the takes you like, arrange the timeline, export MP4.\n\n> **Disclosure:** the APIMart link carries a referral code. You always pay providers directly with your own key at their price. Nomi never proxies or resells inference, and every provider can be swapped for your own endpoint.\n\nMore: [quick start](https://nomiaqm.com/en/quickstart) · [connect your first model (English)](docs/guide/model-connection-en.md) · [user guide](docs/user-guide.md) · [providers](docs/provider-integration.md) · [CLI + MCP](docs/guide/capability-core-cli-mcp.md)\n\n## Use Nomi from your own agent\n\nNomi ships an MCP server with 24 MCP tools, so Claude Code, Codex, or Cursor can drive it — generate, arrange, and edit — while reusing the credits that come with your agent subscription. See [Let your AI connect Nomi](docs/integrate-with-your-agent-en.md).\n\n## Community\n\n- Questions, workflows, what's next: [GitHub Discussions](https://github.com/aqm857886159/Nomi/discussions)\n- Bugs and feature requests: [GitHub Issues](https://github.com/aqm857886159/Nomi/issues)\n- Release notes and short demos: [X / Twitter](https://x.com/sdf297417627618) · [Bilibili](https://www.bilibili.com/video/BV1Lf8b6nEjf/)\n\nWeChat users can scan to join the user group (left). If the group code has expired, add the maintainer (right) at **TZ857886159**.\n\n<p align=\"center\">\n  <a href=\"docs/media/nomi-canvas-group-wechat-2026-11-13.jpg\"><img src=\"docs/media/nomi-canvas-group-wechat-2026-11-13.jpg\" alt=\"Nomi user group WeChat QR\" width=\"220\" /></a>\n  &nbsp;&nbsp;\n  <a href=\"docs/media/qingyang-wechat.jpg\"><img src=\"docs/media/qingyang-wechat.jpg\" alt=\"Nomi maintainer WeChat QR\" width=\"180\" /></a>\n</p>\n\nHit a bug? The code is open — send the error and the [issue-fix prompt](docs/guide/codex-issue-fix-prompt-en.md) to Claude Code or Codex, and it can often patch it for you. Anything everyone runs into, tell us and it goes into the mainline.\n\n## For Teams\n\n**Custom builds**, **Integrations**, **AGPL-compliant deployment**, and **Ongoing iteration** for teams that want Nomi inside a real production workflow. [Discuss a project](https://github.com/aqm857886159/Nomi/issues/new?template=business_inquiry.yml) — the form is public, so share only a non-confidential summary and never post credentials, private contact details, budget details, or NDA-protected information.\n\n## Developers\n\nRequires Node.js 20+ and pnpm.\n\n```bash\ngit clone https://github.com/aqm857886159/Nomi.git\ncd Nomi\ncorepack enable\npnpm install\npnpm dev\n```\n\n```text\nelectron/    Electron main process, local runtime, storage, and model calls\nsrc/         React + Vite + Tailwind workbench\nskills/      Skill Pack v2; see docs/skill-pack-format.md\n```\n\nUseful checks: `pnpm run test` · `pnpm run typecheck` · `pnpm run gates`\n\nResearch tooling (searching what creators say on Douyin / Xiaohongshu / Bilibili / X) reads its key only from the `TIKHUB_API_KEY` environment variable — see [`docs/research/tikhub-api-notes.md`](docs/research/tikhub-api-notes.md).\n\n## Contributing\n\nBug reports, feature proposals, documentation, and code contributions are welcome. Contributors do not need to sign a CLA; contributions are accepted under AGPL-3.0-only.\n\n- [Report a bug](https://github.com/aqm857886159/Nomi/issues/new?template=bug_report.yml)\n- [Request a feature](https://github.com/aqm857886159/Nomi/issues/new?template=feature_request.yml)\n- [Ask a question or share an idea](https://github.com/aqm857886159/Nomi/discussions)\n\n## License\n\nCurrent releases are licensed under AGPL-3.0-only; historical releases published under Apache-2.0 keep their original license.\n\nSee [LICENSE](LICENSE). Paid services can include AGPL-compliant custom development, integration, deployment, training, and ongoing iteration. Nomi does not offer a closed-source distribution that withholds the corresponding source code.\n"
+    },
+    "brief": {
+      "summary": "开源本地优先的 AI 视频工作台，用自己接的模型做分镜和成片。",
+      "problem": "商用 AI 视频产品常用同样的模型却加价数倍，还强制绑定账号。",
+      "highlights": [
+        "可以一句话让 Agent 拆镜头、出关键帧并排上时间线",
+        "可以在单个镜头上换模型重生成，也能接本地 ComfyUI",
+        "可以用手机当取景器摆机位，画面直接回到画布"
+      ],
+      "target_users": [
+        "AI 短片创作者",
+        "独立视频工作室",
+        "分镜与剪辑爱好者"
+      ],
+      "why_trending": "本周首次收录，已积累 636 Star，仓库近期仍有更新。",
+      "caveat": "macOS 版未签名需手动放行，Linux 暂无安装包。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "aqm857886159/Nomi",
+      "score": 92,
+      "category": "AI 视频",
+      "reason": "AI视频工作台，含故事板与时间线剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 52.0
+    }
+  }
+]
