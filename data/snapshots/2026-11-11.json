@@ -1,0 +1,551 @@
+[
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "description": "Public repository for Agent Skills",
+      "language": "Python",
+      "total_stars": 192603,
+      "forks": 22672,
+      "stars_today": 1679,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 3672
+    },
+    "details": {
+      "topics": [
+        "agent-skills"
+      ],
+      "license_name": "",
+      "created_at": "2025-09-22T15:53:31Z",
+      "updated_at": "2026-11-11T06:48:43Z",
+      "pushed_at": "2026-11-06T22:32:32Z",
+      "open_issues": 1516,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "> **Note:** This repository contains Anthropic's implementation of skills for Claude. For information about the Agent Skills standard, see [agentskills.io](http://agentskills.io).\n\n[![skills.sh](https://skills.sh/b/anthropics/skills)](https://skills.sh/anthropics/skills)\n\n# Skills\nSkills are folders of instructions, scripts, and resources that Claude loads dynamically to improve performance on specialized tasks. Skills teach Claude how to complete specific tasks in a repeatable way, whether that's creating documents with your company's brand guidelines, analyzing data using your organization's specific workflows, or automating personal tasks.\n\nFor more information, check out:\n- [What are skills?](https://support.claude.com/en/articles/12512176-what-are-skills)\n- [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude)\n- [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills)\n- [Equipping agents for the real world with Agent Skills](https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)\n\n# About This Repository\n\nThis repository contains skills that demonstrate what's possible with Claude's skills system. These skills range from creative applications (art, music, design) to technical tasks (testing web apps, MCP server generation) to enterprise workflows (communications, branding, etc.).\n\nEach skill is self-contained in its own folder with a `SKILL.md` file containing the instructions and metadata that Claude uses. Browse through these skills to get inspiration for your own skills or to understand different patterns and approaches.\n\nMany skills in this repo are open source (Apache 2.0). We've also included the document creation & editing skills that power [Claude's document capabilities](https://www.anthropic.com/news/create-files) under the hood in the [`skills/docx`](./skills/docx), [`skills/pdf`](./skills/pdf), [`skills/pptx`](./skills/pptx), and [`skills/xlsx`](./skills/xlsx) subfolders. These are also open source (Apache 2.0), and we wanted to share them with developers as a reference for more complex skills that are actively used in a production AI application.\n\n## Disclaimer\n\n**These skills are provided for demonstration and educational purposes only.** While some of these capabilities may be available in Claude, the implementations and behaviors you receive from Claude may differ from what is shown in these skills. These skills are meant to illustrate patterns and possibilities. Always test skills thoroughly in your own environment before relying on them for critical tasks.\n\n# Skill Sets\n- [./skills](./skills): Skill examples for Creative & Design, Development & Technical, Enterprise & Communication, and Document Skills\n- [./spec](./spec): The Agent Skills specification\n- [./template](./template): Skill template\n\n# Try in Claude Code, Claude.ai, and the API\n\n## Claude Code\nYou can register this repository as a Claude Code Plugin marketplace by running the following command in Claude Code:\n```\n/plugin marketplace add anthropics/skills\n```\n\nThen, to install a specific set of skills:\n1. Select `Browse and install plugins`\n2. Select `anthropic-agent-skills`\n3. Select `document-skills` or `example-skills`\n4. Select `Install now`\n\nAlternatively, directly install either Plugin via:\n```\n/plugin install document-skills@anthropic-agent-skills\n/plugin install example-skills@anthropic-agent-skills\n```\n\nAfter installing the plugin, you can use the skill by just mentioning it. For instance, if you install the `document-skills` plugin from the marketplace, you can ask Claude Code to do something like: \"Use the PDF skill to extract the form fields from `path/to/some-file.pdf`\"\n\n## Claude.ai\n\nThese example skills are all already available to paid plans in Claude.ai. \n\nTo use any skill from this repository or upload custom skills, follow the instructions in [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude#h_a4222fa77b).\n\n## Claude API\n\nYou can use Anthropic's pre-built skills, and upload custom skills, via the Claude API. See the [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) for more.\n\n# Creating a Basic Skill\n\nSkills are simple to create - just a folder with a `SKILL.md` file containing YAML frontmatter and instructions. You can use the **template-skill** in this repository as a starting point:\n\n```markdown\n---\nname: my-skill-name\ndescription: A clear description of what this skill does and when to use it\n---\n\n# My Skill Name\n\n[Add your instructions here that Claude will follow when this skill is active]\n\n## Examples\n- Example usage 1\n- Example usage 2\n\n## Guidelines\n- Guideline 1\n- Guideline 2\n```\n\nThe frontmatter requires only two fields:\n- `name` - A unique identifier for your skill (lowercase, hyphens for spaces)\n- `description` - A complete description of what the skill does and when to use it\n\nThe markdown content below contains the instructions, examples, and guidelines that Claude will follow. For more details, see [How to create custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills).\n\n# Partner Skills\n\nSkills are a great way to teach Claude how to get better at using specific pieces of software. As we see awesome example skills from partners, we may highlight some of them here:\n\n- **Notion** - [Notion Skills for Claude](https://www.notion.so/notiondevs/Notion-Skills-for-Claude-28da4445d27180c7af1df7d8615723d0)\n"
+    },
+    "brief": {
+      "summary": "Claude 动态加载的技能集合，教它按固定流程完成专项任务。",
+      "problem": "通用助手缺少企业流程和专用工具知识，专项任务难稳定复现。",
+      "highlights": [
+        "可以提取 PDF 表单字段并处理文档",
+        "可以安装文档技能生成 Word/Excel/PPT",
+        "可以按模板编写 SKILL.md 自定义技能"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "Claude 重度用户",
+        "企业自动化团队"
+      ],
+      "why_trending": "总 Star 超19万，今日新增1679，热度再升",
+      "caveat": "仓库说明技能仅供演示和教育，生产前需测试",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "anthropics/skills",
+      "score": 95,
+      "category": "AI Agent / Skills",
+      "reason": "官方Agent Skills集合，含创作技能",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 20,
+      "ranking_score": 75.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "description": "Production-grade engineering skills for AI coding agents.",
+      "language": "JavaScript",
+      "total_stars": 115362,
+      "forks": 12111,
+      "stars_today": 465,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 465
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "antigravity",
+        "claude-code",
+        "codex",
+        "cursor",
+        "skills"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-15T20:20:26Z",
+      "updated_at": "2026-11-11T06:46:41Z",
+      "pushed_at": "2026-11-01T19:24:49Z",
+      "open_issues": 133,
+      "homepage": "https://skills.addy.ie",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Agent Skills\n\n**Production-grade engineering skills for AI coding agents.**\n\nSkills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development.\n\n<a href=\"https://trendshift.io/repositories/25200\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/25200\" alt=\"addyosmani%2Fagent-skills | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/></a>\n\n![Addy's Agent Skills](https://addyosmani.com/assets/images/addys-agent-skills.jpg)\n\n```\n  DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP\n ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐\n │ Idea │ ───▶ │ Spec │ ───▶ │ Code │ ───▶ │ Test │ ───▶ │  QA  │ ───▶ │  Go  │\n │Refine│      │  PRD │      │ Impl │      │Debug │      │ Gate │      │ Live │\n └──────┘      └──────┘      └──────┘      └──────┘      └──────┘      └──────┘\n  /spec          /plan          /build        /test         /review       /ship\n```\n\n---\n\n## Commands\n\n9 slash commands that map to the development lifecycle. Each one activates the right skills automatically.\n\n| What you're doing | Command | Key principle |\n|-------------------|---------|---------------|\n| Define what to build | `/spec` | Spec before code |\n| Plan how to build it | `/plan` | Small, atomic tasks |\n| Build incrementally | `/build` | One slice at a time |\n| Prove it works | `/test` | Tests are proof |\n| Set the quality bar | `/constraints` | Decide it once, enforce it everywhere |\n| Review before merge | `/review` | Improve code health |\n| Audit web performance | `/webperf` | Measure before you optimize |\n| Simplify the code | `/code-simplify` | Clarity over cleverness |\n| Ship to production | `/ship` | Faster is safer |\n\nIn Claude Code these install as plugin commands. Where a built-in command has the same name, as `/review` does, use the namespaced form: `/agent-skills:review`.\n\nWant fewer manual steps once the spec exists? **`/build auto`** generates the plan and implements every task in a single approved pass — you approve the plan once, then it runs autonomously. It removes the human stepping *between* tasks, not the verification: every task is still test-driven and committed individually, and it pauses on failures or risky steps.\n\nSkills also activate automatically based on what you're doing — designing an API triggers `api-and-interface-design`, building UI triggers `frontend-ui-engineering`, and so on.\n\n---\n\n## Quick Start\n\n**Fastest path — any agent, one command.** The open [skills CLI](https://github.com/vercel-labs/skills) installs into 70+ agents (Claude Code, Cursor, Codex, Copilot, Cline, and more):\n\n```bash\nnpx skills add addyosmani/agent-skills            # install all 25 skills\nnpx skills add addyosmani/agent-skills --list     # browse before installing\n```\n\nOr grab individual skills:\n\n```bash\nnpx skills add addyosmani/agent-skills --skill code-review-and-quality   # five-axis review before merge\nnpx skills add addyosmani/agent-skills --skill interview-me              # requirements interrogation, one question at a time\nnpx skills add addyosmani/agent-skills --skill test-driven-development   # red-green-refactor, enforced\n```\n\n> **Installing one skill?** A per-skill `npx` install copies only\n> `skills/<name>/`, not the repo-level `references/` directory. The skill still\n> works, but paths to supplementary shared checklists are unavailable. Use a\n> whole-repo integration, clone the repository, or copy the needed checklist into\n> a `references/` directory inside the installed skill. This portability gap is\n> tracked in [#361](https://github.com/addyosmani/agent-skills/issues/361).\n\nPrefer a native integration? Pick your tool below.\n\n<details>\n<summary><b>Claude Code (recommended)</b></summary>\n\n**Marketplace install:**\n\n```\n/plugin marketplace add addyosmani/agent-skills\n/plugin install agent-skills@addy-agent-skills\n```\n\n> **SSH errors?** The marketplace clones repos via SSH. If you don't have SSH keys set up on GitHub, either [add your SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) or use the full HTTPS URL to force HTTPS cloning during the marketplace-add step:\n> ```bash\n> /plugin marketplace add https://github.com/addyosmani/agent-skills.git\n> /plugin install agent-skills@addy-agent-skills\n> ```\n>\n> If `/plugin install` still fails with `git@github.com: Permission denied (publickey)` on Windows or macOS, the recommended workaround is to configure Git once to rewrite GitHub SSH URLs to HTTPS for subprocess clones:\n> ```bash\n> git config --global url.\"https://github.com/\".insteadOf git@github.com:\n> ```\n\n**Local / development:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nclaude --plugin-dir /path/to/agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Cursor</b></summary>\n\nPut workflow skills under `.cursor/skills/` (sync from `agent-skills/skills/`) and short policies in `.cursor/rules/*.mdc` — do not paste full skills into rules. Both directories live in your project; this repo does not ship a `.cursor/` folder. See [docs/cursor-setup.md](docs/cursor-setup.md).\n\n</details>\n\n<details>\n<summary><b>Antigravity CLI</b></summary>\n\nInstall as a native plugin for skills and subagents. In affected Antigravity CLI releases, legacy command TOMLs are reported as converted but their wrapper commands are not discoverable; invoke the underlying namespaced skills directly. See [docs/antigravity-setup.md](docs/antigravity-setup.md#lifecycle-workflows-and-command-compatibility).\n\n**Install from the repo:**\n\n```bash\nagy plugin install https://github.com/addyosmani/agent-skills.git\n```\n\n**Install from a local clone:**\n\n```bash\ngit clone https://github.com/addyosmani/agent-skills.git\nagy plugin install ./agent-skills\n```\n\n</details>\n\n<details>\n<summary><b>Gemini CLI</b></summary>\n\nInstall as native skills for auto-discovery, or add to `GEMINI.md` for persistent context. See [docs/gemini-cli-setup.md](docs/gemini-cli-setup.md).\n\n**Install from the repo:**\n\n```bash\ngemini skills install https://github.com/addyosmani/agent-skills.git --path skills\n```\n\n**Install from a local clone:**\n\n```bash\ngemini skills install ./agent-skills/skills/\n```\n\n</details>\n\n<details>\n<summary><b>Windsurf</b></summary>\n\nAdd skill contents to your Windsurf rules configuration. See [docs/windsurf-setup.md](docs/windsurf-setup.md).\n\n</details>\n\n<details>\n<summary><b>OpenCode</b></summary>\n\nCopy skills to `.opencode/skills/` (or `~/.config/opencode/skills/`), add a project-local `AGENTS.md`, and use the built-in `skill` tool for agent-driven execution. Optional slash commands can be added under `.opencode/commands/`.\n\nSee [docs/opencode-setup.md](docs/opencode-setup.md).\n\n</details>\n\n<details>\n<summary><b>GitHub Copilot</b></summary>\n\nUse agent definitions from `agents/` as Copilot personas and skill content in `.github/copilot-instructions.md`. The lifecycle slash commands (`/spec`, `/plan`, `/build`, `/test`, `/review`, `/ship`) are Claude Code commands and do not appear in Copilot; invoke the skills by name (`/spec-driven-development`, …) instead. See [docs/copilot-setup.md](docs/copilot-setup.md).\n\nUsing the standalone `copilot` CLI? Install it as a plugin — see [docs/copilot-cli-setup.md](docs/copilot-cli-setup.md).\n\n</details>\n\n<details>\n  <summary><b>Kiro IDE & CLI </b></summary>\n  Skills for Kiro reside under \".kiro/skills/\" and can be stored under Project or Global level. Kiro also supports Agents.md. See Kiro docs at https://kiro.dev/docs/skills/\n</details>\n\n<details>\n<summary><b>Codex</b></summary>\n\nInstall as a native Codex plugin (Codex CLI v0.122+):\n\n```bash\ncodex plugin marketplace add addyosmani/agent-skills\ncodex plugin add agent-skills@agent-skills\n```\n\nThe first command registers the marketplace; the second installs the plugin. Codex reads the root `skills/` directory directly through `.codex-plugin/plugin.json`. Once installed, invoke skills in chat using `@` (e.g., `@spec-driven-development`). See [docs/codex-setup.md](docs/codex-setup.md) for local installation and troubleshooting.\n\n</details>\n\n<details>\n<summary><b>Command Code</b></summary>\n\nInstall natively with the built-in `cmd skills` command. Command Code clones the repo, discovers every `SKILL.md`, and installs into `.commandcode/skills/`:\n\n```bash\ncmd skills add addyosmani/agent-skills            # pick skills to install (project)\ncmd skills add addyosmani/agent-skills --global   # install for all projects (~/.commandcode/skills/)\ncmd skills add addyosmani/agent-skills -s spec-driven-development  # install a specific skill\n```\n\nInstalled skills show up in the TUI slash menu, e.g. `/spec-driven-development`. See [docs/commandcode-setup.md](docs/commandcode-setup.md).\n\n</details>\n\n<details>\n<summary><b>Other Agents</b></summary>\n\nSkills are plain Markdown - they work with any agent that accepts system prompts or instruction files. See [docs/getting-started.md](docs/getting-started.md). Hosts that install the pack but aren't listed above are in [docs/other-hosts.md](docs/other-hosts.md).\n\n</details>\n\n\n\n---\n\n## Adoption\n\nAlready installed? How you roll the pack out depends on your codebase. The **[Adoption Guide](docs/adoption-guide.md)** covers two paths: the full lifecycle from day one for a greenfield project, or an incremental, verification-first rollout for an established codebase.\n\n---\n\n## All 25 Skills\n\nThe commands above are entry points. The pack includes 25 skills total — 24 lifecycle skills plus the `using-agent-skills` meta-skill. Each skill is a structured workflow with steps, verification gates, and anti-rationalization tables. You can also reference any skill directly.\n\n### Meta - Discover which skill applies\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [using-agent-skills](skills/using-agent-skills/SKILL.md) | Maps incoming work to the right skill workflow and defines shared operating rules | Starting a session or deciding which skill applies |\n\n### Define - Clarify what to build\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [interview-me](skills/interview-me/SKILL.md) | One-question-at-a-time interview that extracts what the user actually wants instead of what they think they should want, until ~95% confidence | The ask is underspecified, or the user invokes \"interview me\" / \"grill me\" |\n| [idea-refine](skills/idea-refine/SKILL.md) | Structured divergent/convergent thinking to turn vague ideas into concrete proposals | You have a rough concept that needs exploration |\n| [spec-driven-development](skills/spec-driven-development/SKILL.md) | Write a PRD covering objectives, commands, structure, code style, testing, and boundaries before any code | Starting a new project, feature, or significant change |\n| [constraint-driven-development](skills/constraint-driven-development/SKILL.md) | Interviews you for a quality bar with sane default thresholds, writes CONSTRAINTS.md, places each check by cost, and catches agents silencing checks or skipping tests to get green | No standards are written down, or an agent is producing more than anyone reads |\n\n### Plan - Break it down\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [planning-and-task-breakdown](skills/planning-and-task-breakdown/SKILL.md) | Decompose specs into small, verifiable tasks with acceptance criteria and dependency ordering | You have a spec and need implementable units |\n\n### Build - Write the code\n\n| Skill | What It Does | Use When |\n|-------|-------------|----------|\n| [incremental-implementation](skills/incremental-implementation/SKILL.md) | Thin vertical slices - implement, test, verify, commit. Feature flags, safe defaults, rollback-friendly changes | Any change touching more than one file |\n| [test-driven-development](skills/test-driven-developm"
+    },
+    "brief": {
+      "summary": "为 AI 编程代理提供生产级工程技能包",
+      "problem": "把资深工程师的工作流和质检门槛封装给 AI 代理",
+      "highlights": [
+        "可以用 /spec 先写规格再写代码",
+        "可以用 /plan 把开发拆成小任务",
+        "可以用 /review 做合并前质量审查"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端与全栈开发者"
+      ],
+      "why_trending": "总星超11.5万，今日新增465星，本周首次收录",
+      "caveat": "部分代理需手动配置，单技能安装会缺共享参考清单",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "addyosmani/agent-skills",
+      "score": 90,
+      "category": "AI Agent / Skills",
+      "reason": "面向编码Agent的工程技能包",
+      "generated_by_ai": true,
+      "velocity_score": 81,
+      "freshness_score": 40,
+      "ranking_score": 71.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "homeassistant-ai/ha-mcp",
+      "url": "https://github.com/homeassistant-ai/ha-mcp",
+      "description": "Configure and automate Home Assistant with Claude, ChatGPT, and other AI assistants.",
+      "language": "Python",
+      "total_stars": 6818,
+      "forks": 439,
+      "stars_today": 790,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 790
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "claude",
+        "hacs",
+        "home-assistant",
+        "home-automation",
+        "llm",
+        "mcp",
+        "model-context-protocol"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-09-14T13:23:45Z",
+      "updated_at": "2026-11-11T06:46:18Z",
+      "pushed_at": "2026-11-11T06:17:22Z",
+      "open_issues": 21,
+      "homepage": "https://homeassistant-ai.github.io/ha-mcp/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "> **Breaking change (v7.3.0):** `ha_config_set_yaml` has been moved to [beta](docs/beta.md).\n\n<div align=\"center\">\n  <img src=\"https://raw.githubusercontent.com/homeassistant-ai/ha-mcp/master/docs/img/ha-mcp-logo.png\" alt=\"Home Assistant MCP Server Logo\" width=\"300\"/>\n\n  # HA-MCP — Manage Home Assistant with AI\n\n  <!-- mcp-name: io.github.homeassistant-ai/ha-mcp -->\n\n  <p align=\"center\">\n    <img src=\"https://img.shields.io/badge/tools-87-blue\" alt=\"87 Tools\">\n    <a href=\"https://github.com/homeassistant-ai/ha-mcp/releases\"><img src=\"https://img.shields.io/github/v/release/homeassistant-ai/ha-mcp\" alt=\"Release\"></a>\n    <a href=\"https://github.com/homeassistant-ai/ha-mcp/actions/workflows/e2e-tests.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/homeassistant-ai/ha-mcp/e2e-tests.yml?branch=master&label=E2E%20Tests\" alt=\"E2E Tests\"></a>\n    <a href=\"LICENSE.md\"><img src=\"https://img.shields.io/github/license/homeassistant-ai/ha-mcp.svg\" alt=\"License\"></a>\n    <br>\n    <a href=\"https://github.com/homeassistant-ai/ha-mcp/commits/master\"><img src=\"https://img.shields.io/github/commit-activity/m/homeassistant-ai/ha-mcp.svg\" alt=\"Activity\"></a>\n    <a href=\"https://github.com/jlowin/fastmcp\"><img src=\"https://img.shields.io/badge/Built%20with-FastMCP-purple\" alt=\"Built with FastMCP\"></a>\n    <img src=\"https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fhomeassistant-ai%2Fha-mcp%2Fmaster%2Fpyproject.toml\" alt=\"Python Version\">\n    <a href=\"https://github.com/sponsors/julienld\"><img src=\"https://img.shields.io/badge/GitHub_Sponsors-☕-blueviolet\" alt=\"GitHub Sponsors\"></a>\n    <a href=\"https://homeassistant-ai.github.io/ha-mcp/\"><img src=\"https://img.shields.io/badge/Website-docs-teal\" alt=\"Website\"></a>\n  </p>\n\n  <p align=\"center\">\n    <em>Configure and automate Home Assistant with Claude, ChatGPT, and other AI assistants.</em>\n  </p>\n</div>\n\n---\n\n![Demo with Claude Desktop](https://raw.githubusercontent.com/homeassistant-ai/ha-mcp/master/docs/img/demo.webp)\n\n---\n\n## 🚀 Get Started\n\nThe recommended way to run ha-mcp is the **HA-MCP integration**. It installs into Home Assistant through HACS (the built-in Marketplace on Home Assistant 2026.11+), runs the full server **in-process**, and works on **every** Home Assistant installation type — Home Assistant OS, Supervised, Container, and Core — with full feature parity. It is the easiest setup in every case: setup asks for an administrator access token and how clients may connect.\n\n**Add it to Home Assistant via HACS or, on Home Assistant 2026.11+, the Marketplace (the preferred install):**\n\n[![Add HA-MCP to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=homeassistant-ai&repository=ha-mcp&category=integration)\n\n**Quick start:**\n\n> The setup below is for version 9.0.0 (October 28, 2026) and later; earlier versions show a shorter setup form without the administrator account step.\n\n1. Install the **HA-MCP integration** (requires **Home Assistant 2026.8.0 or newer**; see [compatibility details](docs/in-process-server.md#requirements)). On **Home Assistant 2026.8–2026.10**, open HACS, search for **HA-MCP**, then **Download**.\n   On **Home Assistant 2026.11 or newer**, open **Settings → Marketplace**, accept its first-run warning, and search for **HA-MCP**, then **Install**. HA-MCP is in the default catalog, so installing it and receiving its updates do not require connecting GitHub or adding a custom repository. The badge above also opens its catalog page.\n   Already installed from the earlier `homeassistant-ai/ha-mcp-integration` repository? It keeps receiving the same releases. On the Marketplace, keep GitHub connected for its background checks on that custom repository.\n   Older installed releases may still appear as **HA-MCP Custom Component**; searching for **HA-MCP** matches both names.\n2. **Restart Home Assistant.**\n3. Decide which administrator account the server acts as. Either create a long-lived access token on your own account (your profile → **Security** → **Long-lived access tokens** → **Create token**; it works from anywhere if it leaks, and the server's changes show under your name), or, safer, create an account just for HA-MCP under **Settings → People → Add person** with **Allow login**, **Local access only** and **Administrator** on. Never use your own login for the second option.\n4. Go to **Settings → Devices & Services → Add Integration**, search for **HA-MCP** and choose **HA-MCP Server**. Paste your token, or enter the user name and password of the account you made for HA-MCP (HA-MCP creates its token), pick how clients may connect — **Remote access through Home Assistant** (start with **Secret URL**, the simplest; **Home Assistant sign-in** adds a login) and/or **Network access: Local network** — then click **Submit**. Both start disabled, so a client on another device needs one of them.\n5. Copy the connect URL from the entry's **Configure** screen (**Settings → Devices & Services → “HA-MCP — Manage Home Assistant with AI” → HA-MCP Server → Configure**). A notification confirms the server started and points you there.\n6. Paste that URL into your AI client — done.\n\n**Connect URL.** The Configure screen gives you a Home Assistant webhook URL for remote clients — `https://<your-ha-domain>/api/webhook/<webhook-id>` through Nabu Casa or any reverse proxy already pointed at Home Assistant (locally, `http://<ha-host>:8123/api/webhook/<webhook-id>`). For clients on the same network, the server is also reachable directly at `http://<ha-ip>:9584/private_<random>`.\n\n- **Replaces other install methods:** the in-process server is a complete, standalone ha-mcp install — it takes the place of the app (add-on), Docker, and uvx/PyPI (stdio) methods. Run only one; do not run the in-process server alongside another install.\n- **Local only?** Leave remote access disabled at setup (or turn off **Remote access via webhook** in the entry options) — no webhook is registered at all, while the direct port and sidebar panel keep working.\n- **Settings panel:** while the server runs, an admin-only **HA-MCP** panel appears in the Home Assistant sidebar for managing tools, feature flags, backups, and themes.\n- **Optional authentication:** set **Authentication mode** to `ha_auth` to require a Home Assistant account sign-in instead of using the secret URL as the credential.\n- **Manual install (no HACS or Marketplace):** copy `custom_components/ha_mcp_tools/` from this repository into your Home Assistant `config/custom_components/` directory, then restart and add the integration as above.\n\nThe component's second entry type, the **File & YAML services entry** (**HA-MCP File & YAML Tools**), is only needed if you enable ha-mcp's opt-in file and YAML editing tools (feature flags, off by default) — skip it otherwise; you can add it later at any time. It works with any server type (in-process, app, Docker, or stdio).\n\n[Full in-process server documentation →](docs/in-process-server.md) · [Setup Wizard for client-specific config →](https://homeassistant-ai.github.io/ha-mcp/setup/)\n\n### 🏠 Home Assistant app (add-on)\n\nPrefer to run ha-mcp as a Home Assistant **app (add-on)**? On **Home Assistant OS** and **Supervised** installs it is a close second — no access token to manage, and it works with Claude Desktop, Claude.ai, ChatGPT, and any other MCP client on your local network or configured for remote access.\n\n1. Add the repository to your Home Assistant instance:\n\n   [![Add Repository](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fhomeassistant-ai%2Fha-mcp)\n\n   If that opens the App store without an add-repository dialog (a [known Home Assistant issue](https://github.com/home-assistant/my.home-assistant.io/issues/698)), add it manually: **Settings → Apps → Install app → ⋮ → Repositories**, then paste `https://github.com/homeassistant-ai/ha-mcp`.\n\n2. Install **\"Home Assistant MCP Server\"** from **Settings → Apps → Install app** and click **Start**. *(Home Assistant 2026.2 renamed \"Add-ons\" to \"Apps\"; on older versions this is the Add-on store.)*\n3. Open the **Logs** tab to find your unique MCP URL.\n4. Connect your AI client to that URL — **no token or credential setup needed**.\n\n[Full app documentation →](homeassistant-addon/DOCS.md)\n\n> ⚠️ **Configure exactly one install method per client.** The custom component, the app, Docker/PyPI, and local stdio are independent ways to run the same server — pick one and point your AI client at that single URL. Keeping two entries for the same server in one client (for example a local `uvx ha-mcp@latest` entry with `HOMEASSISTANT_URL` / `HOMEASSISTANT_TOKEN` alongside an app or component URL) is a known cause of connection hangs.\n\n### Other install methods\n\nThese run the server outside Home Assistant — useful for **Container** / **Core** installs (which can't run apps) or a separate host. The [Setup Wizard](https://homeassistant-ai.github.io/ha-mcp/setup/) generates the exact client-specific config for each.\n\n- **Docker (HTTP server):** run `ghcr.io/homeassistant-ai/ha-mcp` in HTTP mode, pointed at your Home Assistant URL and a long-lived token (an administrator's is recommended; non-admin tokens work with limitations), and connect your client to its secret URL. See the [Setup Wizard](https://homeassistant-ai.github.io/ha-mcp/setup/) for the full command and per-client config.\n- **PyPI / uvx (HTTP server):** run the published `ha-mcp` package with `uvx ha-mcp@latest` (or pip) as a streamable-HTTP server the same way. Details in the [Setup Wizard](https://homeassistant-ai.github.io/ha-mcp/setup/).\n- **Local stdio (not recommended):** runs ha-mcp on your own machine over stdio. The one-command installers in the **Demo server** section below use this path; the [Setup Wizard](https://homeassistant-ai.github.io/ha-mcp/setup/) covers connecting it to your own Home Assistant.\n- **OIDC authentication:** gate remote access behind an external identity provider (Authentik, Keycloak, Auth0, etc.) instead of a secret URL — all authenticated users share the server's Home Assistant credentials. See [OIDC Mode](docs/oidc.md).\n\n  > ⚠️ **stdio has known transport issues.** The stdio transport has connection problems that streamable HTTP does not ([#1713](https://github.com/homeassistant-ai/ha-mcp/issues/1713)). It is recommended only for demo/testing tinkering — for a real setup, use the custom component or an HTTP method above.\n\n<details>\n<summary><b>🌐 Remote access (Nabu Casa / Webhook Proxy app / OpenAI Tunnel)</b></summary>\n\n> **Using the HA-MCP custom component?** You do not need the **Webhook Proxy** — the component has its own built-in webhook for remote access (see the **Get Started** quick start at the top). The proxy is for the **app** (it can also front another external server via its `mcp_server_url` option). The **OpenAI Tunnel** below is different: it applies to **any** install method when Home Assistant isn't publicly reachable at all (no Nabu Casa or reverse proxy).\n\nAlready have **Nabu Casa** or another reverse proxy pointing at your Home Assistant? The Webhook Proxy app routes MCP traffic through your existing setup — no separate tunnel or port forwarding needed.\n\n1. Install the **MCP Server app** (see above) and the **Webhook Proxy** app from the same store\n2. Start the webhook proxy and **restart Home Assistant** when prompted\n3. Copy the webhook URL from the app logs:\n   ```\n   MCP Server URL (remote): https://xxxxx.ui.nabu.casa/api/webhook/mcp_xxxxxxxx\n   ```\n4. Configure your AI client with that URL\n\nFor other remote access methods (Cloudflare Tunnel, custom reverse proxy), see the [Setup Wizard](https://homeassistant-ai.github.io/ha-mcp/setup/).\n\n**ChatGPT / Codex behind a firewall (OpenAI Tunnel).** ChatGPT connectors norma"
+    },
+    "brief": {
+      "summary": "让 Claude 等 AI 助手管理 Home Assistant 的 MCP 服务",
+      "problem": "Home Assistant 配置和自动化门槛高，普通用户难用自然语言操作",
+      "highlights": [
+        "可以让 AI 助手直接创建和修改自动化",
+        "可以通过对话管理设备、场景和脚本",
+        "可以作为 MCP 服务接入 Claude、ChatGPT 等客户端"
+      ],
+      "target_users": [
+        "智能家居玩家",
+        "AI 助手用户"
+      ],
+      "why_trending": "今日新增 790 Star，MCP 生态热度高，安装方式简化",
+      "caveat": "v7.3.0 起 YAML 设置工具移至 beta，升级需注意",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "homeassistant-ai/ha-mcp",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "Home Assistant的MCP服务器",
+      "generated_by_ai": true,
+      "velocity_score": 88,
+      "freshness_score": 20,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 82440,
+      "forks": 7622,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 563
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-11T06:45:02Z",
+      "pushed_at": "2026-11-11T06:47:56Z",
+      "open_issues": 240,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio?utm_source=github&utm_medium=readme\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> |\n  <a href=\"https://hyperframes.studio/?utm_source=github&utm_medium=readme\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> |\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"The HyperFrames Studio app opening from the Dock: free for Mac, Windows and Linux\" width=\"800\">\n</p>\n\n<p align=\"center\">\n  <b>Download the desktop app:</b>\n  <a href=\"https://hyperframes.studio/studio/download?os=mac&src=github-readme&utm_source=github&utm_medium=readme\">macOS</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=windows&src=github-readme&utm_source=github&utm_medium=readme\">Windows</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=deb&src=github-readme&utm_source=github&utm_medium=readme\">Linux (.deb)</a>\n</p>\n\nHyperFrames is a free, open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nThe [HyperFrames Studio app](https://hyperframes.heygen.com/studio-app) is free to use as well; its [Pro plan](https://hyperframes.studio/pricing) adds HeyGen's top video, image, voice and music models.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nTo enable auto-update for the **hyperframes** marketplace, run `claude` in a\nterminal in your project. In Claude Code's terminal UI, run `/plugin`, then select\n**Marketplaces** → **hyperframes** → **Enable auto-update**. Afterward, use\n`/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Without the picker (a script or a CI job), `npx hyperframes skills update` installs exactly the core set, whereas `skills add --all` installs all 9 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs the skills from the release tag that matches your CLI version, so they match the CLI that runs them.\n\nRun project-local installs from your video project's directory. From a HyperFrames\ncheckout, use `npx hyperframes skills update` for a global install instead: a\nproject-local installer target can overlap the tracked `skills/` source and\noverwrite uncommitted edits. See [contributor setup](CONTRIBUTING.md#getting-started).\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 9 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`, `/reverse-any-video`, `/style-sampling`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 9. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, share, project history — plus reading its JSON and recovering from build or render failures.                                                                              |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n| `/reverse-any-video`    | Rebuilding any video file as an editable HyperFrames project (motion graphics, talking heads, live action, AI-generated footage), checked frame by frame against the original. HyperFrames Pro.                                                                                                     |\n| `/style-sampling`       | Making a new episode on your topic in one of five proven styles: Collage Explainer, Finance Explainer, Animated Science Explainer, 3D Brand Explainer, 3D True Crime. HyperFrames Pro.                                                                                                              |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/design-tools?utm_source=github&utm_medium=readme#start-from-claude-design-or-open-design) and [Open Design guide](https://hyperframes.heygen.com/guides/design-tools?utm_source=github&utm_medium=readme#start-from-claude-design-or-open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://"
+    },
+    "brief": {
+      "summary": "把HTML/CSS/动画渲染成确定性MP4视频的开源框架",
+      "problem": "让 AI 编程代理能用 HTML 制作并稳定渲染视频",
+      "highlights": [
+        "可以让 AI 编程代理按一句话需求生成短视频",
+        "可以把 HTML、CSS 和动画导出为 MP4",
+        "可以在本地用 CLI 预览、检查并渲染视频"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "前端与动画开发者",
+        "视频创作者"
+      ],
+      "why_trending": "总 Star 超8.2万，连续上榜，HTML 转视频方向受关注",
+      "caveat": "需 Node.js 22+，并依赖浏览器渲染环境",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 92,
+      "category": "视频剪辑",
+      "reason": "HTML渲染视频与动效剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 83,
+      "freshness_score": 40,
+      "ranking_score": 72.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "kajisho5/ffmpeg-skill",
+      "url": "https://github.com/kajisho5/ffmpeg-skill",
+      "description": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys.",
+      "language": "Python",
+      "total_stars": 5039,
+      "forks": 417,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "audio-processing",
+        "captions",
+        "claude-code",
+        "codex",
+        "coding-agent",
+        "cursor",
+        "ffmpeg",
+        "gemini-cli-extension",
+        "loudness-normalization",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "python",
+        "subtitles",
+        "transcoding",
+        "video",
+        "video-editing",
+        "whisper"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-03T14:33:38Z",
+      "updated_at": "2026-11-11T06:43:40Z",
+      "pushed_at": "2026-11-11T06:40:56Z",
+      "open_issues": 13,
+      "homepage": "https://www.npmjs.com/package/ffmpeg-skill",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"brand/logo/ffmpeg-skill-horizontal-on-dark.svg\">\n    <img src=\"brand/logo/ffmpeg-skill-horizontal.svg\" height=\"72\" alt=\"ffmpeg-skill\">\n  </picture>\n</p>\n\n<p align=\"center\"><b>Give your coding agent a video editor.</b><br>\nClaude Code, Cursor, Codex or any MCP client edits your footage with local FFmpeg, then checks its own output.<br>\nNo cloud · No API keys · Python standard library</p>\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/\"><b>Website</b></a> ·\n  <a href=\"#quick-start\"><b>Quick start</b></a> ·\n  <a href=\"docs/demos.md\">Demos</a> ·\n  <a href=\"#tools\">Tools</a> ·\n  <a href=\"#mcp\">MCP</a> ·\n  <a href=\"https://www.npmjs.com/package/ffmpeg-skill\">npm</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/kajisho5/ffmpeg-skill/actions/workflows/ci.yml\"><img src=\"https://github.com/kajisho5/ffmpeg-skill/actions/workflows/ci.yml/badge.svg\" alt=\"tests\"></a>\n  <a href=\"https://scorecard.dev/viewer/?uri=github.com/kajisho5/ffmpeg-skill\"><img src=\"https://api.scorecard.dev/projects/github.com/kajisho5/ffmpeg-skill/badge\" alt=\"OpenSSF Scorecard\"></a>\n  <a href=\"https://www.npmjs.com/package/ffmpeg-skill\"><img src=\"https://img.shields.io/npm/v/ffmpeg-skill\" alt=\"npm\"></a>\n  <a href=\"#ffmpeg-compatibility\"><img src=\"https://img.shields.io/badge/ffmpeg-6.1%20%7C%207.1%20%7C%208%20%7C%209%20tested-orange\" alt=\"FFmpeg 6.1, 7.1, 8 and 9 tested in CI\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-green\" alt=\"MIT\"></a>\n  <a href=\"https://github.com/sponsors/kajisho5\"><img src=\"https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?logo=githubsponsors\" alt=\"Sponsor\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/\"><img src=\"brand/og.png\" width=\"720\" alt=\"ffmpeg-skill v3: give your coding agent a video editor. An agent runs probe, cut, fit, export and check, and the final file is measured: 59.98 s, 1080x1920, 30 fps.\"></a>\n</p>\n\n```bash\nnpx ffmpeg-skill\n```\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/demos/captions_pop_karaoke.gif\" alt=\"animated captions with a karaoke highlight\"><br><sub><code>caption.py --animate pop --karaoke</code></sub></td>\n    <td width=\"50%\"><img src=\"docs/demos/reframe_crop.gif\" alt=\"16:9 reframed to 9:16\"><br><sub><code>fit.py --aspect 9:16 --fit crop</code></sub></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/demos/silence_removal.gif\" alt=\"silence removed, timeline shorter\"><br><sub><code>silence.py --threshold -35</code></sub></td>\n    <td width=\"50%\"><img src=\"docs/demos/loudness.gif\" alt=\"waveform before and after loudness normalisation\"><br><sub><code>loudness.py -I -14 --tp -1</code></sub></td>\n  </tr>\n</table>\n\nLeft half is the input, right half is what the command produced. **[Every before/after demo, with the exact command under each one →](docs/demos.md)** — all of it generated from synthetic footage by `python3 demos/build.py`, so you can rebuild every frame of it yourself.\n\n`ffmpeg-skill` is an [Agent Skill](https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills) for Claude Code, Cursor, Codex and any agent that reads `SKILL.md`. It teaches the agent a fixed workflow (probe → edit losslessly where possible → check → verify) and ships **42 tools** that do the actual work with `ffmpeg` / `ffprobe`: cut, join, silence removal, fit to duration and aspect, captions and karaoke, overlays and motion graphics, HDR → SDR and LUTs, audio clean-up and typed dynamics, sync with drift correction, multicam, loudness, delivery checks, whole-edit project rendering, batch folders. Every tool is also callable as an MCP tool (`tools/list` advertises a core 12 by default to keep client context small, with `FFMPEG_SKILL_MCP_FULL=1` listing all 42; every tool is reachable by name through `tools/call` either way), and the whole set is described by a machine-readable contract.\n\nIf `ffmpeg` and `python3` are on your PATH, it works: offline, on footage you would rather not upload.\n\n> **SPEC** (Self-Producing Execution Contract): each tool's `input_schema` — the part of its\n> contract and MCP tool definition that has to track the CLI flag-for-flag — is never\n> hand-authored beside the code. It is derived, at run time, from the same `argparse` parser that\n> already defines the CLI, and CI fails the build if any of it drifts.\n> → [full explanation](#what-is-spec)\n\n---\n\n## Standalone, and in an ecosystem\n\n**Standalone**, this is a local FFmpeg engine: probe → edit → verify, `npx ffmpeg-skill` and nothing else. No API key, no account, no other repo required. Everything above and below this section describes that standalone tool, and none of it changes if you never read the rest of this one.\n\n**In [kajisho5](https://github.com/kajisho5)'s wider video-production ecosystem**, this repo is the *hands*: it cuts, measures and exports files, and reports back in structured JSON. It does not decide what to cut, whether a deliverable is approvable, what makes a highlight interesting, or what a caption should say (the user's cue text is burned as written, never rewritten to fit) — those are a *brain*'s job, sitting in front of this engine, not inside it.\n\n| You want to... | Use |\n|---|---|\n| Cut / join / measure / export a file right now | **this repo** (`ffmpeg-skill`), standalone |\n| Decide cut points, approve a deliverable, plan a whole edit | [`video-production-agent`](https://github.com/kajisho5/video-production-agent) / [`AI-video-production-OS`](https://github.com/kajisho5/AI-video-production-OS) |\n| Build a typed editing graph across a workspace, without writing raw `ffmpeg` | [`video-editing-skill`](https://github.com/kajisho5/video-editing-skill) / [`audio-production-skill`](https://github.com/kajisho5/audio-production-skill) |\n| Put Remotion motion graphics (animated captions, silence jump cuts, audio-peak motion) on a real recording | [`remotion-ffmpeg-skill`](https://github.com/kajisho5/remotion-ffmpeg-skill): its compositions take their length, fps, frame, silences, scene cuts, audio peaks and beats from this repo's `probe.py`, `silence.py` and `scenes.py`. It verifies its render with `check.py` and `look.py`, composites a graphics layer with `overlay.py` (`--place` for its `--sparse` mode), and delivers through `render.py --template` |\n\nOther repos in the ecosystem — [`media-analysis-skill`](https://github.com/kajisho5/media-analysis-skill), [`transcription-skill`](https://github.com/kajisho5/transcription-skill), [`subtitle-skill`](https://github.com/kajisho5/subtitle-skill), [`thumbnail-skill`](https://github.com/kajisho5/thumbnail-skill), [`color-grading-skill`](https://github.com/kajisho5/color-grading-skill), [`motion-graphics-skill`](https://github.com/kajisho5/motion-graphics-skill), [`qc-skill`](https://github.com/kajisho5/qc-skill) — read this repo's `contract --json`, its tools' `--json` output and `doctor`, the same way any agent framework would; this repo does not call into any of them. The dependency runs one way.\n\n---\n\n**Contents**\n[Standalone, and in an ecosystem](#standalone-and-in-an-ecosystem) · [Why](#why) · [Quick start](#quick-start) · [How it works](#how-it-works) · [Design principles](#design-principles) · [Tools](#tools) · [Audio](#audio-is-a-first-class-input) · [Built for agents](#built-for-agents) · [FAQ](#faq) · [FFmpeg compatibility](#ffmpeg-compatibility) · [Tested on real footage](#tested-on-real-footage) · [Install](#install) · [Requirements](#requirements) · [Development](#development) · [Docs](#docs)\n\n---\n\n## Why\n\nAn agent that \"knows FFmpeg\" still guesses: it assumes a frame rate, picks a codec the container cannot hold, re-encodes a file that only needed a stream copy, and reports \"done\" without opening the result. This skill takes the guessing out:\n\n- **Real files first.** Every job starts with `probe.py`; the agent decides from the measured duration, fps, resolution, colour and audio layout, not from the file name.\n- **Structured tools, not shell strings.** Each operation is a script with typed arguments. Nothing runs through a shell; no filter graph is accepted from the caller.\n- **A contract the agent can read.** `contract --json` states, for every tool, what it takes, what it writes, which FFmpeg components it needs and how the result is verified. The MCP surface is derived from it.\n- **Verification after execution.** The result is probed, checked against the destination's spec and, when the picture changed, looked at as a contact sheet.\n- **Local first.** No cloud, no API keys, no Python dependencies. Optional local transcription is used when a speech engine (Parakeet or a whisper) is installed, never required — by `caption.py --transcribe` and, since 1.17, by `silence.py --filler --transcribe`; both take a transcript you already have instead, and both refuse with the install lines rather than guessing. Both take `--engine` and `--model`; `FFMPEG_SKILL_ASR_ENGINE` and `FFMPEG_SKILL_ASR_MODEL` set this machine's defaults (e.g. `large-v3-turbo` where that whisper.cpp model is installed; without either, auto and `base`). The engine runs on your machine and the audio is never uploaded; parakeet-mlx, faster-whisper and openai-whisper download their model weights the first time they run (parakeet-mlx's default from Hugging Face).\n\n## Paper\n\nThe design discipline behind this skill — per-operation verification for AI agents — is written up as a position paper. The paper scores ffmpeg-skill itself as only partially conformant with the discipline it defines.\n\nKajiyama, S. (2026). *What Is Verification-Driven Coding? — A Discipline for Not Trusting Generation.* Zenodo. https://doi.org/10.5281/zenodo.23720216\n\n## Quick start\n\n```bash\n# 0. FFmpeg itself, once (Ubuntu/Debian shown; macOS and Windows are in the Install table below)\nsudo apt install ffmpeg\n\n# 1. install the skill for Claude Code (Cursor: --cursor, Codex: --codex, all three: --all)\nnpx ffmpeg-skill\n\n# 2. check the machine: ffmpeg, ffprobe and every FFmpeg component the tools need\nnpx ffmpeg-skill doctor\n\n# 3. (for agent frameworks) read the machine-readable contract\nnpx ffmpeg-skill contract --json | head -40\n```\n\nCaptions from speech (`caption.py --transcribe`) need one local speech engine, installed separately. `pip install faster-whisper` is the simplest; the first run downloads its model, and the audio never leaves the machine. Without an engine, everything else works, `doctor` lists the engine as missing optional, and `--transcribe` refuses with the install line for each engine it supports.\n\nAlready installed? re-run `npx ffmpeg-skill` to refresh `~/.claude/skills/ffmpeg-skill`. Copies are not updated automatically.\n\n`doctor`'s overall `ok` and a single tool's `usable` are different signals: `ok` is false when anything *some* tool requires is missing, so one missing filter (a plain Homebrew `ffmpeg` without `subtitles`, or a build without libvidstab) turns it false even though most tools still run. Check `doctor --json`'s `tools` field for the per-tool answer, not just `ok`.\n\nThen talk to your agent:\n\n> \"Take `interview.mp4`, keep 0:45–3:10 and 5:00–6:30, and make it exactly 60 seconds for Reels.\"\n\nThe agent runs `probe.py`, `cut.py --segments 0:45-3:10,5:00-6:30`, `fit.py --duration 60 --aspect 9:16 --fit crop`, `export.py --preset reels`, `check.py --platform reels` and `look.py`, then reports \"final.mp4: 59.98 s, 1080×1920, 30 fps, AAC stereo\" with the contact sheet it inspected.\n\n### Deliver to a platform\n\nOne command per destination, with the app's own UI taken into account:\n\n```bash\npython3 $S/render.py talk.mp4 --template tiktok --cues cues.txt\n```\n\nThat fills the shipped `templates/tiktok.json`: 9:16 crop, captions popped word by word *above*\nTikTok's description bar and clear of its like column, −14 LUFS, the `tiktok` export preset, and\na `check.py --platform tiktok` on the file it wrote. The caption size comes from the delivery\ntable, so since 1.17.1 the filled p"
+    },
+    "brief": {
+      "summary": "给编程智能体用的本地 FFmpeg 视频剪辑工具",
+      "problem": "解决智能体调用 FFmpeg 时参数靠猜、输出不验证",
+      "highlights": [
+        "可以按脚本批量剪切、拼接和删静音",
+        "可以生成字幕、卡拉OK高亮和竖屏重构图",
+        "可以统一响度并做平台导出检查"
+      ],
+      "target_users": [
+        "编程智能体用户",
+        "视频剪辑开发者",
+        "本地隐私敏感创作者"
+      ],
+      "why_trending": "本周首次收录，总星超五千，近期有更新",
+      "caveat": "依赖本机 ffmpeg 与 python3，非云端服务",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "kajisho5/ffmpeg-skill",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "FFmpeg MCP视频剪辑技能",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "tigin-backwards/oni-moono",
+      "url": "https://github.com/tigin-backwards/oni-moono",
+      "description": "Oxygen Not Included's Unity layer on the BRUTAL framework, .NET 10 CoreCLR. On a late-game colony the game runs at up to 13× the original's frame rate",
+      "language": "C#",
+      "total_stars": 180,
+      "forks": 8,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "brutal",
+        "coreclr",
+        "dotnet",
+        "game-engine",
+        "harmony",
+        "klei",
+        "modding",
+        "oni",
+        "oxygen-not-included",
+        "performance"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-16T00:50:02Z",
+      "updated_at": "2026-11-11T06:16:33Z",
+      "pushed_at": "2026-11-11T06:45:59Z",
+      "open_issues": 4,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "# Moono\n\n[English](README.md) | [简体中文](README.zh-CN.md)\n\nAn unofficial, super fast, super sussy replacement for the Unity layer of Oxygen Not Included,\nartisanally crafted by Claude. On a late-game colony the game runs at up to 13× the original's\nframe rate ([Performance](#performance)).\n\n<p align=\"center\"><img src=\"docs/images/moo-comet.webp\" alt=\"A Gassy Moo falling as a comet\" height=\"240\"></p>\n\nI did this mostly for fun, to see how far Oxygen Not Included's performance can go on a modern\n.NET runtime (CoreCLR). I've had the idea for a while, but none of the existing C# renderers\nsparked joy. When [BRUTAL](https://github.com/ahwootech/BRUTAL) went open source, it seemed like\na good excuse to try a sexy new toy.\n\nMoono runs Klei's original DLLs, patched at load where Mono and .NET\n[differ](docs/ARCHITECTURE.md). Everything they need from Unity is reimplemented here.\n\n## Setup\n\nYou need your own copy of the game on Steam, on Linux or Windows (no macOS). Epic Games Store\nand WeGame (China) are not currently supported. Because this replaces\nthe engine rather than patching the game, it can't ship as an ordinary Harmony mod. Instead, a\nsetup script hooks it into the game's Steam launch options, so you still start the game from\nSteam as usual.\n\n### Easy installation\n\n1. Download the latest release from the\n   [releases page](https://github.com/tigin-backwards/oni-moono/releases/latest):\n   `oni-moono-…-windows-x64.zip` or `oni-moono-…-linux-x64.tar.gz`, and extract it anywhere.\n   (Or clone this repository; the setup then builds the player itself, installing the .NET SDK\n   for your user if you don't have it.)\n2. Run the setup script in the extracted `oni-moono` folder:\n   - Windows: double-click `setup.cmd` (it runs `setup.ps1` and keeps the window open)\n   - Linux: `./setup.sh`\n\n   It finds your Oxygen Not Included install through Steam, and prints one line for the game's\n   launch options, and puts it on your clipboard where it can.\n3. In Steam, right-click Oxygen Not Included → Properties → Launch Options, and paste that line.\n\n   ![Steam's Properties dialog with the Launch Options box](docs/images/steam-launch-options.png)\n\nThen press Play in Steam as usual. The optional tweaks (below) are chosen in the game: **Moono\nTweaks** on the main menu, under Mods. To update, get the new version and run the setup again; the\nlaunch options stay the same, and so do your tweak choices. To go back to the original game, clear\nthe launch options.\n\nOn Linux, Steam installed as a Flatpak or a snap runs games in a sandbox that can't see most of\nyour home folder; the setup notices and installs the player inside the sandbox's own folder.\n(Snap is tested; Flatpak isn't yet.)\n\nYou'll need an OpenGL 4.5 graphics driver. The game uses your normal Steam account, DLCs, saves,\nsettings and mods.\n\n### Manual installation\n\nThe setup script (see above) is the easiest installation on most systems. If you want more\ncontrol, need to customize the installation, or run a sandboxed environment and prefer not to run\na script outside of that, follow these manual steps. They don't include instructions on how to\nbuild the player from scratch; see the setup scripts for the build steps, or\n[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).\n\n<details>\n<summary>Linux</summary>\n\nThe example paths match those used by `setup.sh`, with `~/Downloads/oni-moono/` as the location\nof the downloaded and extracted files. You can choose different paths, but update them\nconsistently in the commands and Steam launch options below.\n\n1. **Locate the game folder.** It must contain `OxygenNotIncluded` and\n   `OxygenNotIncluded_Data/Managed`. Common Steam library locations include:\n\n   - Default Steam: `~/.steam/steam/steamapps/common/OxygenNotIncluded` or\n     `~/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n   - Snap Steam: `~/snap/steam/common/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n   - Flatpak Steam:\n     `~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/OxygenNotIncluded`\n\n   If the game is in another Steam library, use that library's `steamapps/common/OxygenNotIncluded`\n   folder instead. Confirm that `OxygenNotIncluded` is the Linux executable; a Windows installation\n   via compatibility tools (Proton) will not work.\n\n2. **Place the player where Steam can access it.** In the downloaded archive, the `player` folder\n   should contain the `OniMoono` executable and its accompanying files.\n\n   (The `rm -rf` commands in the following examples remove a previous `player` folder, in case you\n   are updating. Check the path before running them, or use your file manager instead.)\n\n   For a regular Steam installation, you can leave the `player` folder where you extracted the\n   archive (`setup.sh` does so), or copy it somewhere convenient:\n\n   ```bash\n   # Default Steam\n   mkdir -p \"$HOME/.local/bin/oni-moono\"\n   rm -rf \"$HOME/.local/bin/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \"$HOME/.local/bin/oni-moono/player\"\n   ```\n\n   Snap and Flatpak Steam run in sandboxes and may not be able to access files elsewhere in your\n   home folder. Copy the player into Steam's sandbox-visible location:\n\n   ```bash\n   # Snap Steam\n   mkdir -p \"$HOME/snap/steam/common/oni-moono\"\n   rm -rf \"$HOME/snap/steam/common/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \"$HOME/snap/steam/common/oni-moono/player\"\n   ```\n\n   ```bash\n   # Flatpak Steam\n   mkdir -p \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono\"\n   rm -rf \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono/player\"\n   cp -rp \"$HOME/Downloads/oni-moono/player\" \\\n     \"$HOME/.var/app/com.valvesoftware.Steam/data/oni-moono/player\"\n   ```\n\n3. **Check the executable bit.** The player binary `OniMoono` must be executable. Set it if needed,\n   using the path where you placed the player:\n\n   ```bash\n   chmod +x \"$HOME/.local/bin/oni-moono/player/OniMoono\"\n   ```\n\n   For Snap or Flatpak, use the corresponding paths above. Check that the file exists and is\n   executable with `ls -l`.\n\n4. **Set Steam's launch options.** In Steam, right-click Oxygen Not Included → Properties → Launch\n   Options. Enter one line, replacing the example path with the full path to your player:\n\n   ```text\n   \"/home/your-username/.local/bin/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   For Snap, the executable path is typically:\n\n   ```text\n   \"/home/your-username/snap/steam/common/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   For Flatpak, it is typically:\n\n   ```text\n   \"/home/your-username/.var/app/com.valvesoftware.Steam/data/oni-moono/player/OniMoono\" -- %command%\n   ```\n\n   Replace `/home/your-username` with your actual home folder path. Do not use a literal `~` or\n   `$HOME` in the launch options. Keep the quotes around the executable path, especially if it\n   contains spaces.\n\nPress Play in Steam. If the game does not start, check that the launch options path matches the\nplayer's actual location, `OniMoono` has its execute bit set, and the game folder contains the\nLinux build. If that doesn't help, launch Steam from a terminal and watch the output for a hint\nafter clicking Play.\n\nFor updates, download the new release archive and repeat the steps, replacing the `player` folder.\n\nTo remove Moono and return to the original game, remove the `player` folder from where you put\nit, and clear the launch options in Steam.\n\n</details>\n\n<details>\n<summary>Windows</summary>\n\n1. **Place the player.** In the downloaded archive, the `player` folder contains `OniMoono.exe`\n   and its accompanying files. Copy it to `%LOCALAPPDATA%\\oni-moono\\player`, the location\n   `setup.ps1` uses (paste `%LOCALAPPDATA%` into Explorer's address bar to open it). You can\n   choose a different folder, but with this one, running the setup later keeps the same launch\n   options. In case you are updating, remove the previous `player` folder first.\n\n2. **Set Steam's launch options.** In Steam, right-click Oxygen Not Included → Properties → Launch\n   Options. Enter one line, replacing the example path with the full path to your player:\n\n   ```text\n   \"C:\\Users\\your-username\\AppData\\Local\\oni-moono\\player\\OniMoono.exe\" -- %command%\n   ```\n\n   Replace `C:\\Users\\your-username` with your actual user folder path. Do not use\n   `%LOCALAPPDATA%` in the launch options. Keep the quotes around the executable path.\n\nPress Play in Steam. If the game does not start, check that the launch options path matches the\nplayer's actual location.\n\nFor updates, download the new release archive and repeat the steps, replacing the `player` folder.\n\nTo remove Moono and return to the original game, remove the `player` folder, and clear the launch\noptions in Steam.\n\n</details>\n\n## Performance\n\nThe biggest change is swapping the very garbage Mono runtime that Unity ships for CoreCLR. On\ntop of that there are optimizations tuned to the way Oxygen Not Included uses the engine.\n\nOn a late-game Spaced Out colony with every DLC (cycle 17,000+), on Windows, on the same machine, back to back, with every Moono tweak on:\n\n| | Original | Moono | |\n|---|---|---|---|\n| Frame rate at speed&nbsp;3 | about 11&nbsp;fps | about 144&nbsp;fps | about 13× |\n| Loading the save | 2&nbsp;min&nbsp;22&nbsp;s | about 25&nbsp;s | about 5.5× faster |\n| Autosave freeze | about 26&nbsp;s | about 2.2&nbsp;s | about 12× shorter |\n| Starting the game, to the main menu (every DLC, second launch) | about 17.4&nbsp;s | about 10.3&nbsp;s | about 1.7× faster |\n\nHow much faster it runs depends on your hardware. Moono removes the runtime's overhead, so the\nfaster your CPU, the more of the gain you see. On slower machines, you'll get bottlenecked by other\nthings sooner: running out of memory, or the game's C++ simulation itself, which Moono doesn't\nspeed up (particularly on very large custom maps).\n\nGarbage-collection hitches are mostly gone: collections now run in the background, spread\nacross every core, and their pauses are about a quarter as long.\n\n**Note:** This uses more memory compared to the original. On a mid-game colony, memory peaked at\naround 11 GB resident compared to 7 GB in the original. This is expected behavior for faster,\nparallel collection.\n\nThe late-game colony at speed 3: about 11 fps in the original, about 136 in Moono.\n\nhttps://github.com/user-attachments/assets/5775cbda-42b6-49cb-b178-669fdbeb9f0a\n\nStarting the game to the main menu, every DLC, second launch: 17.5 s in the original, 9.8 s in\nMoono.\n\nhttps://github.com/user-attachments/assets/f73ebf1a-8440-4579-ab2a-0b2eaa2a6853\n\nAn autosave on the late-game colony: the original freezes for about 25 s, Moono for about 2.1 s.\n\nhttps://github.com/user-attachments/assets/02076cf7-15ec-406a-889d-254ceb7a3e61\n\nThe temperature overlay on the late-game colony, panning: about 7 fps in the original, about 57 in Moono.\n\nhttps://github.com/user-attachments/assets/99767c1f-8600-467c-94c3-f92398aa833d\n\nA mid-game colony at speed 3: about 28 fps in the original, about 126 in Moono.\n\nhttps://github.com/user-attachments/assets/e5293dda-2aa1-4dd9-9ef8-eeaa8808e7dd\n\nFor a more detailed breakdown, see [docs/PERFORMANCE.md](docs/PERFORMANCE.md).\n\n### Tweaks\n\nMoono also speeds up some of the game's own code. Most tweaks don't change gameplay and are on by\ndefault; four do, and are off. Toggle them in **Moono Tweaks** on the main menu. Full list:\n[docs/TWEAKS.md](docs/TWEAKS.md).\n\n![The main menu with the Moono Tweaks button under Mods](docs/images/main-menu.png)\n\n<p align=\"center\"><img src=\"docs/images/moono-tweaks.png\" alt=\"The Moono Tweaks screen, a list of tweaks with checkboxes\"></p>\n\n## Save compatibility\n\nSaves from the original game should load, and saves made here should still load in the\noriginal game (including ones written with the `fast-save-compression` tweak).\n\nSaves come out about 14% larger: the `fast-save-compression` tweak compresses them faster but a\nlittle less tightly, which takes seconds off every save.\n\n## Mod compatibility\n\nMost mods should work, since the game's cod"
+    },
+    "brief": {
+      "summary": "用 .NET 10 重实现《缺氧》Unity 层，后期帧率最高 13 倍",
+      "problem": "原版后期殖民地卡顿，它用新运行时重实现 Unity 层来提速",
+      "highlights": [
+        "可以替换游戏 Unity 层，让后期殖民地跑得更快",
+        "可以通过 Steam 启动项接入，保留存档和模组",
+        "可以在 Moono Tweaks 菜单调整可选选项"
+      ],
+      "target_users": [
+        "《缺氧》后期玩家",
+        "游戏性能折腾者",
+        "C# 引擎研究者"
+      ],
+      "why_trending": "本周首次收录，180 星；重写引擎层思路少见",
+      "caveat": "非官方，仅 Steam 版 Windows/Linux，需 OpenGL 4.5",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "tigin-backwards/oni-moono",
+      "score": 80,
+      "category": "ACG 资源 / Mod",
+      "reason": "《缺氧》Unity层与Mod性能优化",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 52.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "HaD0Yun/CozyClay",
+      "url": "https://github.com/HaD0Yun/CozyClay",
+      "description": "Open source previs software in the browser: block a scene, pose characters, author camera moves and cuts, then take the same shots to an AI video model.",
+      "language": "JavaScript",
+      "total_stars": 1717,
+      "forks": 191,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "3d-animation",
+        "ai",
+        "ai-video",
+        "animation",
+        "blender",
+        "camera-control",
+        "llm-agent",
+        "motion-generation",
+        "previs",
+        "previsualization",
+        "previz",
+        "python",
+        "react-three-fiber",
+        "storyboard",
+        "threejs",
+        "typescript",
+        "virtual-production",
+        "webgl"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-07-28T19:57:47Z",
+      "updated_at": "2026-11-11T02:57:42Z",
+      "pushed_at": "2026-11-11T06:45:26Z",
+      "open_issues": 34,
+      "homepage": "https://cozyclay.org",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/images/cozyclay-logo.png\" alt=\"CozyClay\" width=\"340\">\n</p>\n\n<p align=\"center\">\n  <b>Make the scene first. Then make it a video.</b><br>\n  <em>Open source previs in a browser tab: block the set, move the cast, cut the camera, hand the shot to an AI video model.</em>\n</p>\n\n<p align=\"center\">\n  <a href=\"LICENSE\"><img alt=\"License: AGPL-3.0\" src=\"https://img.shields.io/badge/license-AGPL--3.0-blue\"></a>\n  <a href=\"https://www.npmjs.com/package/cozyclay\"><img alt=\"npm\" src=\"https://img.shields.io/npm/v/cozyclay\"></a>\n  <img alt=\"Node 22.19+\" src=\"https://img.shields.io/badge/node-22.19%2B-brightgreen\">\n  <a href=\"https://github.com/HaD0Yun/CozyClay/stargazers\"><img alt=\"Stars\" src=\"https://img.shields.io/github/stars/HaD0Yun/CozyClay?style=flat\"></a>\n  <a href=\"https://discord.gg/Hp9V5wwgjF\"><img alt=\"Discord\" src=\"https://img.shields.io/badge/discord-join-5865F2?logo=discord&logoColor=white\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://cozyclay.org/#try\">Try it in the browser</a> ·\n  <a href=\"#quick-start\">Quick start</a> ·\n  <a href=\"INSTALL_FOR_AGENTS.md\">Guide for AI agents</a> ·\n  <a href=\"#docs\">Docs</a> ·\n  <a href=\"CHANGELOG.md\">Changelog</a> ·\n  <a href=\"https://discord.gg/Hp9V5wwgjF\">Discord</a>\n</p>\n\n<table>\n  <tr>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/00f28c2f-e8e2-43eb-b253-b6c2436e1818\" controls muted width=\"100%\"></video></td>\n    <td width=\"50%\"><video src=\"https://github.com/user-attachments/assets/4c9b1e29-4803-435c-8305-f2c899fb1c2c\" controls muted width=\"100%\"></video></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><sub>Top: the greybox blocked in CozyClay. Bottom: the AI video made from it.</sub></td>\n    <td align=\"center\"><sub>Same idea, a parkour jump: the blocking holds the timing and the camera.</sub></td>\n  </tr>\n</table>\n\n## Why\n\nAI video costs money per take, and one miss means paying again. A text prompt cannot hold a\nwhole scene: where everyone stands, how they move, where the camera is, when it cuts.\n\nCozyClay lets you make those decisions first, in 3D, where they are cheap to change. Then the video\nmodel gets the shot as a first frame, a greybox reference clip and a prompt that describes the\nreal framing. It follows the blocking instead of guessing.\n\n```mermaid\nflowchart LR\n  S[\"Stage<br/>set + cast\"] --> M[\"Motion<br/>compiled + QA\"] --> C[\"Camera<br/>shots + cuts\"] --> E[\"Export<br/>frame · clip · prompt\"] --> V[\"AI video model\"]\n```\n\n## Quick start\n\n```bash\nnpx cozyclay\n```\n\nThat is the whole install. You need Node.js 22.19 or newer and a Chromium browser. You do not need\na GPU, Python or a model download. The studio opens at `http://127.0.0.1:5180/app/`.\n\n**Updating.** `npx cozyclay` fetches the newest release each time you run it. After\n`npm install -g cozyclay`, the studio shows a small **Update** chip in the top bar when a newer\nrelease is out. **Update now** installs it, and **Restart now** starts the new version in the same\nterminal; the studio reloads once your project is saved. On Windows the chip gives you the command to\ncopy instead: one-click stays off there by design. `cclay update` does the same from the terminal. `--no-update-check` or `COZYCLAY_NO_UPDATE_CHECK=1` turns the check off\nfor one launch; `cclay update --off` turns it off for good, and `cclay update --on` brings it back.\n\n> **Asking an AI agent to set it up?** Give it this repository link. Its instructions are in\n> [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md).\n\n## What you can do\n\n| | |\n| --- | --- |\n| **Stage** | Build the set from primitives. Add rigged characters, or capsule stand-ins when nobody needs to move a limb. Fly the view like a 3D editor. |\n| **Move** | Describe the action. The agent writes a motion spec, and a deterministic compiler in the browser bakes every frame. QA checks collisions, foot slide, reach and hand contact before you see it. |\n| **Shoot** | Put shots on a timeline, draw dolly rails, look through the lens. Each shot knows the limits of the video model you target. |\n| **Export** | Keyframe pack (first and last frame, greybox clip, camera, prompt), mp4, depth and normal passes, contact sheet, OTIO cut list. |\n| **Storyboard** | Prefer stills? A Storyboard project is a row of panels with captions, an animatic and a contact sheet. |\n| **Undo anything** | Every edit, including each change the agent makes, is one undo step. |\n\n## Direct it with AI\n\nThe same scene can be driven from three places, live, while you watch the viewport.\n\n| Surface | Start | For |\n| --- | --- | --- |\n| **Agent panel** | `Cmd/Ctrl+B` in the studio | Chat in the studio. Sign in with ChatGPT or use your own key (Anthropic, OpenAI, Gemini, MiniMax, OpenRouter, CLIProxyAPI). |\n| **MCP server** | `npx -y cozyclay mcp` | Claude Desktop, Claude Code, Cursor or any MCP client. |\n| **Terminal** | `cclay live status --wait` | Coding agents that drive a running studio, JSON in and out. |\n\n```json\n{ \"mcpServers\": { \"cozyclay\": { \"command\": \"npx\", \"args\": [\"-y\", \"cozyclay\", \"mcp\"] } } }\n```\n\n## From source\n\n```bash\ngit clone https://github.com/HaD0Yun/CozyClay.git && cd CozyClay\nnpm install\nnpm run dev     # http://127.0.0.1:5180/app/\nnpm test\n```\n\n## Docs\n\n| Read | For |\n| --- | --- |\n| [`INSTALL_FOR_AGENTS.md`](INSTALL_FOR_AGENTS.md) | Install, run and connect, written for AI agents |\n| [`docs/motion3-agent-guide.md`](docs/motion3-agent-guide.md) | Motion specs, compile and QA |\n| [`docs/agent-cli.md`](docs/agent-cli.md) | `cclay live`, model providers, sessions |\n| [`mcp/README.md`](mcp/README.md) | MCP tools and the live protocol |\n| [`docs/studio-ui-ia.md`](docs/studio-ui-ia.md) | Every control and where it lives |\n| [`docs/privacy.md`](docs/privacy.md) | Anonymous telemetry and how to turn it off (`cclay telemetry off`) |\n| [`AGENTS.md`](AGENTS.md) | Contribution rules |\n\n## Guides\n\n| Read | For |\n| --- | --- |\n| [Greybox to AI video](https://cozyclay.org/greybox-to-video/) | Why a grey blockout is the most reliable input for a video model, and the block-then-generate loop |\n| [Previs software compared](https://cozyclay.org/previs-software/) | Free, open source and browser-based previs tools side by side |\n| [Seedance 2.5 camera control](https://cozyclay.org/seedance-camera-control/) | Getting the same camera on every take with a reference clip |\n| [Camera control for AI video](https://cozyclay.org/ai-camera-control/) | Why camera prompts drift and what the models actually accept |\n\nFound a bug or want a feature? [Open an issue](https://github.com/HaD0Yun/CozyClay/issues).\n\n## License\n\nAGPL-3.0-or-later. See [`LICENSE`](LICENSE), [`LICENSING.md`](LICENSING.md) and\n[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Made by [Doyun](https://github.com/HaD0Yun) at\n[NomaDamas](https://github.com/NomaDamas).\n"
+    },
+    "brief": {
+      "summary": "浏览器里的开源预演工具，先摆3D场景再交给AI视频模型",
+      "problem": "AI视频按次付费，纯文字提示难以控制站位、走位、镜头和剪辑",
+      "highlights": [
+        "可以用基础几何体搭场景、摆好角色站位",
+        "可以写动作描述，自动编译并检查碰撞和滑步",
+        "可以导出首尾帧、灰模片段和提示词给视频模型"
+      ],
+      "target_users": [
+        "AI视频创作者",
+        "分镜预演美术",
+        "独立动画团队"
+      ],
+      "why_trending": "本周首次收录，约1.7k Star，项目近期仍在更新",
+      "caveat": "需Node 22.19以上和Chromium，视频生成要自备模型",
+      "category": "XR / 虚拟制作",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "HaD0Yun/CozyClay",
+      "score": 92,
+      "category": "XR / 虚拟制作",
+      "reason": "浏览器预演与虚拟制作工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "WhiteTowerAI/ohmygame",
+      "url": "https://github.com/WhiteTowerAI/ohmygame",
+      "description": "The open-source studio for making games with AI. Your own one-person game studio. Everything you need to make games with AI, in one app. Game canvas.  Bring your own key.",
+      "language": "TypeScript",
+      "total_stars": 2053,
+      "forks": 259,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-coding",
+        "ai-coding-agent",
+        "ai-game-design",
+        "ai-game-dev",
+        "ai-game-development",
+        "ai-image",
+        "ai-video",
+        "canvas",
+        "game-ai",
+        "game-assets",
+        "game-development",
+        "gamedev",
+        "open-game",
+        "open-google-playground",
+        "pi-agent",
+        "pi-coding-agent-theme"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-08-11T02:24:24Z",
+      "updated_at": "2026-11-11T06:47:13Z",
+      "pushed_at": "2026-11-11T06:48:13Z",
+      "open_issues": 19,
+      "homepage": "https://ohmygame.ai/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"docs/assets/banner.webp\" alt=\"OhMyGame — the open-source studio for making games with AI\" width=\"100%\" />\n\n**Your own one-person game studio.** Everything you need to make games with AI, in one app.\n\n**Make a game. Ship it everywhere. Earn from it.**\n\n<p>\n  <a href=\"https://ohmygame.ai/download/mac\"><img src=\"https://img.shields.io/badge/Download-macOS%20(Apple%20silicon)-000000?style=for-the-badge&logo=apple&logoColor=white\" alt=\"Download for macOS\" /></a>\n  <a href=\"https://ohmygame.ai/download/windows\"><img src=\"https://img.shields.io/badge/Download-Windows%20x64-0078D4?style=for-the-badge&logo=windows&logoColor=white\" alt=\"Download for Windows\" /></a>\n</p>\n\n<p>\n  <a href=\"#how-its-built\"><img src=\"https://img.shields.io/badge/built%20on-Pi-7c3aed?style=flat-square\" alt=\"Built on Pi\" /></a>\n  <a href=\"#any-model-your-keys\"><img src=\"https://img.shields.io/badge/models-40%2B%20providers%20%C2%B7%20BYOK-black?style=flat-square\" alt=\"40+ model providers, BYOK\" /></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square\" alt=\"License Apache 2.0\" /></a>\n  <a href=\"https://discord.gg/TkrgvGQ2Zc\"><img src=\"https://img.shields.io/badge/Discord-join-5865F2?style=flat-square&logo=discord&logoColor=white\" alt=\"Join Discord\" /></a>\n  <a href=\"https://qun.qq.com/universal-share/share?ac=1&authKey=65LzSf96ttluVSAPzPKJvrsoQ0NSQHPJnhgJImnnqIik9uK64ljVd%2FzkRWb8Xanz&busi_data=eyJncm91cENvZGUiOiI0NjA3MDY5MjMiLCJ0b2tlbiI6InNUNWR3U05OeVlMZEVCK0YxNUNKckplazliYklGRnV6ZUZGM1NlV29vYVdKNGkrR2g2c28zNG1kdDFFcHllczMiLCJ1aW4iOiIyNDUxMjQwODEifQ%3D%3D&data=CQ5T4W2Ac1NWWg56dH_HQwixT7faVMm5Xq5kZsLgx9TDBGxeqs3mwXNLVUpO83oOUobc1qXBosRKYmWnziWboA&svctype=4&tempid=h5_group_info\"><img src=\"https://img.shields.io/badge/QQ%20Group-460706923-12B7F5?style=flat-square&logo=qq&logoColor=white\" alt=\"Join the QQ group 460706923\" /></a>\n</p>\n\n<p>\n  <b>English</b> · <a href=\"README.zh-CN.md\">简体中文</a>\n</p>\n\nhttps://github.com/user-attachments/assets/4d5805fe-92a2-40b4-a232-c7452f9a796a\n\n</div>\n\n> [!NOTE]\n> 🚧 OhMyGame is in beta. Expect rough edges. Join us and let's build it together!\n\n## News\n\n<!-- Keep at most three entries, newest first, and only major releases.\nUpdated during release preparation; see docs/maintaining.md. -->\n\n- **2026-10 · beta 5**\n  ([release notes](https://github.com/WhiteTowerAI/ohmygame/releases/tag/v0.0.0-beta.5.0))\n  - **Now with interactive stories:** make visual novels, interactive films,\n    and story games. Every screen is a web page the agent builds from your\n    description, with video, dialogue, choices, or even a mini-game, so your\n    story isn't limited to fixed node types.\n  - **Bring your own agent:** Claude Code, Codex, or OpenCode can run the\n    conversation, or you can bring OhMyGame to them.\n  - **Plugins:** build in Godot, Unity, Unreal Engine, or Cocos Creator; make\n    assets in Blender, Aseprite, or Tiled; ship to WeChat Mini Games, Douyin\n    Mini Games, or TapTap, and\n    [earn from your game](#-publish-and-earn-one-link-or-the-platforms-where-players-pay).\n\n## What it is\n\nMaking a game takes design docs, 2D art, 3D models, video, code, and somewhere\nto put it when it's done. Today those live in five or six different tools.\nOhMyGame puts them in one app: describe your game, and the agent designs it,\nmakes the assets, builds it, plays it to check it works, and publishes it to a\nlink you can share.\n\nTwo core design ideas shape it:\n\n1. **Everything lives on a canvas.** Design docs, concept art, 3D models, and\n   video sit side by side on one board. One character sketch can grow into more\n   art, a video, or a rigged 3D model, and everything is ready to use in your\n   game.\n2. **The agent does the work.** It drives the canvas the way you would:\n   drafting the design doc, turning a character sketch into a rigged 3D model,\n   writing the code, and playtesting the result.\n\nIt's open source and works with 40+ model providers through Pi, from Anthropic\nand OpenAI to DeepSeek and Qwen. Your keys stay on your machine, there are no\nper-run credits, and what you make is yours.\n\n## Features\n\n### 🤖 Agent: drives the canvas, builds and plays the game\n\nThe agent works the canvas the way you would: it drafts the design doc, lays\nout boards, and generates assets on them. It reads the design doc, writes the\ncode, and runs the game in a live preview. Then it opens the game in a window\nyou can watch and plays it, including real-time canvas and WebGL games. When it\nfinds a problem, it tries a fix and plays again. Along the way it can generate\nimages, video, 3D models, and audio, search the web, and use MCP servers and\nplugins.\n\n<!-- Playtesting is open loop for now: the agent plans a batch of inputs, runs\nthem, then looks at the result. It has no real-time reflexes yet. -->\n\n**▶ The agent playtesting a new item feature on desktop and mobile, then reporting\nwhat it found (sped up 4×).**\n\nhttps://github.com/user-attachments/assets/3cb982e8-a4a8-4715-bf3c-df4e41e7855b\n\n### 🎨 Canvas: design docs, art, video, 3D, and audio on one board\n\nEvery game project has a design space: a main design doc plus boards where\nthe doc, images, video, 3D models, and audio sit side by side. Nodes can use\neach other as references, so one character design can lead to more images, a\nvideo, a voice line, or a rigged and animated 3D model. Results go into a shared Asset Library that\nyour games can use.\n\nhttps://github.com/user-attachments/assets/5a35964d-87b3-4153-8b1b-fc6deced5bb3\n\n### 🔗 Publish and earn: one link, or the platforms where players pay\n\nSign in and publish: OhMyGame builds your game and gives it a link anyone can\nplay in the browser. Republishing updates the same link. Published games are\nlisted in the in-app Community, where you can play what others have made,\nsort by latest, most viewed, or most liked, visit creators' profiles, and like\nthe games you enjoy.\n\nA one-person studio should pay for itself. Beyond the Community, plugins take\nyour game to the platforms where players pay.\n\n| Ship to                                 | Earn from                | How                                                            |\n| --------------------------------------- | ------------------------ | -------------------------------------------------------------- |\n| WeChat Mini Games, Douyin Mini Games    | Ads, in-app purchases    | [Platform plugins](#-plugins-connect-with-more-game-dev-tools) |\n| TapTap                                  | Downloads, in-app purchases | TapTap Maker plugin                                         |\n| Steam and other stores                  | Sales                    | Export from Godot or Unity with their plugins                  |\n| itch.io, Poki, CrazyGames               | Sales, ad revenue share  | Upload your Web Game build                                     |\n\n**Your game, your revenue.** OhMyGame takes no cut of what your game earns.\n\n### 🧑‍💻 Bring your own agent\n\nAlready use Claude Code, Codex, or OpenCode? Choose it in the model picker and\nit runs the conversation with its own sign-in. It gets the whole studio: the\ncanvas, media generation, playtesting, plugins, and Undo, with your history\nkept in OhMyGame. See [coding agents](docs/coding-agents.md).\n\n### 🔌 Use OhMyGame from Claude Code, Codex, and other agents\n\nAlready working in another coding agent? Turn on **Settings → MCP Server** and\nadd OhMyGame to Claude Code or Codex with the command shown there.\nThey get OhMyGame's media generation with your providers, the canvas, and\nplaytesting, plus a Skill that explains the workflow. DeepSeek Harness and\nother MCP clients can add the `ohmygame-studio` command shown there. See\n[External agents](docs/external-agents.md).\n\n### 🧩 Plugins: connect with more game dev tools\n\nPlugins let the agent work in the engines and tools you already know:\n\n- **Engines:** Godot, Unity, Unreal Engine, and Cocos Creator.\n- **Platforms:** TapTap Maker, WeChat Mini Games, and Douyin Mini Games.\n- **Assets:** Blender, Aseprite, and Tiled.\n\nTurn them on in **Plugins**, or build your own with Plugin Builder. Engine\nplugins use each engine's own editor and tools, so install those first. See\n[Plugins](docs/plugins.md).\n\n## What you can make\n\nThree games our team made with OhMyGame:\n\n<table>\n  <tr>\n    <td width=\"33%\"><img src=\"docs/assets/showcase/interactive-film.webp\" alt=\"Interactive film made with OhMyGame: a monkey warrior dodges a sword strike\" width=\"100%\" /></td>\n    <td width=\"33%\"><img src=\"docs/assets/showcase/island-builder.webp\" alt=\"Island builder made with OhMyGame: building a workshop on a floating dock\" width=\"100%\" /></td>\n    <td width=\"33%\"><img src=\"docs/assets/showcase/deckbuilding-roguelike.webp\" alt=\"Deckbuilding roguelike made with OhMyGame: playing cards in a gothic battle\" width=\"100%\" /></td>\n  </tr>\n  <tr>\n    <td align=\"center\">Interactive film</td>\n    <td align=\"center\">Island builder</td>\n    <td align=\"center\">Deckbuilding roguelike</td>\n  </tr>\n</table>\n\n### 🎮 Web games\n\n**The best place to start.** 2D and 3D games for the browser, built with\nThree.js, React Three Fiber, or Phaser. The agent follows a complete web game\nworkflow: a design doc, key-screen mockups, production art, a playable core\nloop, and playtesting in the live preview. Games fit any window size, support\ntouch, and publish to a shareable link. The project is a normal web project you\ncan open in any editor.\n\n### 🎬 Interactive stories\n\nInteractive films, visual novels, and story games. Each screen is a free web\npage with its own images, video, and code: a main menu, a case archive, a\ndialogue, a puzzle. You connect them on a graph, and the runtime handles state,\nsaves, music, and navigation. The story plays as its own web page, and the\nruntime is part of the project, so the agent can change anything about how it\nplays. The architecture and authoring model are documented in\n[Playable Nodes](docs/playable-nodes/README.md).\n\n### 🎲 General games: any engine or stack\n\n**General Game** doesn't assume an engine or stack. Start from an idea, bring a\nproject in any engine, or make tools and content for your game. The Game Studio\nplugin coordinates design, production art, implementation, and verification\nacross engines, and the [engine plugins](#-plugins-connect-with-more-game-dev-tools)\nwork in the engine you use. For Godot, start a **Godot** project from the\nsidebar.\n\nWhen the output is a web page, preview, playtesting, and publishing work as\nthey do for Web games; native games use their engine's own tools. See\n[General Game details](docs/runtime.md#agent-game-use). **Making a browser\ngame? Choose Web Game**: it is tuned for the browser.\n\n## How it's built\n\nThe idea that holds this together: one agent drives every part of the studio.\n\n**1 · A full Pi agent with a GUI.** OhMyGame runs\n[Pi](https://www.npmjs.com/package/@earendil-works/pi-coding-agent) with its\nfull toolset and persistent sessions, in a GUI built for watching results\nrather than reading diffs. Close the app, come back, and the project,\nconversation, and context are still there. You describe, review, and steer;\nediting by hand is always possible, but it is not the main path.\n\n**2 · Every workspace is files.** A web game is a normal web project. A design\ndoc is Markdown, and boards and the Asset Canvas share one JSON node model. An\ninteractive story is a node graph on disk. Each comes with an `AGENTS.md` and\nJSON schemas, so the agent edits them the same way it edits code, and the\nvisual editors read and write the same files.\n\n**3 · Games are tool calls.** Playing the game (`game_use`), generating media,\nand checking story nodes are ordinary Pi tools, next to its coding tools. That\nis why the agent can chain them: draft a design, make the art, write the code,\nand play the result in one conversation.\n\n## Any model, your keys\n\nOhMyGame does not lock you into one model or charge per run.\n\n- **Coding models from 40+ providers** through Pi, including Anthropic,\n  OpenAI, Google"
+    },
+    "brief": {
+      "summary": "开源 AI 游戏工作室，在一个应用里做美术、写代码并发布游戏",
+      "problem": "做游戏要在多个工具间来回切换，美术、代码和发布渠道都分散",
+      "highlights": [
+        "可以用画布把设计文档、美术和3D模型放在一起",
+        "可以让智能体写代码，在预览里试玩并尝试修复问题",
+        "可以一键发布成浏览器链接，或接微信小游戏等平台"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "个人创作者",
+        "AI 编程用户"
+      ],
+      "why_trending": "总 Star 约 2053，本周首次收录，近期仍在活跃更新",
+      "caveat": "项目处于 beta，官方提示会有粗糙之处；今日新增 Star 为 0",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "WhiteTowerAI/ohmygame",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "AI一站式游戏制作工作室",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  }
+]
