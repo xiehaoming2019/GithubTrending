@@ -1,0 +1,535 @@
+[
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "shadcn/improve",
+      "url": "https://github.com/shadcn/improve",
+      "description": "Use your most capable model to audit your codebase and write plans for cheaper models to execute.",
+      "language": "",
+      "total_stars": 11178,
+      "forks": 453,
+      "stars_today": 361,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 361
+    },
+    "details": {
+      "topics": [],
+      "license_name": "MIT",
+      "created_at": "2026-06-10T11:06:58Z",
+      "updated_at": "2026-11-12T07:23:49Z",
+      "pushed_at": "2026-09-12T11:29:28Z",
+      "open_issues": 18,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# improve\n\nAn agent skill that audits any codebase and writes implementation plans for other agents to execute.\n\nThe idea: use your most capable model for the part where intelligence compounds — understanding the codebase, judging what's worth doing, writing the spec — and hand execution to cheaper models. The skill never implements anything itself. The plan is the product.\n\n```\nyou          →  /improve                    (expensive model, advises)\nplans/       →  001-fix-n-plus-one.md       (self-contained specs)\nother agent  →  implements, tests, ships    (cheap model, executes)\n```\n\n## Install\n\n```bash\nnpx skills add shadcn/improve\n```\n\nWorks in any agent that supports [Agent Skills](https://agentskills.io) format. The plans it writes are plain markdown, so any agent (or human) can pick them up.\n\n## Usage\n\n```\n/improve                        full audit → prioritized findings → plans\n/improve quick                  cheap pass: hotspots, top findings only\n/improve deep                   exhaustive: every package, every category\n/improve security               focused audit (also: perf, tests, bugs, ...)\n/improve branch                 audit only what the current branch changes\n/improve next                   feature suggestions — where to take the project\n/improve plan <description>     skip the audit, spec one thing\n/improve review-plan <file>     critique and tighten an existing plan\n/improve execute <plan>         dispatch a cheaper executor, review its work\n/improve reconcile              refresh the backlog: verify, unblock, retire\n/improve ... --issues           also publish plans as GitHub issues\n```\n\n## How to use\n\nA typical first run, start to finish:\n\n1. Open your agent in the repo and run `/improve` (or `/improve quick` to keep it cheap).\n2. It maps the repo, audits it, and comes back with a findings table. Reply with the ones you want planned — \"plan 1, 3 and 5\".\n3. Plans land in `plans/` — one file each, plus an index with the recommended order. Read them; they're meant to be reviewed.\n4. Hand a plan to any agent (\"implement plans/001-*.md\"), or let the skill run it: `/improve execute 001`. It dispatches a cheaper model in an isolated worktree, reviews the diff against the plan, and reports back with a verdict. Merging stays up to you.\n5. Next session, run `/improve reconcile` to clean up the backlog: verify what landed, refresh what drifted, unblock what got stuck.\n\nBefore a PR, `/improve branch` does the same thing scoped to just what your branch changes.\n\n## Example\n\nA run against [shadcn/ui](https://github.com/shadcn-ui/ui) came back with findings like:\n\n```\n| # | Finding                                        | Category  | Effort | Confidence |\n|---|------------------------------------------------|-----------|--------|------------|\n| 1 | shadow-config duplicated in search.ts/view.ts, | tech-debt | M      | HIGH       |\n|   | copies already drifted (TODO at search.ts:31)  |           |        |            |\n| 2 | O(n²) icon migration (migrate-icons.ts:168)    | perf      | S      | HIGH       |\n```\n\n…and rejected a few, with reasons recorded so they don't come back next run:\n\n```\n- [SEC-01] https_proxy env var \"SSRF\": by-design — standard proxy convention,\n  every CLI honors it. Not a finding.\n```\n\nPicking #1 produced [this plan](./examples/001-extract-shadow-config-resolution.md) — current code excerpted, exact steps, the repo's own test/lint commands as verification gates, and STOP conditions for when reality doesn't match.\n\n## How it works\n\n**Recon.** Maps the repo: stack, conventions, and the exact build/test/lint commands — these become verification gates in every plan. It also ingests intent and design docs when present — ADRs (`docs/adr/`), PRDs, `CONTEXT.md`, `DESIGN.md`, `PRODUCT.md` — so decided tradeoffs aren't re-flagged as findings, direction suggestions stay grounded in stated product intent, and plans speak the repo's own vocabulary. Composes with any repo that already maintains these docs.\n\n**Audit.** Fans out parallel subagents across nine categories: correctness, security, performance, test coverage, tech debt, dependencies & migrations, DX, docs, and direction (feature suggestions — every one must cite evidence from the repo itself, no generic idea-slop). Every finding carries `file:line` evidence, impact, effort, and confidence.\n\n**Vet.** Subagents over-report, so the advisor re-reads every cited location itself before showing you anything — false positives get dropped, wrong attributions get corrected, rejections get recorded.\n\n**Prioritize.** Findings land in a table ordered by leverage (impact ÷ effort, weighted by confidence). You pick what becomes plans.\n\n**Plan.** One file per selected finding, written into `plans/` with an index, priority order, and dependency graph.\n\n## What makes the plans executable\n\nPlans are written for the weakest plausible executor — a model that has never seen the advisor session and may be much smaller. Three properties carry that:\n\n- **Self-contained.** All context is inlined: exact file paths, current-state code excerpts, repo conventions with an exemplar file, verified commands. No \"as discussed above.\"\n- **Verification gates.** Every step ends with a command and its expected output. Done criteria are machine-checkable. The executor never has to judge whether it succeeded.\n- **Hard boundaries.** Explicit out-of-scope lists, and STOP conditions — \"if X, stop and report\" — instead of letting a small model improvise when reality doesn't match the plan.\n\nEach plan also stamps the git commit it was written against, so executors run a mechanical drift check before touching anything.\n\n## Closing the loop\n\nPlans aren't fire-and-forget:\n\n- **`execute <plan>`** spawns a cheaper executor subagent in an isolated git worktree, hands it the plan, then reviews the result like a tech lead — re-runs every done criterion, checks scope compliance, reads the diff against intent. Verdict: approve (merging stays your call), send back for revision (max 2 rounds), or block and refine the plan.\n- **`reconcile`** processes what happened since: verifies DONE plans still hold, investigates BLOCKED ones and rewrites around the obstacle, refreshes drifted plans, retires findings that got fixed independently.\n- **`--issues`** publishes plans as GitHub issues — same self-contained body, so any agent or human can pick them up where work already lives.\n\n## Hard rules\n\n- Never modifies source code itself. The only writes go to `plans/`; executors edit only in disposable worktrees, and merging is always yours.\n- Never runs commands that mutate your working tree — read, search, and read-only analysis only.\n- Never reproduces secret values. Locations and credential types only, rotation always recommended.\n- Asked to implement? It declines and points at the plan (or offers `execute`).\n\n## License\n\nMIT © shadcn\n"
+    },
+    "brief": {
+      "summary": "用强模型审计代码并写计划，交给便宜模型执行。",
+      "problem": "贵模型直接改代码成本高，执行交给廉价模型。",
+      "highlights": [
+        "可以审计仓库并生成按优先级排序的计划",
+        "可以针对安全、性能或当前分支做专项审计",
+        "可以把计划派给便宜模型执行并审查结果"
+      ],
+      "target_users": [
+        "AI 编程代理用户",
+        "技术负责人",
+        "开源项目维护者"
+      ],
+      "why_trending": "今日新增361星，本周首次收录，强模型规划、弱模型执行。",
+      "caveat": "只生成计划，不直接改代码，合并仍需你决定。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "shadcn/improve",
+      "score": 85,
+      "category": "AI Agent / Skills",
+      "reason": "Agent技能：审计代码并生成计划",
+      "generated_by_ai": true,
+      "velocity_score": 78,
+      "freshness_score": 40,
+      "ranking_score": 68.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "GoogleChrome/modern-web-guidance-src",
+      "url": "https://github.com/GoogleChrome/modern-web-guidance-src",
+      "description": "",
+      "language": "TypeScript",
+      "total_stars": 2018,
+      "forks": 151,
+      "stars_today": 159,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 159
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-27T20:22:24Z",
+      "updated_at": "2026-11-12T07:25:59Z",
+      "pushed_at": "2026-11-12T03:40:40Z",
+      "open_issues": 372,
+      "homepage": "https://goo.gle/modern-web-guidance",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# <img src=\"./.github/img/modern-web-guidance.svg\" alt=\"Modern Web Guidance\" width=\"30\" height=\"30\"> Modern Web Guidance (Source)\n\nThis repo is the source repository for [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance) and includes the code and documentation for authoring, calibrating, and evaluating its contents.\n\n[**Modern Web Guidance**](https://developer.chrome.com/docs/modern-web-guidance) is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead toward solutions that harness the power and capabilities of the modern web platform.\n\nSee [CONTRIBUTING.md](./CONTRIBUTING.md) and [GOVERNANCE.md](./GOVERNANCE.md) for how we work on the project and orientation of the codebase.\n\n---\n\n*Stewarded by the Google Chrome, Microsoft Edge, Mozilla Firefox, and MDN teams, alongside the web development community.*\n\n[Documentation](https://developer.chrome.com/docs/modern-web-guidance) · [Eval Dashboard](https://googlechrome.github.io/modern-web-guidance-src/) · [Source Code](https://github.com/GoogleChrome/modern-web-guidance-src) · [Report an Issue](https://github.com/GoogleChrome/modern-web-guidance-src/issues)\n\n## <img src=\"https://github.com/GoogleChrome/modern-web-guidance/raw/main/.github/img/terminal.svg\" width=\"24\" height=\"24\" style=\"vertical-align: middle; margin-right: 4px;\"> Quickstart\n\n```shell\nnpx modern-web-guidance@latest install\n```\n\nThis command runs an interactive wizard to install Modern Web Guidance. See [Alternative Installation Methods](#-alternative-installation-methods) below.\n\n#### Try it out (without installing)\n\n```shell\n# Search for relevant guides\nnpx modern-web-guidance@latest search \"animate a dialog modal backdrop\"\n\n# Retrieve a guide by ID\nnpx modern-web-guidance@latest retrieve \"animate-to-from-top-layer\"\n\n# Scan a codebase for legacy patterns to modernize\nnpx modern-web-guidance@latest legacy-scan .\n```\n\n## <img src=\"https://github.com/GoogleChrome/modern-web-guidance/raw/main/.github/img/lightbulb.svg\" width=\"24\" height=\"24\" style=\"vertical-align: middle; margin-right: 4px;\"> Why?\n\nCoding agents often default to older patterns because LLM training data contains vast amounts of legacy code. This often leads them to generate bloated JavaScript for tasks that now have native, high-performance web platform solutions.\n\nEven if a model knows an API exists, it often lacks the density of real-world, modern implementation patterns required for production-ready code.\n\n**Modern Web Guidance bridges this gap.** Our skill's CLI returns targeted, expert-curated guidelines directly into your agent's context window, focusing on:\n* **Modern Browser APIs**: Helping models correctly structure APIs they frequently misuse.\n* **Performance & Accessibility**: Preferring platform-level APIs that can be optimized by the browser and include built-in accessibility affordances.\n* **Responsible Fallbacks**: Guiding models to use sensible, lightweight fallbacks instead of heavy polyfills or legacy libraries.\n\n## <img src=\"https://github.com/GoogleChrome/modern-web-guidance/raw/main/.github/img/package.svg\" width=\"24\" height=\"24\" style=\"vertical-align: middle; margin-right: 4px;\"> What's Included?\n\nWe cover the past several years of the web platform's new features, all the way up to the cutting edge. The guides are **designed to be token-efficient**; we run evals enabling us to prune lowest-common-denominator content that models already know.\n\n### Core Disciplines\n\n<table width=\"100%\" style=\"border-collapse: collapse; border: none;\">\n  <tr style=\"border: none;\">\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>🎨 User Experience</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Smooth visual states (View Transitions, entry/exit animations, parallax scroll, CSS <code>scrollbar-color</code>).</p>\n    </td>\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>📐 CSS Layout</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Modern layout systems (container queries, <code>subgrid</code>, modern color spaces like <code>oklch</code>, text-wrap tuning, and line-height trimming).</p>\n    </td>\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>⚡ Performance</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Speed optimizations (instant preloading, Interaction to Next Paint (INP) diagnostics, and scheduling tasks via <code>scheduler.yield</code>).</p>\n    </td>\n  </tr>\n  <tr style=\"border: none;\">\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>📝 Forms & UI</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Native components (Anchor Positioning for tooltips, Popover API, dialogs, <code>:user-invalid</code> validation, and auto-sizing fields).</p>\n    </td>\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>♿ Accessibility</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Important considerations (screen reader and keyboard operability, content navigation and discoverability).</p>\n    </td>\n    <td width=\"33%\" valign=\"top\" style=\"border: none; padding: 6px;\">\n      <h4>🤖 Built-in AI</h4>\n      <p style=\"font-size: 0.9em; line-height: 1.4;\">Local client models (native translation, summarization, and language detection APIs).</p>\n    </td>\n  </tr>\n</table>\n\n_View an example:_ [the `navigation-drawer` guide](https://github.com/GoogleChrome/modern-web-guidance/blob/main/skills/modern-web-guidance/guides/ui-components/navigation-drawer.md).\n\n<!-- INJECT_SKILL_COVERAGE_START -->\n#### The full list\n\n<details>\n<summary><strong>250 modern web features</strong></summary>\n\n### CSS & Layout (140 features)\n\n| | | |\n| :--- | :--- | :--- |\n| [::backdrop](https://web-platform-dx.github.io/web-features-explorer/features/backdrop/) | [content-visibility](https://web-platform-dx.github.io/web-features-explorer/features/content-visibility/) | [progress()](https://web-platform-dx.github.io/web-features-explorer/features/progress-function/) |\n| [::details-content](https://web-platform-dx.github.io/web-features-explorer/features/details-content/) | [contrast-color()](https://web-platform-dx.github.io/web-features-explorer/features/contrast-color/) | [reading-flow](https://web-platform-dx.github.io/web-features-explorer/features/reading-flow/) |\n| [::file-selector-button](https://web-platform-dx.github.io/web-features-explorer/features/file-selector-button/) | [Cross-document view transitions](https://web-platform-dx.github.io/web-features-explorer/features/cross-document-view-transitions/) | [Relative colors](https://web-platform-dx.github.io/web-features-explorer/features/relative-color/) |\n| [::placeholder](https://web-platform-dx.github.io/web-features-explorer/features/placeholder/) | [currentColor](https://web-platform-dx.github.io/web-features-explorer/features/currentcolor/) | [rem](https://web-platform-dx.github.io/web-features-explorer/features/rem/) |\n| [::selection](https://web-platform-dx.github.io/web-features-explorer/features/selection/) | [Custom highlights](https://web-platform-dx.github.io/web-features-explorer/features/highlight/) | [resize (CSS property)](https://web-platform-dx.github.io/web-features-explorer/features/resize/) |\n| [:dir()](https://web-platform-dx.github.io/web-features-explorer/features/dir-pseudo/) | [Custom properties](https://web-platform-dx.github.io/web-features-explorer/features/custom-properties/) | [revert](https://web-platform-dx.github.io/web-features-explorer/features/revert-value/) |\n| [:focus-visible](https://web-platform-dx.github.io/web-features-explorer/features/focus-visible/) | [display animation](https://web-platform-dx.github.io/web-features-explorer/features/display-animation/) | [revert-rule](https://web-platform-dx.github.io/web-features-explorer/features/revert-rule/) |\n| [:focus-within](https://web-platform-dx.github.io/web-features-explorer/features/focus-within/) | [Element-scoped view transitions](https://web-platform-dx.github.io/web-features-explorer/features/view-transitions-element-scoped/) | [Safe area inset environment variables](https://web-platform-dx.github.io/web-features-explorer/features/safe-area-inset/) |\n| [:has()](https://web-platform-dx.github.io/web-features-explorer/features/has/) | [em unit](https://web-platform-dx.github.io/web-features-explorer/features/em-unit/) | [Scroll marker target pseudo-classes](https://web-platform-dx.github.io/web-features-explorer/features/scroll-marker-targets/) |\n| [:host-context()](https://web-platform-dx.github.io/web-features-explorer/features/host-context/) | [field-sizing](https://web-platform-dx.github.io/web-features-explorer/features/field-sizing/) | [Scroll method promises](https://web-platform-dx.github.io/web-features-explorer/features/scroll-promises/) |\n| [:is()](https://web-platform-dx.github.io/web-features-explorer/features/is/) | [filter](https://web-platform-dx.github.io/web-features-explorer/features/filter/) | [Scroll snap](https://web-platform-dx.github.io/web-features-explorer/features/scroll-snap/) |\n| [:modal](https://web-platform-dx.github.io/web-features-explorer/features/modal/) | [flex-wrap: balance](https://web-platform-dx.github.io/web-features-explorer/features/flexbox-flex-wrap-balance/) | [Scroll snap events](https://web-platform-dx.github.io/web-features-explorer/features/scroll-snap-events/) |\n| [:not()](https://web-platform-dx.github.io/web-features-explorer/features/not/) | [Flexbox](https://web-platform-dx.github.io/web-features-explorer/features/flexbox/) | [scroll-axis-lock](https://web-platform-dx.github.io/web-features-explorer/features/scroll-axis-lock/) |\n| [:nth-child() of &lt;selector>](https://web-platform-dx.github.io/web-features-explorer/features/nth-child-of/) | [font-size](https://web-platform-dx.github.io/web-features-explorer/features/font-size/) | [scroll-behavior](https://web-platform-dx.github.io/web-features-explorer/features/scroll-behavior/) |\n| [:placeholder-shown](https://web-platform-dx.github.io/web-features-explorer/features/placeholder-shown/) | [font-size-adjust](https://web-platform-dx.github.io/web-features-explorer/features/font-size-adjust/) | [Scroll-driven animations](https://web-platform-dx.github.io/web-features-explorer/features/scroll-driven-animations/) |\n| [:user-valid and :user-invalid](https://web-platform-dx.github.io/web-features-explorer/features/user-pseudos/) | [Forced colors](https://web-platform-dx.github.io/web-features-explorer/features/forced-colors/) | [scroll-initial-target](https://web-platform-dx.github.io/web-features-explorer/features/scroll-initial-target/) |\n| [:where()](https://web-platform-dx.github.io/web-features-explorer/features/where/) | [Gradient interpolation](https://web-platform-dx.github.io/web-features-explorer/features/gradient-interpolation/) | [scroll-target-group](https://web-platform-dx.github.io/web-features-explorer/features/scroll-target-group/) |\n| [@function](https://web-platform-dx.github.io/web-features-explorer/features/function/) | [Gradients](https://web-platform-dx.github.io/web-features-explorer/features/gradients/) | [scrollbar-color](https://web-platform-dx.github.io/web-features-explorer/features/scrollbar-color/) |\n| [@scope](https://web-platform-dx.github.io/web-features-explorer/features/scope/) | [Grid](https://web-platform-dx.github.io/web-features-explorer/features/grid/) | [scrollbar-gutter](https://web-platform-dx.github.io/web-features-explorer/features/scrollbar-gutter/) |\n| [@starting-style](https://web-platform-dx.github.io/web-features-explorer/features/starting-style/) | [Grid lanes](https://web-platform-dx.github.io/web-features-explorer/features/grid-lanes/) | [scrollbar-width](https://web-platform-dx.github.io/web-features-explorer/features/scrollbar-width/) |\n| [@supports](https://"
+    },
+    "brief": {
+      "summary": "把现代 Web 最佳实践装进编码代理的技能库",
+      "problem": "编码代理常生成旧写法，缺少现代 Web 平台实践",
+      "highlights": [
+        "可以搜索并获取现代 Web 指南",
+        "可以扫描代码库中的过时写法",
+        "可安装到编码代理的上下文中"
+      ],
+      "target_users": [
+        "前端开发者",
+        "编码助手用户",
+        "Web 工具作者"
+      ],
+      "why_trending": "今日新增 159 Star，本周首次收录",
+      "caveat": "项目较新，指南覆盖与评估仍在迭代",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "GoogleChrome/modern-web-guidance-src",
+      "score": 78,
+      "category": "AI Agent / Skills",
+      "reason": "为编码Agent提供Web技能",
+      "generated_by_ai": true,
+      "velocity_score": 67,
+      "freshness_score": 40,
+      "ranking_score": 61.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "livliv-dev/player",
+      "url": "https://github.com/livliv-dev/player",
+      "description": "A lightweight 2.5D character player for the web, with lip sync and webcam face tracking.",
+      "language": "TypeScript",
+      "total_stars": 1498,
+      "forks": 157,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "avatar",
+        "character",
+        "face-tracking",
+        "lip-sync",
+        "pngtuber",
+        "vrm",
+        "vtuber",
+        "webgl2"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-11-04T03:28:33Z",
+      "updated_at": "2026-11-12T05:28:31Z",
+      "pushed_at": "2026-11-12T07:24:15Z",
+      "open_issues": 3,
+      "homepage": "https://livliv-dev.github.io/player/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"media/livliv-player-wordmark-white.svg\">\n    <img alt=\"LivLiv Player\" src=\"media/livliv-player-wordmark-2000.png\" width=\"360\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  A lightweight 2.5D character player for the web, with lip sync and webcam face tracking. A few lines of code put a character in a page, a stream overlay or an app.<br>\n  Comes with 21 featured characters in different styles, ready to use.\n</p>\n\n<p align=\"center\"><b>English</b> · <a href=\"README.zh-CN.md\">中文</a> · <a href=\"README.ja.md\">日本語</a> · <a href=\"README.vi.md\">Tiếng Việt</a></p>\n\n<p align=\"center\"><img src=\"media/demo.gif\" alt=\"Featured characters breathing, blinking, turning their heads and talking\" width=\"720\"></p>\n\n- WebGL2, no dependencies, about 30 KB gzipped for the core\n- Lip sync (microphone, audio, video) and webcam face tracking (MediaPipe), both in the browser, imported only when you need them\n- Plays LivLiv, VRM and PNGTuber characters through the same API\n- 21 featured characters in [`characters/`](characters/), ready to use\n\n## Try it\n\n- **Online**: the examples run on [livliv-dev.github.io/player](https://livliv-dev.github.io/player/).\n- **Here**: `npm install && npm run build`, serve this folder with any static server and open `/example/demo.html`\n  (expressions, actions, microphone, camera; `?model=../characters/<id>/` picks another character).\n  `/example/png.html` and `/example/vrm.html` show a PNGTuber and a VRM.\n- **On livliv.ai**: each character's page there plays it with the same renderer. Start at\n  [livliv.ai/discover](https://livliv.ai/discover).\n\n## Project LivLiv\n\nWe want the art of creating characters to belong to everyone.\n\nWe're open-sourcing our AI tools for character creation, the player and its playback protocol, and a stage\nwhere your characters can meet an audience.\n\nCome say hello on [Discord](https://discord.gg/ac5qF36T2H) and follow us on [X (Twitter)](https://x.com/livliv_ai).\n\n## Use it in your page\n\n```sh\nnpm install @livliv-dev/player\n```\n\n```js\nimport { Player } from '@livliv-dev/player'\n\nconst player = new Player(document.querySelector('canvas'))\nawait player.load('characters/k01/')   // a folder with model.json and textures/, or a .livliv file\n\nplayer.setExpression('smile')          // ids are in player.expressions\nplayer.act('nod')\nplayer.params.mouthOpen = 0.6          // 0..1\n```\n\nLip sync and face tracking:\n\n```js\nimport { createSpeech } from '@livliv-dev/player/voice'\nimport { startFaceTracking } from '@livliv-dev/player/tracking'   // needs @mediapipe/tasks-vision\n\nconst speech = createSpeech(player)\nbutton.onclick = () => { speech.unlock(); speech.say('/reply.mp3') }\n\nawait startFaceTracking(player)\n```\n\nA VRM or a PNGTuber, on the same API:\n\n```js\nimport { BodyPlayer } from '@livliv-dev/player/body'\nimport { VrmBody } from '@livliv-dev/player/vrm'    // needs three and @pixiv/three-vrm\nimport { PngBody } from '@livliv-dev/player/png'\n\nconst vrm = new BodyPlayer(canvasA, new VrmBody())\nawait vrm.load('/avatars/me.vrm')\nconst png = new BodyPlayer(canvasB, new PngBody())\nawait png.load({ closed: 'me-closed.png', open: 'me-open.png' })\n```\n\nThe whole API is in [API.md](API.md): options, params, expressions and actions, drivers, recorded poses and attachment\npoints, VRM and PNGTuber characters, the limits on untrusted files, the model package and the format version. The LivLiv package format (`.livliv`,\n`model.json` v4) is in [FORMAT.md](FORMAT.md), with a JSON Schema in [`schema/`](schema/); packages exported before v4\nare described in [FORMAT-v3.md](FORMAT-v3.md) and still play.\n\n> The npm package is the player alone. The featured characters are in this repository's [`characters/`](characters/): copy\n> the ones you use next to your page, with their licence.\n\n## Featured characters\n\n`characters/` holds 21 characters, ready to `load()`. They carry a small LivLiv mark in the bottom-right corner, which\nthe player draws. They are **not** covered by the Apache License. Most were made by LivLiv: use those free for personal, non-commercial projects with credit\n(\"Characters: LivLiv (livliv.ai)\"); don't sell them, use them commercially or train AI models on them. Nana is\nLivLiv's mascot. The terms are in [characters/LICENSE.md](characters/LICENSE.md).\n\nKujira, Kujira Q and Pen come from other people's work: that licence and that credit don't cover them. Their sources,\ncredits and terms are in [characters/CREDITS.md](characters/CREDITS.md).\n\nEach also has a `cover.webp` (512 x 768, about 50 KB), its first frame without the mark. `player.load(source, { poster })`\nshows it on the canvas until the first frame. To have it before any script has run, put it under the canvas with\n`object-fit: contain` and fade the character in over it, as [example/loading.js](example/loading.js) does.\n\n| id | name | id | name | id | name |\n|---|---|---|---|---|---|\n| `k01` | Sena | `d01` | Yui | `v01` | Aster |\n| `k02` | Elio | `d02` | Leo | `v03` | Mira |\n| `char06` | Aoi | `d03` | Nana | `v04` | Kai |\n| `char07` | Sora | `d03ft` | Nana (refined) | `v05` | Lilith |\n| `s01` | Hana | `p01` | Kujira | `v06` | Usa |\n| `q02` | Mochi | `p02` | Kujira Q | `v07` | Stella |\n| `q03` | Kotaro | `p03` | Pen | `w01` | Max |\n\n## Characters of your own\n\nYou can bring in a PNGTuber's pictures, or a VRM (drawn with three.js); or make a character of your own from one\npicture on [livliv.ai](https://livliv.ai).\n\n- **A PNGTuber**: two pictures (mouth closed, mouth open), and two more with the eyes closed if you have them.\n- **A VRM**: from VRoid Studio or any tool that exports VRM 0.x or 1.0.\n- **A LivLiv model**: make one from a picture on [livliv.ai](https://livliv.ai), then download its model package from\n  the character's page (**Model package**): a `.livliv` file. Pass it to `load()` as it is (a URL, or the `File`\n  someone picked), or unzipped as a folder. Packages on the free plan carry the LivLiv mark, and the player draws it.\n  Full-body characters come in a later version of the player.\n\n## About the player and the characters\n\nLivLiv Player and the `.livliv` format are LivLiv's own work. They use no Live2D software or Cubism SDK and do not\nread `.moc3` or `.cmo3` files. \"Live2D\" is a trademark of Live2D Inc.; LivLiv is not affiliated with it.\n\nMaking a character on livliv.ai uses AI. The player itself only plays: it calls no AI service and reads only the files\nyou point it at. Face tracking runs Google's MediaPipe in the browser, and camera images stay on the device; API.md has\nthe networking details.\n\nThe featured characters in this repository were made on LivLiv too, also with AI; Kujira, Kujira Q and Pen adapt other\npeople's characters ([credits](characters/CREDITS.md)). Refined Nana (`d03ft`) also has\nswinging parts and head-turn keyforms added with LivLiv's own tools.\n\nA package's `meta.author` and `meta.license` record who made it and on what terms: keep them and follow them. When you\nshow a character made with LivLiv in public, say that AI was used to make it, and don't present it as hand-drawn or\nhand-rigged.\n\n## Embed without code\n\n```html\n<iframe src=\"https://livliv.ai/live/k01\" width=\"480\" height=\"640\" allow=\"camera; microphone\"\n  style=\"border:0;background:transparent\"></iframe>\n```\n\nThe same `/live/<id>` page has a transparent background and works as an OBS Browser Source.\\\n(Powered by [https://livliv.ai](https://livliv.ai))\n\n## Develop\n\n```sh\ngit clone https://github.com/livliv-dev/player\ncd player\nnpm install\nnpm run check          # types\nnpm run build          # dist/: index.js, tracking.js, voice.js, body.js, png.js, vrm.js (ES modules), chunks/ and types/\nnpm test               # unit and fuzz tests (Node 22.18 or newer, no browser)\nnpm run test:browser   # every featured character drawn in headless Chromium; once: npx playwright-core install chromium-headless-shell\nnpm run test:engines   # a sample on Firefox and WebKit, where WebGL2 starts (a GPU or a software GL); once: npx playwright-core install firefox webkit\n```\n\n`src/runtime/` is the renderer and motion code livliv.ai runs; this repository is published from it. See\n[CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).\n\n## Browser support\n\nWebGL2 and ES2023: Chrome / Edge 97+, Firefox 104+, Safari 15.4+. Tested on current desktop browsers, not yet on phones.\n\n## License\n\nThe code is under the [Apache License 2.0](LICENSE) (see also [NOTICE](NOTICE)). The featured characters have their\nown licence, [characters/LICENSE.md](characters/LICENSE.md). Neither licence covers the LivLiv name and logos.\n\n## Thanks\n\nThanks to 上善无形, ZipZipPipe and 贱兔死顺盖, whose characters Kujira, Kujira Q and Pen are based on: see [characters/CREDITS.md](characters/CREDITS.md).\n"
+    },
+    "brief": {
+      "summary": "轻量网页 2.5D 角色播放器，带口型同步与摄像头表情追踪",
+      "problem": "想在网页里放一个会说话、会看镜头的虚拟角色，通常要搭很重的方案",
+      "highlights": [
+        "可以用几行代码把角色放进网页或直播叠加层",
+        "可以让角色跟着麦克风或音频对口型",
+        "可以接入 VRM 与 PNGTuber 形象，共用同一套 API"
+      ],
+      "target_users": [
+        "前端开发者",
+        "VTuber 主播",
+        "互动网页作者"
+      ],
+      "why_trending": "本周首次收录，约 1500 Star，Apache-2.0 开源，资料完整",
+      "caveat": "内置 21 个角色不在 Apache 许可内，商用需看清条款",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "livliv-dev/player",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "2.5D虚拟形象播放器，含口型同步",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 62.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "Sunghwan0112/spritecast",
+      "url": "https://github.com/Sunghwan0112/spritecast",
+      "description": "Claude Code plugin: game sprites at your game's exact camera angle, drawn in your art style - props, 8-direction walking characters, characters seated on your own chairs (3D-guided)",
+      "language": "Python",
+      "total_stars": 33,
+      "forks": 2,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "game-assets",
+        "gamedev",
+        "isometric",
+        "sprite-generator",
+        "sprite-sheet",
+        "sprites",
+        "walk-cycle"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-11-03T21:16:10Z",
+      "updated_at": "2026-11-12T06:05:49Z",
+      "pushed_at": "2026-11-12T07:17:20Z",
+      "open_issues": 0,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\"><img src=\"docs/banner.gif\" alt=\"SpriteCast\" width=\"100%\"></h1>\n\n<p align=\"center\"><b>One illustration in. A game character out.</b><br>\nAn isometric sprite generator for Claude Code: 8-direction walks, actions and pixel art<br>\nat your game's camera angle, with a 3D shadow under every frame - and the props to stand beside them.</p>\n\n<p align=\"center\">\n<a href=\"#what-you-can-make\">What you can make</a> ·\n<a href=\"#walking-characters\">Characters</a> ·\n<a href=\"#pixel-art-arcade-size\">Pixel art</a> ·\n<a href=\"#props-and-scenery\">Props</a> ·\n<a href=\"#install\">Install</a> ·\n<a href=\"#faq\">FAQ</a> ·\n<a href=\"README.ko.md\">한국어</a>\n</p>\n\n![GPT alone: one direction, the same leg always in front, no shadow. SpriteCast: the same character walking in eight directions on the game's floor, each with its shadow, and as pixel art](docs/hero.gif)\n\n<p align=\"center\"><i>The same image model, the same character sheet. Left: GPT asked for a walk, as it came out. Right: what the 3D adds.</i></p>\n\n![a ramen street cart as a 3D model from four sides, and the same four sides as pixel-art sprites beside the small pixel character](docs/pixel-props.png)\n\n<p align=\"center\"><i>And things, not only people: any object as pixel art, from any side, at the character's scale. <a href=\"#pixel-art-props-any-object-any-side\">How</a>.</i></p>\n\n```\nclaude plugin marketplace add Sunghwan0112/spritecast\nclaude plugin install spritecast@spritecast\n```\n\nThen just ask: *\"Here's my character (hero.png). Make her walk in 8 directions.\"*\n**To try it free, with no key**, ask Claude to *\"try SpriteCast\"*.\n\nAn image model (OpenAI's, with your own key) does the drawing. The body, the motion, the angle and the shadow come from 3D - so\nevery frame is the same person, and she actually walks.\n\n| | you give | you get | you pay |\n|---|---|---|---|\n| **A walking character** | one illustration | a walk in 8 facings, standing views, a shadow per frame | about $2.2 + 75 Tripo credits |\n| **More actions** | a name, or a Mixamo FBX | run, jump, slash, throw... in 8 facings | about 10 Tripo credits each (an FBX: none) + the drawing |\n| **Pixel art** | a character that walks | pixel sprites about 100 px tall | about $0.075 a sheet (a walk, 8 facings: ~$1.35) |\n| **An animal** | one illustration | a four-legged walk in 8 facings | 30 Tripo credits + the drawing |\n| **Sitting** | a character that walks | seated in 8 facings, placed on your props | about $0.22 |\n| **A prop, or a posed NPC** | a description | a sprite, its shadow, its anchor | about $0.07 (+ $0.08 a further facing) |\n| **A pixel-art prop** | a description | pixel sprites from every side, at the pixel character's scale | about 20 Tripo credits + $0.08 a side |\n\nFree and MIT. You pay OpenAI and Tripo directly; every paid step shows its cost and waits for your OK.\n\n## What you can make\n\n| | |\n|---|---|\n| ![walking in 8 facings](docs/character-walk.gif) | ![running, jumping and slashing with an umbrella](docs/actions.gif) |\n| **[A walk in 8 facings](#walking-characters)** from one illustration, a shadow per frame | **[Actions](#more-actions-run-jump-slash)**: run, jump, slash - or any Mixamo clip |\n| ![pixel-art sprites throwing snowballs five ways on an isometric floor](docs/pixel-throw.gif) | ![an orange tabby in a yellow raincoat walking in 8 facings](docs/animal-walk.gif) |\n| **[Pixel art](#pixel-art-arcade-size)**, about 100 px tall, with things that are held and thrown | **[Four-legged animals](#four-legged-animals)**, with no bought rig |\n| ![the rain girl seated on ten different seats](docs/seats.png) | ![guide → sprite](docs/showcase.png) |\n| **[Sitting](#sitting)** on your props, the armrest in front of her worked out in 3D | **[Props](#props-and-scenery)** at their real size, all on one floor |\n\n## Things to ask for\n\n- *\"Here's my character (hero.png). Make her walk in 8 directions.\"*\n- *\"Add a run and a jump. And a throw - here's a Mixamo clip (Throw.fbx); put a snowball in her hand.\"*\n- *\"Our game is pixel art. Make her walk and throw as pixel sprites, about 96 px tall.\"*\n- *\"Make her sit, and put her on this armchair.\"*\n- *\"Make a shopkeeper NPC, an old man in a brown cardigan, in four directions.\"* (a posed figure: a description is enough)\n- *\"Make an isometric bookshelf, 1.8 m tall, full of books, in the cozy style.\"*\n- *\"Here's a prop from my game (props/barrel.png). Make a matching crate in that style.\"*\n\n## Why it works\n\nAn image model can't keep a body and a pose from one frame to the next. Asked for a walk in words, it gives eight nice drawings\nthat don't walk - the left of the picture at the top, as it came out:\n\n| GPT alone | SpriteCast |\n|---|---|\n| the same leg in front in all eight frames | the legs come from a 3D walk |\n| the arms twitch at random | the arms swing against the legs |\n| the camera at eye level | your game's camera (30° down by default) |\n| no shadow | the 3D body's own shadow, frame by frame |\n\nSo SpriteCast never asks it to. **3D does the moving; the image model only redraws** each rendered frame in your illustration's\nlook. Every drawing is then fitted back onto its render and checked against it: a frame drawn in another pose is flagged and can\nbe redrawn, never squeezed to fit. Props work the same way, with blocks at real size in place of the rig.\n\n**What you get from that:**\n- **The angle and size are right.** The solid props in the examples land on their guide at 95–99 % outline overlap; the plant,\n  drawn loosely on purpose, at 87 %, and the dressed figures at 69–88 % (clothes and hair go past the plain mannequin). Walking\n  characters are scored frame by frame (below). The camera and the scale are fixed, so props made at different times line up on one floor.\n- **Shadows that look right.** One light shared by every prop, so every shadow falls the same way. Solid props cast the 3D\n  guide's own shadow. Posed figures and plants cast a shadow in the drawing's own shape (the hood, the hair, the leaves), placed by\n  the 3D model, so a foot or a pot's base starts its shadow where it stands. Walking characters cast their 3D body's own shadow,\n  frame by frame. Not a painted blob, not a blocky mannequin.\n- **It checks itself.** After drawing, the result is compared with its guide. If the model drew another angle, nothing is squeezed to\n  fit: you get a warning, and Claude suggests a fix before drawing again.\n- **Your game's view and your style.** 2:1 isometric, true isometric, 3/4 top-down, front or any angle; all four facings of one\n  object; the bundled `cozy` style or one picture of your own.\n\n## Walking characters\n\n![an illustration → 3D → drawn frames → an 8-facing walk](docs/character.png)\n\nGive it one illustration of a character (facing front, standing straight, no pose) and you get a walk in 8 facings (8 frames each) and 8 standing views, in that\nillustration's look. An image model can't keep a body and a pose from frame to frame, so the motion comes from 3D:\n1. A turnaround is drawn from the illustration.\n2. [Tripo](https://www.tripo3d.ai) makes the 3D model from it, rigs it and gives it a walk and an idle.\n3. The walk is rendered with the game's camera (free), each frame with the 3D body's own shadow, pressed flat onto the ground\n   along the light.\n4. The image model draws over the renders, 4 frames a call. The front is drawn first and every other facing follows it, so it\n   stays the same person.\n5. Every frame is fitted back onto its render, the head sizes steadied and the edges cleaned. You get strips, a shadow per frame\n   (the feet touch it, a lifted foot casts its own) and an anchor.\n\n```\n$PYTHON skills/spritecast/scripts/charpipe.py turnaround hero.json --yes   # then 3d (model, rig, renders) and draw (then finish, preview by themselves)\n```\nAll eight facings are drawn by default. A design that is the same on both sides can set `\"mirror\": true` to flip the west facings\nfrom the east ones (each keeping its own shadow), about $0.66 less.\n\nCost per character: about $2.2 (OpenAI; ~$1.5 with `\"mirror\": true`) and 75 Tripo credits (~$0.75; an animal 30). Or bring your\nown rigged GLB (`\"rig_glb\"`) and skip to `render`.\n\n<details>\n<summary><b>More: the preview video, Meshy, and the example character with her rig</b></summary>\n\n`preview` also makes `walk-all.mp4` (every facing walking at once, with ffmpeg): the quickest way to see a head that grows and\nshrinks or a frame that jumps. Tripo sometimes sends a model back turned sideways or uncoloured; both are fixed for you.\n`\"modeler\": \"meshy\"` (and `MESHY_API_KEY`) has [Meshy](https://www.meshy.ai) make the model instead (~30 Meshy credits); the rig\nis still Tripo's.\n\nMore options (several outfits, anchoring on the soles) and lessons:\n[reference/character.md](skills/spritecast/reference/character.md). The girl above is in\n[`examples/rain_girl`](examples/rain_girl): her illustration, turnaround, spec, strips, shadows, `character.json` and the sheet.\nShe was made with Tripo alone: about $1.7 of drawing and 85 Tripo credits. Her rigged model is there too (`rig.glb`, with its walk,\nrun, jump and slash, MIT like the rest of the repo), so you can try the whole 3D side with no keys and nothing paid: copy the folder,\nadd `\"draw\": false` to the spec and run `charpipe.py render rain_girl.json` then `finish` - the strips, shadows and anchors come\nfrom the 3D model itself. Her spec also shows what `\"notes\"` is for: the 3D render had dark streaks down the raincoat's sides and\ninside the arms, and one line in `notes` (\"no dark line, stripe or seam on it anywhere... leave them out\") had them drawn out of\nevery frame - a flaw in the model fixed in the drawing, not in 3D.\n\n</details>\n\n### Four-legged animals\n\nTripo's rig for four-legged animals walks badly (no backbone, the shoulders hung off the neck), so an animal gets no bought rig.\nWith `\"kind\": \"animal\"` the 3D model alone (Tripo, ~30 credits) is enough: its skeleton is found from the mesh (the feet, the\nback, the head, the tail, and which way it faces), it walks in a cat's or a dog's gait, and it gets the same drawing, fitting and\n3D shadows as a person.\n\nThe turnaround is drawn on all four legs, each leg clear of the others, the tail out behind; clothes only snug ones (a knit vest, not a\ncape or a scarf - anything hanging moves with the nearest leg). Check the renders before drawing: four legs, the head forward, the tail\nbehind. If Tripo's model grows an extra leg, make it again or use Meshy (`\"modeler\": \"meshy\"`).\n\n![an orange tabby in a yellow raincoat walking in 8 facings](docs/animal-walk.gif)\n\nThe cat is in [`examples/tabby_cat`](examples/tabby_cat): an orange tabby in a little yellow raincoat (the girl's), its design,\nturnaround, spec, strips, shadows and sheet - 30 Tripo credits and about $2.5 of drawing, redraws and design tries included. Its\nframes fit their renders at 0.76-0.97 (north-east and north-west mixed frame by frame with `\"mix\"`, see reference/character.md).\n\n### More actions: run, jump, slash\n\nBeside the walk, a character can run, jump or swing something. List them in the spec, `\"actions\": [\"run\", \"jump\", {\"name\": \"slash\",\n\"hold\": \"umbrella\"}]`: the rig gets those animations from Tripo (about 10 credits each; run, jump, slash, shoot, dive, climb, fall,\nhurt and turn are there), and each is rendered, drawn and finished in 8 facings like the walk, into its own strips with a shadow per\nframe. A slash needs something in the hand: `\"hold\"` builds it from simple shapes and puts it in the right hand, so it moves with\nevery frame (a closed umbrella for now). With your own rigged model, any clip in it can be an action. A held thing is described to the\nimage model part by part - most carefully the end at the hand (the handle, the first stretch of the shaft), which is small and against\nthe body and is where it guesses otherwise.\n\n![the rain girl running, jumping and slashing with her umbrella - the slash seen from the side](docs/actions.gif)\n\n**Most of it comes out in one go.** The rain girl's walk, run and jump"
+    },
+    "brief": {
+      "summary": "Claude Code 插件，从一张插图生成游戏等距精灵动画",
+      "problem": "图像模型画不出连贯走路帧，角度和阴影也不统一",
+      "highlights": [
+        "可以给一张角色插图，生成八方向走路和站立精灵",
+        "可以按你的游戏相机角度和画风做像素小人，约100像素高",
+        "可以让角色坐到自己的椅子上，或生成同尺寸道具"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "像素美术",
+        "小型游戏团队"
+      ],
+      "why_trending": "本周首次收录，33星，用3D驱动保证逐帧一致",
+      "caveat": "需自备 OpenAI 和 Tripo 付费额度，单角色约2.2美元",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Sunghwan0112/spritecast",
+      "score": 85,
+      "category": "游戏开发",
+      "reason": "Claude插件生成游戏精灵图",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "kubai087/kubai-icons",
+      "url": "https://github.com/kubai087/kubai-icons",
+      "description": "An agent skill that draws animated icons in one consistent style, for Claude Code, Codex and other coding agents. Comes with 2,600+ open-source icons for React, Vue and SVG, and a website to browse them.",
+      "language": "JavaScript",
+      "total_stars": 757,
+      "forks": 36,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "animated-icons",
+        "animation",
+        "claude",
+        "claude-skill",
+        "codex",
+        "design-system",
+        "hover-effects",
+        "icon-set",
+        "icons",
+        "react",
+        "svg",
+        "svg-icons",
+        "vue"
+      ],
+      "license_name": "",
+      "created_at": "2026-11-03T09:52:39Z",
+      "updated_at": "2026-11-12T06:54:39Z",
+      "pushed_at": "2026-11-12T07:21:47Z",
+      "open_issues": 0,
+      "homepage": "https://icons.kubai.design",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<p align=\"center\">\n  <img src=\"site/src/app/icon.svg\" width=\"72\" height=\"72\" alt=\"\" />\n</p>\n\n<h1 align=\"center\">Kubai Icons</h1>\n\n<p align=\"center\">\n  <strong>An agent skill that draws animated icons in one consistent style.</strong><br />\n  Plus 2,800+ open-source icons drawn with it, for React, Vue and the web.\n</p>\n\n<p align=\"center\">\n  <a href=\"#install-the-skill\">Install the skill</a> ·\n  <a href=\"https://icons.kubai.design/icons/\">Browse the icons</a> ·\n  <a href=\"#use-the-icons\">Use them in code</a> ·\n  <a href=\"https://icons.kubai.design/docs/\">Docs</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/hover.webp\" alt=\"Sixteen icons opening one after another on hover: a folder opens, an envelope unseals, a calendar turns a page, a lock springs open, a gear turns\" />\n</p>\n\n## What's included\n\n| Part | What you get |\n| --- | --- |\n| **Agent skill** | The rules, engine and self-check that draw every icon in one hand. Give Claude Code, Codex or another coding agent a product, and it draws the icons that product needs. |\n| **Icon library** | 2,800+ icons: nearly 900 objects, plus badged and slashed \"off\" versions. For React, Vue, plain JavaScript, web components and static SVG. MIT licensed. |\n| **Website** | [icons.kubai.design](https://icons.kubai.design/), in 16 languages. Search every icon by name, shape or meaning, recolor it, copy its code or a prompt for your agent, download it as SVG or PNG, and save a collection as a ZIP. |\n\n## Install the skill\n\nCopy this into your agent and send it:\n\n```text\nInstall the Kubai Icons skill for me:\nclone https://github.com/kubai087/kubai-icons into your skills folder as kubai-icons\n(~/.claude/skills in Claude Code, ~/.agents/skills in Codex;\nif it's already there, pull the latest version instead),\nmake sure SKILL.md exists in that folder, and tell me when it's ready.\n```\n\nRestart your agent, and the skill is ready. An agent without skill support can read `SKILL.md` from the cloned folder and follow it.\n\n> [!TIP]\n> The skill asks for careful geometry and several rounds of looking at its own screenshots, so use a capable model that can read images. It was developed and blind-tested with **Claude Opus 5.5**, which we recommend. Other models, such as GPT in Codex, can use the same skill. In Claude Code, run `claude --model claude-opus-5-5`.\n\n<details>\n<summary><strong>Install it yourself</strong></summary>\n\n<br />\n\nClone the repository into your skills folder. In Codex, use `~/.agents/skills` instead.\n\n```bash\ngit clone https://github.com/kubai087/kubai-icons.git ~/.claude/skills/kubai-icons\n```\n\nOr download `kubai-icons-v*.zip` from the [latest release](https://github.com/kubai087/kubai-icons/releases/latest) and unzip it there:\n\n```bash\nunzip kubai-icons-v*.zip -d ~/.claude/skills/\n```\n\nThe agent picks the skill up the next time it starts.\n\nPublishing to a skill marketplace that asks for a version and display names in `SKILL.md`? Upload `kubai-icons-v*-platform.zip` from the same release. It carries those fields at the top of the frontmatter.\n\n</details>\n\n## Ask for icons\n\nDescribe what you need in plain words. The skill triggers on requests about icons, so you don't need to name it.\n\n- \"Read this repository and draw dynamic icons for its main features.\"\n- \"Add a scissors icon and a map icon to this set.\"\n- \"We need an icon for Export that matches the others.\"\n- \"Give me static SVG files I can drop into Figma.\"\n\nThe agent then:\n\n1. Reads the rules and writes one line per feature: an everyday object and what it does on hover (\"a folder opens\", \"a lock springs open\").\n2. Draws each icon after the closest existing one, reusing the engine.\n3. Runs the self-check beside existing icons, compares sizes, outlines, layers and colors, and repeats until every item on the checklist passes.\n\nTo start a set for your own product, the skill copies the engine, gallery and self-check into your project and works there.\n\n<p align=\"center\">\n  <img src=\"assets/skill.webp\" alt=\"Six icons on hover: an alarm clock rings, a notebook opens, a scan line sweeps a QR code, a door opens to an exit arrow, a calculator key presses, a compass needle settles north\" />\n</p>\n\n<p align=\"center\"><sub>Drawn by a fresh Claude session that had nothing but <code>SKILL.md</code> and <code>PROMPT.md</code>. Each blind test closes the gaps it finds in the rules.</sub></p>\n\n## Use the icons\n\n| Package | For |\n| --- | --- |\n| [`kubai-icons-react`](packages/react) | React 18+ and Next.js, server rendering included |\n| [`kubai-icons-vue`](packages/vue) | Vue 3 and Nuxt |\n| [`kubai-icons`](packages/core) | Any page: a framework-free API and the `<kubai-icon>` web component |\n| [`kubai-icons-static`](packages/static) | Standalone SVG files for `<img>`, design tools, native apps and CDNs |\n\n```bash\nnpm i kubai-icons-react\n```\n\n```tsx\nimport { Folder, CalendarCheck } from \"kubai-icons-react\";\n\n// 24px, follows the text color\n<Folder />\n\n// Any CSS color, the soft look, a green badge\n<CalendarCheck size={32} color=\"#22C55E\" variant=\"soft\" badgeColor=\"semantic\" />\n\n// Plays when the button is hovered\n<button data-kubai-trigger>\n  <Folder size={18} trigger=\"parent\" /> Open\n</button>\n```\n\nNo build step? One script tag loads any icon on demand:\n\n```html\n<script type=\"module\" src=\"https://cdn.jsdelivr.net/npm/kubai-icons@0/dist/cdn/element.js\"></script>\n<kubai-icon name=\"folder-plus\" size=\"32\" color=\"#6366F1\"></kubai-icon>\n```\n\n- **Moves like the object.** A folder opens, an envelope unseals, a calendar turns to the next day. Hover, focus, a tap, a parent element or your own state can play it.\n- **One accent, every color.** Gradients, outlines, marks and shadows derive from one color through CSS, so icons follow `currentColor` and recolor without script.\n- **Pay for what you use.** One side-effect-free ES module per icon, pre-rendered markup, server rendering, and a tiny runtime that only runs while an icon moves.\n\nFind an icon and copy its code on the [website](https://icons.kubai.design/icons/). Guides for every package are in the [documentation](https://icons.kubai.design/docs/).\n\nBuilding a native app in Go? [Kubai Icons for MyGo](https://kubai.yldm.ai/) is a community port for [MyGo](https://github.com/egoist/mygo), maintained by [yldm-tech](https://github.com/yldm-tech/mygo-kubai-icons) rather than this project.\n\n## How an icon is built\n\nEvery icon is a back piece, optional white content and a front piece, like a folder holding a sheet of paper. Outlines sit outside the fill, so shapes keep their full size. Every gradient, outline and shadow derives from one accent color, so a single value repaints the whole icon. Each part has exactly two keyframes, rest and hover.\n\n<p align=\"center\">\n  <img src=\"assets/palettes.webp\" alt=\"Eight icons moving through seven palettes: one color per icon, five clear tones, and black\" />\n</p>\n\nThe complete rules are in [`PROMPT.md`](PROMPT.md).\n\n## Reference\n\n<details>\n<summary><strong>What the skill ships</strong></summary>\n\n<br />\n\n| Part | What it does for the model |\n| --- | --- |\n| [`PROMPT.md`](PROMPT.md) | The rules, each one a hard requirement: canvas and keylines, layers, corners and outlines, light, color, marks and motion. |\n| [`src/engine.js`](src/engine.js) | Color derivation, outside outlines, gradients, shadows, interpolation and palettes, already built. New icons reuse them instead of reinventing them. |\n| [`src/icons.js`](src/icons.js) | 66 worked examples. Each new icon starts from the closest one in structure. |\n| [`scripts/check.mjs`](scripts/check.mjs) | A headless self-check: rest, hover, every moment in between, 24px, 28px and every palette. |\n\n`index.html` opens a local gallery of these 66 examples. The full library is on the [website](https://icons.kubai.design/icons/).\n\n</details>\n\n<details>\n<summary><strong>Export static SVG</strong></summary>\n\n<br />\n\nThis exports the skill's own icons, whose names and palettes are in Chinese. For the library, download from the [website](https://icons.kubai.design/icons/) or use [`kubai-icons-static`](packages/static).\n\n```bash\nnode scripts/export.mjs --only 文件夹,日历 --palette 薄荷 --out icons/\n```\n\n| Option | What it does |\n| --- | --- |\n| `--palette` | 彩色 (default), 蓝灰, 青瓷, 薄荷, 薰衣草, 杏色 or 黑色. |\n| `--accent #hex` | Paints every icon in one accent color. |\n| `--state hover` | Exports the end of the hover instead of the rest pose. |\n| `--size 96` | Width and height in pixels. |\n| `--pad 2.5` | Room around the canvas, in icon units, so the shadow isn't cut off. |\n| `--out dir` | Where the files go; `export/` by default. |\n\n</details>\n\n<details>\n<summary><strong>Run the self-check</strong></summary>\n\n<br />\n\nNeeds Node.js 18 or later and Chrome. Everything runs headless.\n\n```bash\nnode scripts/check.mjs --only 剪刀,地图 --with 文件夹,邮件,下载\n```\n\n| Option | What it does |\n| --- | --- |\n| `--only` | Checks only these icons. Without it, the whole set. |\n| `--with` | Adds existing icons beside them for comparison. |\n| `--accent #F59E0B` | Paints every icon in one accent color, to check marks on light accents. |\n| `--scale 3` | Renders every sheet at 3×, to look for seams. |\n| `--out dir` | Writes the screenshots somewhere other than `check-out/`. |\n\n`CHROME` overrides the browser path. The animations in this README come from `node scripts/media.mjs`, which also needs `ffmpeg` and `img2webp`.\n\n</details>\n\n<details>\n<summary><strong>Work on the library and website</strong></summary>\n\n<br />\n\nNeeds Node.js 20 or later; the contact sheets also need Chrome.\n\n```bash\nnpm install\nnpm run build        # every package, from icons/ and badges/\nnpm run validate     # names, metadata and markup of every icon\nnpm test\nnode tools/check.mjs --only folder,mail --with download   # contact sheets in check-out/lib\nnpm run site:dev     # the website\n```\n\nEach icon is one module in [`icons/`](icons); [`docs/authoring.md`](docs/authoring.md) explains the format. The website is a static Next.js export in [`site/`](site).\n\n</details>\n\n## Sponsor\n\n<!-- One sponsor at a time, as a favicon, a linked name and one line of text. -->\nThis spot is open. One product at a time is shown here and in the footer of [icons.kubai.design](https://icons.kubai.design/), with its icon, name and one line of text, for US$150 a month. [Contact me on X](https://x.com/kubai087).\n\n## Contributing\n\n- **Improve the skill.** Report a rule that left you guessing, run a blind test with a fresh session, or fix a script. Rule changes start from an issue.\n- **Add an icon.** Draw it with the skill or by hand as a module in `icons/`, check it with `tools/check.mjs`, and open a pull request. Merged icons are credited to you on the website.\n- **Submit an icon without a pull request.** The [submission page](https://icons.kubai.design/icons/submit/) checks your files and prepares an issue.\n- **Request an icon.** Open an [icon request](https://github.com/kubai087/kubai-icons/issues/new?template=icon-request.yml) with the object and what it should do on hover.\n\nSee [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md). Security issues go through [SECURITY.md](SECURITY.md).\n\n## License\n\n| Part | License | In short |\n| --- | --- | --- |\n| Icons (`icons/`, `badges/`) and the four packages | [MIT](LICENSE-ICONS) | Use, change and redistribute them in any project, commercial or not. |\n| The skill | [Kubai Icons License](LICENSE) | Source-available. See below. |\n| Website (`site/`, `tools/`, `tests/`, `docs/`) | [All rights reserved](LICENSE-SITE) | You may read the source and run it to prepare a contribution, but not copy or host it. |\n\nUnder the Kubai Icons License:\n\n- **Your icons are yours.** Icons you make with the skill belong to you, for any use including commercial, with no credit required.\n- **Ship the engine with them.** You may copy the engine, the gallery, the example icons and the self-check into your own icon set's project, change them, and ship that project, as long as the copyright notice at the top of each file stays.\n- **Use and share the ski"
+    },
+    "brief": {
+      "summary": "给编程代理用的动画图标绘制技能，附2800+开源图标库",
+      "problem": "代理做界面时难产出风格统一的动画图标，自行绘制容易前后不一致",
+      "highlights": [
+        "可以让编码代理按产品功能批量画出同风格图标",
+        "可以在React、Vue或纯HTML里直接调用现成图标",
+        "可以悬停触发文件夹打开、锁弹开等物体化动画"
+      ],
+      "target_users": [
+        "前端开发者",
+        "UI设计师",
+        "用编码代理的团队"
+      ],
+      "why_trending": "本周首次收录，757星，技能与图标库一体化，风格一致",
+      "caveat": "技能需能读图的强模型，效果随模型不同",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "kubai087/kubai-icons",
+      "score": 82,
+      "category": "AI Agent / Skills",
+      "reason": "Agent技能：生成动画图标",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 56.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "nexu-io/openmotion",
+      "url": "https://github.com/nexu-io/openmotion",
+      "description": "The open-source full-stack studio for Opus 5.5 motion video. Reverse engineering for any video. Code video with HTML: recreate, edit and render. BYOA + BYOK · Motion.md · Images, Video, Music & Voice.",
+      "language": "TypeScript",
+      "total_stars": 9558,
+      "forks": 905,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "agentic-ai",
+        "ai-agents",
+        "ai-video",
+        "byok",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "dsh-plugin",
+        "generative-ai",
+        "local-first",
+        "mcp",
+        "motion",
+        "motion-graphics",
+        "multimodal",
+        "openmotion",
+        "reverse-engineering",
+        "video-editing",
+        "video-generation",
+        "workbuddy"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-11T09:40:38Z",
+      "updated_at": "2026-11-12T07:25:34Z",
+      "pushed_at": "2026-11-12T07:23:16Z",
+      "open_issues": 82,
+      "homepage": "https://open-design.ai/motion/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"docs/readme/openmotion-logo.svg\" width=\"420\" alt=\"OpenMotion\"></p>\n\n<p align=\"center\"><strong>Reverse engineering for any video</strong></p>\n\n<p align=\"center\">\n  <a href=\"docs/readme/media/presenter-caption-remake.mp4\"><picture><source media=\"(max-width: 600px)\" srcset=\"docs/readme/brand-hero.mobile.jpg\"><img src=\"docs/readme/brand-hero.jpg\" width=\"100%\" alt=\"Dan Martell’s original beside an OpenMotion remake with Riya. A handwritten keyword sits between two lines of bold captions, with the editable Studio timeline below.\"></picture></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/nexu-io/html-anything\"><img src=\"docs/readme/badges/stars.svg\" alt=\"GitHub Stars · 9.5k (2026-11-09)\"></a>\n  <a href=\"package.json\"><img src=\"docs/readme/badges/node.svg\" alt=\"Node.js 22.18+\"></a>\n  <a href=\"LICENSE\"><img src=\"docs/readme/badges/license.svg\" alt=\"Apache 2.0 license\"></a>\n  <a href=\"https://github.com/nexu-io/open-design\"><img src=\"docs/readme/badges/built-by-opendesign.svg\" alt=\"Built by OpenDesign\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://open-design.ai/motion/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=openmotion&amp;utm_content=readme_en\"><img src=\"docs/readme/badges/website.svg\" alt=\"OpenMotion website\" /></a>\n  <a href=\"https://go.open-design.ai/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=openmotion&amp;utm_content=readme_en\"><img src=\"docs/readme/badges/opendesign-go.svg\" alt=\"OpenDesign Go model subscriptions\" /></a>\n  <a href=\"https://discord.gg/mHAjSMV6gz\"><img src=\"docs/readme/badges/discord.svg\" alt=\"Join the OpenDesign Discord\" /></a>\n  <a href=\"https://x.com/OpenDesignHQ\"><img src=\"docs/readme/badges/x-opendesignhq.svg\" alt=\"OpenDesign on X (@OpenDesignHQ)\" /></a>\n  <a href=\"https://x.com/OpenDesignDevs\"><img src=\"docs/readme/badges/x-opendesigndevs.svg\" alt=\"OpenDesign Developers on X (@OpenDesignDevs)\" /></a>\n  <a href=\"https://www.youtube.com/channel/UChtshixMhvtgBWzoD9R_Qfg\"><img src=\"docs/readme/badges/youtube.svg\" alt=\"OpenDesign on YouTube\" /></a>\n</p>\n\n<p align=\"center\"><a href=\"#agent-wall\">Agents</a> · <a href=\"#showcase\">Use cases &amp; remakes</a> · <a href=\"#features\">Why OpenMotion</a> · <a href=\"#technical-guide\">Setup & architecture</a> · <a href=\"#community\">Community</a></p>\n\n<div align=\"center\">\n\n**English** · [简体中文](docs/README.zh-CN.md) · [日本語](docs/README.ja.md)\n\n</div>\n\n# OpenMotion\n\nOpenMotion is **the first full-stack agentic video generator**. Upload a reference video or paste a social video link to **recreate it with your own brand kit (logo, colors and fonts) and copy**.\n\n- 🎬 **Full-stack video recreation.** Code video with HTML. Your agent breaks down the reference, rebuilds its shots and transitions, and generates missing assets. Edit the timing in Studio and render an MP4 from the same project.\n- 🔑 **BYOA — Bring Your Own Agent. BYOK — Bring Your Own Keys.** OpenMotion is free and open source. Recreate videos in [your local agent](#agent-wall) and use your own API keys at every layer.\n- 🧩 OpenMotion introduces **Motion.md**, a Markdown format for shot order, timing and transitions. Use it to share how a brand film works, shot by shot.\n- 🎛️ **Images, video, music and voice.** Generate artwork with Nano Banana 2, add a shot with Seedance 2.0, score it with Suno v4 and narrate it with Kokoro. [Explore all seven built-in models](#model-wall).\n\n<a id=\"agent-wall\"></a>\n\n**22 local agents** · [Choose your agent](#choose-agent)\n\n<p align=\"center\"><a href=\"#choose-agent\"><picture><source media=\"(max-width: 600px)\" srcset=\"docs/readme/agents/local-agents.mobile.png\"><img src=\"docs/readme/agents/local-agents.png\" width=\"100%\" alt=\"WorkBuddy, Codex CLI, Claude Code, OpenCode, Hermes, Antigravity, Gemini CLI, Grok Build, Kimi CLI, Cursor Agent, Qwen Code, Qoder CLI, GitHub Copilot, Pi, Kiro CLI, Kilo, Mistral Vibe, DeepSeek TUI, Reasonix, Aider, Devin, Trae CLI\"></picture></a></p>\n\n<a id=\"showcase\"></a> <a id=\"what-can-you-make\"></a>\n<a id=\"use-cases-and-remake-examples\"></a>\n\n## 🎞️ Use cases and remake examples\n\n<a id=\"可以用它做什么\"></a>\n\n<a id=\"everyone-can-be-a-creator\"></a> <a id=\"everyone-can-be-an-ai-video-editor-everyone-can-be-a-creator\"></a> <a id=\"人人都是自媒体\"></a> <a id=\"creator-video-gallery\"></a> <a id=\"presenter-motion\"></a>\n\n### AI talking-head edits\n\nEdit around the speaker’s voice, with captions and screen inserts that follow the explanation.\n\n<table width=\"100%\">\n<tr><th colspan=\"3\" align=\"left\">🎓 Teach & explain</th></tr>\n<tr>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"library/skills/presenter-story/assets/careerwithriya-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/careerwithriya.jpg\"><img src=\"docs/readme/people/careerwithriya.gif\" width=\"216\" alt=\"Presenter video reference: 6 essential skills to transform your career\"></picture></a><br>\n<strong>6 essential skills to transform your career</strong><br>\nNumbered points + kinetic keywords<br>\n<sub>Reference · <a href=\"https://www.instagram.com/reel/Ddd57MBszhc/\">@careerwithriya</a></sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/dan-martell-tools-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/dan-martell-tools.jpg\"><img src=\"docs/readme/people/dan-martell-tools.gif\" width=\"216\" alt=\"Presenter video reference: What's the best AI tool right now?\"></picture></a><br>\n<strong>What's the best AI tool right now?</strong><br>\nPresenter + floating tool cards<br>\n<sub>Reference · <a href=\"https://www.youtube.com/shorts/mk1zJd9Rm4c\">Dan Martell</a></sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/harpercarrollai-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/harpercarrollai.jpg\"><img src=\"docs/readme/people/harpercarrollai.gif\" width=\"216\" alt=\"Presenter video reference: 10 Days of AI Basics, Day 1\"></picture></a><br>\n<strong>10 Days of AI Basics, Day 1</strong><br>\nA personal lesson + readable captions<br>\n<sub>Reference · <a href=\"https://www.instagram.com/reel/C4eNPF3PdpG/\">@harpercarrollai</a></sub>\n</td>\n</tr>\n<tr><th colspan=\"3\" align=\"left\">🖥️ Show the workflow</th></tr>\n<tr>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"library/skills/presenter-story/assets/ali-abdaal-workflow-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/ali-abdaal-workflow.jpg\"><img src=\"docs/readme/people/ali-abdaal-workflow.gif\" width=\"216\" alt=\"Presenter video reference: 5 tools I use every day\"></picture></a><br>\n<strong>5 tools I use every day</strong><br>\nDesk-side story + workflow inserts<br>\n<sub>Reference · Ali Abdaal</sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"library/skills/presenter-story/assets/john-tagudin-capso-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/john-tagudin-capso.jpg\"><img src=\"docs/readme/people/john-tagudin-capso.gif\" width=\"216\" alt=\"Presenter video reference: Tool demo with callouts\"></picture></a><br>\n<strong>Tool demo with callouts</strong><br>\nPresenter + screens + callouts<br>\n<sub>Reference · <a href=\"https://www.tiktok.com/@john.tagudin/video/7524883942328126728\">@john.tagudin</a></sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/aiwithsachi-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/aiwithsachi.jpg\"><img src=\"docs/readme/people/aiwithsachi.gif\" width=\"216\" alt=\"Presenter video reference: Top 5 plugins to install in Claude\"></picture></a><br>\n<strong>Top 5 plugins to install in Claude</strong><br>\nA spoken list + supporting screenshots<br>\n<sub>Reference · <a href=\"https://www.instagram.com/reel/Dc7G9Pxu_1O/\">@aiwithsachi</a></sub>\n</td>\n</tr>\n<tr><th colspan=\"3\" align=\"left\">🎬 Tell a story, show a product</th></tr>\n<tr>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/khris-sheer-founder-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/khris-sheer-founder.jpg\"><img src=\"docs/readme/people/khris-sheer-founder.gif\" width=\"216\" alt=\"Presenter video reference: The Founder Experiments, Ep. 1\"></picture></a><br>\n<strong>The Founder Experiments, Ep. 1</strong><br>\nFounder diary + everyday B-roll<br>\n<sub>Reference · <a href=\"https://www.tiktok.com/@khris.sheer/video/7491715587895430402\">@khris.sheer</a></sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/ugc-rachelll-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/ugc-rachelll.jpg\"><img src=\"docs/readme/people/ugc-rachelll.gif\" width=\"216\" alt=\"Presenter video reference: AI creator with product\"></picture></a><br>\n<strong>AI creator with product</strong><br>\nProduct story + proof + picture-in-picture<br>\n<sub>Reference · <a href=\"https://www.tiktok.com/@ugc.rachelll/video/7616996050066345246\">@ugc.rachelll</a></sub>\n</td>\n<td width=\"33%\" valign=\"top\" align=\"center\">\n<a href=\"docs/readme/media/kevinstratvert-reference.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/kevinstratvert.jpg\"><img src=\"docs/readme/people/kevinstratvert.gif\" width=\"216\" alt=\"Presenter video reference: Stop Paying for 5 AI Tools\"></picture></a><br>\n<strong>Stop Paying for 5 AI Tools</strong><br>\nProduct tutorial + live demonstration<br>\n<sub>Reference · <a href=\"https://www.youtube.com/shorts/1fA5j5_5TRY\">Kevin Stratvert</a></sub>\n</td>\n</tr>\n<tr><th colspan=\"3\" align=\"left\">Original → external adaptation</th></tr>\n<tr>\n<td colspan=\"1\" width=\"33%\" align=\"center\" valign=\"top\">\n<a href=\"library/skills/presenter-story/assets/careerwithriya-result.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/careerwithriya-comparison.jpg\"><img src=\"docs/readme/people/careerwithriya-comparison.gif\" width=\"576\" alt=\"Original presenter video and upstream remix with different presenter and content\"></picture></a><br>\n<strong>Career advice → video-production explainer</strong><br>\nNumbered ideas and proof cards follow the new presenter’s explanation.<br>\n<sub><a href=\"library/skills/presenter-story/references/presenter-listicle/MOTION_DESIGN.md\">Motion.md</a> · <a href=\"library/skills/presenter-story/SKILL.md\">Skill</a> · <a href=\"library/skills/presenter-story/assets/careerwithriya-reference.mp4\">Original</a> · <a href=\"library/skills/presenter-story/assets/careerwithriya-result.mp4\">Full adaptation</a></sub>\n</td>\n<td colspan=\"1\" width=\"33%\" align=\"center\" valign=\"top\">\n<a href=\"library/skills/presenter-story/assets/ali-abdaal-workflow-result.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/ali-abdaal-workflow-comparison.jpg\"><img src=\"docs/readme/people/ali-abdaal-workflow-comparison.gif\" width=\"576\" alt=\"Original presenter video and upstream remix with different presenter and content\"></picture></a><br>\n<strong>Everyday tools → a design-workspace story</strong><br>\nScreen inserts follow the speaker through a different workflow.<br>\n<sub><a href=\"library/skills/presenter-story/references/workflow-demo/MOTION_DESIGN.md\">Motion.md</a> · <a href=\"library/skills/presenter-story/SKILL.md\">Skill</a> · <a href=\"library/skills/presenter-story/assets/ali-abdaal-workflow-reference.mp4\">Original</a> · <a href=\"library/skills/presenter-story/assets/ali-abdaal-workflow-result.mp4\">Full adaptation</a></sub>\n</td>\n<td colspan=\"1\" width=\"33%\" align=\"center\" valign=\"top\">\n<a href=\"library/skills/presenter-story/assets/john-tagudin-capso-result.mp4\"><picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/people/john-tagudin-capso-comparison.jpg\"><img src=\"docs/readme/people/john-tagudin-capso-comparison.gif\" width=\"576\" alt=\"Original presenter video and upstream remi"
+    },
+    "brief": {
+      "summary": "开源全栈 AI 视频重制工具，用 HTML 代码复刻参考视频",
+      "problem": "想模仿热门短视频的节奏和包装，却没有可编辑的原始工程",
+      "highlights": [
+        "可以上传参考视频，换成自己的品牌元素重制",
+        "可以在 Studio 时间线调整节奏并导出 MP4",
+        "可以用 Motion.md 记录分镜、时长和转场"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "视频剪辑师",
+        "AI 视频开发者"
+      ],
+      "why_trending": "本周首次收录即达 9.5k Star，仓库近期仍在更新",
+      "caveat": "需自备 Agent 与 API Key，模型调用费用自理",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nexu-io/openmotion",
+      "score": 92,
+      "category": "AI 视频",
+      "reason": "AI视频工作室，支持编辑与生成",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 52.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "ChatCut-Inc/agent-plugin",
+      "url": "https://github.com/ChatCut-Inc/agent-plugin",
+      "description": "AI video editor for agents. ChatCut plugin and MCP server for Codex, ChatGPT, Claude Code, Cursor, Grok, Gemini CLI, WorkBuddy, Doubao Work and Qwen Work: edit your own footage by chatting, add captions and subtitles, remove silences and filler words, create motion graphics, and export an editable timeline.",
+      "language": "JavaScript",
+      "total_stars": 1030,
+      "forks": 84,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-video-editor",
+        "captions",
+        "chatgpt",
+        "claude-code",
+        "codex",
+        "codex-plugin",
+        "cursor",
+        "gemini-cli",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "motion-graphics",
+        "music-generation",
+        "subtitles",
+        "text-to-speech",
+        "transcription",
+        "video-editing",
+        "video-editor",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-06-25T09:45:29Z",
+      "updated_at": "2026-11-12T05:56:12Z",
+      "pushed_at": "2026-11-12T07:18:44Z",
+      "open_issues": 13,
+      "homepage": "https://chatcut.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# ChatCut Agent Plugins\n**ChatCut is an AI video editor for agents: an MCP server and plugin that lets Codex, ChatGPT, Claude Code, Cursor, Grok Bot, Gemini CLI, Google Antigravity, Kimi Work, WorkBuddy, Doubao Work and Qwen Work edit your own footage, add captions and subtitles, remove silences and filler words, create motion graphics, generate video, voiceovers and music, and export an editable timeline.**\\\n[Website](https://chatcut.io) · [Setup guide](https://chatcut.io/desktop) · [ChatGPT and Codex](https://chatcut.io/chatgpt-plugin) · [Claude Code](https://chatcut.io/claude-code-plugin) · [Pricing](https://chatcut.io/pricing)\n\n[![ChatCut MCP server on Glama](https://glama.ai/mcp/connectors/io.chatcut/chatcut/badges/score.svg)](https://glama.ai/mcp/connectors/io.chatcut/chatcut)\n\nAI video editing for your agent. The ChatCut Agent Plugins connect Codex, Claude Code, Grok Bot, Cursor, Google Antigravity, Kimi Work, WorkBuddy, Doubao Work and Qwen Work to ChatCut, so you can ask your agent to edit a video, add captions, clean up a talking-head recording, or recreate a viral video with your own footage, and get an editable timeline back.\n\nUnder the hood the plugins import media, change a project timeline, create motion graphics, generate assets, transcribe audio, add captions, export videos, and verify that edits are visible in the editor.\n\n## Quick install\n\n**ChatCut Desktop (recommended).** Paste this into Codex, the ChatGPT desktop app, Claude Code or another local agent. The agent installs ChatCut Desktop, opens sign-in, and connects itself to Desktop's local `chatcut_desktop` MCP server:\n\n```text\nRead ChatCut.io/desktop to install ChatCut\n```\n\nOr run the official installer yourself:\n\n```sh\n# macOS 13 or newer (Apple Silicon or Intel)\ncurl -fsSL https://chatcut.io/install.sh | sh\n```\n\n```powershell\n# Windows 10 or newer (x64)\nirm https://chatcut.io/install.ps1 | iex\n```\n\nIn the ChatGPT or Codex desktop app you can also open **Plugins** in the sidebar, search for **ChatCut**, and select **Install**.\n\nDoubao Work (豆包工作) connects to ChatCut Desktop through a local connector: see [doubao/README.md](./doubao/README.md).\n\nGoogle Antigravity: install the Desktop package, then ask “Install ChatCut on this computer”. It installs and connects ChatCut Desktop only; see [antigravity-desktop/README.md](./antigravity-desktop/README.md).\n\n```sh\nagy plugin install https://github.com/ChatCut-Inc/agent-plugin/tree/main/antigravity-desktop\n```\n\n**Hosted Web plugin.** Use this for existing ChatCut Web projects or Web-only use.\n\nClaude Code (`claude mcp login` needs Claude Code 2.1.210 or newer; [full guide](https://chatcut.io/web-plugin/claude)):\n\n```sh\nclaude plugin marketplace add https://github.com/ChatCut-Inc/agent-plugin.git#main\nclaude plugin install chatcut@chatcut-inc\nclaude mcp login plugin:chatcut:chatcut\n```\n\nCodex CLI (in the Codex desktop app, use its bundled Codex CLI; [full guide](https://chatcut.io/web-plugin/chatgpt)):\n\n```sh\ncodex plugin marketplace add https://github.com/ChatCut-Inc/agent-plugin.git --ref main\ncodex plugin marketplace list   # note the marketplace name\ncodex plugin add chatcut@<marketplace>\ncodex mcp login chatcut\n```\n\nGemini CLI:\n\n```sh\ngemini extensions install https://github.com/ChatCut-Inc/agent-plugin\n```\n\nGrok Bot: see [grok/README.md](./grok/README.md). Cursor: see [cursor/README.md](./cursor/README.md). Antigravity Web: see [antigravity/README.md](./antigravity/README.md). Kimi Work: see [kimi/README.md](./kimi/README.md). WorkBuddy: see [workbuddy/README.md](./workbuddy/README.md). Qwen Work (千问办公): see [qwen/README.md](./qwen/README.md).\n\nOther MCP clients that support remote servers with OAuth can connect to `https://api.chatcut.io/api/external-mcp/mcp` and sign in with a ChatCut account.\n\n## What you can make\n\nChatCut edits your own footage and generates new media, and the result is an editable timeline. Items marked *(Desktop)* need ChatCut Desktop. Generation uses ChatCut credits, and the agent asks before spending them.\n\n**Editing**\n\n- Talking-head cleanup: remove silences, filler words, repeated takes and stumbles, and tighten the pacing.\n- Text-based editing: edit the video by editing its transcript.\n- Highlight clips and short cuts from long interviews, podcasts and lectures.\n- Multicam sync: line up camera angles and separate audio recordings, then cut to whoever is speaking.\n- Beat-synced cuts and automatic scene-cut detection *(Desktop)*.\n- B-roll, background music, markers and multiple timeline versions, including vertical 9:16 cuts for TikTok, Instagram Reels and YouTube Shorts.\n- Scene-by-scene video analysis, and checks that each edit is visible in the editor.\n\n**Captions and subtitles**\n\n- Word-timed transcripts and subtitles, including Chinese.\n- Animated caption styles, and custom kinetic typography *(Desktop)*.\n- Subtitle translation, and SRT or TXT subtitle files.\n\n**Voice, music and sound**\n\n- Text-to-speech voiceovers, and voice clones with the speaker's consent.\n- Music generation, instrumental or with vocals.\n- Sound effects.\n- Speech cleanup: remove background noise, hum and room echo.\n- Short crossfades that smooth the audio at every cut.\n- Audio effects such as EQ, filters, delay and reverb *(Desktop)*.\n\n**Generation**\n\n- AI video from text, images or reference frames, with models such as Seedance and Kling.\n- AI images, thumbnails and covers, with models such as GPT Image and Nano Banana.\n- Talking-photo presenter videos (digital human / AI avatar).\n- Lip sync for existing footage.\n- Video translation and dubbing into other languages, with or without lip sync.\n- Viral video remakes that keep a reference video's motion and timing with your own person or product *(Desktop)*.\n- Batches of up to 50 image, video, voice, music and sound jobs in one step *(Desktop)*.\n\n**Motion graphics and design**\n\n- Motion graphics: title cards, lower thirds, animated overlays and full-frame animations.\n- Motion graphic templates: apply published ones, or save your own for reuse in other projects.\n- Design styles that keep a brand's colors, fonts and logos consistent across captions and graphics.\n- Google Fonts and bundled Chinese fonts.\n\n**Effects and look**\n\n- Transitions, visual effects and custom shaders.\n- Color grading, LUTs, masks and background removal *(Desktop)*.\n- Beauty and body retouch *(Desktop)*.\n\n**Media in**\n\n- Stock video, photos, music and sound effects from Pexels, Pixabay, Unsplash and Freesound.\n- Product details, brand assets and screenshots collected from a web page.\n- Videos imported from a link *(Desktop)*.\n- Screen recordings with click and cursor data for demo videos *(Desktop)*.\n- Dropbox for importing media and X for posting finished videos *(Desktop)*. Google Drive, YouTube, TikTok and Instagram connectors open as each platform approves them.\n\n**Saved across projects**\n\n- Characters: people you feature again, with photos, a description and a voice, for consistent generated shots and presenter videos *(Desktop)*.\n- Products: photos, selling points, price and specs for product ads, so scripts stick to what you saved *(Desktop)*.\n- Memory of your preferences, and Workflow Skills that save a working editing process for reuse.\n\n**Writing and planning** *(Desktop)*\n\n- Screenplays and scripts with scene outlines, production breakdowns and shot lists.\n- Scripts export to Final Draft (FDX), Fountain, PDF or Word, and shot lists to CSV or HTML.\n\n**Export and handoff**\n\n- MP4 video, MP3, WAV, FLAC or AAC audio, and PNG stills.\n- Premiere Pro and DaVinci Resolve XML.\n- 剪映专业版 (Jianying Pro) and CapCut drafts, transparent ProRes 4444 motion graphics, 4K and HDR video, and Markdown, PDF or Word documents *(Desktop)*.\n\n**Video types:** talking-head videos, podcasts and interviews, tutorials and lectures, product demos and app promos, UGC-style product ads, short-form videos, viral video remakes, presenter and avatar videos, screen-recorded demos *(Desktop)*, multicam shoots, music videos cut to the beat *(Desktop)* and translated videos.\n\n## Install ChatCut Desktop (recommended)\n\nAsk your agent to read the complete [ChatCut Desktop setup guide](https://chatcut.io/desktop) using `curl -fsSL https://chatcut.io/desktop` (`curl.exe` on Windows), then install ChatCut and connect the current agent. The official macOS and Windows installers do not need Node.js or npm. Desktop owns its local tools and Skills. Run setup on a supported macOS or Windows computer with a graphical desktop. Linux and remote agents without access to that computer cannot install Desktop there; continue in a local agent on the supported computer.\n\nTo recreate a reference video with your person or product while retaining its motion and timing, use Desktop’s bundled `video-gen` Skill and `submit_video_remake`. See the [video recreation guide](https://chatcut.io/viralvideocloner). Quotes use current account access and require approval before spending credits.\n\nThe hosted packages below remain available for existing Web projects and explicit Web-only use. Web projects and original media remain separate and are not automatically migrated. Connecting Desktop to the same agent may disable or replace its conflicting hosted connection; do not promise that both connections stay active.\n\n## What Is Included\n\n- `codex/` - the Codex plugin package.\n- `claude/` - the Claude Code plugin package.\n- `grok/` - the Grok Bot plugin package (hidden from Cursor).\n- `cursor/` - the Cursor plugin package (hidden from Grok Bot); its skills and assets symlink to `grok/`.\n- `antigravity-desktop/` - the Google Antigravity Desktop-only package: one Skill that installs ChatCut Desktop and connects `chatcut_desktop`, with no MCP server of its own; see [its README](./antigravity-desktop/README.md).\n- `antigravity/` - the Google Antigravity hosted Web plugin package.\n- `antigravity/plugin.json` - Antigravity plugin metadata.\n- `antigravity/mcp_config.json` - Antigravity MCP server configuration.\n- `kimi/` - the Kimi Work plugin package, with mandatory basics, core craft skills, and in-app browser adapters; see [its package and migration guide](./kimi/README.md).\n- `workbuddy/` - the WorkBuddy expert package for the hosted Web plugin; see [its README](./workbuddy/README.md).\n- `doubao/` - the Doubao Work (豆包工作) Skill package for ChatCut Desktop; see [its README](./doubao/README.md).\n- `qwen/` - the Qwen Work (千问办公) expert kit for the hosted Web plugin; see [its README](./qwen/README.md).\n- `chatcut-desktop-codex-plugin/` - the store-facing, skill-only package that\n  helps Codex install and connect the signed ChatCut Desktop app.\n- `codex-store/` - builds the OpenAI plugin directory ZIP from `codex/`; see\n  [its README](./codex-store/README.md).\n- `codex/.codex-plugin/plugin.json` - Codex plugin metadata.\n- `claude/.claude-plugin/plugin.json` - Claude Code plugin metadata.\n- `grok/.cursor-plugin/plugin.json` and `cursor/.cursor-plugin/plugin.json` - Grok Bot and Cursor plugin metadata, both listed in `.cursor-plugin/marketplace.json`.\n- `gemini-extension.json` - Gemini CLI extension manifest (hosted MCP only; install with `gemini extensions install https://github.com/ChatCut-Inc/agent-plugin`).\n- `codex/.mcp.json` - Codex MCP server configuration.\n- `codex/skills/` - host adapters and canonical shared craft skills for this repository.\n- Other packages use relative symlinks for identical skills, references, helper scripts, licenses and assets; host-specific files stay separate. All targets are inside this repository, not another checkout.\n- `codex/assets/` - canonical plugin icons and brand assets.\n\nClone the complete repository with symlink support. When distributing a standalone package, dereference its symlinks so the bundle contains its shared resources (`codex-store/build.mjs` does this for the OpenAI directory ZIP). Live installation of each host's package still needs host-specific verification.\n\n## Requirements\n\n- A ChatCut account.\n- Codex with plugin support, Claude Code 2.x (CLI"
+    },
+    "brief": {
+      "summary": "ChatCut插件让AI代理通过聊天剪辑视频",
+      "problem": "代理只能建议剪辑，不能直接操作视频项目",
+      "highlights": [
+        "可以聊天清理口播中的静音和口癖",
+        "可以给视频加逐词字幕并翻译",
+        "可以导出可编辑时间线到剪辑软件"
+      ],
+      "target_users": [
+        "视频创作者",
+        "口播/播客团队",
+        "AI代理开发者"
+      ],
+      "why_trending": "本周首次收录，总星1030，支持多代理",
+      "caveat": "部分功能需桌面版，生成会消耗积分",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ChatCut-Inc/agent-plugin",
+      "score": 90,
+      "category": "视频剪辑",
+      "reason": "AI视频剪辑Agent插件，支持字幕",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "Tencent/libpag",
+      "url": "https://github.com/Tencent/libpag",
+      "description": "The official rendering library for PAG (Portable Animated Graphics) files that renders After Effects animations natively across multiple platforms.",
+      "language": "HTML",
+      "total_stars": 5819,
+      "forks": 532,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "after-effects",
+        "animation",
+        "keyframes",
+        "libpag",
+        "pag"
+      ],
+      "license_name": "",
+      "created_at": "2020-09-22T04:32:20Z",
+      "updated_at": "2026-11-12T06:56:34Z",
+      "pushed_at": "2026-11-12T07:25:46Z",
+      "open_issues": 152,
+      "homepage": "https://pag.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<img src=\"resources/readme/logo.png\" alt=\"PAG Logo\" width=\"553\"/>\n\n[![license](https://img.shields.io/badge/license-Apache%202-blue)](https://github.com/Tencent/libpag/blob/master/LICENSE.txt) \n[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/libpag/pulls) \n[![codecov](https://codecov.io/gh/Tencent/libpag/branch/main/graph/badge.svg)](https://codecov.io/gh/Tencent/libpag)\n[![autotest](https://github.com/Tencent/libpag/actions/workflows/autotest.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/autotest.yml)\n[![build](https://github.com/Tencent/libpag/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Tencent/libpag/actions/workflows/build.yml)\n[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Tencent/libpag)](https://github.com/Tencent/libpag/releases)\n\n\n[![Cloud Studio](https://cs-res.codehub.cn/common/assets/icon-badge.svg)](https://cloudstudio.net/a/20987965736472576?channel=share&sharetype=Markdown)\n\nEnglish | [简体中文](./README.zh_CN.md) | [Homepage](https://pag.io)\n\n## Introduction\n\nlibpag is a real-time rendering library for PAG (Portable Animated Graphics) files, capable of \nrendering both vector-based and raster-based animations across various platforms, including iOS, \nAndroid, OpenHarmony, macOS, Windows, Linux, and the Web.\n\nPAG is an open-source file format designed for recording animations. You can create and export PAG \nfiles from Adobe After Effects using the PAGExporter plugin and preview them in the PAGViewer app, \nboth available on macOS and Windows.\n\nPAG is widely used in major Tencent apps like WeChat, Mobile QQ, Honor of Kings, Tencent Video, and \nQQ Music, as well as in thousands of third-party apps, reaching hundreds of millions of users.\n\n## Advantages\n\n- **Highly efficient file format**\n\n<img src=\"resources/readme/intro_1.png\" alt=\"intro_1\" width=\"282\"/>\n\nBenefiting from its highly efficient binary format, PAG files decode 10 times faster than JSON files \nand are about 50% smaller in file size for the same animations. Designers can also easily include \nbeautiful animations with bitmaps or audiovisual media in a single file without needing additional \nattachments.\n\n- **All AE features supported**\n\n<img src=\"resources/readme/intro_2.png\" alt=\"intro_2\" width=\"282\"/>\n\nWhile other solutions may only support exporting limited vector-based AE features, PAG combines \nvector-based and raster-based exporting techniques to support all AE animations in a single file. \nThis means third-party plugin effects in AE can also be exported.\n\n- **Measurable performance**\n\n<img src=\"resources/readme/intro_4.png\" alt=\"intro_4\" width=\"282\"/>\n\nPAG provides a monitoring panel in PAGViewer that displays normalized performance data for PAG files,\nmaking it easy for designers to review and optimize performance without needing developers. With \nnumerous automatic optimization techniques from the PAGExporter plugin, you can create animations \nwith impressive visual effects and excellent performance more efficiently.\n\n\nPAGViewer includes a monitoring panel \n- **Runtime editable animations**\n\n<img src=\"resources/readme/intro_5.png\" alt=\"intro_5\" width=\"282\"/>\n\nWith the flexible editing APIs from the PAG SDK, developers can easily modify the layer structure of\na single PAG file, combine multiple PAG files into one composition, or replace text and images with \nall pre-designed animation effects applied at runtime. This significantly reduces the coding work \nrequired for features like video templates.\n\n## System Requirements\n\n- iOS 15.0+\n- Android 5.0+\n- HarmonyOS Next 5.0.0(12)+\n- macOS 12.0+\n- Windows 7.0+\n- Chrome 69.0+ (Web)\n- Safari 15.0+ (Web)\n\n## Getting Started\n\nWe currently only publish precompiled libraries for iOS, Android, macOS, Web, and OpenHarmony. You \ncan build libraries of other platforms from the source code. The latest releases can be downloaded\nfrom [here](https://github.com/Tencent/libpag/releases).\n\n### iOS Integration\n\nYou can download the framework from the release page or add `libpag` to your project using CocoaPods.\nTo add the pod to your Podfile, include:\n\n```\npod 'libpag'\n```\n\nAnd then run:\n\n```\npod install\n```\n\nAfter installing the CocoaPod, import `libpag` into your project with:\n\n```\n#import <libpag/xxx.h>\n```\n\n### Android Integration\n\nYou can download the AAR from the release page or add `libpag` to your project using Maven:\n\nEdit the `build.gradle` file in the root of your project and add `mavenCentral()` to the `repositories` section:\n\n```\nbuildscript {\n    repositories {\n        mavenCentral()\n    }\n    dependencies {\n        classpath 'com.android.tools.build:gradle:3.2.1'\n    }\n}\n```\n\nAdd libpag to `app/build.gradle` (*`4.0.5.10` should be replaced with the latest release version*):\n\n```\ndependencies {\n    implementation 'com.tencent.tav:libpag:4.0.5.10'\n}\n```\n\nAdd the following rule to your proguard rules to prevent incorrect obfuscation:\n\n```\n  -keep class org.libpag.** {*;}\n  -keep class androidx.exifinterface.** {*;}\n```\n\nFinally, run gradle sync and build your project.\n\n### OpenHarmony Integration\n\nYou can download the HAR file from the [release](https://github.com/Tencent/libpag/releases) page, \nor add `libpag` to your project using OHPM:\n\n```\nohpm install @tencent/libpag\n```\n\nAlternatively, you can add it to your project manually. Add the following lines to `oh-package.json5` \nin your app module.\n\n```\n\"dependencies\": {\n\"@tencent/libpag\": \"^1.0.1\",\n}\n```\n\nThen run:\n\n```\nohpm install\n```\n\n### Web Integration\n\nCopy the following code into an HTML file and open it in your browser:\n\n```html\n<canvas class=\"canvas\" id=\"pag\"></canvas>\n<script src=\"https://unpkg.com/libpag@latest/lib/libpag.min.js\"></script>\n<script>\n  window.libpag.PAGInit().then((PAG) => {\n    const url = 'https://pag.io/file/like.pag';\n    fetch(url)\n      .then((response) => response.blob())\n      .then(async (blob) => {\n        const file = new window.File([blob], url.replace(/(.*\\/)*([^.]+)/i, '$2'));\n        // Do Something.\n      });\n  });\n</script>\n```\nMore information：[Web SDK Guide](./web/README.md)\n\n\n### Example\n\nExplore these projects to learn how to use the libpag APIs:\n\n- [https://github.com/libpag/pag-ios](https://github.com/libpag/pag-ios)\n- [https://github.com/libpag/pag-android](https://github.com/libpag/pag-android)\n- [https://github.com/libpag/pag-web](https://github.com/libpag/pag-web)\n\n### Documentation\n\n- [iOS API Reference](https://pag.io/apis/ios/index.html)\n- [Android API Reference](https://pag.io/apis/android/index.html)\n- [Web API Reference](https://pag.io/apis/web/index.html)\n\nYou can find additional documentation on [pag.io](https://pag.io/docs/home.html)\n\n## Development\n\nWe recommend using the CLion IDE on macOS for development.\n\n### Branch Management\n\n- The `main` branch is our active development branch, containing the latest features and bug fixes.\n- The `release/` branches are our stable milestone branches, fully tested. We periodically create a\n  `release/{version}` branch from the `main` branch. After a `release/{version}` branch is created, \n  only high-priority fixes are checked into it.\n\n**Note: This repository only contains the latest code since PAG 4.0. For legacy PAG 3.0 versions, \nyou can download the precompiled libraries from [here](https://github.com/Tencent/libpag/releases).**\n\n### Build Prerequisites\n\n- Xcode 13.0+\n- GCC 9.0+\n- Visual Studio 2019+\n- NodeJS 14.14.0+\n- Ninja 1.9.0+\n- CMake 3.13.0+\n- QT 6.2.0+\n- NDK 28+ (**28.0.13004108 recommended**)\n- Emscripten 3.1.58+\n\n### Dependency Management\n\nlibpag uses the [depsync](https://github.com/domchen/depsync) tool to manage third-party dependencies.\n\n**For macOS platform：**\n\nRun the script located in the root directory of the project:\n\n```\n./sync_deps.sh\n```\n\nThis script will automatically install the necessary tools and sync all third-party repositories.\n\n**For other platforms：**\n\nFirst, ensure you have the latest version of Node.js installed (you may need to restart your \ncomputer afterward). Then, run the following command to install the depsync tool:\n\n```\nnpm install -g depsync\n```\n\nThen, run `depsync` in the root directory of the project.\n\n```\ndepsync\n```\n\nYou might need to enter your Git account and password during synchronization. Ensure you have \nenabled the `git-credential-store` so that `CMakeList.txt` can automatically trigger synchronization \nnext time.\n\n### Build\n\nAfter synchronization, you can open the project with CLion and build the PAG library.\n\n**For macOS:**\n\nNo additional CLion configuration is needed.\n\n**For Windows:**\n\nFollow these steps to configure CLion correctly:\n\n- Ensure you have installed the **[Desktop development with C++]** and **[Universal Windows Platform development]** components for VS2019.\n- Open the **File->Settings** panel, go to **Build, Execution, Deployment->Toolchains**, and set the toolchain to **Visual Studio** with **amd64 (Recommended)** or **x86** architecture.\n\n**Note: If you encounter issues during the CMake build, update to the latest version of the CMake \ncommand-line tool and try again.**\n\n## Support Us\n\nIf you find libpag helpful, please give us a **Star**. We truly appreciate your support :)\n\n\n[![Star History Chart](https://api.star-history.dera.page/svg?repos=Tencent/libpag&type=Date)](https://star-history.dera.page/#Tencent/libpag&Date)\n\n\n## License\n\nlibpag is licensed under the [Apache Version 2.0 License](./LICENSE.txt)\n\nThe copyright notice pertaining to the Tencent code in this repo was previously in the name of \"THL\nA29 Limited\". That entity has now been de-registered. You should treat all previously distributed\ncopies of the code as if the copyright notice was in the name of \"Tencent\".\n\n## Privacy Policy\n\nPlease refer to the [PAG SDK Personal Information Processing Rules](https://privacy.qq.com/document/preview/01e79d0cc7a2427ba774b88c6beff0fd) when using the libpag SDK.\n\n### Data Collection\n\n- **Binaries built from this repository collect no data.** They contain no network requests or usage reporting, and the bundled privacy manifest (`PrivacyInfo.xcprivacy`) declares no data collection.\n- **Official prebuilt releases** distributed through pag.io and CocoaPods contain an additional anonymous usage statistics module on iOS and Android, which reports the following data to the Tencent Beacon analytics service (`otheve.beacon.qq.com`), at most once per SDK version per month: host app name and bundle identifier, operating system version and device model, GPU version and vendor, and the libpag SDK version. No user IDs, advertising identifiers, or other personal data are collected, and the data is used solely for SDK usage statistics. The privacy manifest bundled in the official releases declares this data collection accordingly.\n\n## Contribution\n\nIf you have any ideas or suggestions to improve libpag, feel free to submit an\n[issue](https://github.com/Tencent/libpag/issues/new/choose) or a [pull request](https://github.com/Tencent/libpag/pulls). \nBefore doing so, please read our [Contributing Guide](./CONTRIBUTING.md).\n\n\n"
+    },
+    "brief": {
+      "summary": "腾讯开源的PAG动画渲染库，跨平台播放AE动画。",
+      "problem": "解决AE动画多端一致播放和运行时编辑难题。",
+      "highlights": [
+        "可以在iOS/Android/Web等平台播放AE导出的PAG动画",
+        "可以运行时替换文本、图片或合并多个PAG文件",
+        "可以用PAGViewer查看性能数据并优化动画"
+      ],
+      "target_users": [
+        "移动端开发者",
+        "动画设计师",
+        "前端工程师"
+      ],
+      "why_trending": "腾讯开源，微信等亿级应用在用，本周首次收录。",
+      "caveat": "需用AE插件导出PAG文件，Web端性能可能弱于原生。",
+      "category": "动画",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Tencent/libpag",
+      "score": 92,
+      "category": "动画",
+      "reason": "AE动画渲染库，跨平台播放",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 20,
+      "ranking_score": 49.0
+    }
+  }
+]
