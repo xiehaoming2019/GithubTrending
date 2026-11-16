@@ -1,0 +1,568 @@
+[
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "NVIDIA/SkillEvaluator",
+      "url": "https://github.com/NVIDIA/SkillEvaluator",
+      "description": "Multi-tier framework for evaluating AI agent skills with quality gates, semantic overlap detection, synthetic evaluation dataset generation, and live agent evaluation that measures how skills affect agent behavior.",
+      "language": "Python",
+      "total_stars": 1955,
+      "forks": 270,
+      "stars_today": 122,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 122
+    },
+    "details": {
+      "topics": [
+        "agent-evaluation",
+        "agent-plugins",
+        "agent-security",
+        "agent-skills",
+        "agentic-ai",
+        "benchmark",
+        "claude-code",
+        "codex",
+        "evaluate",
+        "evaluation",
+        "plugin",
+        "plugin-evaluation",
+        "security-scanner",
+        "skill-eval",
+        "skill-evals",
+        "skill-evaluation",
+        "skill-evaluator",
+        "skills"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-06-24T02:32:26Z",
+      "updated_at": "2026-11-16T06:50:24Z",
+      "pushed_at": "2026-11-16T06:36:38Z",
+      "open_issues": 32,
+      "homepage": "https://docs.nvidia.com/skills/skillevaluator/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# SkillEvaluator\n\n![SkillEvaluator wordmark](https://raw.githubusercontent.com/NVIDIA/SkillEvaluator/ad2815fe78c045db91d230681d32863698da08cf/docs/assets/skillevaluator-wordmark.svg)\n\n[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)\n[![Python](https://img.shields.io/badge/Python-3.12%20%7C%203.13%20%7C%203.14-blue.svg)](https://www.python.org/)\n[![PyPI](https://img.shields.io/pypi/v/skillevaluator.svg?label=PyPI)](https://pypi.org/project/skillevaluator/)\n[![Documentation](https://img.shields.io/badge/Documentation-docs.nvidia.com-blue.svg)](https://docs.nvidia.com/skills/skillevaluator/)\n[![Paper](https://img.shields.io/badge/arXiv-2608.20614-b31b1b.svg)](https://arxiv.org/abs/2608.20614)\n[![NVIDIA Developer Blog](https://img.shields.io/badge/Blog-NVIDIA%20Developer-76B900.svg)](https://developer.nvidia.com/blog/evaluating-ai-agent-skill-performance-with-nvidia-skillevaluator/)\n\n> 📺 **Livestream:** [Ask the Experts: Evaluating Agent Skills](https://www.youtube.com/watch?v=4rI0zATFxYI)\n\nSkillEvaluator checks AI agent skills and measures their effect on task results:\nstart with quality checks, then compare runs with and without a skill.\n\nAgent skills are folders of instructions and supporting files defined by the\n[Agent Skills specification](https://agentskills.io/). SkillEvaluator is part of\nthe [NVIDIA Verified Skills pipeline](https://github.com/NVIDIA/skills).\n\n## Get started\n\nThree ways in, one CLI, same results.\n\n<table>\n<tr>\n<th width=\"33%\">1. Run the CLI directly</th>\n<th width=\"33%\">2. Add it to your repo via CI</th>\n<th width=\"33%\">3. Wire it to your agent</th>\n</tr>\n<tr valign=\"top\">\n<td>\n\nInstall (or `uv tool install`):\n\n```bash\npip install skillevaluator\n```\n\nRun all Tier 1 checks, no API key:\n\n```bash\nskillevaluator validate \\\n  ./my-skill --tiers 1\n```\n\nOr run from a clone: [Quickstart](#quickstart).\n\n</td>\n<td>\n\nCheck changed skills on every pull request. On GitHub, run:\n\n```bash\nskillevaluator ci init\n```\n\nIt opens a setup PR. On GitLab, copy the [CI template](https://github.com/NVIDIA/SkillEvaluator/tree/main/ci/bundles/0.9.0).\n\n</td>\n<td>\n\nAdd the [SkillEvaluator skill](skills/skillevaluator/) to Claude Code, Codex or any skill-aware agent:\n\n```bash\nnpx skills add \\\n  NVIDIA/SkillEvaluator\n```\n\nThen ask: *\"Is my skill any good?\"* No Node.js? [Copy the folder](docs/agent-skill.mdx#install).\n\n</td>\n</tr>\n</table>\n\nGuides: [installation](https://docs.nvidia.com/skills/skillevaluator/installation),\n[CI setup](docs/cli-onboarding.mdx) ([GitHub](docs/github-actions.mdx),\n[GitLab](docs/gitlab-ci.mdx), [report examples](ci/examples/README.md)) and\n[agent skill](docs/agent-skill.mdx).\n\n## Quickstart\n\nBoth paths use bundled `text-analyzer`.\n\n| Start here | Requires | First result |\n| --- | --- | --- |\n| [Run without an LLM](#run-without-an-llm) | Git and uv | A deterministic quality score and findings |\n| [Use NVIDIA Build](#use-nvidia-build) | Git, uv, and a Build API key | Model-backed rubric scores and feedback |\n\nInstall [uv](https://docs.astral.sh/uv/getting-started/installation/) and Git,\nthen get the example:\n\n```bash\ngit clone --depth 1 https://github.com/NVIDIA/SkillEvaluator.git\ncd SkillEvaluator\n```\n\nuv provisions Python 3.13 and dependencies. For standalone installation, see\n[Installation](https://docs.nvidia.com/skills/skillevaluator/installation).\n\n### Run without an LLM\n\n```bash\nuv run --python 3.13 skillevaluator quality-check \\\n  src/skillevaluator/tier3/reference_skills/text-analyzer \\\n  -r cli -r json -o reports/first-quality\n```\n\nNo API key, scanner, GPU or Docker is needed. The example scores **86.2/100 (B)**,\nexits `0` and saves `reports/first-quality/skillevaluator-quality.json`. The\npassing threshold defaults to 70.\n\nThis checks static quality; publication evidence stays `INCOMPLETE`. Security\nneeds scanners; agent impact needs live evaluation. Replace the example path\nwith your skill directory. See the\n[keyless walkthrough](docs/quickstart.mdx#run-without-an-llm).\n\n### Use NVIDIA Build\n\nEligible NVIDIA Developer Program members can use NVIDIA-hosted endpoints for\n**free prototyping**, subject to [access terms and rate limits](https://docs.api.nvidia.com/nim/docs/product).\n\n1. Sign in at [build.nvidia.com](https://build.nvidia.com/) and complete enrollment.\n2. Open a model page, select **Get API Key**, and generate your key.\n3. Set the provider and key in the same terminal, then run the rubric check:\n\n```bash\nexport SKILL_EVAL_LLM_PROVIDER=nv_build\nexport NVIDIA_API_KEY='nvapi-...'\nuv run --python 3.13 --extra llm skillevaluator rubric-eval \\\n  src/skillevaluator/tier3/reference_skills/text-analyzer \\\n  -r cli -r json -o reports/first-build\n```\n\nThe command sends skill documentation to the model and saves feedback in\n`reports/first-build/skillevaluator-rubric.json`. No agent runtime or Docker is\nneeded. Completed evaluations can still fail rubric thresholds.\n\nThe same key supports Tier 2 embeddings and supported Tier 3 agents. See the\n[Build walkthrough](docs/quickstart.mdx#use-nvidia-build) or [provider configuration](docs/configuration.mdx).\n\n## Three-tier overview\n\n![SkillEvaluator three-tier pipeline: Skill → Tier 1 Validation → Tier 2 Deduplication → Tier 3 Live Evaluation → Reports](https://raw.githubusercontent.com/NVIDIA/SkillEvaluator/ad2815fe78c045db91d230681d32863698da08cf/docs/assets/three-tier-overview.svg)\n\nEach tier is independent. Add its extra to your command:\n\n| Tier | Question | Example after setup | Additional setup |\n| --- | --- | --- | --- |\n| Tier 1: Validation | Is the skill safe, well-formed and [harness-compatible](docs/tier1-validation.mdx#the-checks)? | `uv run skillevaluator tier1 ./my-skill --no-llm` | External scanners for full static coverage; a provider and model clients enable LLM checks |\n| Tier 2: Deduplication | Does guidance repeat or overlap? | `uv run --extra tier2 skillevaluator tier2 ./my-skill` | Embeddings and chat; add `--catalog ./skill-catalog.json` for inter-skill comparison |\n| Tier 3: Live Evaluation | Does the skill help the agent? | `uv run --extra tier3 skillevaluator tier3 ./my-skill` | Provider access, a supported agent, and a running sandbox (Docker by default) |\n\nTier 1 fetches pinned, verified SkillSpector and Gitleaks releases when they\nare missing; Semgrep is optional. See [scanners](docs/installation.mdx#system-tools).\n`--no-llm` does not remove scanner requirements; a scanner that cannot run is\n`INCOMPLETE` and exits nonzero.\n[SkillSpector](https://github.com/NVIDIA/SkillSpector) provides specialized skill\nsecurity scanning; [Harbor](https://github.com/harbor-framework/harbor), the\nopen-source agent evaluation framework, powers sandboxed agent runs.\n\nTier 2 reports when inter-skill comparison did not run. Tier 3 autopilot reuses\nsources or creates one skill-grounded case with limited coverage. See\n[tier guides](https://docs.nvidia.com/skills/skillevaluator/).\n\n## Run the combined pipeline\n\nAfter setting up the provider, scanners, and agent sandbox, run all three tiers:\n\n```bash\nuv run --python 3.13 --extra all skillevaluator doctor --env-mode docker\nuv run --python 3.13 --extra all skillevaluator validate ./my-skill\n```\n\n`doctor` checks readiness, not inference success. `validate` runs all tiers with\nautopilot for skills. Use `--tiers 1,2` to skip live evaluation or `--tiers 1` for\nstatic checks. `--no-autopilot` requires an existing source. Other artifact types\nretain their applicable stages.\n\nTier 1 gates `validate`. Tier 2 gates unless `--no-block-on-dedup` is set;\nTier 3 gates only with `--block-on-agent-eval`. Model and managed-sandbox usage\ncan incur charges; see [runtime and cost](docs/tier3-live-evaluation.mdx#plan-for-cost).\n\nStandalone generation needs substantive `evals/EVAL.md` guidance, a `--prompt`\nfile with task requests and outcomes, or matching retained traces. `--force`\nbelow replaces the autopilot starter; `--refine` refines it. Explicit\n`--grounding skill` permits skill-only starters. Review cases; templates omit\nunauthored negatives.\n\n```bash\nuv run --python 3.13 --extra tier3 skillevaluator tier3 create-eval-dataset ./my-skill --full --prompt eval-guidance.md --force\n```\n\n## Run from a source checkout\n\nUse `uv run --python 3.13` with the relevant extra. See\n[Installation](docs/installation.mdx#choosing-extras) for extras and standalone upgrades.\n\n## Research and citation\n\nResources: [paper](https://arxiv.org/abs/2608.20614),\n[PDF](https://arxiv.org/pdf/2608.20614),\n[DOI](https://doi.org/10.48550/arXiv.2608.20614),\n[BibTeX](https://arxiv.org/bibtex/2608.20614), and the\n[NVIDIA Developer blog](https://developer.nvidia.com/blog/evaluating-ai-agent-skill-performance-with-nvidia-skillevaluator/).\nCite the paper and record the SkillEvaluator release or commit; see [CITATION.cff](CITATION.cff).\n\n## Documentation\n\nSee [the documentation](https://docs.nvidia.com/skills/skillevaluator/) for\nsetup, tier guides, reports, CI integration, CLI reference, and\n[performance dashboard](docs/reports.mdx#performance-dashboard).\n\n## Installation and third-party software\n\nFollow the [installation guide](https://docs.nvidia.com/skills/skillevaluator/installation)\nto choose the full installation or a smaller per-tier setup.\n\nThis project will download and install additional third-party open source\nsoftware projects. Review the license terms of these open source projects before\nuse.\n\n## Contributing\n\nRead [CONTRIBUTING.md](CONTRIBUTING.md) and run:\n\n```bash\nmake lint && make test && make build\n```\n\nSee [project governance](GOVERNANCE.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).\n\n## Support\n\nSupport level: **Experimental**. Community-supported, best-effort, with no SLA\nor NVIDIA enterprise support entitlement. Report bugs and feature requests through\n[GitHub Issues](https://github.com/NVIDIA/SkillEvaluator/issues); see\n[SUPPORT.md](SUPPORT.md).\n\n## Security\n\nReport suspected vulnerabilities using the private process in\n[SECURITY.md](SECURITY.md). Do not disclose security issues in a public GitHub\nissue.\n\n## Releases\n\nRelease changes are recorded in [CHANGELOG.md](CHANGELOG.md) and\n[GitHub Releases](https://github.com/NVIDIA/SkillEvaluator/releases).\n\n## License\n\nApache License 2.0 — see [LICENSE](LICENSE), [NOTICE](NOTICE), and\n[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).\n\nCopyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.\n"
+    },
+    "brief": {
+      "summary": "评估 AI 智能体技能质量并测量其对任务结果影响的三层框架",
+      "problem": "技能说明可能不安全、重复或对智能体实际任务没有帮助",
+      "highlights": [
+        "可以跑静态检查，判断技能是否安全、格式合格",
+        "可以检测技能内容重复或语义重叠，避免冗余指导",
+        "可以对比有无技能时的智能体运行结果，看实际效果"
+      ],
+      "target_users": [
+        "AI 技能开发者",
+        "智能体平台团队",
+        "开源项目维护者"
+      ],
+      "why_trending": "今日新增 122 Star，本周首次收录，技能评测受关注",
+      "caveat": "完整体验需 API Key、扫描器和沙箱；仅静态检查不测实际效果",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "NVIDIA/SkillEvaluator",
+      "score": 86,
+      "category": "Harness / Jev",
+      "reason": "Agent Skill评估框架，含质量门禁与效果度量",
+      "generated_by_ai": true,
+      "velocity_score": 63,
+      "freshness_score": 40,
+      "ranking_score": 64.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "google-labs-code/stitch-skills",
+      "url": "https://github.com/google-labs-code/stitch-skills",
+      "description": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.",
+      "language": "TypeScript",
+      "total_stars": 9464,
+      "forks": 1171,
+      "stars_today": 247,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 247
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-16T17:17:17Z",
+      "updated_at": "2026-11-16T06:49:20Z",
+      "pushed_at": "2026-08-17T20:20:23Z",
+      "open_issues": 19,
+      "homepage": "https://stitch.withgoogle.com/docs/mcp/setup",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Stitch Design Skills\n\nA collection of agent skills and plugins for [Google Stitch](https://stitch.withgoogle.com), following the [Agent Skills](https://agentskills.io) open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install).\n\n## Quick Start\n\n### 1. Install Plugins (Recommended)\nThe fastest way to set up the full Stitch plugin suite globally.\n\n#### Codex\n\nAdd the Stitch Skills marketplace, then install the plugins you need.\n\n<details open>\n<summary><strong>Via CLI</strong> (recommended)</summary>\n\n```bash\ncodex plugin marketplace add google-labs-code/stitch-skills --ref main \\\n  --sparse .agents/plugins \\\n  --sparse plugins/stitch-design \\\n  --sparse plugins/stitch-build \\\n  --sparse plugins/stitch-utilities\n```\n\n> [!TIP]\n> The `--sparse` flags are optional — they limit the checkout to only the\n> listed paths for a faster clone. Omit them to pull the entire repository.\n\n</details>\n\n<details>\n<summary><strong>Via the Codex UI</strong></summary>\n\nNavigate to **Settings → Plugin Marketplaces → Add** and fill in:\n\n| Field | Value |\n|---|---|\n| **Source** | `https://github.com/google-labs-code/stitch-skills` |\n| **Git ref** | `main` |\n| **Sparse paths** | *(optional)* `.agents/plugins`, `plugins/stitch-design`, `plugins/stitch-build`, `plugins/stitch-utilities` |\n\n</details>\n\nOnce the marketplace is registered, install any combination of:\n\n- **`stitch-design`** — design-focused skills\n- **`stitch-build`** — build and component skills\n- **`stitch-utilities`** — utility and helper skills\n\n#### Claude Code & Cursor\n\n```bash\n# Claude Code — installs into the current project\nnpx plugins add google-labs-code/stitch-skills --scope project --target claude-code\n```\n\n```bash\n# Cursor — installs into the current workspace\nnpx plugins add google-labs-code/stitch-skills --scope workspace --target cursor\n```\n\n#### OpenCode\n\nOpenCode does **not** use `npx plugins` / `npx skills` or the Codex/Claude marketplace layout.\nInstall skills and the Stitch MCP server manually:\n\n**1. Skills** — copy the skill folders you need into a discoverable path:\n\n```bash\n# Project-local (recommended)\nmkdir -p .opencode/skills\ncp -R plugins/stitch-design/skills/generate-design .opencode/skills/generate-design\n# repeat for other skills under plugins/*/skills/\n```\n\nOpenCode also discovers `.claude/skills/` and `.agents/skills/` (see [OpenCode skills docs](https://opencode.ai/docs/skills/)).\n\n> **Naming:** OpenCode requires skill `name` frontmatter to be lowercase kebab-case and match the directory name. Skills that use `stitch::…` names (or other non-kebab forms) need the `name` field and folder renamed before OpenCode will load them. Extra frontmatter such as `allowed-tools` is ignored.\n\n**2. Stitch MCP** — add a remote MCP entry in project `opencode.json` or `~/.config/opencode/opencode.json` after completing the [Stitch MCP setup](https://stitch.withgoogle.com/docs/mcp/setup/):\n\n```json\n{\n  \"$schema\": \"https://opencode.ai/config.json\",\n  \"mcp\": {\n    \"stitch\": {\n      \"type\": \"remote\",\n      \"url\": \"YOUR_STITCH_MCP_URL\",\n      \"enabled\": true\n    }\n  }\n}\n```\n\nReplace `YOUR_STITCH_MCP_URL` with the endpoint from the Stitch MCP setup flow (credentials/env vars from that guide still apply).\n\nTool names inside skill instructions may differ from OpenCode builtins (`webfetch` / `bash` instead of `web_fetch` / `run_command`). Prefer the OpenCode tool names when adapting a skill for OpenCode.\n\n### 2. Install Skills Selectively\nChoose only the specific skills you need.\n\n> [!IMPORTANT]\n> Stitch Design Skills often have inter-dependencies. If you choose to install skills selectively, ensure you include all required dependencies.\n\n```bash\nnpx skills add google-labs-code/stitch-skills\n```\n\nYou can run the following commands to see the help documentation for plugins and skills:\n\n```bash\nnpx plugins --help\n\nnpx skills --help\n```\n\n## Prerequisites\n\nThese skills require the **Stitch MCP** server to be configured and running in your agent's environment. Make sure you have followed the [Stitch MCP Setup Instructions](https://stitch.withgoogle.com/docs/mcp/setup/) to register the server and set up appropriate environment variables and credentials.\n\n> **Docs navigation:** If a link on [stitch.withgoogle.com/docs](https://stitch.withgoogle.com/docs/) redirects incorrectly, open the target path under the same host (e.g. `https://stitch.withgoogle.com/docs/learn/device-types/`).\n\n## Available Plugins\n\n### Design (`stitch-design`)\n\nCore design workflows for creating, managing, and optimizing designs within Stitch.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [stitch::code-to-design](plugins/stitch-design/skills/code-to-design/) | Convert frontend code (React, Vue, etc.) to a Stitch Design via HTML extraction + design system + upload | *\"Upload the frontend code at `/path/to/dashboard` into a Stitch project named 'Dashboard-Migration-2026'.\"* |\n| [stitch::generate-design](plugins/stitch-design/skills/generate-design/) | Generate new screens from text or images, edit existing screens, and create design variants | · *\"Make a browse tab for a mobile app for romance and date night ideas.\"*<br>· *\"Edit the login screen to add a 'Remember Me' checkbox and change the button color to blue.\"*<br>· *\"Generate 3 design variants of the home screen with dark mode and high-density layouts.\"* |\n| [stitch::manage-design-system](plugins/stitch-design/skills/manage-design-system/) | Manage design systems in Stitch — upload DESIGN.md and apply themes to screens | *\"Upload our design system from `.stitch/DESIGN.md` and apply it to all screens.\"* |\n| [stitch::extract-design-md](plugins/stitch-design/skills/extract-design-md/) | Extract a comprehensive DESIGN.md directly from frontend source code | *\"Scan `/src` and extract the design system into `.stitch/DESIGN.md`.\"* |\n| [stitch::extract-static-html](plugins/stitch-design/skills/extract-static-html/) | Extract self-contained static HTML from running web apps, inlining CSS and images | *\"Extract a static HTML snapshot of `http://localhost:3000/profile`.\"* |\n| [stitch::upload-to-stitch](plugins/stitch-design/skills/upload-to-stitch/) | Upload local assets (images, mockups, HTML) to a Stitch project | *\"Upload `.stitch/landing_page.html` to Stitch project `projects/987654321`.\"* |\n\n---\n\n### Build (`stitch-build`)\n\nCode generation, framework integration, and asset compilation from Stitch designs.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [stitch::react-components](plugins/stitch-build/skills/react-components/) | Convert Stitch screens to React component systems with automated validation and design token consistency | · *\"Convert all screens in Stitch project `projects/123` to React components.\"*<br>· *\"Sync the app to the last updates of the Stitch project `13039335308618232534`.\"* |\n| [stitch::react-native](plugins/stitch-build/skills/react-native/) | Convert Stitch HTML designs to production-ready React Native components with StyleSheet and platform-specific code | · *\"Convert the Stitch design to React Native components with proper theme and navigation.\"*<br>· *\"Sync the app to the last updates of the Stitch project `13039335308618232534`.\"* |\n| [remotion](plugins/stitch-build/skills/remotion/) | Generate walkthrough videos from Stitch projects using Remotion with smooth transitions and zooming | *\"Generate a walkthrough video of the Stitch project `projects/456`.\"* |\n| [shadcn-ui](plugins/stitch-build/skills/shadcn-ui/) | Expert guidance for integrating and building applications with shadcn/ui components | *\"Set up shadcn/ui and build a data table with sorting and filtering.\"* |\n| [react-vite-dashboard](plugins/stitch-build/skills/react-vite-dashboard/) | Convert Stitch screens to React + Vite dashboards with TanStack Query, DESIGN.md tokens, and Web3 read patterns | *\"Build a DeFi portfolio dashboard from this Stitch screen using our DESIGN.md.\"* |\n\n---\n\n### Utilities (`stitch-utilities`)\n\nSupporting tools for enhancing prompts, generating design specs, and enforcing design standards.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [design-md](plugins/stitch-utilities/skills/design-md/) | Analyze Stitch projects and generate comprehensive DESIGN.md files in semantic language | *\"Analyze Stitch project `projects/123` and generate a DESIGN.md.\"* |\n| [enhance-prompt](plugins/stitch-utilities/skills/enhance-prompt/) | Transform vague UI ideas into polished, Stitch-optimized prompts with UI/UX keywords | *\"Enhance this prompt: 'make a settings page'.\"* |\n| [stitch-loop](plugins/stitch-utilities/skills/stitch-loop/) | Generate complete multi-page websites from a single prompt with automated validation | *\"Build a 5-page portfolio website with Stitch.\"* |\n| [taste-design](plugins/stitch-utilities/skills/taste-design/) | Generate DESIGN.md files enforcing premium, anti-generic UI standards | *\"Generate a premium DESIGN.md with strict typography and calibrated colors.\"* |\n\n## Repository Structure\n\n```text\nplugins/\n├── stitch-design/          — Core design workflow plugin\n│   ├── plugin.json\n│   └── skills/\n│       ├── code-to-design/\n│       ├── generate-design/\n│       ├── manage-design-system/\n│       ├── extract-design-md/\n│       ├── extract-static-html/\n│       └── upload-to-stitch/\n├── stitch-build/           — Code generation & build plugin\n│   ├── plugin.json\n│   └── skills/\n│       ├── react-components/    — stitch::react-components\n│       ├── react-native/\n│       ├── react-vite-dashboard/\n│       ├── remotion/\n│       └── shadcn-ui/\n└── stitch-utilities/       — Design utilities & assistants plugin\n    ├── plugin.json\n    └── skills/\n        ├── design-md/\n        ├── enhance-prompt/\n        ├── stitch-loop/\n        └── taste-design/\n```\n\nEach skill follows the Agent Skills standard:\n\n```text\nskills/<skill-name>/\n├── SKILL.md           — The \"Mission Control\" for the agent\n├── scripts/           — Executable enforcers (Validation & Networking)\n├── resources/         — The knowledge base (Checklists & Style Guides)\n└── examples/          — The \"Gold Standard\" syntactically valid references\n```\n\n## Adding New Skills\n\nAll new skills need to follow the file structure above to implement the Agent Skills open standard.\n\n### Great candidates for new skills\n* **Validation**: Skills that convert Stitch HTML to other UI frameworks and validate the syntax.\n* **Decoupling Data**: Skills that convert static design content into external mock data files.\n* **Generate Designs**: Skills that generate new design screens in Stitch from a given set of data.\n\nThis is not an officially supported Google product. This project is not eligible for the [Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).\n"
+    },
+    "brief": {
+      "summary": "Google Stitch 的设计与代码生成 Agent Skills 库",
+      "problem": "把 Stitch 设计稿接入编码代理，减少手动搬运和转换",
+      "highlights": [
+        "可以把前端代码转成 Stitch 设计并上传",
+        "可以根据文字或图片生成界面并做变体",
+        "可以把界面转成 React 或 RN 组件"
+      ],
+      "target_users": [
+        "前端开发者",
+        "UI 设计师",
+        "AI 编码代理用户"
+      ],
+      "why_trending": "今日新增247 Star，本周首次收录，受编码代理生态关注",
+      "caveat": "需先配置 Stitch MCP，选择性安装时注意依赖",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "google-labs-code/stitch-skills",
+      "score": 66,
+      "category": "AI Agent / Skills",
+      "reason": "Stitch设计Agent Skill合集，非ACG专用",
+      "generated_by_ai": true,
+      "velocity_score": 73,
+      "freshness_score": 40,
+      "ranking_score": 57.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "ag-ui-protocol/ag-ui",
+      "url": "https://github.com/ag-ui-protocol/ag-ui",
+      "description": "AG-UI: the Agent-User Interaction Protocol. Bring Agents into Frontend Applications.",
+      "language": "TypeScript",
+      "total_stars": 18150,
+      "forks": 1867,
+      "stars_today": 355,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 691
+    },
+    "details": {
+      "topics": [
+        "ag-ui-protocol",
+        "agent-frontend",
+        "agent-ui",
+        "agentic-workflow",
+        "ai-agents"
+      ],
+      "license_name": "MIT",
+      "created_at": "2025-05-07T12:49:37Z",
+      "updated_at": "2026-11-16T06:50:24Z",
+      "pushed_at": "2026-11-15T02:26:33Z",
+      "open_issues": 594,
+      "homepage": "https://ag-ui.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "\n# <img src=\"https://github.com/user-attachments/assets/ebc0dd08-8732-4519-9b6c-452ce54d8058\" alt=\"ag-ui Logo\" width=\"22\"/> AG-UI: The Agent-User Interaction Protocol\n\n\nAG-UI is an open, lightweight, event-based protocol that standardizes how AI agents connect to user-facing applications.\nBuilt for simplicity and flexibility, it enables seamless integration between AI agents, real time user context, and user interfaces.\n\n---\n\n<div align=\"center\">\n<a href=\"https://trendshift.io/repositories/27961?utm_source=repository-badge&utm_medium=badge&utm_campaign=badge-repository-27961\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/27961\" alt=\"ag-ui-protocol%2Fag-ui | Trendshift\" width=\"250\" height=\"55\"/></a>\n<a href=\"https://trendshift.io/repositories/27961?utm_source=trendshift-badge&utm_medium=badge&utm_campaign=badge-trendshift-27961\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/trendshift/repositories/27961/daily\" alt=\"ag-ui-protocol%2Fag-ui | Trendshift\" width=\"250\" height=\"55\"/></a>\n</div>\n\n<br>\n\n\n[![Version](https://img.shields.io/npm/v/@ag-ui/core?label=Version&color=6963ff&logo=npm&logoColor=white)](https://www.npmjs.com/package/@ag-ui/core)\n![MIT](https://img.shields.io/github/license/copilotkit/copilotkit?color=%236963ff&label=License)\n![Discord](https://img.shields.io/discord/1379082175625953370?logo=discord&logoColor=%23FFFFFF&label=Discord&color=%236963ff)\n\n<a href=\"https://discord.gg/Jd3FzfdJa8\" target=\"_blank\"> Join our Discord → </a> &nbsp;&nbsp;&nbsp; <a href=\"https://ag-ui.com/\" target=\"_blank\"> Read the Docs → </a> &nbsp;&nbsp;&nbsp; <a href=\"https://dojo.ag-ui.com/\" target=\"_blank\"> Go to the AG-UI Dojo → </a> &nbsp;&nbsp;&nbsp; <a href=\"https://x.com/CopilotKit\" target=\"_blank\"> Follow us → </a>\n\n<img width=\"1600\" height=\"680\" alt=\"1600x680\" src=\"https://github.com/user-attachments/assets/00ec7366-713e-443f-a8f0-8db52ad28ef4\" />\n\n\n\n## 🚀 Getting Started\nCreate a new AG-UI application in seconds:\n```bash\nnpx create-ag-ui-app my-agent-app\n```\n\n<h3> Useful Links:</h3>\n\n- [The AG-UI Dojo](https://dojo.ag-ui.com/)\n- [Build AG-UI-powered applications(Quickstart)](https://docs.ag-ui.com/quickstart/applications)\n- [Build new AG-UI framework integrations (Quickstart)](https://go.copilotkit.ai/agui-contribute)\n- [Book a call to discuss an AG-UI integration with a new framework](https://calendly.com/markus-copilotkit/ag-ui)\n- [Join the Discord Community](https://discord.gg/Jd3FzfdJa8)\n\n## What is AG-UI?\n\nAG-UI is an open, lightweight, event-based protocol for agent-human interaction, designed for simplicity & flexibility:\n\n- During agent executions, agent backends **emit events _compatible_ with one of AG-UI's ~16 standard event types**\n- Agent backends can **accept one of a few simple AG-UI compatible inputs** as arguments\n\n**AG-UI includes a flexible middleware layer** that ensures compatibility across diverse environments:\n\n- Works with **any event transport** (SSE, WebSockets, webhooks, etc.)\n- Allows for **loose event format matching**, enabling broad agent and app interoperability\n\nIt also ships with a **reference HTTP implementation** and **default connector** to help teams get started fast.\n\n\n[Learn more about the specs →](https://go.copilotkit.ai/ag-ui-introduction)\n\n\n## Why AG-UI?\n\nAG-UI was developed based on real-world requirements and practical experience building in-app agent interactions.\n\n\n## Where does AGUI fit in the agentic protocol stack?\nAG-UI is complementary to the other 2 top agentic protocols\n- MCP gives agents tools\n- A2A allows agents to communicate with other agents\n- AG-UI brings agents into user-facing applications\n\n<div align=\"center\">\n  <img width=\"2048\" height=\"1182\" alt=\"The Agent Protocol Stack\" src=\"https://github.com/user-attachments/assets/41138f71-50be-4812-98aa-20e0ad595716\" />\n</div>\n\n## 🚀 Features\n\n- 💬 Real-time agentic chat with streaming\n- 🔄 Bi-directional state synchronization\n- 🧩 Generative UI and structured messages\n- 🧠 Real-time context enrichment\n- 🛠️ Frontend tool integration\n- 🧑‍💻 Human-in-the-loop collaboration\n\n\n## 🛠 Supported Integrations\n\nAG-UI was born from CopilotKit's initial **partnership** with LangChain and CrewAI - and brings the incredibly popular agent-user-interactivity infrastructure to the wider agentic ecosystem.\n\n**1st party** = the platforms that have AG‑UI built in and provide documentation for guidance.\n\n## Frameworks\n\n| Framework                                                          | Status                   | AG-UI Resources                                                                 |\n| ------------------------------------------------------------------ | ------------------------ | -------------------------------------------------------------------------------- |\n| Built-in Agent                                                | ✅ Supported             | ➡️ [Docs](https://docs.copilotkit.ai/direct-to-llm)  |\n\n### 🤝 Partnerships\n| Framework | Status | AG-UI Resources |\n| ---------- | ------- | ---------------- |\n| [LangChain](https://www.langchain.com/langgraph) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/langgraph/) 🎮 [Demos](https://dojo.ag-ui.com/langgraph-fastapi/feature/shared_state) |\n| [CrewAI](https://crewai.com/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/crewai-flows) 🎮 [Demos](https://dojo.ag-ui.com/crewai/feature/shared_state) |\n\n### 🧩 1st Party\n| Framework | Status | AG-UI Resources |\n| ---------- | ------- | ---------------- |\n| [Microsoft Agent Framework](https://azure.microsoft.com/en-us/blog/introducing-microsoft-agent-framework/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/microsoft-agent-framework) 🎮 [Demos](https://dojo.ag-ui.com/microsoft-agent-framework-dotnet/feature/shared_state) |\n| [Google ADK](https://google.github.io/adk-docs/get-started/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/adk) 🎮 [Demos](https://dojo.ag-ui.com/adk-middleware/feature/shared_state?openCopilot=true) |\n| [Google Antigravity](https://github.com/google-antigravity/antigravity-sdk-python) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/google-antigravity) 🎮 [Demos](https://dojo.ag-ui.com/antigravity/feature/shared_state) |\n| [AWS Strands Agents](https://github.com/strands-agents/sdk-python) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/aws-strands) 🎮 [Demos](https://dojo.ag-ui.com/aws-strands/feature/shared_state) |\n| [Mastra](https://mastra.ai/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/mastra/) 🎮 [Demos](https://dojo.ag-ui.com/mastra/feature/tool_based_generative_ui) |\n| [Pydantic AI](https://github.com/pydantic/pydantic-ai) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/pydantic-ai/) 🎮 [Demos](https://dojo.ag-ui.com/pydantic-ai/feature/shared_state) |\n| [Agno](https://github.com/agno-agi/agno) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/agno/) 🎮 [Demos](https://dojo.ag-ui.com/agno/feature/tool_based_generative_ui) |\n| [LlamaIndex](https://github.com/run-llama/llama_index) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/llamaindex/) 🎮 [Demos](https://dojo.ag-ui.com/llamaindex/feature/shared_state) |\n| [AG2](https://ag2.ai/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/ag2/)  🎮 [Demos](https://dojo.ag-ui.com/ag2/feature/shared_state) |\n| [AWS Bedrock Agents](https://aws.amazon.com/bedrock/agents/) | 🛠️ In Progress | – |\n\n\n\n### 🌐 Community\n| Framework | Status | AG-UI Resources |\n| ---------- | ------- | ---------------- |\n| [Claude Agent SDK](https://github.com/ag-ui-protocol/ag-ui/tree/main/integrations/claude-agent-sdk) | ✅ Supported | 🎮 [Demos](https://dojo.ag-ui.com/claude-agent-sdk-python/feature/shared_state) |\n| [Claude Managed Agents SDK](https://github.com/ag-ui-protocol/ag-ui/tree/main/integrations/claude-managed-agents) | ✅ Supported | 🎮 [Demos](https://dojo.ag-ui.com/claude-managed-agents-python/feature/tool_based_generative_ui) |\n| [Langroid](https://github.com/ag-ui-protocol/ag-ui/tree/main/integrations/langroid) | ✅ Supported | 🎮 [Demos](https://dojo.ag-ui.com/langroid/feature/shared_state) |\n| [Omnara](https://omnara.com) | ✅ Supported | ➡️ [Docs](https://docs.ag-ui.com/integrations/omnara) 🎮 [Demos](https://dojo.ag-ui.com/omnara/feature/tool_based_generative_ui) |\n| [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | 🛠️ In Progress | – |\n| [Cloudflare Agents](https://developers.cloudflare.com/agents/) | ✅ Supported | ➡️ [Integration](https://github.com/ag-ui-protocol/ag-ui/tree/main/integrations/community/cloudflare-agents) |\n\n\n## Agent Interaction Protocols\n\n| Protocols | Status | AG-UI Resources | Integrations |\n| ---------- | ------- | ---------------- | ------------- |\n| [A2A](https://a2a-protocol.org/latest/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/a2a-protocol) | Partnership |\n\n\n## Infrastructure / Deployment\n| Platform | Status | AG-UI Resources | Integrations |\n| ---------- | ------- | ---------------- | ------------- |\n| [Amazon Bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/) | ✅ Supported | ➡️ [Docs](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-agui.html) | 1st Party |\n\n\n## Specification (standard)\n| Framework | Status | AG-UI Resources |\n| ---------- | ------- | ---------------- |\n| [Oracle Agent Spec](http://oracle.github.io/agent-spec/) | ✅ Supported | ➡️ [Docs](https://go.copilotkit.ai/copilotkit-oracle-docs) 🎮 [Demos](https://dojo.ag-ui.com/agent-spec-langgraph/feature/tool_based_generative_ui) |\n\n## Generative UI\n| Framework | Status | AG-UI Resources |\n| ---------- | ------- | ---------------- |\n| [MCP Apps](https://blog.modelcontextprotocol.io/posts/2025-11-21-mcp-apps/) | ✅ Supported | ➡️ [Docs](https://docs.copilotkit.ai/generative-ui-specs/mcp-apps) 🎮 [Demos]() |\n\n\n## SDKs\n\n| SDK | Status | AG-UI Resources | Integrations |\n| --- | ------- | ---------------- | ------------- |\n| [Kotlin]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/blob/main/docs/sdk/kotlin/overview.mdx) | Community |\n| [Golang]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/blob/main/docs/sdk/go/overview.mdx) | Community |\n| [Dart]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/tree/main/sdks/community/dart) | Community |\n| [Java]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/blob/main/docs/sdk/java/overview.mdx) | Community |\n| [Rust]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/tree/main/sdks/community/rust/crates/ag-ui-client) | Community |\n| [Ruby]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/tree/main/sdks/community/ruby) | Community |\n| [C++]() | ✅ Supported | ➡️ [GitHub Source](https://github.com/ag-ui-protocol/ag-ui/tree/main/sdks/community/c%2B%2B) | Community |\n| [.NET]() | ✅ Supported | ➡️ [Getting Started](https://github.com/ag-ui-protocol/ag-ui/tree/main/sdks/dotnet/samples/GettingStarted) | Community |\n| [Nim]() | 🛠️ In Progress | ➡️ [PR](https://github.com/ag-ui-protocol/ag-ui/pull/29) | Community |\n| [Flowise]() | 🛠️ In Progress | ➡️ [GitHub Source](https://github.com/ag-ui-protocol/ag-ui/issues/367) | Community |\n| [Langflow]() | 🛠️ In Progress | ➡️ [GitHub Source](https://github.com/ag-ui-protocol/ag-ui/issues/366) | Community |\n\n## Clients\n\n| Client | Status | AG-UI Resources | Integrations |\n| --- | ------- | ---------------- | ------------- |\n| [CopilotKit](https://github.com/CopilotKit/CopilotKit) | ✅ Supported | ➡️ [Getting Started](https://docs.copilotkit.ai/direct-to-llm/guides/quickstart) | 1st Party |\n| Terminal + Agent | ✅ Supported | ➡️ [Getting Started](https://docs.ag-ui.com/quickstart/clients) | Community |\n| Chat platforms (Slack, Microsoft Teams) | ✅ Supported | ➡️ [Channels SDK](https://github.com/CopilotKit/channels-sdk) 🎮 [OpenTag example](https://github.com/CopilotKit/OpenTag) | 1st Party |\n| [React Native](https:/"
+    },
+    "brief": {
+      "summary": "开放事件协议，把 AI Agent 接入前端应用",
+      "problem": "Agent 与用户界面集成缺少统一标准",
+      "highlights": [
+        "可以用 npx 快速创建 AG-UI 应用",
+        "可以流式聊天并双向同步状态",
+        "可以接入前端工具和人在回路"
+      ],
+      "target_users": [
+        "前端开发者",
+        "AI Agent 开发者",
+        "全栈工程师"
+      ],
+      "why_trending": "今日新增 355 Star，协议连接 Agent 与前端",
+      "caveat": "开放 issue 较多，资料未说明稳定版",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ag-ui-protocol/ag-ui",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "Agent与前端交互协议，可用于Agent应用接入",
+      "generated_by_ai": true,
+      "velocity_score": 86,
+      "freshness_score": 20,
+      "ranking_score": 55.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "debpalash/VoiceStudio",
+      "url": "https://github.com/debpalash/VoiceStudio",
+      "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
+      "language": "Python",
+      "total_stars": 111512,
+      "forks": 12365,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 687
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "audiobook",
+        "cuda",
+        "dubbing",
+        "elevenlabs-alternative",
+        "huggingface",
+        "local-first",
+        "mlx",
+        "omnivoice-studio",
+        "speech-to-text",
+        "text-to-speech",
+        "transcription",
+        "translate",
+        "tts",
+        "voice-ai",
+        "voice-cloning",
+        "voice-generation",
+        "voicestudio",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-04-09T21:40:26Z",
+      "updated_at": "2026-11-16T06:50:45Z",
+      "pushed_at": "2026-11-16T06:46:41Z",
+      "open_issues": 48,
+      "homepage": "https://voicestudio.sh",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <h1><sub><img src=\"docs/logo.png\" alt=\"\" width=\"36\" height=\"36\" /></sub> VoiceStudio</h1>\n  <p>\n    <a href=\"https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://trendshift.io/api/badge/repositories/28176\" alt=\"Trendshift badge showing where VoiceStudio ranks among trending repositories\" width=\"220\" height=\"48\" /></a>\n  </p>\n  <h2>AI voice studio. On your device.</h2>\n  <h3>Clone, design, dub, dictate, transcribe and narrate in 646 languages.</h3>\n  <p>Runs on your laptop, desktop, servers, phone, tablets and more</p>\n  <p>\n    <a href=\"https://voicestudio.sh/?utm_source=github&utm_medium=readme&utm_campaign=project\">Website</a> ·\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\">Download</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#documentation\">Docs</a> ·\n    <a href=\"https://voicestudio.sh/pro?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project\">VoiceStudio Pro</a> ·\n    <a href=\"https://app.voicestudio.sh/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project\">VoiceStudio Cloud</a>\n  </p>\n  <!-- README_LANGUAGES_START -->\n  <a id=\"readme-languages\"></a>\n  <p><sub>\n    <strong lang=\"en\">🇬🇧 English</strong> · <a href=\"docs/readme/README_CN.md\" lang=\"zh-CN\">🇨🇳 简体中文</a> · <a href=\"docs/readme/README_JA.md\" lang=\"ja\">🇯🇵 日本語</a> · <a href=\"docs/readme/README_KO.md\" lang=\"ko\">🇰🇷 한국어</a> · <a href=\"docs/readme/README_RU.md\" lang=\"ru\">🇷🇺 Русский</a> · <a href=\"docs/readme/README_AR.md\" lang=\"ar\">🇸🇦 العربية</a> · <a href=\"docs/readme/README_DE.md\" lang=\"de\">🇩🇪 Deutsch</a> · <a href=\"docs/readme/README_ES.md\" lang=\"es\">🇪🇸 Español</a> · <a href=\"docs/readme/README_FR.md\" lang=\"fr\">🇫🇷 Français</a> · <a href=\"docs/readme/README_HI.md\" lang=\"hi\">🇮🇳 हिन्दी</a><br />\n    <a href=\"docs/readme/README_ID.md\" lang=\"id\">🇮🇩 Bahasa Indonesia</a> · <a href=\"docs/readme/README_IT.md\" lang=\"it\">🇮🇹 Italiano</a> · <a href=\"docs/readme/README_NL.md\" lang=\"nl\">🇳🇱 Nederlands</a> · <a href=\"docs/readme/README_PL.md\" lang=\"pl\">🇵🇱 Polski</a> · <a href=\"docs/readme/README_PT.md\" lang=\"pt\">🇵🇹 Português</a> · <a href=\"docs/readme/README_TH.md\" lang=\"th\">🇹🇭 ไทย</a> · <a href=\"docs/readme/README_TR.md\" lang=\"tr\">🇹🇷 Türkçe</a> · <a href=\"docs/readme/README_TW.md\" lang=\"zh-TW\">🇹🇼 繁體中文</a> · <a href=\"docs/readme/README_UK.md\" lang=\"uk\">🇺🇦 Українська</a> · <a href=\"docs/readme/README_VI.md\" lang=\"vi\">🇻🇳 Tiếng Việt</a>\n  </sub></p>\n  <!-- README_LANGUAGES_END -->\n\n\n  <p>\n    <a href=\"https://github.com/debpalash/VoiceStudio/actions/workflows/ci.yml\"><img src=\"https://img.shields.io/github/actions/workflow/status/debpalash/VoiceStudio/ci.yml?branch=main&amp;style=flat-square&amp;label=build&amp;labelColor=27272a\" alt=\"CI\" /></a>\n    <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/github/v/release/debpalash/VoiceStudio?style=flat-square&amp;labelColor=27272a&amp;color=52525b\" alt=\"Latest release\" /></a>\n    <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-AGPL--3.0-52525b?style=flat-square&amp;labelColor=27272a\" alt=\"AGPL-3.0\" /></a>\n    <a href=\"https://supermetry.com\"><img src=\"https://app.supermetry.com/px/zfjiv7psp4ed.svg?c=VoiceStudio\" alt=\"views\" /></a>\n    <a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?style=flat-square&amp;logo=discord&amp;logoColor=white\" alt=\"Join Discord\" /></a>\n  </p>\n  <p>\n    <sub>Strategic sponsors</sub>      <a href=\"https://github.com/debpalash/OpenGTM?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/opengtm-dark.svg\" /><img src=\"docs/sponsors/opengtm.svg\" alt=\"OpenGTM\" height=\"32\" align=\"middle\" /></picture></a>\n    <a href=\"https://github.com/debpalash/Opal?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/opal-dark.svg\" /><img src=\"docs/sponsors/opal.svg\" alt=\"Opal\" height=\"32\" align=\"middle\" /></picture></a>\n    <a href=\"https://github.com/velixio/supermetry?utm_source=voicestudio&utm_medium=sponsor&utm_campaign=strategic-sponsor&utm_content=readme-logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/supermetry-dark.svg\" /><img src=\"docs/sponsors/supermetry.svg\" alt=\"Supermetry\" height=\"32\" align=\"middle\" /></picture></a>\n      ·   <sub>Special sponsor</sub> \n    <a href=\"https://spicrawl.com?utm_source=voicestudio&amp;utm_medium=github_readme&amp;utm_campaign=special_sponsor&amp;utm_content=logo\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/sponsors/spicrawl-dark.svg\" /><img src=\"docs/sponsors/spicrawl.svg\" alt=\"Spicrawl\" height=\"32\" align=\"middle\" /></picture></a>\n  </p>\n  <br />\n</div>\n\n<p align=\"center\">\n  <a href=\"docs/media/electron/voicestudio.mp4\">\n    <picture>\n      <source media=\"(prefers-reduced-motion: reduce) and (max-width: 768px)\" srcset=\"docs/media/electron/voice-cloning.webp\" />\n      <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/media/electron/voice-cloning.png\" />\n      <img src=\"docs/media/electron/voicestudio.gif\" alt=\"A tour of the app: voice cloning, voice design, dubbing, and model management\" width=\"100%\" />\n    </picture>\n  </a><br />\n  <sub>Demo workspace · Default dark theme · <a href=\"docs/media/electron/voicestudio.mp4\">Watch the HD tour</a></sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/debpalash/VoiceStudio/releases/latest\"><img src=\"https://img.shields.io/badge/Download-993f61?style=for-the-badge&amp;logo=github&amp;logoColor=ffffff\" alt=\"Download\" height=\"24\" /></a>\n  <a href=\"#get-started\"><img src=\"https://img.shields.io/badge/Get%20started-27272a?style=for-the-badge\" alt=\"Get started\" height=\"24\" /></a>\n  <a href=\"https://voicestudio.sh/pro?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=hero-badge\"><img src=\"https://img.shields.io/badge/VoiceStudio%20Pro-27272a?style=for-the-badge\" alt=\"VoiceStudio Pro\" height=\"24\" /></a>\n  <a href=\"https://app.voicestudio.sh/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=hero-badge\"><img src=\"https://img.shields.io/badge/VoiceStudio%20Cloud-27272a?style=for-the-badge\" alt=\"VoiceStudio Cloud\" height=\"24\" /></a>\n</p>\n\n## What you can do\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/voice-cloning.png\"><img src=\"docs/media/electron/voice-cloning.webp\" alt=\"Voice cloning workspace with the bundled demo voice\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/audio-quality.md\">Voice cloning</a></strong><br />\n      Turn a clean reference recording into speech in a familiar voice.\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/dubbing.png\"><img src=\"docs/media/electron/dubbing.webp\" alt=\"Video dubbing workspace\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/electron-dubbing.md\">Video dubbing</a></strong><br />\n      Translate and dub videos with speech timed to the original.\n    </td>\n  </tr>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/voice-design.png\"><img src=\"docs/media/electron/voice-design.webp\" alt=\"Describe a voice in the voice design workspace\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/electron-voice-design.md\">Voice design</a></strong><br />\n      Describe a voice in words and generate it.\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"docs/media/electron/models.png\"><img src=\"docs/media/electron/models.webp\" alt=\"Install and manage local speech models\" width=\"100%\" /></a><br />\n      <strong><a href=\"docs/downloading-models.md\">Local models</a></strong><br />\n      Choose your engines and download only the models you need.\n    </td>\n  </tr>\n</table>\n\n<details>\n<summary><strong>More screenshots</strong></summary>\n\n<table>\n  <tr>\n    <td width=\"50%\"><a href=\"docs/media/electron/overview.png\"><img src=\"docs/media/electron/overview.webp\" alt=\"Workspace overview\" width=\"100%\" /></a><br /><strong>Workspace overview</strong></td>\n    <td width=\"50%\"><a href=\"docs/media/electron/model-packs.png\"><img src=\"docs/media/electron/model-packs.webp\" alt=\"Model packs\" width=\"100%\" /></a><br /><strong>Model packs</strong></td>\n  </tr>\n</table>\n\n</details>\n\n- **Dictate & transcribe** — A floating dictation widget and local transcription\n- **Narrate & batch** — Stories, audiobooks and queued jobs\n- **Connect & automate** — Local API, MCP, reusable recipes and watch folders\n\nStart with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or pick from dozens of other engines in the Model Manager. See the [features & engine catalog](docs/feature-catalog.md).\n\n<p align=\"center\"><a href=\"https://discord.gg/bzQavDfVV9\"><img src=\"docs/assets/discord-community.svg\" alt=\"Come say hello! Join us on Discord\" height=\"64\" /></a></p>\n\n## Pro and Cloud\n\nEverything above is free, runs on your own hardware and needs no account. Pro and Cloud are optional.\n\n<table>\n  <tr>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"https://voicestudio.sh/pro?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\"><img src=\"docs/assets/voicestudio-pro.svg\" alt=\"\" width=\"56\" height=\"56\" align=\"middle\" /></a>&nbsp;&nbsp;<strong><a href=\"https://voicestudio.sh/pro?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\">VoiceStudio Pro</a></strong><br /><br />\n      For paid client work across more than one machine.\n      <ul>\n        <li>A Commercial License for your client work, emailed to you</li>\n        <li>One user on up to 3 devices at once</li>\n        <li>Send jobs to your other GPUs while your projects stay local</li>\n        <li>New features and fixes first</li>\n      </ul>\n      <sub>Closed-source build, account required, 7-day full refund. The AGPL-3.0 app stays free, including commercial use under its terms.</sub><br /><br />\n      <strong><a href=\"https://voicestudio.sh/pro?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\">See Pro plans →</a></strong>\n    </td>\n    <td width=\"50%\" valign=\"top\">\n      <a href=\"https://app.voicestudio.sh/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\"><img src=\"docs/assets/voicestudio-cloud.svg\" alt=\"\" width=\"56\" height=\"56\" align=\"middle\" /></a>&nbsp;&nbsp;<strong><a href=\"https://app.voicestudio.sh/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\">VoiceStudio Cloud</a></strong><br /><br />\n      A hosted voice and dubbing API, coming soon. No GPU needed.\n      <ul>\n        <li>Speech, voice design and voice cloning with consent</li>\n        <li>Dubbing, transcription and audiobooks</li>\n        <li>Usage and credits by day or project</li>\n        <li>Long jobs that run on their own</li>\n      </ul>\n      <sub>Not available yet: join early access for free usage credits. The desktop app stays free and local.</sub><br /><br />\n      <strong><a href=\"https://app.voicestudio.sh/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=project&amp;utm_content=readme-section\">Join Cloud early access →</a></strong>\n    </td>\n  </tr>\n</table>\n\n## Platforms\n\nExperimental [Windows ROCm setup](docs/install/windows-rocm.md) supports selected RDNA 2 RX 6000 GPUs with targets `gfx1030`, `gfx1031` or `gfx1032`; RX 6500 XT (`gfx1034`) is excluded. GPU transcription uses a CTranslate2 build with native\n`gfx1031` kernels that this repository builds from upstream source and pins by\nhash, and setup checks actual GPU kernel execution. RX 6700 XT tests also cover native Torch speech generation and\nPyTorch Whisper. R"
+    },
+    "brief": {
+      "summary": "全本地开源的ElevenLabs替代，支持克隆配音转录",
+      "problem": "云端语音服务有费用和隐私顾虑，缺少本地方案",
+      "highlights": [
+        "可以用参考录音克隆音色并生成语音",
+        "可以给视频翻译配音并对齐时间轴",
+        "可以听写转录并制作多语言有声书"
+      ],
+      "target_users": [
+        "内容创作者",
+        "视频剪辑师",
+        "隐私敏感用户"
+      ],
+      "why_trending": "总Star超11万，近期活跃且连续上榜",
+      "caveat": "硬件门槛和模型体积资料中未说明",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "debpalash/VoiceStudio",
+      "score": 92,
+      "category": "语音 / 配音",
+      "reason": "本地语音克隆、配音与有声书生成",
+      "generated_by_ai": true,
+      "velocity_score": 86,
+      "freshness_score": 40,
+      "ranking_score": 73.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Write HTML. Render video. Built for agents.",
+      "language": "TypeScript",
+      "total_stars": 84866,
+      "forks": 7858,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 430
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-16T06:49:55Z",
+      "pushed_at": "2026-11-16T06:50:32Z",
+      "open_issues": 303,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>Write HTML. Render video. Built for agents.</b></p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio?utm_source=github&utm_medium=readme\">Studio</a> |\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> |\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> |\n  <a href=\"https://hyperframes.studio/?utm_source=github&utm_medium=readme\">Playground</a> |\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> |\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> |\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://github.com/user-attachments/assets/f6ff9fae-f33d-4f68-bd54-f3ed4ba6473b\" alt=\"The HyperFrames Studio app opening from the Dock: free for Mac, Windows and Linux\" width=\"800\">\n</p>\n\n<p align=\"center\">\n  <b>Download the desktop app:</b>\n  <a href=\"https://hyperframes.studio/studio/download?os=mac&src=github-readme&utm_source=github&utm_medium=readme\">macOS</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=windows&src=github-readme&utm_source=github&utm_medium=readme\">Windows</a> ·\n  <a href=\"https://hyperframes.studio/studio/download?os=deb&src=github-readme&utm_source=github&utm_medium=readme\">Linux (.deb)</a>\n</p>\n\nHyperFrames is a free, open-source framework for turning HTML, CSS, media, and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents with skills, or as the rendering core behind hosted authoring workflows.\n\nThe [HyperFrames Studio app](https://hyperframes.heygen.com/studio-app) is free to use as well; its [Pro plan](https://hyperframes.studio/pricing) adds HeyGen's top video, image, voice and music models.\n\nUsing Claude Code, Codex, Cursor, or another coding agent? Run `npx hyperframes skills update` once, then ask your agent to make a video.\n\n## Quick Start\n\n### With an AI coding agent\n\nFor Claude Code, install the versioned plugin:\n\n```bash\nclaude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes\n```\n\nTo enable auto-update for the **hyperframes** marketplace, run `claude` in a\nterminal in your project. In Claude Code's terminal UI, run `/plugin`, then select\n**Marketplaces** → **hyperframes** → **Enable auto-update**. Afterward, use\n`/hyperframes:hyperframes`. See the [plugin guide](docs/guides/plugins.mdx)\nfor Copilot, VS Code, Cursor, Gemini CLI, updates, and migration.\n\nFor standalone skills (including OpenCode), use:\n\n```bash\nnpx skills add heygen-com/hyperframes\n```\n\n> The picker opens with nothing pre-selected — the **Core Skills** group is all you need; `/slideshow`, `/remotion-to-hyperframes` and `/figma` install on demand. Without the picker (a script or a CI job), `npx hyperframes skills update` installs exactly the core set, whereas `skills add --all` installs all 9 published skills. The six repo-internal skills under `.claude/skills` / `.agents/skills` are excluded by default. For the full published set use `npx hyperframes skills`.\n>\n> `skills add` resolves the skills.sh registry blob, which can lag `main` by hours. `npx hyperframes skills update` installs the skills from the release tag that matches your CLI version, so they match the CLI that runs them.\n\nRun project-local installs from your video project's directory. From a HyperFrames\ncheckout, use `npx hyperframes skills update` for a global install instead: a\nproject-local installer target can overlap the tracked `skills/` source and\noverwrite uncommitted edits. See [contributor setup](CONTRIBUTING.md#getting-started).\n\nTry a prompt like:\n\n> Using `/hyperframes`, create a 10-second product intro with a fade-in title, a background video, and subtle background music.\n\nThe skills teach agents the HyperFrames production loop: plan the video, write valid HTML, wire seekable animations, add media, lint, preview, and render. They work with Claude Code, Codex, Cursor, Gemini CLI, IBM Bob, and other coding agents that support skills.\n\n## Skills\n\nHyperFrames ships 9 skills. Make any video by asking for it; the `/hyperframes` skill carries the contract and the references (film, captions, overlays, motion, look). Read it first.\n\nFor standalone installation, default to the **core set** (`/hyperframes`, `/hyperframes-cli`, `/hyperframes-registry`, `/media-use`, `/reverse-any-video`, `/style-sampling`). `npx hyperframes skills update` installs exactly that from anywhere; the interactive picker (`npx skills add heygen-com/hyperframes`) lists it as the \"Core Skills\" group, nothing pre-selected. The picker is interactive-only — a non-interactive or agent run without `--skill` installs all 9. Use `npx skills add heygen-com/hyperframes --all` to install the complete published set deliberately (skips the picker), or `npx skills add heygen-com/hyperframes --skill <name>` for just one (bare name, no leading `/`).\n\nStandalone installs stay lean after that: `npx hyperframes init` installs the **core set** only when it is missing and never touches a skill you already have (`npx hyperframes skills update` refreshes them, and never removes one); `/figma`, `/slideshow` and `/remotion-to-hyperframes` install **on demand** with `npx hyperframes skills update <name>`. Nothing re-pulls the full set behind your back.\n\n### Plugin packages\n\nPlugins bundle the full skill catalog and use their agent's update manager.\n`bun run package:agent-plugin` builds the committed portable ZIP, source metadata,\nand SHA-256 checksum. See the [maintainer checklist](docs/contributing/agent-plugins.mdx).\n\n### Upload to Codex\n\nBuild the upload-ready Codex plugin archive from the committed `HEAD` version of the manifest, brand assets, and skills:\n\n```bash\nbun run package:codex-plugin\n```\n\nThis writes `dist/hyperframes-plugin.zip` with a `hyperframes/` root folder and fails if the archive exceeds Codex's 100 MB upload limit.\n\n### Core set\n\n| Skill                   | Use when                                                                                                                                                                                                                                                                                            |\n| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/hyperframes`          | **Read first** for any request to make, edit, animate or render a video, motion graphic, captions or overlays with HyperFrames (HTML rendered to video). Holds the render contract and the work loop, and points to the references for format, motion, look, captions, whole films and storyboards. |\n| `/hyperframes-cli`      | The HyperFrames CLI by job — scaffold, check, look at frames, edit the timeline, preview, render locally or in the cloud, share, project history — plus reading its JSON and recovering from build or render failures.                                                                              |\n| `/hyperframes-registry` | About 450 ready-made blocks and components installed as editable source — transitions, overlays, titles, kinetic type, captions, charts, maps, 3D, camera moves. Use before hand-building any named visual; also for `hyperframes add` and `catalog`.                                               |\n| `/media-use`            | Get or make any media for a video — music, sound effects, images, icons, logos, voiceover, avatar and generated video, transcripts, cutouts, colour grades and looks — with HeyGen or free local tools, and mix placed audio. Also for footage that looks dark, flat or dull.                       |\n| `/reverse-any-video`    | Rebuilding any video file as an editable HyperFrames project (motion graphics, talking heads, live action, AI-generated footage), checked frame by frame against the original. HyperFrames Pro.                                                                                                     |\n| `/style-sampling`       | Making a new episode on your topic in one of five proven styles: Collage Explainer, Finance Explainer, Animated Science Explainer, 3D Brand Explainer, 3D True Crime. HyperFrames Pro.                                                                                                              |\n\n### On demand\n\n| Skill                      | Use when                                                                                                                                                                                              |\n| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `/figma`                   | Bring Figma into a video — rendered assets, brand tokens, components, storyboard frames as reconstructed motion, shaders and connector-assisted motion. Use when you paste a figma.com link.          |\n| `/slideshow`               | A presentation, pitch deck or interactive deck — discrete slides, fragment reveals, branching, hotspot navigation, presenter mode with speaker notes. Output is a navigable deck, not a rendered MP4. |\n| `/remotion-to-hyperframes` | Bringing existing video code or footage into HyperFrames (Remotion first; also Motion Canvas, Lottie, Three.js, canvas, other tools' renders), verified frame by frame.                               |\n\nFor visual design handoff workflows, see the [Claude Design guide](https://hyperframes.heygen.com/guides/design-tools?utm_source=github&utm_medium=readme#start-from-claude-design-or-open-design) and [Open Design guide](https://hyperframes.heygen.com/guides/design-tools?utm_source=github&utm_medium=readme#start-from-claude-design-or-open-design).\n\n### Manually with the CLI\n\n```bash\nnpx hyperframes init my-video\ncd my-video\nnpx hyperframes preview      # preview in browser with live reload\nnpx hyperframes render       # render to MP4\n```\n\n**Requirements:** Node.js 22+, FFmpeg\n\n## What You Can Build\n\nNeed ideas? Browse the [Showcase](https://"
+    },
+    "brief": {
+      "summary": "写 HTML 就能渲染出 MP4 视频的开源框架",
+      "problem": "传统视频制作依赖专用剪辑软件，AI 代理难以直接生成可控视频",
+      "highlights": [
+        "可以让 AI 代理写 HTML 并渲染出 MP4 视频",
+        "可以在本地用 CLI 预览、检查并渲染视频",
+        "可以安装技能让 Claude Code 等代理制作视频"
+      ],
+      "target_users": [
+        "视频创作者",
+        "前端开发者",
+        "AI 编程代理用户"
+      ],
+      "why_trending": "连续上榜，总星 8.4 万，HTML 转视频并适配 AI 代理",
+      "caveat": "资料中未说明复杂动画的渲染上限",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 90,
+      "category": "AI 视频",
+      "reason": "HTML渲染视频，Agent驱动动态图形",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 40,
+      "ranking_score": 71.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "meshy-dev/ThreeRT",
+      "url": "https://github.com/meshy-dev/ThreeRT",
+      "description": "Hardware ray-traced three.js: a real-time path tracer behind a three.js-style API. Rust + wgpu engine, TypeScript scene and gameplay packages.",
+      "language": "TypeScript",
+      "total_stars": 445,
+      "forks": 33,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "global-illumination",
+        "graphics",
+        "metal",
+        "path-tracing",
+        "ray-tracing",
+        "real-time-rendering",
+        "rendering",
+        "rust",
+        "threejs",
+        "typescript",
+        "voxel",
+        "webgpu",
+        "wgpu"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-11-10T11:22:56Z",
+      "updated_at": "2026-11-16T06:39:48Z",
+      "pushed_at": "2026-11-16T06:44:51Z",
+      "open_issues": 20,
+      "homepage": "https://threert.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <a href=\"https://threert.dev\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"site/brand/mark.svg\">\n      <img src=\"site/brand/mark-light.svg\" width=\"84\" alt=\"ThreeRT\">\n    </picture>\n  </a>\n</p>\n\n<h1 align=\"center\">ThreeRT</h1>\n\n<p align=\"center\"><b>Hardware ray-traced three.js.</b></p>\n\n<p align=\"center\">\n  A real-time path tracer behind a three.js-style API. Write the scene you would write in three.js,<br>\n  and every light in it is traced on the GPU's ray-tracing hardware, at 60 fps.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/meshy-dev/ThreeRT/actions/workflows/ci.yml\"><img src=\"https://github.com/meshy-dev/ThreeRT/actions/workflows/ci.yml/badge.svg?branch=main\" alt=\"CI\"></a>\n  <a href=\"https://www.npmjs.com/package/@threert/scene\"><img src=\"https://img.shields.io/npm/v/@threert/scene?label=%40threert%2Fscene&color=f97316\" alt=\"@threert/scene on npm\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-blue\" alt=\"MIT licence\"></a>\n  <a href=\"https://threert.dev/download/\"><img src=\"https://img.shields.io/badge/clients-macOS%20%C2%B7%20iOS-lightgrey\" alt=\"Clients for macOS and iOS\"></a>\n  <a href=\"https://discord.gg/n7vsVmAKCK\"><img src=\"https://img.shields.io/badge/chat-Discord-5865F2\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://threert.dev\"><b>Website</b></a> ·\n  <a href=\"https://threert.app\">Apps</a> ·\n  <a href=\"https://threert.dev/download/\">Download</a> ·\n  <a href=\"https://threert.dev/docs/\">Docs</a> ·\n  <a href=\"https://discord.gg/n7vsVmAKCK\">Discord</a> ·\n  <a href=\"https://x.com/ThreeRT3D\">X</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://threert.dev\"><img src=\"docs/images/reel.webp\" width=\"100%\" alt=\"Twelve scenes path-traced live by ThreeRT: Bistro at night with a crowd, Tokyo at dusk, Kabukichō in the rain, a voxel city, product and interior scenes, and a first-person shooter\"></a>\n  <br>\n  <sub>ThreeRT, live on an Apple M3 Max: this repository's demos and OpenStrike, a shooter built on the engine.</sub>\n</p>\n\n## Three + RT\n\n**Three**, for the API you already know. **RT**, for the three things it adds:\n\n- **Ray tracing.** Every light is traced: shadows, bounce light, reflections, and glowing surfaces that light the room. No shadow maps, no light probes, no lightmaps, no baking.\n- **Real time.** 60 fps in production scenes with the camera moving: Amazon Lumberyard Bistro and Beeple's Zero-Day, on a laptop. Not a still that converges once you stop.\n- **Runtime.** A game runtime, not only a renderer. Scene code and game logic run inside the engine, and the same file runs as plain three.js in any browser.\n\n## Hello world looks right\n\nWrite a scene at tutorial size and leave every setting at its default.\n\n```ts\nimport { Scene, PerspectiveCamera, Mesh, BoxGeometry, MeshStandardMaterial, DirectionalLight, SkyAtmosphere } from \"@threert/scene\";\n\nexport default function build() {\n  const scene = new Scene();\n  const sun = new DirectionalLight(0xffffff, 90000).setSunAngles(28, 100); // lux\n  scene.add(sun);\n  scene.environment = new SkyAtmosphere({ sun });\n\n  const plaster = new MeshStandardMaterial({ color: 0xd9d4cc, roughness: 0.92 });\n  const wall = new Mesh(new BoxGeometry(6.6, 3, 0.3), plaster);\n  wall.position.set(0, 1.5, -3.15);\n  scene.add(wall);\n  // ... the rest of the room: a floor, a window, a sofa, a lamp\n\n  const camera = new PerspectiveCamera(58, 16 / 9, 0.05, 200);\n  camera.position.set(-2.3, 1.45, 2.4);\n  camera.lookAt(1.0, 0.9, -1.2);\n  scene.add(camera);\n  return { scene, camera };\n}\n```\n\n| three.js, as written | ThreeRT, all defaults |\n|---|---|\n| ![A room in three.js: flat walls, no sunlight on the floor](site/media/hello/sun-room-three.webp) | ![The same room in ThreeRT: sunlight through the window, bounce light on the walls](site/media/hello/sun-room-rt.webp) |\n\nThe sun through the window, the sky, the bounce light off the floor and the lamp's glow come from tracing the scene. Light is in physical units: the sun is 90,000 lux, and an emissive surface is a light source. The whole file is [`scenes/sun-room.ts`](scenes/sun-room.ts).\n\n## Against three.js at full power\n\nThe same scene file, run by both engines on the same Mac. three.js gets everything it has: shadow maps, image-based lighting and, on WebGPU, its own SSGI, SSR and TRAA.\n\n| three.js r187 | ThreeRT |\n|---|---|\n| ![Amazon Lumberyard Bistro at night in three.js](site/media/bistro/hero-three.webp) | ![The same frame in ThreeRT](site/media/bistro/hero-rt.webp) |\n| ![Beeple's Zero-Day in three.js](site/media/zero-day/tuned.webp) | ![The same frame in ThreeRT](site/media/zero-day/live.webp) |\n\n| Bistro night, 1280 × 720 | Frame cost | Error against the reference (ΔE, lower is closer) |\n|---|---|---:|\n| **ThreeRT, live** | 15.5 ms (60 fps) | **3.4** |\n| three.js, WebGPU + SSGI + SSR + TRAA | 34.7 ms (29 fps) | 10.1 |\n| three.js, WebGL tuned | 15.9 ms (60 fps) | 12.1 |\n\nThe reference is an unbiased offline render (4,096 samples per pixel, no denoiser). The method, every scene, and where three.js is ahead (it draws small scenes in about 1 ms) are in [`docs/COMPARE.md`](docs/COMPARE.md).\n\n## Get started\n\n### Play and make games\n\n1. **[Download ThreeRT](https://threert.dev/download/)** for macOS (14 or later, Apple silicon) or iPhone and iPad (iOS 17 or later). The client fetches a game's code and traces it on the device's own GPU.\n2. Open an example from the app's library or from [threert.app](https://threert.app), where ThreeRT apps and games are published.\n3. Write your own with the `threert` command line that ships inside the Mac app:\n\n```bash\nthreert create my-game\ncd my-game\nthreert dev        # bundles on save, serves every client on your network, prints a QR code for your phone\n```\n\nThe same address in any browser shows the game as three.js. The full walk-through is at [threert.dev/docs](https://threert.dev/docs/).\n\n### Packages\n\n| Package | What |\n|---|---|\n| [`@threert/scene`](packages/scene) | The three.js-style scene API: meshes, PBR materials, lights, glTF models, physics, volumes |\n| [`@threert/gameplay`](packages/gameplay) | Games: state, transactional handlers, world handlers, frame scripts; input, a HUD and a channel to the app that runs the game; deterministic and replayable |\n| [`@threert/voxel`](packages/voxel) | Destructible voxel levels: explosions, cuts, and pieces that break off as rigid bodies |\n\n```bash\nnpm install @threert/scene @threert/gameplay\n```\n\n`threert dev` bundles these for you. Install them from npm for types, tests, or a build pipeline of your own.\n\n### Build the engine from source\n\nThe engine is Rust and [wgpu](https://wgpu.rs): hardware ray queries where the GPU has them (Metal, Vulkan), a software BVH where it does not. You need Rust, Node 24 and [Bun](https://bun.sh).\n\n```bash\nnpm install && bun scripts/setup.ts      # assets/ -> the machine's shared asset store, then fetch what is missing\nnode tools/build-scenes.ts                # scenes/*.ts + games -> out/bundles/<id>.js\nbun renderer/build.ts                     # -> renderer/target/release/threert-render\n\nrenderer/target/release/threert-render play out/bundles/light-room.js                         # a game, in a window\nrenderer/target/release/threert-render render out/bundles/cornell-box.js -o out/cornell.png --spp 32   # a scene, to an image\nnode tools/three/open.ts scenes/bistro.ts # the same scene in three.js, in your browser\n```\n\nIn the window: drag to orbit, right-drag to pan, wheel to zoom, WASD/QE to fly, `R` to reset, `P` for a snapshot.\n\n```bash\nnpm test && npm run typecheck && (cd renderer && cargo test --release)   # scene API, gameplay, runtime and engine tests\nnpm run test:render                                                      # the render test suite, on the GPU\n```\n\n## Demos in this repository\n\n| Demo | What | Run |\n|---|---|---|\n| **Light Room** | A small game: click coins, the floor, the balls, the crate and the walls | `threert-render play out/bundles/light-room.js` |\n| **Kabukichō Night** | A Shinjuku night street, procedural, lit almost entirely by ~120 emissive signs; rain, fog, a taxi. `R` rain, `L` closing time, `V` viewpoint | `threert-render play out/bundles/kabukicho.js` |\n| **Bistro** | Amazon Lumberyard Bistro at night: a slice, the district, and a crowd of 150 walkers and 60 vans | [`games/bistro-slice`](games/bistro-slice), [`bistro-district`](games/bistro-district), [`bistro-crowd`](games/bistro-crowd) |\n| **Zero-Day** | Beeple's Zero-Day (Measure One), animated | [`games/zero-day`](games/zero-day) |\n| **Tokyo** | Shinjuku and Shiba from the PLATEAU city model, with a live time of day | [`games/tokyo`](games/tokyo), [`tools/tokyo`](tools/tokyo) |\n| **Voxel level** | A destructible voxel city: explosions, falling pieces, fire and smoke | [`games/voxel-level`](games/voxel-level), [`docs/VOXEL.md`](docs/VOXEL.md) |\n| **Playground** | A macOS editor around the live viewport: outliner, live editing, Play-in-Editor, A/B against UE5 | `bun playground/build.ts && bun playground/run.ts` |\n\n## Repository layout\n\n| Directory | What |\n|---|---|\n| [`renderer/`](renderer) | The engine: the Rust + wgpu path tracer, live viewport, denoiser, post, and an embedded QuickJS that runs scene code (`threert-render`); `voxel-core` and `physics-core` (Rapier) also build for wasm32 |\n| [`packages/`](packages) | `@threert/scene`, `@threert/gameplay`, `@threert/voxel` |\n| [`scenes/`](scenes), [`games/`](games) | The reference catalog (Cornell box, material grid, Bistro, Zero-Day, …) and the playable content |\n| [`tests/`](tests) | The render test suite (analytic and temporal checks) and the three.js compatibility set |\n| [`tools/`](tools) | Bundling, benches and gates, the three.js comparison, the Tokyo pipeline |\n| [`compare/`](compare) | Hello-world scenes side by side in three.js and ThreeRT |\n| [`ue5/`](ue5) | UE5 reference captures (Lumen and the Path Tracer): the ground truth the renderer is measured against |\n| [`playground/`](playground) | ThreeRT Playground, the macOS editor |\n| [`site/`](site) | [threert.dev](https://threert.dev): the landing page, Download and Docs (the apps themselves are on [threert.app](https://threert.app)) |\n\n## Documentation\n\n- [Getting started](https://threert.dev/docs/): the client, a first scene, the dev loop, packages\n- [`docs/RUNTIME.md`](docs/RUNTIME.md): how scene code runs in the engine: setup, handlers, world handlers, frame scripts, physics\n- [`docs/MATERIAL_FUNCTIONS.md`](docs/MATERIAL_FUNCTIONS.md): a WGSL body on a material, run by the path tracer at every hit\n- [`docs/VOXEL.md`](docs/VOXEL.md): the voxel engine, measured on a destructible level\n- [`docs/PORTS.md`](docs/PORTS.md): a game written once for ThreeRT, and ports of it to devices the engine does not run on\n- [`docs/COMPARE.md`](docs/COMPARE.md): three.js at its strongest against ThreeRT, in frame rate and image quality\n- [`docs/PARITY.md`](docs/PARITY.md): Kabukichō against the same brief built in UE 5.8, and what the engine gained from it\n- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`docs/REPORT.md`](docs/REPORT.md): the serverless gameplay and rendering runtime the engine was built for\n- [`docs/ROADMAP.md`](docs/ROADMAP.md): the goal, the plan, and what each step measured\n- [Scene authoring skill](.claude/skills/threert-scene-authoring/SKILL.md): photo-referenced scenes with a coding agent\n\n## Contributing\n\nIssues and pull requests are welcome. [`docs/WORKFLOW.md`](docs/WORKFLOW.md) covers how work lands: one PR per item, the merge gate by tier, and CI. PRs are squash-merged.\n\nThe project started inside another repository and was extracted on 2026-11-10; PR numbers #1 to #139 in the docs, and the `cloud/` and `render-node/` directories some of them mention, refer to that one.\n\n## Licence and credits\n\nThreeRT is under the [MIT licence](LICENSE). The clients for macOS and iOS are free to use and closed source.\n\nThe assets are not in the repository; `bun scripts/setup.ts` fetches "
+    },
+    "brief": {
+      "summary": "基于 three.js API 的硬件光追实时路径追踪引擎",
+      "problem": "让 three.js 场景实时获得物理正确光追，免去阴影贴图和烘焙",
+      "highlights": [
+        "可以用 three.js 风格 API 写光追场景",
+        "可以让同一场景在浏览器以普通 three.js 运行",
+        "可以开发光追小游戏并打包到 macOS/iOS"
+      ],
+      "target_users": [
+        "游戏开发者",
+        "图形程序员",
+        "three.js 用户"
+      ],
+      "why_trending": "总 Star 445，近期更新活跃，本周雷达首次收录",
+      "caveat": "光追客户端目前仅 macOS/iOS，浏览器只能普通 three.js 预览",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "meshy-dev/ThreeRT",
+      "score": 80,
+      "category": "游戏开发",
+      "reason": "three.js风格实时路径追踪，可用于游戏与3D",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 55.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 9,
+      "full_name": "ZLHad/OpenVideoHarness",
+      "url": "https://github.com/ZLHad/OpenVideoHarness",
+      "description": "A video harness work platform for Agents such as Claude or Codex: the agent writes the code that renders the film, checks its own frames, storyboard and cut.  给 Claude Code 和 Codex 用的视频Harness工作台：agent 写代码渲染成片、自己检查分镜，立意、成片由你拍板；众多风格预设、引擎丰富，配音配乐也用代码做。",
+      "language": "JavaScript",
+      "total_stars": 32,
+      "forks": 7,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-video",
+        "claude-code",
+        "code2video",
+        "codex",
+        "coding-agents",
+        "explainer-video",
+        "ffmpeg",
+        "gemini",
+        "hyperframes",
+        "manim",
+        "motion-graphics",
+        "music-generation",
+        "procedural-audio",
+        "qwen3-tts",
+        "remotion",
+        "text-to-speech",
+        "threejs",
+        "video-as-code",
+        "video-generation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-28T18:22:24Z",
+      "updated_at": "2026-11-14T13:36:41Z",
+      "pushed_at": "2026-11-16T06:44:59Z",
+      "open_issues": 1,
+      "homepage": "https://zlhad.top/OpenVideoHarness/docs/site/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# OpenVideoHarness\n\n### Making one good film is easy. Making a good one every time is the hard part.\n\nA video workbench for Claude Code and Codex. You say what you want in one sentence. The agent finds the idea, writes the film as code, checks its own work, and stops for your call at the concept and the first draft; when the film is long, heavy to render or costs money, it shows you the storyboard first too.\n\n**English** · [中文](README.zh-CN.md) · [Website](https://zlhad.top/OpenVideoHarness/docs/site/) · [Wiki](https://github.com/ZLHad/OpenVideoHarness/wiki)\n\n![License: MIT](https://img.shields.io/badge/license-MIT-black)\n![Agents](https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex-orange)\n![Engines](https://img.shields.io/badge/engines-HyperFrames%20%7C%20canvas%20%2B%20Three.js%20%7C%20p5.brush%20%7C%20Manim%20%7C%20Blender-blue)\n\n<img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-wall.gif\" width=\"960\" alt=\"Twelve moving moments from films made with this workbench: a black hole, a brake cylinder cut open, shadow puppets, a stock chart running through a grey city, a glowing map, a blue terrain, a gold track, ink wash, a pen drawing a steam engine, mirror-image molecules, a sea of films, paper silhouettes growing wings\">\n\n<sub>Twelve moments from real films made with it. More below, some with sound.</sub>\n\n</div>\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/ZLHad/OpenVideoHarness/main/install.sh | bash\ncd ~/OpenVideoHarness && claude        # or: codex\n```\n\n---\n\n## Why this exists\n\nCoding agents can already write a video. Give one a sentence and what comes back can startle you: real motion, real type, real rhythm. There are hundreds of films like that out there now.\n\nAsk again, and the same model loses the pacing, makes everything glow and invents a number. That isn't a rendering problem. HyperFrames, Manim and Blender turn code into pictures. None of them decides what the film is about, whether a line of text stays up long enough to read, or whether the number on screen is true.\n\n**What's missing isn't tools. It's craft.**\n\nThis repo is that craft, written down where an agent can use it: how to find an idea that isn't the first one everybody has, why the sound comes before the picture, how to check a film you can't watch. A few rules never bend, and everything else is a default that a good idea can overrule.\n\nIt grew out of real films. Each time one went wrong, the lesson became a doc or a check, and the next film started from there.\n\n## What makes it different\n\n<table>\n<tr>\n<td width=\"44%\" valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-11.gif\" width=\"100%\" alt=\"A stock chart drawn as an ink-wash mountain range\"><br><sub>A stock chart that is also a mountain range.</sub></td>\n<td valign=\"top\"><b>It has an idea before it has code.</b><br>Two or three concept cards come first, each with a frame and a hook. It says what every other film on your topic looks like, then goes somewhere else.</td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-25.gif\" width=\"100%\" alt=\"A sea of films collapsing under the words What's missing?\"><br><sub>Said at the first stop: \"glass, cosmos, a starry sky… dizzying\".</sub></td>\n<td valign=\"top\"><b>You direct. It does the work.</b><br>It stops for you at the concept and the first draft; when the film is long, heavy to render or costs money, at the storyboard too. Want to decide the hook, the voice or the cover as well? Name them. Want none of it? Say \"just make it\".</td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-02.gif\" width=\"100%\" alt=\"A flash crossing a detector, with a timer counting microseconds\"><br><sub>Time is the only input. This flash is counted in microseconds.</sub></td>\n<td valign=\"top\"><b>Every frame is a function of time.</b><br>So any frame can be drawn alone, in any order, in parallel. A render that stops picks up where it stopped. A few seconds of a finished 4K film can be redrawn and put back without touching the rest.</td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-29.gif\" width=\"100%\" alt=\"The agent reviewing a contact sheet of its own frames in a terminal\"><br><sub>The agent going through its own frames.</sub></td>\n<td valign=\"top\"><b>It can't watch, so it measures everything it can.</b><br>An agent can't see video or hear sound. So it reads contact sheets against a 20-point checklist, measures the sound, and hands the draft to a reviewer with a fresh context, who scores it on 8 points. <code>bin/vh check</code> catches frozen frames, flashes, subtitles too short to read and wrong colour tags, and names a way out of each.</td>\n</tr>\n<tr>\n<td valign=\"top\"><video src=\"https://github.com/user-attachments/assets/84cee687-619c-4d5a-ad49-e9b79412d419\" controls width=\"100%\"></video><br><sub>▶ Press play and turn the sound on: each harmonic sounds its own note.</sub></td>\n<td valign=\"top\"><b>Sound comes first, and it's code too.</b><br>The narration or the music goes down first. Every word and beat gets a time, and the picture hangs on those times. The score is written as code, and sound effects land on the frame where things happen.</td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-24.gif\" width=\"100%\" alt=\"A neon arcade with a chat bubble and a glowing sign\"><br><sub>A generated plate, with code on top, both on record.</sub></td>\n<td valign=\"top\"><b>Real material, on the record.</b><br>Archive footage, generated pictures, recorded sound: one ledger keeps where each file came from, its licence and what it cost. No budget, no paid call.</td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-19.gif\" width=\"100%\" alt=\"A glowing gold map of rivers and points of light\"><br><sub>From a film of 33 minutes.</sub></td>\n<td valign=\"top\"><b>Long films hold up.</b><br>Shots, captions and chapters hang on the narration's words, so adding a pause moves the picture with it. Edit lists join pages and footage, renders resume, and the upload copy fits the platform's limit. The longest so far runs 33 minutes in 4K.</td>\n</tr>\n</table>\n\n**And not one AI look.** Left alone, AI video drifts toward one face: dark background, glow, glass cards. Here are 32 of its 33 styles, all rendering the same sentence:\n\n<a href=\"styles/\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-styles.gif\" width=\"960\" alt=\"All the styles moving at once, each rendering the same sentence: every frame is code\"></a>\n\n## What it makes\n\nMoments from a dozen films the author made with it in about a month, about 100 minutes in all. Physics, chemistry, engineering, money, folklore, literature, essays: each in a world of its own. They're in Chinese, and silent here.\n\n<table>\n<tr>\n<td width=\"33%\" valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-01.gif\" width=\"100%\" alt=\"A black hole and its jet\"><br><sub>A black hole's jet, all in Canvas 2D<br>7½-min physics explainer</sub></td>\n<td width=\"33%\" valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-03.gif\" width=\"100%\" alt=\"Two mirror-image molecules\"><br><sub>Mirror-image molecules in Three.js<br>2-min chemistry explainer</sub></td>\n<td width=\"33%\" valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-04.gif\" width=\"100%\" alt=\"White strands of fluid spiralling on blue\"><br><sub>A fluid winding itself up<br>3-min maths story</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-07.gif\" width=\"100%\" alt=\"A brake cylinder cut open\"><br><sub>A brake cylinder cut open, the camera following the fluid<br>14-min teardown in Three.js</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-08.gif\" width=\"100%\" alt=\"A brake disc glowing in false colour\"><br><sub>A disc under braking, in false colour</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-09.gif\" width=\"100%\" alt=\"A drum brake swelling with heat\"><br><sub>A drum brake swelling with heat</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-10.gif\" width=\"100%\" alt=\"A red line running through a grey model city\"><br><sub>2008 is a grey city<br>9½-min data film at 60 fps</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-12.gif\" width=\"100%\" alt=\"A chart in neon, pink bars climbing\"><br><sub>2015 is neon</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-05.gif\" width=\"100%\" alt=\"A blue terrain crossed by a purple band\"><br><sub>A conjecture as a landscape</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-13.gif\" width=\"100%\" alt=\"Shadow puppets climbing a hill as geese pass\"><br><sub>Shadow puppets, drawn in code<br>3-min folk history</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-14.gif\" width=\"100%\" alt=\"An ink-wash garden with chrysanthemums\"><br><sub>Ink wash, chrysanthemums opening</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-30.gif\" width=\"100%\" alt=\"Blue-and-green mountains beside a Tang poem\"><br><sub>Blue-and-green mountains, a Tang poem</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-15.gif\" width=\"100%\" alt=\"People climbing a dim stairwell with a torch\"><br><sub>The same film, reaching a stairwell today</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-16.gif\" width=\"100%\" alt=\"A pen drawing a steam engine and a railway\"><br><sub>A pen draws the machines as you watch<br>3-min history of technology</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-17.gif\" width=\"100%\" alt=\"Silhouettes growing wings on red\"><br><sub>Silhouettes growing wings<br>9-min portrait of a writer</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-18.gif\" width=\"100%\" alt=\"A book unfolding out of a box\"><br><sub>A book that opens like a box</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-20.gif\" width=\"100%\" alt=\"A brain lit by a lantern in a dark library\"><br><sub>A lamp, a brain, a library<br>33-min essay film</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-21.gif\" width=\"100%\" alt=\"Light travelling up a tree of branching paths\"><br><sub>A path of light through a tree</sub></td>\n</tr>\n<tr>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-22.gif\" width=\"100%\" alt=\"An app separated into glowing glass layers\"><br><sub>Software taken apart in glass layers<br>4-min tech story in Three.js</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-23.gif\" width=\"100%\" alt=\"Glowing capsules on a curved gold track\"><br><sub>Findings lighting up along a track</sub></td>\n<td valign=\"top\"><img src=\"https://github.com/ZLHad/OpenVideoHarness/releases/download/media/readme-06.gif\" width=\"100%\" alt=\"A flat illustration of a boat linking to satellites\"><br><sub>From "
+    },
+    "brief": {
+      "summary": "给 Claude Code 和 Codex 的视频代码工作台",
+      "problem": "编码代理能生成视频，但难稳定把控节奏、内容准确度和成片质量",
+      "highlights": [
+        "可以用一句话让代理写代码渲染成片",
+        "可以让代理检查分镜和关键帧",
+        "可以用代码制作配音配乐与音效"
+      ],
+      "target_users": [
+        "视频创作者",
+        "技术内容作者",
+        "编码代理用户"
+      ],
+      "why_trending": "本周首次收录，定位具体但社区热度尚低",
+      "caveat": "总 Star 仅 32，实际效果与稳定性待验证",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ZLHad/OpenVideoHarness",
+      "score": 88,
+      "category": "AI 视频",
+      "reason": "Agent写代码渲染成片的视频Harness工作台",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "skyzhao1223/free-for-creators",
+      "url": "https://github.com/skyzhao1223/free-for-creators",
+      "description": "🎁 License-verified free assets for creators — 214 resources for music, SFX, footage, photos, fonts, icons, palettes, LUTs, mockups & 3D, each tagged with attribution and monetization rules. Weekly CI link-check, 0 dead links.",
+      "language": "Python",
+      "total_stars": 84,
+      "forks": 11,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d-assets",
+        "awesome-list",
+        "cc0",
+        "content-creators",
+        "creative-commons",
+        "free-assets",
+        "free-fonts",
+        "free-music",
+        "game-assets",
+        "hacktoberfest",
+        "icons",
+        "luts",
+        "mockups",
+        "public-domain",
+        "royalty-free",
+        "sound-effects",
+        "stock-footage",
+        "stock-photos",
+        "streaming",
+        "video-editing"
+      ],
+      "license_name": "CC0-1.0",
+      "created_at": "2026-09-21T09:12:55Z",
+      "updated_at": "2026-11-15T23:38:48Z",
+      "pushed_at": "2026-11-16T06:48:47Z",
+      "open_issues": 2,
+      "homepage": "https://skyzhao1223.github.io/free-for-creators/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<!-- This file is generated by scripts/build_readme.py from data/*.json — edit the JSON, then run the script (CI checks sync). -->\n\n<p align=\"center\">\n  <img src=\"assets/banner.webp\" alt=\"Free for Creators: music, sound effects, footage, photos, fonts, icons, palettes, LUTs, mockups, 3D assets, search engines\" width=\"860\">\n</p>\n\n<p align=\"center\"><strong>English</strong> | <a href=\"README.zh-CN.md\">简体中文</a></p>\n\n# 🎁 Free for Creators\n\n<p align=\"center\">\n  <a href=\"https://skyzhao1223.github.io/free-for-creators/\"><img src=\"https://img.shields.io/badge/%F0%9F%8C%90_website-browse-success\" alt=\"Website\"></a>\n  <a href=\"https://github.com/skyzhao1223/free-for-creators/actions/workflows/ci.yml\"><img src=\"https://github.com/skyzhao1223/free-for-creators/actions/workflows/ci.yml/badge.svg\" alt=\"CI\"></a>\n  <a href=\"https://github.com/skyzhao1223/free-for-creators/actions/workflows/linkcheck.yml\"><img src=\"https://github.com/skyzhao1223/free-for-creators/actions/workflows/linkcheck.yml/badge.svg\" alt=\"Link check\"></a>\n  <img src=\"https://img.shields.io/badge/resources-221-blue\" alt=\"221 resources\">\n  <img src=\"https://img.shields.io/badge/license-CC0-lightgrey\" alt=\"License: CC0\">\n  <img src=\"https://img.shields.io/badge/PRs-welcome-brightgreen\" alt=\"PRs welcome\">\n</p>\n\n*Links last verified 2026-11-02: 158 ok · 60 need a browser · 0 broken.*\n\n> \"Free\" on an asset site rarely says whether it is free for a monetized video, a client project or a shipped game. This directory records that, for every entry. 221 resources in 11 categories.\n\n**At a glance:** 162 entries are 💚 safe for monetized content · 137 need ➖ no attribution · 176 need 🔓 no account · 36 are entirely CC0 / public domain · 14 more mix in CC0 items (filter per asset).\n\nEvery entry answers three questions that decide whether a free asset is actually usable:\n\n1. **What is the license?** → the *License* column\n2. **Do I have to credit anyone?** → the *Attribution* column\n3. **Can I use it in monetized content?** → the *Monetization* column\n\nA weekly GitHub Action link-checks every URL and files an issue on a dead one. The entries live as JSON in [`data/`](data), released under CC0.\n\n🌐 **[Browse the interactive directory](https://skyzhao1223.github.io/free-for-creators/)**: search and filter by license, attribution and monetization.\n\n> ⚠️ **Disclaimer** — Licenses change and this list is maintained by volunteers. It is not legal advice. Always verify the current license on the source website before publishing, especially for monetized or client work.\n\n## Legend\n\n| Symbol | Meaning |\n| --- | --- |\n| 💚 Allowed | Safe for monetized/commercial content under the listed license |\n| ⚠️ Conditional | Allowed only under conditions (credit, free-tier limits, specific platforms) |\n| ❓ Varies | License differs per item — check each asset |\n| 🚫 Not allowed | Not free for commercial/monetized use |\n| ✅ Required | You must credit the author/source |\n| 🔑 Yes | A (free) account is needed to download |\n\n## Table of Contents\n\n- [Music](#music) — 22 resources · Royalty-free and copyright-safe music for videos, streams, podcasts and games.\n- [Sound Effects](#sound-effects) — 15 resources · Free SFX libraries, packs and ambience for video, games, podcasts and streams.\n- [Stock Footage](#stock-footage) — 17 resources · Free video clips and B-roll, including 4K, archival and public domain footage.\n- [Stock Photos](#stock-photos) — 33 resources · Free photography, from modern stock to museum-grade public domain archives.\n- [Fonts](#fonts) — 21 resources · Typefaces free for commercial use, including CJK families.\n- [Graphics & Icons](#graphics--icons) — 49 resources · Illustrations, icons, vectors and clipart for thumbnails, sites, slides and branding.\n- [Colors & Gradients](#colors--gradients) — 6 resources · Palettes and gradients you can copy into a design, each with a stated license.\n- [Video Production](#video-production) — 10 resources · LUTs, color grading assets, transitions and editor templates.\n- [Mockups & Design Templates](#mockups--design-templates) — 12 resources · PSD/device mockups, thumbnail and social media templates.\n- [3D & Game Assets](#3d--game-assets) — 27 resources · Models, HDRIs, PBR textures, characters and game-ready asset packs.\n- [Search Engines](#search-engines) — 9 resources · Meta-search across openly licensed images, audio and media.\n- [Creator field notes](#creator-field-notes)\n- [Related Lists](#related-lists)\n- [Contributors](#contributors)\n- [Contributing](#contributing)\n\n## Music\n\n*Royalty-free and copyright-safe music for videos, streams, podcasts and games.*\n\n| Resource | About | License | Attribution | Monetization | Sign-up |\n| --- | --- | --- | --- | --- | --- |\n| [YouTube Audio Library](https://www.youtube.com/audiolibrary) | Free music and sound effects provided by YouTube for use in your videos. _Some tracks require attribution exactly as shown in the library._ | YouTube Audio Library License (some tracks CC-BY) | ❓ Varies | 💚 Allowed | 🔑 Yes |\n| [Pixabay Music](https://pixabay.com/music/) | Large and growing library of royalty-free tracks and loops. | Pixabay Content License | — | 💚 Allowed | — |\n| [Free Music Archive](https://freemusicarchive.org/) | Archive of Creative Commons music, running since the WFMU radio days. _Filter by license; some tracks are NonCommercial or NoDerivatives._ | Various CC licenses | ❓ Varies | ❓ Varies | — |\n| [Incompetech](https://incompetech.com/music/royalty-free/) | Kevin MacLeod's legendary library of film-score style music. _Credit must be visible: \"Track Title\" — Kevin MacLeod (incompetech.com), CC BY 4.0. Monetized videos are explicitly allowed._ | CC BY 4.0 (paid no-attribution license available) | ✅ Required | 💚 Allowed | — |\n| [Bensound](https://www.bensound.com/) | Catchy corporate, acoustic and cinematic tracks by composer Benjamin Tissot. _Free license covers online videos with credit; some tracks are Pro-only._ | Bensound Free License | ✅ Required | ⚠️ Conditional | — |\n| [Mixkit Music](https://mixkit.co/free-stock-music/) | Envato's free music for videos, streams and podcasts. | Mixkit Stock License (Free) | — | 💚 Allowed | — |\n| [Uppbeat](https://uppbeat.io/) | Modern royalty-free music made for creators, with a free monthly tier. _Free account has a monthly download cap and requires pasting the credit link._ | Uppbeat Free License | ✅ Required | 💚 Allowed | 🔑 Yes |\n| [Scott Buckley](https://www.scottbuckley.com.au/library/) | Film-quality orchestral and ambient library released under CC-BY. _Credit Scott Buckley in your video description; missing credits have triggered YouTube copyright claims._ | CC BY 4.0 | ✅ Required | 💚 Allowed | — |\n| [Audionautix](https://audionautix.com/) | Jason Shaw's free rock, acoustic and electronic tracks. _Commercial use is allowed as long as credit is given to Jason Shaw (audionautix.com)._ | CC BY 4.0 | ✅ Required | 💚 Allowed | — |\n| [Mikael Hellman](https://mikaelhellman.com/) <sup>[@muzicaed](https://github.com/muzicaed)</sup> | Cinematic and orchestral instrumentals from a single composer, free under CC BY. _Every track is checked by hand against YouTube Content ID, with the date shown on its page; anything registered is removed rather than flagged. Some tracks are AI-assisted, and each page says which._ | CC BY 4.0 | ✅ Required | 💚 Allowed | — |\n| [FreePD](https://freepd.com/) | Public domain music across many genres, zero restrictions. | Public Domain | — | 💚 Allowed | — |\n| [Musopen](https://musopen.org/) | Public domain classical recordings, sheet music and music textbooks. _Most recordings are public domain; verify the license on each item._ | Public Domain / various | — | 💚 Allowed | — |\n| [ccMixter](https://ccmixter.org/) | Community remix site with Creative Commons licensed tracks. | Various CC licenses | ❓ Varies | ❓ Varies | — |\n| [NoCopyrightSounds (NCS)](https://ncs.io/) | Iconic electronic music label, free for creators who follow its usage policy. _Credit the track title, artist and NCS link; policy covers monetized YouTube and Twitch._ | NCS Usage Policy | ✅ Required | 💚 Allowed | — |\n| [StreamBeats](https://www.streambeats.com/) | Harris Heller's copyright-safe music library built specifically for streamers. _Available on major streaming platforms; designed to be DMCA-safe._ | Free (custom StreamBeats license) | — | 💚 Allowed | — |\n| [Pretzel Rocks](https://www.pretzel.rocks/) | DMCA-safe music player for streamers with a free tier. _Free tier requires on-stream attribution; paid tier removes it._ | Pretzel Free License | ✅ Required | 💚 Allowed | 🔑 Yes |\n| [Purple Planet](https://www.purple-planet.com/) | Mood-based free tracks for small creators and non-broadcast use. _Free for YouTube and online video with credit; other uses need a paid license._ | Purple Planet Free License | ✅ Required | ⚠️ Conditional | — |\n| [Chosic](https://www.chosic.com/free-music/all/) | Aggregator of free and CC music with handy license filters. | Various (per track) | ❓ Varies | ❓ Varies | — |\n| [Thematic](https://hellothematic.com/) | Free songs for creators in exchange for a simple credit link. _Each track used needs its credit link in your description._ | Thematic License | ✅ Required | 💚 Allowed | 🔑 Yes |\n| [Soundimage.org](https://soundimage.org/) | Free music tracks and texture images by Eric Matyas; credit required. _Attribution page requires crediting the author in the game/video/podcast description; tracks are free for commercial projects._ | Custom free license (attribution required) | ✅ Required | 💚 Allowed | — |\n| [Ende (formerly Filmmusic.io)](https://ende.app/en) | Royalty-free production music by Sascha Ende under CC BY 4.0, commercial use included. _Renamed from filmmusic.io. CC BY 4.0 with commercial use allowed; download opens a 'License ticket' step, account requirement unverified._ | CC BY 4.0 | ✅ Required | 💚 Allowed | — |\n| [Tunetank](https://tunetank.com/) | Royalty-free music and sound effects for video creators; free tier for commercial projects. _License page allows free commercial use; check each track's terms and be aware channels may need whitelisting to avoid copyright claims._ | Tunetank license (free tier) | ❓ Varies | 💚 Allowed | 🔑 Yes |\n\n## Sound Effects\n\n*Free SFX libraries, packs and ambience for video, games, podcasts and streams.*\n\n| Resource | About | License | Attribution | Monetization | Sign-up |\n| --- | --- | --- | --- | --- | --- |\n| [Freesound](https://freesound.org/) | Collaborative database of sounds under CC0 and CC-BY licenses. _Filter by license; CC-BY sounds need credit in your description._ | Various CC licenses (per sound) | ❓ Varies | ❓ Varies | 🔑 Yes |\n| [ZapSplat](https://www.zapsplat.com/) | 100,000+ free sound effects; free tier works with attribution. _Gold membership removes attribution and raises quality limits._ | ZapSplat Free License | ✅ Required | ⚠️ Conditional | 🔑 Yes |\n| [Pixabay Sound Effects](https://pixabay.com/sound-effects/) | Royalty-free sound effects library from Pixabay. | Pixabay Content License | — | 💚 Allowed | — |\n| [Mixkit Sound Effects](https://mixkit.co/free-sound-effects/) | Free SFX for videos, games and streams from Envato's Mixkit. | Mixkit Sound Effects Free License | — | 💚 Allowed | — |\n| [BBC Sound Effects](https://sound-effects.bbcrewind.co.uk/) | 33,000+ sounds from the historic BBC archive. _NOT free for commercial or monetized content; great for learning and research._ | RemArc/BBC License (personal, educational, research only) | — | 🚫 Not allowed | — |\n| [Sonniss GDC Audio Bundles](https://sonniss.com/gameaudiogdc) | Multi-gigabyte professional game audio packs released free every year. | Royalty-free (Sonniss GDC license) | — | 💚 Allowed | — |\n| [Orange Free Sounds](https://orangefreesounds.com/) | Large mixed library of free sounds, loops and ringtones. | Various CC licenses | ❓ Varies | ❓ Varies | — |\n| [SoundBible](https://soundbible.com/) | Simple, no-frills free sound effect downloads. | CC0 / CC-BY (per sound) | ❓ Varies "
+    },
+    "brief": {
+      "summary": "整理 214 个可商用免费素材，并标注授权规则。",
+      "problem": "免费素材站常不说明能否商用、是否要署名，容易踩坑。",
+      "highlights": [
+        "可以按授权筛选音乐、音效和图片素材",
+        "可以快速查字体、图标、LUT 和 3D 模型",
+        "可以在做视频或游戏前确认商用与署名要求"
+      ],
+      "target_users": [
+        "视频创作者",
+        "独立游戏开发者",
+        "设计与剪辑师"
+      ],
+      "why_trending": "本周首次收录，素材授权信息细，适合内容创作选材。",
+      "caveat": "授权可能变化，商用前仍需到来源网站核对。",
+      "category": "ACG 资源 / Mod",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "skyzhao1223/free-for-creators",
+      "score": 78,
+      "category": "ACG 资源 / Mod",
+      "reason": "创作者免费素材库，含音乐音效3D与游戏资源",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 49.5
+    }
+  }
+]
