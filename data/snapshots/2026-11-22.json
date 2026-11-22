@@ -1,0 +1,580 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "elementalsouls/Claude-BugHunter",
+      "url": "https://github.com/elementalsouls/Claude-BugHunter",
+      "description": "A Claude Code skill bundle for bug hunting and external red-team work - 82 skills, 15 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
+      "language": "Python",
+      "total_stars": 16439,
+      "forks": 1865,
+      "stars_today": 1803,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 1803
+    },
+    "details": {
+      "topics": [
+        "ai-security",
+        "anthropic",
+        "application-security",
+        "bug-bounty",
+        "bugbounty",
+        "bugcrowd",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "ethical-hacking",
+        "hackerone",
+        "offensive-security",
+        "pentesting",
+        "red-team",
+        "security-tools",
+        "web-security"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-05T11:22:32Z",
+      "updated_at": "2026-11-22T07:06:15Z",
+      "pushed_at": "2026-11-22T04:24:52Z",
+      "open_issues": 18,
+      "homepage": "https://elementalsouls.github.io/Claude-BugHunter",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![claude-bughunter banner](assets/banner-v2.svg)\n\n# claude-bughunter\n\n> A self-contained Claude skill bundle for bug hunting and external red-team work · **83 skills** · 15 slash commands · **681 disclosed-report patterns** (433 now individually cited & auditable) across 24 core vulnerability classes · enterprise identity + infrastructure attack matrices · engagement-folder scaffolding · Burp MCP integration · battle-tested across authorized red-team and bug-hunting engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101, testphp.vulnweb.com).\n\nBuilt by **[Sachin Sharma](https://www.linkedin.com/in/sachinsharma8080/)** — Bug Hunting & GenAI Security Research.\n\n<p align=\"center\">\n  <sub>SPONSORED BY</sub>\n  <br/>\n  <a href=\"https://www.apismart.ai/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/apismart-dark.png\">\n      <img alt=\"ApiSmart\" src=\"assets/sponsors/apismart-light.png\" height=\"30\">\n    </picture>\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://threatwatch360.com\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/tw360-dark.svg\">\n      <img alt=\"ThreatWatch360\" src=\"assets/sponsors/tw360-light.svg\" height=\"30\">\n    </picture>\n  </a>\n</p>\n\n---\n\n## What is this?\n\n`claude-bughunter` is a drop-in skill bundle for the [Claude Code skills system](https://docs.claude.com/en/docs/claude-code/skills). Install once and Claude Code stops being a chatbot and starts behaving like a senior bug-hunting researcher or red-team operator: it knows the techniques, the chain templates, the VRT mappings, the platform CVE chains, and the hygiene — and it stays in scope.\n\nFour layers stack:\n\n- **Think** — `bb-methodology` + `redteam-mindset`: the 5-phase non-linear workflow, critical-thinking framework, and red-team operator discipline.\n- **Hunt webapps** — 58 `hunt-*` skills curated from 681 disclosed HackerOne reports: per-class detection patterns, payloads, bypass tables, and chain templates.\n- **Hit the perimeter** — enterprise platform chains (M365/Entra, Okta, vCenter, SSL-VPN appliances, SharePoint, cloud IAM): current 2024–2026 CVE chains + post-credential escalation.\n- **Ship it** — `triage-validation` + reporting + `evidence-hygiene`: the 7-Question Gate, VRT-aware severity, OOS rebuttals, PII redaction, and red-team deliverables.\n\nAll triggered automatically by topic — describe what you're testing in plain English and the relevant skill loads. No invocation by name.\n\n---\n\n## Quickstart\n\n**Option A — install as a Claude Code plugin (recommended).** From inside Claude Code:\n\n```text\n/plugin marketplace add elementalsouls/Claude-BugHunter\n/plugin install claude-bughunter@elementalsouls\n```\n\nAll 83 skills + 15 commands load namespaced under `claude-bughunter:` and update when you bump the plugin version — no files copied into `~/.claude/`.\n\n**A HackerOne account is optional.** The install asks for a HackerOne API username and token. They only let the HackerOne MCP read your private programs and your own reports; leave both blank if you don't need that. Every skill, command and the MCP's public tools (duplicate search, program scope) work without them.\n\n**Option B — copy install (no plugin system / pin to a clone):**\n\n```bash\ngit clone https://github.com/elementalsouls/Claude-BugHunter.git\ncd Claude-BugHunter\n```\n\n```bash\n# macOS / Linux\nbash scripts/install.sh\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1\n```\n\nBoth copy the skills + commands into `~/.claude/` (macOS/Linux) or `%USERPROFILE%\\.claude\\` (Windows) and wire the `hunt` engagement scaffolder.\n\n**What each install path gives you:**\n\n| Path | 83 skills + 15 slash commands | `cbh` CLI | `hunt` scaffolder |\n|---|---|---|---|\n| **A — plugin** | ✅ namespaced under `claude-bughunter:` | ➕ separate `pipx install` | ❌ clone-only |\n| **B — copy install** | ✅ copied into `~/.claude/` | ✅ from the clone | ✅ from the clone |\n\nThe plugin is the fastest path to the skills + slash commands. The terminal-native\n`cbh` runner installs standalone — `pipx install git+https://github.com/elementalsouls/Claude-BugHunter`\n— so plugin users can add it without a full clone (see [`cbh` CLI](docs/cbh-cli.md)).\nThe `hunt` engagement scaffolder ships with the clone (Option B).\n\nThat's it. Open Claude Code and describe what you're testing in plain English — the right skill loads automatically, no invocation by name:\n\n```text\n> Testing acme.com — an in-scope HackerOne target. Run recon and rank the surface.\n\n  ⟳ loading skills: web2-recon, offensive-osint, bb-methodology …\n    → subdomain enum (subfinder + crt.sh) … 47 hosts\n    → live hosts (httpx) … 12 · tech fingerprint … 6 distinct stacks\n    → ranked surface: api.acme.com (GraphQL, introspection ON)  ← start here\n                      auth.acme.com (OAuth, SSO)               ← hunt-oauth\n\n  Next: want me to probe the GraphQL introspection + OAuth redirect_uri?\n```\n\n→ Full [Installation guide](INSTALL.md) · [Usage guide](USAGE.md) · [searchable skill catalog](docs/skills.md).\n\n> The block above is an illustrative transcript. To record a real demo of your own session: `asciinema rec demo.cast` → upload to [asciinema.org](https://asciinema.org) and drop the badge here.\n\n---\n\n## Runs on multiple agent harnesses\n\n![One install, agent harnesses — Claude Code, OpenCode, Codex CLI, Hermes Agent, Google AntiGravity](assets/harness-routing.svg)\n\nThe skills are plain [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) — the same `SKILL.md` format that **Claude Code · OpenCode · OpenAI Codex CLI · Hermes Agent · Google AntiGravity** all load. One command installs them everywhere:\n\n```bash\n# macOS / Linux\nbash scripts/install.sh --all --burp-mcp\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1 -All -BurpMcp\n```\n\n| Harness | Target Skill Directory | Flag |\n|---|---|---|\n| **Claude Code** (baseline) | `~/.claude/skills/` | *(default)* |\n| **OpenCode** | reads `~/.claude/skills/` & `~/.agents/skills/` | *(default)* / `--agents` |\n| **OpenAI Codex CLI** | `~/.agents/skills/` | `--agents` |\n| **Hermes Agent** | `~/.hermes/skills/` | `--hermes` |\n| **Google AntiGravity** | `~/.gemini/config/skills/` | `--antigravity` |\n\n`--all` (`-All`) detects installed harnesses and copies skills to each harness's path (`~/.claude/skills`, `~/.agents/skills`, `~/.hermes/skills`, `~/.gemini/config/skills`); `--burp-mcp` (`-BurpMcp`) wires the Burp MCP server into each. The full *knowledge* layer ports to all five — the slash commands and `/hunt` engine stay Claude-Code-only by design.\n\n→ [Multi-harness guide](docs/multi-harness.md)\n\n---\n\n## Star History\n\n<a href=\"https://github.com/elementalsouls/Claude-BugHunter/stargazers\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"assets/star-history-light.svg\" />\n   <img alt=\"Star history chart for Claude-BugHunter\" src=\"assets/star-history-light.svg\" width=\"840\" />\n </picture>\n</a>\n\n<sub>Chart is self-hosted — regenerate with `python3 scripts/gen_star_history.py` (needs `gh auth login`).\nRefreshes automatically each day via `.github/workflows/star-history.yml`.</sub>\n\n---\n\n\n## Scope — what this bundle is for, and what it isn't\n\nThis bundle covers the **external attack surface** — anything reachable from the internet without first compromising an internal endpoint.\n\n### In scope\n\n- **Bug bounty hunting** — web apps, APIs, SaaS, GraphQL, OAuth, JWT, file upload, IDOR, SSRF, RCE chains\n- **Web application pentesting** — full hunt-* coverage of OWASP-mapped bug classes + discipline rules\n- **External red-team engagements** — initial-access against internet-facing enterprise estate: M365 / Entra ID, Okta-as-IdP, SharePoint on-prem (ToolShell + legacy SOAP), VMware vCenter / Workspace ONE, SSL VPN appliances (Cisco / Fortinet / Citrix / Palo Alto / Pulse / SonicWall / F5), Android APK red-team, supply-chain recon\n- **Cloud misconfig + post-credential escalation** — public S3, IMDS chains, STS AssumeRole, cross-account confused-deputy\n- **Recon + OSINT** — subdomain enum, identity-fabric mapping, certificate transparency, JS analysis, secret scanning\n- **Reporting** — H1, Bugcrowd (VRT-aware), Intigriti, Immunefi, plus client-facing red-team deliverable format\n\n### Out of scope (deliberate — not gaps, design decisions)\n\n- **Internal Active Directory attacks** — BloodHound, Kerberoasting, ASREProast, DCSync, Pass-the-Hash, AD CS abuse, ntlmrelayx, Responder, PetitPotam, etc. Different operational risk profile; needs different tooling and judgment. **Future bundle, not this one.**\n- **C2 frameworks** — Cobalt Strike, Sliver, Mythic, Havoc, BRC4 tradecraft. Out of scope for external-only engagement model.\n- **Post-exploit / persistence / lateral** — Mimikatz/comsvcs LSASS dumping, golden/silver tickets, named-pipe impersonation, persistence (registry, scheduled tasks, WMI events, COM hijacking), token theft. These start after the perimeter has already broken — different bundle territory.\n- **Evasion** — AMSI bypass, ETW patching, AV/EDR bypass. Tied to C2 tradecraft above.\n- **iOS pentesting / hardware / RF / ICS** — out of scope by design.\n- **Binary exploitation / kernel pwn / browser internals** — different skill universe.\n\nIf you're running an internal red team that includes domain-takeover chains via Kerberos or lateral movement, **this bundle won't help you in those phases** — and we'd rather say that up front than have you find out mid-engagement. The external surface handoff to internal-RT tooling (Impacket, NetExec, CrackMapExec, Rubeus, Certify, BloodHound) is intentionally outside our scope. **Coverage for internal AD and post-exploit may come in a future update.**\n\n---\n\n## What's inside\n\n**83 skills**, auto-loaded by topic — no invocation by name. Coverage across the external attack surface:\n\n| Category | # | Examples |\n|---|---|---|\n| Hunt — web app vuln classes | 58 | XSS, SQLi, SSRF, IDOR, LFI, SSTI, XXE, CSRF, CORS, open-redirect, SharePoint, ASP.NET/NTLM |\n| Enterprise platform attack ★ | 10 | M365/Entra, Okta, cloud-IAM-deep, vCenter, enterprise VPN, APK/iOS red-team pipelines, supply-chain recon |\n| Reporting & validation | 6 | triage-validation, evidence-hygiene, report-writing, bugcrowd-reporting |\n| Recon & OSINT | 5 | web2-recon, offensive-osint, osint-methodology, recon-scope-triage |\n| Methodology & mindset | 4 | bb-methodology, bug-bounty, redteam-mindset, bb-local-toolkit |\n\nFull searchable catalog → **[docs/skills.md](docs/skills.md)**. Also ships **15 slash commands** (`/hunt`, `/recon`, `/report`, …) and a deterministic **engagement engine** (`engine/`) that maps a target's attack surface and routes each finding to the skill that handles it.\n\n---\n\n## How it works\n\nA 6-phase, non-linear workflow — **recon → map & rank → hunt → validate → report** — with scope enforced in code and a **7-Question Gate** before anything is submitted. Two ways to drive it:\n\n- **Plain English** — describe what you're testing and the relevant skill loads automatically.\n- **`/hunt` scaffold + `cbh` CLI** — engagement-folder structure, state, and orchestration.\n\n→ [Usage guide & worked example](USAGE.md) · [6-phase architecture & skill-to-phase map](docs/architecture.md) · [`cbh` CLI](docs/cbh-cli.md)\n\n---\n## Authorization\n\nThese skills are intended for assets you **own** or have **written authorization to assess** (bug-bounty in-scope assets, pentest engagement letters, CTF challenges, your own infrastructure).\n\nThe skills include validation gates that auto-trigger when you point Claude at unverified third-party targets — `triage-validation`'s 7-Question Gate explicitly asks whether the asset is in scope (Q3) and on the program's accepted-impact list (Q2). The `bugcrowd-reporting` skill includes researcher-side hygiene (Bugcrowdninja alias, account-state restoration, friendly-tester posture) that signals legitimate authorized testing to the target's fr"
+    },
+    "brief": {
+      "summary": "为 Claude Code 提供漏洞挖掘与红队技能包",
+      "problem": "红队和漏洞挖掘的流程知识与报告模式分散难用",
+      "highlights": [
+        "可以自动加载对应漏洞挖掘技能",
+        "可以对外部目标做侦察并排序攻击面",
+        "可以对照披露报告模式做漏洞验证"
+      ],
+      "target_users": [
+        "漏洞挖掘者",
+        "红队工程师",
+        "安全学习者"
+      ],
+      "why_trending": "今日新增1803星，热度再升",
+      "caveat": "需合法授权，主要覆盖外部攻击面",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "elementalsouls/Claude-BugHunter",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "Claude安全技能包，属Agent技能但非ACG",
+      "generated_by_ai": true,
+      "velocity_score": 99,
+      "freshness_score": 40,
+      "ranking_score": 61.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "AI video you can actually edit. HyperFrames is a free, open-source AI video editor. Describe any video and get a real project you can change down to the frame.",
+      "language": "TypeScript",
+      "total_stars": 87932,
+      "forks": 8183,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 360
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "framework",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "rendering",
+        "typescript",
+        "video-editor"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-22T06:48:12Z",
+      "pushed_at": "2026-11-22T07:07:41Z",
+      "open_issues": 306,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>The open-source AI video editor: create, edit, remake.</b></p>\n\n<p align=\"center\">Write HTML. Render video. Built for agents.</p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio/download?utm_source=github&utm_medium=readme&src=github-readme\">Download the app</a> ·\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> ·\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> ·\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> ·\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> ·\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a> ·\n  <a href=\"https://x.com/HyperFrames_\">X</a> ·\n  <a href=\"https://www.youtube.com/@HyperFrames_Official\">YouTube</a>\n</p>\n\n<p align=\"center\"><a href=\"https://hyperframes.studio/studio/download?src=github-readme-hero\"><picture><source type=\"image/avif\" srcset=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-26s-v3.avif\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-v1.webp\" width=\"800\" alt=\"HyperFrames Studio, the AI video editor: ask for a launch video, get an editable project, then mark one word and the agent changes just that\"></picture></a></p>\n\nHyperFrames is HeyGen's AI video editor for people and agents. Describe a video, bring your own footage, or remake a video you love, and get a real project you can change down to the frame: ask for a bigger title, a faster cut or new captions, and it changes just that.\n\nUnderneath, HyperFrames is a free, open-source framework (Apache 2.0) for turning HTML, CSS, JavaScript, media and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents like Claude Code, Codex and Cursor with skills, or as the rendering core behind hosted authoring workflows. No React required.\n\n## Three ways to use it\n\n|                                    | Best for                                                                                                                                                     | Start                                                                                                                                                                                                      |\n| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **HyperFrames Studio app**         | Anyone, no code. Describe a video or drop in your footage, then edit by typing or pointing. Use the built-in agent on Pro, or your own Claude Code or Codex. | [Download for Mac, Windows or Linux](https://hyperframes.studio/studio/download?src=github-readme) (free plan)                                                                                             |\n| **Your coding agent**              | Claude Code, Codex, Cursor, Gemini CLI and other agents.                                                                                                     | `npx skills add heygen-com/hyperframes`                                                                                                                                                                    |\n| **Claude, ChatGPT or Grok** (beta) | Making a video in a chat, nothing to install. ChatGPT: Business, Enterprise and Edu workspaces.                                                              | Connect [HyperFrames by HeyGen](https://hyperframes.heygen.com/guides/mcp?utm_source=github&utm_medium=readme), listed in [Claude's connector directory](https://claude.com/connectors/hyperframes-heygen) |\n\nThe [HyperFrames Studio app](https://hyperframes.studio/studio?utm_source=github&utm_medium=readme) has a free plan. [Pro](https://hyperframes.studio/pricing?utm_source=github&utm_medium=readme) ($25 a month) adds top video, image, voice and music models (HeyGen Video 1, Seedance 2.5, Lyria 3 Pro and more) and 25,000 credits a month.\n\n## Made with HyperFrames\n\n<table>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2113670541274144802\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/script-based-editing-v1.webp\" width=\"195\" alt=\"Editing a talking-head video by editing its script in HyperFrames Studio\"></a><br><b>Script-based editing</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/liu8in/status/2123562606535565629\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/edit-your-own-footage-v1.webp\" width=\"195\" alt=\"A creator's own phone footage edited into a finished social video with HyperFrames\"></a><br><b>Edit your own footage</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2112960682526490691\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/captions-v1.webp\" width=\"195\" alt=\"Animated captions added to a talking-head video with HyperFrames\"></a><br><b>Captions on your video</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2110784695634178256\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remake-any-video-v1.webp\" width=\"195\" alt=\"A video rebuilt as an editable HyperFrames project, then changed\"></a><br><b>Remake any video</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/website-to-launch-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/launch-from-website-v1.webp\" width=\"195\" alt=\"Product launch video built from a company's website with HyperFrames\"></a><br><b>Launch video from your website</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/WaterrrMiao/status/2114585876160455057\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/faceless-explainer-v1.webp\" width=\"195\" alt=\"Faceless YouTube explainer made with HyperFrames\"></a><br><b>Faceless explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/flat-cartoon-explainer-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/flat-cartoon-explainer-v1.webp\" width=\"195\" alt=\"Flat cartoon explainer video about the Sun made with HyperFrames\"></a><br><b>Flat cartoon explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/real-ui-newspaper-1969-v2.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/real-ui-newspaper-v1.webp\" width=\"195\" alt=\"Motion graphics built from a real 1969 newspaper front page with HyperFrames\"></a><br><b>Real-UI motion graphics</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/cartoon-frameys-launch-one-take-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-one-take-trailer-v1.webp\" width=\"195\" alt=\"3D one-take launch trailer made with HyperFrames\"></a><br><b>3D one-take trailer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/3d-type-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-type-v1.webp\" width=\"195\" alt=\"Kinetic 3D typography made with HyperFrames\"></a><br><b>3D type</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/remotion-to-hyperframes-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remotion-ported-voxels-v1.webp\" width=\"195\" alt=\"A Remotion project with 3D voxels, ported to HyperFrames\"></a><br><b>Remotion project, ported</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/generative-replica-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/generative-motion-v1.webp\" width=\"195\" alt=\"Generative motion design made with HyperFrames\"></a><br><b>Generative motion</b></td></tr>\n</table>\n\nClick any clip to watch it with sound.\n\n## What you can make\n\n| Video                                                                                                                     | How                                                                                                                                                   |\n| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Branded UGC videos for TikTok and Instagram from your own phone clips: captions, music, text hooks, fast client revisions | The Studio app: drop in your footage, then edit by typing or pointing                                                                                 |\n| Video podcast episodes: line up a multi-camera recording, cut to whoever is talking, clean up the sound, add captions     | The Studio app's podcast edit                                                                                                                         |\n| Product demos, tutorials, launch videos and feature announcements, from your website or a screen recording                | Paste your URL into the Studio app, or ask your agent                                                                                                 |\n| Explainer and faceless YouTube episodes from your topic, script or voiceover                                              | Ask for one; [`/style-sampling`](skills/style-sampling) for five proven series styles                                                                 |\n| Remake a video you love, then make it yours                                                                               | [`/reverse-any-video`](skills/reverse-any-video)                                                                                                  "
+    },
+    "brief": {
+      "summary": "免费开源 AI 视频编辑器，生成可逐帧修改的项目。",
+      "problem": "解决 AI 生成视频难以精细修改、难以变成可编辑项目的问题。",
+      "highlights": [
+        "可以描述需求生成视频，再逐帧修改",
+        "可以给视频加字幕、改标题或调整剪辑",
+        "可以把现有视频重制成可编辑项目"
+      ],
+      "target_users": [
+        "视频创作者",
+        "前端开发者",
+        "AI 编程助手用户"
+      ],
+      "why_trending": "连续上榜，总 Star 近 8.8 万，近期仍有更新。",
+      "caveat": "开源的是框架，Studio 的 Pro 功能需付费。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 95,
+      "category": "AI 视频",
+      "reason": "AI视频编辑器，可逐帧编辑成片",
+      "generated_by_ai": true,
+      "velocity_score": 77,
+      "freshness_score": 40,
+      "ranking_score": 72.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 4,
+      "full_name": "mvschwarz/openrig",
+      "url": "https://github.com/mvschwarz/openrig",
+      "description": "Build your own network of agents from Claude Code, Codex and Pi: persistent teams with roles, shared context and owned work.",
+      "language": "TypeScript",
+      "total_stars": 8931,
+      "forks": 775,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 10
+    },
+    "details": {
+      "topics": [
+        "agent-harness",
+        "agent-orchestration",
+        "agent-skills",
+        "ai-coding",
+        "claude-code",
+        "cli",
+        "codex-cli",
+        "multi-agent",
+        "multi-agent-systems",
+        "tmux",
+        "typescript"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-04-01T06:22:40Z",
+      "updated_at": "2026-11-22T06:54:04Z",
+      "pushed_at": "2026-11-22T07:06:00Z",
+      "open_issues": 309,
+      "homepage": "https://openrig.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# OpenRig\n\n[![npm version](https://img.shields.io/npm/v/@openrig/cli)](https://www.npmjs.com/package/@openrig/cli) [![npm downloads](https://img.shields.io/npm/dw/@openrig/cli)](https://www.npmjs.com/package/@openrig/cli) [![License: Apache 2.0](https://img.shields.io/github/license/mvschwarz/openrig)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/mvschwarz/openrig?style=social)](https://github.com/mvschwarz/openrig/stargazers)\n\nA harness wraps a model. A rig wraps your harnesses. Define your agent team in YAML, boot it with one command. Claude Code and Codex in the same rig, managed as one system.\n\nOpenRig is open-source software for building and running your own network of agents. It turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions that need your attention. Start with a repository and one useful change, then keep the team's work and context at the same addresses.\n\nIt's the open-source system behind my AI civilization experiments.\n\n**Guide:** [Getting started](docs/reference/quickstart.md) · **Stuck?** [Help](docs/reference/help.md) · **Questions:** [Q&A](https://github.com/mvschwarz/openrig/discussions/92) · **Updates and demos:** [@_feralmachine on X](https://x.com/_feralmachine)\n\n## See it running\n\n![The OpenRig TUI: the build rig as a graph, then as a table of seats with runtime, model, context and state, then one seat in detail (real recording, 10 seconds)](assets/readme/openrig-agents-working.gif)\n\n**Start here:** [the guided first-use path](docs/reference/quickstart.md): install, talk to OpenRig's operator, then choose a team for your first useful change.\n\nNot setting this up today? Get the next walkthrough and occasional OpenRig updates → https://openrig.dev/follow\n\n## Install and first run\n\n**Let your coding agent set it up.** First check that `node --version` shows 22 or 24: the command below needs\nNode.js and the `npx` that comes with it. Then, in your project folder, add OpenRig's `rigs` skill to the agent you\nuse:\n\n```sh\n# Claude Code\nnpx skills add https://github.com/mvschwarz/openrig/tree/v0.7.20/skills/rigs --skill rigs --agent claude-code\n# Codex\nnpx skills add https://github.com/mvschwarz/openrig/tree/v0.7.20/skills/rigs --skill rigs --agent codex\n# OMP (Oh My Pi): the pi target installs to .agents/skills, which OMP reads\nnpx skills add https://github.com/mvschwarz/openrig/tree/v0.7.20/skills/rigs --skill rigs --agent pi\n```\n\n**OMP:** this pin installs the shared skill only. The `v0.7.20` skill does not yet include OMP attachment guidance,\nand complete setup from OMP has not been verified. OMP isn't a kernel provider; Claude Code or Codex must still be\nsigned in.\n\nThen type `/rigs` in Claude Code, `$rigs` in Codex, or `/skill:rigs` in OMP (after `/reload-plugins` if OMP was already\nopen), and say what you want built. The skill has your agent tell you what it will run and change before it does,\ninstall OpenRig, open the OpenRig view and pass your goal to OpenRig's operator. If Claude Code was already running\nwhen you added the skill, type `/reload-skills` first, or start\na new session: a session doesn't see a skills folder created after it started.\n\nYou need Node.js 22 or 24 (22 on Apple silicon), tmux, macOS or Linux (WSL2 on Windows), and Claude Code or Codex\nsigned in. One provider is enough to start.\n\nAlready have OpenRig? Use the tag that matches `rig --version`, or upgrade first.\n\nPrefer to type the commands yourself? [Install it yourself ↓](#install-it-yourself)\n\nSetting up Node.js on Linux, on a Mac where you aren't an administrator, or on Windows (WSL2)? See [Before you start](docs/reference/getting-started.md#before-you-start).\n\n> **What OpenRig changes on your machine**\n> - **Install:** `@openrig/cli` goes in globally with npm.\n> - **Setup:** `rig setup` adds an OpenRig block to `~/.tmux.conf`. It can install tmux (with Homebrew on macOS), and\n>   Herdr unless you pass `--no-herdr`. Plain `rig setup`, which is what the one-command install runs, checks both\n>   Claude Code and Codex and may install a missing one; `rig setup --providers claude` (or `codex`) limits it to\n>   yours.\n> - **Starting OpenRig, for the coding agent you use** (paths are the usual defaults):\n>   - Codex: hooks and trust in `~/.codex/config.toml`.\n>   - Claude Code: workspace trust in `~/.claude.json`, and activity hooks in the project's\n>     `.claude/settings.local.json`, plus a status line unless you already have your own.\n>   - Discovery skills go in `~/.claude/skills` and `~/.agents/skills`.\n> - **Starting a team in your project:** adds managed guidance to `AGENTS.md` or `CLAUDE.md`, plus the team's skills\n>   and plugins.\n> - **Permissions:** by default, OpenRig's own kernel gets broader permissions than a project team gets by default.\n>   On Codex that's full access with no approval prompts (`-s danger-full-access -a never`). On Claude Code, its file\n>   tools, web fetches and operational commands, including reads under your home folder, run without asking. A\n>   permission policy, per-agent choice or Codex profile changes that. What your team can do depends on the team you\n>   choose and your settings; `workshop`, for example, ships with broad access.\n> - **Backups:** OpenRig doesn't guarantee it can preserve or roll back these files, so back them up first.\n>\n> [Everything OpenRig writes, and why →](https://github.com/mvschwarz/openrig#what-openrig-changes-on-your-machine)\n\n### Install it yourself\n\nThis runs OpenRig's install script from the `v0.7.20` release. It checks Node.js and npm, installs the latest published `@openrig/cli` with `npm install -g`, runs the Node.js and SQLite check, then runs `rig setup --dry-run` and `rig setup`. The first line prints that plan and changes nothing:\n\n```bash\ncurl -fsSL https://raw.githubusercontent.com/mvschwarz/openrig/v0.7.20/scripts/install.sh | sh -s -- --dry-run\ncurl -fsSL https://raw.githubusercontent.com/mvschwarz/openrig/v0.7.20/scripts/install.sh | sh\n```\n\nIf the last step isn't ready, the installer reports `INSTALLED, SETUP NOT COMPLETE` and points to the details from `rig setup` above. Follow that output and any reported Fix, then rerun `rig setup`; the CLI does not need reinstalling. If the only remaining failures are provider sign-ins, sign in to each selected provider as below and continue.\n\n**Or step by step:**\n\n```bash\nnpm install -g @openrig/cli\nrig setup --dry-run\n```\n\nTo install with Bun instead, run `bun add -g @openrig/cli`. OpenRig still runs on Node.js, so install Node.js 22 as well. Bun may block this package's postinstall script, in which case the Node.js and SQLite check described under [what OpenRig changes on your machine](#what-openrig-changes-on-your-machine) does not run at install time.\n\nnpm 11 and later can skip that postinstall script and print `npm warn install-scripts` naming `@openrig/cli`. That's expected: the CLI still works, and only the Node.js and SQLite check was skipped. To run it yourself, use `node \"$(npm root -g)/@openrig/cli/scripts/check-abi.mjs\"`; `rig doctor` checks the Node.js version only.\n\nChoose the working account you already have: **Claude Code, Codex, or both**. Reuse an explicit choice; no second subscription is required. `rig setup --dry-run` previews the broader setup; applying `rig setup` checks both harnesses and installs a missing one, plus Herdr unless declined with `--no-herdr`. Pass the choice with `--providers claude` or `--providers codex` so the other reads not selected instead of failed. The one-command install above doesn't know the choice, so it installs and checks both; for one provider, go step by step and run `rig setup --providers <choice>`. On macOS, the installing agent offers Ghostty once. Setup leaves an existing cmux installation alone. It is optional for the [selected-provider path](docs/reference/getting-started.md#choose-your-providers).\n\nA team seat with no permission policy, per-seat choice or (for Codex) named profile launches with OpenRig's [team default](docs/reference/rig-spec.md#team-launch-defaults): Claude runs ordinary `rig` commands, project reads and common tests without prompting, while lifecycle commands such as `rig up` and `rig down` still ask; Codex also gets the OpenRig workspace and its pod's state directory as writable directories. Before launching, your agent recommends keeping that default, and offers to remember selected OpenRig commands in your native settings only if you want that, at personal project scope unless you explicitly choose user-wide sessions. It is not global YOLO or permission to invent work. On Yes, the agent [adds and verifies native rules](docs/reference/getting-started.md#have-your-agent-configure-permissions); No or no answer keeps the team default and leaves settings unchanged. An existing explicit choice is reused. Say “Undo the OpenRig command allowances added by this setup” to remove only its additions.\n\nIf permission prompts are slowing you down, consider the\n[workshop bundle](https://openrig.dev/rigs/workshop). It ships with broad access\nand [non-interruptive mode](docs/reference/non-interruptive-mode.md): its agents\nbypass permission prompts and supported harness warning dialogs. The listing\nand before-install view explain that access before you choose it.\n\nCheck `tmux -V` and only your selected CLI/login: `claude --version` plus\n`claude auth status`, or `codex --version` plus `codex login status`. If needed,\nsign in once with `claude auth login` or `codex login`; do not install or log in\nto an unused provider.\n\n### Your agent opens OpenRig for you\n\nAfter installing, your agent opens the OpenRig TUI and the operator for you. To get back to them later, ask your\nagent for OpenRig or your agents in any words. After checking the selected login, it starts the daemon if it's stopped\nand opens the view:\n\n```sh\nrig daemon start\nrig terminal open saved:kernel --window\n```\n\n`--window` opens a new terminal tab or window itself, or a space in your current\nHerdr session. Below 120 measured columns,\nthe **operator** fills the first page; from 120, the dashboard and operator share\nit equally. The advisor has a separate tab or tmux window.\nAn installing agent can run it from its shell on the daemon's\ndesktop; the person copies nothing. It uses Herdr when installed, otherwise\nthe same layout in plain tmux, and preserves existing conversations. `rig tui`\nis the team dashboard. Installation is finished when you are talking to the\noperator; if you choose to talk later, that handoff remains pending.\n\nIf setup stops, read the named step: missing tools and selected-provider logins\nneed their specific setup action. A harness permission rule, sandbox or automatic\npermission decision can also block the installing agent's command. The agent\nshould name the command and reported reason, then help you resolve that specific\nstep within your chosen permissions. A permission refusal is not an OpenRig\ninstallation result.\n\nThe desktop may need an Automation approval; SSH/headless sessions may have no\ndisplay. Herdr can show first-run panels, and an 80×24 window can cramp the view.\nFollow [the OpenRig view checks and next steps](docs/reference/getting-started.md#what-can-interrupt-installation-and-the-openrig-view).\nHerdr is visible only inside a terminal you can see. Changing the shared TUI to\n`:terminals` does not open that terminal. The agent checks the visible window when\nit has desktop access and says what it could not verify otherwise. Over headless\nSSH, it asks you to open a new terminal window or tab and gives the exact connection\nand attachment command for the current view. If you choose a manual attachment\nafter a failure,\nask the installing agent for the exact command using your current operator\nsession; run that in a new terminal window.\n\nThe kernel's operator helps you pick a first team. It asks what you want to build,\nrecommends"
+    },
+    "brief": {
+      "summary": "用 YAML 定义多智能体团队，一条命令启动编排",
+      "problem": "多个终端里的 AI 编码会话各自为战，上下文和任务难以协同延续",
+      "highlights": [
+        "可以把 Claude Code 与 Codex 编进同一支团队",
+        "可以让主控 agent 协调专职角色并回报结果",
+        "可以在 TUI 里查看每个席位的模型与状态"
+      ],
+      "target_users": [
+        "多智能体开发者",
+        "AI 编码重度用户",
+        "自动化流程搭建者"
+      ],
+      "why_trending": "本周首次收录，近九千 Star，多 harness 编排正受关注",
+      "caveat": "默认给内核较高权限，安装会改动本地配置，需先备份",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mvschwarz/openrig",
+      "score": 88,
+      "category": "Harness / Jev",
+      "reason": "多Agent编排Harness，含角色与工具",
+      "generated_by_ai": true,
+      "velocity_score": 32,
+      "freshness_score": 40,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "HamSanders/soundbox",
+      "url": "https://github.com/HamSanders/soundbox",
+      "description": "Free, open-source, local alternative to ElevenLabs and Suno. AI sound effects, music with lyrics, text-to-speech and voice cloning on your own GPU (Stable Audio, ACE-Step and more). No account, no credits, offline. Windows/macOS app, HTTP API and a 24-tool MCP server for Claude Code and Cursor.",
+      "language": "TypeScript",
+      "total_stars": 239,
+      "forks": 23,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai-music",
+        "ai-sound-effects",
+        "ai-voice",
+        "audio-generation",
+        "claude-code",
+        "elevenlabs-alternative",
+        "game-audio",
+        "local-ai",
+        "local-tts",
+        "mcp",
+        "mcp-server",
+        "music-generation",
+        "sfx",
+        "sound-effects",
+        "stable-audio",
+        "suno-alternative",
+        "text-to-audio",
+        "text-to-speech",
+        "tts",
+        "voice-cloning"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-13T20:54:04Z",
+      "updated_at": "2026-11-22T06:53:23Z",
+      "pushed_at": "2026-11-22T07:06:32Z",
+      "open_issues": 6,
+      "homepage": "https://mirli.app",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n# Mirli\n\n**The free, open-source, local alternative to ElevenLabs and Suno.**\n\nSound effects, music, songs with lyrics, speech and voice cloning from\nopen-weight models on your own GPU. Arrange it on a timeline, or let Claude\nCode, Cursor or any MCP agent do it. No account, no credits, works offline. MIT.\n\nMirli was formerly Soundbox. The repository, the `soundbox` command, the\n`soundbox.*` MCP tools and the installer file names keep the old name for now.\nEnvironment variables are `MIRLI_*`, and the old `SOUNDBOX_*` names still work\n(0.5.0 and earlier read only `SOUNDBOX_*`).\n\n[Download](#download) · [Hear it](#hear-it) · [For agents](#for-agents) · [Models](#models) · [Docs](#docs) · [Website](https://mirli.app/) · [Patreon](https://patreon.com/soundboxai)\n\n[![Latest release](https://img.shields.io/github/v/release/HamSanders/soundbox?label=release)](https://github.com/HamSanders/soundbox/releases/latest)\n[![Downloads](https://img.shields.io/github/downloads/HamSanders/soundbox/total?label=downloads)](https://github.com/HamSanders/soundbox/releases)\n[![MIT licence](https://img.shields.io/badge/licence-MIT-2ea44f)](LICENSE)\n[![MCP server](https://img.shields.io/badge/MCP-24%20tools-6b4fbb)](docs/MCP.md)\n[![Patreon](https://img.shields.io/badge/Patreon-support-f96854?logo=patreon&logoColor=white)](https://patreon.com/soundboxai)\n\n<img src=\"site/public/product/same-prompt-three-models.gif\" alt=\"The same prompt and seed rendered by Stable Audio 3.0 Small Music, MiniMax Music 3 and ACE-Step 1.5 Turbo, with measured render times on an RTX 5080\" width=\"880\">\n\n**Watch:** [30-second tour](https://mirli.app/media/soundbox-vibe.mp4) · [Under the hood](https://mirli.app/media/soundbox-tech.mp4) · [Agents and MCP](https://mirli.app/media/soundbox-agents.mp4)\n\n</div>\n\n## Describe it, hear it, arrange it\n\n| Make | Arrange | Connect |\n|---|---|---|\n| Sound effects and ambience from a description | A multi-track timeline with effects, MIDI and mixdown | An MCP server with 24 tools for Claude Code and Cursor |\n| Instrumentals, or songs from a lyric sheet | Cast saved voices onto the lines of a script | A local HTTP API on port 17494 |\n| Speech, voice cloning and voice conversion | Extend, cover, repaint, split into stems | Three agent skills, including a full sound pass |\n\nFour models are verified end to end and on by default; 61 more can be switched\non from the Models page. Each model's licence is shown before you download it.\nEverything stays in one SQLite file and a folder of WAVs under `~/.mirli`.\nProfiles give you several libraries in one install, one per game or client,\nswitched from the header without a restart; the models are shared.\n\n<picture>\n  <source media=\"(prefers-color-scheme: light)\" srcset=\"site/public/product/app-dashboard-light.webp\">\n  <img src=\"site/public/product/app-dashboard.webp\" alt=\"The Mirli dashboard: a sidebar of icons, Studio, Music and SFX shortcuts, a shelf of tag tiles and a list of recent sounds with licence badges, models and lengths\" width=\"880\">\n</picture>\n\n<details>\n<summary><b>More screenshots</b> · library, create, details, voices</summary>\n<br>\n\n| | |\n|---|---|\n| <img src=\"site/public/product/app-library.webp\" alt=\"The Library: kind tabs, a search box with filter pills, eight sounds with their tags, licence and model, and the bottom player playing Door slam 01\"> | <img src=\"site/public/product/app-create-music.webp\" alt=\"The Create panel on its Music tab, with model, lyrics switch, styles, tempo and a Create button, beside the list of tracks\"> |\n| **Library.** Every take in one list, with the player along the bottom. | **Create.** Music, SFX and Speech tabs beside the track list. |\n| <img src=\"site/public/product/app-details.webp\" alt=\"The details panel docked on the right of the Library: a waveform for Rain on tin roof with trim tools and its generation settings: model, prompt, seed, steps and duration\"> | <img src=\"site/public/product/app-voice-lab.webp\" alt=\"Voice Lab: your voices as cards, a table of all voices with kind and model, and a panel for comparing voices on one line\"> |\n| **Details.** Waveform, edits and the exact settings that made it. | **Voice Lab.** Your voices, and a side-by-side compare. |\n| <img src=\"site/public/product/app-voice-new.webp\" alt=\"Voice creation: three cards, Clone from clips, Built-in voice from a model, and Import a voice file\"> | <img src=\"site/public/product/app-voice-clone.webp\" alt=\"Clone a voice: an upload or record area for up to five clips, a clip timer, and name, model and notes fields\"> |\n| **New voice.** Clone it, pick a built-in, or import one. | **Clone.** Up to five clips of one speaker, recorded or uploaded. |\n\n</details>\n\n## Download\n\nThe [download page](https://mirli.app/download/) picks the installer for your system. Or take one directly:\n\n| Platform | Installer |\n|---|---|\n| **Windows** 10 and 11 (x64) | [`Soundbox_x.y.z_x64-setup.exe`](https://mirli.app/download/) |\n| **macOS**, Apple silicon | [`Soundbox_x.y.z_aarch64.dmg`](https://mirli.app/download/) |\n| **macOS**, Intel | [`Soundbox_x.y.z_x64.dmg`](https://mirli.app/download/) |\n| **Linux** x64 (glibc 2.35+) | [`Soundbox_x.y.z_amd64.AppImage` or `.deb`](https://github.com/HamSanders/soundbox/releases/latest) |\n\nThe installer carries its own runtime. The builds are not signed yet, so the\nfirst launch asks you to confirm ([where](docs/DESKTOP.md#installing)). Open\nSFX, describe the material, the action and the space, and generate: the first\nmodel downloads when you pick it, with its licence shown first.\n\n| Hardware | What to expect |\n|---|---|\n| NVIDIA GPU (Windows, Linux) | CUDA. A few GB of VRAM covers the verified models; MiniMax Music 3 wants about 10 GB. |\n| AMD or Intel GPU | Runs on the CPU unless you set `MIRLI_AUDIOCPP_BACKEND=vulkan` ([how](docs/AUDIOCPP.md#choosing-a-backend)). Vulkan is not yet confirmed on the verified models; reports welcome. |\n| Apple silicon | Metal. Installers exist; none of the verified models has been confirmed on a Mac yet. |\n| No dedicated GPU | Works, slowly. A clip that takes seconds on a GPU takes minutes on the CPU. |\n\nDocker and running from source (Linux arm64 included) are under [Run from source](#run-from-source).\n\n### Install with a prompt\n\nPaste this into Claude Code, Cursor or Codex:\n\n```text\nInstall Mirli on this machine and confirm it works, following\nhttps://github.com/HamSanders/soundbox/blob/main/docs/INSTALL-AGENT.md\n```\n\nThe guide tells the agent to check the GPU and VRAM first, to show you each\nmodel's size and licence before downloading it, never to accept a\nnon-commercial licence for you, and to finish by generating one sound and\ntelling you where the WAV is.\n\n## Hear it\n\nEach clip was generated by Mirli from the prompt shown. The\n[samples site](https://mirli.app/sfx/) has around 600 more.\n\n| | Prompt | Model | |\n|---|---|---|---|\n| Glass | *large window pane breaking, cracking then collapsing inward with long shards falling and shattering on a wooden floor* | Stable Audio 3.0 SFX | [▶ Listen](https://mirli.app/sfx/glass/glass-window-pane-break) |\n| Ambience | *heavy thunderstorm, driving rain with rolling thunder and wind gusting through trees, outdoor, seamless loop* | Stable Audio 3.0 SFX | [▶ Listen](https://mirli.app/sfx/rain/rain-thunderstorm-full) |\n| Game | *plasma bolt firing, thick electric discharge with a downward pitch sweep and a crackling tail* | Stable Audio 3.0 SFX | [▶ Listen](https://mirli.app/sfx/laser/laser-plasma-bolt) |\n| Instrumental | *1980s synthwave arcade title theme, wide analog saw lead, gated reverb drum machine, pulsing sidechained bass, 110 BPM* | Stable Audio 3.0 Small Music | [▶ Listen](https://mirli.app/music/neon-arcade-nights) |\n| Song | *triumphant power pop victory anthem, bright electric guitars, punchy live drums, gang vocal chorus*, with a four-line lyric sheet | ACE-Step 1.5 | [▶ Listen](https://mirli.app/music/victory-lap) |\n\n## For agents\n\nStart Mirli, then add it to your client.\n\n```bash\nclaude mcp add --transport http soundbox http://127.0.0.1:17494/mcp\n```\n\nCursor and other MCP clients take `{ \"type\": \"http\", \"url\": \"http://127.0.0.1:17494/mcp\" }`.\nThen ask: \"add a door slam and a coin pickup to this game\", \"voice these three\nlines as two characters\", \"write a 20-second loading-screen loop\". The agent\ngets 24 tools for sounds, speech and multi-track stories, and three skills:\n`soundbox-sfx`, `soundbox-sound-pass` and `soundbox-voice-story`. Every tool,\nthe stdio bridge and the skills are in [docs/MCP.md](docs/MCP.md).\n\n<img src=\"site/public/product/agents.png\" alt=\"The Agents page: connected MCP clients, copy-paste connection commands, and a log of recent calls\" width=\"880\">\n\n## Models\n\nEvery model runs through [audio.cpp](docs/AUDIOCPP.md), a native runtime, so\nthere is no Python to set up. Verified end to end and on by default:\n\n| Model | Good for | Licence | Commercial use |\n|---|---|---|---|\n| **Stable Audio 3.0 SFX** | Sound effects, foley, ambience | Stability AI Community | ⚠️ Under $1M revenue |\n| **Stable Audio 3.0 Small Music** | Instrumental music, loops | Stability AI Community | ⚠️ Under $1M revenue |\n| **ACE-Step 1.5 Turbo** | Songs with lyrics; extend, cover, repaint | MIT | ✅ Yes |\n| **MiniMax Music 3** | Songs with lyrics, about 10 GB VRAM | MiniMax-Music3 Community | ⚠️ Conditional |\n\n<details>\n<summary><b>61 more in the catalog</b> · 45 text-to-speech, 6 music, 2 SFX, 4 stem separation, 4 voice conversion</summary>\n<br>\n\n| Kind | Count | Includes |\n|---|---|---|\n| Text-to-speech | 45 | Chatterbox, Fish Audio S2 Pro, IndexTTS 2, VibeVoice, Higgs Audio v3, Qwen3-TTS, CosyVoice 3, Kokoro and more; several clone from a reference clip |\n| Music | 6 | ACE-Step 1.5 Base and XL, Stable Audio 3.0 Medium, HeartMuLa, MiniMax H3 |\n| Sound effects | 2 | MiDashengLM-Gen, ControlFoley |\n| Stem separation | 4 | HTDemucs (4- and 6-stem), BS-RoFormer, Mel-Band RoFormer |\n| Voice conversion | 4 | RVC, Seed-VC, MioCodec, MeanVC2 |\n\nVibeVoice 1.5B, MiDashengLM-Gen, HTDemucs 6-stem and Chatterbox Turbo have also\nbeen run end to end; the rest are marked unverified until someone reports. The\n19 added in October 2026 need audio.cpp 0.9.2 or newer\n(`soundbox model install audiocpp` fetches the latest).\n\n</details>\n\nAny model whose licence could not be established is treated as non-commercial.\nThis is a summary, not legal advice: read each licence before you ship what a\nmodel made.\n\n## Compared with a hosted service\n\n| | Hosted (ElevenLabs, Suno and similar) | Mirli |\n|---|---|---|\n| Runs on | Their GPUs | Your machine |\n| Cost | Subscription or credits | Your electricity |\n| Account | Required | None |\n| Models | Closed, tuned, consistent | Open weights; quality varies by model |\n| Output rights | Their terms of service | The licence of the model that made it, shown up front |\n| Offline | No | Yes, once the weights are downloaded |\n| Agents | HTTP API | HTTP API and an MCP server |\n| Source | Closed | MIT |\n\n## Run from source\n\n<details>\n<summary><b>Node, Docker and the HTTP API</b></summary>\n<br>\n\nRequires Node 22.12 or later. No Python, no CUDA toolkit.\n\n```bash\ngit clone https://github.com/HamSanders/soundbox\ncd soundbox\nnpm install\nnpm run dev\n```\n\nThis starts the server on port 17494 and the UI on <http://localhost:5174>.\n`npm run dev:mock` runs the UI with no GPU or server (see [CONTRIBUTING.md](CONTRIBUTING.md)).\n\n**Docker.** The server and web UI run headless in one container with the\naudio.cpp runtime inside. CPU by default; add the CUDA override for a GPU. Both\npull the prebuilt image from GHCR (`:latest`, `:cuda`, or a version such as\n`:v0.4.0` and `:v0.4.0-cuda`).\n\n```bash\ndocker compose up -d\ndocker compose -f docker-compose.yml -f docker-compose.cuda.yml up -d\n```\n\nTo build from the checkout instead, add `-f docker-compose.build.yml`\n(and `-f docker-compose.build-cuda.yml` for CUDA) and `--build`; see\n[docs/INSTALL.md](docs/INSTALL.md#docker).\n\nThere is no authentication unless you set `MIRLI_API_TOKEN`,"
+    },
+    "brief": {
+      "summary": "本地开源音频生成工具，可做音效、音乐、语音和克隆。",
+      "problem": "用本地 GPU 替代付费云服务，免账号和额度，离线生成音频。",
+      "highlights": [
+        "可以按描述生成游戏音效和环境声",
+        "可以用歌词表生成带人声的歌曲",
+        "可以克隆声音并套用到脚本台词"
+      ],
+      "target_users": [
+        "游戏开发者",
+        "音乐创作者",
+        "AI 编程用户"
+      ],
+      "why_trending": "本周首次收录，239 星，提供本地音频与 MCP 工具链。",
+      "caveat": "安装包未签名，Apple 与 Vulkan 兼容未确认。",
+      "category": "音乐 / 音效",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "HamSanders/soundbox",
+      "score": 95,
+      "category": "音乐 / 音效",
+      "reason": "本地AI音效音乐配音与声音克隆",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 58.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "shinyobjectz/raea",
+      "url": "https://github.com/shinyobjectz/raea",
+      "description": "Render Anything Engine: tell your AI what to make. Videos, motion graphics, 3D and games as React and TypeScript, rendered on your own GPU. Rust + Bevy, macOS, Linux and Windows.",
+      "language": "TypeScript",
+      "total_stars": 3483,
+      "forks": 263,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "agent-skills",
+        "ai-agents",
+        "ai-video",
+        "bevy",
+        "claude-code",
+        "game-engine",
+        "gpu",
+        "linux",
+        "macos",
+        "motion-design",
+        "motion-graphics",
+        "react",
+        "rust",
+        "typescript",
+        "video-editing",
+        "video-rendering",
+        "wgpu",
+        "windows"
+      ],
+      "license_name": "",
+      "created_at": "2026-10-18T18:08:48Z",
+      "updated_at": "2026-11-22T07:07:17Z",
+      "pushed_at": "2026-11-22T06:56:58Z",
+      "open_issues": 25,
+      "homepage": "https://raea.io",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/cat-white.svg\">\n    <img src=\"docs/logo/cat-black.svg\" width=\"72\" alt=\"raea's cat\">\n  </picture>\n</p>\n\n<h1 align=\"center\">raea</h1>\n\n<p align=\"center\"><b>Render Anything Engine</b> <i>(for Anyone)</i></p>\n\n<p align=\"center\">\n  Tell your AI what to make. Videos, motion graphics, 3D and games, written as React and TypeScript<br>\n  (the code your AI already writes) and rendered on your own GPU, faster than they play.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://raea.io\">raea.io</a> ·\n  <a href=\"https://raea.io/made/\">Made in raea</a> ·\n  <a href=\"https://raea.io/why/\">Why raea</a> ·\n  <a href=\"https://raea.io/learn/\">Docs</a> ·\n  <a href=\"https://github.com/shinyobjectz/raea/releases\">Releases</a>\n</p>\n\n<p align=\"center\">\n  <img alt=\"licence FSL-1.1-ALv2\" src=\"https://img.shields.io/badge/licence-FSL--1.1--ALv2-black\">\n  <img alt=\"latest release\" src=\"https://img.shields.io/github/v/release/shinyobjectz/raea?label=release&color=black\">\n  <img alt=\"macOS, Apple Silicon\" src=\"https://img.shields.io/badge/macOS-Apple%20Silicon-black\">\n  <img alt=\"Linux x86_64\" src=\"https://img.shields.io/badge/Linux-x86__64-black\">\n  <img alt=\"Windows x86_64\" src=\"https://img.shields.io/badge/Windows-x86__64-black\">\n</p>\n\n---\n\n> **0.1.6** (17 November 2026) is the latest release: the engine and the desktop app on macOS (Apple Silicon), Linux\n> (x86_64) and, newest and least tested, Windows 10 and 11 (x86_64). raea is young and moves fast, with a release most\n> days since 0.1.1 on 11 November: expect rough edges, and tell us what you hit in an\n> [issue](https://github.com/shinyobjectz/raea/issues), or from your agent with `raea bug`.\n\n## The app\n\nThe raea app is where you make video, 3D and games with your AI. You ask in a chat; your own AI (Claude, ChatGPT, Kimi\nor a local model) writes the raea code and renders it; what it makes lands in the project's feed, where you watch it,\nscrub it, mark it up and send it back with notes. Download it from [raea.io](https://raea.io) for the Mac, Windows or\nLinux. It tells you when a new version is out; on the Mac it updates itself.\n\n<p align=\"center\">\n  <a href=\"https://media.raea.io/#goose-learns-raea\"><img src=\"docs/readme/goose-learns-raea.jpg\" width=\"720\" alt=\"The raea app tutorial\"></a>\n</p>\n\nNew to the app? **[Watch the tutorial](https://media.raea.io/#goose-learns-raea)** (5:50).\n\nWhat the app does now:\n\n- **The chat comes first** (0.1.5): your projects in a rail, the conversation in the middle, and `/goal` to keep an\n  agent going until a condition you set holds.\n- **A timeline you edit by hand** (0.1.4): trim, split and move clips, speed curves, freeze frames and keys, the way\n  CapCut works, under every film, sound and scene.\n- **Scenes you walk around in** (0.1.3): your agent posts a 3D scene and you walk through it, pin comments in it and\n  move its parts by hand; every change is written into the scene's own code.\n- **Index** (0.1.5): your folders, drives and Apple Photos made searchable by what's in them, on your Mac. On an M5 Pro,\n  10,000 pictures were searchable in under a minute.\n- **Review** (0.1.6): each project has a Review tab, every comment you leave reaches the agent, and export is one\n  window.\n- **Lighter** (0.1.6): the window gives back memory it's finished with and rests when nothing changes, 34% less CPU\n  at rest.\n\nThe app and the engine are free. Pro adds cloud storage, search across your computers and publishing; Team puts up to\nfive people on one plan ([pricing](https://raea.io/pricing/)). Each release's notes are on the\n[releases page](https://github.com/shinyobjectz/raea/releases).\n\n## Install\n\n```sh\ncurl -fsSL https://raea.io/install | sh\n```\n\nThe installer puts the `raea` command under `~/.raea`, links it into `~/.local/bin`, and adds raea's agent skills to\n`~/.claude/skills`, so Claude Code (or any agent that reads that folder) knows how to write, render and check raea\nwork. Run it again to update. The engine is free and needs no account. Tarballs and checksums are on the\n[releases page](https://github.com/shinyobjectz/raea/releases).\n\nOn Windows 10 or 11, in PowerShell:\n\n```powershell\nirm https://raea.io/install.ps1 | iex\n```\n\nIt does the same under `~\\.raea` and adds raea to your PATH. raea needs a DirectX 12 or Vulkan GPU driver; what\nelse it needs (the Visual C++ runtime, FFmpeg and uv) is in its `bin\\` folder.\n\n## Hello\n\nA composition is a React component that draws a frame for a given moment:\n\n```tsx\nimport { AbsoluteFill, Composition, interpolate, registerRoot, useCurrentFrame } from \"raea\";\n\nfunction Hello() {\n  const f = useCurrentFrame();\n  return <AbsoluteFill style={{ background: \"#000\", color: \"#fff\", fontSize: 120, opacity: interpolate(f, [0, 20], [0, 1]) }}>Hello</AbsoluteFill>;\n}\n\nregisterRoot(() => <Composition id=\"hello\" component={Hello} width={1920} height={1080} fps={30} durationInFrames={90} />);\n```\n\n```sh\nraea render hello.tsx -o hello.mp4\n```\n\nOn an Apple Silicon Mac those 90 frames render in about a second. The same file can play live as a game\n(`raea play`), render one frame for an agent to look at (`-o frame.png --frame 45`), or be checked against a quality\nfloor (`raea check hello.mp4`). `raea init` starts a project, and `raea --help` lists every verb.\n\n## What it does\n\n- **Video and motion graphics.** Layout, text, Tailwind, SVG and animation, composited on the GPU and encoded in\n  hardware where the machine has it. Footage is cut by what's said in it (`raea cut`), and `raea check` catches clipped\n  text, low contrast, unsafe areas, freezes and loudness problems before anyone watches.\n- **Games.** Input, physics, sound and 3D, played live with `raea play`, and exported as a program of their own\n  (`raea export-game`).\n- **3D.** Scenes in TypeScript drawn by [Bevy](https://bevyengine.org) 0.20: cameras, lights, materials, glTF models,\n  Gaussian splats, and Bevy plugins compiled into the engine. three.js work runs as it's written: a React Three Fiber\n  scene inside `<R3F>`, or a three.js page's script inside `<Three program>`.\n- **Sound.** One mixer for live play and offline render, instruments and effects, and local models for foley and\n  instrument notes (`raea sao`, `raea tokensynth`).\n- **Built for agents.** Everything it draws stays queryable as data, so an agent can render a frame, look at it, and\n  fix what's wrong without a person in the loop.\n\n## Made in raea\n\nFilms, music videos, a tutorial and a game made with raea are on [media.raea.io](https://media.raea.io). Six of them\ncome with their source in [raea-films](https://github.com/shinyobjectz/raea-films): each project's code under\nApache-2.0, to read, render and take apart, and its models, textures and sound for anyone with a free raea account.\n\n## Use it from your agent\n\n- **Agent skills.** They live in [raea-skills](https://github.com/shinyobjectz/raea-skills), pinned here as\n  [`skills/`](skills): `raea` teaches an agent to write, render and check raea compositions, 3D and games\n  included. The installer adds it to `~/.claude/skills`, and `raea skills install --agent NAME` to other agents.\n- **Claude plugin.** The raea skill and two hooks (raea's quick check after a composition is saved, and media shown in\n  the raea app). In Claude Code: `/plugin install raea --marketplace shinyobjectz/raea-skills`. It's the `skills/`\n  folder of raea-skills, and `/plugin marketplace add shinyobjectz/raea` installs the same one.\n- **Craft guides.** `raea guide` prints the floor every edit is held to and the guides for pitches, explainers, stories,\n  games, motion, music and layout. `raea context PROJECT` says what to read before working on a project.\n- **Bug reports.** When an agent finds a bug in raea itself, `raea bug TITLE --text TEXT` sends it to raea's server\n  with raea's version and the OS, no account needed. It sends words only: paths, emails and keys are taken out before\n  it goes, and `--dry-run` prints what would go.\n\n## Build from source\n\nRequirements: [Rust](https://rustup.rs) (rustup reads the pinned version from rust-toolchain.toml), [bun](https://bun.sh)\nand CMake. On macOS, Xcode's command-line tools; on Linux, the ALSA, fontconfig, udev, xkbcommon (with its X11\npart, which the app targets' windows also load at run time) and Vulkan libraries and NASM (Ubuntu: `cmake ninja-build\nnasm libasound2-dev libfontconfig1-dev libudev-dev libvulkan-dev libxkbcommon-dev libxkbcommon-x11-dev`), as public CI\ninstalls them.\n\n```sh\ngit clone https://github.com/shinyobjectz/raea && cd raea\ncargo build --release -p raea-cli --no-default-features\nfor d in sdk/raea sdk/react/js sdk/react/tw; do (cd $d && bun install); done\ntarget/release/raea render sdk/react/bench/games/pong/edit.tsx -o pong.mp4\n```\n\n`--no-default-features` builds the public engine, as the releases are. The default features add one hosted service,\nContent Credentials signed by raea's signing server, which isn't part of this repository. raea sends nothing on its\nown: no telemetry, crash reports or update checks. What reaches the network is what you ask for (a remote URL in a\ncomposition, a model downloaded on first use, a `raea gen` step on a provider you hold a key for), and `RAEA_OFFLINE=1`\nrefuses all of it. [docs/settings.md](docs/settings.md) lists the settings raea reads.\n\n## What's in here\n\nThe workspace is layered, from pure building blocks up to the command.\n\n| Folder | What |\n|---|---|\n| [`core/`](core) | Pure building blocks: the kernel language (K, interpreted on the CPU and compiled to WGSL), easing and animation, shapes, fonts, the scene and wire formats |\n| [`gpu/`](gpu) | The one shared GPU device and its telemetry |\n| [`io/`](io) | Decode and encode (VideoToolbox, software codecs, AV1, a muxer), files, network, npm packages, traces |\n| [`systems/`](systems) | Engine systems: layout, canvas, compositing, filters, mixing, speech, ML on ONNX Runtime, footage reading, lighting, contact checks for 3D parts, splats |\n| [`runtime/`](runtime) | Running a composition: the JavaScript engine seam (JavaScriptCore on macOS, QuickJS elsewhere), React and HTML on Bevy, baking, encode, live play |\n| [`engine/`](engine) | The renderer (`engine/render`), the in-process TypeScript bundler, the Bevy plugin catalog, and the `raea` command itself (`engine/cli`) |\n| [`apps/`](apps) | The crates behind the CLI's verbs: check, play, games, media |\n| [`sdk/`](sdk) | `raea`, the TypeScript SDK (`sdk/raea`), its 3D, physics, audio, video and UI packages, the craft guides, and the agent skills |\n| [`vendor/`](vendor) | Patched upstream crates, under their own licences ([`vendor/vendor.toml`](vendor/vendor.toml) says why each is patched) |\n| [`tools/`](tools) | Build and release helpers |\n\nBehaviour specs written in Gherkin (`.feature`) sit beside the code they describe.\n\n## Licence\n\nraea is under the [Functional Source License 1.1, ALv2 Future License](LICENSE) (FSL-1.1-ALv2), copyright Shane\nMurphy. Use it, change it, build on it and pass it on for anything except a product that competes with raea. Each\nversion becomes Apache-2.0 two years after its release. Third-party parts keep their own licences; see\n[NOTICE](NOTICE).\n"
+    },
+    "brief": {
+      "summary": "用React写视频、3D和游戏，在自己GPU上渲染",
+      "problem": "AI生成的视频和3D缺少可渲染、可复用的代码管线",
+      "highlights": [
+        "可以让AI写React代码，直接渲染出MP4视频",
+        "可以把同一份代码当游戏实时游玩",
+        "可以用命令行检查字幕裁切、对比度和响度"
+      ],
+      "target_users": [
+        "前端开发者",
+        "AI编程用户",
+        "独立游戏作者"
+      ],
+      "why_trending": "本周首次收录，总Star约3.5k，11月起几乎每日发版",
+      "caveat": "0.1.6仍年轻，Windows版最不成熟，官方称有粗糙边缘",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "shinyobjectz/raea",
+      "score": 88,
+      "category": "3D / VTuber",
+      "reason": "GPU渲染视频动效3D与游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 54.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "AppitStudio/awesome-jev",
+      "url": "https://github.com/AppitStudio/awesome-jev",
+      "description": "Curated Jev resources and runnable examples for typed AI decisions.",
+      "language": "Python",
+      "total_stars": 116,
+      "forks": 27,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "awesome",
+        "awesome-list",
+        "decision-making",
+        "jev",
+        "system-one",
+        "typesafe-ai"
+      ],
+      "license_name": "",
+      "created_at": "2026-09-18T17:56:36Z",
+      "updated_at": "2026-11-18T17:56:15Z",
+      "pushed_at": "2026-11-22T06:57:34Z",
+      "open_issues": 3,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Awesome Jev [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)\n\n> Discover Jev-powered apps, developer resources, and runnable decision examples.\n\n[Jev](https://docs.typesafe.ai/introduction) is TypeSafe AI's System One model: give it state and typed questions, then use the returned choices, scores, and probabilities in your code. This independent community directory collects applications that use Jev, resources for developers, and small, inspectable workflows to learn from.\n\n**[Explore Jev-powered apps](community/projects/apps/README.md)** · **[Share your app](CONTRIBUTING.md#list-a-jev-powered-app)**\n\n**Try the beta web UI at [JevList](https://jevlist.ai/).** Explore the projects in this directory through a searchable web interface. We're continually improving the experience—take a look and let us know what you think!\n\n## Contents\n\n- [Explore Jev with our skill](#explore-jev-with-our-skill)\n- [Start here](#start-here)\n  - [Explore practical use cases](docs/explore-use-cases.md)\n- [Official SDKs and tools](#official-sdks-and-tools)\n- [Community projects](#community-projects)\n  - [Community knowledge base](community/knowledge-base/README.md)\n  - [Apps powered by Jev](#apps-powered-by-jev)\n  - [Browse the project directory](community/projects/README.md)\n  - [Tools and integrations](community/projects/tools/README.md)\n- [Computer and browser use](#computer-and-browser-use)\n- [Starter projects](#starter-projects)\n- [Reference project](#reference-project)\n- [Patterns and cookbooks](#patterns-and-cookbooks)\n  - [Routing and classification](#routing-and-classification)\n  - [Retrieval and verification](#retrieval-and-verification)\n  - [Extraction and structured data](#extraction-and-structured-data)\n- [Model behavior and evaluation](#model-behavior-and-evaluation)\n- [Contributing](#contributing)\n\n## Explore Jev with our skill\n\nUse **Awesome Jev Guide** to understand Jev and explore solutions that fit your needs. Describe your workflow in plain language, and your coding agent will help you choose an example, adapt a project, or build a suitable starter—with guided setup along the way.\n\n**1. Install the skill.** With Node.js 22+ installed, run this in your project directory:\n\n```sh\nnpx skills add AppitStudio/awesome-jev --skill awesome-jev-guide\n```\n\nSelect your coding agent when prompted. For Codex, you can add `--agent codex`. No TypeSafe account or API key is needed to explore ideas or run the offline examples.\n\n**2. Open your coding agent in that project and try a prompt.**\n\nNew to Jev? Start here:\n\n```text\nUse awesome-jev-guide. Explain Jev simply, help me understand what I can\nbuild with it, and walk me through the easiest example. I don't have\nan API key yet.\n```\n\nHave a workflow in mind? Fill in the brackets:\n\n```text\nUse awesome-jev-guide. Today I [describe the work I do manually].\nI want to [describe the result]. I use [language, framework, or tools].\nHelp me find the best starting point in this repo and explain what\nneeds adapting. Ask me anything essential that's missing.\n```\n\nReady to build?\n\n```text\nUse awesome-jev-guide to build a small starter for [my workflow] using\n[my stack]. Start with a working offline demo, explain what I should\ncustomize, then guide me through API-key setup and a first live check\nwhen I'm ready.\n```\n\n**3. Follow the next step together.** The guide uses current TypeSafe documentation and explains what already works, what needs building, and how to handle uncertain results. When you want live access, it walks you through private key setup—never paste a key into chat.\n\nSee the [full onboarding guide](docs/using-the-guide.md) for installation options, demos, and setup details.\n\n## Start here\n\n**[Explore what you can build](docs/explore-use-cases.md)** — choose a real implementation by the result you want, then follow its guide, worked example, and setup path.\n\n- [Introduction](https://docs.typesafe.ai/introduction) - Understand Jev's state-and-questions interface and its three decision primitives.\n- [Official quick start](https://docs.typesafe.ai/introduction/quickstart) - Make a first request using Python or HTTP.\n- [Run an example locally](docs/getting-started.md) - Try a complete workflow with synthetic mock responses, without an account, an API key, or package installation.\n- [Choose a decision pattern](docs/decision-patterns.md) - Match a task to Choice, Score, or Noul and define what happens when the result is uncertain.\n- [HTTP API reference](https://docs.typesafe.ai/api) - Check the wire format, authentication, answer fields, and error responses.\n\n## Official SDKs and tools\n\nThese resources are maintained by TypeSafe.\n\n- [Agent skill](https://docs.typesafe.ai/agent-skill) - Official docs for giving a coding agent API context and guidance when designing narrow System One / Jev decision questions (Claude Code plugin and skills.sh install paths).\n- [JavaScript SDK](https://github.com/typesafe-ai/typesafe-sdk-js) - JavaScript and TypeScript client that infers answer types from the supplied questions.\n- [Python SDK](https://github.com/typesafe-ai/typesafe-sdk-python) - Synchronous and asynchronous clients with typed answers and configurable retries.\n- [System One Adapter](https://github.com/typesafe-ai/system-one-adapter-python) - Run a similar typed-question interface against other LLM providers for comparisons; those responses do not come from Jev.\n- [TypeSafe Agent Skills](https://github.com/typesafe-ai/skills) - Official Claude Code / skills.sh agent skill for designing typed System One / Jev decisions; [docs](https://docs.typesafe.ai/agent-skill).\n\n## Community projects\n\nThe [community knowledge base](community/knowledge-base/README.md) turns credited articles into original implementation guides with source links, project connections and stated validation limits.\n\n**[Browse the project directory](community/projects/README.md)** for separate app and tool directories, each with full project pages covering use cases, setup, examples, limitations, and review evidence. The links below still take you directly to the upstream projects.\n\nChecks are tied to reviewed versions; see each page and the [validation scope](docs/validation.md#community-project-checks). Mocked tests and reported live smoke checks do not establish model quality on your workload.\n\n### Apps powered by Jev\n\n- [1 Million Emojis](https://github.com/cwdx/1-million-emojis) - `Open source` · `Free` · `BYOK`. Shared million-emoji canvas where TypeSafe Jev paints alongside humans from stroke context. [Try app](https://chriswijnia.com/lab/emoji) · [Project guide](community/projects/apps/1-million-emojis.md).\n- [Ad Library Saver by Jim Banks (Chrome extension that saves Meta Ad Library ads as you scroll and has Jev tag their format, call to action and funnel stage)](https://github.com/jimbanks/ad-library-saver) - `Open source` · `Free source build`. Manifest V3 Chrome extension for competitor ad research. As you scroll the Meta Ad Library, each ad that comes into view is saved to a database inside the extension (copy, headline, call-to-action button, landing URL with tracking parameters stripped, media, run dates, country). Jev tags each ad's format, call to action and funnel stage, three at a time, and everything exports to CSV. Saving and export work without a key; only tagging needs one. [Project guide](community/projects/apps/ad-library-saver.md).\n- [Agent AFK (local coding agent you can walk away from, with optional Jev as the what-if verification judge)](https://github.com/griffinwork40/agent-afk) - `Open source` · `Free source build` · `BYOK`. Local coding-agent harness (`afk`) that builds a feature, verifies its own work and texts you when done. Optional Jev integration: configure Jev as an MCP judge so `afk whatif --judge auto` grades verification episodes with calibrated probabilities instead of the same-family model. [Project guide](community/projects/apps/agent-afk.md).\n- [AI Model Picker](https://github.com/Gavinluo19/ai-model-picker) - `Open source` · `Free`. macOS task-to-model picker that opens the task in your existing AI app; optional TypeSafe Jev classification. [Project guide](community/projects/apps/ai-model-picker.md).\n- [AI Plays Pokémon (kotlinds)](https://github.com/kotlinds/ai-plays-pokemon) - `Source available` · `Free source build` · `BYOK`. Kotlin desktop app that puts an AI in front of Pokémon HeartGold on a Nintendo DS emulator: the game RAM is described as JSON, and a Jev backend picks each action from a closed list with per-option probabilities, optionally with an LLM planner in hybrid mode. [Project guide](community/projects/apps/ai-plays-pokemon.md).\n- [AI, SI, or Whatever](https://github.com/SjJ1017/ai-si-or-whatever) - `Open source` · `Free source build` · `BYOK`. Chrome extension where TypeSafe Jev can choose AI/SI/alternating/custom webpage terminology per page. [Project guide](community/projects/apps/ai-si-or-whatever.md).\n- [AI;DR](https://github.com/duyet/aidr) - `Source available` · `Free`. Ranked daily AI-news site and digest whose importance scoring can use Jev through AnyRouter, with a chat-model rubric as backup. [Project guide](community/projects/apps/aidr.md).\n- [Albatross](https://github.com/morganlinton/Albatross) - `Open source` · `Free source build` · `BYOK`. Terminal-first coding harness (bring your own model, key or MCP server) with an experimental Jev Mode that puts TypeSafe's decision model before the main LLM. [Project guide](community/projects/apps/albatross.md).\n- [Alethe (multi-agent coding desktop workspace with TypeSafe Jev voice-intent routing)](https://github.com/Vnxcarvalho/Alethe-2.0) - `Open source` · `Free source build` · `BYOK`. Local-first desktop app that runs Claude Code, Codex, Copilot and shells side by side. Voice intent routing goes through TypeSafe Jev (`src-tauri/src/jev.rs`) so spoken commands map to typed workspace actions. [Project guide](community/projects/apps/alethe.md).\n- [AlgorithVideo (open-source desktop video clipper with optional Jev clip review)](https://github.com/algorithco/algorith-video) - `Open source` · `Free` · `BYOK`. Open-source Electron desktop app that turns podcasts, interviews and streams into captioned short clips rendered on your own computer; an opt-in Jev review step, through OpenRouter's Decisions API, scores candidate moments from transcript excerpts. [Project guide](community/projects/apps/algorithvideo.md).\n- [Android Voice Control by dbrodie (say a task and GPT-Live hands it to an on-device loop where Jev picks each tap, type or swipe)](https://github.com/dbrodie/android-voice-control) - `Open source` · `Free source build` · `BYOK`. Floating mic bubble over every app: you say a task such as \"open settings and turn on Bluetooth\", GPT-Live turns it into a crisp instruction, and the phone runs a screenshot → decide → act loop through an accessibility service, asking Jev which tap, typing or swipe comes next until the task is done. Based on System One Computer Use by brainstormity. [Project guide](community/projects/apps/android-voice-control-dbrodie.md).\n- [Anki Review-Finder](https://github.com/elias170105/anki-review-finder) - `Open source` · `Free source build` · `BYOK`. Alpha CLI that audits Anki flashcards through AnkiConnect with TypeSafe Jev, flagging structural defects such as answer leaks, missing context, scope problems and binary questions, then writes priority and defect tags back to Anki (never card text) and produces an HTML report. [Project guide](community/projects/apps/anki-review-finder.md).\n- [Anti Slop for X (Chrome extension that folds AI-bait and bot replies on X, scored by Jev)](https://github.com/Caph-dev/anti-slop-for-x) - `Open source` · `Free source build` · `BYOK`. Chrome extension for x.com that pre-screens replies with local keywords, then optionally sends a post and its parent to a decision model through your own proxy worker. Jev answers whether it reads like AI engagement bait, which kind of bait it is and how strongly; replies"
+    },
+    "brief": {
+      "summary": "整理 Jev 类型化 AI 决策资源与可运行示例的社区目录",
+      "problem": "帮开发者找到 Jev 应用、教程和可运行示例，降低上手门槛",
+      "highlights": [
+        "可以按具体用例找到可运行示例",
+        "可以用内置技能让编码代理推荐方案",
+        "可以查看路由、抽取等决策模式"
+      ],
+      "target_users": [
+        "AI 应用开发者",
+        "Jev 初学者",
+        "技术调研人员"
+      ],
+      "why_trending": "本周首次收录，已有 116 Star，可快速了解 Jev 用法",
+      "caveat": "在线调用需 API Key，社区示例效果需自行验证",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "AppitStudio/awesome-jev",
+      "score": 85,
+      "category": "Harness / Jev",
+      "reason": "Jev资源与可运行示例，类型化决策",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 70,
+      "ranking_score": 53.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "Hon-Lu/OverTranslate",
+      "url": "https://github.com/Hon-Lu/OverTranslate",
+      "description": "Real-time screen translator overlay for Windows — OCR translation for games, manga, comics, videos & everyday text. ｜ Windows 螢幕即時翻譯工具，適合遊戲、漫畫、影音與日常使用。",
+      "language": "C#",
+      "total_stars": 331,
+      "forks": 21,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "comics",
+        "game-translation",
+        "game-translator",
+        "live-translation",
+        "manga",
+        "manga-translator",
+        "ocr",
+        "ocr-translation",
+        "overlay",
+        "real-time-translation",
+        "screen-translation",
+        "screen-translator",
+        "screenshot-translation",
+        "subtitle-translation",
+        "translate",
+        "translation",
+        "translation-overlay",
+        "translator",
+        "visual-novel",
+        "windows"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-09T17:07:47Z",
+      "updated_at": "2026-11-22T06:55:45Z",
+      "pushed_at": "2026-11-22T06:57:28Z",
+      "open_issues": 1,
+      "homepage": "https://hon-lu.github.io/OverTranslate/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n  <p>\n    🌐\n    <strong>English ✓</strong>\n    &nbsp;｜&nbsp;\n    <strong><a href=\"README.zh-Hant.md\">繁體中文</a></strong>\n    &nbsp;｜&nbsp;\n    <strong><a href=\"README.zh-Hans.md\">简体中文</a></strong>\n    &nbsp;｜&nbsp;\n    <strong><a href=\"README.ja.md\">日本語</a></strong>\n    &nbsp;｜&nbsp;\n    <strong><a href=\"README.ko.md\">한국어</a></strong>\n  </p>\n\n  <br/>\n\n  <p>\n    <a href=\"https://hon-lu.github.io/OverTranslate/\"><img src=\"docs/images/ui/btn-site.en.svg\" alt=\"Visit the website\" /></a>\n  </p>\n\n  <h1>\n    <img src=\"docs/images/icon.svg\" width=\"180\" alt=\"OverTranslate Icon\"/>\n    <br/>\n    OverTranslate\n  </h1>\n  <p>A Windows screen translator for games, manga, comics, videos and everyday use — screenshot translation, real-time translation and more, overlaid right on the original text.</p>\n  <p>一款適合遊戲、漫畫、影音與日常使用的 Windows 螢幕翻譯工具，支援截圖翻譯、即時翻譯等功能，譯文可直接覆蓋在原文上。</p>\n\n  <p>\n    <img src=\"https://img.shields.io/github/v/release/Hon-Lu/OverTranslate?style=for-the-badge&label=latest%20release\" alt=\"Latest release\" />\n    <img src=\"https://img.shields.io/badge/license-MIT-22C55E?style=for-the-badge\" alt=\"License MIT\" />\n    <img src=\"https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Hon-Lu/github-statcards/main/badges/overtranslate-downloads.json\" alt=\"Total downloads\" />\n  </p>\n\n  <p>\n    <a href=\"https://github.com/Hon-Lu/OverTranslate/releases/latest/download/OverTranslate-win-Setup.exe\"><img src=\"docs/images/ui/btn-setup.en.svg\" alt=\"Download the Windows installer (recommended)\" /></a>\n    &nbsp;\n    <a href=\"https://github.com/Hon-Lu/OverTranslate/releases/latest/download/OverTranslate-win-Portable.zip\"><img src=\"docs/images/ui/btn-portable.en.svg\" alt=\"Download the portable version\" /></a>\n  </p>\n\n  <p>\n    <img src=\"docs/images/readme-hero.png\" alt=\"Animated before/after comparison: the translation is overlaid right on the original text\" />\n    <br/>\n    <sub>Source: <a href=\"https://godotengine.org/blog/\">Godot Engine Blog</a></sub>\n  </p>\n\n</div>\n\n---\n\n## Translation Features\n\nOverTranslate currently offers five translation features, so you can pick the one that suits what you are doing:\n\n- **[Screenshot Translation](#screenshot-translation)** — select an area of the screen; the text is recognised and the translation is shown right on it\n- **[Real-time Translation](#real-time-translation)** — select an area of a video, a game or a comic; the text is recognised continuously and the translation is shown right on it\n- **[Quick Lookup](#quick-lookup)** — select some text and a compact translation popup opens; it can be pinned to stay on screen\n- **[In-place Translation](#in-place-translation)** — select some text and press the hotkey to translate it and replace it in place\n- **[Text Translation](#text-translation)** — the full translation window, with text input, swapping languages and reading aloud\n\n> 🌐 **OverTranslate has a multilingual interface. The screenshots in this README show it in Traditional Chinese or English; the interface language is switchable in the app.**\n\n---\n\n## Screenshot Translation\n\n**The main window can be closed so the app just sits in the system tray**, there's no need to keep the window open all the time.  \nWhen you need a translation, press the hotkey (default Ctrl + Alt + A) and select the area you want to translate.\n> Works on web pages, PDFs, images, comics, videos, game interfaces, and any other screen where text can't be selected directly.\n\n![Translation comparison](docs/images/翻譯比對圖.png)\n\n| Source text | Translation |\n|------|----------|\n| ![截圖翻譯0-前.png](docs/images/截圖翻譯0-前.png) | ![截圖翻譯0-後.png](docs/images/截圖翻譯0-後.png) |\n| ![截圖翻譯1-前.png](docs/images/截圖翻譯1-前.png) | ![截圖翻譯1-後.png](docs/images/截圖翻譯1-後.png) |\n| ![截圖翻譯2-前.png](docs/images/截圖翻譯2-前.png) | ![截圖翻譯2-後.png](docs/images/截圖翻譯2-後.png) |\n\n> All translation comparisons above are real results from running OverTranslate.\n\n> Image sources: the first comic's original artwork is AI-generated; the second comic is from [こうしす！＠IT支線](https://atmarkit.itmedia.co.jp/ait/articles/2604/02/news010.html); the third is from the [Closers official website](https://www.naddic.co.kr/ko/cls/index).\n\n### Toolbar - Other Features\n\nOnce the selection is done, the toolbar offers:\n\n- **Copy text:** copies the recognized text straight to the clipboard, no translation needed\n- **Screenshot:** copies the selected area to the clipboard, and also saves an image file when \"Save screenshots\" is turned on in the settings\n- **Annotate:** mark up the capture directly with the pen, text and other tools, then copy or save what you drew with Screenshot\n- **Settings:** Auto-translate, Close after screenshot, Save screenshots and more\n\n![截圖翻譯-標記.png](docs/images/截圖翻譯-標記.png)\n\n---\n\n## Real-time Translation\n\nIdeal for **video subtitles, game screens and comics**, and other situations that need continuous translation. After selecting the area, the screen content is recognized continuously, and the translation updates automatically in the original position whenever the text changes.\n\nThere are two capture modes, **screen capture** and **window capture**:  \nscreen capture needs Windows 11 24H2 or later, window capture needs Windows 10 1903 or later.\n\n![Real-time translation window preview](docs/images/即時翻譯視窗預覽_en.png)\n\n### Translation Block Modes (area selection)\n\n> The real-time translation hotkey (default Ctrl + Alt + S) starts selecting blocks when it isn't running, and starts translating when pressed again during selection; while translating, it pauses / resumes,  \n> When a screen doesn't need translating, or when you want to read the original text, pause first and resume later — there's no need to shut down real-time translation.\n\nTranslation blocks come with several modes and layouts:\n#### Subtitles / Comics\nFor video subtitles, game story dialogue and comic lettering; use this mode when the content is writing meant to be read straight through.\n\n| Selection | Translation result |\n|-----------|--------------------|\n| ![Real-time translation - comic selection](docs/images/即時翻譯-漫畫框.png) | ![Real-time translation - comic result](docs/images/即時翻譯-漫畫翻譯.png) |\n| ![Real-time translation1 - comic selection](docs/images/即時翻譯1-漫畫框.png) | ![Real-time translation1 - comic result](docs/images/即時翻譯1-漫畫翻譯.png) |\n| ![Real-time translation - video selection](docs/images/即時翻譯-影片框.png) | ![Real-time translation - video result](docs/images/即時翻譯-影片翻譯.png) |\n| ![Real-time translation2 - dialogue game selection](docs/images/即時翻譯2-對話遊戲框.png) | ![Real-time translation2 - dialogue game result](docs/images/即時翻譯2-對話遊戲翻譯.png) |\n\n> All translation comparisons above are real results from running OverTranslate.\n\n> Image sources: the first comic's original artwork is AI-generated; the second, a four-panel comic, is by [@kiyo_mariari](https://x.com/kiyo_mariari/status/2101991547877429535?s=20); the third video is from [BanG Dream! Girls Band Party!☆PICO～OHMORI～](https://www.youtube.com/watch?v=Tsmf4dkigbw); the fourth game screen is from [Magical Girl Witch Trials](https://store.steampowered.com/app/3101040).\n\n#### Game / UI\nFor game screens, chat windows, menus and interface text; use this mode when the content is not subtitles, story dialogue or comic lettering.\n\n![Real-time translation - chat comparison](docs/images/即時翻譯-聊天室比對圖.png)\n\n| Selection | Translation result |\n|-----------|--------------------|\n| ![Real-time translation - game chat selection](docs/images/即時翻譯1-遊戲翻譯框.png) | ![Real-time translation - game chat result](docs/images/即時翻譯1-遊戲翻譯.png) |\n| ![Real-time translation - game selection](docs/images/即時翻譯-遊戲翻譯框.png) | ![Real-time translation - game result](docs/images/即時翻譯-遊戲翻譯.png) |\n\n### Compare with Original\n\nTurn on \"Compare with original\" from the floating bar to keep the original screen as it is and show the translation in a separate compare box, so the original and the translation are easy to check against each other.\n> The compare box can be dragged, resized or closed individually.\n\n| Selection | Translation result |\n|-----------|--------------------|\n| ![Real-time translation - compare with original, selection](docs/images/即時翻譯-原文對照0-前.png) | ![Real-time translation - compare with original, result](docs/images/即時翻譯-原文對照0-後.png) |\n\n> Video source: [millsage「everscape」](https://www.youtube.com/watch?v=nPv1dBYawZQ)\n\n## Quick Lookup\n> The hotkey (default `Ctrl + C + C`: hold Ctrl and press C twice) opens it on top of whatever is on screen.\n\nSelect some text and press the hotkey and it is picked up and translated straight away; with nothing selected, you can type the text in yourself.  \nThe window closes itself when you switch to another window; pin it if you need it to stay on screen.\n\n![Quick lookup](docs/images/選詞翻譯.png)\n\n---\n\n## In-place Translation\n> The hotkey (default `Ctrl + Alt + E`); translating opens no window at all.\n\nSelect some text and press the hotkey: the translation is pasted straight over it (only in fields that accept typed text; nothing can be pasted outside an input area).\n\n![Quick translate](docs/images/快速翻譯.png)\n\n---\n\n## Text Translation\n\n**Type text and it is translated right away**, and the source and target languages can be swapped in one click;  \nbuilt-in text to speech (TTS) reads both the original text and the translation aloud.\n\n![Translation window preview](docs/images/翻譯視窗預覽_en.png)\n\n---\n\n## Settings\n\n![Settings page](docs/images/設定頁_en.png)\n\n- **Interface language**: Traditional Chinese / Simplified Chinese / English / Japanese / Korean / Russian; on first launch it follows your Windows display language\n- **Shortcuts**: every feature's shortcut can be changed — key combinations, single keys (F1 ~ F24, Pause, Scroll Lock), double presses (Ctrl + Ctrl, Ctrl + C + C), the middle or side mouse buttons, and gamepad buttons all work. There is also **Open window** (default `Ctrl + Alt + W`) to bring up the main window at any time\n- **Recognition models**: manage the [recognition languages](#recognition-languages-ocr) and manga vertical-text models that are downloaded separately\n- **Translation services**: choose which translation services to use; DeepL, AI (Local) and OpenAI are also configured here\n- **Model location**: move the downloaded recognition models and AI models to another drive, under **Advanced**\n\n> Logs are stored on your machine only and are never uploaded automatically; what **Record detailed information** adds also stays on your machine. To report a problem, press **Export diagnostics** and **Upload** on the settings page.\n\n---\n\n### Translation APIs\n\n**General services**: work right after installing — no account or API key needed.\n\n- Google Translate (Standard)\n- Google Translate (Beta)\n- Bing Translator\n- Microsoft Translator **(default)**\n- Youdao Translate\n- Tencent Translate\n- Yandex\n\n**Customizable services**: bring your own API key or endpoint, or download a model (see \"System Requirements\" below).\n\n- DeepL\n- AI (Local)\n- OpenAI\n  \nAn \"automatic fallback\" mechanism is provided (it applies to **screenshot translation**, **real-time translation**, **Quick Lookup** and **In-place Translation**):\nwhen a translation fails or responds too slowly, the app first retries the same service, and switches to another available translation service only if it still cannot translate. The engine actually in use is shown in the toolbar.\n![Fallback](docs/images/備援.png)\n\n> The fallback mechanism is not triggered when using **DeepL** or the AI translation services.\n\n### AI translation\n\nTranslates with an AI model that takes earlier translations into account, so names, terms and tone stay consistent across continuous subtitles and dialogue.\n\n![AI translation](docs/images/AI翻譯_en.png)\n\n- **AI (Local)**: built into OverTranslate and runs on a dedicated graphics card. Just download a model the first time you use it — no other tools to install, no API key to apply for, and nothing goes over the network while translating. Pick a dedicated translation model or a general-purpose language model to su"
+    },
+    "brief": {
+      "summary": "Windows屏幕OCR翻译覆盖工具，适合游戏漫画视频",
+      "problem": "解决无法选中文字的屏幕内容翻译需求",
+      "highlights": [
+        "可以框选屏幕区域，将译文直接覆盖在原文上",
+        "可以持续识别视频字幕、游戏对话和漫画文字",
+        "可以用快捷键查词、原位翻译和朗读文本"
+      ],
+      "target_users": [
+        "游戏玩家",
+        "漫画读者",
+        "跨语言视频观众"
+      ],
+      "why_trending": "总Star 331且近期有更新，本周首次收录",
+      "caveat": "仅支持Windows，部分捕捉模式有系统版本要求",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Hon-Lu/OverTranslate",
+      "score": 90,
+      "category": "ACG 本地化",
+      "reason": "游戏漫画视频实时OCR翻译覆盖",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 8,
+      "full_name": "badhope/world-walker",
+      "url": "https://github.com/badhope/world-walker",
+      "description": "A single-player AI tabletop RPG engine: deterministic rules own the numbers, saves and replay; any OpenAI-compatible model writes the scene.",
+      "language": "Python",
+      "total_stars": 21,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "ai",
+        "deterministic",
+        "game-engine",
+        "interactive-fiction",
+        "llm",
+        "mcp",
+        "narrative",
+        "openai-compatible",
+        "python",
+        "role-playing-game",
+        "single-player",
+        "tabletop-rpg",
+        "text-game",
+        "world-simulation"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-02-24T07:56:07Z",
+      "updated_at": "2026-11-21T18:12:09Z",
+      "pushed_at": "2026-11-22T07:05:22Z",
+      "open_issues": 0,
+      "homepage": "https://badhope.github.io/world-walker/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# World Walker\n\n**v1.18.0** · English · [简体中文](README.zh-CN.md) · [Architecture](ARCHITECTURE.md) · [MCP mode](docs/MCP_PLAY.md) · [Changelog](CHANGELOG.md)\n\nWorld Walker is a single-player AI tabletop RPG engine. You talk to the GM in plain language; a deterministic rules engine owns checks, prices, inventory, relationships, saves and replay. Any OpenAI-compatible `/chat/completions` endpoint can drive the story.\n\nNo host app. No provider lock-in. The model writes the scene; the engine owns the truth.\n\n`217 rule functions` · `73 MCP tools` · `28 player tools` · `6 setting bundles` · `9 templates` · `24 self-check suites` · `0 runtime dependencies`\n\n## Why it exists\n\nMost AI RPGs fail in the same places. World Walker puts the boundaries in the engine, not in a longer prompt.\n\n- **The GM cannot play your character.** It describes the world and NPCs; your decisions stay yours.\n- **NPCs only know what they have seen.** A character cannot quote facts outside their witnessed memory.\n- **A turn must leave a trace.** Every reply carries a scene card and an audit; a turn without a visible consequence is flagged.\n\nA campaign is built at the table, not pre-written. Session Zero asks genre, play style, role, tone, difficulty and boundaries. Then each turn runs `scene card → your action → world reaction → state change → next hook`.\n\n## Install and play\n\n```bash\npip install -e \".[mcp]\"      # core uses only the standard library; mcp is optional\nwg init my-game.json\nwg play --state my-game.json\n```\n\n`wg play` opens the local page at `http://127.0.0.1:8899/`. Continue a save or start a new world. The player view is one screen: narrative on the left, a narrow character and quest rail on the right, one input at the bottom.\n\n`wg` is the entry point: `init`, `setup`, `play`, `serve`, `mcp`, `run`, `doctor`, `version`. `wg --help` lists the rest.\n\n`wg setup` writes the five built-in narrative skill packs, a director note and two table rules to `~/.world-walker/harness.json` with `0600` permissions. An existing config is kept; use `--force` to rewrite it.\n\n## Knowledge library\n\nThe lobby's “Start from a prefab or archive” entry offers six selectable starts: island survival, Nine Wastes, Fog Port, Neon Abyss, Sword Break, and the Xuan Gate. A prefab fixes the world, play loop, difficulty, tone and narrative style; name, role, boundaries and what happens next still belong to the player.\n\n“Design archives” holds the raft, prefab-authoring and release-discipline notes. The data lives in `library/playbooks/*.json` and `library/archives/*.md` and ships with the package.\n\n## Use your own model\n\nThe model layer only assumes an OpenAI-compatible endpoint:\n\n```json\n{ \"base_url\": \"https://your-gateway/v1\", \"api_key\": \"sk-...\", \"model\": \"any-model\" }\n```\n\nSet it in the model settings page, or use `WW_MODEL_BASE_URL`, `WW_MODEL_API_KEY` and `WW_MODEL_NAME`. The config lives at `~/.world-walker/model.json` with `0600` permissions.\n\n## Tune the GM\n\nThe “Connect & tune → Narrative tuning” panel keeps four layers separate instead of folding taste, prompt packs and hard rules into one switch:\n\n- **Prompt:** director notes and table rules are appended to the GM system prompt. They change the telling, not POLICY, CANON or numeric outcomes.\n- **Narrative skills:** prompt packs under `narrative_skills/*.md`, each with a title and summary, injected only when enabled. These are not character skills.\n- **Engine rules:** the current save's `rulebook`, ordered by `order`, limited to whitelisted effects. Validate and save from the panel; trigger counts are persisted. Rules can run at turn start or after every tool result.\n- **Turn hooks:** `before_turn.py`, `after_tool.py` and `after_turn.py` under `~/.world-walker/hooks`. Off by default. They run with your own permissions — treat them as Python you wrote yourself.\n\nTuning config lives at `~/.world-walker/harness.json` with `0600` permissions. Prompts, skills, hooks and rules for an external agent still belong to its host; World Walker only supplies MCP tools and starting prompts.\n\n## Connect an agent over MCP\n\n```json\n{ \"mcpServers\": { \"world-walker\": { \"command\": \"world-walker-mcp\" } } }\n```\n\nAny MCP client works. For remote agents, use HTTP instead of stdio:\n\n```bash\nwg mcp --http --port 8620\n```\n\nThen point the client at `http://127.0.0.1:8620/mcp`. A complete game can start with one setting bundle and one trade:\n\n```\nload_setting(path=\"settings/玄枢界.setting.json\")\ntrade(location=\"临川城\", item=\"ningyuan_dan\", direction=\"buy\", quantity=1)\n```\n\nThe host calls tools only when a number is needed. Prose stays in the conversation.\n\n## What the engine owns\n\n- **Checks and combat:** d20, 2d6, d100, 4dF, dice pools, opposed rolls, damage and death rules.\n- **Economy and people:** prices, inventory, relationships, reputation, debts and faction shifts.\n- **World movement:** clocks, rumors, roaming NPCs, clues, quest stages and long-run consequences.\n- **Replay:** one transactional writer, a command log with state fingerprints, and a save you can inspect.\n- **Context boundaries:** NPC knowledge, canon facts, world book triggers and a scene card before every reply.\n\nThe player surface exposes 28 tools. The 73-tool MCP surface remains for advanced hosts. Both routes share the same rules, state file and writer.\n\n## Quality\n\nVerification is executable, not decorative. `scripts/verify_*.py`, behaviour regressions and mutation tests must fail when the code is wrong. The main gate runs 24 self-check suites, with coverage for the core domain and a zero-survivor mutation pass.\n\n```bash\npython3 scripts/verify_docs.py\npython3 scripts/verify_player_shell.py\npython3 scripts/verify_mcp_stdio.py\n```\n\n## Saves and failure\n\nSaves use atomic replacement with a `.bak` fallback and a re-entrant Windows/POSIX lock. Crash tests cover several interruption windows.\n\nIf `<state>.archive-pending` or `.ww-session-transaction-pending` exists, protected reads and writes are refused. There is **no automatic recovery**: stop writing, preserve the evidence and review it manually. Restoring the caller's in-memory state after a failed save is **not an archive rollback**. See [the archive recovery guide](docs/ARCHIVE_RECOVERY.md).\n\n## Scope\n\nBuilt for single-player AI GM play, setting bundles, local saves and MCP hosts. Deliberately not multiplayer, cloud accounts, a plugin marketplace or pre-written campaigns sold as content.\n\n## Project layout\n\n```\nworld-walker/                  # repo root is the game_engine package\n├── panel.py                   # player HTTP/SSE server and game APIs\n├── dialog_runtime.py          # GM prompt, tool loop, turn finish and audit\n├── narrative_rules.py         # Session Zero, scene cards, turn audit\n├── rules/                     # deterministic settlement\n├── settings/                  # six ready-to-play worlds\n├── saves/                     # local save library\n└── scripts/                   # verification and build tools\n```\n\n## License\n\nMIT. Demo names, factions and places are original; no setting material from existing works is reused.\n"
+    },
+    "brief": {
+      "summary": "单机 AI 桌面 RPG 引擎，规则管数值，模型写剧情。",
+      "problem": "AI 跑团常失控：GM 替玩家做决定、NPC 乱知道、回合没痕迹。",
+      "highlights": [
+        "可以用任意 OpenAI 兼容模型当 GM 开团",
+        "可以用六个内置世界观直接开局",
+        "可以让外部 Agent 通过 MCP 调 73 个工具"
+      ],
+      "target_users": [
+        "单人跑团玩家",
+        "AI 叙事开发者",
+        "MCP Agent 玩家"
+      ],
+      "why_trending": "本周首次收录，v1.18 仍在更新，规则与模型分离的思路少见。",
+      "caveat": "存档异常时没有自动恢复，需手动保留证据排查。",
+      "category": "互动叙事",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "badhope/world-walker",
+      "score": 90,
+      "category": "互动叙事",
+      "reason": "AI桌面RPG引擎，确定性规则与叙事",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 40,
+      "ranking_score": 51.0
+    }
+  }
+]
