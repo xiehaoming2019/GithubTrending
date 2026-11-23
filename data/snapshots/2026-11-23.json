@@ -1,0 +1,575 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "elementalsouls/Claude-BugHunter",
+      "url": "https://github.com/elementalsouls/Claude-BugHunter",
+      "description": "A Claude Code skill bundle for bug hunting and external red-team work - 82 skills, 15 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
+      "language": "Python",
+      "total_stars": 18449,
+      "forks": 2022,
+      "stars_today": 1716,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2010
+    },
+    "details": {
+      "topics": [
+        "ai-security",
+        "anthropic",
+        "application-security",
+        "bug-bounty",
+        "bugbounty",
+        "bugcrowd",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "ethical-hacking",
+        "hackerone",
+        "offensive-security",
+        "pentesting",
+        "red-team",
+        "security-tools",
+        "web-security"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-05T11:22:32Z",
+      "updated_at": "2026-11-23T07:54:25Z",
+      "pushed_at": "2026-11-23T04:27:51Z",
+      "open_issues": 21,
+      "homepage": "https://elementalsouls.github.io/Claude-BugHunter",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![claude-bughunter banner](assets/banner-v2.svg)\n\n# claude-bughunter\n\n> A self-contained Claude skill bundle for bug hunting and external red-team work · **83 skills** · 15 slash commands · **681 disclosed-report patterns** (433 now individually cited & auditable) across 24 core vulnerability classes · enterprise identity + infrastructure attack matrices · engagement-folder scaffolding · Burp MCP integration · battle-tested across authorized red-team and bug-hunting engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101, testphp.vulnweb.com).\n\nBuilt by **[Sachin Sharma](https://www.linkedin.com/in/sachinsharma8080/)** — Bug Hunting & GenAI Security Research.\n\n<p align=\"center\">\n  <sub>SPONSORED BY</sub>\n  <br/>\n  <a href=\"https://www.apismart.ai/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/apismart-dark.png\">\n      <img alt=\"ApiSmart\" src=\"assets/sponsors/apismart-light.png\" height=\"30\">\n    </picture>\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://threatwatch360.com\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/tw360-dark.svg\">\n      <img alt=\"ThreatWatch360\" src=\"assets/sponsors/tw360-light.svg\" height=\"30\">\n    </picture>\n  </a>\n</p>\n\n---\n\n## What is this?\n\n`claude-bughunter` is a drop-in skill bundle for the [Claude Code skills system](https://docs.claude.com/en/docs/claude-code/skills). Install once and Claude Code stops being a chatbot and starts behaving like a senior bug-hunting researcher or red-team operator: it knows the techniques, the chain templates, the VRT mappings, the platform CVE chains, and the hygiene — and it stays in scope.\n\nFour layers stack:\n\n- **Think** — `bb-methodology` + `redteam-mindset`: the 5-phase non-linear workflow, critical-thinking framework, and red-team operator discipline.\n- **Hunt webapps** — 58 `hunt-*` skills curated from 681 disclosed HackerOne reports: per-class detection patterns, payloads, bypass tables, and chain templates.\n- **Hit the perimeter** — enterprise platform chains (M365/Entra, Okta, vCenter, SSL-VPN appliances, SharePoint, cloud IAM): current 2024–2026 CVE chains + post-credential escalation.\n- **Ship it** — `triage-validation` + reporting + `evidence-hygiene`: the 7-Question Gate, VRT-aware severity, OOS rebuttals, PII redaction, and red-team deliverables.\n\nAll triggered automatically by topic — describe what you're testing in plain English and the relevant skill loads. No invocation by name.\n\n---\n\n## Quickstart\n\n**Option A — install as a Claude Code plugin (recommended).** From inside Claude Code:\n\n```text\n/plugin marketplace add elementalsouls/Claude-BugHunter\n/plugin install claude-bughunter@elementalsouls\n```\n\nAll 83 skills + 15 commands load namespaced under `claude-bughunter:` and update when you bump the plugin version — no files copied into `~/.claude/`.\n\n**A HackerOne account is optional.** The install asks for a HackerOne API username and token. They only let the HackerOne MCP read your private programs and your own reports; leave both blank if you don't need that. Every skill, command and the MCP's public tools (duplicate search, program scope) work without them.\n\n**Option B — copy install (no plugin system / pin to a clone):**\n\n```bash\ngit clone https://github.com/elementalsouls/Claude-BugHunter.git\ncd Claude-BugHunter\n```\n\n```bash\n# macOS / Linux\nbash scripts/install.sh\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1\n```\n\nBoth copy the skills + commands into `~/.claude/` (macOS/Linux) or `%USERPROFILE%\\.claude\\` (Windows) and wire the `hunt` engagement scaffolder.\n\n**What each install path gives you:**\n\n| Path | 83 skills + 15 slash commands | `cbh` CLI | `hunt` scaffolder |\n|---|---|---|---|\n| **A — plugin** | ✅ namespaced under `claude-bughunter:` | ➕ separate `pipx install` | ❌ clone-only |\n| **B — copy install** | ✅ copied into `~/.claude/` | ✅ from the clone | ✅ from the clone |\n\nThe plugin is the fastest path to the skills + slash commands. The terminal-native\n`cbh` runner installs standalone — `pipx install git+https://github.com/elementalsouls/Claude-BugHunter`\n— so plugin users can add it without a full clone (see [`cbh` CLI](docs/cbh-cli.md)).\nThe `hunt` engagement scaffolder ships with the clone (Option B).\n\nThat's it. Open Claude Code and describe what you're testing in plain English — the right skill loads automatically, no invocation by name:\n\n```text\n> Testing acme.com — an in-scope HackerOne target. Run recon and rank the surface.\n\n  ⟳ loading skills: web2-recon, offensive-osint, bb-methodology …\n    → subdomain enum (subfinder + crt.sh) … 47 hosts\n    → live hosts (httpx) … 12 · tech fingerprint … 6 distinct stacks\n    → ranked surface: api.acme.com (GraphQL, introspection ON)  ← start here\n                      auth.acme.com (OAuth, SSO)               ← hunt-oauth\n\n  Next: want me to probe the GraphQL introspection + OAuth redirect_uri?\n```\n\n→ Full [Installation guide](INSTALL.md) · [Usage guide](USAGE.md) · [searchable skill catalog](docs/skills.md).\n\n> The block above is an illustrative transcript. To record a real demo of your own session: `asciinema rec demo.cast` → upload to [asciinema.org](https://asciinema.org) and drop the badge here.\n\n---\n\n## Runs on multiple agent harnesses\n\n![One install, agent harnesses — Claude Code, OpenCode, Codex CLI, Hermes Agent, Google AntiGravity](assets/harness-routing.svg)\n\nThe skills are plain [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) — the same `SKILL.md` format that **Claude Code · OpenCode · OpenAI Codex CLI · Hermes Agent · Google AntiGravity** all load. One command installs them everywhere:\n\n```bash\n# macOS / Linux\nbash scripts/install.sh --all --burp-mcp\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1 -All -BurpMcp\n```\n\n| Harness | Target Skill Directory | Flag |\n|---|---|---|\n| **Claude Code** (baseline) | `~/.claude/skills/` | *(default)* |\n| **OpenCode** | reads `~/.claude/skills/` & `~/.agents/skills/` | *(default)* / `--agents` |\n| **OpenAI Codex CLI** | `~/.agents/skills/` | `--agents` |\n| **Hermes Agent** | `~/.hermes/skills/` | `--hermes` |\n| **Google AntiGravity** | `~/.gemini/config/skills/` | `--antigravity` |\n\n`--all` (`-All`) detects installed harnesses and copies skills to each harness's path (`~/.claude/skills`, `~/.agents/skills`, `~/.hermes/skills`, `~/.gemini/config/skills`); `--burp-mcp` (`-BurpMcp`) wires the Burp MCP server into each. The full *knowledge* layer ports to all five — the slash commands and `/hunt` engine stay Claude-Code-only by design.\n\n→ [Multi-harness guide](docs/multi-harness.md)\n\n---\n\n## Star History\n\n<a href=\"https://github.com/elementalsouls/Claude-BugHunter/stargazers\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"assets/star-history-light.svg\" />\n   <img alt=\"Star history chart for Claude-BugHunter\" src=\"assets/star-history-light.svg\" width=\"840\" />\n </picture>\n</a>\n\n<sub>Chart is self-hosted — regenerate with `python3 scripts/gen_star_history.py` (needs `gh auth login`).\nRefreshes automatically each day via `.github/workflows/star-history.yml`.</sub>\n\n---\n\n\n## Scope — what this bundle is for, and what it isn't\n\nThis bundle covers the **external attack surface** — anything reachable from the internet without first compromising an internal endpoint.\n\n### In scope\n\n- **Bug bounty hunting** — web apps, APIs, SaaS, GraphQL, OAuth, JWT, file upload, IDOR, SSRF, RCE chains\n- **Web application pentesting** — full hunt-* coverage of OWASP-mapped bug classes + discipline rules\n- **External red-team engagements** — initial-access against internet-facing enterprise estate: M365 / Entra ID, Okta-as-IdP, SharePoint on-prem (ToolShell + legacy SOAP), VMware vCenter / Workspace ONE, SSL VPN appliances (Cisco / Fortinet / Citrix / Palo Alto / Pulse / SonicWall / F5), Android APK red-team, supply-chain recon\n- **Cloud misconfig + post-credential escalation** — public S3, IMDS chains, STS AssumeRole, cross-account confused-deputy\n- **Recon + OSINT** — subdomain enum, identity-fabric mapping, certificate transparency, JS analysis, secret scanning\n- **Reporting** — H1, Bugcrowd (VRT-aware), Intigriti, Immunefi, plus client-facing red-team deliverable format\n\n### Out of scope (deliberate — not gaps, design decisions)\n\n- **Internal Active Directory attacks** — BloodHound, Kerberoasting, ASREProast, DCSync, Pass-the-Hash, AD CS abuse, ntlmrelayx, Responder, PetitPotam, etc. Different operational risk profile; needs different tooling and judgment. **Future bundle, not this one.**\n- **C2 frameworks** — Cobalt Strike, Sliver, Mythic, Havoc, BRC4 tradecraft. Out of scope for external-only engagement model.\n- **Post-exploit / persistence / lateral** — Mimikatz/comsvcs LSASS dumping, golden/silver tickets, named-pipe impersonation, persistence (registry, scheduled tasks, WMI events, COM hijacking), token theft. These start after the perimeter has already broken — different bundle territory.\n- **Evasion** — AMSI bypass, ETW patching, AV/EDR bypass. Tied to C2 tradecraft above.\n- **iOS pentesting / hardware / RF / ICS** — out of scope by design.\n- **Binary exploitation / kernel pwn / browser internals** — different skill universe.\n\nIf you're running an internal red team that includes domain-takeover chains via Kerberos or lateral movement, **this bundle won't help you in those phases** — and we'd rather say that up front than have you find out mid-engagement. The external surface handoff to internal-RT tooling (Impacket, NetExec, CrackMapExec, Rubeus, Certify, BloodHound) is intentionally outside our scope. **Coverage for internal AD and post-exploit may come in a future update.**\n\n---\n\n## What's inside\n\n**83 skills**, auto-loaded by topic — no invocation by name. Coverage across the external attack surface:\n\n| Category | # | Examples |\n|---|---|---|\n| Hunt — web app vuln classes | 58 | XSS, SQLi, SSRF, IDOR, LFI, SSTI, XXE, CSRF, CORS, open-redirect, SharePoint, ASP.NET/NTLM |\n| Enterprise platform attack ★ | 10 | M365/Entra, Okta, cloud-IAM-deep, vCenter, enterprise VPN, APK/iOS red-team pipelines, supply-chain recon |\n| Reporting & validation | 6 | triage-validation, evidence-hygiene, report-writing, bugcrowd-reporting |\n| Recon & OSINT | 5 | web2-recon, offensive-osint, osint-methodology, recon-scope-triage |\n| Methodology & mindset | 4 | bb-methodology, bug-bounty, redteam-mindset, bb-local-toolkit |\n\nFull searchable catalog → **[docs/skills.md](docs/skills.md)**. Also ships **15 slash commands** (`/hunt`, `/recon`, `/report`, …) and a deterministic **engagement engine** (`engine/`) that maps a target's attack surface and routes each finding to the skill that handles it.\n\n---\n\n## How it works\n\nA 6-phase, non-linear workflow — **recon → map & rank → hunt → validate → report** — with scope enforced in code and a **7-Question Gate** before anything is submitted. Two ways to drive it:\n\n- **Plain English** — describe what you're testing and the relevant skill loads automatically.\n- **`/hunt` scaffold + `cbh` CLI** — engagement-folder structure, state, and orchestration.\n\n→ [Usage guide & worked example](USAGE.md) · [6-phase architecture & skill-to-phase map](docs/architecture.md) · [`cbh` CLI](docs/cbh-cli.md)\n\n---\n## Authorization\n\nThese skills are intended for assets you **own** or have **written authorization to assess** (bug-bounty in-scope assets, pentest engagement letters, CTF challenges, your own infrastructure).\n\nThe skills include validation gates that auto-trigger when you point Claude at unverified third-party targets — `triage-validation`'s 7-Question Gate explicitly asks whether the asset is in scope (Q3) and on the program's accepted-impact list (Q2). The `bugcrowd-reporting` skill includes researcher-side hygiene (Bugcrowdninja alias, account-state restoration, friendly-tester posture) that signals legitimate authorized testing to the target's fr"
+    },
+    "brief": {
+      "summary": "Claude Code 红队与漏洞狩猎技能包。",
+      "problem": "帮助 Claude Code 具备漏洞赏金与红队专业知识。",
+      "highlights": [
+        "可以用自然语言描述目标，自动加载对应漏洞技能。",
+        "可以进行外网红队评估，覆盖企业身份和基础设施。",
+        "可以辅助漏洞报告分类、证据脱敏和交付。"
+      ],
+      "target_users": [
+        "漏洞赏金猎人",
+        "红队安全工程师",
+        "安全研究人员"
+      ],
+      "why_trending": "今日新增 1716 Star，连续上榜，AI 安全技能包热度高。",
+      "caveat": "仅限授权安全测试，勿用于非法用途。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "elementalsouls/Claude-BugHunter",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Code 安全技能包，属 Agent Skill",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 66.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "mjmirza/app-store-compliance",
+      "url": "https://github.com/mjmirza/app-store-compliance",
+      "description": "Avoid common App Store and Google Play rejections. Open playbook and pre-submission guard with 124 documented rejection patterns and fixes, privacy manifest and Data safety checks, 112 tracked deadlines (EU AI Act, DSA, COPPA, age laws), and a skill for AI coding agents.",
+      "language": "Shell",
+      "total_stars": 4267,
+      "forks": 273,
+      "stars_today": 621,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 719
+    },
+    "details": {
+      "topics": [
+        "accessibility",
+        "ai-agents",
+        "android",
+        "app-review-guidelines",
+        "app-store",
+        "app-store-connect",
+        "app-store-rejection",
+        "app-store-review",
+        "claude-code",
+        "coppa",
+        "data-safety",
+        "eu-ai-act",
+        "gdpr",
+        "google-play",
+        "google-play-policy",
+        "ios",
+        "mobile-compliance",
+        "play-console",
+        "pre-submission-checklist",
+        "privacy-manifest"
+      ],
+      "license_name": "",
+      "created_at": "2026-06-06T11:29:45Z",
+      "updated_at": "2026-11-23T07:52:06Z",
+      "pushed_at": "2026-11-23T07:41:52Z",
+      "open_issues": 28,
+      "homepage": "https://mjmirza.github.io/app-store-compliance/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<img src=\"assets/apple.png\" alt=\"Apple\" height=\"64\" />&nbsp;&nbsp;&nbsp;<img src=\"assets/android.png\" alt=\"Android\" height=\"64\" />\n\n# App Store Compliance Playbook\n\nCatch App Store and Google Play rejection causes before the reviewer does. A reference and a pre-submission guard for iOS and Android apps that is plain about what a scan can prove and what still needs a person. It does not guarantee approval.\n\nRead it as a website at [mjmirza.github.io/app-store-compliance](https://mjmirza.github.io/app-store-compliance/).\n\n[![Apple App Store](https://img.shields.io/badge/Apple_App_Store-000000?logo=apple&logoColor=white)](https://developer.apple.com/app-store/review/guidelines/)\n[![Google Play](https://img.shields.io/badge/Google_Play-414141?logo=googleplay&logoColor=white)](https://play.google/developer-content-policy/)\n[![Claude Code](https://img.shields.io/badge/Claude_Code-ready-000000?logo=anthropic&logoColor=white)](#how-you-actually-use-this)\n[![OpenRoots ORA 2.3](https://openroots.org/badge/ora.svg)](https://openroots.org/licenses/ora/2.3)\n[![CI](https://img.shields.io/github/actions/workflow/status/mjmirza/app-store-compliance/ci.yml?branch=main&label=CI)](https://github.com/mjmirza/app-store-compliance/actions)\n[![PRs welcome](https://img.shields.io/badge/PRs-welcome-2ea44f)](.github/CONTRIBUTING.md)\n\n[![Stars](https://img.shields.io/github/stars/mjmirza/app-store-compliance?style=social)](https://github.com/mjmirza/app-store-compliance/stargazers)\n[![Forks](https://img.shields.io/github/forks/mjmirza/app-store-compliance?style=social)](https://github.com/mjmirza/app-store-compliance/fork)\n[![Follow mjmirza](https://img.shields.io/github/followers/mjmirza?label=Follow&style=social)](https://github.com/mjmirza)\n\n**If this saves you even one rejection, leave a star, fork it, and follow along. That is the whole ask.**\n\n[Star this repo](https://github.com/mjmirza/app-store-compliance) &nbsp;|&nbsp; [Fork it](https://github.com/mjmirza/app-store-compliance/fork) &nbsp;|&nbsp; [Follow on GitHub](https://github.com/mjmirza) &nbsp;|&nbsp; [Follow on X](https://twitter.com/MirzaJhanzaib) &nbsp;|&nbsp; [next8n.com](https://next8n.com)\n\n</div>\n\n## Start here\n\nPick one row. The time shown is for that first step.\n\n| You are | Do this first | Time |\n|---|---|---|\n| About to submit, and you can open a terminal | Run the two commands below | 2 minutes |\n| Already rejected | Open [the appeal playbook](docs/MISTAKE-PATTERNS.md#the-appeal-playbook) | 10 minutes |\n| Not a developer | Open [the checklist](docs/PRE-SUBMISSION-CHECKLIST.md) and do its first two checks | 5 minutes |\n| Using an AI coding tool (Claude Code, Codex, Gemini CLI, GitHub Copilot, Cursor, Grok, Qwen, Kimi and more), and want this on every submit | Go to [the install](#install-it-into-your-ai-coding-tool) | 1 minute |\n\nThe two commands. Needs git and bash. The first downloads this playbook. The second scans your app. Nothing is installed and nothing in your app is changed.\n\n```\ngit clone https://github.com/mjmirza/app-store-compliance ~/repositories/app-store-compliance\nbash ~/repositories/app-store-compliance/agent-os/hooks/app-store-compliance-guard.sh \"/path/to/your/app\"\n```\n\nReplace only `/path/to/your/app`, with the folder that holds your Xcode project or your Android app. Keep the quotes, they keep a folder name with a space in it whole. To get the path without typing it, drag the folder from Finder or your file manager into the terminal window. A small project scans in about a second, a large one can take up to a minute, and the guard prints the time it took. Findings print first, critical ones on top, each with the file and line that triggered it when there is one. The last lines tell you where you stand.\n\n| Verdict line starts with | It means | Do next |\n|---|---|---|\n| `BLOCKED.` | A critical rejection risk was found | Fix each `[CRITICAL]` line using the `fix.` line under it, then run the same command again |\n| `CLEAR.` | No critical risk in your code. Not an approval, the reviewer still checks what a scan cannot see | Do the account and listing checks in [the checklist](docs/PRE-SUBMISSION-CHECKLIST.md), then record them in `.app-review-readiness.json` ([why](docs/WHAT-THE-SCAN-PROVES.md)) |\n| `Rule pack STALE.` (near the top) | The rules this scan used are more than 60 days old | Update the playbook with `git pull`, then run the scan again |\n| `NOT CHECKED.` | No iOS or Android project was found in that folder, or the guard could not write its scan files. Run by hand this exits 1. As a hook it lets the command through | Point it at the right folder, and check the temp folder is writable. A managed Expo app with no native folders still gets its `app.json` or `app.config` read for purpose strings, the privacy manifest and Android permissions. Run `npx expo prebuild` to cover the native code too |\n\n## What you get\n\nA rejection costs a week. You submit, you wait days in review, you get a one line rejection, you guess at the fix, you resubmit, you wait again. This playbook turns that loop into a check you run before you ever submit.\n\n- **You catch the rejection before Apple or Google does.** The guard runs against your project and names the risk while you can still fix it cheaply, not after a reviewer has already said no.\n- **You stop guessing at the cause.** Every rejection pattern maps to the exact guideline and the exact fix, so a one line rejection email becomes a known problem with a known answer.\n- **The two checks that cause most rejections are covered first.** A working demo account with a live backend, and a privacy declaration that matches what your app actually does at runtime, including every SDK. These are the top modern rejection causes and the playbook holds them above everything else.\n- **It works whether or not you write code.** A developer wires the guard into the build. A non developer reads the plain English checklist and walks the submission safely.\n- **Every claim is real.** Guideline numbers and statistics trace to a live Apple or Google source, never invented, so you are acting on the actual rules, not a guess.\n\nIf it saves you one rejection, it has paid for the ten minutes it takes to read.\n\n## Install it into your AI coding tool\n\nThis puts the check in front of every submit. Your agent runs the guard before any submit command, such as an upload to App Store Connect or Google Play, and stops the command when a critical rejection risk stands. For a one-time scan, skip this section and use Start here.\n\nOne command per tool, about a minute. Needs git and bash. Every tool other than Claude Code also needs python3.\n\n```\ngit clone https://github.com/mjmirza/app-store-compliance ~/repositories/app-store-compliance\nbash ~/repositories/app-store-compliance/scripts/install.sh --tool all\n```\n\n`--tool all` installs into every supported tool it finds in your home folder. To pick one, pass its name instead.\n\n| Tool | Command | What it gets | One thing to do after |\n|---|---|---|---|\n| Claude Code | `install.sh` | Hook, skill, `/app-store-audit` | Restart Claude Code |\n| Codex CLI | `install.sh --tool codex` | Hook, skill | Run `/hooks` in Codex once and approve the new hook. Codex runs no new hook until you do |\n| Gemini CLI | `install.sh --tool gemini` | Hook, skill, `/app-store-audit` | Restart Gemini CLI. The hook works from 0.22, the skill needs 0.24 or later |\n| OpenCode | `install.sh --tool opencode` | Plugin, skill, `/app-store-audit` | Restart OpenCode |\n| Cursor | `install.sh --tool cursor` | Hook, skill | Restart Cursor |\n| GitHub Copilot CLI and Copilot in VS Code | `install.sh --tool copilot` | Hook, skill | Start a new Copilot CLI session and reload VS Code |\n| GitHub Copilot cloud agent and Copilot in JetBrains | `install.sh --tool copilot-repo --repo \"/path/to/your/app\"` | Hook in your app's `.github/hooks` | Commit `.github/hooks` to your default branch. The cloud agent reads hooks only from there |\n| Grok | `install.sh --tool grok` | Hook, skill | Start a new Grok session |\n| Qwen Code | `install.sh --tool qwen` | Hook, skill, in `$QWEN_HOME` when it is set | Restart Qwen Code |\n| Kimi Code | `install.sh --tool kimi` | Hook, skill | Restart Kimi Code |\n| Factory Droid | `install.sh --tool droid` | Hook, skill | Start a new Droid session |\n| Augment Auggie | `install.sh --tool auggie` | Hook, skill | Start a new Auggie session |\n| Windsurf | `install.sh --tool windsurf` | Hook, skill | Restart Windsurf |\n\nEvery run ends with `Install verified.` only after it has fed a submit command to the hook in that tool's own payload format and seen it blocked. For OpenCode that check runs the plugin under node, so without node the run says `Installed, but not fully verified.` instead. If you see a `FAIL` line instead, fix that line and run the same command with `doctor` added.\n\nWhat it writes, so you can check it.\n\n- The guard, into that tool's own folder, for example `~/.codex/hooks/` or `~/.gemini/hooks/`.\n- The skill. Claude Code reads it from `~/.claude/skills/`. Every other tool reads one shared copy in `~/.agents/skills/`.\n- One hook entry in that tool's config (`~/.claude/settings.json`, `~/.codex/hooks.json`, `~/.gemini/settings.json`, `~/.cursor/hooks.json`, `~/.copilot/hooks/` or `$COPILOT_HOME/hooks/`), or for OpenCode one plugin file in `~/.config/opencode/plugins/`. Every other setting is kept, and a dated backup sits next to a file that already existed. A config that is not valid JSON or repeats a key is never rewritten. You get the exact block to paste instead.\n- For Gemini CLI it also turns on `tools.enableHooks`, which Gemini needs before version 0.26 to run any hook.\n- For Kimi Code it appends one marked `[[hooks]]` block to `~/.kimi-code/config.toml` (or `$KIMI_CODE_HOME/config.toml`) and never rewrites or prints the rest of that file, which can hold API keys. Uninstall removes exactly that block.\n- For Factory Droid it writes to `~/.factory/settings.json` when your hooks already live there, because Droid ignores them once `~/.factory/hooks.json` exists.\n\n#### Tools the installer does not wire, and what to do instead\n\nEach of these was checked against its own documentation. Where a tool can block a command but its format could not be confirmed, you get the manual step rather than a guess.\n\n| Tool | What to do |\n|---|---|\n| Kiro CLI | Kiro sends the event as JSON on stdin and blocks the tool when a `PreToolUse` command hook exits non-zero, and the guard reads Kiro's `shell`, `execute_bash`, `execute_pwsh` and `execute_cmd` payloads. The installer does not wire it yet. After `install.sh`, add `.kiro/hooks/app-store-compliance.json` to the project with `{\"version\":\"v1\",\"hooks\":[{\"name\":\"app-store-compliance\",\"trigger\":\"PreToolUse\",\"matcher\":\"^(shell\\|execute_bash\\|execute_pwsh\\|execute_cmd)$\",\"action\":{\"type\":\"command\",\"command\":\"bash ~/.claude/hooks/app-store-compliance-guard.sh\"}}]}`. Not yet tested against a live Kiro |\n| Cline | Hooks run on macOS and Linux only, from an executable file `~/.cline/hooks/PreToolUse` that answers `{\"cancel\":true}`. Wire it by hand from the guard's exit code, then turn hooks on in Cline's settings |\n| Amp | Blocking needs a TypeScript plugin in `~/.config/amp/plugins/`. Not installed automatically yet. Run the guard by hand before a submit |\n| Goose, Crush | Both can block, and their file layout could not be confirmed. Run the guard by hand before a submit |\n| Roo Code, Continue | No hook, only a deny list. Add the submit commands (`fastlane`, `xcrun altool`, `eas submit`, `gradle bundleRelease`) to Roo's `deniedCommands` or to the exclude list in Continue's `permissions.yaml` |\n| Aider, Copilot for Xcode | No way to run a check before a command. Run the guard by hand, or as a git pre-push hook, before every submit |\n\nIt never touches your GitHub account or your credentials. Undo it with the same command and `uninstall`, for example `install.sh --tool gemini uninstall`. The shared skill stays until the last tool using "
+    },
+    "brief": {
+      "summary": "应用商店拒审预检查工具，内置规则库与 AI 代理技能。",
+      "problem": "开发者常因不明规则被应用商店拒审，反复提交耗时。",
+      "highlights": [
+        "可以在提交前扫描项目，找出关键拒审风险",
+        "可以查阅 124 种拒审模式及对应修复方法",
+        "可以安装到 Claude Code 等 AI 编码工具做提交前拦截"
+      ],
+      "target_users": [
+        "iOS/Android 开发者",
+        "独立开发者",
+        "AI 编码工具用户"
+      ],
+      "why_trending": "今日新增 621 Star，本周首次入榜，合规痛点受关注。",
+      "caveat": "扫描不能保证过审，仍需人工核对账户和商店 listing。",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mjmirza/app-store-compliance",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "面向 App 合规的 Agent Skill",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 57.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "nexu-io/openmotion",
+      "url": "https://github.com/nexu-io/openmotion",
+      "description": "The open-source Claude Motion & CapCut alternative. Turn a reference video into editable motion graphics with your brand kit. Export MP4s for YouTube, YouTube Shorts, Instagram Reels, and TikTok. A full-stack agentic video studio with 300+ Motion.md guides and support for 22 agents, including Claude Code, Codex, DSH, and WorkBuddy.",
+      "language": "TypeScript",
+      "total_stars": 15504,
+      "forks": 1537,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 1287
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "ffmpeg",
+        "generative-ai",
+        "html",
+        "javascript",
+        "local-first",
+        "mcp",
+        "motion-graphics",
+        "openmotion",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-11T09:40:38Z",
+      "updated_at": "2026-11-23T07:52:33Z",
+      "pushed_at": "2026-11-23T07:53:58Z",
+      "open_issues": 112,
+      "homepage": "https://open-design.ai/motion/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"docs/readme/openmotion-logo.svg\" width=\"420\" alt=\"OpenMotion\"></p>\n\n<p align=\"center\"><strong>The open-source Claude Motion &amp; CapCut alternative</strong></p>\n\n<p align=\"center\">\n  <picture>\n    <source type=\"image/webp\" srcset=\"docs/readme/capcut-claude-motion-cover.webp\">\n    <source media=\"(max-width: 600px)\" srcset=\"https://releases.open-design.ai/open-motion/media/sha256/730e1d6235820d39ba8adde42810d1165377992136a3b20290ad5d504abb527b.jpg\">\n    <img src=\"https://releases.open-design.ai/open-motion/media/sha256/730e1d6235820d39ba8adde42810d1165377992136a3b20290ad5d504abb527b.jpg\" width=\"100%\" alt=\"OpenMotion — the open-source Claude Motion and CapCut alternative. Dan Martell’s original and an OpenMotion remake with Riya appear beside each other above the editable Studio timeline.\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/nexu-io/openmotion\"><img src=\"docs/readme/badges/stars.svg\" alt=\"GitHub Stars · 9.5k (2026-11-09)\"></a>\n  <a href=\"package.json\"><img src=\"docs/readme/badges/node.svg\" alt=\"Node.js 22.18+\"></a>\n  <a href=\"LICENSE\"><img src=\"docs/readme/badges/license.svg\" alt=\"Apache 2.0 license\"></a>\n  <a href=\"https://github.com/nexu-io/open-design\"><img src=\"docs/readme/badges/built-by-opendesign.svg\" alt=\"Built by OpenDesign\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://open-design.ai/motion/\"><img src=\"docs/readme/badges/website.svg\" alt=\"OpenMotion website\" /></a>\n  <a href=\"https://go.open-design.ai/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=openmotion&amp;utm_content=readme_en\"><img src=\"docs/readme/badges/opendesign-go.svg\" alt=\"OpenDesign Go model subscriptions\" /></a>\n  <a href=\"https://discord.com/invite/M7NnHS9gNa\"><img src=\"docs/readme/badges/discord.svg\" alt=\"Join the OpenMotion Discord\" /></a>\n  <a href=\"https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=b6cs46dc-acb2-48ed-941d-c45642ead841\"><img src=\"docs/readme/badges/feishu.svg\" alt=\"Join the OpenMotion Feishu group\" /></a>\n  <a href=\"https://x.com/OpenDesignHQ\"><img src=\"docs/readme/badges/x-opendesignhq.svg\" alt=\"OpenDesign on X (@OpenDesignHQ)\" /></a>\n  <a href=\"https://x.com/OpenDesignDevs\"><img src=\"docs/readme/badges/x-opendesigndevs.svg\" alt=\"OpenDesign Developers on X (@OpenDesignDevs)\" /></a>\n  <a href=\"https://www.youtube.com/channel/UChtshixMhvtgBWzoD9R_Qfg\"><img src=\"docs/readme/badges/youtube.svg\" alt=\"OpenDesign on YouTube\" /></a>\n</p>\n\n<p align=\"center\"><a href=\"#quick-start\">Install</a> · <a href=\"#agent-wall\">Agents</a> · <a href=\"#showcase\">Use cases &amp; remakes</a> · <a href=\"#features\">Why OpenMotion</a> · <a href=\"#technical-guide\">Setup & architecture</a> · <a href=\"#community\">Community</a></p>\n\n<div align=\"center\">\n\n**English** · [简体中文](docs/README.zh-CN.md) · [日本語](docs/README.ja.md)\n\n</div>\n\n# OpenMotion\n\nOpenMotion is a **full-stack agentic video** studio and an **open-source alternative to Claude Motion and CapCut**. Upload a reference video or paste a social video link to **recreate it with your own brand kit and copy**.\n\n- 🎬 **Full-stack video recreation.** Code video with HTML. Your agent breaks down the reference, rebuilds its shots and transitions, and generates missing assets. Edit the timing in Studio and render an MP4 from the same project.\n- 🔑 **BYOA — Bring Your Own Agent. BYOK — Bring Your Own Keys.** OpenMotion is free and open source. Recreate videos in [your local agent](#agent-wall) with your own API keys. Supported agents include Claude Code, Codex, and WorkBuddy.\n- 🧩 OpenMotion introduces **Motion.md**, a Markdown format for shot order, timing and transitions. Use it to share how a brand film works, shot by shot.\n- 🎛️ **Images, video, music and voice.** Create artwork with GPT Image 2.6, add a shot with Seedance 2.5, score it with Suno and narrate it with Eleven v4. [Explore the models and providers](#model-wall).\n\n<a id=\"快速开始\"></a> <a id=\"quick-start\"></a>\n\n### Install from ChatGPT Marketplace\n\n**One-click installation. No manual configuration required.** Once installed, create motion videos from scratch, recreate reference videos, or start from a template—all in your conversation.\n\n**[Install OpenMotion in ChatGPT →](https://chatgpt.com/plugins/plugins_6a742d13e88481919b42002864b1bb26)**\n\n<a id=\"start-in-codex\"></a>\n\n### Install in your agent\n\nInstall the main Skill with the [Skills CLI](https://github.com/vercel-labs/skills):\n\n```sh\nnpx skills add nexu-io/openmotion --skill openmotion\n```\n\nThen ask your agent: **Use OpenMotion to install and connect the local Studio and MCP, then help me make a video.** The Skill completes the source setup below when needed and reuses an existing workspace. Installing the Skill alone copies instructions; it does not yet install Studio or connect MCP.\n\nCopy this instruction into your local agent to set up OpenMotion from source:\n\n```text\nRead https://github.com/nexu-io/openmotion/blob/main/docs/install.md and follow the instructions to install and connect OpenMotion in the current agent.\n```\n\nAfter setup, the agent opens the local template library and shows the welcome followed by three project-preview cards in a self-contained HTML document. Each installation samples three distinct entries from the curated pool of four. The complete silent previews and posters are bundled, so this display does not wait for native MCP reload or fetch remote reference films. Native original-reference playback remains available separately and requires internet access. The library opens once using the opening tool's result, with no extra page or playback audit. An opening failure is reported with a usable link and does not invalidate installation. Automatic current-chat MCP activation is assessed independently. Preview a card, choose **Recreate template**, then send your brief to start creating. [Source installation guide](docs/install.md) · [Onboarding selection](docs/install.md#maintained-recommendation-selection)\n\n### Install the published npm app (optional)\n\nSource setup above remains the default for repository installation. To explicitly choose the published application with prebuilt Studio and its configured online catalog, copy this instruction into your local agent:\n\n```text\nRead https://releases.open-design.ai/motion and follow the instructions to install and connect the published npm application in the current agent.\n```\n\n[Published application installation and channel selection](docs/install.md). Published versions can lag behind this checkout.\n\n### Run the repository locally\n\nUse Git, npm and Node.js 26.11.1:\n\n```sh\ngit -c filter.lfs.process= -c filter.lfs.smudge= -c filter.lfs.required=false clone --depth 1 --single-branch --branch main https://github.com/nexu-io/openmotion.git\ncd openmotion\nnpm ci\nnpm run build:studio\nnpm start\n```\n\nOpen the actual `studioUrl` or `previewUrl` printed at startup, then choose **Template library**. Studio and MCP read the templates in this checkout. To connect your agent to this same copy, follow [source setup and MCP configuration](#agent-setup). [Clone size and optional media](docs/repository-storage.md)\n\n\n### Start from an existing project\n\nImport a **HyperFrames project ZIP** into OpenMotion to continue editing its composition and local assets. Compress the project folder, open **All projects → Import projects**, then select the imported copy to edit in Studio or with your Agent. Import creates an independent copy and requires a supported native project structure.\n\n[Step-by-step import guide, required files and compatibility](docs/project-archives.md#import-from-hyperframes)\n\n<a id=\"agent-wall\"></a>\n\n**22 local agents** · [Choose your agent](#choose-agent)\n\n<p align=\"center\"><a href=\"#choose-agent\"><picture><source media=\"(max-width: 600px)\" srcset=\"docs/readme/agents/local-agents.mobile.png\"><img src=\"docs/readme/agents/local-agents.png\" width=\"100%\" alt=\"WorkBuddy, Codex CLI, Claude Code, OpenCode, Hermes, Antigravity, Gemini CLI, Grok Build, Kimi CLI, Cursor Agent, Qwen Code, Qoder CLI, GitHub Copilot, Pi, Kiro CLI, Kilo, Mistral Vibe, DeepSeek TUI, Reasonix, Aider, Devin, Trae CLI\"></picture></a></p>\n\n<a id=\"showcase\"></a> <a id=\"brand-before-after\"></a> <a id=\"what-can-you-make\"></a>\n<a id=\"use-cases-and-remake-examples\"></a>\n\n## 🎞️ Use cases and remake examples\n\nExplore product demos, brand films, talking-head videos and more. The previews below show reference videos.\n\n**[Browse the full template library →](https://open-design.ai/templates/)** — Find more templates, full videos, Motion.md and recreation instructions.\n\n### AI recuts & revisions\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/many-possible-futures.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/f4a30a4a3b2dbc5c43df68837bebb284d204a1408394e248d7df339154914917.gif\" width=\"480\" alt=\"Build a story from multiple scenes\"></picture><br>\n<strong>OpenAI · Build a story from multiple scenes</strong><br>\nConnect different scenes around one narrative idea, then expand into a broader montage.<br>\n<a href=\"https://open-design.ai/templates/many-possible-futures-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/making-of-window-collage.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/dae76ee380e75eb257be035bda3697981c5cce42b53a0f61da34c46687b52e1d.gif\" width=\"480\" alt=\"Recut a making-of collage\"></picture><br>\n<strong>Anthropic · Recut a making-of collage</strong><br>\nLayer clips and screenshots in sequence, keeping the main title readable above them.<br>\n<a href=\"https://open-design.ai/templates/making-of-window-collage-motion-design/\">View template</a>\n</td>\n</tr>\n</table>\n\n### Product launches & demos\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/notion-custom-agents.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/b62ffb99195f35396b6ec0b5f8f0abb8552ffd2493a5e982e5e10fd640c44a0f.gif\" width=\"480\" alt=\"Show a problem, then the solution\"></picture><br>\n<strong>Notion · Show a problem, then the solution</strong><br>\nMove from crowded tasks to coordinated agents; adapt the sequence to your own product.<br>\n<a href=\"https://open-design.ai/templates/notion-custom-agents-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"https://releases.open-design.ai/open-motion/media/sha256/66bc3f14f916a58800562af5b2c8412b2f554f36a435da950faa39ef4b82da96.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/ecbb5b36bf9997451a02fbf6db8ef9083b93326eb81b5bd1c29b7ca988d008cd.gif\" width=\"480\" alt=\"Turn demand into a product reveal\"></picture><br>\n<strong>OpenAI · Turn demand into a product reveal</strong><br>\nBuild momentum with overlapping requests, then reveal the app in one clear beat.<br>\n<a href=\"https://open-design.ai/templates/demand-becomes-a-desktop-release-motion-design/\">View template</a>\n</td>\n</tr>\n</table>\n\n### Brand films & motion\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/a-world-connected-by-computational-fragments.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/d94806d916b9b7d9325db6901cc36b890ee0e4ff7503bfbd888b2d258b985925.gif\" width=\"480\" alt=\"Connect worlds through motion\"></picture><br>\n<strong>Kimi · Connect worlds through motion</strong><br>\nUse code strips, offset slices and transitions to connect a series of brand scenes.<br>\n<a href=\"https://open-design.ai/templates/a-world-connected-by-computational-fragments-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-mo"
+    },
+    "brief": {
+      "summary": "开源动效视频工作室，用 AI Agent 重制参考视频",
+      "problem": "参考视频做同款动效成本高，传统剪辑软件上手也慢",
+      "highlights": [
+        "可以把参考视频拆成可编辑的时间线动效",
+        "可以套用品牌素材和文案，导出多平台 MP4",
+        "可以用 300+ Motion.md 指南让 Agent 生成分镜"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "品牌营销团队",
+        "动效开发者"
+      ],
+      "why_trending": "资料显示总 Star 超 1.5 万，仓库近日仍有提交",
+      "caveat": "需自备 Agent 和 API Key，并配置本地 Node 环境",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nexu-io/openmotion",
+      "score": 94,
+      "category": "视频剪辑",
+      "reason": "开源动效视频编辑，支持 Agent 工作流",
+      "generated_by_ai": true,
+      "velocity_score": 94,
+      "freshness_score": 40,
+      "ranking_score": 76.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Open-source AI video editor: edit your own footage, or create and remake any video with Claude Code, Codex or the free Studio app. Write HTML, render MP4. By HeyGen.",
+      "language": "TypeScript",
+      "total_stars": 88494,
+      "forks": 8237,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 562
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "ai-video-editor",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "remotion-alternative",
+        "rendering",
+        "typescript",
+        "video-editing",
+        "video-editor",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-23T07:51:57Z",
+      "pushed_at": "2026-11-23T07:54:08Z",
+      "open_issues": 307,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>The open-source AI video editor: create, edit, remake.</b></p>\n\n<p align=\"center\">Write HTML. Render video. Built for agents.</p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio/download?utm_source=github&utm_medium=readme&src=github-readme\">Download the app</a> ·\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> ·\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> ·\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> ·\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> ·\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a> ·\n  <a href=\"https://x.com/HyperFrames_\">X</a> ·\n  <a href=\"https://www.youtube.com/@HyperFrames_Official\">YouTube</a>\n</p>\n\n<p align=\"center\"><a href=\"https://hyperframes.studio/studio/download?src=github-readme-hero\"><picture><source type=\"image/avif\" srcset=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-26s-v3.avif\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-v1.webp\" width=\"800\" alt=\"HyperFrames Studio, the AI video editor: ask for a launch video, get an editable project, then mark one word and the agent changes just that\"></picture></a></p>\n\nHyperFrames is HeyGen's AI video editor for people and agents. Describe a video, bring your own footage, or remake a video you love, and get a real project you can change down to the frame: ask for a bigger title, a faster cut or new captions, and it changes just that.\n\nUnderneath, HyperFrames is a free, open-source framework (Apache 2.0) for turning HTML, CSS, JavaScript, media and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents like Claude Code, Codex and Cursor with skills, or as the rendering core behind hosted authoring workflows. No React required.\n\n## Three ways to use it\n\n|                                    | Best for                                                                                                                                                     | Start                                                                                                                                                                                                      |\n| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **HyperFrames Studio app**         | Anyone, no code. Describe a video or drop in your footage, then edit by typing or pointing. Use the built-in agent on Pro, or your own Claude Code or Codex. | [Download for Mac, Windows or Linux](https://hyperframes.studio/studio/download?src=github-readme) (free plan)                                                                                             |\n| **Your coding agent**              | Claude Code, Codex, Cursor, Gemini CLI and other agents.                                                                                                     | `npx skills add heygen-com/hyperframes`                                                                                                                                                                    |\n| **Claude, ChatGPT or Grok** (beta) | Making a video in a chat, nothing to install. ChatGPT: Business, Enterprise and Edu workspaces.                                                              | Connect [HyperFrames by HeyGen](https://hyperframes.heygen.com/guides/mcp?utm_source=github&utm_medium=readme), listed in [Claude's connector directory](https://claude.com/connectors/hyperframes-heygen) |\n\nThe [HyperFrames Studio app](https://hyperframes.studio/studio?utm_source=github&utm_medium=readme) has a free plan. [Pro](https://hyperframes.studio/pricing?utm_source=github&utm_medium=readme) ($25 a month) adds top video, image, voice and music models (HeyGen Video 1, Seedance 2.5, Lyria 3 Pro and more) and 25,000 credits a month.\n\n## Made with HyperFrames\n\n<table>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2113670541274144802\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/script-based-editing-v1.webp\" width=\"195\" alt=\"Editing a talking-head video by editing its script in HyperFrames Studio\"></a><br><b>Script-based editing</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/liu8in/status/2123562606535565629\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/edit-your-own-footage-v1.webp\" width=\"195\" alt=\"A creator's own phone footage edited into a finished social video with HyperFrames\"></a><br><b>Edit your own footage</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2112960682526490691\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/captions-v1.webp\" width=\"195\" alt=\"Animated captions added to a talking-head video with HyperFrames\"></a><br><b>Captions on your video</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2110784695634178256\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remake-any-video-v1.webp\" width=\"195\" alt=\"A video rebuilt as an editable HyperFrames project, then changed\"></a><br><b>Remake any video</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/website-to-launch-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/launch-from-website-v1.webp\" width=\"195\" alt=\"Product launch video built from a company's website with HyperFrames\"></a><br><b>Launch video from your website</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/WaterrrMiao/status/2114585876160455057\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/faceless-explainer-v1.webp\" width=\"195\" alt=\"Faceless YouTube explainer made with HyperFrames\"></a><br><b>Faceless explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/flat-cartoon-explainer-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/flat-cartoon-explainer-v1.webp\" width=\"195\" alt=\"Flat cartoon explainer video about the Sun made with HyperFrames\"></a><br><b>Flat cartoon explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/real-ui-newspaper-1969-v2.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/real-ui-newspaper-v1.webp\" width=\"195\" alt=\"Motion graphics built from a real 1969 newspaper front page with HyperFrames\"></a><br><b>Real-UI motion graphics</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/cartoon-frameys-launch-one-take-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-one-take-trailer-v1.webp\" width=\"195\" alt=\"3D one-take launch trailer made with HyperFrames\"></a><br><b>3D one-take trailer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/3d-type-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-type-v1.webp\" width=\"195\" alt=\"Kinetic 3D typography made with HyperFrames\"></a><br><b>3D type</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/remotion-to-hyperframes-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remotion-ported-voxels-v1.webp\" width=\"195\" alt=\"A Remotion project with 3D voxels, ported to HyperFrames\"></a><br><b>Remotion project, ported</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/generative-replica-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/generative-motion-v1.webp\" width=\"195\" alt=\"Generative motion design made with HyperFrames\"></a><br><b>Generative motion</b></td></tr>\n</table>\n\nClick any clip to watch it with sound.\n\n## What you can make\n\n| Video                                                                                                                     | How                                                                                                                                                   |\n| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Branded UGC videos for TikTok and Instagram from your own phone clips: captions, music, text hooks, fast client revisions | The Studio app: drop in your footage, then edit by typing or pointing                                                                                 |\n| Video podcast episodes: line up a multi-camera recording, cut to whoever is talking, clean up the sound, add captions     | The Studio app's podcast edit                                                                                                                         |\n| Product demos, tutorials, launch videos and feature announcements, from your website or a screen recording                | Paste your URL into the Studio app, or ask your agent                                                                                                 |\n| Explainer and faceless YouTube episodes from your topic, script or voiceover                                              | Ask for one; [`/style-sampling`](skills/style-sampling) for five proven series styles                                                                 |\n| Remake a video you love, then make it yours                                                                               | [`/reverse-any-video`](skills/reverse-any-video)                                                                                                  "
+    },
+    "brief": {
+      "summary": "写 HTML 就能渲染成 MP4 的开源 AI 视频编辑器",
+      "problem": "视频改动常要重剪整段，AI 代理也难以稳定复现画面",
+      "highlights": [
+        "可以把自己的实拍素材剪成成品视频",
+        "可以让 Claude Code 等代理只改字幕或标题",
+        "可以把喜欢的视频重制成可编辑项目"
+      ],
+      "target_users": [
+        "视频创作者",
+        "前端开发者",
+        "AI 代理用户"
+      ],
+      "why_trending": "连续上榜，近 8.8 万 Star，仓库近期仍在活跃更新",
+      "caveat": "Pro 版模型与额度需付费，免费范围资料未说明",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 95,
+      "category": "AI 视频",
+      "reason": "开源 AI 视频编辑器，HTML 渲染 MP4",
+      "generated_by_ai": true,
+      "velocity_score": 83,
+      "freshness_score": 40,
+      "ranking_score": 74.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "horizon-rust/horizon",
+      "url": "https://github.com/horizon-rust/horizon",
+      "description": "Minecraft 26.3 rewritten in Rust.",
+      "language": "Rust",
+      "total_stars": 11807,
+      "forks": 2088,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 361
+    },
+    "details": {
+      "topics": [
+        "game-engine",
+        "gamedev",
+        "linux",
+        "minecraft",
+        "minecraft-java",
+        "reimplementation",
+        "rust",
+        "voxel",
+        "vulkan",
+        "wgpu"
+      ],
+      "license_name": "LGPL-3.0",
+      "created_at": "2026-10-03T17:08:48Z",
+      "updated_at": "2026-11-23T07:54:20Z",
+      "pushed_at": "2026-11-23T07:44:48Z",
+      "open_issues": 1487,
+      "homepage": "https://playhorizon.dev",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/media/readme/title-dark.png\">\n    <img src=\"docs/media/readme/title-light.png\" alt=\"Horizon\" width=\"320\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <b>Minecraft 26.3, rewritten from scratch in Rust.</b><br>\n  Play on existing worlds and servers.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev/download\"><img src=\"docs/media/readme/download-button.png\" alt=\"Download the Horizon launcher for Windows, macOS and Linux\" width=\"400\"></a><br>\n  <sub>You need your own copy of Minecraft: Java Edition.</sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://playhorizon.dev/docs/install\"><b>Install guide</b></a> ·\n  <a href=\"https://playhorizon.dev/docs/\"><b>Docs</b></a> ·\n  <a href=\"https://playhorizon.dev/mods\"><b>Mods</b></a> ·\n  <a href=\"https://discord.gg/playhorizon\"><b>Discord</b></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/media/readme/hero-lookout.webp\" alt=\"A player's view from a wooden lookout over a village: a friend in diamond armour sneaks at the edge while a creeper flashes white behind her, another friend rides a horse between the houses below, and forest, snowy peaks and the sea run to the horizon\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/media/readme/signs.webp\" alt=\"Three wooden signs: 3.5x faster start than modded Java, 38 percent more FPS than Java with Sodium, and a mod API to port your mods to Rust\" width=\"100%\">\n</p>\n\n<p align=\"center\">\n  <sub>*Against Java Edition with Sodium, Lithium, FerriteCore and ImmediatelyFast on a Ryzen 7 9800X3D with an RTX 5080. More computers on the <a href=\"https://playhorizon.dev/benchmarks\">benchmarks page</a>.</sub>\n</p>\n\n<h2 align=\"center\">What you get</h2>\n\n- **Vanilla Minecraft:** survival, creative and hardcore in every dimension, with the same terrain, mobs, villagers and redstone. Your saves open as they are.\n- **Multiplayer:** vanilla and Horizon servers, LAN, and invite codes for playing your world with friends. You can [host a server](https://playhorizon.dev/docs/hosting) too.\n- **Mods:** Horizon's own mod system, with mods like zoom and a minimap, and shader packs. Browse the [catalogue](https://playhorizon.dev/mods) or [make a mod](https://playhorizon.dev/docs/make-a-mod).\n- **Beyond vanilla:** terrain up to 1,024 chunks away, HDR, controller support, graphics presets and dynamic lights.\n- **Dedicated server:** Server software for high performance, low memory usage, and near instant startup. See [the server benchmark](docs/performance/server-vs-vanilla.md).\n\n<h2 align=\"center\">What you need</h2>\n\n- **Your own copy of Minecraft: Java Edition.** Horizon ships no Minecraft files. It builds them from the game you bought, so install version 26.3 and start it once.\n- **Windows, macOS or Linux:** Windows on x64 or ARM64, macOS 12 or later, Linux on x86-64.\n\n<h2 align=\"center\">Made by the Horizon Team</h2>\n\n<table align=\"center\">\n  <tr>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/kacpherek\"><img src=\"https://github.com/kacpherek.png?size=160\" width=\"80\" alt=\"Kacper\"><br><b>Kacper</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/Online5277\"><img src=\"https://github.com/Online5277.png?size=160\" width=\"80\" alt=\"Cosmic\"><br><b>Cosmic</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/levzzz5154\"><img src=\"https://github.com/levzzz5154.png?size=160\" width=\"80\" alt=\"levzzz\"><br><b>levzzz</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/rdbtCVS\"><img src=\"https://github.com/rdbtCVS.png?size=160\" width=\"80\" alt=\"rdbt\"><br><b>rdbt</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/dezer-x\"><img src=\"https://github.com/dezer-x.png?size=160\" width=\"80\" alt=\"Anthony S\"><br><b>Anthony S</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/NikitaMGrimm\"><img src=\"https://github.com/NikitaMGrimm.png?size=160\" width=\"80\" alt=\"Nikita\"><br><b>Nikita</b></a></td>\n    <td align=\"center\" width=\"140\"><a href=\"https://github.com/ludovic111\"><img src=\"https://github.com/ludovic111.png?size=160\" width=\"80\" alt=\"Ludovic Marie\"><br><b>Ludovic Marie</b></a><br><sub>Founder</sub></td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <sub>and everyone who has contributed</sub><br><br>\n  <a href=\"https://github.com/horizon-rust/horizon/graphs/contributors\"><img src=\"https://contrib.rocks/image?repo=horizon-rust/horizon&max=72&columns=12\" alt=\"Everyone who has contributed to Horizon\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://blacksmith.sh\"><img src=\"docs/media/readme/blacksmith.png\" alt=\"CI powered by Blacksmith\" width=\"280\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"docs/native-client.md#run-from-a-checkout\"><b>Build guide</b></a> ·\n  <a href=\"CONTRIBUTING.md\"><b>Contributing</b></a> ·\n  <a href=\"GOVERNANCE.md\"><b>Governance</b></a> ·\n  <a href=\"https://github.com/sponsors/ludovic111\"><b>Sponsor</b></a>\n</p>\n\n<sub>Horizon is released under the [GNU LGPL, version 3 or later](LICENSE), for the project's original work. Code merged before the move from MIT stays available under the [MIT licence](LICENSES/MIT.txt). Dependencies keep their own licences, see the [notices](THIRD_PARTY_NOTICES.md). Founded by [Ludovic Marie](https://lu4ovic.com) and built by the Horizon Team and [its contributors](https://github.com/horizon-rust/horizon/graphs/contributors). You can support it on [GitHub Sponsors](https://github.com/sponsors/ludovic111).</sub>\n\n<sub>NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT. Minecraft is a trademark of Mojang Synergies AB; its code and assets belong to Mojang and Microsoft under the [Minecraft EULA](https://www.minecraft.net/en-us/eula).</sub>\n"
+    },
+    "brief": {
+      "summary": "用 Rust 重写 Minecraft 26.3 客户端，能玩原版存档",
+      "problem": "Java 版 Minecraft 启动慢、帧率有上限，想要更快的实现",
+      "highlights": [
+        "可以直接打开现有的 Minecraft 存档和服务器",
+        "可以用自带 Mod 系统装小地图、缩放和光影包",
+        "可以开专用服务器，内存占用低、启动快"
+      ],
+      "target_users": [
+        "Minecraft 玩家",
+        "Rust 游戏开发者",
+        "服主/服务器运维"
+      ],
+      "why_trending": "总 Star 近 1.2 万，近期持续推送，热度再升",
+      "caveat": "需自备 Minecraft: Java Edition，官方不附带游戏文件",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "horizon-rust/horizon",
+      "score": 85,
+      "category": "游戏开发",
+      "reason": "Rust 重写 Minecraft，体素游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 78,
+      "freshness_score": 70,
+      "ranking_score": 72.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "esengine/estella",
+      "url": "https://github.com/esengine/estella",
+      "description": "A fast 2D and 3D game engine — TypeScript SDK, C++/WebAssembly core, visual editor. Ship one project to web, desktop, WeChat MiniGames, playable ads, and native Android / iOS.",
+      "language": "TypeScript",
+      "total_stars": 1299,
+      "forks": 312,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 331
+    },
+    "details": {
+      "topics": [
+        "2d-game-engine",
+        "3d",
+        "3d-game-engine",
+        "android",
+        "cpp",
+        "ecs",
+        "game-editor",
+        "game-engine",
+        "gamedev",
+        "ios",
+        "typescript",
+        "webassembly",
+        "webgl",
+        "webgpu",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-25T07:34:59Z",
+      "updated_at": "2026-11-23T07:40:22Z",
+      "pushed_at": "2026-11-23T07:51:19Z",
+      "open_issues": 0,
+      "homepage": "https://estellaengine.com/",
+      "archived": false,
+      "default_branch": "master",
+      "readme": "<div align=\"center\">\n\n<img src=\".github/logo.png\" width=\"120\" alt=\"Estella logo\" />\n\n# Estella\n\n**A 2D and 3D game engine whose editor is an MCP server.**<br/>\nYour AI agent builds the game with the same 181 tools the editor's own UI uses —\nthen ships it to the web, mini-game platforms, playable ads, desktop and native mobile.\n\n[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/esengine/estella)](https://github.com/esengine/estella/releases)\n[![MCP](https://img.shields.io/badge/MCP-181_tools-8A2BE2.svg)](https://estellaengine.com/docs/agents/mcp/)\n[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Mini--games%20%7C%20Playable%20ads%20%7C%20Desktop%20%7C%20Android%20%7C%20iOS-green.svg)](https://estellaengine.com/docs/publishing/overview/)\n[![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-1f6feb.svg)](https://deepwiki.com/esengine/estella)\n\n<img src=\"docs/assets/icons/globe.svg\" width=\"18\" height=\"18\" align=\"absmiddle\" alt=\"\" /> [Website](https://estellaengine.com) &nbsp;·&nbsp; <img src=\"docs/assets/icons/bot.svg\" width=\"18\" height=\"18\" align=\"absmiddle\" alt=\"\" /> [Agent](#your-agent-drives-the-editor) &nbsp;·&nbsp; <img src=\"docs/assets/icons/rocket.svg\" width=\"18\" height=\"18\" align=\"absmiddle\" alt=\"\" /> [Getting Started](#getting-started) &nbsp;·&nbsp; <img src=\"docs/assets/icons/book-open.svg\" width=\"18\" height=\"18\" align=\"absmiddle\" alt=\"\" /> [Documentation](#documentation) &nbsp;·&nbsp; <img src=\"docs/assets/icons/message-circle.svg\" width=\"18\" height=\"18\" align=\"absmiddle\" alt=\"\" /> [QQ群 481923584](https://qm.qq.com/q/BONa5LXQ0U)\n\n<br/>\n\n<img src=\"docs/assets/agent-e58817d7.webp\" alt=\"An AI agent driving the Estella editor over MCP: it opens the Bistro project, finds the Weather entity and turns it to snow, sets the time of day to 9 pm, presses Play, steps the game and takes a screenshot of the snowy night it made\" width=\"900\" />\n\n<sub><i>Every frame is one MCP tool call into the editor, captured as it happened — no mouse involved.</i></sub>\n\n</div>\n\n<a id=\"your-agent-drives-the-editor\"></a>\n\n## <img src=\"docs/assets/icons/bot.svg\" width=\"26\" height=\"26\" align=\"absmiddle\" alt=\"\" /> Your agent drives the editor\n\nThe Estella editor speaks the **Model Context Protocol**. Connect Claude Code, Cursor,\nCodex or any MCP client, and the agent works inside the real editor rather than\naround it:\n\n- <img src=\"docs/assets/icons/hammer.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It builds** — creates projects, spawns entities from the editor's own Create catalog,\n  writes component fields, makes prefabs, paints tilemaps, writes and type-checks scripts.\n- <img src=\"docs/assets/icons/eye.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It looks** — takes screenshots of the viewport and the running game, replays a frame\n  draw by draw, compares the game with reference images, and audits what a scene's look lacks.\n- <img src=\"docs/assets/icons/play.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It plays** — enters Play mode, steps time deterministically, sends input and clicks\n  UI by name, runs scripted playtests, then reads the running world back.\n- <img src=\"docs/assets/icons/palette.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It makes assets** — images, sound effects, music and 3D models, each answered with\n  a picture of what it made.\n- <img src=\"docs/assets/icons/rocket.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It ships** — reads project health, exports the game, and drives a build running on a\n  connected phone.\n\nEvery call goes through the editor's command surface: each one is **one undo step**,\nyou watch it happen in the window, and you can take the mouse back at any time. The\neditor starts **read-only**; an agent edits only after you allow it in\n*Window → Connect AI Tools…*, which also writes the client's MCP config for you.\n\n**The tools are not all loaded at once.** A session starts with the everyday ones\nonly, about fifty: read and edit the scene, play and step the game, open and save,\nscreenshots, logs, undo. The rest sit in the groups below, and the agent lists a group\nwhen the work calls for it (`enable_tools { groups: [\"look\"] }`), so a session does not\npay thousands of tokens of tool descriptions for tools it never uses. Long tool guides\nwork the same way: a description is the short form, and `tool_guide` reads the rest by\ntopic. How a kind of task is done end to end (2D and 3D gameplay, UI, animation,\nmultiplayer, performance, shipping) is a skill the agent reads with `skill_guide`\nbefore it starts.\n\n| Group | What the agent gets |\n|---|---|\n| core | scene tree, entities, components, play / step / input, screenshots, logs, undo |\n| `assets` · `prefab` · `authoring` | asset documents and import settings, tilemaps, prefabs and variants, physics bodies, UI events |\n| `look` · `render` | reference images beside the game, light and field sweeps, frame capture and replay, shadows, LOD, bakes |\n| `code` · `project` | scripts, symbol search, type-check, project settings, health, export |\n| `image` · `sound` · `modeling` | draw sprites and textures, compose sound and music, build 3D models from steps |\n| `terrain` · `tripo` | shape land from steps (ranges, rivers, roads, a coast) and place it in the scene; generate textured 3D models with Tripo AI (your own key and credits) |\n| `play` · `view` · `device` | gamepads, time scale, scripted playtests, editor view, and a game running on a connected phone |\n\n**How undo works.** Tools are sorted by how their effect is taken back, not by what\nthey touch:\n\n| A call that… | is taken back by |\n|---|---|\n| reads (scene tree, screenshots, logs, stats) | nothing to take back |\n| plays, steps or sends input to the game | **Stop**: the game runs in its own copy of the world and never touches the scene you edit |\n| edits the scene or a prefab | **Undo**: the edit goes through the editor's own history, the one Ctrl+Z walks |\n| writes project files (a script, an asset, an image, a material) | **Undo** as well: the editor keeps each file as it was before the call and puts it back |\n| leaves the project or runs code nobody can enumerate (a new project, an export, an editor command, code evaluated in the running game) | not undoable, and marked so |\n\nOne call is one step however much it did: a tool that adds six entities and writes two\nfiles is undone by a single Undo, by you with Ctrl+Z or by the agent with its `undo`\ntool. A save is not a step, so undoing never rolls a saved file back under an unchanged\nscene.\n\n→ [Connecting an agent](https://estellaengine.com/docs/agents/mcp/)\n\n## <img src=\"docs/assets/icons/shield-check.svg\" width=\"26\" height=\"26\" align=\"absmiddle\" alt=\"\" /> Why Estella, when Unity and Unreal have MCP too?\n\nAn MCP server can be bolted onto any editor. What an agent can actually get done\ndepends on what sits behind it.\n\n- <img src=\"docs/assets/icons/plug.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **The protocol is the editor, not a plugin on it.** The 181 tools call the pipelines the\n  editor's own menus, inspector and toolbar run, so an agent's edit is the edit a person\n  would have made, and undoes the same way. Calls are schema-checked and permission-gated\n  by the editor itself.\n- <img src=\"docs/assets/icons/eye.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **The agent can check its own work.** It steps a paused game frame by frame, so\n  \"play three seconds, then look\" is the same frame every run. It sees the game, not just the\n  log: screenshots, a frame replayed draw call by draw call, the game set beside a reference\n  image, scripted playtests that read the running world back.\n- <img src=\"docs/assets/icons/wand-sparkles.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **The agent can make what the game needs.** Sprites, textures, sound effects, music and\n  3D models come from tools inside the editor, so a prototype does not stop at grey boxes\n  while someone opens five other programs.\n- <img src=\"docs/assets/icons/file-text.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **Everything is text.** Scenes, prefabs and materials are JSON; gameplay is TypeScript.\n  An agent reads and writes the project directly, and every change is a reviewable diff.\n- <img src=\"docs/assets/icons/globe.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It ships where heavier engines struggle.** A WebAssembly runtime that loads on a phone\n  browser, seven Chinese mini-game platforms, single-file playable ads for the major ad\n  networks, and native Android / iOS apps — from one project.\n- <img src=\"docs/assets/icons/scale.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **It is open.** The runtime, SDK, pipeline and CLI are Apache-2.0: no royalties, no seats,\n  no runtime fees. The editor is a free download.\n\n## <img src=\"docs/assets/icons/camera.svg\" width=\"26\" height=\"26\" align=\"absmiddle\" alt=\"\" /> Rendered in real time\n\n<div align=\"center\">\n  <img src=\"docs/assets/day-1ea1637f.webp\" alt=\"The Bistro street corner rendered in real time by Estella from morning to night: a low sun, mist, rain that leaves puddles with rings on the water and splashes on the street, then snow settling on the awnings and falling past the lit street lamps\" width=\"900\" />\n  <br/>\n  <sub><i>One day on the Amazon Lumberyard Bistro, recorded frame by frame from the running game: a sun that follows the clock, weather that turns from clear to mist, rain and snow, baked bounce light, reflections and volumetric haze. Scene © Amazon Lumberyard, <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>, modified.</i></sub>\n</div>\n\n<div align=\"center\">\n  <a href=\"https://github.com/esengine/estella-space-frigate\"><img src=\"docs/assets/space-frigate-efc7716b.webp\" alt=\"Space Frigate, a game made with Estella: a frigate cruises off a gas giant, turns on her thrusters, fires her turrets at an asteroid, then flies through a gate, down a tunnel of light, and comes out beside a ringed ice giant\" width=\"900\" /></a>\n  <br/>\n  <sub><i><a href=\"https://github.com/esengine/estella-space-frigate\">Space Frigate</a>, a game made with Estella and recorded frame by frame as it runs: flying on thrusters, gunnery, and a jump through a gate to another star system. Every model, texture and sound in it is generated from a recipe.</i></sub>\n</div>\n\n<div align=\"center\">\n  <img src=\"docs/assets/tripo-fight-85323505.webp\" alt=\"A knight runs at a stone golem among desert ruins at dusk, lands a slash that throws sparks, then a second that bursts into fire and smoke and fells it, while the camera turns around them\" width=\"900\" />\n  <br/>\n  <sub><i>A fight scene an AI agent built in the editor through MCP, recorded frame by frame as it runs. Both characters, their rigs and animations, the columns, the braziers and the floor texture were generated with <a href=\"https://www.tripo3d.ai/\">Tripo AI</a> by the editor's <code>tripo</code> tools.</i></sub>\n</div>\n\n## <img src=\"docs/assets/icons/layers.svg\" width=\"26\" height=\"26\" align=\"absmiddle\" alt=\"\" /> What's inside\n\nEstella is a C++ engine with a TypeScript SDK. The core runs as WebAssembly on the web\nand natively on desktop and mobile; game logic is written as ECS systems in TypeScript.\n\n<img src=\"docs/assets/icons/layers.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **2D** — sprites and sprite animation, tilemaps (with LDtk import), Spine 2.1 – 4.3 and\nDragonBones, 2D lights and shadows, UI with layout, rich and bitmap text, particles,\nBox2D physics, native 2D rigs.\n\n<img src=\"docs/assets/icons/box.svg\" width=\"20\" height=\"20\" align=\"absmiddle\" alt=\"\" /> **3D** — glTF / FBX import, PBR materials, directional / point / spot lights with\nshadows, sky atmosphere with time of day and weather, baked lightmaps, light and\nreflection probes, SSR, SSGI, height fog, terrain, water, foliage, skeletal animation\nwith spri"
+    },
+    "brief": {
+      "summary": "带 MCP 编辑器的 2D/3D 游戏引擎，可多端发布。",
+      "problem": "解决 AI 代理难在真实游戏编辑器里操作和验证的问题。",
+      "highlights": [
+        "可以让 AI 代理创建项目、实体和预制体。",
+        "可以让代理截图、逐帧回放并跑脚本化试玩。",
+        "可以把项目发布到 Web、桌面和移动端。"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "AI 辅助开发团队",
+        "多端小游戏开发者"
+      ],
+      "why_trending": "总 Star 近 1300，近期持续更新，MCP 编辑器是主要看点。",
+      "caveat": "资料未说明实际性能、稳定性和多端发布限制。",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "esengine/estella",
+      "score": 90,
+      "category": "游戏开发",
+      "reason": "TypeScript 2D/3D 游戏引擎",
+      "generated_by_ai": true,
+      "velocity_score": 76,
+      "freshness_score": 40,
+      "ranking_score": 70.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 12,
+      "full_name": "livliv-dev/player",
+      "url": "https://github.com/livliv-dev/player",
+      "description": "A lightweight 2.5D character player for the web, with lip sync and webcam face tracking.",
+      "language": "TypeScript",
+      "total_stars": 1620,
+      "forks": 167,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "avatar",
+        "character",
+        "face-tracking",
+        "lip-sync",
+        "pngtuber",
+        "vrm",
+        "vtuber",
+        "webgl2"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-11-04T03:28:33Z",
+      "updated_at": "2026-11-23T06:35:10Z",
+      "pushed_at": "2026-11-23T07:46:04Z",
+      "open_issues": 6,
+      "homepage": "https://livliv-dev.github.io/player/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"media/livliv-player-wordmark-white.svg\">\n    <img alt=\"LivLiv Player\" src=\"media/livliv-player-wordmark-2000.png\" width=\"360\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  A lightweight 2.5D character player for the web, with lip sync and webcam face tracking. A few lines of code put a character in a page, a stream overlay or an app.<br>\n  Comes with 25 featured characters in different styles, ready to use.\n</p>\n\n<p align=\"center\"><b>English</b> · <a href=\"README.zh-CN.md\">中文</a> · <a href=\"README.ja.md\">日本語</a> · <a href=\"README.vi.md\">Tiếng Việt</a></p>\n\n<p align=\"center\"><img src=\"media/demo.gif\" alt=\"Featured characters breathing, blinking, turning their heads and talking\" width=\"720\"></p>\n\n- WebGL2, no dependencies, about 30 KB gzipped for the core\n- Lip sync (microphone, audio, video) and webcam face tracking (MediaPipe), both in the browser, imported only when you need them\n- Plays LivLiv, VRM and PNGTuber characters through the same API\n- Full-body characters stand on the ground: they sway, crouch and dip with their feet in place, in the shot you pick\n- 25 featured characters in [`characters/`](characters/), ready to use\n\n## Try it\n\n- **Online**: the examples run on [livliv-dev.github.io/player](https://livliv-dev.github.io/player/).\n- **Here**: `npm install && npm run build`, serve this folder with any static server and open `/example/demo.html`\n  (expressions, actions, microphone, camera; `?model=../characters/<id>/` picks another character).\n  `/example/png.html` and `/example/vrm.html` show a PNGTuber and a VRM.\n- **On livliv.ai**: each character's page there plays it with the same renderer. Start at\n  [livliv.ai/discover](https://livliv.ai/discover).\n\n## Project LivLiv\n\nWe want the art of creating characters to belong to everyone.\n\nWe're open-sourcing our AI tools for character creation, [the player and its playback protocol](https://github.com/livliv-dev/player),\nand [a stage where your characters can meet an audience](https://github.com/livliv-dev/stage).\n\nCome say hello on [Discord](https://discord.gg/ac5qF36T2H) and follow us on [X (Twitter)](https://x.com/livliv_ai).\n\n## Use it in your page\n\n```sh\nnpm install @livliv-dev/player\n```\n\n```js\nimport { Player } from '@livliv-dev/player'\n\nconst player = new Player(document.querySelector('canvas'))\nawait player.load('characters/k01/')   // a folder with model.json and textures/, or a .livliv file\n\nplayer.setExpression('smile')          // ids are in player.expressions\nplayer.act('nod')\nplayer.params.mouthOpen = 0.6          // 0..1\n```\n\nLip sync and face tracking:\n\n```js\nimport { createSpeech } from '@livliv-dev/player/voice'\nimport { startFaceTracking } from '@livliv-dev/player/tracking'   // needs @mediapipe/tasks-vision\n\nconst speech = createSpeech(player)\nbutton.onclick = () => { speech.unlock(); speech.say('/reply.mp3') }\n\nawait startFaceTracking(player)\n```\n\nA VRM or a PNGTuber, on the same API:\n\n```js\nimport { BodyPlayer } from '@livliv-dev/player/body'\nimport { VrmBody } from '@livliv-dev/player/vrm'    // needs three and @pixiv/three-vrm\nimport { PngBody } from '@livliv-dev/player/png'\n\nconst vrm = new BodyPlayer(canvasA, new VrmBody())\nawait vrm.load('/avatars/me.vrm')\nconst png = new BodyPlayer(canvasB, new PngBody())\nawait png.load({ closed: 'me-closed.png', open: 'me-open.png' })\n```\n\nThe whole API is in [API.md](API.md): options, params, expressions and actions, drivers, recorded poses and attachment\npoints, VRM and PNGTuber characters, the limits on untrusted files, the model package and the format version. The LivLiv package format (`.livliv`,\n`model.json` v4) is in [FORMAT.md](FORMAT.md), with a JSON Schema in [`schema/`](schema/); packages exported before v4\nare described in [FORMAT-v3.md](FORMAT-v3.md) and still play.\n\n> The npm package is the player alone. The featured characters are in this repository's [`characters/`](characters/): copy\n> the ones you use next to your page, with their licence.\n\n## Featured characters\n\n`characters/` holds 25 characters, ready to `load()`. Most were made by LivLiv: use them free with credit\n(\"Characters: LivLiv (livliv.ai)\"), commercially too if you are an individual. Don't sell them or merchandise made from\nthem, and don't train AI models on them. They are **not** covered by the Apache License; the terms are in\n[characters/LICENSE.md](characters/LICENSE.md). Kujira, Kujira Q and Pen come from other people's work, with their own\nterms in [characters/CREDITS.md](characters/CREDITS.md).\n\n**New in 0.5.0: full-body characters.** Drawn head to feet, they stand on the ground: they sway, crouch and dip while\ntheir feet stay put. Four featured characters are full-body: Tsubaki, Neve, Juno and Viola (f05–f08). Pick the shot\nwith `player.view.fit`: `'frame'` (default), `'knee'` or `'whole'`; see\n[Full-body characters](API.md#full-body-characters) in API.md.\n\nEach character has a `cover.webp`, its first frame: `player.load(source, { poster })` shows it until the character is\nready, and [example/loading.js](example/loading.js) shows it before any script has run.\n\nEach character is also one file to download, `<id>.livliv`, at `https://livliv-dev.github.io/player/characters/<id>.livliv`\n(the names below link to them). They are served with CORS, so a page on another site can `load()` one straight from\nthere, and [`index.json`](https://livliv-dev.github.io/player/characters/index.json) lists them all.\n\n| id | name | id | name | id | name |\n|---|---|---|---|---|---|\n| `k01` | [Sena](https://livliv-dev.github.io/player/characters/k01.livliv) | `d01` | [Yui](https://livliv-dev.github.io/player/characters/d01.livliv) | `v01` | [Aster](https://livliv-dev.github.io/player/characters/v01.livliv) |\n| `k02` | [Elio](https://livliv-dev.github.io/player/characters/k02.livliv) | `d02` | [Leo](https://livliv-dev.github.io/player/characters/d02.livliv) | `v03` | [Mira](https://livliv-dev.github.io/player/characters/v03.livliv) |\n| `char06` | [Aoi](https://livliv-dev.github.io/player/characters/char06.livliv) | `d03` | [Nana](https://livliv-dev.github.io/player/characters/d03.livliv) | `v04` | [Kai](https://livliv-dev.github.io/player/characters/v04.livliv) |\n| `char07` | [Sora](https://livliv-dev.github.io/player/characters/char07.livliv) | `d03ft` | [Nana (refined)](https://livliv-dev.github.io/player/characters/d03ft.livliv) | `v05` | [Lilith](https://livliv-dev.github.io/player/characters/v05.livliv) |\n| `s01` | [Hana](https://livliv-dev.github.io/player/characters/s01.livliv) | `p01` | [Kujira](https://livliv-dev.github.io/player/characters/p01.livliv) | `v06` | [Usa](https://livliv-dev.github.io/player/characters/v06.livliv) |\n| `q02` | [Mochi](https://livliv-dev.github.io/player/characters/q02.livliv) | `p02` | [Kujira Q](https://livliv-dev.github.io/player/characters/p02.livliv) | `v07` | [Stella](https://livliv-dev.github.io/player/characters/v07.livliv) |\n| `q03` | [Kotaro](https://livliv-dev.github.io/player/characters/q03.livliv) | `p03` | [Pen](https://livliv-dev.github.io/player/characters/p03.livliv) | `w01` | [Max](https://livliv-dev.github.io/player/characters/w01.livliv) |\n| `f05` | [Tsubaki (full-body)](https://livliv-dev.github.io/player/characters/f05.livliv) | `f06` | [Neve (full-body)](https://livliv-dev.github.io/player/characters/f06.livliv) | `f07` | [Juno (full-body)](https://livliv-dev.github.io/player/characters/f07.livliv) |\n| `f08` | [Viola (full-body)](https://livliv-dev.github.io/player/characters/f08.livliv) | | | | |\n\n## Characters of your own\n\nYou can bring in a PNGTuber's pictures, or a VRM (drawn with three.js); or make a character of your own from one\npicture on [livliv.ai](https://livliv.ai).\n\n- **A PNGTuber**: two pictures (mouth closed, mouth open), and two more with the eyes closed if you have them.\n- **A VRM**: from VRoid Studio or any tool that exports VRM 0.x or 1.0.\n- **A LivLiv model**: make one from a picture on [livliv.ai](https://livliv.ai), then download its model package from\n  the character's page (**Model package**): a `.livliv` file. Pass it to `load()` as it is (a URL, or the `File`\n  someone picked), or unzipped as a folder. Full-body characters play too (from 0.5); livliv.ai does not offer their\n  packages yet.\n\n## About the player and the characters\n\nLivLiv Player and the `.livliv` format are LivLiv's own work. They use no Live2D software or Cubism SDK and do not\nread `.moc3` or `.cmo3` files. \"Live2D\" is a trademark of Live2D Inc.; LivLiv is not affiliated with it.\n\nMaking a character on livliv.ai uses AI. The player itself only plays: it calls no AI service and reads only the files\nyou point it at. Face tracking runs Google's MediaPipe in the browser, and camera images stay on the device; API.md has\nthe networking details.\n\nThe featured characters in this repository were made on LivLiv too, also with AI; Kujira, Kujira Q and Pen adapt other\npeople's characters ([credits](characters/CREDITS.md)). Refined Nana (`d03ft`) also has\nswinging parts and head-turn keyforms added with LivLiv's own tools.\n\nA package's `meta.author` and `meta.license` record who made it and on what terms: keep them and follow them. When you\nshow a character made with LivLiv in public, say that AI was used to make it, and don't present it as hand-drawn or\nhand-rigged.\n\n## Embed without code\n\n```html\n<iframe src=\"https://livliv.ai/live/k01\" width=\"480\" height=\"640\" allow=\"camera; microphone\"\n  style=\"border:0;background:transparent\"></iframe>\n```\n\nThe same `/live/<id>` page has a transparent background and works as an OBS Browser Source.\\\n(Powered by [https://livliv.ai](https://livliv.ai))\n\n## Develop\n\n```sh\ngit clone https://github.com/livliv-dev/player\ncd player\nnpm install\nnpm run check          # types\nnpm run build          # dist/: index.js, tracking.js, voice.js, body.js, png.js, vrm.js (ES modules), chunks/ and types/\nnpm test               # unit and fuzz tests (Node 22.18 or newer, no browser)\nnpm run test:browser   # every featured character drawn in headless Chromium; once: npx playwright-core install chromium-headless-shell\nnpm run test:engines   # a sample on Firefox and WebKit, where WebGL2 starts (a GPU or a software GL); once: npx playwright-core install firefox webkit\n```\n\n`src/runtime/` is the renderer and motion code livliv.ai runs; this repository is published from it. See\n[CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).\n\n## Browser support\n\nWebGL2 and ES2023: Chrome / Edge 97+, Firefox 104+, Safari 15.4+. Tested on current desktop browsers, not yet on phones.\n\n## License\n\nThe code is under the [Apache License 2.0](LICENSE) (see also [NOTICE](NOTICE)). The featured characters have their\nown licence, [characters/LICENSE.md](characters/LICENSE.md). You may keep the LivLiv name and logo in your own versions, as long as they don't claim to be the official one.\n\n## Thanks\n\nThanks to 上善无形, ZipZipPipe and 贱兔死顺盖, whose characters Kujira, Kujira Q and Pen are based on: see [characters/CREDITS.md](characters/CREDITS.md).\n"
+    },
+    "brief": {
+      "summary": "轻量网页 2.5D 角色播放器，支持口型同步和摄像头面部追踪。",
+      "problem": "在网页、直播叠加层或应用中快速放入会眨眼、说话的角色。",
+      "highlights": [
+        "可以几行代码把角色放进网页或直播叠加层",
+        "可以用麦克风、音频或视频驱动角色口型",
+        "可以用同一套 API 播放 VRM 和 PNGTuber 角色"
+      ],
+      "target_users": [
+        "网页开发者",
+        "VTuber 主播",
+        "直播工具开发者"
+      ],
+      "why_trending": "总 Star 约 1620 且近期活跃，新增全身角色支持。",
+      "caveat": "内置角色不适用 Apache 许可，商用需看单独条款。",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "livliv-dev/player",
+      "score": 95,
+      "category": "3D / VTuber",
+      "reason": "Web 2.5D 虚拟角色，口型同步与面部追踪",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 60.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "native-bond-lab/Jev-Interaction",
+      "url": "https://github.com/native-bond-lab/Jev-Interaction",
+      "description": "System-One-controlled full-duplex voice interaction: turn-taking as plain-language decisions judged by Jev.",
+      "language": "Python",
+      "total_stars": 103,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "conversational-ai",
+        "full-duplex",
+        "jev",
+        "llm",
+        "speech",
+        "turn-taking",
+        "voice-agent",
+        "voice-ai"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-11-10T09:10:14Z",
+      "updated_at": "2026-11-23T06:34:28Z",
+      "pushed_at": "2026-11-23T07:46:37Z",
+      "open_issues": 0,
+      "homepage": "https://pupunpu-jev-interaction.hf.space/",
+      "archived": false,
+      "default_branch": "dev",
+      "readme": "<div align=\"center\">\n\n# Jev-Interaction\n\n**System-One-controlled full-duplex voice interaction.**<br>Turn-taking as decisions you write — not a model you train.\n\n[中文](README.zh-CN.md) · [Cookbook](cookbook) · [Profiles](jev_interaction/profiles) · [Decisions](jev_interaction/judge/questions.py) · [Docs](#documentation)\n\n🏆 **Build of the Week** at [TypeSafe](https://typesafe.ai) · 🤗 **Live demo** on [Hugging Face](https://huggingface.co/spaces/pupunpu/Jev-Interaction)\n\n[![Build of the Week](https://img.shields.io/badge/%F0%9F%8F%86%20Build%20of%20the%20Week-TypeSafe-f5b301)](https://typesafe.ai) [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-live%20demo-ffcc4d)](https://huggingface.co/spaces/pupunpu/Jev-Interaction)\n[![PyPI](https://img.shields.io/pypi/v/jev-interaction)](https://pypi.org/project/jev-interaction/) [![tests](https://github.com/native-bond-lab/Jev-Interaction/actions/workflows/tests.yml/badge.svg)](https://github.com/native-bond-lab/Jev-Interaction/actions/workflows/tests.yml) ![python](https://img.shields.io/badge/python-3.10%2B-3776ab) ![license](https://img.shields.io/badge/license-Apache--2.0-blue) ![status](https://img.shields.io/badge/status-alpha-f59e0b) ![judge](https://img.shields.io/badge/judge-Jev-0f766e) ![duplex](https://img.shields.io/badge/full--duplex-voice-6366f1)\n<br>\n\n*Most of a conversation happens in the gaps: who waits, who yields, who answers with nothing but an \"mm-hm\".<br>We wrote every gap down as a question, and gave the questions to Jev.* Try it here: [Try it now](https://pupunpu-jev-interaction.hf.space/) (or [on Hugging Face](https://huggingface.co/spaces/pupunpu/Jev-Interaction)).\n\n\n</div>\n\n<img src=\"docs/cover.png\" alt=\"Jev-Interaction — full-duplex voice, turn-taking you control\" width=\"100%\">\n\n> **Built on [Jev](https://typesafe.ai).** Every turn-taking decision here is a question Jev answers in tens of\n> milliseconds. Without it, none of this would work.\n\n> **From an applied lab.** Native Bond Lab is the applied research lab behind a consumer voice product. Everything in\n> this repository comes out of that product and runs at scale on real calls with real users, not in a demo.\n\n![Jev-Interaction architecture](docs/architecture.svg)\n\n**Full duplex from a cascade.** Speech recognition → Jev's decisions → any language model → any speech synthesis. The\nagent listens while it talks, says \"mm-hm\" while you talk, lets a pause stand, carries on through a backchannel, yields\nor finishes its sentence when you cut in, and picks the call back up after a silence.\n\n**A System One for conversation.** People on a call run two minds at once: a fast one that knows, without thinking,\nwhen to wait, when to yield and when to say \"mm-hm\", and a slow one that works out what to say. Here Jev is the fast\nmind, deciding each moment in tens of milliseconds; the language model is the slow one, writing the words. Neither\nwaits for the other.\n\nVoice agents today take one of two roads. **Cascades** bolt a small trained model onto that pipeline to guess *\"has\nthe user finished?\"* and leave everything else to timers. **End-to-end full-duplex models** (Moshi, GPT-4o Realtime,\nGemini Live) learn turn-taking inside one large speech model: fast and natural, but a black box. You cannot see why it\nstopped, cannot change how it takes turns for a product or a persona, and are tied to the vendor's model, voices and\nsession limits.\n\n**Jev-Interaction keeps the cascade's freedom and gives it the judgement.** Every one of those moments becomes an\nexplicit decision: a plain-language multiple-choice question, a probability from Jev for every choice, and a policy\nthat turns the probabilities into an action. Questions, policies and the agent's manner are text you can read, change\nand replay against real calls.\n\n**Demo video: on the way.**\n\n## Quickstart\n\nFrom PyPI, in any folder; the page walks you through each provider and key:\n\n```bash\npip install \"jev-interaction[server]\"     # add ,sound for the sound model and ,voiceprint for the caller's voiceprint\njev-interaction serve                     # http://localhost:8080\n```\n\nOr from a clone, one command installs everything, starts the server and opens the page:\n\n```bash\ngit clone https://github.com/native-bond-lab/Jev-Interaction && cd Jev-Interaction\n./scripts/setup.sh            # --china installs through a domestic PyPI mirror\n```\n\nOr with Docker (any OS):\n\n```bash\ncp .env.example .env          # fill it in, or leave it empty and use the setup steps on the page\ndocker compose up             # http://localhost:8080\n```\n\nOpen <http://localhost:8080>. Setup goes one node at a time: the judge (Jev), a language model, speech recognition, a\nvoice. Paste a key and the page recognises whose it is; pick the language model from the endpoint's own model list; test\neach step before moving on. Settings are saved to `.env` in the folder you started from. Make a persona of your own or change one with **New\npersona** / **Edit** under the cards (on your own machine or your own Docker; a public deployment does not offer it):\nwho it is for the language model, its habits on a call for Jev, its turn-taking and its voice, saved to `profiles/`. Then pick a persona and click\nthe orb to call (click it again to hang up). The voice detector is TEN VAD, the one our product runs on; headphones still give the cleanest call.\n\nEach node and its providers, the recommended setups (global and mainland China), presets and publishing a Hugging Face Space: [docs/setup.md](docs/setup.md).\n\n### In your own code\n\n```python\nfrom jev_interaction import Config, Profile\nfrom jev_interaction.adapters import best_vad\nfrom jev_interaction.adapters.openai_compat import OpenAICompatResponder\nfrom jev_interaction.adapters.scribe import ScribeRealtime\nfrom jev_interaction.judge import JevClient\nfrom jev_interaction.session import Session\n\nsession = Session(\n    Profile.load(\"support\")          # a built-in persona, or a path to your own YAML,\n    send=my_send,                       # async: deliver events to your client\n    judge=JevClient(),\n    recognizer=ScribeRealtime(language=\"en\"),\n    responder=OpenAICompatResponder(),   # any OpenAI-compatible endpoint\n    vad=best_vad(),                      # TEN VAD (pip install ten-vad), or the energy detector without it\n    config=Config(language=\"en\"),\n)\nawait session.start()\nawait session.on_audio(frame)          # 200 ms of 16 kHz PCM16, as it arrives\nawait session.on_client({\"type\": \"playback\", \"state\": \"idle\"})\n```\n\nEvents to the client: `line`, `listen`, `stop`, `finish_line`, `persona`, `hangup`, plus `user`, `pace` and\n`decision` for display. Client messages: `playback` and `heard`.\n\n### Inside a coding agent\n\nIn Claude Code or DeepSeek Harness, a slash command brings up a voice companion for the session you are in: you talk to\nthe computer, it hands what you ask for to the session as a background task, says how far it has got when you ask,\ntells you when it is done, and sleeps in between. The talking is done by a fast model of the harness's own that you\nchoose the first time, speech recognition and synthesis by providers of your choice; there is no page and no window.\n\n```bash\npipx install \"jev-interaction[server,local]\"\n# Claude Code:        /plugin marketplace add native-bond-lab/Jev-Interaction\n#                     /plugin install interaction@jev-interaction      then  /interaction:start\n# DeepSeek Harness:   dsh plugin --profile tui add <this repo>/connectors/deepseek-harness      then  /interaction\n```\n\nSetup, how it works and what is still open: [docs/harness.md](docs/harness.md). Background tasks and sleep in your own\ncode (`Session(executors=...)`): [docs/tasks.md](docs/tasks.md).\n\n## How it works\n\n![The call policy: the ears give signals, everything goes on one timeline, who is making sound picks one of four moments, Jev answers small facts, thresholds pick one action, the language model writes the words](docs/policy.svg)\n\nJev-Interaction is an interaction engine, not a voice-activity detector. Jev never hears audio and never decides that\nsomeone is speaking; the ears do that (voice activity, the recognizer, a sound model, a voiceprint) and their output is\nonly signals. What the engine decides is what to do with the moment: answer, wait, slip in an \"mm-hm\", cut in, carry on\nover an interruption, pick a quiet up, hang up. Three principles shape it.\n\n1. **Two parties, four moments.** The agent and the user each make sound or not, which gives four moments: the user\n   has the turn, both are quiet, both are talking, the agent is talking. Each moment has its own set of actions, and\n   nothing else.\n2. **One timeline, one \"now\".** The call is one record that only grows: the words, the signals, every answer from Jev,\n   every action taken, each on the same clock (`Ledger`). Every judgement and the model that writes the lines read the\n   same present from it (`judge/state.py`, `Now`); no decision keeps its own account of the call.\n3. **One action per moment, no case left out.** In any moment there is one set of choices that do not overlap, and\n   every situation belongs to exactly one of them. One answer from Jev, one thing done.\n\n| moment | Jev is asked | one action |\n|---|---|---|\n| the user has the turn | have they finished · which pace (one yes/no fact per pace) · is something they asked for due · sparring or telling | take the turn (when the words and the sound agree) · cut in (in a pace that does) · slip in a sound · stay silent |\n| quiet | does the agent's last line leave them a move · did they say they need a moment · were goodbyes said · has the agent called out with no answer | let it be · pick the thread up · check on them · hang up (the facts and the clock decide) |\n| both talking | what their words over the line are: a reaction, a \"stop\", or something of their own | carry on · stop and listen · finish the sentence · take the floor back · react at once |\n| the agent is talking | nothing | nothing to decide |\n\nWhat follows from the principles, the paces, and the same engine under two personas: [docs/policy.md](docs/policy.md).\n\n## What you get\n\n- **Every piece is yours to choose.** The intelligence (any language model), the voice (any synthesizer and voice),\n  the style, the task and the persona. The persona reaches the interaction itself, not only the words: an impatient\n  character cuts in and answers half-sentences, a gentle one says \"mm-hm\" often and waits you out, a tutor finishes the\n  explanation before yielding, a support agent stays brief and stops the moment you speak.\n- **The pace routes itself, turn by turn.** Each turn Jev also judges which pace the call is in: normal conversation,\n  listening (the caller is pouring something out: more listening sounds, longer waits, fewer interruptions), narrating\n  (the agent is telling a story: an \"mm-hm\" does not stop it) or eager (quick to take the floor). One call moves between\n  them on its own, from small talk into a game and back.\n- **A new task is a few knobs, zero-shot.** Nothing here is trained on any benchmark or on your data. A task profile is\n  a page of text; the pause problem in Full-Duplex-Bench was fixed with two knobs, and each trade-off is measured, not\n  guessed.\n- **Every number comes with a reason.** Each decision is logged with the state Jev read and the probabilities it gave,\n  so a bad moment points at the step that caused it, and a reworded question can be replayed against recorded calls\n  before it ships.\n- **Calls of any length.** No session is held open on a model provider; each decision and each reply is a fresh request\n  over a text history.\n- **Cheap.** A decision is a few hundred tokens to Jev; in our runs a reply cost about $0.002 of language model and a\n  400-sample benchmark round about $2.\n\n## Task profiles\n\nOne framework, many products. A profile says what the agent is for, how it behaves on a call, and how each decision is\nread.\n\n| profile | listening sounds | mid-sentence pauses "
+    },
+    "brief": {
+      "summary": "基于 Jev 判断轮次的全双工语音交互框架",
+      "problem": "传统语音智能体靠计时器猜轮次，端到端模型又难控制",
+      "highlights": [
+        "可以边听边说，并用“mm-hm”回应对方",
+        "可以在用户插话时让出话轮或说完句子",
+        "可以把轮次策略写成可读可改的问题和规则"
+      ],
+      "target_users": [
+        "语音智能体开发者",
+        "对话式 AI 研究者",
+        "客服产品团队"
+      ],
+      "why_trending": "本周首次收录，总 Star 约103，近期仍有更新",
+      "caveat": "项目标注 alpha，需配置语音识别、模型等密钥",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "native-bond-lab/Jev-Interaction",
+      "score": 88,
+      "category": "Harness / Jev",
+      "reason": "Jev 决策模型驱动的全双工语音交互",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  }
+]
