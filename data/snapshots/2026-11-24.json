@@ -1,0 +1,581 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "elementalsouls/Claude-BugHunter",
+      "url": "https://github.com/elementalsouls/Claude-BugHunter",
+      "description": "A Claude Code skill bundle for bug hunting and external red-team work - 84 skills, 15 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
+      "language": "Python",
+      "total_stars": 20461,
+      "forks": 2166,
+      "stars_today": 2029,
+      "source": "trending",
+      "history_label": "连续上榜",
+      "star_gain": 2029
+    },
+    "details": {
+      "topics": [
+        "ai-security",
+        "anthropic",
+        "application-security",
+        "bug-bounty",
+        "bugbounty",
+        "bugcrowd",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "ethical-hacking",
+        "hackerone",
+        "offensive-security",
+        "pentesting",
+        "red-team",
+        "security-tools",
+        "web-security"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-05T11:22:32Z",
+      "updated_at": "2026-11-24T10:08:05Z",
+      "pushed_at": "2026-11-24T04:26:28Z",
+      "open_issues": 13,
+      "homepage": "https://elementalsouls.github.io/Claude-BugHunter",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![claude-bughunter banner](assets/banner-v2.svg)\n\n# claude-bughunter\n\n> A self-contained Claude skill bundle for bug hunting and external red-team work · **84 skills** · 15 slash commands · **681 disclosed-report patterns** (433 now individually cited & auditable) across 24 core vulnerability classes · enterprise identity + infrastructure attack matrices · engagement-folder scaffolding · Burp MCP integration · battle-tested across authorized red-team and bug-hunting engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101, testphp.vulnweb.com).\n\nBuilt by **[Sachin Sharma](https://www.linkedin.com/in/sachinsharma8080/)** — Bug Hunting & GenAI Security Research.\n\n<p align=\"center\">\n  <sub>SPONSORED BY</sub>\n  <br/>\n  <br/>\n  <a href=\"https://www.apismart.ai/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/apismart-dark.png\">\n      <img alt=\"ApiSmart\" src=\"assets/sponsors/apismart-light.png\" height=\"28\" align=\"middle\">\n    </picture>\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://threatwatch360.com\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/tw360-badge-dark.svg\">\n      <img alt=\"ThreatWatch360\" src=\"assets/sponsors/tw360-badge-light.svg\" height=\"26\" align=\"middle\">\n    </picture>\n  </a>\n</p>\n\n---\n\n## What is this?\n\n`claude-bughunter` is a drop-in skill bundle for the [Claude Code skills system](https://docs.claude.com/en/docs/claude-code/skills). Install once and Claude Code stops being a chatbot and starts behaving like a senior bug-hunting researcher or red-team operator: it knows the techniques, the chain templates, the VRT mappings, the platform CVE chains, and the hygiene — and it stays in scope.\n\nFour layers stack:\n\n- **Think** — `bb-methodology` + `redteam-mindset`: the 5-phase non-linear workflow, critical-thinking framework, and red-team operator discipline.\n- **Hunt webapps** — 58 `hunt-*` skills curated from 681 disclosed HackerOne reports: per-class detection patterns, payloads, bypass tables, and chain templates.\n- **Hit the perimeter** — enterprise platform chains (M365/Entra, Okta, vCenter, SSL-VPN appliances, SharePoint, cloud IAM): current 2024–2026 CVE chains + post-credential escalation.\n- **Ship it** — `triage-validation` + reporting + `evidence-hygiene`: the 7-Question Gate, VRT-aware severity, OOS rebuttals, PII redaction, and red-team deliverables.\n\nAll triggered automatically by topic — describe what you're testing in plain English and the relevant skill loads. No invocation by name.\n\n---\n\n## Quickstart\n\n**Option A — install as a Claude Code plugin (recommended).** From inside Claude Code:\n\n```text\n/plugin marketplace add elementalsouls/Claude-BugHunter\n/plugin install claude-bughunter@elementalsouls\n```\n\nAll 84 skills + 15 commands load namespaced under `claude-bughunter:` and update when you bump the plugin version — no files copied into `~/.claude/`.\n\n**A HackerOne account is optional.** The install asks for a HackerOne API username and token. They only let the HackerOne MCP read your private programs and your own reports; leave both blank if you don't need that. Every skill, command and the MCP's public tools (duplicate search, program scope) work without them.\n\n**Option B — copy install (no plugin system / pin to a clone):**\n\n```bash\ngit clone https://github.com/elementalsouls/Claude-BugHunter.git\ncd Claude-BugHunter\n```\n\n```bash\n# macOS / Linux\nbash scripts/install.sh\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1\n```\n\nBoth copy the skills + commands into `~/.claude/` (macOS/Linux) or `%USERPROFILE%\\.claude\\` (Windows) and wire the `hunt` engagement scaffolder.\n\n**What each install path gives you:**\n\n| Path | 84 skills + 15 slash commands | `cbh` CLI | `hunt` scaffolder |\n|---|---|---|---|\n| **A — plugin** | ✅ namespaced under `claude-bughunter:` | ➕ separate `pipx install` | ❌ clone-only |\n| **B — copy install** | ✅ copied into `~/.claude/` | ✅ from the clone | ✅ from the clone |\n\nThe plugin is the fastest path to the skills + slash commands. The terminal-native\n`cbh` runner installs standalone — `pipx install git+https://github.com/elementalsouls/Claude-BugHunter`\n— so plugin users can add it without a full clone (see [`cbh` CLI](docs/cbh-cli.md)).\nThe `hunt` engagement scaffolder ships with the clone (Option B).\n\nThat's it. Open Claude Code and describe what you're testing in plain English — the right skill loads automatically, no invocation by name:\n\n```text\n> Testing acme.com — an in-scope HackerOne target. Run recon and rank the surface.\n\n  ⟳ loading skills: web2-recon, offensive-osint, bb-methodology …\n    → subdomain enum (subfinder + crt.sh) … 47 hosts\n    → live hosts (httpx) … 12 · tech fingerprint … 6 distinct stacks\n    → ranked surface: api.acme.com (GraphQL, introspection ON)  ← start here\n                      auth.acme.com (OAuth, SSO)               ← hunt-oauth\n\n  Next: want me to probe the GraphQL introspection + OAuth redirect_uri?\n```\n\n→ Full [Installation guide](INSTALL.md) · [Usage guide](USAGE.md) · [searchable skill catalog](docs/skills.md).\n\n> The block above is an illustrative transcript. To record a real demo of your own session: `asciinema rec demo.cast` → upload to [asciinema.org](https://asciinema.org) and drop the badge here.\n\n---\n\n## Runs on multiple agent harnesses\n\n![One install, agent harnesses — Claude Code, OpenCode, Codex CLI, Hermes Agent, Google AntiGravity](assets/harness-routing.svg)\n\nThe skills are plain [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) — the same `SKILL.md` format that **Claude Code · OpenCode · OpenAI Codex CLI · Hermes Agent · Google AntiGravity** all load. One command installs them everywhere:\n\n```bash\n# macOS / Linux\nbash scripts/install.sh --all --burp-mcp\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1 -All -BurpMcp\n```\n\n| Harness | Target Skill Directory | Flag |\n|---|---|---|\n| **Claude Code** (baseline) | `~/.claude/skills/` | *(default)* |\n| **OpenCode** | reads `~/.claude/skills/` & `~/.agents/skills/` | *(default)* / `--agents` |\n| **OpenAI Codex CLI** | `~/.agents/skills/` | `--agents` |\n| **Hermes Agent** | `~/.hermes/skills/` | `--hermes` |\n| **Google AntiGravity** | `~/.gemini/config/skills/` | `--antigravity` |\n\n`--all` (`-All`) detects installed harnesses and copies skills to each harness's path (`~/.claude/skills`, `~/.agents/skills`, `~/.hermes/skills`, `~/.gemini/config/skills`); `--burp-mcp` (`-BurpMcp`) wires the Burp MCP server into each. The full *knowledge* layer ports to all five — the slash commands and `/hunt` engine stay Claude-Code-only by design.\n\n→ [Multi-harness guide](docs/multi-harness.md)\n\n---\n\n## Star History\n\n<a href=\"https://github.com/elementalsouls/Claude-BugHunter/stargazers\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"assets/star-history-light.svg\" />\n   <img alt=\"Star history chart for Claude-BugHunter\" src=\"assets/star-history-light.svg\" width=\"840\" />\n </picture>\n</a>\n\n<sub>Chart is self-hosted — regenerate with `python3 scripts/gen_star_history.py` (needs `gh auth login`).\nRefreshes automatically each day via `.github/workflows/star-history.yml`.</sub>\n\n---\n\n\n## Scope — what this bundle is for, and what it isn't\n\nThis bundle covers the **external attack surface** — anything reachable from the internet without first compromising an internal endpoint.\n\n### In scope\n\n- **Bug bounty hunting** — web apps, APIs, SaaS, GraphQL, OAuth, JWT, file upload, IDOR, SSRF, RCE chains\n- **Web application pentesting** — full hunt-* coverage of OWASP-mapped bug classes + discipline rules\n- **External red-team engagements** — initial-access against internet-facing enterprise estate: M365 / Entra ID, Okta-as-IdP, SharePoint on-prem (ToolShell + legacy SOAP), VMware vCenter / Workspace ONE, SSL VPN appliances (Cisco / Fortinet / Citrix / Palo Alto / Pulse / SonicWall / F5), Android APK red-team, supply-chain recon\n- **Cloud misconfig + post-credential escalation** — public S3, IMDS chains, STS AssumeRole, cross-account confused-deputy\n- **Recon + OSINT** — subdomain enum, identity-fabric mapping, certificate transparency, JS analysis, secret scanning\n- **Reporting** — H1, Bugcrowd (VRT-aware), Intigriti, Immunefi, plus client-facing red-team deliverable format\n\n### Out of scope (deliberate — not gaps, design decisions)\n\n- **Internal Active Directory attacks** — BloodHound, Kerberoasting, ASREProast, DCSync, Pass-the-Hash, AD CS abuse, ntlmrelayx, Responder, PetitPotam, etc. Different operational risk profile; needs different tooling and judgment. **Future bundle, not this one.**\n- **C2 frameworks** — Cobalt Strike, Sliver, Mythic, Havoc, BRC4 tradecraft. Out of scope for external-only engagement model.\n- **Post-exploit / persistence / lateral** — Mimikatz/comsvcs LSASS dumping, golden/silver tickets, named-pipe impersonation, persistence (registry, scheduled tasks, WMI events, COM hijacking), token theft. These start after the perimeter has already broken — different bundle territory.\n- **Evasion** — AMSI bypass, ETW patching, AV/EDR bypass. Tied to C2 tradecraft above.\n- **iOS pentesting / hardware / RF / ICS** — out of scope by design.\n- **Binary exploitation / kernel pwn / browser internals** — different skill universe.\n\nIf you're running an internal red team that includes domain-takeover chains via Kerberos or lateral movement, **this bundle won't help you in those phases** — and we'd rather say that up front than have you find out mid-engagement. The external surface handoff to internal-RT tooling (Impacket, NetExec, CrackMapExec, Rubeus, Certify, BloodHound) is intentionally outside our scope. **Coverage for internal AD and post-exploit may come in a future update.**\n\n---\n\n## What's inside\n\n**84 skills**, auto-loaded by topic — no invocation by name. Coverage across the external attack surface:\n\n| Category | # | Examples |\n|---|---|---|\n| Hunt — web app vuln classes | 58 | XSS, SQLi, SSRF, IDOR, LFI, SSTI, XXE, CSRF, CORS, open-redirect, SharePoint, ASP.NET/NTLM |\n| Enterprise platform attack ★ | 10 | M365/Entra, Okta, cloud-IAM-deep, vCenter, enterprise VPN, APK/iOS red-team pipelines, supply-chain recon |\n| Reporting & validation | 7 | triage-validation, evidence-hygiene, report-writing, bugcrowd-reporting |\n| Recon & OSINT | 5 | web2-recon, offensive-osint, osint-methodology, recon-scope-triage |\n| Methodology & mindset | 4 | bb-methodology, bug-bounty, redteam-mindset, bb-local-toolkit |\n\nFull searchable catalog → **[docs/skills.md](docs/skills.md)**. Also ships **15 slash commands** (`/hunt`, `/recon`, `/report`, …) and a deterministic **engagement engine** (`engine/`) that maps a target's attack surface and routes each finding to the skill that handles it.\n\n---\n\n## How it works\n\nA 6-phase, non-linear workflow — **recon → map & rank → hunt → validate → report** — with scope enforced in code and a **7-Question Gate** before anything is submitted. Two ways to drive it:\n\n- **Plain English** — describe what you're testing and the relevant skill loads automatically.\n- **`/hunt` scaffold + `cbh` CLI** — engagement-folder structure, state, and orchestration.\n\n→ [Usage guide & worked example](USAGE.md) · [6-phase architecture & skill-to-phase map](docs/architecture.md) · [`cbh` CLI](docs/cbh-cli.md)\n\n---\n## Authorization\n\nThese skills are intended for assets you **own** or have **written authorization to assess** (bug-bounty in-scope assets, pentest engagement letters, CTF challenges, your own infrastructure).\n\nThe skills include validation gates that auto-trigger when you point Claude at unverified third-party targets — `triage-validation`'s 7-Question Gate explicitly asks whether the asset is in scope (Q3) and on the program's accepted-impact list (Q2). The `bugcrowd-reporting` skill includes researcher-side hygiene (Bugcrowdninja alias, account-state restoration, friendly-tester posture)"
+    },
+    "brief": {
+      "summary": "给 Claude Code 装的 84 个漏洞挖掘技能包",
+      "problem": "把零散的漏洞挖掘方法整理成 AI 可自动加载的流程",
+      "highlights": [
+        "可以按主题自动加载对应 Web 漏洞检测技能",
+        "可以查公开报告模式，找复现与串联思路",
+        "可以按 Burp MCP 串起侦察与验证环节"
+      ],
+      "target_users": [
+        "安全测试人员",
+        "红队工程师",
+        "漏洞赏金猎人"
+      ],
+      "why_trending": "今日新增约 2000 星，安全场景关注度高",
+      "caveat": "仅覆盖外部攻击面，须在授权范围内使用",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "elementalsouls/Claude-BugHunter",
+      "score": 60,
+      "category": "AI Agent / Skills",
+      "reason": "Claude Code技能包，但面向安全渗透",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 40,
+      "ranking_score": 61.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 11,
+      "full_name": "google-labs-code/stitch-skills",
+      "url": "https://github.com/google-labs-code/stitch-skills",
+      "description": "A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.",
+      "language": "TypeScript",
+      "total_stars": 12472,
+      "forks": 1519,
+      "stars_today": 422,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 422
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-01-16T17:17:17Z",
+      "updated_at": "2026-11-24T10:05:47Z",
+      "pushed_at": "2026-11-23T18:42:27Z",
+      "open_issues": 24,
+      "homepage": "https://stitch.withgoogle.com/docs/mcp/setup",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# Stitch Design Skills\n\nA collection of agent skills and plugins for [Google Stitch](https://stitch.withgoogle.com), following the [Agent Skills](https://agentskills.io) open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install).\n\n## Quick Start\n\n### 1. Install Plugins (Recommended)\nThe fastest way to set up the full Stitch plugin suite globally.\n\n#### Codex\n\nAdd the Stitch Skills marketplace, then install the plugins you need.\n\n<details open>\n<summary><strong>Via CLI</strong> (recommended)</summary>\n\n```bash\ncodex plugin marketplace add google-labs-code/stitch-skills --ref main \\\n  --sparse .agents/plugins \\\n  --sparse plugins/stitch-design \\\n  --sparse plugins/stitch-build \\\n  --sparse plugins/stitch-utilities\n```\n\n> [!TIP]\n> The `--sparse` flags are optional — they limit the checkout to only the\n> listed paths for a faster clone. Omit them to pull the entire repository.\n\n</details>\n\n<details>\n<summary><strong>Via the Codex UI</strong></summary>\n\nNavigate to **Settings → Plugin Marketplaces → Add** and fill in:\n\n| Field | Value |\n|---|---|\n| **Source** | `https://github.com/google-labs-code/stitch-skills` |\n| **Git ref** | `main` |\n| **Sparse paths** | *(optional)* `.agents/plugins`, `plugins/stitch-design`, `plugins/stitch-build`, `plugins/stitch-utilities` |\n\n</details>\n\nOnce the marketplace is registered, install any combination of:\n\n- **`stitch-design`** — design-focused skills\n- **`stitch-build`** — build and component skills\n- **`stitch-utilities`** — utility and helper skills\n\n#### Claude Code & Cursor\n\n```bash\n# Claude Code — installs into the current project\nnpx plugins add google-labs-code/stitch-skills --scope project --target claude-code\n```\n\n```bash\n# Cursor — installs into the current workspace\nnpx plugins add google-labs-code/stitch-skills --scope workspace --target cursor\n```\n\n#### OpenCode\n\nOpenCode does **not** use `npx plugins` / `npx skills` or the Codex/Claude marketplace layout.\nInstall skills and the Stitch MCP server manually:\n\n**1. Skills** — copy the skill folders you need into a discoverable path:\n\n```bash\n# Project-local (recommended)\nmkdir -p .opencode/skills\ncp -R plugins/stitch-design/skills/generate-design .opencode/skills/generate-design\n# repeat for other skills under plugins/*/skills/\n```\n\nOpenCode also discovers `.claude/skills/` and `.agents/skills/` (see [OpenCode skills docs](https://opencode.ai/docs/skills/)).\n\n> **Naming:** OpenCode requires skill `name` frontmatter to be lowercase kebab-case and match the directory name. Skills that use `stitch::…` names (or other non-kebab forms) need the `name` field and folder renamed before OpenCode will load them. Extra frontmatter such as `allowed-tools` is ignored.\n\n**2. Stitch MCP** — add a remote MCP entry in project `opencode.json` or `~/.config/opencode/opencode.json` after completing the [Stitch MCP setup](https://stitch.withgoogle.com/docs/mcp/setup/):\n\n```json\n{\n  \"$schema\": \"https://opencode.ai/config.json\",\n  \"mcp\": {\n    \"stitch\": {\n      \"type\": \"remote\",\n      \"url\": \"YOUR_STITCH_MCP_URL\",\n      \"enabled\": true\n    }\n  }\n}\n```\n\nReplace `YOUR_STITCH_MCP_URL` with the endpoint from the Stitch MCP setup flow (credentials/env vars from that guide still apply).\n\nTool names inside skill instructions may differ from OpenCode builtins (`webfetch` / `bash` instead of `web_fetch` / `run_command`). Prefer the OpenCode tool names when adapting a skill for OpenCode.\n\n### 2. Install Skills Selectively\nChoose only the specific skills you need.\n\n> [!IMPORTANT]\n> Stitch Design Skills often have inter-dependencies. If you choose to install skills selectively, ensure you include all required dependencies.\n\n```bash\nnpx skills add google-labs-code/stitch-skills\n```\n\nYou can run the following commands to see the help documentation for plugins and skills:\n\n```bash\nnpx plugins --help\n\nnpx skills --help\n```\n\n## Prerequisites\n\nThese skills require the **Stitch MCP** server to be configured and running in your agent's environment. Make sure you have followed the [Stitch MCP Setup Instructions](https://stitch.withgoogle.com/docs/mcp/setup/) to register the server and set up appropriate environment variables and credentials.\n\n> **Docs navigation:** If a link on [stitch.withgoogle.com/docs](https://stitch.withgoogle.com/docs/) redirects incorrectly, open the target path under the same host (e.g. `https://stitch.withgoogle.com/docs/learn/device-types/`).\n\n## Available Plugins\n\n### Design (`stitch-design`)\n\nCore design workflows for creating, managing, and optimizing designs within Stitch.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [stitch::code-to-design](plugins/stitch-design/skills/code-to-design/) | Convert frontend code (React, Vue, etc.) to a Stitch Design via HTML extraction + design system + upload | *\"Upload the frontend code at `/path/to/dashboard` into a Stitch project named 'Dashboard-Migration-2026'.\"* |\n| [stitch::generate-design](plugins/stitch-design/skills/generate-design/) | Generate new screens from text or images, edit existing screens, and create design variants | · *\"Make a browse tab for a mobile app for romance and date night ideas.\"*<br>· *\"Edit the login screen to add a 'Remember Me' checkbox and change the button color to blue.\"*<br>· *\"Generate 3 design variants of the home screen with dark mode and high-density layouts.\"* |\n| [stitch::manage-design-system](plugins/stitch-design/skills/manage-design-system/) | Manage design systems in Stitch — upload DESIGN.md and apply themes to screens | *\"Upload our design system from `.stitch/DESIGN.md` and apply it to all screens.\"* |\n| [stitch::extract-design-md](plugins/stitch-design/skills/extract-design-md/) | Extract a comprehensive DESIGN.md directly from frontend source code | *\"Scan `/src` and extract the design system into `.stitch/DESIGN.md`.\"* |\n| [stitch::extract-static-html](plugins/stitch-design/skills/extract-static-html/) | Extract self-contained static HTML from running web apps, inlining CSS and images | *\"Extract a static HTML snapshot of `http://localhost:3000/profile`.\"* |\n| [stitch::upload-to-stitch](plugins/stitch-design/skills/upload-to-stitch/) | Upload local assets (images, mockups, HTML) to a Stitch project | *\"Upload `.stitch/landing_page.html` to Stitch project `projects/987654321`.\"* |\n\n---\n\n### Build (`stitch-build`)\n\nCode generation, framework integration, and asset compilation from Stitch designs.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [stitch::react-components](plugins/stitch-build/skills/react-components/) | Convert Stitch screens to React component systems with automated validation and design token consistency | · *\"Convert all screens in Stitch project `projects/123` to React components.\"*<br>· *\"Sync the app to the last updates of the Stitch project `13039335308618232534`.\"* |\n| [stitch::react-native](plugins/stitch-build/skills/react-native/) | Convert Stitch HTML designs to production-ready React Native components with StyleSheet and platform-specific code | · *\"Convert the Stitch design to React Native components with proper theme and navigation.\"*<br>· *\"Sync the app to the last updates of the Stitch project `13039335308618232534`.\"* |\n| [remotion](plugins/stitch-build/skills/remotion/) | Generate walkthrough videos from Stitch projects using Remotion with smooth transitions and zooming | *\"Generate a walkthrough video of the Stitch project `projects/456`.\"* |\n| [shadcn-ui](plugins/stitch-build/skills/shadcn-ui/) | Expert guidance for integrating and building applications with shadcn/ui components | *\"Set up shadcn/ui and build a data table with sorting and filtering.\"* |\n| [react-vite-dashboard](plugins/stitch-build/skills/react-vite-dashboard/) | Convert Stitch screens to React + Vite dashboards with TanStack Query, DESIGN.md tokens, and Web3 read patterns | *\"Build a DeFi portfolio dashboard from this Stitch screen using our DESIGN.md.\"* |\n\n---\n\n### Utilities (`stitch-utilities`)\n\nSupporting tools for enhancing prompts, generating design specs, and enforcing design standards.\n\n| Skill | Description | Prompt Example |\n|---|---|---|\n| [design-md](plugins/stitch-utilities/skills/design-md/) | Analyze Stitch projects and generate comprehensive DESIGN.md files in semantic language | *\"Analyze Stitch project `projects/123` and generate a DESIGN.md.\"* |\n| [enhance-prompt](plugins/stitch-utilities/skills/enhance-prompt/) | Transform vague UI ideas into polished, Stitch-optimized prompts with UI/UX keywords | *\"Enhance this prompt: 'make a settings page'.\"* |\n| [site-md](plugins/stitch-utilities/skills/site-md/) | Analyze a project description or site requirements and synthesize a project constitution (SITE.md) for the Stitch Build Loop | *\"Analyze this project brief and create a SITE.md constitution for the Stitch Build Loop.\"* |\n| [stitch-loop](plugins/stitch-utilities/skills/stitch-loop/) | Generate complete multi-page websites from a single prompt with automated validation | *\"Build a 5-page portfolio website with Stitch.\"* |\n| [taste-design](plugins/stitch-utilities/skills/taste-design/) | Generate DESIGN.md files enforcing premium, anti-generic UI standards | *\"Generate a premium DESIGN.md with strict typography and calibrated colors.\"* |\n\n## Repository Structure\n\n```text\nplugins/\n├── stitch-design/          — Core design workflow plugin\n│   ├── plugin.json\n│   └── skills/\n│       ├── code-to-design/\n│       ├── generate-design/\n│       ├── manage-design-system/\n│       ├── extract-design-md/\n│       ├── extract-static-html/\n│       └── upload-to-stitch/\n├── stitch-build/           — Code generation & build plugin\n│   ├── plugin.json\n│   └── skills/\n│       ├── react-components/    — stitch::react-components\n│       ├── react-native/\n│       ├── react-vite-dashboard/\n│       ├── remotion/\n│       └── shadcn-ui/\n└── stitch-utilities/       — Design utilities & assistants plugin\n    ├── plugin.json\n    └── skills/\n        ├── design-md/\n        ├── enhance-prompt/\n        ├── site-md/\n        ├── stitch-loop/\n        └── taste-design/\n```\n\nEach skill follows the Agent Skills standard:\n\n```text\nskills/<skill-name>/\n├── SKILL.md           — The \"Mission Control\" for the agent\n├── scripts/           — Executable enforcers (Validation & Networking)\n├── resources/         — The knowledge base (Checklists & Style Guides)\n└── examples/          — The \"Gold Standard\" syntactically valid references\n```\n\n## Adding New Skills\n\nAll new skills need to follow the file structure above to implement the Agent Skills open standard.\n\n### Great candidates for new skills\n* **Validation**: Skills that convert Stitch HTML to other UI frameworks and validate the syntax.\n* **Decoupling Data**: Skills that convert static design content into external mock data files.\n* **Generate Designs**: Skills that generate new design screens in Stitch from a given set of data.\n\nThis is not an officially supported Google product. This project is not eligible for the [Google Open Source Software Vulnerability Rewards Program](https://bughunters.google.com/open-source-security).\n"
+    },
+    "brief": {
+      "summary": "让编码代理通过 Stitch MCP 做设计与代码转换的技能库",
+      "problem": "解决代理难以直接操作 Stitch 完成设计与代码互转",
+      "highlights": [
+        "可以把前端代码转成 Stitch 设计",
+        "可以根据文字或图片生成和编辑界面",
+        "可以把 Stitch 设计转成 React 组件"
+      ],
+      "target_users": [
+        "前端开发者",
+        "UI 设计师",
+        "AI 编码代理用户"
+      ],
+      "why_trending": "今日新增 422 Star，本周首次收录，技能生态受关注",
+      "caveat": "需先配置 Stitch MCP，部分技能有依赖关系",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "google-labs-code/stitch-skills",
+      "score": 62,
+      "category": "AI Agent / Skills",
+      "reason": "Agent Skills标准库，面向UI设计生成",
+      "generated_by_ai": true,
+      "velocity_score": 80,
+      "freshness_score": 40,
+      "ranking_score": 57.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Open-source AI video editor: edit your own footage, or create and remake any video with Claude Code, Codex or the free Studio app. Write HTML, render MP4. By HeyGen.",
+      "language": "TypeScript",
+      "total_stars": 89212,
+      "forks": 8321,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 718
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "ai-video-editor",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "remotion-alternative",
+        "rendering",
+        "typescript",
+        "video-editing",
+        "video-editor",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-24T10:08:15Z",
+      "pushed_at": "2026-11-24T10:07:52Z",
+      "open_issues": 329,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>The open-source AI video editor: create, edit, remake.</b></p>\n\n<p align=\"center\">Write HTML. Render video. Built for agents.</p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio/download?utm_source=github&utm_medium=readme&src=github-readme\">Download the app</a> ·\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> ·\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> ·\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> ·\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> ·\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a> ·\n  <a href=\"https://x.com/HyperFrames_\">X</a> ·\n  <a href=\"https://www.youtube.com/@HyperFrames_Official\">YouTube</a>\n</p>\n\n<p align=\"center\"><a href=\"https://hyperframes.studio/studio/download?src=github-readme-hero\"><picture><source type=\"image/avif\" srcset=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-26s-v3.avif\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-v1.webp\" width=\"800\" alt=\"HyperFrames Studio, the AI video editor: ask for a launch video, get an editable project, then mark one word and the agent changes just that\"></picture></a></p>\n\nHyperFrames is HeyGen's AI video editor for people and agents. Describe a video, bring your own footage, or remake a video you love, and get a real project you can change down to the frame: ask for a bigger title, a faster cut or new captions, and it changes just that.\n\nUnderneath, HyperFrames is a free, open-source framework (Apache 2.0) for turning HTML, CSS, JavaScript, media and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents like Claude Code, Codex and Cursor with skills, or as the rendering core behind hosted authoring workflows. No React required.\n\n## Three ways to use it\n\n|                                    | Best for                                                                                                                                                     | Start                                                                                                                                                                                                      |\n| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **HyperFrames Studio app**         | Anyone, no code. Describe a video or drop in your footage, then edit by typing or pointing. Use the built-in agent on Pro, or your own Claude Code or Codex. | [Download for Mac, Windows or Linux](https://hyperframes.studio/studio/download?src=github-readme) (free plan)                                                                                             |\n| **Your coding agent**              | Claude Code, Codex, Cursor, Gemini CLI and other agents.                                                                                                     | `npx skills add heygen-com/hyperframes`                                                                                                                                                                    |\n| **Claude, ChatGPT or Grok** (beta) | Making a video in a chat, nothing to install. ChatGPT: Business, Enterprise and Edu workspaces.                                                              | Connect [HyperFrames by HeyGen](https://hyperframes.heygen.com/guides/mcp?utm_source=github&utm_medium=readme), listed in [Claude's connector directory](https://claude.com/connectors/hyperframes-heygen) |\n\nThe [HyperFrames Studio app](https://hyperframes.studio/studio?utm_source=github&utm_medium=readme) has a free plan. [Pro](https://hyperframes.studio/pricing?utm_source=github&utm_medium=readme) ($25 a month) adds top video, image, voice and music models (HeyGen Video 1, Seedance 2.5, Lyria 3 Pro and more) and 25,000 credits a month.\n\n## Made with HyperFrames\n\n<table>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2113670541274144802\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/script-based-editing-v1.webp\" width=\"195\" alt=\"Editing a talking-head video by editing its script in HyperFrames Studio\"></a><br><b>Script-based editing</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/liu8in/status/2123562606535565629\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/edit-your-own-footage-v1.webp\" width=\"195\" alt=\"A creator's own phone footage edited into a finished social video with HyperFrames\"></a><br><b>Edit your own footage</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2112960682526490691\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/captions-v1.webp\" width=\"195\" alt=\"Animated captions added to a talking-head video with HyperFrames\"></a><br><b>Captions on your video</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2110784695634178256\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remake-any-video-v1.webp\" width=\"195\" alt=\"A video rebuilt as an editable HyperFrames project, then changed\"></a><br><b>Remake any video</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/website-to-launch-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/launch-from-website-v1.webp\" width=\"195\" alt=\"Product launch video built from a company's website with HyperFrames\"></a><br><b>Launch video from your website</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/WaterrrMiao/status/2114585876160455057\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/faceless-explainer-v1.webp\" width=\"195\" alt=\"Faceless YouTube explainer made with HyperFrames\"></a><br><b>Faceless explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/flat-cartoon-explainer-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/flat-cartoon-explainer-v1.webp\" width=\"195\" alt=\"Flat cartoon explainer video about the Sun made with HyperFrames\"></a><br><b>Flat cartoon explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/real-ui-newspaper-1969-v2.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/real-ui-newspaper-v1.webp\" width=\"195\" alt=\"Motion graphics built from a real 1969 newspaper front page with HyperFrames\"></a><br><b>Real-UI motion graphics</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/cartoon-frameys-launch-one-take-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-one-take-trailer-v1.webp\" width=\"195\" alt=\"3D one-take launch trailer made with HyperFrames\"></a><br><b>3D one-take trailer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/3d-type-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-type-v1.webp\" width=\"195\" alt=\"Kinetic 3D typography made with HyperFrames\"></a><br><b>3D type</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/remotion-to-hyperframes-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remotion-ported-voxels-v1.webp\" width=\"195\" alt=\"A Remotion project with 3D voxels, ported to HyperFrames\"></a><br><b>Remotion project, ported</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/generative-replica-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/generative-motion-v1.webp\" width=\"195\" alt=\"Generative motion design made with HyperFrames\"></a><br><b>Generative motion</b></td></tr>\n</table>\n\nClick any clip to watch it with sound.\n\n## What you can make\n\n| Video                                                                                                                     | How                                                                                                                                                   |\n| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Branded UGC videos for TikTok and Instagram from your own phone clips: captions, music, text hooks, fast client revisions | The Studio app: drop in your footage, then edit by typing or pointing                                                                                 |\n| Video podcast episodes: line up a multi-camera recording, cut to whoever is talking, clean up the sound, add captions     | The Studio app's podcast edit                                                                                                                         |\n| Product demos, tutorials, launch videos and feature announcements, from your website or a screen recording                | Paste your URL into the Studio app, or ask your agent                                                                                                 |\n| Explainer and faceless YouTube episodes from your topic, script or voiceover                                              | Ask for one; [`/style-sampling`](skills/style-sampling) for five proven series styles                                                                 |\n| Remake a video you love, then make it yours                                                                               | [`/reverse-any-video`](skills/reverse-any-video)                                                                                                  "
+    },
+    "brief": {
+      "summary": "开源AI视频编辑器，写HTML即可渲染MP4视频",
+      "problem": "让普通人和AI代理都能改视频，精确到帧",
+      "highlights": [
+        "可以用自己的素材剪辑并加动态字幕",
+        "可以让Claude Code等代理生成视频项目",
+        "可以把喜欢的视频重制成可编辑工程"
+      ],
+      "target_users": [
+        "视频创作者",
+        "前端开发者",
+        "AI代理用户"
+      ],
+      "why_trending": "总Star超8.9万，近期持续更新并连续上榜",
+      "caveat": "Studio免费版有功能限制，高级模型需Pro",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "开源AI视频编辑器，HTML渲染成片",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 75.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 2,
+      "full_name": "nexu-io/openmotion",
+      "url": "https://github.com/nexu-io/openmotion",
+      "description": "The open-source Claude Motion & CapCut alternative. Turn a reference video into editable motion graphics with your brand kit. Export MP4s for YouTube, YouTube Shorts, Instagram Reels, and TikTok. A full-stack agentic video studio with 300+ Motion.md guides and support for 22 agents, including Claude Code, Codex, DSH, and WorkBuddy.",
+      "language": "TypeScript",
+      "total_stars": 15871,
+      "forks": 1582,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 367
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "animation",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "ffmpeg",
+        "generative-ai",
+        "html",
+        "javascript",
+        "local-first",
+        "mcp",
+        "motion-graphics",
+        "openmotion",
+        "typescript",
+        "video-editing",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-05-11T09:40:38Z",
+      "updated_at": "2026-11-24T10:07:32Z",
+      "pushed_at": "2026-11-24T10:07:28Z",
+      "open_issues": 119,
+      "homepage": "https://open-design.ai/motion/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"docs/readme/openmotion-logo.svg\" width=\"420\" alt=\"OpenMotion\"></p>\n\n<p align=\"center\"><strong>The open-source Claude Motion &amp; CapCut alternative</strong></p>\n\n<p align=\"center\">\n  <picture>\n    <source type=\"image/webp\" srcset=\"docs/readme/capcut-claude-motion-cover.webp\">\n    <source media=\"(max-width: 600px)\" srcset=\"https://releases.open-design.ai/open-motion/media/sha256/730e1d6235820d39ba8adde42810d1165377992136a3b20290ad5d504abb527b.jpg\">\n    <img src=\"https://releases.open-design.ai/open-motion/media/sha256/730e1d6235820d39ba8adde42810d1165377992136a3b20290ad5d504abb527b.jpg\" width=\"100%\" alt=\"OpenMotion — the open-source Claude Motion and CapCut alternative. Dan Martell’s original and an OpenMotion remake with Riya appear beside each other above the editable Studio timeline.\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/nexu-io/openmotion\"><img src=\"docs/readme/badges/stars.svg\" alt=\"GitHub Stars · 9.5k (2026-11-09)\"></a>\n  <a href=\"package.json\"><img src=\"docs/readme/badges/node.svg\" alt=\"Node.js 22.18+\"></a>\n  <a href=\"LICENSE\"><img src=\"docs/readme/badges/license.svg\" alt=\"Apache 2.0 license\"></a>\n  <a href=\"https://github.com/nexu-io/open-design\"><img src=\"docs/readme/badges/built-by-opendesign.svg\" alt=\"Built by OpenDesign\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://open-design.ai/motion/\"><img src=\"docs/readme/badges/website.svg\" alt=\"OpenMotion website\" /></a>\n  <a href=\"https://go.open-design.ai/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=openmotion&amp;utm_content=readme_en\"><img src=\"docs/readme/badges/opendesign-go.svg\" alt=\"OpenDesign Go model subscriptions\" /></a>\n  <a href=\"https://discord.com/invite/M7NnHS9gNa\"><img src=\"docs/readme/badges/discord.svg\" alt=\"Join the OpenMotion Discord\" /></a>\n  <a href=\"https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=b6cs46dc-acb2-48ed-941d-c45642ead841\"><img src=\"docs/readme/badges/feishu.svg\" alt=\"Join the OpenMotion Feishu group\" /></a>\n  <a href=\"https://x.com/OpenDesignHQ\"><img src=\"docs/readme/badges/x-opendesignhq.svg\" alt=\"OpenDesign on X (@OpenDesignHQ)\" /></a>\n  <a href=\"https://x.com/OpenDesignDevs\"><img src=\"docs/readme/badges/x-opendesigndevs.svg\" alt=\"OpenDesign Developers on X (@OpenDesignDevs)\" /></a>\n  <a href=\"https://www.youtube.com/channel/UChtshixMhvtgBWzoD9R_Qfg\"><img src=\"docs/readme/badges/youtube.svg\" alt=\"OpenDesign on YouTube\" /></a>\n</p>\n\n<p align=\"center\"><a href=\"#quick-start\">Install</a> · <a href=\"#agent-wall\">Agents</a> · <a href=\"#showcase\">Use cases &amp; remakes</a> · <a href=\"#features\">Why OpenMotion</a> · <a href=\"#technical-guide\">Setup & architecture</a> · <a href=\"#community\">Community</a></p>\n\n<div align=\"center\">\n\n**English** · [简体中文](docs/README.zh-CN.md) · [日本語](docs/README.ja.md)\n\n</div>\n\n# OpenMotion\n\nOpenMotion is a **full-stack agentic video** studio and an **open-source alternative to Claude Motion and CapCut**. Upload a reference video or paste a social video link to **recreate it with your own brand kit and copy**.\n\n- 🎬 **Full-stack video recreation.** Code video with HTML. Your agent breaks down the reference, rebuilds its shots and transitions, and generates missing assets. Edit the timing in Studio and render an MP4 from the same project.\n- 🔑 **BYOA — Bring Your Own Agent. BYOK — Bring Your Own Keys.** OpenMotion is free and open source. Recreate videos in [your local agent](#agent-wall) with your own API keys. Supported agents include Claude Code, Codex, and WorkBuddy.\n- 🧩 OpenMotion introduces **Motion.md**, a Markdown format for shot order, timing and transitions. Use it to share how a brand film works, shot by shot.\n- 🎛️ **Images, video, music and voice.** Create artwork with GPT Image 2.6, add a shot with Seedance 2.5, score it with Suno and narrate it with Eleven v4. [Explore the models and providers](#model-wall).\n\n<a id=\"快速开始\"></a> <a id=\"quick-start\"></a>\n\n### Install from ChatGPT Marketplace\n\n**One-click installation. No manual configuration required.** Once installed, create motion videos from scratch, recreate reference videos, or start from a template—all in your conversation.\n\n**[Install OpenMotion in ChatGPT →](https://chatgpt.com/plugins/plugins_6a742d13e88481919b42002864b1bb26)**\n\n<a id=\"start-in-codex\"></a>\n\n### Install in your agent\n\nInstall the main Skill with the [Skills CLI](https://github.com/vercel-labs/skills):\n\n```sh\nnpx skills add nexu-io/openmotion --skill openmotion\n```\n\nThen ask your agent: **Use OpenMotion to install and connect the local Studio and MCP, then help me make a video.** The Skill completes the source setup below when needed and reuses an existing workspace. Installing the Skill alone copies instructions; it does not yet install Studio or connect MCP.\n\nCopy this instruction into your local agent to set up OpenMotion from source:\n\n```text\nRead https://github.com/nexu-io/openmotion/blob/main/docs/install.md and follow the instructions to install and connect OpenMotion in the current agent.\n```\n\nAfter setup, the agent opens the local template library and shows the welcome followed by three project-preview cards in a self-contained HTML document. Each installation samples three distinct entries from the curated pool of four. The complete silent previews and posters are bundled, so this display does not wait for native MCP reload or fetch remote reference films. Native original-reference playback remains available separately and requires internet access. The library opens once using the opening tool's result, with no extra page or playback audit. An opening failure is reported with a usable link and does not invalidate installation. Automatic current-chat MCP activation is assessed independently. Preview a card, choose **Recreate template**, then send your brief to start creating. [Source installation guide](docs/install.md) · [Onboarding selection](docs/install.md#maintained-recommendation-selection)\n\n### Install the published npm app (optional)\n\nSource setup above remains the default for repository installation. To explicitly choose the published application with prebuilt Studio and its configured online catalog, copy this instruction into your local agent:\n\n```text\nRead https://releases.open-design.ai/motion and follow the instructions to install and connect the published npm application in the current agent.\n```\n\n[Published application installation and channel selection](docs/install.md). Published versions can lag behind this checkout.\n\n### Run the repository locally\n\nUse Git, npm and Node.js 26.11.1:\n\n```sh\ngit -c filter.lfs.process= -c filter.lfs.smudge= -c filter.lfs.required=false clone --depth 1 --single-branch --branch main https://github.com/nexu-io/openmotion.git\ncd openmotion\nnpm ci\nnpm run build:studio\nnpm start\n```\n\nOpen the actual `studioUrl` or `previewUrl` printed at startup, then choose **Template library**. Studio and MCP read the templates in this checkout. To connect your agent to this same copy, follow [source setup and MCP configuration](#agent-setup). [Clone size and optional media](docs/repository-storage.md)\n\n\n### Start from an existing project\n\nImport a **HyperFrames project ZIP** into OpenMotion to continue editing its composition and local assets. Compress the project folder, open **All projects → Import projects**, then select the imported copy to edit in Studio or with your Agent. Import creates an independent copy and requires a supported native project structure.\n\n[Step-by-step import guide, required files and compatibility](docs/project-archives.md#import-from-hyperframes)\n\n<a id=\"agent-wall\"></a>\n\n**22 local agents** · [Choose your agent](#choose-agent)\n\n<p align=\"center\"><a href=\"#choose-agent\"><picture><source media=\"(max-width: 600px)\" srcset=\"docs/readme/agents/local-agents.mobile.png\"><img src=\"docs/readme/agents/local-agents.png\" width=\"100%\" alt=\"WorkBuddy, Codex CLI, Claude Code, OpenCode, Hermes, Antigravity, Gemini CLI, Grok Build, Kimi CLI, Cursor Agent, Qwen Code, Qoder CLI, GitHub Copilot, Pi, Kiro CLI, Kilo, Mistral Vibe, DeepSeek TUI, Reasonix, Aider, Devin, Trae CLI\"></picture></a></p>\n\n<a id=\"showcase\"></a> <a id=\"brand-before-after\"></a> <a id=\"what-can-you-make\"></a>\n<a id=\"use-cases-and-remake-examples\"></a>\n\n## 🎞️ Use cases and remake examples\n\nExplore product demos, brand films, talking-head videos and more. The previews below show reference videos.\n\n**[Browse the full template library →](https://open-design.ai/templates/)** — Find more templates, full videos, Motion.md and recreation instructions.\n\n### AI recuts & revisions\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/many-possible-futures.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/f4a30a4a3b2dbc5c43df68837bebb284d204a1408394e248d7df339154914917.gif\" width=\"480\" alt=\"Build a story from multiple scenes\"></picture><br>\n<strong>OpenAI · Build a story from multiple scenes</strong><br>\nConnect different scenes around one narrative idea, then expand into a broader montage.<br>\n<a href=\"https://open-design.ai/templates/many-possible-futures-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/making-of-window-collage.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/dae76ee380e75eb257be035bda3697981c5cce42b53a0f61da34c46687b52e1d.gif\" width=\"480\" alt=\"Recut a making-of collage\"></picture><br>\n<strong>Anthropic · Recut a making-of collage</strong><br>\nLayer clips and screenshots in sequence, keeping the main title readable above them.<br>\n<a href=\"https://open-design.ai/templates/making-of-window-collage-motion-design/\">View template</a>\n</td>\n</tr>\n</table>\n\n### Product launches & demos\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/notion-custom-agents.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/b62ffb99195f35396b6ec0b5f8f0abb8552ffd2493a5e982e5e10fd640c44a0f.gif\" width=\"480\" alt=\"Show a problem, then the solution\"></picture><br>\n<strong>Notion · Show a problem, then the solution</strong><br>\nMove from crowded tasks to coordinated agents; adapt the sequence to your own product.<br>\n<a href=\"https://open-design.ai/templates/notion-custom-agents-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"https://releases.open-design.ai/open-motion/media/sha256/66bc3f14f916a58800562af5b2c8412b2f554f36a435da950faa39ef4b82da96.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/ecbb5b36bf9997451a02fbf6db8ef9083b93326eb81b5bd1c29b7ca988d008cd.gif\" width=\"480\" alt=\"Turn demand into a product reveal\"></picture><br>\n<strong>OpenAI · Turn demand into a product reveal</strong><br>\nBuild momentum with overlapping requests, then reveal the app in one clear beat.<br>\n<a href=\"https://open-design.ai/templates/demand-becomes-a-desktop-release-motion-design/\">View template</a>\n</td>\n</tr>\n</table>\n\n### Brand films & motion\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/live-templates/a-world-connected-by-computational-fragments.jpg\"><img src=\"https://releases.open-design.ai/open-motion/media/sha256/d94806d916b9b7d9325db6901cc36b890ee0e4ff7503bfbd888b2d258b985925.gif\" width=\"480\" alt=\"Connect worlds through motion\"></picture><br>\n<strong>Kimi · Connect worlds through motion</strong><br>\nUse code strips, offset slices and transitions to connect a series of brand scenes.<br>\n<a href=\"https://open-design.ai/templates/a-world-connected-by-computational-fragments-motion-design/\">View template</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<picture><source media=\"(prefers-reduced-mo"
+    },
+    "brief": {
+      "summary": "开源替代 CapCut，用 AI Agent 把参考视频重制成可编辑动效",
+      "problem": "参考视频难复刻成自有品牌动效，剪辑工具门槛高还要订阅",
+      "highlights": [
+        "可以把参考视频拆解，用自己的品牌素材重制",
+        "可以在 Studio 改时间轴，再导出 MP4 发各平台",
+        "可以用 Motion.md 记录镜头顺序与转场并分享"
+      ],
+      "target_users": [
+        "短视频创作者",
+        "动效设计师",
+        "内容营销团队"
+      ],
+      "why_trending": "连续上榜，Star 超 1.5 万，支持 22 种本地 Agent",
+      "caveat": "今日新增 Star 为 0，热度或已回落；生成质量资料未说明",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nexu-io/openmotion",
+      "score": 95,
+      "category": "视频剪辑",
+      "reason": "Agent驱动动态图形与短视频剪辑工作台",
+      "generated_by_ai": true,
+      "velocity_score": 78,
+      "freshness_score": 40,
+      "ranking_score": 73.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "mdiri-ai/SoduWork",
+      "url": "https://github.com/mdiri-ai/SoduWork",
+      "description": "The AI-native engine for teams and their agents. Multi-harness, multi-agent, self-hosted.",
+      "language": "JavaScript",
+      "total_stars": 7458,
+      "forks": 645,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 6150
+    },
+    "details": {
+      "topics": [
+        "agent-harness",
+        "agent-orchestration",
+        "agent-workflows",
+        "ai-agents",
+        "ai-workflows",
+        "anti-slop",
+        "claude-code",
+        "codex",
+        "deepseek",
+        "electron",
+        "fastapi",
+        "harness",
+        "human-in-the-loop",
+        "llm",
+        "mcp",
+        "multi-agent",
+        "opencode",
+        "plugin-system",
+        "self-hosted",
+        "team-collaboration"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-10-29T02:43:14Z",
+      "updated_at": "2026-11-24T10:07:41Z",
+      "pushed_at": "2026-11-24T10:06:55Z",
+      "open_issues": 235,
+      "homepage": "https://www.soduwork.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "**English** · [简体中文](README.zh-CN.md)\n\n> **中文文档入口：[文档目录](docs/README.zh-CN.md) · [安装与启动](docs/getting-started.md) · [开发指南](docs/development.md)**\n\n<div align=\"center\">\n\n<img src=\"client/build/icons/256x256.png\" alt=\"SoduWork\" width=\"96\" />\n\n# SoduWork\n\n## The AI-native engine for teams and their agents\n\n**A chat ends with an answer. A SoduWork request ends when the person who asked signs off.**\n\n<a href=\"https://trendshift.io/repositories/350333?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-350333\" target=\"_blank\" rel=\"noopener noreferrer\">\n  <img src=\"https://trendshift.io/api/badge/trendshift/repositories/350333/daily\" alt=\"mdiri-ai/SoduWork — #1 GitHub Trending Repository\" width=\"250\" height=\"55\" />\n</a>\n\n**Multi-harness · Multi-agent · Self-hosted**\n\nWorks with Pi · OpenCode · DeepSeek Harness · Qwen Code · Kimi Code · Codex Harness · Codex\n\n**Run from source**\n\n```sh\ngit clone https://github.com/mdiri-ai/SoduWork\ncd SoduWork\n```\n\n| Platform | Start command |\n| --- | --- |\n| macOS / Linux | `sh start.sh --desktop` |\n| Windows PowerShell | `.\\start.cmd --desktop` |\n| Windows Command Prompt | `start.cmd --desktop` |\n\nFor source setup, we recommend [Python 3.12.x](https://www.python.org/downloads/) and [Node.js 22.x](https://nodejs.org/) (22.19.0 or later in that series). The clone command uses [Git](https://git-scm.com/downloads).\n\n**[Windows desktop app](https://github.com/mdiri-ai/SoduWork/releases/latest)** | [Website](https://soduwork.ai) | [Live demo](https://soduwork.ai) | [Documentation](docs/README.md) | [Docs website](https://dev.soduwork.ai) | [Releases](https://github.com/mdiri-ai/SoduWork/releases) | [Discord](https://discord.gg/AXYNrAYHy)\n\n[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)\n[![Release](https://img.shields.io/github/v/release/mdiri-ai/SoduWork)](https://github.com/mdiri-ai/SoduWork/releases)\n[![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#quick-start)\n[![Discord](https://img.shields.io/badge/chat-Discord-5865F2.svg)](https://discord.gg/AXYNrAYHy)\n\n</div>\n\n---\n\n## What SoduWork can do for you\n\n| | |\n| --- | --- |\n| **One harness does the work, another reviews it** | Pick Pi to do the work. OpenCode, on a different model, reviews it against the acceptance criteria. If the review fails, the work goes back with the reasons. |\n| **Hand a request to a colleague's agent** | People and AI work together: you file a request, AI writes the acceptance criteria, and you assign it to yourself or a colleague. The assignee's agent does the work and reviews it, and a person signs off. Everyone on the request can see who did what. |\n| **Turn one person's know-how into a team asset** | When you and AI get a task right, save the chat as a plugin. After review, anyone on the team can use it and contribute improvements, with access granted as needed. |\n\n## Core ideas\n\n<table>\n<tr>\n<td width=\"33%\" valign=\"top\">\n\n**🔀 Smart dispatch**\n\n**The right agent and model for each job.**\n\n- Pick a harness for each step and switch mid-conversation\n- Routine steps on cheap or local models, strong models where it matters\n- Long tasks go to your own cloud runner\n\n</td>\n<td width=\"33%\" valign=\"top\">\n\n**🛡️ Built-in governance**\n\n**Your organization decides which AI does what, and where.**\n\n- Plugins are reviewed before they are shared, granted to teams or people, and can be revoked\n- Roles, usage, cost and an audit log\n- Self-hosted\n\n</td>\n<td width=\"33%\" valign=\"top\">\n\n**✅ Verified delivery**\n\n**Set the bar first. Done means the requester signed off.**\n\n- Every request carries its acceptance criteria\n- A separate AI review checks each one\n- A person makes the final call\n\n</td>\n</tr>\n</table>\n\n## Quick start\n\n> SoduWork is in public beta. Try it and tell us what you think, and evaluate it before using it in production.\n\nClone the repository with Git or extract a source archive. See the [source setup guide](docs/getting-started.en.md) for prerequisites.\n\nFrom the repository root, run `sh start.sh --desktop` on macOS/Linux, `.\\start.cmd --desktop` in Windows PowerShell, or `start.cmd --desktop` in Command Prompt.\n\nIf Windows says a command “is not recognized”, check which command it names. For `git`, `python` or `node`, check that the corresponding tool is installed and on `PATH`, then reopen Command Prompt. See the [source setup guide](docs/getting-started.en.md).\n\nThe first run installs dependencies, then starts the Hub, the admin console and the desktop client on this computer. Set a password for the `admin` account (12–128 characters) when asked. Then add a model provider under **Model catalog** in the admin console, start a chat in the client and try a small task. Pi is built in.\n\n### Already added an API key? Start here\n\n1. **Add a chat model as well.** Under **Capabilities → Model catalog**, find the service you connected, choose **Add model**, enter the provider's exact model ID, select **Chat model**, and save. Saving a service credential alone does not create a selectable model.\n2. **Open the desktop client and sign in to the same Hub.** Use `--desktop` when starting from source. The browser admin console configures the service; check that **Connection** on the desktop sign-in screen points to that same Hub.\n3. **Choose New conversation, Pi, and the model you added.** Pi uses the SoduWork model catalog. Codex uses its own account and needs its own sign-in; it does not automatically use this API key.\n4. **Try a small task.** For example: “Turn these fictional meeting notes into an action table with owner and due date. Mark missing information as unconfirmed: Alex will organize the requirements by Friday; Sam will check the quotation.” Check the returned table against the notes.\n5. **Create a requirement when you need assignment and acceptance.** Describe the goal, inputs and acceptance criteria, open **Arrange execution**, choose an Agent and model, and inspect the delivery before accepting it. A normal conversation does not require a project, plugin or automation first.\n\nFor the first message, use an **OpenAI-compatible chat model with Pi**. A successful connection probe does not guarantee a successful inference: balance, model permissions and protocol support still matter. If the Agent list is empty, check **Agent management** and the Runner connection. If the model list is empty, check that the model exists, is enabled, and both interfaces use the same Hub.\n\nSee [Run from source: send your first AI message](docs/getting-started.en.md#send-your-first-ai-message) for field-by-field setup and troubleshooting.\n\n<details>\n<summary><b>Try the live demo</b></summary>\n\nDownload the client from [Releases](https://github.com/mdiri-ai/SoduWork/releases/latest), enter `https://service.soduwork.ai` under **Connection** on the sign-in screen, then sign up and sign in.\n\n> The demo is for evaluation only. Don't upload real business data or anything sensitive.\n\n</details>\n\n<details>\n<summary><b>Install the desktop client</b></summary>\n\nFollow the illustrated [desktop installation and first conversation guide](docs/desktop-quickstart.en.md).\n\n| OS | Package |\n| --- | --- |\n| Windows | `SoduWork-<version>-Setup.exe` |\n| macOS (Apple Silicon / Intel) | `SoduWork-<version>-mac-<arch>.dmg` |\n| Linux | `SoduWork-<version>-linux.deb` / `.rpm` / `.tar.gz` |\n\nDownload from [Releases](https://github.com/mdiri-ai/SoduWork/releases). On first launch, enter your Hub address under **Connection**, then sign in. On macOS, if you see \"cannot verify the developer\", open **System Settings → Privacy & Security** and choose **Open Anyway**.\n\n</details>\n\n<details>\n<summary><b>Deploy for a team with Docker</b></summary>\n\nWith Docker installed and running, from the repository root:\n\n```bash\npython3 ops/self-host/deploy.py up\npython3 ops/self-host/deploy.py credentials   # show the initial admin password\n```\n\nThis starts the Hub, the admin console and PostgreSQL on one server. Put an HTTPS reverse proxy in front of it to open it to your team. See [Deploy with Docker](https://dev.soduwork.ai/docs/get-started/docker) and [Deploy for a team](https://dev.soduwork.ai/docs/deploy).\n\n</details>\n\nPorts, data folders and troubleshooting are in [Run from source](https://dev.soduwork.ai/docs/get-started/run-from-source) and the [FAQ](https://dev.soduwork.ai/docs/get-started/faq).\n\n## Why SoduWork\n\nAI agents give everyone fast output. What no one gets for free is trust in that output — or a way to keep what worked. That's where individuals and teams get stuck alike:\n\n| The problem | What SoduWork does |\n| --- | --- |\n| **Fast output, slow trust** — whether you work alone or in a team, the time AI saves goes back into checking what it produced | **The request is the spec.** Criteria set before work starts; a separate AI review checks each one; a person signs off |\n| **What worked dies in a chat thread** — for one person, it's last month's perfect run you can't reproduce; for a team, it's one person's method nobody else can use | **Get it right once, keep it as a plugin.** Reuse it yourself or publish it for everyone — every improvement reaches everyone |\n| **A drawer full of AI tools** — three subscriptions and no standard for which one does what | **One workbench, your playbook.** Your plugins run on every harness. Switch mid-conversation, keep your history and files |\n| **Results that never enter the workflow** — output gets copy-pasted around, and every handoff re-explains the background | **Issues that carry the context.** People and agents pick up where it left off, with a full record of who did what |\n\n## How it works\n\nRequests, execution, review and reuse all happen in one shared issue pool:\n\n```mermaid\nflowchart LR\n  A[Raise a request] --> B[AI refines it<br/>adds acceptance criteria]\n  B --> C[Assign<br/>yourself · a colleague · an agent]\n  C --> D[Agent runs it<br/>with a team plugin]\n  D --> E[AI review<br/>assignee confirms]\n  E --> F[Requester signs off]\n  F --> G[Save as a plugin]\n  G -.reused by the team.-> D\n```\n\n| Role | Where they join |\n| --- | --- |\n| **Solo developer** | Puts requests in the pool, lets agents work through them, and only signs off |\n| **Specialist** | Gets a task right with AI, saves the method as a plugin, and publishes it to the team |\n| **Manager** | Drops in a request; AI fills in the criteria and routes it to a person or an agent; signs off at the end |\n| **New team member** | Uses the plugins the organization has built up to do the work to team standards, and improves them when they find a gap |\n\nWho asked, who did the work, which plugin ran and who approved it is always on record.\n\n## Multi-harness · Multi-agent\n\nA harness is the agent runtime that does the work. It is not the model. SoduWork connects every harness through one adapter interface, so issues, plugins and review don't depend on any single harness. Switch harnesses mid-conversation and keep the history and the working folder. Programs that support the Agent Client Protocol (ACP) can be added with a catalog declaration.\n\n<details>\n<summary>Supported harnesses (7)</summary>\n\n| Harness | Models | How it connects |\n| --- | --- | --- |\n| Pi | Your SoduWork models | Built in |\n| OpenCode | Your SoduWork models | Native adapter, installed on demand |\n| DeepSeek Harness | Your SoduWork models, or your own DeepSeek key | ACP, installed on demand |\n| Qwen Code | Your SoduWork models | ACP, installed on demand |\n| Kimi Code | Your SoduWork models | ACP, installed on demand |\n| Codex Harness | Your SoduWork models | ACP, installed on demand |\n| Codex | Its own OpenAI account | Native adapter, installed on demand |\n\n</details>\n\nAgents work together at several levels:\n\n| Level | Who decides | Example |\n| --- | --- | --- |\n| Harness | The harness itself | OpenCode or Qwen Code starts its own subagents to explore the code or split a task |\n| Single method | A Skill or plugin sets the method, process, rules and what "
+    },
+    "brief": {
+      "summary": "面向团队的多智能体自托管引擎",
+      "problem": "AI对话止于回答，团队交付需人工验收",
+      "highlights": [
+        "可让不同模型分工干活并交叉审查",
+        "可把个人调好的对话存为团队插件",
+        "可给需求附验收标准并人工签字"
+      ],
+      "target_users": [
+        "技术团队负责人",
+        "AI应用开发者",
+        "自托管需求团队"
+      ],
+      "why_trending": "总Star超7千，近期更新频繁，理念实用",
+      "caveat": "公测阶段，建议先评估再用于生产",
+      "category": "Harness / Jev",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mdiri-ai/SoduWork",
+      "score": 70,
+      "category": "Harness / Jev",
+      "reason": "多Harness多Agent编排平台，通用团队向",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 85,
+      "ranking_score": 72.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 15,
+      "full_name": "omnimux-ai/omnimux-client",
+      "url": "https://github.com/omnimux-ai/omnimux-client",
+      "description": "OmniMux — Local AI content commerce workbench for product videos, ads, and creator workflows. Built-in product & asset library, inspiration teardown, infinite multimodal canvas, and timeline editor for macOS & Windows.",
+      "language": "TypeScript",
+      "total_stars": 41,
+      "forks": 2,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "content-creation",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "ecommerce",
+        "electron",
+        "ffmpeg",
+        "generative-ai",
+        "local-first",
+        "omnimux",
+        "react",
+        "typescript",
+        "ugc",
+        "video-editing",
+        "video-generation",
+        "workflow"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-11-13T08:08:11Z",
+      "updated_at": "2026-11-24T09:57:33Z",
+      "pushed_at": "2026-11-24T09:56:53Z",
+      "open_issues": 7,
+      "homepage": "https://omnimux.ai",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/readme/omnimux-wordmark-dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/readme/omnimux-wordmark-light.svg\">\n    <img src=\"docs/readme/omnimux-wordmark-light.svg\" width=\"260\" alt=\"OmniMux\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <strong>Open-source local AI video studio for product marketing &amp; UGC</strong><br>\n  <sub>Turn product links and reference videos into editable workflows, multi-track cuts, and consistent brand assets — co-edited by you and your AI Agent on macOS &amp; Windows.</sub>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://omnimux.ai\"><img src=\"https://img.shields.io/badge/Website-omnimux.ai-4D6BFE?style=flat\" alt=\"Website\"></a>\n  <a href=\"#quick-start\"><img src=\"https://img.shields.io/badge/Download-macOS%20%7C%20Windows-2EA44F?style=flat\" alt=\"Download for macOS and Windows\"></a>\n  <a href=\"https://github.com/omnimux-ai/omnimux-client/actions/workflows/ci.yml\"><img src=\"https://github.com/omnimux-ai/omnimux-client/actions/workflows/ci.yml/badge.svg\" alt=\"CI Status\"></a>\n  <a href=\"https://github.com/omnimux-ai/omnimux-client/releases/latest\"><img src=\"https://img.shields.io/github/v/release/omnimux-ai/omnimux-client?style=flat&label=release&color=4D6BFE\" alt=\"Latest Release\"></a>\n  <a href=\"https://github.com/omnimux-ai/omnimux-client/commits/main\"><img src=\"https://img.shields.io/github/last-commit/omnimux-ai/omnimux-client?style=flat\" alt=\"Last Commit\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL--3.0%20%2F%20Commercial-blue?style=flat\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://discord.gg/uNPBDz3WNC\"><img src=\"https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat&logo=discord&logoColor=white\" alt=\"Discord\"></a>\n  <a href=\"https://x.com/OmniMuxai\"><img src=\"https://img.shields.io/badge/X-@OmniMuxai-000000?style=flat&logo=x&logoColor=white\" alt=\"X\"></a>\n  <a href=\"#community\"><img src=\"https://img.shields.io/badge/WeChat-Community%20Group-07C160?style=flat&logo=wechat&logoColor=white\" alt=\"WeChat\"></a>\n  <a href=\"https://github.com/omnimux-ai/omnimux-client/discussions\"><img src=\"https://img.shields.io/badge/GitHub-Discussions-0969DA?style=flat&logo=github&logoColor=white\" alt=\"Discussions\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#quick-start\">Quick Start</a> ·\n  <a href=\"#showcase\">Showcase</a> ·\n  <a href=\"#cloud-assets\">Cloud Assets</a> ·\n  <a href=\"#capabilities\">Interface &amp; Capabilities</a> ·\n  <a href=\"#ecosystem\">Skills &amp; Ecosystem</a> ·\n  <a href=\"#models\">Models</a> ·\n  <a href=\"#architecture\">Architecture</a> ·\n  <a href=\"#status\">Status</a> ·\n  <a href=\"#community\">Community</a>\n</p>\n\n<p align=\"center\">\n  <strong>English</strong> · <a href=\"docs/README.zh-CN.md\">简体中文</a>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/readme/ui/omnimux-workbench-hero.jpg\" width=\"100%\" alt=\"OmniMux Desktop Workbench — Agent chat, quick-start commerce workflows, and template explorer\">\n</p>\n<p align=\"center\">\n  <sub>OmniMux Desktop Workbench: Agent chat, quick-start commerce entry points, and Explore templates in one local-first app.</sub>\n</p>\n\n---\n\n**OmniMux** solves the biggest headache in AI product video production: scattered prompts, inconsistent characters/products, and one-off web tools that lock your files in the cloud. It brings your **Product Library, 6,380+ Built-in Cloud & Local Assets, Inspiration Teardown, Infinite Multimodal Canvas, and Multi-Track Clip Studio** into one local-first desktop app built on [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), where humans and AI Agents edit the exact same live workspace.\n\n- 🛍️ **Stop re-briefing your product every prompt** — Paste a landing page to extract selling points and local media refs, save reusable characters/scenes/styles, and mention `@Product` in any chat or canvas.\n- ☁️ **6,380+ built-in cloud assets ready out of the box** — Browse 350+ multi-filter digital humans, 3,390+ real-world scenes, 940 product props, 700+ first-3-second viral hooks, 150+ visual style packs, and 610+ voiceover/BGM tracks inside the Asset Center—audition live, save locally in one click, or attach straight into chat and workflows.\n- 🔍 **Turn reference videos into production briefs** — Capture posts via the Chrome companion, keep original copy & translations, break down hooks clip-by-clip, and send selected segments straight into a new session.\n- 🧩 **Co-edit workflows and timelines with your Agent** — Wire image, video, lip-sync, voiceover, and music nodes on a DAG canvas, then refine timing in the built-in multi-track timeline and export MP4 locally.\n- 🔑 **Zero-CLI desktop app with local-first storage & BYOK** — Native macOS and Windows installers bundle the runtime and plugins. Use the unified OmniMux route or bring your own API keys (BYOK) locally.\n\n---\n\n<a id=\"quick-start\"></a>\n\n## ⚡ Download & Quick Start\n\n### 1. Install the Desktop App (No Node.js or CLI required)\n\n| Platform | Direct Download | Installation |\n| --- | --- | --- |\n| **macOS (Apple Silicon)** | [Download `OmniMux-arm64.dmg`](https://dl.omnimux.ai/releases/latest/OmniMux-arm64.dmg) | Open DMG and drag **OmniMux** into `Applications` |\n| **macOS (Intel)** | [Download `OmniMux-x64.dmg`](https://dl.omnimux.ai/releases/latest/OmniMux-x64.dmg) | Open DMG and drag **OmniMux** into `Applications` |\n| **Windows (x64)** | [Download `OmniMux-Setup.exe`](https://dl.omnimux.ai/releases/latest/OmniMux-Setup.exe) | Run the installer and follow the setup wizard |\n\n> **Zero-setup runtime & data isolation:** The desktop installers bundle a pinned upstream [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) runtime (`0.2.2-rc.5`) — no prior DSH or Node.js installation is required. OmniMux stores its profiles, sessions, products, and assets locally under `~/.omnimux` and never reads or modifies your existing `~/.dsh` directory.\n>\n> All release builds and checksums are also published on [GitHub Releases](https://github.com/omnimux-ai/omnimux-client/releases). Visit [omnimux.ai](https://omnimux.ai) for release highlights.\n\n### 2. Produce Your First Product Video in 3 Minutes\n\nSign in to the OmniMux official route or configure your own model endpoints in **Settings**, then run this loop:\n\n1. **Add a product**: Open **Products → + Add Product**, paste any product landing page URL to extract selling points and media paths, and save.\n2. **Generate with `@Product`**: Open a new chat and run a brief:\n\n```text\nUsing the core selling points from @Product/Your-Product-Name, plan a 15-second vertical product video:\n1. Draft the opening 3-second hook and shot-by-shot storyboard;\n2. Build the image and video generation nodes on the Workflow Canvas;\n3. Send the generated clips into Clip Studio so I can fine-tune captions and pacing and export an MP4.\n```\n\n3. **Hand off between UI and AI**: Swap reference frames or rerun a single node directly on the canvas; in Clip Studio, trim manually or click **AI Edit** to pass your active playhead and selection back into chat.\n\n> ⭐ **Useful for your workflow?** [Star OmniMux on GitHub](https://github.com/omnimux-ai/omnimux-client) — it takes 2 seconds and helps more creators and developers find the project.\n\n---\n\n<a id=\"showcase\"></a>\n\n## 🎬 Content Commerce Showcase\n\nReal vertical e-commerce video formats built around product briefs, reusable visual assets, and multimodal workflow templates inside OmniMux:\n\n### Product Commercials & Visual Hooks\n\n<table width=\"100%\">\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/pet-food-commercial.jpg\">\n        <img src=\"docs/readme/showcase/pet-food-commercial.gif\" width=\"220\" alt=\"3D VFX Pet Food Product Commercial\">\n      </picture><br>\n      <strong>3D VFX Product Spot</strong><br>\n      <sub>Dynamic kibble pour transitioning into a warm studio packshot with consistent packaging</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/apparel-tryon.jpg\">\n        <img src=\"docs/readme/showcase/apparel-tryon.gif\" width=\"220\" alt=\"Apparel Flat-Lay to Runway Try-On\">\n      </picture><br>\n      <strong>Apparel Runway Try-On</strong><br>\n      <sub>Turn a flat-lay garment photo into multi-angle street lookbook motion</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/energy-drink-ad.jpg\">\n        <img src=\"docs/readme/showcase/energy-drink-ad.gif\" width=\"220\" alt=\"Neon Beverage Macro Commercial\">\n      </picture><br>\n      <strong>Beverage Macro Commercial</strong><br>\n      <sub>High-contrast condensation macro and kinetic neon lighting for CPG launches</sub>\n    </td>\n  </tr>\n</table>\n\n### UGC Talking-Head & Product Reviews\n\n<table width=\"100%\">\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/probiotics-ugc.jpg\">\n        <img src=\"docs/readme/showcase/probiotics-ugc.gif\" width=\"220\" alt=\"Creator Kitchen Selfie Product Review\">\n      </picture><br>\n      <strong>Creator Selfie Review</strong><br>\n      <sub>First-person kitchen supplement pitch with authentic daylight framing and pack close-up</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/beauty-lipgloss-ugc.jpg\">\n        <img src=\"docs/readme/showcase/beauty-lipgloss-ugc.gif\" width=\"220\" alt=\"Beauty Lip Gloss Swatch and Demo\">\n      </picture><br>\n      <strong>Beauty Swatch &amp; Demo</strong><br>\n      <sub>On-skin application, wand reveal, and close-up finish proof for cosmetics</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/skincare-serum-ugc.jpg\">\n        <img src=\"docs/readme/showcase/skincare-serum-ugc.gif\" width=\"220\" alt=\"Skincare Serum Dropper Talking-Head Review\">\n      </picture><br>\n      <strong>Skincare Talking-Head</strong><br>\n      <sub>Window-light serum demonstration keeping bottle branding clear throughout the cut</sub>\n    </td>\n  </tr>\n</table>\n\n### Promo Hooks & Product Walkthroughs\n\n<table width=\"100%\">\n  <tr>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/headphones-promo.jpg\">\n        <img src=\"docs/readme/showcase/headphones-promo.gif\" width=\"220\" alt=\"Headphones Street Drop-Test Promo Hook\">\n      </picture><br>\n      <strong>Durability &amp; Promo Hook</strong><br>\n      <sub>Scroll-stopping street drop-test opening paired with a seasonal campaign callout</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/totebag-street-hook.jpg\">\n        <img src=\"docs/readme/showcase/totebag-street-hook.gif\" width=\"220\" alt=\"Tote Bag Street Crowd Viral Hook\">\n      </picture><br>\n      <strong>Viral Street Chase Hook</strong><br>\n      <sub>High-energy urban POV opener spotlighting everyday carry accessories</sub>\n    </td>\n    <td width=\"33%\" align=\"center\" valign=\"top\">\n      <picture>\n        <source media=\"(prefers-reduced-motion: reduce)\" srcset=\"docs/readme/showcase/travel-app-demo.jpg\">\n        <img src=\"docs/readme/showcase/travel-app-demo.gif\" width=\"220\" alt=\"Interactive App and SaaS Product Walkthrough\">\n      </picture><br>\n      <strong>Interactive App Walkthrough</strong><br>\n      <sub>Presenter-led live laptop screen demonstration for apps, software, and digital services</sub>\n    </td>\n  </tr>\n</table>\n\n---\n\n<a i"
+    },
+    "brief": {
+      "summary": "本地AI产品视频与广告创作工作台",
+      "problem": "解决AI产品视频制作中提示词分散、角色产品不一致、文件锁云端的问题",
+      "highlights": [
+        "可以粘贴商品链接提取卖点并复用角色场景",
+        "可以在无限画布上搭建图像视频配音工作流",
+        "可以在多轨时间线微调并本地导出MP4"
+      ],
+      "target_users": [
+        "电商视频创作者",
+        "产品营销人员",
+        "短视频创作者"
+      ],
+      "why_trending": "本周首次收录，本地优先的AI视频工作台，内置海量素材",
+      "caveat": "项目较新且Star较少，长期维护和生态待观察",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "omnimux-ai/omnimux-client",
+      "score": 85,
+      "category": "视频剪辑",
+      "reason": "本地AI视频广告创作台，含时间线剪辑",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 57.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 16,
+      "full_name": "srlegrand/Aztek",
+      "url": "https://github.com/srlegrand/Aztek",
+      "description": "Modelling, UVs, rigging and animation that behaves like familiar 3D software. Rust core, Qt shell, Vulkan viewport, Python.",
+      "language": "Rust",
+      "total_stars": 31,
+      "forks": 10,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "3d",
+        "animation",
+        "dcc",
+        "modeling",
+        "qt",
+        "rigging",
+        "rust",
+        "vulkan"
+      ],
+      "license_name": "MIT-0",
+      "created_at": "2026-11-05T11:08:23Z",
+      "updated_at": "2026-11-24T09:18:20Z",
+      "pushed_at": "2026-11-24T09:56:02Z",
+      "open_issues": 9,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"docs/splash.png\" alt=\"Aztek\"></p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/srlegrand/Aztek/releases\"><img src=\"https://img.shields.io/badge/Download-Windows%20%7C%20Linux%20%7C%20macOS-white?style=for-the-badge\" alt=\"Download\"></a>\n  <a href=\"https://github.com/srlegrand/Aztek/fork\"><img src=\"https://img.shields.io/badge/Fork%20it%20on%20GitHub-white?style=for-the-badge&logo=github&logoColor=black\" alt=\"Fork it on GitHub\"></a>\n  <a href=\"#copy-it-anywhere\"><img src=\"https://img.shields.io/badge/Copy%20it%20anywhere-white?style=for-the-badge\" alt=\"Copy it anywhere\"></a>\n  <a href=\"#fix-it-yourself\"><img src=\"https://img.shields.io/badge/Fix%20it%20yourself-white?style=for-the-badge\" alt=\"Fix it yourself\"></a>\n  <a href=\"https://srlegrand.github.io/Aztek/\"><img src=\"https://img.shields.io/badge/Website-white?style=for-the-badge\" alt=\"Website\"></a>\n  <a href=\"https://discord.gg/XDEgpWDVKa\"><img src=\"https://img.shields.io/badge/Join%20the%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white\" alt=\"Join the Discord\"></a>\n</p>\n\n## Build Linux\n\n    git clone https://github.com/srlegrand/Aztek.git\n    cd Aztek\n    ./build.sh --deps --run          # Linux\n\n## Build Windows\n\n    git clone https://github.com/srlegrand/Aztek.git\n    cd Aztek\n    .\\build.bat -Run                 # Windows, from PowerShell, with Visual Studio 2022\n\n## Build Mac\n\n    git clone https://github.com/srlegrand/Aztek.git\n    cd Aztek\n    ./build-macos.sh --deps --run    # macOS, with Homebrew\n\nPrebuilt packages are under [Install](#install).\n\n<details>\n<summary>Build details for Linux, macOS and Windows</summary>\n\n**Linux.** `--deps` installs the build tools (apt, dnf or pacman) and only needs running once; `--run` starts Aztek\nafterwards; `--install` puts the app in `~/.local/share/aztek` with a launcher in `~/.local/bin`, a menu entry and an\nicon; `--debug` builds into `build-debug/`. Rust comes from [rustup](https://rustup.rs). An active conda environment is\nfine: the script ignores conda's libraries.\n\nEvery build is self-contained and follows the VFX Reference Platform CY2027: Python 3.13, Qt and PySide6 6.8, C++20.\nThe first one fetches Qt 6.8.3 from Qt's own kit with\n[aqtinstall](https://github.com/miurahr/aqtinstall) into `build/qt`, and a relocatable Python 3.13 from\n[python-build-standalone](https://github.com/astral-sh/python-build-standalone) into `build/python` with\n`tools/python/fetch-python.sh`, checked against its SHA-256. It then installs PySide6 and shiboken6 6.8.3, the release\nbuilt for that Qt, into that Python, builds against all three and stages the result in `build/Aztek`. 6.8.3's Linux\nwheels need glibc 2.28, so the same versions build on Rocky 8. Nothing comes from the system's Qt or Python; later builds reuse the fetched ones, and\n`tools/bundle/versions.sh` holds the versions.\n\n**macOS**, with [Homebrew](https://brew.sh): `--deps` installs Xcode's command line tools, CMake, Ninja, MoltenVK and\nRust. Every build fetches Qt 6.8.3, Python 3.13 and PySide6 6.8.3 and puts them, with MoltenVK, inside\n`build/aztek.app`, signed ad hoc. `--package` also makes `dist/aztek-macos-<arch>.zip`, and `--install` puts Aztek.app\nin `~/Applications`. macOS is new: the viewport, menus and shortcuts haven't been checked there yet.\n\n**Windows**, from PowerShell or a command prompt: Visual Studio 2022 (or its Build Tools) with \"Desktop development with\nC++\", Rust from [rustup](https://rustup.rs) and CMake. Every build fetches Qt 6.8.3 for MSVC 2022, Python 3.13 and PySide6 6.8.3 into `build\\`, builds against them, and makes a folder in\n`build\\dist` that runs by itself: Qt's DLLs, the VC runtime, Python and PySide6 beside `aztek.exe`.\n\n**By hand**, on any of them, after the build script has fetched them: CMake needs the kit `tools/bundle/versions.sh`\nnames (`build/qt/6.8.3/gcc_64`) on its `CMAKE_PREFIX_PATH`, and\n`build/python/bin/python3.13` as `Python3_EXECUTABLE` (on macOS the kit's folder is `macos`). The first build compiles\nthe Rust core (a few minutes); later builds only rebuild what changed. `-DAZTEK_PYTHON=OFF` builds without Python.\n\nOptions:\n\n    aztek [scene.ma|scene.mb] [--script file.mel|file.py] [--screenshot out.png]\n\nOn KDE Plasma, Alt + drag moves windows by default: set System Settings > Window Management > Window Behavior >\nWindow Actions > Modifier key to Meta.\n\n</details>\n\n## This doesn't feel right!\n\nAztek should feel like second nature to anyone who has spent years in a 3D package. If something doesn't work, or works but\ndoesn't feel quite right (a hotkey, a drag, a default, a menu in the wrong place), press the orange **This doesn't feel\nright!** button at the far right of the shelf bar. Say what you did and what you expected; that's the whole report. It opens a filled-in\nGitHub issue, so every rough edge anyone notices ends up in one public list.\n\n![The This doesn't feel right! window over the main window](docs/feedback.png)\n\nIt is also under Help > This doesn't feel right!, and the `AztekFeedback` runtime command. The small arrow on the\nbutton's left folds it away, and brings it back; Aztek remembers which. The window's Attachments section has a box for each kind,\nall optional:\n\n- **Pictures**: the screenshot taken as the window opened (click it to add it), more screenshots after a delay, and images of your own,\n  added from a file, pasted (Ctrl+V in the description works too) or dropped on the window. Click a picture to draw on it with a pen,\n  arrows, rectangles and text, crop it or retake it;\n- **Video**: Record takes 3, 5 or 10 seconds of Aztek's windows at 720p after a delay you set, with your pointer, clicks and keys drawn\n  on, kept under GitHub's 10 MB; or attach a video of your own (`.mp4`, `.mov` or `.webm`, up to 10 MB) from a file or by dropping it;\n- **Scene**: a zipped `.ma` copy of the current scene. Your scene stays as it is, and the copy has a generic name. It holds the names of\n  everything in the scene and may hold file paths. Referenced files and textures are not included.\n\nNothing is attached until you add it, and the first of each kind asks you to confirm. **Reports are public: never include work under NDA or anything confidential. If you do, it\nis at your own risk.**\n\nSending a report makes no network request from the app. \"Open on GitHub\" opens a filled-in issue page in your browser, puts the picture on the clipboard (Ctrl+V\nin the description box) and shows the folder holding the attachments, under `feedback/` in the app's data location, so the zip can be dragged\nin. GitHub plays the video in the issue. You need a GitHub account, and nothing is public until you press Submit on that page. The window shows exactly what the page will be\nfilled in with, folded under the attachments. GitHub takes files up to 25 MB and images up to 10 MB.\n\n## Fix it yourself\n\nIf something is wrong and you can see how to fix it, fix it and send the change. Small fixes are as welcome as large\nones, and there is nothing to ask first. Three ways. **Click one to unfold it:**\n\n[CONTRIBUTING.md](CONTRIBUTING.md) has the short version, with how to say you are on an issue, what a change carries\nand what happens after you send it.\n\n<details>\n<summary><h3>By hand: build it, change it, send a patch or a pull request</h3></summary>\n\n1. **Get the tools, the source, and build it.** You need `git`, and `gh` (GitHub's command line tool) if you will\n   send a pull request. What the build itself needs is under [Build](#build).\n\n   Linux:\n\n       sudo apt install git        # or: sudo dnf install git, sudo pacman -S git\n       git clone https://github.com/srlegrand/Aztek.git\n       cd Aztek\n       ./build.sh --deps --run\n\n   For `gh`, follow [its Linux instructions](https://github.com/cli/cli/blob/trunk/docs/install_linux.md): the `gh`\n   that Debian and Ubuntu ship themselves is too old to work with GitHub (as of 11/2025, by its maintainers' note).\n\n   macOS, with [Homebrew](https://brew.sh):\n\n       brew install git gh\n       git clone https://github.com/srlegrand/Aztek.git\n       cd Aztek\n       ./build-macos.sh --deps --run\n\n   Windows, from PowerShell, with Visual Studio 2022 and Qt installed as [Build](#build) says:\n\n       winget install --id Git.Git\n       winget install --id GitHub.cli\n       git clone https://github.com/srlegrand/Aztek.git\n       cd Aztek\n       .\\build.bat -Run\n\n   Open a new terminal after installing so `git` and `gh` are found. Then, once, sign `gh` in to your GitHub account\n   (a free one will do; make it at [github.com/signup](https://github.com/signup)):\n\n       gh auth login\n\n   Answer GitHub.com, HTTPS, Yes to authenticating Git, and \"Login with a web browser\": it shows a code, opens the\n   browser, and you paste the code there. `gh auth status` says whether it worked. A patch attached to an issue needs\n   no `gh`, only the account.\n\n2. **Find the code.** The Rust core is under `crates/`: `aztek_scene` holds the nodes and commands, `aztek_geo` the mesh\n   operations, `aztek_host` the viewport and everything the interface asks of the core. The Qt interface is under\n   `app/src`. Searching for a command's name, a menu label or an error message usually lands on the right file.\n   [PARITY.md](PARITY.md) says how each area is meant to behave.\n\n3. **Make the change and check it.** `./build.sh --run` rebuilds and starts Aztek (`./build-macos.sh --run` on macOS,\n   `.\\build.bat -Run` on Windows). Each crate keeps its tests in its\n   `tests/` folder; run the ones for the crate you touched, and add one beside them if the fix can be tested.\n\n       cargo test -p aztek_scene\n\n4. **Send it**, as a patch or as a pull request.\n\n   A patch needs no fork. Make one file holding everything you changed, new files included:\n\n       git add -A\n       git diff --cached > my-fix.patch\n\n   Send it with the **Send a patch** button under [Send your fix](#send-your-fix).\n\n   A pull request, with `gh` signed in. The first command makes your own copy of the repository on GitHub and points\n   this folder at it; the last pushes your branch there and opens the pull request:\n\n       gh repo fork --remote\n       git checkout -b my-fix\n       git add -A\n       git commit -m \"What the fix does\"\n       gh pr create --fill\n\n   If git asks who you are at the commit, tell it once: `git config --global user.name \"Your Name\"` and\n   `git config --global user.email \"you@example.com\"`.\n\n</details>\n\n<details>\n<summary><h3>With an LLM, nothing to install: the source zip and a chat</h3></summary>\n\n\nNo git, no build: a chat service that takes a file and can give one back is enough.\n\n1. Download the source: [Aztek-main.zip](https://github.com/srlegrand/Aztek/archive/refs/heads/main.zip) (about 30 MB).\n2. Start a new chat, attach the zip, and send this with the problem filled in. If the service refuses the zip for its\n   size, unzip it and zip only `crates`, `app`, `CLAUDE.md` and `PARITY.md` (about 5 MB).\n\n   ```text\n   The attached zip is the source of Aztek (https://github.com/srlegrand/Aztek), a 3D application\n   with a Rust core under crates/ and a Qt interface in C++ under app/src. Unzipped, everything\n   sits in one top folder (Aztek-main).\n\n   Read CLAUDE.md first: it holds the project's rules and layout. PARITY.md says how each area\n   is meant to behave.\n\n   The problem:\n   <What you did, what happened, and what you expected instead. Paste the issue's text and\n   its number if there is one.>\n\n   Do this, in order:\n   1. Find the code responsible and tell me what causes the problem.\n   2. Make the smallest change that fixes it, in the style of the code around it. Don't\n      refactor, rename or reformat what the fix doesn't need.\n   3. If the fix can be tested, add a test in that crate's tests/ folder.\n   4. If the change alters behaviour that PARITY.md describes, update PARITY.md.\n\n   Give me the result as one file to download, named my-fix.patch: a unified diff that\n   `git apply` accepts, with paths from the repository's root (a/crates/..., b/crates/.."
+    },
+    "brief": {
+      "summary": "开源3D建模、UV、绑定与动画软件",
+      "problem": "让3D创作像熟悉软件一样，且可自行修改",
+      "highlights": [
+        "可以建模、展UV、绑定和做动画",
+        "可以用Python脚本和命令行打开场景",
+        "可以截图录屏并生成GitHub反馈报告"
+      ],
+      "target_users": [
+        "3D建模师",
+        "绑定动画师",
+        "开源工具开发者"
+      ],
+      "why_trending": "本周首次收录；31星，Rust+Vulkan的3D DCC尝试",
+      "caveat": "macOS视口和快捷键尚未验证；项目较新",
+      "category": "3D / VTuber",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "srlegrand/Aztek",
+      "score": 88,
+      "category": "3D / VTuber",
+      "reason": "建模、UV、绑定与动画的3D DCC软件",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 56.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 13,
+      "full_name": "Jared-woodruff/TA-Reborn",
+      "url": "https://github.com/Jared-woodruff/TA-Reborn",
+      "description": "Total Annihilation Reborn: a clean-room Rust reimplementation of the 1997 RTS engine. Plays your own GOG or Steam copy of TA on modern hardware: ray tracing, 20,000-unit battles, a cockpit in every unit, formations, lockstep multiplayer, replays to MP4, a launcher with ModDB mods, maps, skins and careers.",
+      "language": "Rust",
+      "total_stars": 27,
+      "forks": 1,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "cavedog",
+        "clean-room",
+        "cross-platform",
+        "egui",
+        "game",
+        "game-engine",
+        "gamedev",
+        "lockstep",
+        "map-editor",
+        "modding",
+        "multiplayer",
+        "open-source-game",
+        "ray-tracing",
+        "real-time-strategy",
+        "reimplementation",
+        "rts",
+        "rust",
+        "strategy-game",
+        "total-annihilation",
+        "wgpu"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-11-09T08:28:21Z",
+      "updated_at": "2026-11-23T10:02:50Z",
+      "pushed_at": "2026-11-24T09:58:13Z",
+      "open_issues": 0,
+      "homepage": "https://ta-reborn.com/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\"docs/media/hero.webp\" alt=\"Total Annihilation Reborn: the emblem and title over the war itself: an assault on a base at golden hour, a fleet action under the moon, an armoured charge across the desert, New Year's Eve in Midnight Square\" width=\"100%\">\n</p>\n\n<h1 align=\"center\">The war you remember. The way you imagined it.</h1>\n\n<p align=\"center\">\n  <b>Total Annihilation</b> rewrote the strategy game in 1997. <b>TA Reborn</b> is a new engine for it, written from nothing in Rust.<br>\n  Point it at the copy you own, and the same units, maps and campaigns fight in a lit, living 3D world:\n  twenty thousand units in one battle, a cockpit in every one of them, and the community's mods a click away.\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/Jared-woodruff/TA-Reborn/releases/latest\"><img src=\"docs/media/btn-download.png\" alt=\"Download TA Reborn: free, for Windows, macOS and Linux\" height=\"48\"></a>\n  &nbsp;\n  <a href=\"#trailer\"><img src=\"docs/media/btn-trailer.png\" alt=\"Watch the trailer: two minutes, filmed in the game\" height=\"48\"></a>\n  &nbsp;\n  <a href=\"https://ta-reborn.com/\"><img src=\"docs/media/btn-website.png\" alt=\"ta-reborn.com, the project's home\" height=\"48\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/Jared-woodruff/TA-Reborn/releases/latest\"><img src=\"https://img.shields.io/badge/release-1.0.9-d8b456?style=flat-square&labelColor=1f1e1a\" alt=\"Release 1.0.9\"></a>\n  <img src=\"https://img.shields.io/badge/windows%20%C2%B7%20macOS%20%C2%B7%20linux-x64%20%C2%B7%20ARM64-9e998a?style=flat-square&labelColor=1f1e1a\" alt=\"Windows, macOS and Linux, x64 and ARM64\">\n  <img src=\"https://img.shields.io/badge/built%20in-rust-9e998a?style=flat-square&labelColor=1f1e1a&logo=rust&logoColor=e2deb6\" alt=\"Built in Rust\">\n  <a href=\"#credits\"><img src=\"https://img.shields.io/badge/licence-GPL%20v3-e2deb6?style=flat-square&labelColor=1f1e1a\" alt=\"GNU GPL v3 licence\"></a>\n  <img src=\"https://img.shields.io/badge/unofficial-fan%20project-78d65c?style=flat-square&labelColor=1f1e1a\" alt=\"An unofficial fan project\">\n</p>\n\n<a id=\"trailer\"></a>\n\nhttps://github.com/user-attachments/assets/231fbe92-a6bd-4ff5-bea5-b6174d606288\n\n<p align=\"center\"><sub>The 1.0 launch trailer, filmed in the game. Its music, “The War Reborn” by Hadal Static, is an original track made for TA Reborn.</sub></p>\n\n> [!IMPORTANT]\n> **Bring your own copy.** TA Reborn contains no original game data: no units, maps, art, sound,\n> music or video. It plays a legitimately owned copy of Total Annihilation, such as the\n> *Commander Pack* on [GOG.com](https://www.gog.com/game/total_annihilation_commander_pack) or\n> [Steam](https://store.steampowered.com/app/298030/), read in place from where you installed it.\n> It is an unofficial fan project, not affiliated with or endorsed by the game's owners.\n\n<p align=\"center\">\n  <b>\n    <a href=\"#the-battlefield\">Battlefield</a> ·\n    <a href=\"#construction\">Construction</a> ·\n    <a href=\"#perspective\">Perspective</a> ·\n    <a href=\"#command\">Command</a> ·\n    <a href=\"#ways-to-play\">Ways to play</a> ·\n    <a href=\"#the-launcher\">Launcher</a> ·\n    <a href=\"#worlds\">Worlds</a> ·\n    <a href=\"#mods\">Mods</a> ·\n    <a href=\"#the-archives\">Archives</a> ·\n    <a href=\"#get-started\">Get started</a> ·\n    <a href=\"#faq\">FAQ</a> ·\n    <a href=\"#build\">Build</a>\n  </b>\n</p>\n\n<a id=\"then-and-now\"></a>\n\n## One battle, two eras\n\n<p align=\"center\">\n  <img src=\"docs/media/then-now.webp\" alt=\"The same battle side by side and in step. Left: TA's own top-down view with its 1997 panel, Peewees and laser towers holding off Core kbots. Right: the same instant from TA Reborn's camera, low over the grass at sunset, the towers firing into the explosions\" width=\"100%\">\n</p>\n\nThat is **one battle, simulated once and drawn twice**. On the left, Total Annihilation as it has\nlooked since 1997: its own top-down view and its own panel. Both are still in TA Reborn, a key and\na setting away. On the right, the same instant through TA Reborn's camera.\n\nTA Reborn replaces the engine and nothing else. It reads the game's archives where you installed\nthem and plays what is in them: every unit by its own script, every map, every campaign mission,\nevery sound. Everything round them is new.\n\n<p align=\"center\">\n  <img src=\"docs/media/numbers.png\" alt=\"20,000 units in one battle · 29 new worlds · 8 cockpits to ride in · 134 achievements · 14 languages · 3 operating systems\" width=\"100%\">\n</p>\n\n<a id=\"features\"></a>\n\n## Everything at a glance\n\n<table>\n  <tr>\n    <td width=\"33%\"><a href=\"#the-battlefield\"><img src=\"docs/media/tile-battlefield.webp\" alt=\"The battlefield: two battle lines meet in the rain\" width=\"100%\"></a></td>\n    <td width=\"33%\"><a href=\"#the-battlefield\"><img src=\"docs/media/tile-swarm.webp\" alt=\"20,000 units: the camera pulling back from the front to the whole map\" width=\"100%\"></a></td>\n    <td width=\"33%\"><a href=\"#the-battlefield\"><img src=\"docs/media/tile-nukes.webp\" alt=\"Nuclear strikes: a fireball over an island base by night\" width=\"100%\"></a></td>\n  </tr>\n  <tr>\n    <td><a href=\"#construction\"><img src=\"docs/media/tile-construction.webp\" alt=\"Construction: a metal extractor rises under the nano-lathe\" width=\"100%\"></a></td>\n    <td><a href=\"#perspective\"><img src=\"docs/media/tile-cockpits.webp\" alt=\"A cockpit in every unit: a fighter's canopy in a dogfight\" width=\"100%\"></a></td>\n    <td><a href=\"#command\"><img src=\"docs/media/tile-command.webp\" alt=\"Command: the radial menu opens on a laser tower\" width=\"100%\"></a></td>\n  </tr>\n  <tr>\n    <td><a href=\"#ways-to-play\"><img src=\"docs/media/tile-modes.webp\" alt=\"Campaigns and Conquest: a galaxy of worlds to take\" width=\"100%\"></a></td>\n    <td><a href=\"#ways-to-play\"><img src=\"docs/media/tile-replays.webp\" alt=\"Replays, casts and MP4 export: a replay as a broadcast\" width=\"100%\"></a></td>\n    <td><a href=\"#the-launcher\"><img src=\"docs/media/tile-launcher.webp\" alt=\"Launcher and mods: the launcher's pages\" width=\"100%\"></a></td>\n  </tr>\n  <tr>\n    <td><a href=\"#worlds\"><img src=\"docs/media/tile-worlds.webp\" alt=\"29 new worlds: rocks adrift in space\" width=\"100%\"></a></td>\n    <td><a href=\"#the-battlefield\"><img src=\"docs/media/tile-skins.webp\" alt=\"Skins: an army marching in four liveries\" width=\"100%\"></a></td>\n    <td><a href=\"#the-archives\"><img src=\"docs/media/tile-archives.webp\" alt=\"The archives: a bedroom in 1997, the CRT switching on\" width=\"100%\"></a></td>\n  </tr>\n</table>\n\n<p align=\"center\"><sub>Every tile is the game itself, and a link to its chapter.</sub></p>\n\n<br>\n\n<a id=\"the-battlefield\"></a>\n<p align=\"center\"><img src=\"docs/media/chapter-battlefield.webp\" alt=\"01 · The Battlefield: TA's worlds, lit as they never were. The Arm's and the Core's firing lines meet on Sapphire Reach, aircraft fighting overhead\" width=\"100%\"></p>\n\nEvery world has a sky and a light of its own. Hills throw long shadows and steep faces stand as\nwalls of rock. Surf breaks on the shores and ships leave wakes. Lava crusts over and glows through\nits cracks. Rain soaks the ground and stands in puddles that mirror the sky. And from TA's usual\nheight, the battle keeps the art exactly as it was painted.\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\"><img src=\"docs/media/sea.webp\" alt=\"Arm and Core fleets trade fire across the water at sunset\" width=\"100%\"><br><sub><b>War at sea</b>: bow waves, wakes, hulls seen through the water</sub></td>\n    <td width=\"50%\" align=\"center\"><img src=\"docs/media/thunders.webp\" alt=\"Arm Thunder bombers come out of the setting sun over a Core base\" width=\"100%\"><br><sub><b>The air war</b>: Thunders out of the setting sun</sub></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><img src=\"docs/media/rain.webp\" alt=\"Two battle lines meet on a green highland in a rain shower\" width=\"100%\"><br><sub><b>Weather</b>: showers that soak the ground and dry after</sub></td>\n    <td align=\"center\"><img src=\"docs/media/lava.webp\" alt=\"The Core holds a river of lava by night\" width=\"100%\"><br><sub><b>Lava worlds</b>: the melt lights the rock</sub></td>\n  </tr>\n  <tr>\n    <td align=\"center\"><img src=\"docs/media/krogoth.webp\" alt=\"A Krogoth walks out of the dusk on Cinder Basin, missiles falling round it\" width=\"100%\"><br><sub><b>Experimentals</b>: a Krogoth walks out of the dusk</sub></td>\n    <td align=\"center\"><img src=\"docs/media/nukes.webp\" alt=\"A nuclear strike on an island base by night: the flash, the shockwave running out, the fireball climbing over the moonlit sea\" width=\"100%\"><br><sub><b>Nuclear strikes</b>: the flash, the shockwave, the fireball</sub></td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <img src=\"docs/media/swarm.webp\" alt=\"Twenty thousand units on Reactor Grid at dusk: the camera starts behind two of them at the front and pulls back until the whole map and its seam of fire are in view\" width=\"100%\">\n  <br><sub><b>Twenty thousand units, one battle.</b> The camera pulls back from two of them until their front is a seam of fire across the map</sub>\n</p>\n\n<p align=\"center\">\n  <img src=\"docs/media/art-styles.jpg\" alt=\"A Bulldog and a Raider in Enhanced Classic (left) and Reborn (right): armour plates, bolts and road wheels\" width=\"100%\">\n  <br><sub><b>Two art styles</b>: Enhanced Classic keeps TA's own models and paint; Reborn rebuilds every unit, mods' too, with armour plates, bolts and road wheels</sub>\n</p>\n\n<details>\n<summary><b>More about the battlefield</b>: the renderer, water, time and weather, weight, skins</summary>\n\n<br>\n\n<table>\n  <tr>\n    <td width=\"50%\" align=\"center\"><img src=\"docs/media/ford.webp\" alt=\"An Arm column fords a river at sunrise\" width=\"100%\"><br><sub><b>Time of day</b>: an Arm column fords the river at first light</sub></td>\n    <td width=\"50%\" align=\"center\"><img src=\"docs/media/wildfire.webp\" alt=\"Pyros set a wood alight under the moon\" width=\"100%\"><br><sub><b>Fire</b>: a wood burning under the hunter's moon</sub></td>\n  </tr>\n</table>\n\n- **A modern renderer for TA's art**: physically based lighting, soft shadows that harden at the\n  contact, ambient occlusion, HD surfaces that wear paint, soot and embers, and the ground's own\n  materials (sand, soil, turf, rock, snow, ice, volcanic rock, metal, lunar dust) told from TA's\n  painted colours. On cards that trace rays: ray-traced shadows, occlusion and reflections.\n- **Worlds of their own**: smoke over lava, smog over metal and cities, violet over crystal, a black,\n  starry sky on the moon; dull worlds graded as their painters meant them. Beyond the map's edge\n  the world runs on: the map's own ground across the edge, then land and sea like the map's round\n  that stretch of it (a metal world's city of plating, the moon's craters), never copies of it.\n- **Water**: surf and whitecaps, shallows graded by depth with caustics on the bed, bow waves and\n  wakes behind ships and hovercraft, hulls and wading legs seen through the water. Lava crusts and\n  glows; acid looks like acid.\n- **Time and weather**: dawn, dusk, a moonlit night (bases light up, aircraft blink their beacons)\n  or a full day and night; showers that soak the ground and dry; the wind across the land, gusts\n  running over the grass in soft cat's paws, sand streaming and snow drifting the way it blows.\n- **Battles with weight**: vehicles squat, dip and lean on their suspension; guns kick their units\n  back and big blasts shove the units round them; walkers walk in step with the ground and leave\n  footprints the shape of their feet; aircraft fall trailing smoke; ships list and go under;\n  shells landing in the sea throw up spray.\n- **3D close to the ground**: TA's painted trees, rocks, crystals, ruins, pipework and relays stand\n  as models of TA Reborn's own when the camera comes down to them.\n- **Skins**: nineteen built in (Reborn's own; Heritage's battle-worn TA as it was; desert, winter,\n  woodland, navy, urban, tiger and night camouflage; Christmas, Halloween and parade dress; and the\n  colours of seven nations), for your army, the enemy or both, and an editor"
+    },
+    "brief": {
+      "summary": "Rust重写的《横扫千军》开源游戏引擎",
+      "problem": "老RTS难在新硬件上运行，它用新引擎读取原版游戏数据",
+      "highlights": [
+        "可以读取GOG或Steam正版TA并直接开战",
+        "可以在一场战斗里模拟两万个单位",
+        "可以把回放导出为MP4视频"
+      ],
+      "target_users": [
+        "RTS老玩家",
+        "Rust引擎开发者",
+        "模组作者"
+      ],
+      "why_trending": "本周首次收录，Star不多；老RTS引擎重写较稀缺",
+      "caveat": "不含原版游戏数据，需自备GOG或Steam正版",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Jared-woodruff/TA-Reborn",
+      "score": 84,
+      "category": "游戏开发",
+      "reason": "经典RTS引擎重实现，含Mod与录像导出",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 54.8
+    }
+  }
+]
