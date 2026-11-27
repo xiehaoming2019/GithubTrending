@@ -1,0 +1,588 @@
+[
+  {
+    "repository": {
+      "rank": 1,
+      "full_name": "elementalsouls/Claude-BugHunter",
+      "url": "https://github.com/elementalsouls/Claude-BugHunter",
+      "description": "A Claude Code skill bundle for bug hunting and external red-team work - 85 skills, 16 slash commands, 681 disclosed-report patterns curated across 24 core vulnerability classes, plus enterprise identity + infrastructure attack matrices.",
+      "language": "Python",
+      "total_stars": 25147,
+      "forks": 2559,
+      "stars_today": 1597,
+      "source": "trending",
+      "history_label": "热度再升",
+      "star_gain": 1623
+    },
+    "details": {
+      "topics": [
+        "ai-security",
+        "anthropic",
+        "application-security",
+        "bug-bounty",
+        "bugbounty",
+        "bugcrowd",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "ethical-hacking",
+        "hackerone",
+        "offensive-security",
+        "pentesting",
+        "red-team",
+        "security-tools",
+        "web-security"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-05-05T11:22:32Z",
+      "updated_at": "2026-11-27T08:47:14Z",
+      "pushed_at": "2026-11-27T04:27:28Z",
+      "open_issues": 10,
+      "homepage": "https://elementalsouls.github.io/Claude-BugHunter/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "![claude-bughunter banner](assets/banner-v2.svg)\n\n# claude-bughunter\n\n> A self-contained Claude skill bundle for bug hunting and external red-team work · **85 skills** · 16 slash commands · **681 disclosed-report patterns** (433 now individually cited & auditable) across 24 core vulnerability classes · enterprise identity + infrastructure attack matrices · engagement-folder scaffolding · Burp MCP integration · battle-tested across authorized red-team and bug-hunting engagements, plus public training platforms (DVWA, OWASP Juice Shop, Hacker101, testphp.vulnweb.com).\n\nBuilt by **[Sachin Sharma](https://www.linkedin.com/in/sachinsharma8080/)** — Bug Hunting & GenAI Security Research.\n\n<p align=\"center\">\n  <sub>SPONSORED BY</sub>\n  <br/>\n  <br/>\n  <a href=\"https://www.apismart.ai/\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/apismart-dark.png\">\n      <img alt=\"ApiSmart\" src=\"assets/sponsors/apismart-light.png\" height=\"28\" align=\"middle\">\n    </picture>\n  </a>\n  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n  <a href=\"https://threatwatch360.com\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/sponsors/tw360-badge-dark.svg\">\n      <img alt=\"ThreatWatch360\" src=\"assets/sponsors/tw360-badge-light.svg\" height=\"26\" align=\"middle\">\n    </picture>\n  </a>\n</p>\n\n---\n\n## What is this?\n\n`claude-bughunter` is a drop-in skill bundle for the [Claude Code skills system](https://docs.claude.com/en/docs/claude-code/skills). Install once and Claude Code stops being a chatbot and starts behaving like a senior bug-hunting researcher or red-team operator: it knows the techniques, the chain templates, the VRT mappings, the platform CVE chains, and the hygiene — and it stays in scope.\n\nFour layers stack:\n\n- **Think** — `bb-methodology` + `redteam-mindset`: the 5-phase non-linear workflow, critical-thinking framework, and red-team operator discipline.\n- **Hunt webapps** — 58 `hunt-*` skills curated from 681 disclosed HackerOne reports: per-class detection patterns, payloads, bypass tables, and chain templates.\n- **Hit the perimeter** — enterprise platform chains (M365/Entra, Okta, vCenter, SSL-VPN appliances, SharePoint, cloud IAM): current 2024–2026 CVE chains + post-credential escalation.\n- **Ship it** — `triage-validation` + reporting + `evidence-hygiene`: the 7-Question Gate, VRT-aware severity, OOS rebuttals, PII redaction, and red-team deliverables.\n\nAll triggered automatically by topic — describe what you're testing in plain English and the relevant skill loads. No invocation by name.\n\n---\n\n## Quickstart\n\n**Option A — install as a Claude Code plugin (recommended).** From inside Claude Code:\n\n```text\n/plugin marketplace add elementalsouls/Claude-BugHunter\n/plugin install claude-bughunter@elementalsouls\n```\n\nAll 85 skills + 16 commands load namespaced under `claude-bughunter:` and update when you bump the plugin version — no files copied into `~/.claude/`.\n\n**A HackerOne account is optional.** The install asks for a HackerOne API username and token. They only let the HackerOne MCP read your private programs and your own reports; leave both blank if you don't need that. Every skill, command and the MCP's public tools (duplicate search, program scope) work without them.\n\n**Option B — copy install (no plugin system / pin to a clone):**\n\n```bash\ngit clone https://github.com/elementalsouls/Claude-BugHunter.git\ncd Claude-BugHunter\n```\n\n```bash\n# macOS / Linux\nbash scripts/install.sh\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1\n```\n\nBoth copy the skills + commands into `~/.claude/` (macOS/Linux) or `%USERPROFILE%\\.claude\\` (Windows) and wire the `hunt` engagement scaffolder.\n\n**What each install path gives you:**\n\n| Path | 85 skills + 16 slash commands | `cbh` CLI | `hunt` scaffolder |\n|---|---|---|---|\n| **A — plugin** | ✅ namespaced under `claude-bughunter:` | ➕ separate `pipx install` | ❌ clone-only |\n| **B — copy install** | ✅ copied into `~/.claude/` | ✅ from the clone | ✅ from the clone |\n\nThe plugin is the fastest path to the skills + slash commands. The terminal-native\n`cbh` runner installs standalone — `pipx install claude-bughunter` (or `pipx install git+https://github.com/elementalsouls/Claude-BugHunter` for the tip of main)\n— so plugin users can add it without a full clone (see [`cbh` CLI](docs/cbh-cli.md)).\nThe `hunt` engagement scaffolder ships with the clone (Option B).\n\nThat's it. Open Claude Code and describe what you're testing in plain English — the right skill loads automatically, no invocation by name:\n\n```text\n> Testing acme.com — an in-scope HackerOne target. Run recon and rank the surface.\n\n  ⟳ loading skills: web2-recon, offensive-osint, bb-methodology …\n    → subdomain enum (subfinder + crt.sh) … 47 hosts\n    → live hosts (httpx) … 12 · tech fingerprint … 6 distinct stacks\n    → ranked surface: api.acme.com (GraphQL, introspection ON)  ← start here\n                      auth.acme.com (OAuth, SSO)               ← hunt-oauth\n\n  Next: want me to probe the GraphQL introspection + OAuth redirect_uri?\n```\n\n→ Full [Installation guide](INSTALL.md) · [Usage guide](USAGE.md) · [searchable skill catalog](docs/skills.md).\n\n> The block above is an illustrative transcript. To record a real demo of your own session: `asciinema rec demo.cast` → upload to [asciinema.org](https://asciinema.org) and drop the badge here.\n\n---\n\n## Runs on multiple agent harnesses\n\n![One install, agent harnesses — Claude Code, OpenCode, Codex CLI, Hermes Agent, Google AntiGravity](assets/harness-routing.svg)\n\nThe skills are plain [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) — the same `SKILL.md` format that **Claude Code · OpenCode · OpenAI Codex CLI · Hermes Agent · Google AntiGravity** all load. One command installs them everywhere:\n\n```bash\n# macOS / Linux\nbash scripts/install.sh --all --burp-mcp\n\n# Windows (PowerShell)\npwsh ./scripts/install.ps1 -All -BurpMcp\n```\n\n| Harness | Target Skill Directory | Flag |\n|---|---|---|\n| **Claude Code** (baseline) | `~/.claude/skills/` | *(default)* |\n| **OpenCode** | reads `~/.claude/skills/` & `~/.agents/skills/` | *(default)* / `--agents` |\n| **OpenAI Codex CLI** | `~/.agents/skills/` | `--agents` |\n| **Hermes Agent** | `~/.hermes/skills/` | `--hermes` |\n| **Google AntiGravity** | `~/.gemini/config/skills/` | `--antigravity` |\n\n`--all` (`-All`) detects installed harnesses and copies skills to each harness's path (`~/.claude/skills`, `~/.agents/skills`, `~/.hermes/skills`, `~/.gemini/config/skills`); `--burp-mcp` (`-BurpMcp`) wires the Burp MCP server into each. The full *knowledge* layer ports to all five — the slash commands and `/hunt` engine stay Claude-Code-only by design.\n\n→ [Multi-harness guide](docs/multi-harness.md)\n\n---\n\n## Star History\n\n<a href=\"https://github.com/elementalsouls/Claude-BugHunter/stargazers\">\n <picture>\n   <source media=\"(prefers-color-scheme: dark)\" srcset=\"assets/star-history-dark.svg\" />\n   <source media=\"(prefers-color-scheme: light)\" srcset=\"assets/star-history-light.svg\" />\n   <img alt=\"Star history chart for Claude-BugHunter\" src=\"assets/star-history-light.svg\" width=\"840\" />\n </picture>\n</a>\n\n<sub>Chart is self-hosted — regenerate with `python3 scripts/gen_star_history.py` (needs `gh auth login`).\nRefreshes automatically each day via `.github/workflows/star-history.yml`.</sub>\n\n---\n\n\n## Scope — what this bundle is for, and what it isn't\n\nThis bundle covers the **external attack surface** — anything reachable from the internet without first compromising an internal endpoint.\n\n### In scope\n\n- **Bug bounty hunting** — web apps, APIs, SaaS, GraphQL, OAuth, JWT, file upload, IDOR, SSRF, RCE chains\n- **Web application pentesting** — full hunt-* coverage of OWASP-mapped bug classes + discipline rules\n- **External red-team engagements** — initial-access against internet-facing enterprise estate: M365 / Entra ID, Okta-as-IdP, SharePoint on-prem (ToolShell + legacy SOAP), VMware vCenter / Workspace ONE, SSL VPN appliances (Cisco / Fortinet / Citrix / Palo Alto / Pulse / SonicWall / F5), Android APK red-team, supply-chain recon\n- **Cloud misconfig + post-credential escalation** — public S3, IMDS chains, STS AssumeRole, cross-account confused-deputy\n- **Recon + OSINT** — subdomain enum, identity-fabric mapping, certificate transparency, JS analysis, secret scanning\n- **Reporting** — H1, Bugcrowd (VRT-aware), Intigriti, Immunefi, plus client-facing red-team deliverable format\n\n### Out of scope (deliberate — not gaps, design decisions)\n\n- **Internal Active Directory attacks** — BloodHound, Kerberoasting, ASREProast, DCSync, Pass-the-Hash, AD CS abuse, ntlmrelayx, Responder, PetitPotam, etc. Different operational risk profile; needs different tooling and judgment. **Future bundle, not this one.**\n- **C2 frameworks** — Cobalt Strike, Sliver, Mythic, Havoc, BRC4 tradecraft. Out of scope for external-only engagement model.\n- **Post-exploit / persistence / lateral** — Mimikatz/comsvcs LSASS dumping, golden/silver tickets, named-pipe impersonation, persistence (registry, scheduled tasks, WMI events, COM hijacking), token theft. These start after the perimeter has already broken — different bundle territory.\n- **Evasion** — AMSI bypass, ETW patching, AV/EDR bypass. Tied to C2 tradecraft above.\n- **iOS pentesting / hardware / RF / ICS** — out of scope by design.\n- **Binary exploitation / kernel pwn / browser internals** — different skill universe.\n\nIf you're running an internal red team that includes domain-takeover chains via Kerberos or lateral movement, **this bundle won't help you in those phases** — and we'd rather say that up front than have you find out mid-engagement. The external surface handoff to internal-RT tooling (Impacket, NetExec, CrackMapExec, Rubeus, Certify, BloodHound) is intentionally outside our scope. **Coverage for internal AD and post-exploit may come in a future update.**\n\n---\n\n## What's inside\n\n**85 skills**, auto-loaded by topic — no invocation by name. Coverage across the external attack surface:\n\n| Category | # | Examples |\n|---|---|---|\n| Hunt — web app vuln classes | 58 | XSS, SQLi, SSRF, IDOR, LFI, SSTI, XXE, CSRF, CORS, open-redirect, SharePoint, ASP.NET/NTLM |\n| Enterprise platform attack ★ | 10 | M365/Entra, Okta, cloud-IAM-deep, vCenter, enterprise VPN, APK/iOS red-team pipelines, supply-chain recon |\n| Reporting & validation | 7 | triage-validation, evidence-hygiene, report-writing, bugcrowd-reporting |\n| Recon & OSINT | 5 | web2-recon, offensive-osint, osint-methodology, recon-scope-triage |\n| Methodology & mindset | 5 | bb-methodology, bug-bounty, redteam-mindset, bb-local-toolkit |\n\nFull searchable catalog → **[docs/skills.md](docs/skills.md)**. Also ships **16 slash commands** (`/hunt`, `/recon`, `/report`, …) and a deterministic **engagement engine** (`engine/`) that maps a target's attack surface and routes each finding to the skill that handles it.\n\n---\n\n## How it works\n\nA 6-phase, non-linear workflow — **recon → map & rank → hunt → validate → report** — with scope enforced in code and a **7-Question Gate** before anything is submitted. Two ways to drive it:\n\n- **Plain English** — describe what you're testing and the relevant skill loads automatically.\n- **`/hunt` scaffold + `cbh` CLI** — engagement-folder structure, state, and orchestration.\n\n→ [Usage guide & worked example](USAGE.md) · [6-phase architecture & skill-to-phase map](docs/architecture.md) · [`cbh` CLI](docs/cbh-cli.md)\n\n---\n## Authorization\n\nThese skills are intended for assets you **own** or have **written authorization to assess** (bug-bounty in-scope assets, pentest engagement letters, CTF challenges, your own infrastructure).\n\nThe skills include validation gates that auto-trigger when you point Claude at unverified third-party targets — `triage-validation`'s 7-Question Gate explicitly asks whether the asset is in scope (Q3) and on the program's accepted-impact list (Q2). The `bugcrowd-reporting` skill includes researcher-side hygiene (Bugcrowdninja a"
+    },
+    "brief": {
+      "summary": "Claude Code 漏洞赏金与外部红队技能包",
+      "problem": "把漏洞挖掘流程、报告模式与红队规范打包给 AI 助手",
+      "highlights": [
+        "可以按目标自动加载侦察与漏洞技能",
+        "可以用 16 个斜杠命令跑漏洞挖掘流程",
+        "可以接入 Burp MCP 做测试与证据整理"
+      ],
+      "target_users": [
+        "漏洞赏金猎人",
+        "红队工程师",
+        "应用安全测试人员"
+      ],
+      "why_trending": "今日新增 1597 Star，热度再升",
+      "caveat": "仅限授权测试，资料未说明误报率",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "elementalsouls/Claude-BugHunter",
+      "score": 70,
+      "category": "AI Agent / Skills",
+      "reason": "Agent Skill 包，聚焦安全红队",
+      "generated_by_ai": true,
+      "velocity_score": 97,
+      "freshness_score": 40,
+      "ranking_score": 65.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "mvanhorn/last30days-skill",
+      "url": "https://github.com/mvanhorn/last30days-skill",
+      "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
+      "language": "Python",
+      "total_stars": 76010,
+      "forks": 6714,
+      "stars_today": 759,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 759
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "artificial-intelligence",
+        "automation",
+        "bot",
+        "command-line",
+        "data-science",
+        "dsh",
+        "dsh-plugin",
+        "golang",
+        "instagram",
+        "llms",
+        "nlp",
+        "osint",
+        "polymarket",
+        "python3",
+        "reddit",
+        "terminal",
+        "tiktok",
+        "twitter",
+        "youtube"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-01-23T20:37:37Z",
+      "updated_at": "2026-11-27T08:45:33Z",
+      "pushed_at": "2026-11-27T06:30:50Z",
+      "open_issues": 16,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "# /last30days\n\nEnglish | [Français](README.fr.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Português (Brasil)](README.pt-BR.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [العربية](README.ar.md) | [فارسی](README.fa.md) | [Türkçe](README.tr.md) | [Tiếng Việt](README.vi.md) | [Русский](README.ru.md)\n\n<p align=\"center\">\n  <img src=\"media/pr-assets/last30days-ad.gif\" width=\"720\" alt=\"last30days - an AI agent-led search engine that searches people, not editors\" />\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/mvanhorn/last30days-skill\">\n    <img src=\"https://img.shields.io/badge/%231-Repository%20Of%20The%20Day-6f42c1?style=for-the-badge&logo=github&label=GITHUB%20TRENDING\" alt=\"GitHub Trending #1 Repository Of The Day\" />\n  </a>\n  <br/>\n  <a href=\"https://trendshift.io/repositories/21997\" target=\"_blank\">\n    <img src=\"https://trendshift.io/api/badge/repositories/21997\" alt=\"mvanhorn/last30days-skill | Trendshift\" style=\"width: 250px; height: 55px;\" width=\"250\" height=\"55\"/>\n  </a>\n  <br/>\n  <a href=\"https://github.com/mvanhorn/last30days-skill/actions/workflows/validate.yml\">\n    <img src=\"https://github.com/mvanhorn/last30days-skill/actions/workflows/validate.yml/badge.svg\" alt=\"Validate status\" />\n  </a>\n</p>\n\n**An AI agent-led search engine scored by upvotes, likes, and real money - not editors.**\n\nThis README tracks the current v4 pipeline. The runtime skill spec lives in [skills/last30days/SKILL.md](skills/last30days/SKILL.md), which is the source of truth for the latest command and setup behavior.\n\n**Claude Code (recommended — auto-updates via marketplace):**\n```\n/plugin marketplace add mvanhorn/last30days-skill\n/plugin install last30days\n```\n\n**Codex, Cursor, Copilot, Gemini CLI, or any of 50+ [Agent Skills](https://agentskills.io) hosts:**\n```\nnpx skills add mvanhorn/last30days-skill -g\n```\n(`-g` installs globally for your user, available across all projects. Drop it to scope per-project.)\n\nMore install options (claude.ai web, OpenClaw, manual) in the [Install](#install) section below.\n\nZero config. Reddit, HN, Polymarket, and GitHub work immediately, and so do patent filings and careers pages when your topic is a company. Run it once and the setup wizard unlocks X, YouTube, TikTok, arXiv, Techmeme, and more in 30 seconds.\n\n---\n\nReddit upvotes. X likes. YouTube transcripts. TikTok engagement. Polymarket odds backed by real money and insider information. That's millions of people voting with their attention and their wallets every day. /last30days searches all of it in parallel, scores it by what real people actually engage with, and an AI agent judge synthesizes it into one brief.\n\nGoogle aggregates editors. /last30days searches people.\n\nYou can't get this search anywhere else because no single AI has access to all of it. Google search doesn't touch Reddit comments or X posts. ChatGPT has a deal with Reddit but can't search X or TikTok. Gemini has YouTube but not Reddit. Claude has none of them natively. Each platform is a walled garden with its own API, its own tokens, its own auth. But you can bring your own keys and browser sessions, and suddenly an AI agent can search all of them at once, score them against each other, and tell you what actually matters.\n\nThat's the unlock. Not one better search engine. A dozen disconnected platforms, bridged by an agent.\n\n```\n/last30days Peter Steinberger\n```\n\nYou have a meeting tomorrow. You Google them. You get their LinkedIn from 2023. /last30days gives you what they're actually doing this month: joined OpenAI to work on Codex, fighting Anthropic's ban on third-party agents, shipping 23 PRs at 85% merge rate, building \"LobsterOS\" for cross-device agent control, and r/ClaudeCode hit 569 upvotes debating whether he's a hero or \"insufferable.\" Scattered across X posts, Reddit threads, YouTube transcripts, and GitHub commits. None of it was on Google.\n\n## Why this exists\n\nI built it to keep up in AI. Everything changes every day and the Reddit and X nerds are always on top of it first. I needed better prompts, and the training data was always months behind what the community had already figured out.\n\nBut it turned into something bigger. Now I run it before a sales call to know the last 30 days truth about a business. Before a meeting to read someone's recent tweets and podcast transcripts. Before a Disney World trip to know which rides are closed and what the community says about Genie+. Before I build anything to know what problems people are actually hitting.\n\nIf you're meeting with a CEO, have you read all their tweets and YouTube transcripts from the last 30 days? I have.\n\n## Sources, scored by the people\n\n| Source | What the people tell you |\n|--------|--------------------------|\n| **Reddit** | The unfiltered take. Top comments with real upvote counts, free, no API key. The real opinions that Google buries. With your OK, it can also search as your own logged-in Reddit account for more threads and live scores. |\n| **X / Twitter** | The hot take, the expert thread, the breaking reaction. First to know, first to argue. |\n| **YouTube** | The 45-minute deep dive. Full transcripts searched for the 5 quotable sentences that matter. |\n| **TikTok** | The creator reaching 3.6M people with a take you'll never find on Google. |\n| **Instagram Reels** | The influencer perspective with spoken-word transcripts. The visual culture signal. |\n| **Hacker News** | The developer consensus. 825 points, 899 comments. Where technical people actually argue. |\n| **Polymarket** | Not opinions. Odds. Backed by real money. 96% confidence on album sales. 4% on an acquisition. The report puts a market's odds on one line under the story it bears on, with how much they moved. |\n| **GitHub** | For people: PR velocity, top repos by stars, release notes. For topics: issues and discussions. |\n| **Digg** | Story clusters from every Digg topic (AI, tech, world and business, sports, science, gaming, entertainment), ranked by Digg Score, with attributable inline quotes from X (no X auth required). Auto-enabled when `digg-pp-cli` is on PATH. An older `digg-pp-cli` still works, on AI and tech only and without scores. |\n| **arXiv** | The papers behind the hype. New research in the window, free, no API key. Auto-enabled when `arxiv-pp-cli` is on PATH (first-run setup installs it). |\n| **Techmeme** | The tech-news editorial layer, date-windowed to your 30 days. Free, no API key. Auto-enabled when `techmeme-pp-cli` is on PATH (first-run setup installs it). |\n| **Yahoo Finance** | The market's read on a company. The share-price move over your 30 days, next to the S&P 500 for US listings. Free, no API key. Shows when your topic is a listed company or the person who leads one and `yahoo-finance-pp-cli` is on PATH (first-run setup installs it). |\n| **LinkedIn** | The professional signal. Posts and articles, with articles weighted as high signal. |\n| **Meta Ads** | What a brand is paying to say. Live Meta ad creatives launched this month, with copy, promo codes, and spoken transcripts. |\n| **StockTwits** | Trader sentiment. Auto-activates when your topic is a ticker or crypto. |\n| **Threads** | The post-Twitter text layer. Conversations from creators and brands. |\n| **Pinterest** | Visual discovery. Pins, saves, and comments on products and ideas. |\n| **Xiaohongshu (RED)** | Chinese lifestyle, product, and creator signals. Requested explicitly with `--search xhs` when a logged-in x-mcp browser plugin or `xiaohongshu-mcp` service is running locally. |\n| **Bluesky** | The decentralized social layer. AT Protocol posts from the post-Twitter migration. |\n| **Perplexity** | Controlled Agent API synthesis, OpenRouter Sonar fallback, raw Search API rows, and explicit Deep Research. |\n| **DEV Community (dev.to)** | Developer articles and top comments through the public, keyless API. Opt in with `--devto-tags`, `--search devto`, or `INCLUDE_SOURCES=devto`. |\n| **Truth Social** | Posts searched with `TRUTHSOCIAL_TOKEN`; available when authenticated. |\n| **Telegram** | Public posts from named channels. Opt-in; requires `SCRAPECREATORS_API_KEY` and a channel list. No keyword discovery. |\n| **Trustpilot** | Company TrustScore, review count, and an AI summary of customer feedback. Opt-in; requires `trustpilot-pp-cli` on PATH and a usable session. |\n| **Amazon** | Product ratings, prices, and customer reviews. Opt-in; requires an authenticated `brightdata` CLI and uses your Bright Data credits. |\n| **DripStack** | Financial newsletters and analyst writeups through a public, keyless API. Opt in with `--search dripstack` or `INCLUDE_SOURCES=dripstack`. |\n| **Jobs / careers pages** | What a company is hiring for, read from its own careers page (Workday, Apple, Amazon, Google, Microsoft, Netflix, Oracle, and more). A company run reads it automatically, and roles that hint at something unannounced become Jobs Page Secret Signals. Also selected with `--hiring-signals`, `--search jobs`, or the research plan. |\n| **Patents** | A company's new US patent filings, as evidence of what it is building before it ships. Free, no API key. Shows when your topic is a company. A filing becomes a Patent Secret Signal only when it is out of character for the company or describes something it has not shipped or announced. |\n| **Local corpus** | Your local Markdown and text files, plus PDFs when `pdftotext` is on PATH. Opt in with `--corpus` or `LAST30DAYS_CORPUS_DIRS`. |\n| **Web** | The editorial coverage, the blog comparisons. One signal of many, not the only one. |\n\nAsk `/last30days` to include the sources you need. Availability depends on credentials, installed tools, the topic, and explicit opt-ins. See [source requirements](CONFIGURATION.md#source-requirements) for configuration.\n\nA Reddit thread with 1,500 upvotes is a stronger signal than a blog post nobody read. A TikTok with 3.6M views tells you more about what's culturally relevant than a press release. Polymarket odds backed by $66K in volume are harder to argue with than a pundit's guess.\n\nThe synthesis ranks by what real people actually engaged with. Social relevancy, not SEO relevancy.\n\n## What people actually use it for\n\n**Before a meeting.** `/last30days Peter Steinberger` - joined OpenAI's Codex team, fighting Anthropic's ban on third-party agents, 23 PRs merged at 85% merge rate on GitHub, building LobsterOS for cross-device agent control. r/ClaudeCode: \"Ever since OpenClaw released, it was widely known that if you run it through anything other than the API, you were gonna get banned eventually\" (227 upvotes). That's not on LinkedIn.\n\n**To see what a company is building before it ships.** `/last30days Apple` - the Jobs Page Secret Signal flagged a new director role testing whether requests trigger transactions that run through partner APIs and financial systems, which reads like quality control for an assistant that completes purchases. The Patent Secret Signal flagged an application for changing a device's state by tapping it in a saved photo of your room. Polymarket put Apple at 91% to be the world's largest company at year end. `/last30days Alphabet` found a product manager role for \"YouTube Ads Agentic Buyflows\", and its stock line read down 17.6% over 30 days while the S&P 500 fell 3.6%, with the worst day on Oct 29 (-12.6%). For a hiring-only report, add `--hiring-signals`.\n\n**To find the topic before it peaks.** Ask `/last30days what's exploding in AI agents?` and the skill switches to discovery mode: the engine sweeps Reddit category listings, Hacker News front/best stories, Digg stories, and X when authenticated; your agent judges the nominations (names, junk filtering, content-worthiness) and writes podcast / X-article angles; then you get 5-10 velocity-ranked topics. Every result includes cross-source numbers, a momentum label, and a ready-to-run `/last30days \"<topic>\"` follow-up.\n\n**When something drops.** `/last30days Kanye West` - UK blocked his visa, Wireless Festival canceled, sponsors fled. But BULL"
+    },
+    "brief": {
+      "summary": "跨平台搜索近30天讨论并生成摘要的AI技能",
+      "problem": "信息散落在各平台，人工汇总耗时",
+      "highlights": [
+        "可以并行搜索Reddit、X等平台",
+        "可以按点赞和赔率排序结果",
+        "可以生成带来源的摘要报告"
+      ],
+      "target_users": [
+        "AI从业者",
+        "研究员",
+        "产品经理"
+      ],
+      "why_trending": "今日新增759星，本周首次收录",
+      "caveat": "部分平台需自备密钥或登录会话",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "mvanhorn/last30days-skill",
+      "score": 68,
+      "category": "AI Agent / Skills",
+      "reason": "Agent 话题研究技能，非 ACG 专用",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 61.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 3,
+      "full_name": "HKUDS/CLI-Anything",
+      "url": "https://github.com/HKUDS/CLI-Anything",
+      "description": "\"CLI-Anything: Making ALL Software Agent-Native\" -- CLI-Hub: https://clianything.cc/",
+      "language": "Python",
+      "total_stars": 66612,
+      "forks": 6081,
+      "stars_today": 746,
+      "source": "trending",
+      "history_label": "本周首次收录",
+      "star_gain": 746
+    },
+    "details": {
+      "topics": [],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-08T13:52:57Z",
+      "updated_at": "2026-11-27T08:46:14Z",
+      "pushed_at": "2026-11-20T10:05:15Z",
+      "open_issues": 329,
+      "homepage": "https://clianything.cc/",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<h1 align=\"center\"><img src=\"assets/icon.png\" alt=\"\" width=\"64\" style=\"vertical-align: middle;\">&nbsp; CLI-Anything: Making ALL Software Agent-Native</h1>\n\n<div align=\"center\">\n<a href=\"https://www.star-history.com/hkuds/cli-anything\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=trending&amp;theme=dark\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=trending\"><img alt=\"GitHub Trending Repository of the Day\" src=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=trending\" height=\"55\"></picture></a>&#32;<a href=\"https://trendshift.io/repositories/22991\" target=\"_blank\"><img src=\"https://trendshift.io/api/badge/repositories/22991\" alt=\"HKUDS/CLI-Anything | Trendshift\" height=\"55\"></a>&#32;<a href=\"https://www.star-history.com/hkuds/cli-anything\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=rank&amp;theme=dark\"><source media=\"(prefers-color-scheme: light)\" srcset=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=rank\"><img alt=\"Star History Rank\" src=\"https://api.star-history.com/badge?repo=HKUDS/CLI-Anything&amp;type=rank\" height=\"55\"></picture></a>\n</div>\n\n<p align=\"center\">\n  <strong>Today's Software Serves Humans👨‍💻. Tomorrow's Users will be Agents🤖.<br>\nCLI-Anything: Bridging the Gap Between AI Agents and the World's Software</strong><br>\n</p>\n\n**🌐 [CLI-Hub](https://hkuds.github.io/CLI-Anything/)**: `pip install cli-anything-hub` then `cli-hub install <name>` — browse, install, and manage all community-built CLIs. Want to add your own? [Open a PR](https://github.com/HKUDS/CLI-Anything/blob/main/CONTRIBUTING.md) — the hub updates instantly.\n\n**🎬 [See Demos](#-real-world-demos)**: Watch AI agents use generated CLIs plus preview, live preview, and trajectory loops to produce real artifacts — CAD builds, 3D scenes, diagrams, gameplay, subtitles, and more.\n\n**🙋 [Become a Contributor, or Request a CLI]**: [Join us](https://github.com/HKUDS/CLI-Anything/issues/new?template=contributor-signup.yml)! Sign up to build a new CLI harness — once reviewed and merged, you'll gain access as one of our community contributors! Wish CLI-Anything supported a specific software or service? Submit a [wishlist request](https://github.com/HKUDS/CLI-Anything/issues/new?template=cli-wishlist.yml)!\n\n<p align=\"center\">\n  <a href=\"#-quick-start\"><img src=\"https://img.shields.io/badge/Quick_Start-5_min-blue?style=for-the-badge\" alt=\"Quick Start\"></a>\n  <a href=\"https://hkuds.github.io/CLI-Anything/\"><img src=\"https://img.shields.io/badge/CLI_Hub-Browse_%26_Install-ff69b4?style=for-the-badge\" alt=\"CLI Hub\"></a>\n  <a href=\"#-demonstrations\"><img src=\"https://img.shields.io/badge/Demos-18_Apps-green?style=for-the-badge\" alt=\"Demos\"></a>\n  <a href=\"#-test-results\"><img src=\"https://img.shields.io/badge/Tests-2%2C461_Passing-brightgreen?style=for-the-badge\" alt=\"Tests\"></a>\n  <a href=\"https://arxiv.org/abs/2606.03854\"><img src=\"https://img.shields.io/badge/Tech_Report-arXiv%3A2606.03854-b31b1b?style=for-the-badge\" alt=\"Tech Report\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-Apache_2.0-yellow?style=for-the-badge\" alt=\"License\"></a>\n</p>\n\n<p align=\"center\">\n  <img src=\"https://img.shields.io/badge/python-≥3.10-blue?logo=python&logoColor=white\" alt=\"Python\">\n  <img src=\"https://img.shields.io/badge/click-≥8.0-green\" alt=\"Click\">\n  <img src=\"https://img.shields.io/badge/pytest-100%25_pass-brightgreen\" alt=\"Pytest\">\n  <img src=\"https://img.shields.io/badge/coverage-unit_%2B_e2e-orange\" alt=\"Coverage\">\n  <img src=\"https://img.shields.io/badge/output-JSON_%2B_Human-blueviolet\" alt=\"Output\">\n  <a href=\"https://github.com/HKUDS/.github/blob/main/profile/README.md\"><img src=\"https://img.shields.io/badge/Feishu-Group-E9DBFC?style=flat&logo=feishu&logoColor=white\" alt=\"Feishu\"></a>\n<a href=\"https://github.com/HKUDS/.github/blob/main/profile/README.md\"><img src=\"https://img.shields.io/badge/WeChat-Group-C5EAB4?style=flat&logo=wechat&logoColor=white\" alt=\"WeChat\"></a>\n</p>\n\n**One Command Line**: Make any software agent-ready for Pi, OpenClaw, nanobot, Cursor, Claude Code, etc.&nbsp;&nbsp;[**中文文档**](README_CN.md) | [**日本語ドキュメント**](README_JA.md) | [**Deutsch**](README_DE.md)\n\n<p align=\"center\">\n  <img src=\"assets/cli-typing.gif\" alt=\"CLI-Anything typing demo\" width=\"800\">\n</p>\n\n<p align=\"center\">\n  <img src=\"assets/teaser.png\" alt=\"CLI-Anything Teaser\" width=\"800\">\n</p>\n\n---\n\n## 📰 News\n\n> Thanks to all invaluable efforts from the community! More updates continuously on the way everyday..\n\n- **2026-05-30** 🧭 **Hermes skill** proposed (#320), adding a CLI-Anything orchestration skill with installer scripts and HARNESS fallback guidance. 🗺️ **ArcGIS Pro** was proposed for the public registry (#318) as a Windows/ArcPy CLI for cartography, geoprocessing, feature editing, and live-Pro MCP workflows.\n\n- **2026-05-27** 🔧 **CLI-Hub** registry date updates now handle `python -m pip` install commands (#312), improving package-date detection for registry automation.\n\n- **2026-05-23** 📝 **Obsidian Agent CLI** was proposed for the public registry (#307), bringing a PyPI-installed Obsidian automation CLI with persistent agent memory workflows and a pinned skill link.\n\n- **2026-05-21** 🔒 **Sketch CLI** token-file handling was hardened against path traversal and symlink escapes (#304).\n\n- **2026-05-20** 📓 **Joplin CLI** was proposed (#300) with notebooks, notes, to-dos, tags, attachments, search/sync, import/export, server/E2EE helpers, full docs, packaged skill docs, and a 134-test validation baseline.\n\n- **2026-05-20** 🎛️ **Rekordbox CLI** merged (#252) with guarded SQLCipher write paths, backup-required forced writes, smoke coverage, and root skill sync. 📚 **Calibre CLI** merged (#223) with library/search/metadata/conversion/export workflows, 41 unit tests, real-Calibre E2E evidence, and root skill validation. 🧊 **3MF CLI** merged (#209) with mesh inspection, hole resizing, repair, comparison, and preserved triangle attributes. 🎙️ **MiniMax CLI** merged (#189) with chat/TTS workflows, JSON-safe model/voice listing, REPL quote handling, and smoke/E2E coverage. 🎮 **UEAtelier** joined the registry (#297) as an Unreal Editor MCP self-extension workbench with a Python CLI proxy.\n\n- **2026-05-19** 🛠️ Existing harnesses got a quality/security pass — **Zoom** downloads recordings from direct URLs (#294), **Obsidian** search now uses the Local REST API vendor content types (#289), **LibreOffice** headless conversion is more robust on macOS (#290), and XML/SVG/ODF/MLT/MusicXML/CSL parsing now routes untrusted input through `defusedxml` (#296).\n\n- **2026-05-18** 📈 README presentation refreshed with the Trendshift badge and centered project header polish (#285, #286), keeping the landing section focused on discovery and project momentum.\n\n- **2026-05-17** 🌐 **CLI-Hub** registry handling was hardened (#281) — registry entries are now copied before `_source` tagging, preventing cached or mocked registry data from being mutated in place.\n\n- **2026-05-16** 🔧 **n8n** received the REPL banner crash fix that later merged into main (#280), restoring the no-subcommand interactive startup path with regression coverage.\n\n<details>\n<summary>Earlier news (Apr 10–18)</summary>\n\n- **2026-04-18** 🧩 **All SKILL.md files are now being unified under the top-level `skills/` directory** — every CLI skill can be installed from one canonical source with `npx skills add HKUDS/CLI-Anything --skill <skill-name> -g -y`. We also added root-skill validation CI, synced contribution / PR docs and REPL skill-path hints to the new layout, and refreshed the **CLI-Hub** install-first frontend around the new `npx skills` flow.\n\n- **2026-04-17** 🌐 **CLI-Hub** received another install UX pass — public registry metadata and skill coverage were tightened, visit counting was corrected, and the web hub was further refined. 🧪 **Shotcut** render output duration was fixed (#92). 📝 **SKILL** contribution paths were corrected for the new docs flow (#224), and the skill generator now safely handles empty intros (#203).\n\n- **2026-04-16** 🗺️ **QGIS CLI** merged (#207) — a full GIS / map authoring harness landed. 🧬 **UniMol Tools CLI** merged (#219) for molecular modeling workflows. 🌐 **CLI-Hub** also added more public CLIs, including **py4csr**, refreshed its generated meta-skill, corrected SKILL contribution docs, and fixed `apt-get` package extraction in skill generation (#204).\n\n- **2026-04-16** 📈 **Unreal Insights CLI** expanded — added background capture session control (`capture start/status/snapshot/stop`), engine-root-matched `UnrealInsights.exe` resolution/build flows, and refreshed docs/tests for the new orchestration workflow.\n\n- **2026-04-15** 🌐 **CLI-Hub** updated to **v0.2.0** — the PyPI package now supports public CLIs from multiple install sources (`pip`, `npm`, `brew`, bundled/system tools), backed by a new `public_registry.json`. The Hub frontend was redesigned with separate **CLI-Anything CLIs** and **Public CLIs** decks, and live end-to-end checks now cover real install, update, and uninstall flows across both pip and npm packages.\n\n- **2026-04-14** 🧭 **Safari CLI** merged (#212) and added to the Hub registry — browser automation via `safari-mcp`. 🎬 **Kdenlive** also received compatibility fixes for Gen 5 project output and invalid project generation.\n\n- **2026-04-13** 📓 **Obsidian CLI** merged (#211) — knowledge management harness via the Local REST API, with 48 unit tests and 7 E2E tests. ⛓️ **Eth2-Quickstart CLI** merged (#195) — Ethereum staking node management harness. 📚 **Zotero CLI** updated to v0.4.1 (#201) — now shipped from its standalone repo, and CLI-Hub gained support for remote `skill_md` URLs.\n\n- **2026-04-11** 🔗 **n8n CLI** merged (#188) — workflow automation harness for self-hosted automation flows. 🔧 **Exa CLI** fix (#205) added the `x-exa-integration` header for usage tracking. 📦 **CLI-Hub** also gained its PyPI auto-publish workflow and package refresh pipeline.\n\n- **2026-04-10** 📦 **CLI-Hub package manager** launched — `pip install cli-anything-hub` to browse, search, install, update, and uninstall CLI-Anything harnesses from one command. The web Hub also shipped its first install-focused frontend refresh and \"Empower yourself\" toolkit card.\n\n</details>\n\n<details>\n<summary>Earlier news (Apr 1–9)</summary>\n\n- **2026-04-09** 🧹 Cleanup and docs pass (#200) — fixed Openscreen test subtotals, added Openscreen to the Chinese README and project structure, and clarified `/cli-anything` command syntax in the docs.\n\n- **2026-04-08** 🎬 **Openscreen CLI** merged (#183) — screen recording editor harness with 101 tests. ☁️ **CloudAnalyzer CLI** merged (#181) — cloud cost analysis harness with 27 commands. 🌊 **SeaClip / PM2 / ChromaDB** harnesses merged (#129).\n\n- **2026-04-07** 🔄 **Dify Workflow CLI** merged (#191) — workflow automation wrapper. 🔧 **Inkscape** auto-save fix (#193, fixes #182). 🛡️ **DomShell security hardening** (#156) — URL validation and DOM sanitization for the browser CLI. 🥧 **Pi Coding Agent extension** merged (#178).\n\n- **2026-04-06** 🔍 **Exa CLI** merged (#172) — AI-powered web search and answers harness. 🎮 **Godot CLI** merged (#140) — game engine harness with a full demo-game E2E pipeline. ☁️ **CloudAnalyzer** review fixes and frontend improvements also landed.\n\n- **2026-04-03** 🧪 **WireMock CLI** merged (#170) — HTTP mock server harness for API testing. 🥧 **Pi Coding Agent** extension support also landed, and CLI demo recordings were added to the docs.\n\n- **2026-04-01** ⚔️ **Slay the Spire II CLI** merged (#148) — deck-building roguelike harness. 🎥 **VideoCaptioner CLI** merged (#166) — AI-powered video captioning harness. 🛰️ **IntelWatch** was added to the registry for B2B OSINT workflows.\n\n</details>\n\n<details>\n<summary>Earlier news (Ma"
+    },
+    "brief": {
+      "summary": "把现有软件变成 AI Agent 可调用的命令行接口",
+      "problem": "解决 AI Agent 难以直接操作现有软件的问题",
+      "highlights": [
+        "可以给软件生成 CLI 供 Agent 调用",
+        "可以用 CLI-Hub 安装社区 CLI",
+        "可以让 Agent 产出 CAD、3D 场景等"
+      ],
+      "target_users": [
+        "AI Agent 开发者",
+        "工具集成工程师",
+        "自动化爱好者"
+      ],
+      "why_trending": "今日新增 746 Star，本周首次收录",
+      "caveat": "项目较新，兼容性与稳定性需验证",
+      "category": "AI Agent / Skills",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "HKUDS/CLI-Anything",
+      "score": 65,
+      "category": "AI Agent / Skills",
+      "reason": "让 CLI 软件成为 Agent 原生工具",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 60.2
+    }
+  },
+  {
+    "repository": {
+      "rank": 10,
+      "full_name": "kajisho5/ffmpeg-skill",
+      "url": "https://github.com/kajisho5/ffmpeg-skill",
+      "description": "Local video editor for coding agents: 42 FFmpeg tools with a machine-readable contract and an MCP server, for Claude Code, Cursor and Codex. Cut, captions, reframe, loudness, platform exports. No cloud, no API keys.",
+      "language": "Python",
+      "total_stars": 11678,
+      "forks": 974,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "热度再升",
+      "star_gain": 3179
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "audio-processing",
+        "captions",
+        "claude-code",
+        "codex",
+        "coding-agent",
+        "cursor",
+        "ffmpeg",
+        "gemini-cli-extension",
+        "loudness-normalization",
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "python",
+        "subtitles",
+        "transcoding",
+        "video",
+        "video-editing",
+        "whisper"
+      ],
+      "license_name": "MIT",
+      "created_at": "2026-09-03T14:33:38Z",
+      "updated_at": "2026-11-27T08:49:39Z",
+      "pushed_at": "2026-11-27T08:46:06Z",
+      "open_issues": 31,
+      "homepage": "https://www.npmjs.com/package/ffmpeg-skill",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"brand/logo/ffmpeg-skill-horizontal-on-dark.svg\">\n    <img src=\"brand/logo/ffmpeg-skill-horizontal.svg\" height=\"72\" alt=\"ffmpeg-skill\">\n  </picture>\n</p>\n\n<p align=\"center\"><b>Give your coding agent a video editor.</b><br>\nClaude Code, Cursor, Codex or any MCP client edits your footage with local FFmpeg, then checks its own output.<br>\nNo cloud · No API keys · Python standard library<br>\n<a href=\"SECURITY.md#what-you-install-and-what-it-touches\">What you install and what it touches</a></p>\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/\"><b>Website</b></a> ·\n  <a href=\"#quick-start\"><b>Quick start</b></a> ·\n  <a href=\"docs/demos.md\">Demos</a> ·\n  <a href=\"#tools\">Tools</a> ·\n  <a href=\"#mcp\">MCP</a> ·\n  <a href=\"https://www.npmjs.com/package/ffmpeg-skill\">npm</a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/kajisho5/ffmpeg-skill/actions/workflows/ci.yml\"><img src=\"https://github.com/kajisho5/ffmpeg-skill/actions/workflows/ci.yml/badge.svg\" alt=\"tests\"></a>\n  <a href=\"https://scorecard.dev/viewer/?uri=github.com/kajisho5/ffmpeg-skill\"><img src=\"https://api.scorecard.dev/projects/github.com/kajisho5/ffmpeg-skill/badge\" alt=\"OpenSSF Scorecard\"></a>\n  <a href=\"https://www.npmjs.com/package/ffmpeg-skill\"><img src=\"https://img.shields.io/npm/v/ffmpeg-skill\" alt=\"npm\"></a>\n  <a href=\"https://www.npmjs.com/package/ffmpeg-skill\"><img src=\"https://img.shields.io/npm/dm/ffmpeg-skill\" alt=\"npm downloads per month\"></a>\n  <a href=\"#ffmpeg-compatibility\"><img src=\"https://img.shields.io/badge/ffmpeg-6.1%20%7C%207.1%20%7C%208%20%7C%209%20tested-orange\" alt=\"FFmpeg 6.1, 7.1, 8 and 9 tested in CI\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-MIT-green\" alt=\"MIT\"></a>\n  <a href=\"https://github.com/sponsors/kajisho5\"><img src=\"https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?logo=githubsponsors\" alt=\"Sponsor\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/\"><img src=\"brand/og.png\" width=\"720\" alt=\"ffmpeg-skill v4: Edit. Measure. Ship. 42 local FFmpeg tools, 12 stable; your agent does the work. A card shows final.mp4 measured: 59.98 s, 1080x1920, 30 fps, -14.0 LUFS, verified.\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"#quick-start\"><img src=\"brand/button-install.svg\" height=\"56\" alt=\"Install: npx ffmpeg-skill setup\"></a>\n  &nbsp;\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/#showcase\"><img src=\"brand/button-demos.svg\" height=\"56\" alt=\"Watch the demos\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://trendshift.io/repositories/211415\"><img src=\"https://trendshift.io/api/badge/repositories/211415\" alt=\"kajisho5/ffmpeg-skill on Trendshift: GitHub Trending, repository of the day\" width=\"250\" height=\"55\"></a>\n  &nbsp;\n  <a href=\"https://www.star-history.com/kajisho5/ffmpeg-skill\"><img src=\"https://api.star-history.com/badge?repo=kajisho5/ffmpeg-skill&type=rank\" alt=\"Star History: global rank among GitHub repositories\" height=\"55\"></a>\n</p>\n\n<p align=\"center\"><b>English</b> · <a href=\"https://kajisho5.github.io/ffmpeg-skill/?lang=ja\">日本語（サイト）</a></p>\n\n```bash\nnpx ffmpeg-skill\n```\n\n<table>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/demos/captions_pop_karaoke.gif\" alt=\"animated captions with a karaoke highlight\"><br><sub><code>caption.py --animate pop --karaoke</code></sub></td>\n    <td width=\"50%\"><img src=\"docs/demos/reframe_crop.gif\" alt=\"16:9 reframed to 9:16\"><br><sub><code>fit.py --aspect 9:16 --fit crop</code></sub></td>\n  </tr>\n  <tr>\n    <td width=\"50%\"><img src=\"docs/demos/silence_removal.gif\" alt=\"silence removed, timeline shorter\"><br><sub><code>silence.py --threshold -35</code></sub></td>\n    <td width=\"50%\"><img src=\"docs/demos/loudness.gif\" alt=\"waveform before and after loudness normalisation\"><br><sub><code>loudness.py -I -14 --tp -1</code></sub></td>\n  </tr>\n</table>\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/#showcase\"><img src=\"site/media/showcase_talk_en.jpg\" width=\"720\" alt=\"a conference talk laid out with its slides on the left and the speaker on the right\"></a><br>\n  <sub>Twelve clips edited by asking: colour, slow motion and reframing, a talk laid out with its slides and cut into a captioned short, a pause removed, a green-screen composite, a levelled horizon, and three phone clips (stabilised, a night shot lifted and denoised, 60 fps slowed down). <a href=\"https://kajisho5.github.io/ffmpeg-skill/#showcase\">Watch them</a> (English and Japanese) · <a href=\"docs/showcase.md\">the request and the exact commands</a>. Nine clips are AI-generated with Google Veo; three are shot on a phone.</sub>\n</p>\n\n### Review page\n\nAfter an edit, ask your agent for the review page (\"show me the review page\"), or run `npx ffmpeg-skill review project.json --result run.json` yourself (`python3 scripts/_review.py` from a checkout). It writes one local HTML file. It shows the sources, every step with its checks, the result in a phone frame with the platform's safe area, and a timeline. Press the number of a clip or a caption, write what should change, and copy the instruction it builds back to your agent. Nothing is uploaded; the page speaks English, Japanese, Korean and Chinese.\n\n<p align=\"center\">\n  <a href=\"https://kajisho5.github.io/ffmpeg-skill/#review\"><img src=\"site/media/review_en.png\" width=\"820\" alt=\"the review page: sources and work steps on the left, the source frames and the vertical result with a timeline in the middle, the selected caption and the instruction for the agent on the right\"></a><br>\n  <sub>The talk above as a vertical short, on the review page (AI-generated footage).</sub>\n</p>\n\nLeft half is the input, right half is what the command produced. **[Every before/after demo, with the exact command under each one →](docs/demos.md)** — all of it built by `python3 demos/build.py`, so you can rebuild every frame of it yourself. The pictures come from [demos/footage/](demos/footage/README.md): clips AI-generated with Google Veo (the people and places do not exist) and a few shot on a phone. The sound is synthetic, and a few demos (HDR10, a panorama) use a synthetic picture.\n\n`ffmpeg-skill` is an [Agent Skill](https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills) for Claude Code, Cursor, Codex and any agent that reads `SKILL.md`. It teaches the agent a fixed workflow (probe → edit losslessly where possible → check → verify) and ships **42 tools** that do the actual work with `ffmpeg` / `ffprobe`: cut, join, silence removal, fit to duration and aspect, captions and karaoke, overlays and motion graphics, HDR → SDR and LUTs, audio clean-up and typed dynamics, sync with drift correction, multicam, loudness, delivery checks, whole-edit project rendering, batch folders. Every tool is also callable as an MCP tool (`tools/list` advertises a core 12 by default to keep client context small, with `FFMPEG_SKILL_MCP_FULL=1` listing all 42; every tool is reachable by name through `tools/call` either way), and the whole set is described by a machine-readable contract.\n\nIf `ffmpeg` and `python3` are on your PATH, it works: offline, on footage you would rather not upload.\n\n- **Protect your source files.** A destination that matches a declared input is refused. Direct edits require `--overwrite` to replace an existing output. A `batch --watch` job can replace an unchanged file it delivered on an earlier pass. The `-y` in the dry-run command takes effect only after the tool checks the destination.\n- **Call typed tools.** The agent supplies named options such as `--aspect 9:16` and `--fit pad`. The tool builds the FFmpeg command and filter graph.\n- **Verify the edit.** The tools probe the source and the written file, so the agent can check the actual duration, frame size and audio before reporting success.\n\n> **SPEC** (Self-Producing Execution Contract): each tool's `input_schema` — the part of its\n> contract and MCP tool definition that has to track the CLI flag-for-flag — is never\n> hand-authored beside the code. It is derived, at run time, from the same `argparse` parser that\n> already defines the CLI, and CI fails the build if any of it drifts.\n> → [full explanation](#what-is-spec)\n\n---\n\n## Standalone, and in an ecosystem\n\n**Standalone**, this is a local FFmpeg engine: probe → edit → verify, `npx ffmpeg-skill` and nothing else. No API key, no account, no other repo required. Everything above and below this section describes that standalone tool, and none of it changes if you never read the rest of this one.\n\n**In [kajisho5](https://github.com/kajisho5)'s wider video-production ecosystem**, this repo is the *hands*: it cuts, measures and exports files, and reports back in structured JSON. It does not decide what to cut, whether a deliverable is approvable, what makes a highlight interesting, or what a caption should say (the user's cue text is burned as written, never rewritten to fit) — those are a *brain*'s job, sitting in front of this engine, not inside it.\n\n| You want to... | Use |\n|---|---|\n| Cut / join / measure / export a file right now | **this repo** (`ffmpeg-skill`), standalone |\n| Decide cut points, approve a deliverable, plan a whole edit | [`video-production-agent`](https://github.com/kajisho5/video-production-agent) / [`AI-video-production-OS`](https://github.com/kajisho5/AI-video-production-OS) |\n| Build a typed editing graph across a workspace, without writing raw `ffmpeg` | [`video-editing-skill`](https://github.com/kajisho5/video-editing-skill) / [`audio-production-skill`](https://github.com/kajisho5/audio-production-skill) |\n| Put Remotion motion graphics (animated captions, silence jump cuts, audio-peak motion) on a real recording | [`remotion-ffmpeg-skill`](https://github.com/kajisho5/remotion-ffmpeg-skill): its compositions take their length, fps, frame, silences, scene cuts, audio peaks and beats from this repo's `probe.py`, `silence.py` and `scenes.py`. It verifies its render with `check.py` and `look.py`, composites a graphics layer with `overlay.py` (`--place` for its `--sparse` mode), and delivers through `render.py --template` |\n\nOther repos in the ecosystem — [`media-analysis-skill`](https://github.com/kajisho5/media-analysis-skill), [`transcription-skill`](https://github.com/kajisho5/transcription-skill), [`subtitle-skill`](https://github.com/kajisho5/subtitle-skill), [`thumbnail-skill`](https://github.com/kajisho5/thumbnail-skill), [`color-grading-skill`](https://github.com/kajisho5/color-grading-skill), [`motion-graphics-skill`](https://github.com/kajisho5/motion-graphics-skill), [`qc-skill`](https://github.com/kajisho5/qc-skill) — read this repo's `contract --json`, its tools' `--json` output and `doctor`, the same way any agent framework would; this repo does not call into any of them. The dependency runs one way.\n\n---\n\n**Contents**\n[Standalone, and in an ecosystem](#standalone-and-in-an-ecosystem) · [Why](#why) · [Quick start](#quick-start) · [How it works](#how-it-works) · [Design principles](#design-principles) · [Tools](#tools) · [Audio](#audio-is-a-first-class-input) · [Built for agents](#built-for-agents) · [FAQ](#faq) · [FFmpeg compatibility](#ffmpeg-compatibility) · [Tested on real footage](#tested-on-real-footage) · [Install](#install) · [Requirements](#requirements) · [Development](#development) · [Docs](#docs)\n\n---\n\n## Why\n\nAn agent that \"knows FFmpeg\" still guesses: it assumes a frame rate, picks a codec the container cannot hold, re-encodes a file that only needed a stream copy, and reports \"done\" without opening the result. This skill takes the guessing out:\n\n- **Real files first.** Every job starts with `probe.py`; the agent decides from the measured duration, fps, resolution, colour and audio layout, not from the file name.\n- **Structured tools, not shell strings.** Each operation is a script with typed arguments. Nothing runs through a shell; no filter graph is accepted from the caller.\n- **A contract the agent can read."
+    },
+    "brief": {
+      "summary": "给编程代理本地剪辑视频的 FFmpeg 工具集",
+      "problem": "让代理无需云服务，也能稳定完成视频剪辑与校验",
+      "highlights": [
+        "可以用自然语言让代理剪片、加字幕和调整比例",
+        "可以把横屏改成竖屏，并做响度标准化和平台导出",
+        "可以在本地检查成片时长、分辨率和音频是否达标"
+      ],
+      "target_users": [
+        "Claude Code 用户",
+        "AI 编程代理使用者",
+        "视频创作者"
+      ],
+      "why_trending": "总 Star 已破万，近期仍活跃，代理本地剪辑受关注",
+      "caveat": "需本机装好 FFmpeg 和 Python 3；资料中未说明云端协作",
+      "category": "视频剪辑",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "kajisho5/ffmpeg-skill",
+      "score": 88,
+      "category": "视频剪辑",
+      "reason": "FFmpeg 视频剪辑 Agent 技能，含 MCP",
+      "generated_by_ai": true,
+      "velocity_score": 100,
+      "freshness_score": 70,
+      "ranking_score": 79.5
+    }
+  },
+  {
+    "repository": {
+      "rank": 6,
+      "full_name": "heygen-com/hyperframes",
+      "url": "https://github.com/heygen-com/hyperframes",
+      "description": "Open-source AI video editor: edit your own footage, or create and remake any video with Claude Code, Codex or the free Studio app. Write HTML, render MP4. By HeyGen.",
+      "language": "TypeScript",
+      "total_stars": 91119,
+      "forks": 8503,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "连续上榜",
+      "star_gain": 731
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai",
+        "ai-agents",
+        "ai-video",
+        "ai-video-editor",
+        "animation",
+        "claude-code",
+        "ffmpeg",
+        "gsap",
+        "html",
+        "html-to-video",
+        "mcp",
+        "motion-graphics",
+        "puppeteer",
+        "remotion-alternative",
+        "rendering",
+        "typescript",
+        "video-editing",
+        "video-editor",
+        "video-generation"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-03-10T01:51:06Z",
+      "updated_at": "2026-11-27T08:49:18Z",
+      "pushed_at": "2026-11-27T08:47:38Z",
+      "open_issues": 328,
+      "homepage": "https://hyperframes.heygen.com",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/logo/dark.svg\">\n    <source media=\"(prefers-color-scheme: light)\" srcset=\"docs/logo/light.svg\">\n    <img alt=\"HyperFrames\" src=\"docs/logo/light.svg\" width=\"300\">\n  </picture>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://skills.sh/heygen-com/hyperframes\"><img src=\"https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fskills.sh%2Fapi%2Fbadge%2Fheygen-com%2Fhyperframes\" alt=\"Skills downloads\"></a>\n  <a href=\"https://www.star-history.com/heygen-com/hyperframes\"><picture><source media=\"(prefers-color-scheme: dark)\" srcset=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank&theme=dark\"><img alt=\"GitHub top repository global rank\" src=\"https://api.star-history.com/badge?repo=heygen-com/hyperframes&type=rank\" height=\"36\"></picture></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/v/hyperframes.svg?style=flat\" alt=\"npm version\"></a>\n  <a href=\"https://www.npmjs.com/package/hyperframes\"><img src=\"https://img.shields.io/npm/dm/hyperframes.svg?style=flat\" alt=\"npm downloads\"></a>\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/license-Apache%202.0-blue.svg\" alt=\"License\"></a>\n  <a href=\"https://nodejs.org\"><img src=\"https://img.shields.io/badge/node-%3E%3D22-brightgreen\" alt=\"Node.js\"></a>\n  <a href=\"https://discord.gg/fzbdWyjphr\"><img src=\"https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white\" alt=\"Discord\"></a>\n</p>\n\n<p align=\"center\"><b>The open-source AI video editor: create, edit, remake.</b></p>\n\n<p align=\"center\">Write HTML. Render video. Built for agents.</p>\n\n<p align=\"center\">\n  <a href=\"https://hyperframes.studio/studio/download?utm_source=github&utm_medium=readme&src=github-readme\">Download the app</a> ·\n  <a href=\"https://hyperframes.heygen.com/quickstart?utm_source=github&utm_medium=readme\">Quickstart</a> ·\n  <a href=\"https://hyperframes.heygen.com/examples?utm_source=github&utm_medium=readme\">Showcase</a> ·\n  <a href=\"https://hyperframes.heygen.com/catalog/blocks/data-chart?utm_source=github&utm_medium=readme\">Catalog</a> ·\n  <a href=\"https://hyperframes.heygen.com/introduction?utm_source=github&utm_medium=readme\">Docs</a> ·\n  <a href=\"https://discord.gg/fzbdWyjphr\">Discord</a> ·\n  <a href=\"https://x.com/HyperFrames_\">X</a> ·\n  <a href=\"https://www.youtube.com/@HyperFrames_Official\">YouTube</a>\n</p>\n\n<p align=\"center\"><a href=\"https://static.heygen.ai/hyperframes-oss/site/studio-launch-nib-sf-audio.mp4\"><picture><source type=\"image/avif\" srcset=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-26s-v3.avif\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/hero-studio-intro-v1.webp\" width=\"800\" alt=\"HyperFrames Studio, the AI video editor: ask for a launch video, get an editable project, then mark one word and the agent changes just that\"></picture></a></p>\n\nHyperFrames is HeyGen's AI video editor for people and agents. Describe a video, bring your own footage, or remake a video you love, and get a real project you can change down to the frame: ask for a bigger title, a faster cut or new captions, and it changes just that.\n\nUnderneath, HyperFrames is a free, open-source framework (Apache 2.0) for turning HTML, CSS, JavaScript, media and seekable animations into deterministic MP4 videos. Use it locally with the CLI, from AI coding agents like Claude Code, Codex and Cursor with skills, or as the rendering core behind hosted authoring workflows. No React required.\n\n## Three ways to use it\n\n|                                    | Best for                                                                                                                                                     | Start                                                                                                                                                                                                      |\n| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| **HyperFrames Studio app**         | Anyone, no code. Describe a video or drop in your footage, then edit by typing or pointing. Use the built-in agent on Pro, or your own Claude Code or Codex. | [Download for Mac, Windows or Linux](https://hyperframes.studio/studio/download?src=github-readme) (free plan)                                                                                             |\n| **Your coding agent**              | Claude Code, Codex, Cursor, Gemini CLI and other agents.                                                                                                     | `npx skills add heygen-com/hyperframes`                                                                                                                                                                    |\n| **Claude, ChatGPT or Grok** (beta) | Making a video in a chat, nothing to install. ChatGPT: Business, Enterprise and Edu workspaces.                                                              | Connect [HyperFrames by HeyGen](https://hyperframes.heygen.com/guides/mcp?utm_source=github&utm_medium=readme), listed in [Claude's connector directory](https://claude.com/connectors/hyperframes-heygen) |\n\nThe [HyperFrames Studio app](https://hyperframes.studio/studio?utm_source=github&utm_medium=readme) has a free plan. [Pro](https://hyperframes.studio/pricing?utm_source=github&utm_medium=readme) ($25 a month) adds top video, image, voice and music models (HeyGen Video 1, Seedance 2.5, Lyria 3 Pro and more) and 25,000 credits a month.\n\n## Made with HyperFrames\n\n<table>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2113670541274144802\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/script-based-editing-v1.webp\" width=\"195\" alt=\"Editing a talking-head video by editing its script in HyperFrames Studio\"></a><br><b>Script-based editing</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/liu8in/status/2123562606535565629\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/edit-your-own-footage-v1.webp\" width=\"195\" alt=\"A creator's own phone footage edited into a finished social video with HyperFrames\"></a><br><b>Edit your own footage</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2112960682526490691\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/captions-v1.webp\" width=\"195\" alt=\"Animated captions added to a talking-head video with HyperFrames\"></a><br><b>Captions on your video</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/HyperFrames_/status/2110784695634178256\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remake-any-video-v1.webp\" width=\"195\" alt=\"A video rebuilt as an editable HyperFrames project, then changed\"></a><br><b>Remake any video</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/website-to-launch-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/launch-from-website-v1.webp\" width=\"195\" alt=\"Product launch video built from a company's website with HyperFrames\"></a><br><b>Launch video from your website</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://x.com/WaterrrMiao/status/2114585876160455057\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/faceless-explainer-v1.webp\" width=\"195\" alt=\"Faceless YouTube explainer made with HyperFrames\"></a><br><b>Faceless explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/flat-cartoon-explainer-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/flat-cartoon-explainer-v1.webp\" width=\"195\" alt=\"Flat cartoon explainer video about the Sun made with HyperFrames\"></a><br><b>Flat cartoon explainer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/real-ui-newspaper-1969-v2.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/real-ui-newspaper-v1.webp\" width=\"195\" alt=\"Motion graphics built from a real 1969 newspaper front page with HyperFrames\"></a><br><b>Real-UI motion graphics</b></td></tr>\n<tr><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/cartoon-frameys-launch-one-take-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-one-take-trailer-v1.webp\" width=\"195\" alt=\"3D one-take launch trailer made with HyperFrames\"></a><br><b>3D one-take trailer</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/films/3d-type-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/3d-type-v1.webp\" width=\"195\" alt=\"Kinetic 3D typography made with HyperFrames\"></a><br><b>3D type</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/remotion-to-hyperframes-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/remotion-ported-voxels-v1.webp\" width=\"195\" alt=\"A Remotion project with 3D voxels, ported to HyperFrames\"></a><br><b>Remotion project, ported</b></td><td align=\"center\" valign=\"bottom\"><a href=\"https://static.heygen.ai/hyperframes-oss/homepage/showcase/hq/generative-replica-v1.mp4\"><img src=\"https://static.heygen.ai/hyperframes-oss/readme/2026-11/generative-motion-v1.webp\" width=\"195\" alt=\"Generative motion design made with HyperFrames\"></a><br><b>Generative motion</b></td></tr>\n</table>\n\nClick any clip to watch it with sound.\n\n## What you can make\n\n| Video                                                                                                                     | How                                                                                                                                                   |\n| ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |\n| Branded UGC videos for TikTok and Instagram from your own phone clips: captions, music, text hooks, fast client revisions | The Studio app: drop in your footage, then edit by typing or pointing                                                                                 |\n| Video podcast episodes: line up a multi-camera recording, cut to whoever is talking, clean up the sound, add captions     | The Studio app's podcast edit                                                                                                                         |\n| Product demos, tutorials, launch videos and feature announcements, from your website or a screen recording                | Paste your URL into the Studio app, or ask your agent                                                                                                 |\n| Explainer and faceless YouTube episodes from your topic, script or voiceover                                              | Ask for one; [`/style-sampling`](skills/style-sampling) for five proven series styles                                                                 |\n| Remake a video you love, then make it yours                                                                               | [`/reverse-any-video`](skills/reverse-any-video)                                                                                       "
+    },
+    "brief": {
+      "summary": "开源 AI 视频编辑器，写 HTML 渲染 MP4。",
+      "problem": "降低视频制作门槛，让描述、素材或代码都能变成可改的视频项目。",
+      "highlights": [
+        "可以把网页或产品介绍快速做成发布视频。",
+        "可以上传自己的素材，用文字指令改字幕和节奏。",
+        "可以让 Claude Code 等代理写 HTML 再渲染 MP4。"
+      ],
+      "target_users": [
+        "内容创作者",
+        "视频剪辑初学者",
+        "前端开发者"
+      ],
+      "why_trending": "连续上榜，总 Star 超 9 万，近期仍有更新。",
+      "caveat": "Studio 的 Pro 模型和额度需付费，免费版功能有限。",
+      "category": "AI 视频",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "heygen-com/hyperframes",
+      "score": 92,
+      "category": "AI 视频",
+      "reason": "开源 AI 视频编辑器，HTML 渲染 MP4",
+      "generated_by_ai": true,
+      "velocity_score": 87,
+      "freshness_score": 40,
+      "ranking_score": 73.8
+    }
+  },
+  {
+    "repository": {
+      "rank": 7,
+      "full_name": "nexu-io/opengame",
+      "url": "https://github.com/nexu-io/opengame",
+      "description": "The Super Game Agent — the Unity & Unreal for AI agents, with 100+ viral games to remix. Turn 20+ coding agents (Claude Code, Codex, DeepSeek, etc.) into a full-stack AI game studio. Build and publish 3D & mini-games to WeChat, Douyin, TikTok, Telegram, itch.io, and more.",
+      "language": "TypeScript",
+      "total_stars": 1578,
+      "forks": 266,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-game-generator",
+        "claude-code",
+        "codex",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "game-development",
+        "game-engine",
+        "indie-game",
+        "local-first",
+        "mcp",
+        "mini-games",
+        "threejs",
+        "unity",
+        "unreal-engine",
+        "vibe-coding",
+        "wechat-minigame"
+      ],
+      "license_name": "Apache-2.0",
+      "created_at": "2026-11-25T10:35:45Z",
+      "updated_at": "2026-11-27T08:50:15Z",
+      "pushed_at": "2026-11-27T08:47:22Z",
+      "open_issues": 38,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\"><img src=\"docs/readme/opengame-logo.svg\" width=\"400\" alt=\"OpenGame\"></p>\n\n<p align=\"center\"><strong>The First Super Game Agent — Open-Source Full-Stack AI Game Studio</strong></p>\n\n<p align=\"center\">\n  <img src=\"docs/readme/opengame-hero.webp\" width=\"100%\" alt=\"OpenGame — The First Super Game Agent. Remix, re-style, test, and publish playable 3D, anime, pixel, and 9:16 mini-games from 25 built-in playable templates across 22 local AI agents.\">\n</p>\n\n<p align=\"center\">\n  <a href=\"package.json\"><img src=\"docs/readme/badges/node.svg\" alt=\"Node.js 22.18+\"></a>\n  <a href=\"LICENSE\"><img src=\"docs/readme/badges/license.svg\" alt=\"Apache 2.0 license\"></a>\n  <a href=\"https://github.com/nexu-io/open-design\"><img src=\"docs/readme/badges/built-by-opendesign.svg\" alt=\"Built by OpenDesign\"></a>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://go.open-design.ai/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=opengame&amp;utm_content=readme_en\"><img src=\"docs/readme/badges/opendesign-go.svg\" alt=\"OpenDesign Go model subscriptions\" /></a>\n  <a href=\"https://discord.com/invite/M7NnHS9gNa\"><img src=\"docs/readme/badges/discord.svg\" alt=\"Join the OpenGame Discord\" /></a>\n  <a href=\"https://applink.feishu.cn/client/chat/chatter/add_by_link?link_token=b6cs46dc-acb2-48ed-941d-c45642ead841\"><img src=\"docs/readme/badges/feishu.svg\" alt=\"Join the OpenGame Feishu group\" /></a>\n  <a href=\"https://x.com/OpenDesignHQ\"><img src=\"docs/readme/badges/x-opendesignhq.svg\" alt=\"OpenDesign on X (@OpenDesignHQ)\" /></a>\n  <a href=\"https://x.com/OpenDesignDevs\"><img src=\"docs/readme/badges/x-opendesigndevs.svg\" alt=\"OpenDesign Developers on X (@OpenDesignDevs)\" /></a>\n  <a href=\"https://www.youtube.com/channel/UChtshixMhvtgBWzoD9R_Qfg\"><img src=\"docs/readme/badges/youtube.svg\" alt=\"OpenDesign on YouTube\" /></a>\n</p>\n\n<p align=\"center\"><a href=\"#quick-start\">Quick Start</a> · <a href=\"#agent-wall\">Agents</a> · <a href=\"#showcase\">Playable Templates</a> · <a href=\"#features\">Why OpenGame</a> · <a href=\"#publish-monetize\">Publish &amp; Monetize</a> · <a href=\"#technical-guide\">Setup &amp; MCP</a> · <a href=\"#community\">Community</a></p>\n\n<div align=\"center\">\n\n**English** · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)\n\n</div>\n\n# Introducing OpenGame\n\nOpenGame is **the first open-source Super Game Agent** — turning **DeepSeek (DSH)**, **Claude Code**, **Codex**, or any of your local coding agents into an AI Unreal Engine / Unity and full-stack game studio. Go from a single idea to **AAA-grade 3D worlds** or **monetization-ready viral mini-games** in one end-to-end pipeline.\n\n- 🚀 **Build AAA-Grade 3D Games with Your Agent.** Drive full-stack 3D gameplay, art, music, and voice straight from **DeepSeek (DSH)**, **Claude**, **Codex**, or **Gemini** — from one prompt to playable 3D action, racing, and open-world games.\n- 🎮 **One-Click Remix & Re-style Any Game.** Start from **25 built-in playable templates** (3D, voxel, anime, pixel & 9:16 hits) with full editable source — keep proven mechanics while swapping characters, worlds, and art styles in minutes.\n- 💰 **Build Games That Earn: Create → Verify → Monetize.** Automated logic checks, balance simulation, headless playtesting, covers, and gameplay trailers — ship live web links, export single-file **9:16 Playable Ads**, and connect publishing paths for **WeChat Mini Games**, **TikTok**, and **Douyin**.\n- 🔓 **Full-Stack Open Source (BYOA + BYOK).** Code, art, video, music, voice, SFX, and Three.js 3D are all open source — plug in your favorite [local agent](#agent-wall) and own API keys, or connect [OpenDesign Go](https://go.open-design.ai/?utm_source=github&utm_medium=referral&utm_campaign=opengame&utm_content=readme_en) (Black Friday lowest-ever discount, with free access to **DeepSeek V4.1 Flash**, **Seedream**, and more).\n\n<a id=\"quick-start\"></a> <a id=\"快速开始\"></a>\n\n## ⚡ Quick Start\n\n### 1. Give one prompt to your local Agent\n\nPaste this instruction into **DeepSeek TUI / Harness**, **Claude Code**, **Codex**, **WorkBuddy**, **Cursor**, **Gemini CLI**, or any of the [22 supported local agents](#agent-wall):\n\n```text\nFollow https://github.com/nexu-io/opengame/blob/main/docs/opengame-setup.md to connect OpenGame to this agent and open the Game Studio template gallery.\n```\n\n### 2. Install the Main OpenGame Skill with Skills CLI\n\nInstall the main `opengame` entry Skill (which guides local setup and routes into `openmotion-game` + 18 game craft, 3C, animation, playable-ad, and QA reference handbooks) with the [Skills CLI](https://github.com/vercel-labs/skills):\n\n```sh\nnpx skills add https://github.com/nexu-io/opengame/tree/skills --skill opengame\n```\n\n> Installing the Skill copies the OpenGame entry instructions into your agent (you can also install `--skill openmotion-game` directly). Complete the local Studio & MCP setup below so your agent can call the 12 `openmotion_game_*` tools and open Game Studio.\n\n### 3. Run OpenGame Studio locally from source\n\nRequires **Git**, **Git LFS**, **npm**, and **Node.js 22.18+** (CI pins Node.js 26.11.1). Browse the catalog immediately after startup. Playing or remixing a template downloads its assets on first use. Tidebreaker works offline.\n\n```sh\ngit -c filter.lfs.process= -c filter.lfs.smudge= -c filter.lfs.required=false clone --depth 1 --single-branch --branch main https://github.com/nexu-io/opengame.git\ncd opengame\ngit lfs install --local --skip-smudge\nnpm ci\nnpm run build:studio\nnpm start\n```\n\n<a id=\"agent-wall\"></a>\n\n**Works with 22 local agents (BYOA)** · [Choose your agent](#choose-agent)\n\n<p align=\"center\"><a href=\"#choose-agent\"><picture><source media=\"(max-width: 600px)\" srcset=\"docs/readme/agents/local-agents.mobile.png\"><img src=\"docs/readme/agents/local-agents.png\" width=\"100%\" alt=\"WorkBuddy, Codex CLI, Claude Code, OpenCode, Hermes, Antigravity, Gemini CLI, Grok Build, Kimi CLI, Cursor Agent, Qwen Code, Qoder CLI, GitHub Copilot, Pi, Kiro CLI, Kilo, Mistral Vibe, DeepSeek TUI, Reasonix, Aider, Devin, Trae CLI\"></picture></a></p>\n\n<a id=\"showcase\"></a>\n\n## 🕹️ Playable Game Templates & Showcase\n\nOpenGame ships with **25 ready-to-play games** right inside [`templates/games/`](templates/games/) — complete with playable HTML5 / Three.js source, artwork, controls, and localization. Play them locally in Game Studio, **Remix** any title with one click, or **Re-style** it into your own IP, theme, or brand.\n\n### 3D, Voxel & Action Games (16:9)\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/tidebreaker/cover.webp\" width=\"100%\" alt=\"Tidebreaker — 3D storm archipelago speedboat racing\"><br>\n<strong>Tidebreaker</strong> · <code>3D · Racing · Three.js</code><br>\nRace a speedboat through a storm-lashed archipelago, jump wave crests, dodge reefs, and beat the tide across eight checkpoints.<br>\n<a href=\"templates/games/tidebreaker/\">Inspect source &amp; DESIGN.md →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/starlight-bastion/cover.webp\" width=\"100%\" alt=\"Starlight Bastion — Voxel space crystal wave shooter\"><br>\n<strong>Starlight Bastion</strong> · <code>Voxel · Shooter · Upgrades</code><br>\nDefend a luminous crystal against five escalating waves of voxel invaders, choosing roguelite upgrades between waves.<br>\n<a href=\"templates/games/starlight-bastion/\">Inspect source &amp; DESIGN.md →</a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/skyline-courier/cover.webp\" width=\"100%\" alt=\"Skyline Courier — 3D cyberpunk rooftop parkour platformer\"><br>\n<strong>Skyline Courier</strong> · <code>3D · Platformer · Cyberpunk</code><br>\nRun, leap, and wall-kick across rain-soaked cyberpunk skyscrapers to deliver three final parcels in 90 seconds.<br>\n<a href=\"templates/games/skyline-courier/\">Inspect source &amp; DESIGN.md →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/neon-drift/cover.webp\" width=\"100%\" alt=\"Neon Drift — 3D synthwave night highway racer\"><br>\n<strong>Neon Drift</strong> · <code>3D · Racing · Cyberpunk</code><br>\nWeave through rain-slick neon highway traffic, chain near-misses to recharge boost, and chase a new distance record.<br>\n<a href=\"templates/games/neon-drift/\">Inspect source →</a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/comet-guard/cover.webp\" width=\"100%\" alt=\"Comet Guard — Orbital defense space shooter\"><br>\n<strong>Comet Guard</strong> · <code>Shooter · Space</code><br>\nPilot an orbital interceptor in a painted starfield, shatter molten comets, and defend the station through escalating waves.<br>\n<a href=\"templates/games/comet-guard/\">Inspect source →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/harbor-skirmish/cover.webp\" width=\"100%\" alt=\"Harbor Skirmish — 3D first-person island shooter\"><br>\n<strong>Harbor Skirmish</strong> · <code>3D FPS · Grapple &amp; Slide</code><br>\nA stylized 3D first-person shooter on a curved island with double-jump, slide, dash, and grappling-hook mobility.<br>\n<a href=\"templates/games/harbor-skirmish/\">Inspect source →</a>\n</td>\n</tr>\n</table>\n\n### Stylized, Narrative & Atmospheric Games (16:9)\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/glyph-garden/cover.webp\" width=\"100%\" alt=\"Glyph Garden — Anime fantasy match-3 puzzle\"><br>\n<strong>Glyph Garden</strong> · <code>Anime · Puzzle · Fantasy</code><br>\nTrade moonlit petals and trigger cascading combo blooms to reach 2,200 points in 24 moves.<br>\n<a href=\"templates/games/glyph-garden/\">Inspect source →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/lantern-hop/cover.webp\" width=\"100%\" alt=\"Lantern Hop — Pixel fantasy rooftop platformer\"><br>\n<strong>Lantern Hop</strong> · <code>Pixel · Platformer · Fantasy</code><br>\nGuide a scarf-wearing pixel fox across layered moonlit rooftops, double-jumping gaps and collecting glowing paper lanterns.<br>\n<a href=\"templates/games/lantern-hop/\">Inspect source →</a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/lighthouse-log/cover.webp\" width=\"100%\" alt=\"Lighthouse Log — Anime stormy-night narrative survival\"><br>\n<strong>Lighthouse Log</strong> · <code>Anime · Visual novel · Survival</code><br>\nKeep a coastal lighthouse burning through seven stormy nights, rationing fuel and making impossible radio choices.<br>\n<a href=\"templates/games/lighthouse-log/\">Inspect source →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/last-light/cover.webp\" width=\"100%\" alt=\"Last Light — Torch-beam horror escape\"><br>\n<strong>Last Light</strong> · <code>Horror · Atmospheric</code><br>\nSearch an abandoned school for three keys before your torch dies while keeping the pursuing shade pinned in your beam.<br>\n<a href=\"templates/games/last-light/\">Inspect source →</a>\n</td>\n</tr>\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/night-train/cover.webp\" width=\"100%\" alt=\"Night Train Letters — Interactive branching story\"><br>\n<strong>Night Train Letters</strong> · <code>Visual novel · Branching Narrative</code><br>\nThree unsent letters on a rain-soaked night train to the sea — an intimate branching narrative built in pure HTML.<br>\n<a href=\"templates/games/night-train/\">Inspect source →</a>\n</td>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/stack-the-moon/cover.webp\" width=\"100%\" alt=\"Stack the Moon — One-tap moonlit tower stacker\"><br>\n<strong>Stack the Moon</strong> · <code>Casual · One-Tap Arcade</code><br>\nBuild a moonlit observatory above the clouds one timed stone at a time; chain perfect landings to widen your tower.<br>\n<a href=\"templates/games/stack-the-moon/\">Inspect source →</a>\n</td>\n</tr>\n</table>\n\n### Viral Portrait Mini-Games & Playable Ads (9:16)\n\nBuilt for mobile thumbs, instant first-frame engagement, short high-retention loops, and **mini-game / playable-ad monetization**:\n\n<table width=\"100%\">\n<tr>\n<td width=\"50%\" valign=\"top\">\n<img src=\"templates/games/gate-legion/cover.webp\" width=\"100%\" alt=\"Gate Legion "
+    },
+    "brief": {
+      "summary": "把本地编程Agent变成AI游戏工作室，可改模板并发布小游戏",
+      "problem": "做游戏要写代码、美术和发布流程，普通开发者难快速做出可玩版本",
+      "highlights": [
+        "可以用现成模板快速换角色、场景和美术风格",
+        "可以让Claude Code等Agent生成3D玩法并试玩",
+        "可以导出9:16可玩广告并接微信、抖音发布"
+      ],
+      "target_users": [
+        "独立游戏开发者",
+        "AI编程工具用户",
+        "小游戏创作者"
+      ],
+      "why_trending": "本周首次收录，总星约1.6k，近期有更新",
+      "caveat": "需本地安装Node 22.18+并配置Agent与MCP，上手有门槛",
+      "category": "游戏开发",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "nexu-io/opengame",
+      "score": 88,
+      "category": "游戏开发",
+      "reason": "AI Agent 游戏工作室，生成发布小游戏",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 14,
+      "full_name": "Renakoni/Voicebox",
+      "url": "https://github.com/Renakoni/Voicebox",
+      "description": "最好用的Android 离线多模型 TTS 与音色克隆（误），支持 GPU/NPU 加速 | The best Offline multi-model TTS & voice cloning on Android (jk) with GPU/NPU acceleration.",
+      "language": "Kotlin",
+      "total_stars": 419,
+      "forks": 47,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "android",
+        "android-app",
+        "android-tts",
+        "edge-ai",
+        "gpt-sovits",
+        "multilingual",
+        "npu",
+        "offline-ai",
+        "on-device-ai",
+        "onnx-runtime",
+        "qnn",
+        "snapdragon",
+        "speech-synthesis",
+        "streaming-tts",
+        "text-to-speech",
+        "tts",
+        "voice-cloning",
+        "webgpu",
+        "zero-shot-tts"
+      ],
+      "license_name": "AGPL-3.0",
+      "created_at": "2026-11-14T13:55:51Z",
+      "updated_at": "2026-11-27T08:43:52Z",
+      "pushed_at": "2026-11-27T08:41:57Z",
+      "open_issues": 4,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<p align=\"center\">\n  <img src=\".github/assets/voicebox.svg\" width=\"112\" height=\"112\" alt=\"Voicebox app icon\">\n</p>\n\n<h1 align=\"center\">Voicebox</h1>\n\n<p align=\"center\">\n  <strong>On-device multi-model speech workstation for Android</strong><br>\n  Run open-source TTS and voice cloning models offline on your phone, with no cloud or desktop GPU required\n</p>\n\n<p align=\"center\">\n  <a href=\"README_ZH.md\">中文</a> · <a href=\"README_JA.md\">日本語</a> · <strong>English</strong>\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/Renakoni/Voicebox/releases/latest\"><img src=\"https://img.shields.io/github/v/release/Renakoni/Voicebox?style=flat-square&amp;label=release&amp;color=9A4930\" alt=\"Latest release\"></a>\n  <img src=\"https://img.shields.io/badge/Android-11%2B-59665A?style=flat-square&amp;logo=android&amp;logoColor=white\" alt=\"Android 11+\">\n  <img src=\"https://img.shields.io/badge/ABI-arm64--v8a-655D57?style=flat-square\" alt=\"ARM64\">\n  <a href=\"LICENSE\"><img src=\"https://img.shields.io/badge/License-AGPL--3.0-6E665F?style=flat-square\" alt=\"AGPL-3.0 License\"></a>\n  <br>\n  <img src=\"https://img.shields.io/badge/Runtime-ONNX%20Runtime-4B6478?style=flat-square&amp;logo=onnx&amp;logoColor=white\" alt=\"ONNX Runtime\">\n  <img src=\"https://img.shields.io/badge/GPU-WebGPU-4D6D73?style=flat-square&amp;logo=webgpu&amp;logoColor=white\" alt=\"WebGPU\">\n  <img src=\"https://img.shields.io/badge/NPU-Qualcomm%20QNN-5C5675?style=flat-square&amp;logo=qualcomm&amp;logoColor=white\" alt=\"Qualcomm QNN\">\n</p>\n\n<p align=\"center\">\n  <a href=\"https://github.com/Renakoni/Voicebox/releases/latest\"><strong>Download APK</strong></a>\n  · <a href=\"#models-and-roadmap\">Models</a>\n  · <a href=\"#getting-started\">Getting Started</a>\n  · <a href=\"#performance-and-quality\">Performance</a>\n  · <a href=\"#building-from-source\">Build</a>\n  · <a href=\"https://github.com/Renakoni/Voicebox/issues\">Issues</a>\n</p>\n\nVoicebox brings multiple open-source speech models to Android in one offline app, combining voice cloning, delivery controls, streaming playback, and a local API. Clone a voice with roughly 5 seconds of reference audio and its transcript.\n\n> [!NOTE]\n> Voicebox is specifically tuned for Qualcomm Snapdragon chips; use a Snapdragon device for the full experience. As for MediaTek Dimensity—godspeed. I simply can't afford a Dimensity phone to optimize for it.\n\nhttps://github.com/user-attachments/assets/aca3f5e3-c458-4756-a44f-0a513cffe7f9\n\n<sub>▶ Demo (33 seconds, with sound and Chinese captions). Every Roxy line in the video was generated on a Xiaomi 14 using Voicebox.</sub>\n\n## Models and Roadmap\n\nVoicebox uses a modular backend architecture. Each model runtime and resource pack is downloaded and uninstalled independently inside the app, sharing the same voice library, audio export, QQ voice sending, and local HTTP API.\n\n| Model | Status | Highlights |\n|---|---|---|\n| [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) | ✅ Supported | V2 Pro, V2 Pro Plus, and V5 Turbo; cross-lingual cloning and on-device `.ckpt` / `.pth` conversion |\n| [Ming-TTS 0.5B](https://github.com/inclusionAI/Ming-3.0-tts) | ✅ Supported | 93 built-in official voices, single-clip cloning, emotion and dialect controls, reading instructions, and streaming playback |\n| [CosyVoice3-0.5B-2512](https://github.com/FunAudioLLM/CosyVoice) | 🔧 Inference Ready | Mobile inference verified; app integration pending |\n| [Qwen3-TTS-0.6B-Base](https://github.com/QwenLM/Qwen3-TTS) | 🔧 Inference Ready | Mobile inference verified; app integration pending |\n| [IndexTTS-2.5](https://github.com/index-tts/index-tts) | 🗺️ Planned | Planned for mobile support |\n| [Fish Audio S1-mini](https://github.com/fishaudio/fish-speech) | 🗺️ Planned | Planned for mobile support |\n| [OmniVoice](https://github.com/k2-fsa/OmniVoice) | 🗺️ Planned | Planned for mobile support |\n\n## Features\n\n- **On-demand model packs**: The app and inference backends are decoupled. Download, verify, or uninstall individual model runtimes and packs on demand inside the app without bloating the APK.\n- **Offline inference with hardware acceleration**: Everything runs locally once models are ready, with no network calls or cloud GPUs. Built for GPU-accelerated mobile devices, with additional Qualcomm QNN NPU hybrid acceleration on compatible Snapdragon phones.\n- **Zero-shot cloning and expressive controls**: GPT-SoVITS supports cross-lingual voice transfer and direct on-device import of native `.ckpt` and `.pth` checkpoints; Ming-TTS 0.5B includes 93 official voices, single-clip cloning, speed/pitch/volume controls, emotions, dialects, natural-language reading instructions, and real-time streaming playback.\n- **Native QQ voice messages**: Send generated audio directly as native, tap-to-play QQ voice messages rather than audio attachments. [Watch QQ demo](https://github.com/Renakoni/Voicebox/blob/main/.github/assets/demo-qq.mp4)\n- **Local HTTP API**: Lightweight `127.0.0.1` server for audiobook readers, Tasker, or other clients, with desktop access supported via ADB port forwarding.\n- **Verified in-app updates**: Check GitHub for new releases inside the app, with automatic verification of file size, SHA-256, package name, and version.\n\n## Getting Started\n\nDownload **Voicebox 1.2.0** from [Releases](https://github.com/Renakoni/Voicebox/releases/latest) (requires an ARM64 device running Android 11 or later).\n\n> [!WARNING]\n> 1.2.0 is a breaking release and cannot be installed over earlier versions. Uninstall any previous version before installing 1.2.0 (future releases will update in place).\n\n1. **Install models**: Open **Models** and install **GPT-SoVITS** or **Ming-TTS 0.5B** as needed.\n2. **Set up voices**: Open **Voices** to pick an official voice, or record/import a reference clip with its transcript to clone a voice. For GPT-SoVITS, you can also import local `.ckpt` and `.pth` weights directly.\n3. **Create and export**: Open **Create**, pick a voice and adjust your settings, enter text, and generate. Play, save, share, or send the result to QQ.\n\n<details>\n<summary><strong>One-time setup for QQ voice messages</strong></summary>\n\n1. Turn on **Wireless debugging** in Android's Developer options.\n2. On the **Send to QQ** screen, tap **Connect** and enter the six-digit pairing code shown by Android. Pairing is only needed once.\n3. Tap **Choose contact and send**, then open the target chat in QQ. Voicebox will record a placeholder voice message, replace its audio, and send it. Leave QQ untouched until it finishes.\n\nEach message must be shorter than 60 seconds.\n\n</details>\n\n## Performance and Quality\n\nAll mobile benchmarks were measured on a **Xiaomi 14 (Snapdragon 8 Gen 3, 16 GB RAM)** using the same Chinese short sentence (~3.5–4 s) and long passage (~19–22 s), with official weights or fixed presets and seeds. Once models and caches were warm, each configuration and length ran **10 times** at normal ambient temperature with no thermal throttling; values are reported as **mean ± standard deviation**.\n\n| Model | Execution Path | Short RTF | Long RTF | ASR Agreement |\n|---|---|---:|---:|---:|\n| GPT-SoVITS V2 Pro Plus | GPU | 0.614 | 0.556 | 99.34% |\n| GPT-SoVITS V2 Pro Plus | GPU + NPU | 0.627 | 0.511 | 99.72% |\n| GPT-SoVITS V5 Turbo | GPU | 2.038 | 1.816 | 99.72% |\n| GPT-SoVITS V5 Turbo | GPU + NPU | 1.313 | 0.954 | 99.62% |\n| Ming-TTS 0.5B | GPU | 1.821 | 1.055 | 100.00% / 100.00% |\n| Ming-TTS 0.5B | GPU + NPU | 1.599 | 0.574 | 100.00% / 99.89% |\n\n- **RTF (Real-Time Factor)**: Inference time ÷ audio duration. Values below `1.0` run faster than real-time playback.\n- **ASR agreement**: Transcribed offline with SenseVoice and scored after stripping punctuation as `(1 − character edit distance ÷ reference length) × 100%`. For Ming-TTS 0.5B, values show short / long results respectively.\n- **Execution paths**: GPU runs on CPU + WebGPU; GPU + NPU adds Qualcomm QNN heterogeneous acceleration.\n\n<details>\n<summary><strong>GPT-SoVITS detailed benchmarks</strong></summary>\n\n#### 1. Mobile vs. desktop GPU latency\n\nThe desktop baseline runs the [official repository](https://github.com/RVC-Boss/GPT-SoVITS) CUDA implementation on an RTX 3070 Ti Laptop (8 GB VRAM, 16 GB RAM), using official weights and the same Chinese reference clip (~4 s short sentence, ~22 s long passage).\n\n| Model | Implementation / Device | Short time (s) | Short RTF | Long time (s) | Long RTF |\n|---|---|---:|---:|---:|---:|\n| V2 Pro Plus | GPT-SoVITS · RTX 3070 Ti Laptop | 1.380 ± 0.382 | 0.341 ± 0.089 | 6.153 ± 0.301 | 0.265 ± 0.007 |\n| V2 Pro Plus | Voicebox · GPU | 2.587 ± 0.182 | 0.614 ± 0.043 | 12.637 ± 0.453 | 0.556 ± 0.005 |\n| V2 Pro Plus | Voicebox · GPU + NPU | 2.618 ± 0.927 | 0.627 ± 0.286 | 11.955 ± 0.608 | 0.511 ± 0.007 |\n| V5 Turbo | GPT-SoVITS · RTX 3070 Ti Laptop | 1.680 ± 0.326 | 0.416 ± 0.086 | 6.217 ± 0.566 | 0.278 ± 0.021 |\n| V5 Turbo | Voicebox · GPU | 8.173 ± 0.429 | 2.038 ± 0.102 | 40.676 ± 2.589 | 1.816 ± 0.043 |\n| V5 Turbo | Voicebox · GPU + NPU | 5.367 ± 0.301 | 1.313 ± 0.074 | 21.479 ± 0.867 | 0.954 ± 0.021 |\n\n#### 2. Waveform error and transcription accuracy\n\nWaveform error compares phone GPU + NPU output against official PyTorch FP32 under identical inputs and noise. SenseVoice transcribed all clips generated in the latency runs.\n\n| Model | RMS Short | RMS Long | ASR · Official CUDA | ASR · Phone GPU | ASR · Phone GPU + NPU |\n|---|---:|---:|---:|---:|---:|\n| V2 Pro Plus | 0.2323% | 0.2351% | 99.06% | 99.34% | 99.72% |\n| V5 Turbo | 1.4489% | 0.6537% | 99.25% | 99.72% | 99.62% |\n\n- **Relative RMS error**: `RMS(phone − official) ÷ RMS(official) × 100%`; lower means closer numerical match to FP32.\n- See [Architecture and Optimizations](docs/METHODS_EN.md) for model analysis and scheduling details.\n\n</details>\n\n<details>\n<summary><strong>Ming-TTS 0.5B detailed benchmarks</strong></summary>\n\nRepeated runs used the official Chinese preset `灵小柔`, outputting 44.1 kHz mono 16-bit PCM WAV.\n\n| Execution Path | Passage | Audio Length (s) | End-to-End Time (s) | Inference RTF | ASR Agreement |\n|---|---|---:|---:|---:|---:|\n| GPU | Short | 3.57 ± 0.11 | 11.88 ± 0.50 | 1.821 ± 0.068 | 100.00% |\n| GPU | Long | 19.19 ± 0.40 | 25.70 ± 1.03 | 1.055 ± 0.044 | 100.00% |\n| GPU + NPU | Short | 3.59 ± 0.11 | 11.20 ± 0.42 | 1.599 ± 0.031 | 100.00% |\n| GPU + NPU | Long | 19.17 ± 0.30 | 16.42 ± 0.52 | 0.574 ± 0.009 | 99.89% |\n\n- **NPU speedup**: Accelerating acoustic synthesis via QNN reduces long-passage RTF by **45.5%** and cuts end-to-end latency from 25.70 s to 16.42 s.\n- **Timing breakdown**: Inference RTF divides core synthesis time by output WAV duration. End-to-end time also includes app preparation, session setup, and WAV export (~5.4 s on long passages).\n- **Cold start and cache**: Cold short-sentence requests take 12.87 s on GPU. First-time NPU graph compilation takes 17.53 s and caches a ~205 MB QNN context; subsequent runs reuse the cache and drop to 11.39 s.\n- **Additional checks**: All generated WAV files decoded cleanly with zero clipping; NPU checks for Chinese voice cloning and English presets both reached 100.00% ASR agreement.\n\n</details>\n\n## Building from Source\n\nRequires JDK 21, Android SDK 37 (with NDK and CMake), and Python 3.12+.\n\n```powershell\ngit clone https://github.com/Renakoni/Voicebox.git\ncd Voicebox/Android\n.\\gradlew.bat :app:assembleDebug\n```\n\n`:app:assembleDebug` builds the app shell, which downloads model runtimes from Releases on demand. To package a WebGPU-enabled GPT-SoVITS backend yourself, build the custom ONNX Runtime ([build script](tools/build_ort_webgpu.ps1), [patches](Android/model/gptsovits/patches)) and pass `-PvoiceboxOrtAar=<path-to-AAR>` when running `:model:gptsovits:bundleDebugBridge` or `:model:gptsovits:bundleReleaseBridge`; omitting it builds a CPU-only backend package.\n\n## Feedback and Contributing\n\n[Issues](https://github.com/Renakoni/Voicebox/issues) and [pull requests](https://github.com/Renakoni/Voicebox/pulls) are welcome. When reporting a bug, please include the app version, phone model, TTS mode"
+    },
+    "brief": {
+      "summary": "Android 离线多模型 TTS 与音色克隆应用",
+      "problem": "在手机上离线运行多模型 TTS 和声音克隆，无需云端 GPU",
+      "highlights": [
+        "可以用约 5 秒参考音频克隆音色",
+        "可以离线生成语音并直接分享",
+        "可以通过本地 HTTP API 接入其他应用"
+      ],
+      "target_users": [
+        "Android 用户",
+        "语音创作者",
+        "开发者"
+      ],
+      "why_trending": "本周首次收录，近期活跃，离线语音方案值得关注",
+      "caveat": "主要适配骁龙芯片，联发科优化有限；1.2.0 需先卸载旧版",
+      "category": "语音 / 配音",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "Renakoni/Voicebox",
+      "score": 88,
+      "category": "语音 / 配音",
+      "reason": "Android 离线 TTS 与音色克隆工具",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 100,
+      "ranking_score": 59.0
+    }
+  },
+  {
+    "repository": {
+      "rank": 5,
+      "full_name": "ilynthn/MeguLit",
+      "url": "https://github.com/ilynthn/MeguLit",
+      "description": "Click any word in a Japanese visual novel to look it up — translation and furigana right beside the original, read straight from the game, with Anki and lessons (Windows) · 在 Galgame 里点哪个词查哪个词，翻译和注音就在原文旁边，直接从游戏里读原文，还能做 Anki 卡片、上课学日语（Windows）",
+      "language": "JavaScript",
+      "total_stars": 83,
+      "forks": 5,
+      "stars_today": 0,
+      "source": "radar",
+      "history_label": "本周首次收录",
+      "star_gain": 0
+    },
+    "details": {
+      "topics": [
+        "anki",
+        "chinese",
+        "chinese-simplified",
+        "chinese-translation",
+        "english",
+        "english-language",
+        "english-translation",
+        "galgame-tool",
+        "japanese",
+        "japanese-dictionary",
+        "japanese-language",
+        "japanese-learning",
+        "tauri",
+        "texthook",
+        "visual-novel",
+        "windows-11"
+      ],
+      "license_name": "GPL-3.0",
+      "created_at": "2026-11-06T10:00:42Z",
+      "updated_at": "2026-11-26T07:19:45Z",
+      "pushed_at": "2026-11-27T08:47:51Z",
+      "open_issues": 10,
+      "homepage": "",
+      "archived": false,
+      "default_branch": "main",
+      "readme": "<div align=\"center\">\n\n<a href=\"The%20Seed\"><img src=\"docs/assets/the-seed.jpg\" width=\"900\" alt=\"The Seed\"></a>\n\n</div>\n\n> [!NOTE]\n> **The Seed**\n>\n> 以前一直想用一套通用内核适配所有游戏，结果修好一个，另一个游戏就又出问题了，来回很多遍都搞不好，很折磨人\n>\n> 所以换个做法：MeguLit 的内核和各引擎的画字函数管大框架，每个游戏、每个版本单独一份差分，这就是 The Seed\n>\n> - 几 KB 的纯数据，没有代码，也不会带你电脑上的路径和个人信息\n> - 每个游戏只动自己那份，互不打扰。做好了的就是做好了，以后更新也不会被连累\n> - 认 exe、封包、剧本指纹、Steam / VNDB 编号，补丁版、汉化版、不同发行版都能找到自己那颗\n> - 玩的时候一直在自检，丢句、没选项、原文没藏住就先退回读模式并上报，我们把那份差分修好，热更新送到大家手上\n>\n> 现在 [`The Seed/`](The%20Seed) 里先种下了 55 部游戏。读取、自动回传和热更新从 1.4.22 起已经上线，大家玩得越多，长出来的就越多\n>\n> <sub>名字致敬《刀剑神域》里的 The Seed；共享的思路致敬当年大家在论坛上互相贴的 Textractor 钩子码 · Named after <i>Sword Art Online</i>'s The Seed; the sharing idea is a nod to the Textractor hook codes people used to post for each other · 名前は『ソードアート・オンライン』の The Seed から。共有の発想は、かつて皆で貼り合った Textractor のフックコードへのオマージュ</sub>\n\n<br>\n\n<div align=\"center\">\n\n<img src=\"docs/assets/logo.png\" width=\"480\" alt=\"MeguLit\">\n\n<h3>Click any word in a Japanese visual novel to look it up — translation and furigana right beside the original</h3>\n<h3>在 Galgame 里点哪个词查哪个词，翻译和注音就在原文旁边</h3>\n\n<sub>Reads text straight from the game — no OCR, no second window · 直接从游戏里读出原文，不用 OCR，不开第二个窗口</sub>\n\n<br><br>\n\n[![Website](https://img.shields.io/badge/website-megulit.com-e0a84b?style=flat-square)](https://megulit.com)\n[![Version](https://img.shields.io/github/v/release/ilynthn/MeguLit?style=flat-square&label=version&color=e0a84b)](https://github.com/ilynthn/MeguLit/releases/latest)\n[![Platform](https://img.shields.io/badge/Windows%2010%20%2F%2011-x64-3b2124?style=flat-square)](#zh-install)\n[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-8b1e2d?style=flat-square)](LICENSE)\n[![Sponsor](https://img.shields.io/badge/%E2%99%A1-Sponsor-c8323c?style=flat-square)](https://github.com/sponsors/ilynthn)\n\n**[下载 v1.4.25](https://github.com/ilynthn/MeguLit/releases/latest)** &nbsp;·&nbsp; **[官网 megulit.com](https://megulit.com)** &nbsp;·&nbsp; [简体中文](#zh) &nbsp;·&nbsp; [English](#en) &nbsp;·&nbsp; [日本語](#ja) &nbsp;·&nbsp; [常见问题](#faq) &nbsp;·&nbsp; [更新日志](https://github.com/ilynthn/MeguLit/releases) &nbsp;·&nbsp; [♡ 赞赏](#support)\n\n<br>\n\n<img src=\"docs/screenshots/home.jpg\" width=\"900\" alt=\"MeguLit 首页\">\n\n</div>\n\n<br>\n\n> [!WARNING]\n> 还在积极开发中，功能、数据格式和界面随时可能变 &nbsp;·&nbsp; Still in active development &nbsp;·&nbsp; 開発中です\n\n<br>\n\n<a id=\"zh\"></a>\n\n# 简体中文\n\n## 它做什么\n\n你照常玩日文原版，MeguLit 在旁边帮你读\n\n- **点读**：直接点游戏里的词，读音、释义马上出来；拖一段查短语。点了不会推进剧情\n- **原文**：直接从游戏里读出正在显示的台词，不截图、不 OCR，字不会认错\n- **翻译和注音**：写在原文旁边，不盖住游戏画面。装过汉化补丁的话，直接用汉化组的译文，一句不等\n- **AI 讲解**：选中词或整句，让 AI 讲语法和语境\n- **声音**：有配音的句子播游戏原声，没配音的才用本地语音\n- **学习**：查过的词进生词本，一键做成带截图和原声的 Anki 卡片；零基础可以从五十音和语法课开始\n\n界面有简体中文、English、日本語。主要面向学日语的中文 / 英文用户，反过来用日语学中文或英文也可以\n\n<a id=\"zh-new\"></a>\n\n## 最近更新\n\n| | |\n|---|---|\n| **内嵌显示** | 原文、注音、翻译直接画进游戏里，选项按钮也能内嵌。新支持 ファタモルガーナの館（海市蜃楼之馆）、沙耶の唄（沙耶之歌）HD、魔法使いの夜（魔法使之夜）整页、euphoria、穢翼のユースティア（秽翼的尤斯蒂娅）等 |\n| **游戏原声** | 有配音的句子一律播游戏自己的 CV：CLANNAD、千恋＊万花（千恋万花）、WHITE ALBUM2（白色相簿2）等；Anki 录音自动去掉背景音乐 |\n| **语法课** | 从 N5 一路到 N0（含 2025–2026 流行语），例句来自你读过的台词 |\n| **新首页和日报** | 首页重做，自己挑展示的作品；「日报」看 Galgame 新闻和每日热词 |\n| **零延迟翻译** | 你装过的汉化补丁直接当译文，KiriKiri、BGI、Siglus、YU-RIS、Artemis、Ren'Py 等引擎都能对上；没汉化的句子提前机翻 |\n| **日文原版恢复** | Steam 中文 / 英文版一键换回日文，也能用日文原版的压缩包、文件夹或光盘镜像对照替换，全部备份、一键还原 |\n\n更早的更新见 [Releases](https://github.com/ilynthn/MeguLit/releases)\n\n<br>\n\n## 功能预览\n\n### 游戏库\n\n<div align=\"center\">\n<img src=\"docs/screenshots/library-search.gif\" width=\"820\" alt=\"游戏库搜索\">\n<br><sub>每打一个字母，不相关的封面就散开，剩下的排到中间</sub>\n</div>\n\n<br>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"docs/screenshots/library.jpg\" alt=\"游戏库\"></td>\n<td width=\"50%\"><img src=\"docs/screenshots/game-detail.jpg\" alt=\"作品详情\"></td>\n</tr>\n<tr>\n<td><sub><b>游戏库</b> · 扫描文件夹和 Steam，系列作品自动归到一起</sub></td>\n<td><sub><b>作品详情</b> · 简介、各站评分、阅读记录、关联单词和收藏的句子</sub></td>\n</tr>\n</table>\n\n1. 第一次打开时选好放游戏的文件夹，MeguLit 会自动找出日文原版 EXE\n2. 点封面进入作品详情，点「启动游戏」。需要转区的游戏可以单独开 Locale Emulator\n3. 游戏启动后阅读层自动接上，按 <kbd>Alt</kbd> + <kbd>T</kbd> 呼出菜单\n\n### 自动更新\n\n<img src=\"docs/screenshots/auto-update.jpg\" width=\"100%\" alt=\"自动更新\">\n\n- 每次启动都会联网检查一次新版本，有的话直接在后台下载\n- 卡片上写着版本号、更新内容，以及安装包比现在大还是小多少\n- 下载有真实进度条，下完先校验，再由你选「重启并更新」或「稍后」\n- 也可以随时到「关于」页点「检查更新」手动检查\n- 只替换程序文件，游戏库、学习记录和设置都会保留\n\n### 阅读层\n\n两种显示方式，都不抢焦点，点它也不会让剧情往下走\n\n- **内嵌**：原文、注音、翻译直接画进游戏的文本框位置，选项按钮也一样\n- **阅读层**：浮在游戏上面，内嵌不了的游戏用它\n\n\n- **点一下**查单词，**拖一段**查短语，离线词典\n- 注音优先用游戏自带的 ruby，没有再用词典和上下文\n- 翻译支持 DeepL、Bing、Google、Gemini、DeepSeek、Sakura、Ollama 和 OpenAI 兼容接口，密钥加密存在本地\n- 选中词或整句，让 AI 讲语法和语境\n- 有配音的句子播游戏原声，没配音的才用本地 TTS\n- 每部作品单独记字体、颜色和位置\n\n### 历史\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"docs/screenshots/history.jpg\" alt=\"阅读会话\"></td>\n<td width=\"50%\"><img src=\"docs/screenshots/dialogue.jpg\" alt=\"对话记录\"></td>\n</tr>\n<tr>\n<td><sub><b>阅读会话</b> · 每次玩了多久、读了多少字</sub></td>\n<td><sub><b>对话记录</b> · 读过的每一句原文和译文</sub></td>\n</tr>\n</table>\n\n### 学习\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"docs/screenshots/anki.jpg\" alt=\"Anki 复习\"></td>\n<td width=\"50%\"><img src=\"docs/screenshots/words.jpg\" alt=\"单词本\"></td>\n</tr>\n<tr>\n<td><sub><b>Anki 复习</b> · 直接用 Anki 的卡片和调度，评分写回 Anki</sub></td>\n<td><sub><b>单词本</b> · 查过的词、读音、释义和掌握程度</sub></td>\n</tr>\n</table>\n\n<img src=\"docs/screenshots/stats.jpg\" width=\"100%\" alt=\"学习统计\">\n\n<img src=\"docs/screenshots/stats-trend.jpg\" width=\"100%\" alt=\"字数走势与阅读时段\">\n\n<p align=\"center\"><sub><b>学习统计</b> · 阅读字数、时长、查词、日历、每部作品的阅读量、字数走势、阅读时段和星期分布</sub></p>\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"docs/screenshots/empty-state.jpg\" alt=\"空页面\"></td>\n<td width=\"50%\"><img src=\"docs/screenshots/tools.jpg\" alt=\"工具\"></td>\n</tr>\n<tr>\n<td><sub><b>空页面</b> · 告诉你这里会出现什么、怎么让它出现</sub></td>\n<td><sub><b>工具</b> · 日文原版恢复、修复内嵌替换</sub></td>\n</tr>\n</table>\n\n- 在阅读层查词时点「制卡」，会带上游戏截图和原声；没配音的旁白用本地 TTS 补\n- Anki 需要自己安装 Anki 和 AnkiConnect，MeguLit 可以一键装好 AnkiConnect\n\n<br>\n\n<a id=\"zh-kana\"></a>\n\n## 五十音\n\n给零基础的人：先认得每一个假名，再到游戏里把它读出来\n\n<img src=\"docs/screenshots/kana-home.jpg\" width=\"100%\" alt=\"五十音主页\">\n\n**学习 → 五十音 → 开始学习**。主页记住你学到哪一课，右边是平假名熟悉度\n\n<table>\n<tr>\n<td width=\"50%\"><img src=\"docs/screenshots/kana-lesson.jpg\" alt=\"一课\"></td>\n<td width=\"50%\"><img src=\"docs/screenshots/kana-chart.jpg\" alt=\"五十音图\"></td>\n</tr>\n<tr>\n<td><sub><b>一课四步</b> · 认识 → 辨认 → 回忆 → 混合。笔顺、字源、例词，还有<b>你自己玩过的游戏里</b>含这个假名的台词</sub></td>\n<td><sub><b>五十音图</b> · 平 / 片假名，清音、浊音、拗音；点格子看笔顺、发音要点和易混字</sub></td>\n</tr>\n<tr>\n<td><img src=\"docs/screenshots/kana-games.jpg\" alt=\"假名游戏\"></td>\n<td><img src=\"docs/screenshots/kana-play-choice.jpg\" alt=\"行段识别\"></td>\n</tr>\n<tr>\n<td><sub><b>假名游戏</b> · 三种玩法、四档难度，规则都写在面板上</sub></td>\n<td><sub><b>行段识别</b> · 先按辅音字母选行，再按元音选段</sub></td>\n</tr>\n<tr>\n<td><img src=\"docs/screenshots/kana-results.jpg\" alt=\"结算\"></td>\n<td><img src=\"docs/screenshots/kana-records.jpg\" alt=\"学习手帐\"></td>\n</tr>\n<tr>\n<td><sub><b>结算</b> · 达成率、判定、答题轨迹和错题分析，一键错题再挑战</sub></td>\n<td><sub><b>学习手帐</b> · 熟悉度、到期复习（1 → 3 → 7 → 21 天）、个人最佳</sub></td>\n</tr>\n</table>\n\n<details>\n<summary><b>玩法、难度和评分规则</b></summary>\n\n<br>\n\n| 玩法 | 怎么玩 |\n|---|---|\n| 行段识别 | 看到「き」，答出 か行 · い段。键盘先按 <kbd>k</kbd> 再按 <kbd>i</kbd> |\n| 前后假名 | 按 あいうえお…わをん 的顺序说出前一个和后一个，空位直接跳过 |\n| 平片转换 | 看平假名写片假名，反过来也一样。可以用日语输入法（<kbd>F7</kbd> / <kbd>F6</kbd>），也可以按 <kbd>K</kbd> 打开屏幕假名键盘 |\n\n| 难度 | 规则 |\n|---|---|\n| 入门 | 只考学过的假名，不限时，每题可看提示 |\n| 标准 | 全部清音，每题限时，整局 3 次提示 |\n| 进阶 | 加入浊音、拗音和易混字，限时更短 |\n| 挑战 | 总计 90 秒，错 3 次结束，没有提示 |\n\n- 每道题是一个音符：普通假名算 TAP，最容易认错的几组（シ / ツ、ソ / ン、ぬ / め、ね / れ / わ…）算 **BREAK**，分量是 5 倍\n- 答得快是 CRITICAL PERFECT，稍慢 PERFECT，再慢 GREAT；用了提示算 GOOD，答错或超时算 MISS\n- 基础 100% 加 BREAK 奖励最多 1%，**满分 101.0000%**，评级从 SSS+ 到 D\n\n快捷键：<kbd>Enter</kbd> 下一个，<kbd>Space</kbd> 发音，<kbd>←</kbd> <kbd>→</kbd> 切换假名，答题时按 <kbd>1</kbd>–<kbd>4</kbd>\n\n</details>\n\n<img src=\"docs/screenshots/kanji.jpg\" width=\"100%\" alt=\"汉字读音\">\n\n<sub><b>汉字读音</b> · 学完假名可以玩《漢字でGO!》。MeguLit 只是在窗口里原样打开 PLiCy 上的官方页面（作者 Micelle，含广告），<b>不是 MeguLit 的一部分</b>；不想在 MeguLit 里玩，可以点「在浏览器打开」</sub>\n\n<br><br>\n\n<a id=\"zh-install\"></a>\n\n## 安装\n\n> [!IMPORTANT]\n> **游戏剧情必须是日文原文**。MeguLit 读的是游戏正在显示的台词，剧情被汉化后读到的就不是日文。只汉化了菜单、剧情仍是日文的游戏不受影响；汉化版可以先试试「工具 → 日文原版恢复」\n\n1. 去 [Releases](https://github.com/ilynthn/MeguLit/releases/latest) 下载 `MeguLit-v1.4.25-win-x64.zip`，完整解压后双击 `Install MeguLit.cmd`。确认安装后，安装程序会按需安装包内的微软 Visual C++ x64 运行库\n2. 第一次启动会弹出安装窗口，马上开始下载运行组件（约 565 MB，含注音词典和 AivisSpeech 语音引擎，需要约 1.8 GB 空间）。下载的同时选好安装位置和快捷方式，点「安装」，下完自动装好；中途关掉，下次打开会接着下\n3. 选好放游戏的文件夹，等游戏库扫描完\n4. 点一部作品 →「启动游戏」，**用窗口模式玩**\n5. 零基础的话，先去 学习 → 五十音\n\n之后每次启动会自动检查更新，只换程序文件，游戏库、学习记录和设置都保留\n\n需要 Windows 10 / 11 x64 和 Microsoft Edge WebView2 Runtime\n\n<br>\n\n<a id=\"faq\"></a>\n\n## 常见问题\n\n<details open>\n<summary><b>全屏玩的时候翻译显示不全，或者文字跑到了桌面上</b></summary>\n\n<br>\n\n请把游戏切到**窗口模式**。独占全屏下游戏会盖住其他所有窗口，阅读层没法稳定地画在游戏上面。窗口拉大一点也没关系\n\n</details>\n\n<details>\n<summary><b>读到的是乱码，或者根本不是日文</b></summary>\n\n<br>\n\n剧情必须是日文原文。汉化版先试试「工具 → 日文原版恢复」；乱码的话在 <kbd>Alt</kbd> + <kbd>T</kbd> 里重选文本流\n\n</details>\n\n<details>\n<summary><b>更新会不会弄丢我的数据</b></summary>\n\n<br>\n\n不会。自动更新只替换程序文件，`data`、`logs`、`cache`、`runtime`、`models` 都不碰。旧的 `MeguLit.exe` 还会留一份 `MeguLit.rollback-update.exe`\n\n</details>\n\n<details>\n<summary><b>Anki 连不上</b></summary>\n\n<br>\n\n先打开 Anki，并装好 AnkiConnect（MeguLit 里可以一键安装）。端口 8765 被别的程序占用也会连不上\n\n</details>\n\n<details>\n<summary><b>某个游戏读不到文字</b></summary>\n\n<br>\n\n不同引擎差别很大。请在「关于 → 一键上传问题反馈」告诉我们，或者在 [Issues](https://github.com/ilynthn/MeguLit/issues) 留下游戏名\n\n</details>\n\n<br>\n\n## 支持哪些游戏\n\nKiriKiri、YU-RIS、Artemis、BGI、Siglus、Ren'Py、Unity 等主流引擎都能读。每个引擎能做到哪一步（读原文、对汉化、内嵌），见 [引擎覆盖表](docs/engine-coverage.md)\n\n读不到的游戏请在 [Issues](https://github.com/ilynthn/MeguLit/issues) 留下游戏名\n\n## 现在能做什么\n\n| 功能 | 状态 | 说明 |\n|---|:---:|---|\n| 抓取游戏文本 | ✅ | 基于 LunaHook 和自有读取器，自动挑文本流，不对可以手动换 |\n| 内嵌显示 | ✅ | 原文、注音、翻译画进游戏；选项按钮也支持 |\n| 阅读层 · 注音 · 点读 | ✅ | 游戏自带 ruby 优先；点读不推进剧情 |\n| 汉化补丁对照 | ✅ | 已装的汉化当译文，零延迟 |\n| 实时翻译 · AI 讲解 | ✅ | 多家翻译和大模型接口，密钥加密存在本地 |\n| 游戏原声 · 本地语音 | ✅ | 有配音播原声，没配音用本地 TTS |\n| 生词本 · Anki | ✅ | 单词、例句、回收站；制卡带截图和原声 |\n| 游戏库 · 启动器 | ✅ | 扫文件夹和 Steam，自动认日文原版 EXE |\n| 学习统计 · 等级段位 | ✅ | 年 / 月 / 周 / 日，每块单独切换 |\n| 五十音 · 语法课 | ✅ | 25 课五十音、三个小游戏；语法 N5–N0 |\n| 自动更新 · 备份恢复 | ✅ | 只换程序文件；备份恢复失败自动回滚 |\n| 本地翻译模型 | ✅ | 需要显卡，在设置里下载 |\n\n## 接下来\n\n- [ ] **第四个假名小游戏：太鼓风节奏游戏**，随机用你装的 Galgame 的 BGM，检测 BPM 和鼓点，跟着节奏认假名\n- [ ] 五十音学习的英文、日文界面\n- [ ] 保住游戏原生 LOG 里的原文；开场、章节标题、独立字幕\n- [ ] 联网排行榜：阅读量、生词数、连续打卡天数\n- [ ] 更多学习语言，以及 Galgame 以外的游戏\n\n## 从源码构建\n\n```powershell\n.\\Build.ps1 -Check\n```\n\n需要 Rust（Tauri）、Node.js 和 .NET Framework 的 C# 编译器\n\n只跑测试：`.\\Build.ps1 -TestsOnly` 跑全部；`.\\Build.ps1 -TestsChanged` 只跑和 origin/main 相比改动涉及的测试，改到测试运行器、CI 配置这类公共部分时自动跑全部\n\n## 致谢\n\n[LunaHook](https://github.com/HIllya51/LunaHook)（文本 Hook）· [JMdict / EDRDG](https://www.edrdg.org/jmdict/j_jmdict.html)（词典）· [SudachiDict](https://github.com/WorksApplications/SudachiDict)（分词）· [KanjiVG](https://kanjivg.tagaini.net/)（© Ulrich Apel，CC BY-SA 3.0，笔顺）· [AivisSpeech](https://aivis-project.com/)（语音）· [Tauri](https://tauri.app/) · [Anki](https://apps.ankiweb.net/) & AnkiConnect · [Tomoyo](https://github.com/46daishi/tomoyo)（最早的灵感）\n\n推荐游戏：[漢字でGO!](https://plicy.net/GamePlay/155561)（Micelle · PLiCy），只是推荐，与 MeguLit 无关\n\nGPL-3.0-or-later，见 [LICENSE](LICENSE)；第三方组件按各自许可证，见 [THIRD-PARTY.md](THIRD-PARTY.md)\n\n<br>\n\n---\n\n<a id=\"en\"></a>\n\n# English\n\n**You play the Japanese original. MeguLit reads along with you.**\n\n- **Click to look up**: click any word in the game for its reading and meaning, drag for a phrase. Clicking never advances the story\n- **Original text**: read straight from the game, no screenshots or OCR, so no misread characters\n- **Translation and furigana**: drawn beside the original, never covering the picture. If you have a translation patch installed, its wording is used with zero delay\n- **AI explanations**: select a word or line and ask about grammar and context\n- **Voice**: voiced lines play the game's own voice; local speech only fills in unvoiced lines\n- **Learning**: looked-up words go to a word list and become Anki cards with a screenshot and the original audio; beginners can start with kana and grammar lessons\n\n### Recently\n\n| | |\n|---|---|\n| **In-game display** | Original, furigana and translation drawn inside the game, choice buttons included. New: The House in Fata Morgana, The Song of Saya HD, Witch on the Holy Night (full page), euphoria, Eustia and more |\n| **The game's own voice** | Voiced lines always play the original cast (CLANNAD, Senren＊Banka, WHITE ALB"
+    },
+    "brief": {
+      "summary": "在日文Galgame里点词查词，原文旁显示翻译和注音",
+      "problem": "日文Galgame阅读门槛高，查词要切换窗口，生词难整理",
+      "highlights": [
+        "可以点游戏里的词，立刻看读音和释义",
+        "可以把查过的词一键做成带截图和原声的Anki卡片",
+        "可以从五十音和语法课开始学日语"
+      ],
+      "target_users": [
+        "学日语的中文玩家",
+        "Galgame玩家",
+        "日语初学者"
+      ],
+      "why_trending": "本周首次收录，总83星，点读与制卡场景具体",
+      "caveat": "仅支持Windows，仍在开发中，功能与界面可能变",
+      "category": "ACG 本地化",
+      "generated_by_ai": true,
+      "prompt_version": "use-cases-v4-harness-jev"
+    },
+    "interest": {
+      "repository": "ilynthn/MeguLit",
+      "score": 86,
+      "category": "ACG 本地化",
+      "reason": "Galgame 日语点词翻译注音与 Anki",
+      "generated_by_ai": true,
+      "velocity_score": 0,
+      "freshness_score": 85,
+      "ranking_score": 55.8
+    }
+  }
+]
